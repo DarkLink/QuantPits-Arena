@@ -1,0 +1,21 @@
+contestant_id: CONTESTANT_B
+display_name: Ensemble-B (06-26)
+family: Family-Alpha
+artifact_date: '2026-06-26'
+train_cutoff: '2026-06-26'
+historical_role: Accepted replacement, later rejected
+training_mode: ensemble_cv
+feature_set: mixed_multi_dim
+members:
+- name: member_1
+  member_count: 4
+inference_adapter: ensemble_cv
+adapter_config:
+  fold_aggregation: mean
+  fusion_method: rank_norm_equal
+  fillna_value: 0.5
+integrity_class: ORIGINAL
+known_issues: []
+arena_eligible_from: '2026-07-01'
+paired_rival: CONTESTANT_A
+notes: Anonymized contestant metadata for public benchmark.

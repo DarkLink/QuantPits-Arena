@@ -36,10 +36,29 @@ ENV/
 *.swo
 *~
 
-# Arena run caches and large dynamic outputs
+# Model weights and binaries (NEVER COMMIT - PRIVATE ARTIFACTS)
+artifacts/models/
+*.pkl
+trained_model
+
+# Private manifests with real model identities (anonymized public versions in manifests/public/)
+manifests/private/
+
+# Internal design docs with real model names (for developer reference only)
+docs/internal/
+
+# Workflow configs containing model architecture details
+artifacts/configs/
+
+# Raw specifications containing private host paths and un-anonymized model names
+INIT.md
+REF.md
+
+# Arena run caches and private/raw outputs
 runs/*/predictions/
 runs/*/portfolios/
 runs/*/monkey/
+runs/*/private/
 
 # Keep run manifests and reports
 !runs/*/run_manifest.yaml

@@ -1,0 +1,20 @@
+contestant_id: CONTESTANT_C
+display_name: Ensemble-C (06-12)
+family: Family-Beta
+artifact_date: '2026-06-12'
+train_cutoff: '2026-06-12'
+historical_role: Rejected production candidate
+training_mode: ensemble_static
+feature_set: mixed_multi_dim
+members:
+- name: member_1
+  member_count: 3
+inference_adapter: ensemble_static
+adapter_config:
+  fusion_method: rank_norm_equal
+  fillna_value: 0.5
+integrity_class: ORIGINAL
+known_issues: []
+arena_eligible_from: '2026-07-01'
+paired_rival: null
+notes: Anonymized contestant metadata for public benchmark.

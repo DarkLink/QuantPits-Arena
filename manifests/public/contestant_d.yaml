@@ -1,0 +1,21 @@
+contestant_id: CONTESTANT_D
+display_name: Ensemble-D (03-06)
+family: Family-Gamma
+artifact_date: '2026-03-06'
+train_cutoff: '2026-03-06'
+historical_role: First QuantPits production ensemble proxy
+training_mode: ensemble_static
+feature_set: mixed_multi_dim
+members:
+- name: member_1
+  member_count: 5
+inference_adapter: ensemble_static
+adapter_config:
+  fusion_method: rank_norm_equal
+  fillna_value: 0.5
+integrity_class: PROXY
+known_issues:
+- 原始 2026-02-28 权重未落盘，本模型为 2026-03-06 同配置重训版本（仅训练 cutoff 延后 1 周）
+arena_eligible_from: '2026-07-01'
+paired_rival: null
+notes: Anonymized contestant metadata for public benchmark.

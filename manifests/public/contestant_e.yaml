@@ -1,0 +1,22 @@
+contestant_id: CONTESTANT_E
+display_name: SingleModel-E (09-19)
+family: Family-Delta
+artifact_date: '2025-09-19'
+train_cutoff: '2025-09-19'
+historical_role: Rejected feature expansion experiment
+training_mode: single_model
+feature_set: filtered_52dim
+members:
+- name: member_1
+  member_count: 1
+inference_adapter: single_model
+adapter_config:
+  d_feat: 52
+  step_len: 20
+integrity_class: EXHIBITION_ONLY
+known_issues:
+- 训练阶段存在测试集数据偷看（2026-02-03 修复前），导致历史回测指标虚高；但实盘和 Arena OOS 推理无泄漏，成绩真实
+- 历史 20→52 实验伴随 4 处变动同时发生（d_feat 52, lr 0.001, early_stop 20, model_path demo 底座），非单一变量实验
+arena_eligible_from: '2026-07-01'
+paired_rival: CONTESTANT_F
+notes: Anonymized contestant metadata for public benchmark.
