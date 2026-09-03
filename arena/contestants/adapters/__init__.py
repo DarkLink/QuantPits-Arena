@@ -30,11 +30,12 @@ def create_adapter(
     if mock:
         return MockInferenceAdapter(manifest)
 
-    # 针对 Static 与 CPCV，若指定 replay 且本地具备生产历史快照，使用 100% 生产同源回放
+    # 优先检查权威全量预测库，或针对 Static/CPCV 检查生产历史快照
+    auth_store_path = Path(__file__).resolve().parent.parent.parent.parent / "artifacts" / "predictions" / "all_contestants_oos.pkl"
     snapshot_path = Path.home() / "src/QLIB-TEST-RUN/ARCHAEOLOGY/raw_preds.pkl"
     cid = manifest.contestant_id.lower()
-    if use_replay and snapshot_path.exists():
-        if "static" in cid or "cpcv" in cid:
+    if use_replay and (auth_store_path.exists() or snapshot_path.exists()):
+        if auth_store_path.exists() or "static" in cid or "cpcv" in cid:
             return HistoricalReplayAdapter(manifest, snapshot_path=snapshot_path)
 
     adapter_name = manifest.inference_adapter.lower()
