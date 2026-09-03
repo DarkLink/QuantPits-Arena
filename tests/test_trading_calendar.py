@@ -81,18 +81,34 @@ def test_july_2026_anchor_dates_day_of_week():
     assert "2026-07-13" in days_set
 
 
-def build_weekly_cycles(start_date: str, end_date: str, trading_days: list):
-    """
-    周频状态机周期划分工具函数（用于验证周频推进行为）
-    规则：
-    - 每个周期：周五收盘产生 signal（或当周最后一个交易日）
-    - 下一个交易周首日（通常是周一）执行买卖/调仓
-    - 周五收盘结算当周净值
-    """
-    days_subset = [d for d in trading_days if start_date <= d <= end_date]
-    assert len(days_subset) > 0
+def test_trading_calendar_build_weekly_cycles():
+    """测试 TradingCalendar.build_weekly_cycles 能够正确划分完整的周频周期"""
+    from arena.calendar import TradingCalendar
 
-    # 找到所有周五或当周最后交易日
-    cycles = []
-    # 模拟周频推进
-    return cycles
+    cal = TradingCalendar()
+    # 从 2026-07-03 到 2026-08-28
+    cycles = cal.build_weekly_cycles("2026-07-03", "2026-08-28")
+
+    assert len(cycles) == 8, f"期望 8 个完整周周期，实际划分了 {len(cycles)} 个"
+
+    # Cycle 0
+    c0 = cycles[0]
+    assert c0.cycle_idx == 0
+    assert c0.is_first_week is True
+    assert c0.decision_date == "2026-07-03"  # 周五收盘
+    assert c0.trade_date == "2026-07-06"     # 周一开盘
+    assert c0.settle_date == "2026-07-10"    # 周五收盘
+    assert len(c0.trading_days) == 5
+
+    # Cycle 1
+    c1 = cycles[1]
+    assert c1.cycle_idx == 1
+    assert c1.is_first_week is False
+    assert c1.decision_date == "2026-07-10"  # 周五收盘
+    assert c1.trade_date == "2026-07-13"     # 周一开盘
+    assert c1.settle_date == "2026-07-17"    # 周五收盘
+    assert len(c1.trading_days) == 5
+
+    # 验证最后一个周期的结算日为 2026-08-28
+    assert cycles[-1].settle_date == "2026-08-28"
+

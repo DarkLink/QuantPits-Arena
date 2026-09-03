@@ -34,73 +34,94 @@ def simulate_cross_sectional_score(dates: list, instruments: list):
     return df["score"]
 
 
-def test_robot_contract():
-    """验证 Robot 策略契约"""
-    dates = ["2026-07-03", "2026-07-10", "2026-07-17"]
-    stocks = [f"STOCK_{i:02d}" for i in range(30)]
-    score = simulate_cross_sectional_score(dates, stocks)
+from arena.animals import (
+    Robot, Sloth, Rabbit, Turtle, Koala, get_all_animals
+)
 
-    # Robot 规范：不改变得分，策略参数 topk=22, n_drop=3
-    topk, n_drop = 22, 3
-    assert topk == 22
-    assert n_drop == 3
-    assert len(score) == len(dates) * len(stocks)
+
+def test_get_all_animals_completeness():
+    """验证 9 种动物齐备"""
+    animals = get_all_animals()
+    assert len(animals) == 9
+    ids = [a.animal_id for a in animals]
+    assert ids == [
+        "robot", "sloth-1", "sloth-2", "sloth-3", "sloth-4",
+        "rabbit-1", "rabbit-2", "turtle", "koala"
+    ]
+
+
+def test_robot_contract():
+    """验证 Robot 策略契约与信号直通"""
+    stocks = [f"STOCK_{i:02d}" for i in range(30)]
+    score = pd.Series(np.linspace(0.1, 0.9, 30), index=stocks)
+    robot = Robot()
+
+    transformed = robot.transform_signal(score, {}, cycle_idx=0)
+    assert transformed.equals(score)
+
+    policy = robot.get_portfolio_policy()
+    assert policy["topk"] == 22
+    assert policy["n_drop"] == 3
 
 
 def test_koala_rank_inversion_contract():
     """验证 Koala 反向截面排名契约"""
     stocks = [f"STOCK_{i:02d}" for i in range(10)]
-    dates = ["2026-07-03"]
-    score = simulate_cross_sectional_score(dates, stocks)
+    score = pd.Series(np.linspace(0.1, 0.9, 10), index=stocks)
+    koala = Koala()
 
-    # 考拉反向变换公式: 1.0 - (rank - 1)/(n - 1)
-    ranked = score.groupby(level="datetime").rank(method="average", ascending=True)
-    n = len(stocks)
-    norm_rank = (ranked - 1) / (n - 1)
-    inverted_score = 1.0 - norm_rank
+    inverted = koala.transform_signal(score, {}, cycle_idx=0)
 
-    # 验证反转性：原第一名在反转后排在最后
-    original_top = score.xs("2026-07-03").idxmax()
-    inverted_top = inverted_score.xs("2026-07-03").idxmax()
-    original_bottom = score.xs("2026-07-03").idxmin()
-
-    assert original_top == inverted_score.xs("2026-07-03").idxmin()
-    assert original_bottom == inverted_top
-    assert np.allclose(inverted_score.values.min(), 0.0)
-    assert np.allclose(inverted_score.values.max(), 1.0)
+    # 验证原第一名在反转后排在最后
+    assert score.idxmax() == inverted.idxmin()
+    assert score.idxmin() == inverted.idxmax()
+    assert np.allclose(inverted.min(), 0.0)
+    assert np.allclose(inverted.max(), 1.0)
 
 
 def test_rabbit_and_turtle_dropn_contract():
     """验证 Rabbit 与 Turtle 的 DropN 策略契约"""
-    topk = 22
-    # Rabbit-1: TopK 50% = 11
-    rabbit1_drop = topk // 2
-    assert rabbit1_drop == 11, "Rabbit-1 每次调仓必须是 topk 的 50% = 11 只"
+    r1 = Rabbit(variant=1)
+    assert r1.get_portfolio_policy()["n_drop"] == 11
 
-    # Rabbit-2: 全仓 = 22
-    rabbit2_drop = topk
-    assert rabbit2_drop == 22, "Rabbit-2 每次全仓替换 = 22 只"
+    r2 = Rabbit(variant=2)
+    assert r2.get_portfolio_policy()["n_drop"] == 22
 
-    # Turtle: 极低换手 = 1
-    turtle_drop = 1
-    assert turtle_drop == 1, "Turtle 每次调仓换手 = 1 只"
+    turtle = Turtle()
+    assert turtle.get_portfolio_policy()["n_drop"] == 1
 
 
-def test_sloth_delay_availability_contract():
+def test_sloth_option_b_cold_start_contract():
     """
-    验证 Sloth 延迟语义与冷启动边界
-    Sloth-1 在 Week 0 仅有 1 个信号快照，延迟 1 周时在 Week 0 只能使用当前信号；
-    进入 Week 1 时，使用 Week 0 的信号进行决策。
+    验证 Sloth 方案 B 冷启动：
+    - 前 N 周 (cycle_idx < delay_weeks) 返回 None（空仓现金）
+    - cycle_idx == delay_weeks 时返回 cycle 0 信号
+    - 后续周期返回 cycle_idx - delay_weeks 信号
     """
-    dates = ["2026-07-03", "2026-07-10", "2026-07-17", "2026-07-24"]
     stocks = [f"STOCK_{i:02d}" for i in range(10)]
-    score = simulate_cross_sectional_score(dates, stocks)
+    score_c0 = pd.Series(np.linspace(0.1, 0.9, 10), index=stocks)
+    score_c1 = pd.Series(np.linspace(0.2, 0.8, 10), index=stocks)
+    score_c2 = pd.Series(np.linspace(0.3, 0.7, 10), index=stocks)
 
-    # 模拟 Sloth-1 延迟映射
-    delay_weeks = 1
-    # 在 2026-07-10 决策时，应取 2026-07-03 的信号
-    signal_at_w1 = score.xs(dates[0])
-    signal_at_w2 = score.xs(dates[1])
+    history = {0: score_c0, 1: score_c1, 2: score_c2}
 
-    # 验证不相等，且能够准确索引到前一周期
-    assert not np.allclose(signal_at_w1.values, signal_at_w2.values)
+    # 测试 Sloth-1
+    sloth1 = Sloth(delay_weeks=1)
+    # Cycle 0: 前置期未满 1 周 -> None (保持空仓现金)
+    assert sloth1.transform_signal(score_c0, history, cycle_idx=0) is None
+    # Cycle 1: 达到 1 周延迟 -> 返回 Cycle 0 信号 (首次建仓)
+    sig_c1 = sloth1.transform_signal(score_c1, history, cycle_idx=1)
+    assert sig_c1.equals(score_c0)
+    # Cycle 2: 延迟使用 Cycle 1 信号 (调仓)
+    sig_c2 = sloth1.transform_signal(score_c2, history, cycle_idx=2)
+    assert sig_c2.equals(score_c1)
+
+    # 测试 Sloth-2
+    sloth2 = Sloth(delay_weeks=2)
+    # Cycle 0 和 Cycle 1 都必须保持空仓现金
+    assert sloth2.transform_signal(score_c0, history, cycle_idx=0) is None
+    assert sloth2.transform_signal(score_c1, history, cycle_idx=1) is None
+    # Cycle 2: 达到 2 周延迟 -> 首次建仓使用 Cycle 0 信号
+    sig2_c2 = sloth2.transform_signal(score_c2, history, cycle_idx=2)
+    assert sig2_c2.equals(score_c0)
+

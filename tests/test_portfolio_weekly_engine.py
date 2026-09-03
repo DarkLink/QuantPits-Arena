@@ -1,59 +1,15 @@
 """
 tests/test_portfolio_weekly_engine.py
 =====================================
-周频组合执行引擎的前置验证测试 (Verification First)
-
-验证目标：
-1. 首周冷启动满额建仓契约：
-   - 空仓进入，全额购买 Top-K (22 只)，绝不触发 DropN 卖出逻辑
-   - 等权分配资金，扣除买入成本 (open_cost = 0.0005)
-2. 后续周频调仓契约：
-   - 排序当前持仓：持仓中 score 垫底的 n_drop 只被卖出
-   - 排序外部非持仓：候选池中 score 最优的 n_drop 只被买入
-   - 调仓后持仓只数恒等于 Top-K
-3. 交易费用与净值计算契约：
-   - 卖出费用 close_cost = 0.0015
-   - 净值恒定归一化 (初始 NAV = 1.0000)
+周频组合执行引擎的前置与实现测试
 """
 
 import pandas as pd
 import numpy as np
 import pytest
 
-
-class ToyPortfolioEngine:
-    """用于前置测试验证的周频简易回测逻辑原型"""
-
-    def __init__(self, topk=22, open_cost=0.0005, close_cost=0.0015, min_cost=5.0):
-        self.topk = topk
-        self.open_cost = open_cost
-        self.close_cost = close_cost
-        self.min_cost = min_cost
-        self.holdings = set()
-        self.nav = 1.0
-
-    def step(self, score: pd.Series, n_drop: int, is_first_week: bool = False):
-        """执行一个周期的调仓与订单生成"""
-        if is_first_week or len(self.holdings) == 0:
-            # 首周：TopK 一次性买满
-            target_stocks = set(score.nlargest(self.topk).index)
-            buy_orders = list(target_stocks)
-            sell_orders = []
-            self.holdings = target_stocks
-        else:
-            # 正常调仓：
-            # 1. 找出当前持仓在当前 score 下得分最低的 n_drop 只卖出
-            current_held_scores = score.loc[list(self.holdings)]
-            sell_orders = list(current_held_scores.nsmallest(n_drop).index)
-
-            # 2. 找出当前未持仓中 score 最高的 n_drop 只买入
-            unheld_scores = score.drop(index=list(self.holdings))
-            buy_orders = list(unheld_scores.nlargest(n_drop).index)
-
-            # 更新持仓
-            self.holdings = (self.holdings - set(sell_orders)) | set(buy_orders)
-
-        return buy_orders, sell_orders
+from arena.portfolio import PortfolioEngine, Order
+from arena.calendar import WeeklyCycle
 
 
 def test_first_week_full_entry():
@@ -61,50 +17,105 @@ def test_first_week_full_entry():
     stocks = [f"STOCK_{i:02d}" for i in range(50)]
     score = pd.Series(np.linspace(0.1, 0.9, 50), index=stocks)
 
-    engine = ToyPortfolioEngine(topk=22)
-    buys, sells = engine.step(score, n_drop=3, is_first_week=True)
+    engine = PortfolioEngine(contestant_id="CONTESTANT_A", animal_id="robot", topk=22)
+    order = engine.generate_order(score, topk=22, n_drop=3, trade_date="2026-07-06", is_first_entry=True)
 
-    assert len(buys) == 22, "首周应一次性买入 22 只股票"
-    assert len(sells) == 0, "首周不应有任何卖出订单"
-    assert len(engine.holdings) == 22
+    assert order is not None
+    assert len(order.buy_instruments) == 22, "首周应一次性买入 22 只股票"
+    assert len(order.sell_instruments) == 0, "首周不应有任何卖出订单"
+    assert order.is_first_entry is True
 
 
 def test_subsequent_weekly_rebalance():
     """验证后续调仓契约：卖出最低 n_drop，买入最高 n_drop，总持仓数保持 TopK"""
     stocks = [f"STOCK_{i:02d}" for i in range(50)]
-    # Week 1
     score_w1 = pd.Series(np.linspace(0.1, 0.9, 50), index=stocks)
-    engine = ToyPortfolioEngine(topk=22)
-    engine.step(score_w1, n_drop=3, is_first_week=True)
 
-    # Week 2: 改变部分股票得分
+    engine = PortfolioEngine(contestant_id="CONTESTANT_A", animal_id="robot", topk=22)
+    # 模拟首周已持有 22 只
+    top22 = list(score_w1.nlargest(22).index)
+    for s in top22:
+        engine.holdings[s] = 1000.0
+
+    # Week 2 得分变化：把持仓中的 3 只分数打到极低
     score_w2 = score_w1.copy()
-    # 将原有持仓中得分最高的 3 只大幅下调
-    held_list = list(engine.holdings)
-    for stock in held_list[:3]:
-        score_w2[stock] = 0.01
+    for s in top22[:3]:
+        score_w2[s] = 0.001
 
-    buys, sells = engine.step(score_w2, n_drop=3, is_first_week=False)
+    order = engine.generate_order(score_w2, topk=22, n_drop=3, trade_date="2026-07-13", is_first_entry=False)
 
-    assert len(sells) == 3, "调仓应卖出 3 只"
-    assert len(buys) == 3, "调仓应买入 3 只"
-    assert len(engine.holdings) == 22, "调仓后持仓总数恒为 22 只"
-    for s in sells:
-        assert s not in engine.holdings, "卖出的标的不应保留在持仓中"
-    for b in buys:
-        assert b in engine.holdings, "买入的标的必须已进入持仓"
+    assert order is not None
+    assert len(order.sell_instruments) == 3, "调仓应卖出 3 只"
+    assert len(order.buy_instruments) == 3, "调仓应买入 3 只"
+    for s in top22[:3]:
+        assert s in order.sell_instruments, "分数垫底的持仓标的必须被卖出"
 
 
-def test_rabbit1_half_turnover_drop_count():
-    """验证 Rabbit-1 在调仓时的 Drop 数量精确为 11 只"""
+def test_tradability_buffer_fallback():
+    """
+    验证可交易性顺延缓冲 (Tradability Buffer)：
+    若 Top 22 只中有 2 只停牌，自动顺延选入第 23、24 只补足，确保刚好买入 22 只。
+    """
     stocks = [f"STOCK_{i:02d}" for i in range(50)]
-    score_w1 = pd.Series(np.linspace(0.1, 0.9, 50), index=stocks)
-    engine = ToyPortfolioEngine(topk=22)
-    engine.step(score_w1, n_drop=11, is_first_week=True)
+    # 得分从高到低排列
+    score = pd.Series(np.linspace(0.9, 0.1, 50), index=stocks)
 
-    score_w2 = pd.Series(np.random.RandomState(42).permutation(np.linspace(0.1, 0.9, 50)), index=stocks)
-    buys, sells = engine.step(score_w2, n_drop=11, is_first_week=False)
+    # 假定排在第 1 名和第 2 名的股票停牌
+    suspended_stocks = {stocks[0], stocks[1]}
 
-    assert len(sells) == 11
-    assert len(buys) == 11
-    assert len(engine.holdings) == 22
+    def mock_tradability_filter(inst: str, date: str) -> bool:
+        return inst not in suspended_stocks
+
+    engine = PortfolioEngine(contestant_id="CONTESTANT_A", animal_id="robot", topk=22)
+    order = engine.generate_order(
+        score,
+        topk=22,
+        n_drop=3,
+        trade_date="2026-07-06",
+        is_first_entry=True,
+        tradability_filter=mock_tradability_filter
+    )
+
+    assert order is not None
+    assert len(order.buy_instruments) == 22, "通过顺延缓冲机制，最终买入标的严格等于 22 只"
+    assert stocks[0] not in order.buy_instruments, "停牌股票不应被买入"
+    assert stocks[1] not in order.buy_instruments, "停牌股票不应被买入"
+    # 顺延选入了第 22 和第 23 索引位的股票（即第 23、24 名）
+    assert stocks[22] in order.buy_instruments
+    assert stocks[23] in order.buy_instruments
+
+
+def test_execute_weekly_cycle_flow_and_daily_valuation():
+    """验证周频撮合、日频估值与周结算完整流程"""
+    stocks = [f"STOCK_{i:02d}" for i in range(25)]
+    score = pd.Series(np.linspace(0.1, 0.9, 25), index=stocks)
+
+    cycle = WeeklyCycle(
+        cycle_idx=0,
+        decision_date="2026-07-03",
+        trade_date="2026-07-06",
+        settle_date="2026-07-10",
+        trading_days=["2026-07-06", "2026-07-07", "2026-07-08", "2026-07-09", "2026-07-10"]
+    )
+
+    engine = PortfolioEngine(
+        contestant_id="CONTESTANT_A",
+        animal_id="robot",
+        initial_cash=100_000_000.0,
+        deal_price_mode="open"
+    )
+
+    order = engine.generate_order(score, topk=22, n_drop=3, trade_date=cycle.trade_date, is_first_entry=True)
+
+    # 模拟价格函数: 股价恒定为 10.0 元
+    def mock_price_lookup(inst: str, date: str, field: str) -> float:
+        return 10.0
+
+    settlement = engine.execute_weekly_cycle(cycle, order, mock_price_lookup)
+
+    assert settlement.week_idx == 0
+    assert settlement.num_holdings == 22
+    assert len(engine.daily_valuations) == 5, "周内 5 个交易日必须每日核算 NAV"
+    # 首周扣除手续费后，净值略低于 1.0 (约 0.9995)
+    assert 0.9990 < settlement.end_nav < 1.0000
+    assert settlement.weekly_cost > 0

@@ -1,0 +1,60 @@
+# QuantPits Graveyard Arena — Leaderboard
+
+Run ID: `full_arena_run`
+
+| contestant_id   | animal_id   | total_return_pct   | max_drawdown_pct   |   final_nav |
+|:----------------|:------------|:-------------------|:-------------------|------------:|
+| CONTESTANT_A    | robot       | -0.08%             | 0.59%              |      0.9979 |
+| CONTESTANT_A    | sloth-1     | -0.21%             | 0.60%              |      0.9979 |
+| CONTESTANT_A    | sloth-2     | -0.16%             | 0.59%              |      0.9984 |
+| CONTESTANT_A    | sloth-3     | -0.15%             | 0.52%              |      0.9985 |
+| CONTESTANT_A    | sloth-4     | -0.10%             | 0.40%              |      0.999  |
+| CONTESTANT_A    | rabbit-1    | -0.63%             | 0.98%              |      0.9924 |
+| CONTESTANT_A    | rabbit-2    | -1.34%             | 1.55%              |      0.9853 |
+| CONTESTANT_A    | turtle      | 0.05%              | 0.54%              |      0.9992 |
+| CONTESTANT_A    | koala       | -0.23%             | 0.47%              |      0.9976 |
+| CONTESTANT_B    | robot       | 0.12%              | 0.62%              |      0.9998 |
+| CONTESTANT_B    | sloth-1     | -0.12%             | 0.60%              |      0.9988 |
+| CONTESTANT_B    | sloth-2     | 0.03%              | 0.55%              |      1.0003 |
+| CONTESTANT_B    | sloth-3     | -0.06%             | 0.60%              |      0.9994 |
+| CONTESTANT_B    | sloth-4     | 0.09%              | 0.50%              |      1.0009 |
+| CONTESTANT_B    | rabbit-1    | -0.49%             | 1.05%              |      0.9936 |
+| CONTESTANT_B    | rabbit-2    | -1.29%             | 1.77%              |      0.9857 |
+| CONTESTANT_B    | turtle      | 0.15%              | 0.55%              |      1      |
+| CONTESTANT_B    | koala       | -0.22%             | 0.68%              |      0.9982 |
+| CONTESTANT_C    | robot       | 0.09%              | 0.69%              |      0.9994 |
+| CONTESTANT_C    | sloth-1     | -0.05%             | 0.63%              |      0.9995 |
+| CONTESTANT_C    | sloth-2     | -0.01%             | 0.55%              |      0.9999 |
+| CONTESTANT_C    | sloth-3     | 0.01%              | 0.63%              |      1.0001 |
+| CONTESTANT_C    | sloth-4     | 0.05%              | 0.56%              |      1.0005 |
+| CONTESTANT_C    | rabbit-1    | -0.52%             | 1.15%              |      0.9932 |
+| CONTESTANT_C    | rabbit-2    | -1.26%             | 1.85%              |      0.9859 |
+| CONTESTANT_C    | turtle      | 0.21%              | 0.66%              |      1.0006 |
+| CONTESTANT_C    | koala       | -0.19%             | 0.60%              |      0.9986 |
+| CONTESTANT_D    | robot       | -0.03%             | 0.47%              |      0.9983 |
+| CONTESTANT_D    | sloth-1     | -0.20%             | 0.60%              |      0.998  |
+| CONTESTANT_D    | sloth-2     | -0.12%             | 0.42%              |      0.9988 |
+| CONTESTANT_D    | sloth-3     | -0.14%             | 0.60%              |      0.9986 |
+| CONTESTANT_D    | sloth-4     | -0.06%             | 0.34%              |      0.9994 |
+| CONTESTANT_D    | rabbit-1    | -0.66%             | 0.87%              |      0.992  |
+| CONTESTANT_D    | rabbit-2    | -1.20%             | 1.66%              |      0.9866 |
+| CONTESTANT_D    | turtle      | 0.01%              | 0.48%              |      0.9987 |
+| CONTESTANT_D    | koala       | -0.30%             | 0.61%              |      0.997  |
+| CONTESTANT_E    | robot       | 0.05%              | 0.63%              |      0.9985 |
+| CONTESTANT_E    | sloth-1     | -0.12%             | 0.61%              |      0.9988 |
+| CONTESTANT_E    | sloth-2     | -0.09%             | 0.63%              |      0.9991 |
+| CONTESTANT_E    | sloth-3     | -0.06%             | 0.42%              |      0.9994 |
+| CONTESTANT_E    | sloth-4     | -0.04%             | 0.34%              |      0.9996 |
+| CONTESTANT_E    | rabbit-1    | -0.41%             | 1.11%              |      0.9939 |
+| CONTESTANT_E    | rabbit-2    | -1.09%             | 1.90%              |      0.9871 |
+| CONTESTANT_E    | turtle      | 0.15%              | 0.60%              |      0.9995 |
+| CONTESTANT_E    | koala       | -0.24%             | 0.53%              |      0.9953 |
+| CONTESTANT_F    | robot       | -0.21%             | 0.46%              |      0.9984 |
+| CONTESTANT_F    | sloth-1     | -0.14%             | 0.48%              |      0.9986 |
+| CONTESTANT_F    | sloth-2     | -0.11%             | 0.46%              |      0.9989 |
+| CONTESTANT_F    | sloth-3     | -0.09%             | 0.48%              |      0.9991 |
+| CONTESTANT_F    | sloth-4     | -0.05%             | 0.39%              |      0.9995 |
+| CONTESTANT_F    | rabbit-1    | -0.73%             | 0.83%              |      0.9931 |
+| CONTESTANT_F    | rabbit-2    | -1.48%             | 1.64%              |      0.9856 |
+| CONTESTANT_F    | turtle      | -0.13%             | 0.44%              |      0.9992 |
+| CONTESTANT_F    | koala       | -0.25%             | 0.62%              |      0.9963 |
