@@ -25,11 +25,11 @@ class Sloth(Animal):
         topk: int = DEFAULT_TOPK,
         n_drop: int = DEFAULT_CANONICAL_DROP_N
     ):
-        if delay_weeks < 1:
-            raise ValueError("delay_weeks 必须 >= 1")
+        if delay_weeks < 0:
+            raise ValueError("delay_weeks 必须 >= 0")
         super().__init__(
-            animal_id=f"sloth-{delay_weeks}",
-            display_name=f"Sloth-{delay_weeks}w",
+            animal_id=f"sloth-{delay_weeks}" if delay_weeks > 0 else "sloth-0",
+            display_name=f"Sloth-{delay_weeks}w" if delay_weeks > 0 else "Sloth-0w",
             family="Latency"
         )
         self.delay_weeks = delay_weeks

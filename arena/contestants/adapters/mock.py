@@ -40,8 +40,9 @@ class MockInferenceAdapter(BaseInferenceAdapter):
             # 默认使用 100 只虚拟标的
             instruments = [f"STOCK_{i:03d}" for i in range(100)]
 
-        # 单日截面打分生成
-        rng = np.random.RandomState(self.base_seed)
+        # 单日截面打分生成（包含日期种子，保证打分随每周时间推进动态演化）
+        date_seed = (self.base_seed + abs(hash(str(start_date)))) % 1000000
+        rng = np.random.RandomState(date_seed)
         # 生成有一定排名的得分
         raw_scores = rng.normal(loc=0.0, scale=1.0, size=len(instruments))
         series = pd.Series(raw_scores, index=instruments)

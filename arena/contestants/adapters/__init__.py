@@ -4,6 +4,7 @@ arena.contestants.adapters
 模型推理适配器与工厂函数
 """
 
+from pathlib import Path
 from arena.contestants.manifest import ContestantManifest
 from arena.contestants.adapters.base import (
     BaseInferenceAdapter,
@@ -14,18 +15,27 @@ from arena.contestants.adapters.mock import MockInferenceAdapter
 from arena.contestants.adapters.static import StaticEnsembleAdapter
 from arena.contestants.adapters.cpcv import CPCVEnsembleAdapter
 from arena.contestants.adapters.gat import GATAdapter
+from arena.contestants.adapters.historical import HistoricalReplayAdapter
 
 
 def create_adapter(
     manifest: ContestantManifest,
-    mock: bool = False
+    mock: bool = False,
+    use_replay: bool = False
 ) -> BaseInferenceAdapter:
     """
     适配器工厂函数：
-    依据 manifest 的 inference_adapter 字段或 mock 标志实例化对应适配器。
+    依据 manifest 的 inference_adapter 字段或 mock/replay 标志实例化对应适配器。
     """
     if mock:
         return MockInferenceAdapter(manifest)
+
+    # 针对 Static 与 CPCV，若指定 replay 且本地具备生产历史快照，使用 100% 生产同源回放
+    snapshot_path = Path.home() / "src/QLIB-TEST-RUN/ARCHAEOLOGY/raw_preds.pkl"
+    cid = manifest.contestant_id.lower()
+    if use_replay and snapshot_path.exists():
+        if "static" in cid or "cpcv" in cid:
+            return HistoricalReplayAdapter(manifest, snapshot_path=snapshot_path)
 
     adapter_name = manifest.inference_adapter.lower()
 

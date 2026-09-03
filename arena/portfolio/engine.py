@@ -37,18 +37,22 @@ class PortfolioEngine:
         self,
         contestant_id: str,
         animal_id: str,
-        initial_cash: float = DEFAULT_INITIAL_CASH,
         topk: int = DEFAULT_TOPK,
+        initial_cash: float = DEFAULT_INITIAL_CASH,
+        cost_model: Optional[CostModel] = None,
         deal_price_mode: str = DEFAULT_DEAL_PRICE,
-        cost_model: Optional[CostModel] = None
+        allow_fractional_shares: bool = False,  # 默认不支持碎股
+        lot_size: int = 100,                     # A股一手 100 股
     ):
         self.contestant_id = contestant_id
         self.animal_id = animal_id
+        self.topk = topk
         self.initial_cash = float(initial_cash)
         self.cash_balance = float(initial_cash)
-        self.topk = topk
-        self.deal_price_mode = deal_price_mode
         self.cost_model = cost_model or CostModel()
+        self.deal_price_mode = deal_price_mode
+        self.allow_fractional_shares = allow_fractional_shares
+        self.lot_size = lot_size
 
         # 当前持仓: {instrument: shares}
         self.holdings: Dict[str, float] = {}
@@ -68,7 +72,8 @@ class PortfolioEngine:
         n_drop: int = 3,
         trade_date: str = "",
         is_first_entry: bool = False,
-        tradability_filter: Optional[Callable[[str, str], bool]] = None
+        tradability_filter: Optional[Callable[[str, str], bool]] = None,
+        price_lookup: Optional[Callable[[str, str, str], float]] = None,
     ) -> Optional[Order]:
         """
         根据当周得分与策略生成调仓订单。
@@ -80,6 +85,7 @@ class PortfolioEngine:
             trade_date: 拟交易日期 (周一)
             is_first_entry: 是否为首次买入建仓
             tradability_filter: 物理可交易性过滤函数 (instrument, date) -> bool
+            price_lookup: 价格查询函数 (若不支持碎股，用于测算是否买得起一手)
         """
         if score is None:
             # 冷启动空仓期（如 Sloth 前置周期）：不产生订单，维持空仓
@@ -87,15 +93,28 @@ class PortfolioEngine:
 
         current_held = self.get_current_held_instruments()
 
-        # 筛选具备可交易性的候选标的列表（顺延缓冲）
-        sorted_candidates = list(score.sort_values(ascending=False).index)
-        if tradability_filter is not None:
-            tradable_candidates = [
-                inst for inst in sorted_candidates
-                if tradability_filter(inst, trade_date)
-            ]
+        # 预估单只标的分配可用资金
+        if is_first_entry or len(current_held) == 0:
+            est_per_stock_cash = (self.cash_balance * 0.995) / max(topk, 1)
         else:
-            tradable_candidates = sorted_candidates
+            est_per_stock_cash = self.initial_cash / max(topk, 1)
+
+        # 筛选具备可交易性且“买得起”的候选标的列表（顺延缓冲机制）
+        sorted_candidates = list(score.sort_values(ascending=False).index)
+        tradable_candidates = []
+        for inst in sorted_candidates:
+            # 1. 停牌/涨跌停过滤
+            if tradability_filter is not None and not tradability_filter(inst, trade_date):
+                continue
+
+            # 2. 资金承受能力过滤：若不支持碎股且买不起一手 (100股)，跳过并顺延
+            if not self.allow_fractional_shares and price_lookup is not None:
+                p = price_lookup(inst, trade_date, self.deal_price_mode)
+                if p > 0 and (p * self.lot_size) > est_per_stock_cash:
+                    # 买不起一手，跳过（与涨停停牌处理逻辑一致）
+                    continue
+
+            tradable_candidates.append(inst)
 
         # 1. 首次建仓（或持仓为空时的首次买入）
         if is_first_entry or len(current_held) == 0:
@@ -108,18 +127,46 @@ class PortfolioEngine:
             )
 
         # 2. 常规周频调仓
-        # a. 持仓中在当前 score 中得分最低的 n_drop 只卖出
+        target_topk = tradable_candidates[:topk]
+
+        # 找到入围 target_topk 但当前尚未持有的新标的
+        entrants = [inst for inst in target_topk if inst not in current_held]
+
+        # 调仓换手数量：受 n_drop 约束，且不超过实际有必要更换的新标的数
+        num_to_replace = min(len(entrants), n_drop)
+
+        if num_to_replace == 0:
+            # 目标组合无任何新成员，持仓完全匹配当前目标，零换手！
+            return Order(
+                trade_date=trade_date,
+                buy_instruments=[],
+                sell_instruments=[],
+                is_first_entry=False
+            )
+
+        buy_list = entrants[:num_to_replace]
+
+        # 换出标的：
+        # 优先卖出不在当前打分表中的标的，然后卖出已跌出 target_topk 的标的，最后按得分从低到高补足
         held_in_score = [inst for inst in current_held if inst in score.index]
-        # 若某持仓标的不在当前得分中，优先卖出
-        missing_in_score = [inst for inst in current_held if inst not in score.index]
-
         held_score_series = score.loc[held_in_score]
-        lowest_held = list(held_score_series.nsmallest(n_drop).index)
-        sell_list = (missing_in_score + lowest_held)[:n_drop]
 
-        # b. 从非持仓的可交易标的中，按得分最高选入 n_drop 只买入
-        unheld_tradable = [inst for inst in tradable_candidates if inst not in current_held]
-        buy_list = unheld_tradable[:n_drop]
+        missing_in_score = [inst for inst in current_held if inst not in score.index]
+        exits_not_in_target = [inst for inst in current_held if inst in score.index and inst not in target_topk]
+        # 按得分从低到高排序
+        exits_not_in_target_sorted = list(held_score_series.loc[exits_not_in_target].nsmallest(len(exits_not_in_target)).index)
+
+        # 仍在 target_topk 内但若需要被换出的（得分最低的）
+        in_target_held = [inst for inst in current_held if inst in target_topk]
+        in_target_held_sorted = list(held_score_series.loc[in_target_held].nsmallest(len(in_target_held)).index)
+
+        candidates_to_sell = missing_in_score + exits_not_in_target_sorted + in_target_held_sorted
+        sell_list = []
+        for inst in candidates_to_sell:
+            if inst not in sell_list:
+                sell_list.append(inst)
+            if len(sell_list) == num_to_replace:
+                break
 
         return Order(
             trade_date=trade_date,
@@ -142,7 +189,20 @@ class PortfolioEngine:
             order: 周一调仓订单 (若为 None 则本周不调仓)
             price_lookup: 价格查询函数 (instrument, date, field='open'|'close') -> float
         """
-        prev_nav = self.daily_valuations[-1].nav if self.daily_valuations else 1.0
+        # 如果是首次运行，记录 T0 起点 (Anchor 收盘状态: NAV=1.000000, 现金=100%, 仓位=0%)
+        if len(self.daily_valuations) == 0:
+            self.daily_valuations.append(
+                DailyValuation(
+                    date=cycle.decision_date,
+                    cash=self.cash_balance,
+                    holdings_value=0.0,
+                    total_asset=self.cash_balance,
+                    nav=1.0,
+                    daily_return=0.0
+                )
+            )
+
+        prev_nav = self.daily_valuations[-1].nav
         weekly_cost = 0.0
         turnover_value = 0.0
 
@@ -185,11 +245,14 @@ class PortfolioEngine:
 
                 for inst in order.buy_instruments:
                     price = price_lookup(inst, cycle.trade_date, exec_field)
-                    if price <= 0:
-                        continue
-                    # 假设整手（或精确股数）买入
-                    shares = float(int(per_stock_cash / price))
-                    if shares <= 0:
+                    if self.allow_fractional_shares:
+                        shares = per_stock_cash / price
+                    else:
+                        lots = int(per_stock_cash / (price * self.lot_size))
+                        shares = float(lots * self.lot_size)
+
+                    if shares < (1.0 if self.allow_fractional_shares else float(self.lot_size)):
+                        # 买不起一手 (100股)，跳过
                         continue
                     gross_val = shares * price
                     cost = self.cost_model.calculate_buy_cost(gross_val)

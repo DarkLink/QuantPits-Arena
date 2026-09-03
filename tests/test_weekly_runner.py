@@ -28,20 +28,20 @@ def test_weekly_cycle_runner_mock_execution(tmp_path):
     assert len(results) > 0
     # 验证每一个组合都输出了有效的回测路径
     for (cid, aid), path in results.items():
-        assert len(path.daily_valuations) == 10, f"{cid}_{aid} 期望 2 周共 10 个交易日估值"
+        assert len(path.daily_valuations) == 11, f"{cid}_{aid} 期望 1 个 T0 锚定日 + 2 周共 10 个交易日估值"
         assert len(path.weekly_settlements) == 2, f"{cid}_{aid} 期望 2 个周结算"
 
     # 特别检查 Sloth-1 方案 B 冷启动
     sloth1_key = ("QP-20260626-STATIC", "sloth-1")
     if sloth1_key in results:
         s1_path = results[sloth1_key]
-        # Cycle 0 (前 5 个交易日): 保持空仓现金，无买卖，NAV 恒为 1.0000
-        for v in s1_path.daily_valuations[:5]:
+        # Cycle 0 (T0 + 前 5 个交易日): 保持空仓现金，无买卖，NAV 恒为 1.0000
+        for v in s1_path.daily_valuations[:6]:
             assert np.isclose(v.nav, 1.0)
             assert v.holdings_value == 0.0
 
-        # Cycle 1 (第 6~10 个交易日): 激活建仓，持仓市值大于 0
-        v_c1 = s1_path.daily_valuations[5]
+        # Cycle 1 (第 7~11 个交易日，索引 6 起): 激活建仓，持仓市值大于 0
+        v_c1 = s1_path.daily_valuations[6]
         assert v_c1.holdings_value > 0.0
 
 

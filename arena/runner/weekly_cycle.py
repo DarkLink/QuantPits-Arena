@@ -14,6 +14,7 @@ from arena.config import (
     DEFAULT_ANCHOR_DATE,
     DEFAULT_END_DATE,
     DEFAULT_TOPK,
+    DEFAULT_INITIAL_CASH,
     DEFAULT_DEAL_PRICE,
     RUNS_DIR,
 )
@@ -24,6 +25,7 @@ from arena.contestants.adapters import create_adapter, BaseInferenceAdapter
 from arena.animals import get_all_animals, Animal
 from arena.portfolio import PortfolioEngine, PortfolioPath
 from arena.controls import MonkeyColony, RockBenchmark
+from arena.data.market import MarketDataProvider
 
 
 class WeeklyCycleRunner:
@@ -39,21 +41,25 @@ class WeeklyCycleRunner:
         anchor_date: str = DEFAULT_ANCHOR_DATE,
         end_date: str = DEFAULT_END_DATE,
         topk: int = DEFAULT_TOPK,
+        initial_cash: float = DEFAULT_INITIAL_CASH,
         deal_price_mode: str = DEFAULT_DEAL_PRICE,
         mock_mode: bool = False,
         calendar: Optional[TradingCalendar] = None,
         registry: Optional[ContestantRegistry] = None,
         animals: Optional[List[Animal]] = None,
+        market_provider: Optional[MarketDataProvider] = None,
     ):
         self.anchor_date = anchor_date
         self.end_date = end_date
         self.topk = topk
+        self.initial_cash = initial_cash
         self.deal_price_mode = deal_price_mode
         self.mock_mode = mock_mode
 
         self.calendar = calendar or TradingCalendar()
         self.registry = registry or ContestantRegistry()
         self.animals = animals or get_all_animals()
+        self.market_provider = market_provider
 
         self.cycles = self.calendar.build_weekly_cycles(anchor_date, end_date)
         self.monkey_colony = MonkeyColony(colony_size=100)  # 默认 100 只用于快速执行，支持配置 1000
@@ -76,7 +82,7 @@ class WeeklyCycleRunner:
         for c in contestants:
             cid = c.contestant_id
             self.signal_history[cid] = {}
-            self.adapters[cid] = create_adapter(c, mock=self.mock_mode)
+            self.adapters[cid] = create_adapter(c, mock=self.mock_mode, use_replay=not self.mock_mode)
 
             for a in self.animals:
                 key = (cid, a.animal_id)
@@ -84,6 +90,7 @@ class WeeklyCycleRunner:
                     contestant_id=cid,
                     animal_id=a.animal_id,
                     topk=self.topk,
+                    initial_cash=self.initial_cash,
                     deal_price_mode=self.deal_price_mode
                 )
 
@@ -106,15 +113,30 @@ class WeeklyCycleRunner:
         active_contestants = contestants or self.registry.list_contestants()
         self._init_engines(active_contestants)
 
-        # 默认 Mock 价格生成器（以标的基准价为底，叠加小幅微量波动）
+        # 行情与可交易性数据提供
         if price_lookup_fn is None:
-            def default_price_lookup(inst: str, date: str, field: str) -> float:
-                base = (abs(hash(inst)) % 3000 + 1000) / 100.0  # 10.0 ~ 40.0 元
-                day_offset = ((abs(hash(f"{inst}_{date}")) % 20) - 10) / 1000.0  # -1% ~ +1% 波动
-                if field == "open":
-                    return base
-                return base * (1.0 + day_offset)
-            price_lookup_fn = default_price_lookup
+            if not self.mock_mode:
+                if self.market_provider is None:
+                    self.market_provider = MarketDataProvider(use_real_qlib=True)
+                # 获取首个预测标的池并预加载真实 Qlib 价格
+                try:
+                    first_adapter = next(iter(self.adapters.values()))
+                    sample_score = first_adapter.predict(start_date=self.anchor_date, end_date=self.anchor_date)
+                    insts = list(sample_score.index)
+                    self.market_provider.load_qlib_data(insts, self.anchor_date, self.end_date)
+                except Exception as e:
+                    print(f"[WARN] 真实 Qlib 价格批量加载异常，降级为模拟价格: {e}")
+                price_lookup_fn = self.market_provider.get_real_price
+                if tradability_filter_fn is None:
+                    tradability_filter_fn = self.market_provider.is_tradable
+            else:
+                def default_price_lookup(inst: str, date: str, field: str) -> float:
+                    base = (abs(hash(inst)) % 3000 + 1000) / 100.0  # 10.0 ~ 40.0 元
+                    day_offset = ((abs(hash(f"{inst}_{date}")) % 20) - 10) / 1000.0  # -1% ~ +1% 波动
+                    if field == "open":
+                        return base
+                    return base * (1.0 + day_offset)
+                price_lookup_fn = default_price_lookup
 
         cycles_to_run = self.cycles[:max_cycles] if max_cycles else self.cycles
 
@@ -160,7 +182,8 @@ class WeeklyCycleRunner:
                         n_drop=n_drop,
                         trade_date=cycle.trade_date,
                         is_first_entry=is_first,
-                        tradability_filter=tradability_filter_fn
+                        tradability_filter=tradability_filter_fn,
+                        price_lookup=price_lookup_fn
                     )
 
                     # 3. 撮合成交与周内日频估值

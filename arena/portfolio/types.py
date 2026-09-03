@@ -75,10 +75,10 @@ class PortfolioPath:
 
     @property
     def total_return(self) -> float:
-        """区间累计总收益率"""
+        """区间累计总收益率 (严格以初始 NAV = 1.000000 为基准)"""
         if not self.daily_valuations:
             return 0.0
-        return (self.daily_valuations[-1].nav / self.daily_valuations[0].nav) - 1.0
+        return self.daily_valuations[-1].nav - 1.0
 
     @property
     def max_drawdown(self) -> float:

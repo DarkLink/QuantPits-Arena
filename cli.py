@@ -76,6 +76,7 @@ def cmd_run(args):
     runner = WeeklyCycleRunner(
         anchor_date=args.anchor_date,
         end_date=args.end_date,
+        initial_cash=args.initial_cash,
         mock_mode=args.mock,
         calendar=calendar,
         registry=registry
@@ -84,7 +85,13 @@ def cmd_run(args):
     print(f"[1/3] 已划分 {len(runner.cycles)} 个周频执行周期...")
     max_c = args.cycles if args.cycles > 0 else None
 
-    results = runner.run(max_cycles=max_c)
+    active_contestants = None
+    if args.contestants:
+        chosen = [c.strip() for c in args.contestants.split(",")]
+        active_contestants = [c for c in registry.list_contestants() if c.contestant_id in chosen]
+        print(f"    指定参赛选手: {[c.contestant_id for c in active_contestants]}")
+
+    results = runner.run(contestants=active_contestants, max_cycles=max_c)
     print(f"[2/3] 完成回测计算，涵盖 {len(results)} 个 (Contestant, Animal) 组合路径。")
 
     output_dir = Path(args.output) if args.output else RUNS_DIR
@@ -118,7 +125,9 @@ def main():
     p_run.add_argument("--anchor-date", type=str, default=DEFAULT_ANCHOR_DATE, help="初始锚定日期")
     p_run.add_argument("--end-date", type=str, default=DEFAULT_END_DATE, help="回测结束日期")
     p_run.add_argument("--cycles", type=int, default=0, help="限制运行的最大周数 (0 表示全部)")
+    p_run.add_argument("--initial-cash", type=float, default=500_000.0, help="初始资金规模 (默认 500,000 元)")
     p_run.add_argument("--mock", action="store_true", help="使用 Mock 适配器运行全流程快速验证")
+    p_run.add_argument("--contestants", type=str, default=None, help="逗号分隔的参赛选手 ID (如 QP-20260626-STATIC,QP-20260626-CPCV)")
     p_run.add_argument("--output", type=str, default=None, help="指定输出根目录")
 
     args = parser.parse_args()

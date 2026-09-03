@@ -101,7 +101,7 @@ def test_execute_weekly_cycle_flow_and_daily_valuation():
     engine = PortfolioEngine(
         contestant_id="CONTESTANT_A",
         animal_id="robot",
-        initial_cash=100_000_000.0,
+        initial_cash=500_000.0,
         deal_price_mode="open"
     )
 
@@ -115,7 +115,62 @@ def test_execute_weekly_cycle_flow_and_daily_valuation():
 
     assert settlement.week_idx == 0
     assert settlement.num_holdings == 22
-    assert len(engine.daily_valuations) == 5, "周内 5 个交易日必须每日核算 NAV"
+    assert len(engine.daily_valuations) == 6, "T0 锚定日 + 周内 5 个交易日共 6 次估值"
     # 首周扣除手续费后，净值略低于 1.0 (约 0.9995)
     assert 0.9990 < settlement.end_nav < 1.0000
     assert settlement.weekly_cost > 0
+
+
+def test_skip_unaffordable_stock_and_no_fractional_shares():
+    """
+    验证不买碎股与资金门槛顺延契约：
+    - 初始资金 50,000 元，目标买入 2 只，单只预算约 25,000 元
+    - STOCK_0 (得分最高 0.99)，但股价 300 元，一手需 30,000 元 -> 买不起，必须跳过顺延！
+    - STOCK_1 (得分 0.88)，股价 20 元，一手 2,000 元 -> 买得起
+    - STOCK_2 (得分 0.77)，股价 10 元，一手 1,000 元 -> 买得起
+    - 验证最终订单买入 STOCK_1 和 STOCK_2，且股数均为 100 的整数倍
+    """
+    score = pd.Series([0.99, 0.88, 0.77], index=["STOCK_HIGH", "STOCK_MID", "STOCK_LOW"])
+    prices = {
+        "STOCK_HIGH": 300.0,
+        "STOCK_MID": 20.0,
+        "STOCK_LOW": 10.0,
+    }
+
+    def price_lookup(inst: str, date: str, field: str) -> float:
+        return prices[inst]
+
+    engine = PortfolioEngine(
+        contestant_id="CONTESTANT_A",
+        animal_id="robot",
+        topk=2,
+        initial_cash=50_000.0,
+        allow_fractional_shares=False,
+        lot_size=100
+    )
+
+    order = engine.generate_order(
+        score=score,
+        topk=2,
+        trade_date="2026-07-06",
+        is_first_entry=True,
+        price_lookup=price_lookup
+    )
+
+    assert order is not None
+    assert "STOCK_HIGH" not in order.buy_instruments, "买不起一手 (300元*100=30000 > 25000) 的标的必须跳过"
+    assert order.buy_instruments == ["STOCK_MID", "STOCK_LOW"], "应自动顺延选入后续买得起的标的"
+
+    # 执行买入，验证股数无碎股（全部是 100 的整数倍）
+    cycle = WeeklyCycle(
+        cycle_idx=0,
+        decision_date="2026-07-03",
+        trade_date="2026-07-06",
+        settle_date="2026-07-10",
+        trading_days=["2026-07-06"]
+    )
+    engine.execute_weekly_cycle(cycle, order, price_lookup)
+
+    for inst, shares in engine.holdings.items():
+        assert shares > 0
+        assert shares % 100 == 0, f"{inst} 持仓股数 {shares} 必须是一手 (100股) 的整数倍，严禁碎股！"
