@@ -74,18 +74,16 @@ class PortfolioEngine:
         is_first_entry: bool = False,
         tradability_filter: Optional[Callable[[str, str], bool]] = None,
         price_lookup: Optional[Callable[[str, str, str], float]] = None,
+        passive_pool: bool = False,
     ) -> Optional[Order]:
         """
-        根据当周得分与策略生成调仓订单。
+        根据当周得分与策略生成调仓订单（含出池被动优先调仓机制与 DropN 预算约束）。
 
-        Args:
-            score: Animal 变换后的截面得分 Series（若为 None 表示冷启动空仓期）
-            topk: 目标持股数量 (默认 22)
-            n_drop: 调仓时换出换入只数 (Robot: 3, Rabbit-1: 11, Turtle: 1...)
-            trade_date: 拟交易日期 (周一)
-            is_first_entry: 是否为首次买入建仓
-            tradability_filter: 物理可交易性过滤函数 (instrument, date) -> bool
-            price_lookup: 价格查询函数 (若不支持碎股，用于测算是否买得起一手)
+        调仓规则：
+        1. 出池优先于 DROP：当前持仓中不在有效池中的标的优先卖出；
+        2. 调仓卖出上限不超过 DropN：单期卖出总数受限于 n_drop（多余出池标的留待下期处理）；
+        3. 出池卖出后若仍有剩余 DropN 配额，继续按打分进行常规主动 Drop；
+        4. 饕餮（全池纯被动）：全量被动卖出出池标的、全量买入新入池标的。
         """
         if score is None:
             # 冷启动空仓期（如 Sloth 前置周期）：不产生订单，维持空仓
@@ -93,15 +91,17 @@ class PortfolioEngine:
 
         current_held = self.get_current_held_instruments()
 
-        # 预估单只标的分配可用资金
-        if is_first_entry or len(current_held) == 0:
-            est_per_stock_cash = (self.cash_balance * 0.995) / max(topk, 1)
-        else:
-            est_per_stock_cash = self.initial_cash / max(topk, 1)
-
         # 筛选具备可交易性且“买得起”的候选标的列表（顺延缓冲机制）
         sorted_candidates = list(score.sort_values(ascending=False).index)
         tradable_candidates = []
+
+        # 预估单只标的分配可用资金
+        effective_topk = len(sorted_candidates) if (topk <= 0 or topk >= len(sorted_candidates)) else topk
+        if is_first_entry or len(current_held) == 0:
+            est_per_stock_cash = (self.cash_balance * 0.995) / max(effective_topk, 1)
+        else:
+            est_per_stock_cash = self.initial_cash / max(effective_topk, 1)
+
         for inst in sorted_candidates:
             # 1. 停牌/涨跌停过滤
             if tradability_filter is not None and not tradability_filter(inst, trade_date):
@@ -111,14 +111,19 @@ class PortfolioEngine:
             if not self.allow_fractional_shares and price_lookup is not None:
                 p = price_lookup(inst, trade_date, self.deal_price_mode)
                 if p > 0 and (p * self.lot_size) > est_per_stock_cash:
-                    # 买不起一手，跳过（与涨停停牌处理逻辑一致）
                     continue
 
             tradable_candidates.append(inst)
 
+        # 重新校准实际有效 topk（不超过实际可交易候选池大小）
+        if topk <= 0 or topk >= len(tradable_candidates):
+            target_capacity = len(tradable_candidates)
+        else:
+            target_capacity = topk
+
         # 1. 首次建仓（或持仓为空时的首次买入）
         if is_first_entry or len(current_held) == 0:
-            target_buys = tradable_candidates[:topk]
+            target_buys = tradable_candidates[:target_capacity]
             return Order(
                 trade_date=trade_date,
                 buy_instruments=target_buys,
@@ -127,46 +132,62 @@ class PortfolioEngine:
             )
 
         # 2. 常规周频调仓
-        target_topk = tradable_candidates[:topk]
+        # 识别出池持仓与在池持仓
+        out_of_pool_held = [inst for inst in current_held if inst not in tradable_candidates]
+        in_pool_held = [inst for inst in current_held if inst in tradable_candidates]
 
-        # 找到入围 target_topk 但当前尚未持有的新标的
-        entrants = [inst for inst in target_topk if inst not in current_held]
+        target_topk = tradable_candidates[:target_capacity]
 
-        # 调仓换手数量：受 n_drop 约束，且不超过实际有必要更换的新标的数
-        num_to_replace = min(len(entrants), n_drop)
+        # 模式 A: 纯被动全池复制模式（如饕餮 Taotie: passive_pool=True 或 n_drop=0 且全池）
+        if passive_pool or (n_drop == 0 and target_capacity >= len(tradable_candidates)):
+            sell_list = list(out_of_pool_held)
+            buy_list = [inst for inst in tradable_candidates if inst not in current_held]
+            if len(sell_list) == 0 and len(buy_list) == 0:
+                return Order(trade_date=trade_date, buy_instruments=[], sell_instruments=[], is_first_entry=False)
+            return Order(trade_date=trade_date, buy_instruments=buy_list, sell_instruments=sell_list, is_first_entry=False)
 
-        if num_to_replace == 0:
-            # 目标组合无任何新成员，持仓完全匹配当前目标，零换手！
+        # 模式 B: 主动配额调仓模式（含出池被动优先调仓与 DropN 卖出上限约束）
+        max_sells = n_drop
+
+        # 1) 出池优先卖出（上限不超过 DropN）
+        sells_from_out = out_of_pool_held[:max_sells]
+        remaining_drop = max_sells - len(sells_from_out)
+
+        # 2) 若仍有剩余 DropN 额度，进行常规主动得分 Drop
+        sells_from_active = []
+        if remaining_drop > 0 and len(in_pool_held) > 0:
+            held_in_score = [inst for inst in in_pool_held if inst in score.index]
+            held_score_series = score.loc[held_in_score]
+
+            exits_not_in_target = [inst for inst in in_pool_held if inst not in target_topk]
+            exits_not_in_target_sorted = list(held_score_series.loc[exits_not_in_target].nsmallest(len(exits_not_in_target)).index)
+
+            in_target_held = [inst for inst in in_pool_held if inst in target_topk]
+            in_target_held_sorted = list(held_score_series.loc[in_target_held].nsmallest(len(in_target_held)).index)
+
+            active_candidates = exits_not_in_target_sorted + in_target_held_sorted
+            entrants = [inst for inst in target_topk if inst not in current_held]
+
+            # 主动换出受限于剩余配额、新入围需求以及可换出标的数
+            num_active = min(remaining_drop, len(entrants), len(active_candidates))
+            sells_from_active = active_candidates[:num_active]
+
+        sell_list = sells_from_out + sells_from_active
+
+        # 3) 计算买入标的列表，维持目标持仓规模 (卖出后组合实际保留的总持股数)
+        retained_held = [inst for inst in current_held if inst not in sell_list]
+        need_to_buy = max(0, target_capacity - len(retained_held))
+
+        available_buys = [inst for inst in tradable_candidates if inst not in current_held or inst in sell_list]
+        buy_list = available_buys[:need_to_buy]
+
+        if len(buy_list) == 0 and len(sell_list) == 0:
             return Order(
                 trade_date=trade_date,
                 buy_instruments=[],
                 sell_instruments=[],
                 is_first_entry=False
             )
-
-        buy_list = entrants[:num_to_replace]
-
-        # 换出标的：
-        # 优先卖出不在当前打分表中的标的，然后卖出已跌出 target_topk 的标的，最后按得分从低到高补足
-        held_in_score = [inst for inst in current_held if inst in score.index]
-        held_score_series = score.loc[held_in_score]
-
-        missing_in_score = [inst for inst in current_held if inst not in score.index]
-        exits_not_in_target = [inst for inst in current_held if inst in score.index and inst not in target_topk]
-        # 按得分从低到高排序
-        exits_not_in_target_sorted = list(held_score_series.loc[exits_not_in_target].nsmallest(len(exits_not_in_target)).index)
-
-        # 仍在 target_topk 内但若需要被换出的（得分最低的）
-        in_target_held = [inst for inst in current_held if inst in target_topk]
-        in_target_held_sorted = list(held_score_series.loc[in_target_held].nsmallest(len(in_target_held)).index)
-
-        candidates_to_sell = missing_in_score + exits_not_in_target_sorted + in_target_held_sorted
-        sell_list = []
-        for inst in candidates_to_sell:
-            if inst not in sell_list:
-                sell_list.append(inst)
-            if len(sell_list) == num_to_replace:
-                break
 
         return Order(
             trade_date=trade_date,

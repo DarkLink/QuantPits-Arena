@@ -51,7 +51,11 @@
 | **Rabbit-1** | Bandwidth | Half-turnover: Drop-11 (50% of Top-22) | Test aggressive opinion deployment |
 | **Rabbit-2** | Bandwidth | Full-turnover: Drop-22 (complete replacement) | Measure maximum turnover performance |
 | **Turtle** | Low Turnover | Drop-1 minimal turnover | Test extreme turnover minimization |
-| **Koala** | Inversion | Cross-sectional rank reversal (`1.0 - rank_norm`) | Anti-alpha & signal symmetry check |
+| **Koala** | Inversion | Cross-sectional rank reversal (`1.0 - rank_norm`) | Anti-alpha & signal symmetry check (100% percentile) |
+| **Meerkat-10% ~ 90%** | Percentile | 9 percentile slices ($P \in [10\%, 90\%]$), Top-22, Drop-3 | Test cross-sectional signal linearity & alpha depth |
+| **Eagle-5/1 ~ 88/12** | Capacity | (5/1, 11/2, 44/6, 66/9, 88/12) TopK/DropN matrix | Stress-test portfolio capacity, concentration & cost boundary |
+| **WhaleShark-50%** | Broad-Market | TopK=50% of Universe (123), DropN~13.8% (17) | Broad-market half-pool capacity benchmark |
+| **Taotie-All** | All-Market | TopK=100% of Universe, DropN=0 (Pure Passive) | Full-market index tracking with passive exit/entry rebalancing |
 
 ### Controls
 

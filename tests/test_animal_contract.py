@@ -35,20 +35,26 @@ def simulate_cross_sectional_score(dates: list, instruments: list):
 
 
 from arena.animals import (
-    Robot, Sloth, Snail, Rabbit, Turtle, Koala, get_all_animals
+    Robot, Sloth, Snail, Rabbit, Turtle, Koala,
+    Meerkat, Eagle, WhaleShark, Taotie, get_all_animals
 )
 
 
 def test_get_all_animals_completeness():
-    """验证 13 种动物齐备（含 4 种预热延迟 Snail）"""
+    """验证 29 种动物齐备（含狐獴群、鹰群、鲸鲨与饕餮）"""
     animals = get_all_animals()
-    assert len(animals) == 13
+    assert len(animals) == 29
     ids = [a.animal_id for a in animals]
-    assert ids == [
+    expected_ids = [
         "robot", "sloth-1", "sloth-2", "sloth-3", "sloth-4",
         "snail-1", "snail-2", "snail-3", "snail-4",
-        "rabbit-1", "rabbit-2", "turtle", "koala"
+        "rabbit-1", "rabbit-2", "turtle", "koala",
+        "meerkat-10", "meerkat-20", "meerkat-30", "meerkat-40", "meerkat-50",
+        "meerkat-60", "meerkat-70", "meerkat-80", "meerkat-90",
+        "eagle-5-1", "eagle-11-2", "eagle-44-6", "eagle-66-9", "eagle-88-12",
+        "whale-shark", "taotie"
     ]
+    assert ids == expected_ids
 
 
 def test_robot_contract():
@@ -167,5 +173,56 @@ def test_snail_warm_start_contract():
     assert pol["topk"] == 22
     assert pol["n_drop"] == 3
     assert pol["delay_weeks"] == 3
+
+
+def test_meerkat_percentile_contract():
+    """验证狐獴群 (Meerkat) 百分位站位与信号变换"""
+    stocks = [f"STOCK_{i:03d}" for i in range(101)]  # 101 只标的，索引 0~100 对应百分位 0%~100%
+    # STOCK_000 最高分 (rank 0 -> 0%)，STOCK_100 最低分 (rank 100 -> 100%)
+    score = pd.Series(np.linspace(1.0, 0.0, 101), index=stocks)
+
+    # 1. 验证 meerkat-10 (靠近 10% 处得分最高)
+    m10 = Meerkat(percentile=10)
+    sig_10 = m10.transform_signal(score, {}, cycle_idx=0)
+    # STOCK_010 的百分位排位恰为 10/100 = 10%，新得分应为最大值 0.0
+    assert sig_10.idxmax() == "STOCK_010"
+
+    # 2. 验证 meerkat-50 (靠近 50% 处得分最高)
+    m50 = Meerkat(percentile=50)
+    sig_50 = m50.transform_signal(score, {}, cycle_idx=0)
+    assert sig_50.idxmax() == "STOCK_050"
+
+    # 3. 验证 meerkat-90 (靠近 90% 处得分最高)
+    m90 = Meerkat(percentile=90)
+    sig_90 = m90.transform_signal(score, {}, cycle_idx=0)
+    assert sig_90.idxmax() == "STOCK_090"
+
+    assert m50.get_portfolio_policy()["topk"] == 22
+    assert m50.get_portfolio_policy()["n_drop"] == 3
+
+
+def test_eagle_capacity_contract():
+    """验证鹰群 (Eagle) 容量与带宽矩阵"""
+    specs = [(5, 1), (11, 2), (44, 6), (66, 9), (88, 12)]
+    for topk, n_drop in specs:
+        eagle = Eagle(topk=topk, n_drop=n_drop)
+        pol = eagle.get_portfolio_policy()
+        assert pol["topk"] == topk
+        assert pol["n_drop"] == n_drop
+
+
+def test_whale_shark_and_taotie_contract():
+    """验证鲸鲨 (WhaleShark) 与饕餮 (Taotie) 契约"""
+    ws = WhaleShark()
+    pol_ws = ws.get_portfolio_policy()
+    assert pol_ws["topk"] == 123
+    assert pol_ws["n_drop"] == 17
+
+    taotie = Taotie()
+    pol_tt = taotie.get_portfolio_policy()
+    assert pol_tt["topk"] == 0
+    assert pol_tt["n_drop"] == 0
+    assert pol_tt["passive_pool"] is True
+
 
 

@@ -174,6 +174,7 @@ class WeeklyCycleRunner:
                     policy = a.get_portfolio_policy()
                     n_drop = policy.get("n_drop", 3)
                     topk = policy.get("topk", self.topk)
+                    passive_pool = policy.get("passive_pool", False)
 
                     is_first = (c_idx == 0)
                     order = engine.generate_order(
@@ -183,7 +184,8 @@ class WeeklyCycleRunner:
                         trade_date=cycle.trade_date,
                         is_first_entry=is_first,
                         tradability_filter=tradability_filter_fn,
-                        price_lookup=price_lookup_fn
+                        price_lookup=price_lookup_fn,
+                        passive_pool=passive_pool
                     )
 
                     # 3. 撮合成交与周内日频估值

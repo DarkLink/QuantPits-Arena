@@ -174,3 +174,76 @@ def test_skip_unaffordable_stock_and_no_fractional_shares():
     for inst, shares in engine.holdings.items():
         assert shares > 0
         assert shares % 100 == 0, f"{inst} 持仓股数 {shares} 必须是一手 (100股) 的整数倍，严禁碎股！"
+
+
+def test_out_of_pool_priority_and_dropn_cap():
+    """
+    验证出池被动调仓核心规则：
+    1. 出池优先于 DROP；
+    2. 调仓卖出上限不超过 DropN；
+    3. 若出池数 < DropN，出池先卖，剩余额度继续主动 Drop；若出池数 >= DropN，出池卖至上限，多余留待下期。
+    """
+    stocks_w1 = [f"STOCK_{i:02d}" for i in range(30)]
+    score_w1 = pd.Series(np.linspace(0.9, 0.1, 30), index=stocks_w1)
+
+    engine = PortfolioEngine(contestant_id="CONTESTANT_A", animal_id="robot", topk=10)
+    # 模拟持仓 STOCK_00 ~ STOCK_09 共 10 只
+    for s in stocks_w1[:10]:
+        engine.holdings[s] = 1000.0
+
+    # Week 2 出现出池情况：
+    # 假设 STOCK_00, STOCK_01, STOCK_02, STOCK_03 共 4 只股票出池（不在 score_w2 中）
+    in_pool_stocks = [s for s in stocks_w1 if s not in {"STOCK_00", "STOCK_01", "STOCK_02", "STOCK_03"}]
+    score_w2 = pd.Series(np.linspace(0.9, 0.1, len(in_pool_stocks)), index=in_pool_stocks)
+
+    # 场景 A: DropN = 2 (出池 4 只 > DropN 2)
+    # 规则：卖出上限不超过 DropN (2)，必须优先卖出 2 只出池标的，多余 2 只出池标的保留至下期
+    order_cap2 = engine.generate_order(score_w2, topk=10, n_drop=2, trade_date="2026-07-13", is_first_entry=False)
+    assert order_cap2 is not None
+    assert len(order_cap2.sell_instruments) == 2, "总卖出数量上限严格不超过 DropN=2"
+    assert len(order_cap2.buy_instruments) == 2, "补足卖出数量以维持目标持仓"
+    assert all(s in {"STOCK_00", "STOCK_01", "STOCK_02", "STOCK_03"} for s in order_cap2.sell_instruments), "卖出必须优先从出池标的中选取"
+
+    # 场景 B: DropN = 5 (出池 4 只 < DropN 5)
+    # 规则：4 只出池先卖，剩余 1 个名额进行主动得分 Drop
+    order_cap5 = engine.generate_order(score_w2, topk=10, n_drop=5, trade_date="2026-07-13", is_first_entry=False)
+    assert order_cap5 is not None
+    assert len(order_cap5.sell_instruments) == 5, "总卖出正好达到 DropN=5"
+    assert len(order_cap5.buy_instruments) == 5
+    # 前 4 只必须包含所有出池标的
+    for s in ["STOCK_00", "STOCK_01", "STOCK_02", "STOCK_03"]:
+        assert s in order_cap5.sell_instruments
+    # 第 5 只是在池标的中得分最低的标的
+    in_pool_sells = [s for s in order_cap5.sell_instruments if s not in {"STOCK_00", "STOCK_01", "STOCK_02", "STOCK_03"}]
+    assert len(in_pool_sells) == 1
+
+
+def test_taotie_passive_pool_rebalance():
+    """
+    验证饕餮 (Taotie) 全池纯被动出入池调仓：
+    1. 首周全池买入所有标的；
+    2. 后续周期若有标的出池，全量被动卖出；若有标的入池，全量被动买入；不受 DropN=0 限制。
+    """
+    universe_w1 = [f"STOCK_{i:02d}" for i in range(20)]
+    score_w1 = pd.Series(np.linspace(0.9, 0.1, 20), index=universe_w1)
+
+    engine = PortfolioEngine(contestant_id="CONTESTANT_A", animal_id="taotie", topk=0)
+    order_w1 = engine.generate_order(score_w1, topk=0, n_drop=0, trade_date="2026-07-06", is_first_entry=True, passive_pool=True)
+
+    assert len(order_w1.buy_instruments) == 20, "首周应买入全池 20 只标的"
+    assert len(order_w1.sell_instruments) == 0
+
+    # 模拟持仓
+    for s in universe_w1:
+        engine.holdings[s] = 500.0
+
+    # Week 2: STOCK_00, STOCK_01 出池；同时新增 STOCK_98, STOCK_99 入池
+    universe_w2 = [s for s in universe_w1 if s not in {"STOCK_00", "STOCK_01"}] + ["STOCK_98", "STOCK_99"]
+    score_w2 = pd.Series(np.linspace(0.9, 0.1, len(universe_w2)), index=universe_w2)
+
+    order_w2 = engine.generate_order(score_w2, topk=0, n_drop=0, trade_date="2026-07-13", is_first_entry=False, passive_pool=True)
+
+    assert order_w2 is not None
+    assert set(order_w2.sell_instruments) == {"STOCK_00", "STOCK_01"}, "出池标的应全部被动卖出"
+    assert set(order_w2.buy_instruments) == {"STOCK_98", "STOCK_99"}, "新入池标的应全部被动买入"
+
