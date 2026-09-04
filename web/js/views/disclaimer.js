@@ -11,113 +11,53 @@ window.DisclaimerView = {
     if (!el) return;
 
     el.innerHTML = `
-      <div class="view-header">
-        <div>
-          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 6px;">
+      <div class="doc-page-container" style="max-width: 1040px; margin: 0 auto; width: 100%;">
+        <div class="view-header" style="text-align: center; margin-bottom: 2rem; display: flex; flex-direction: column; align-items: center;">
+          <div style="display: inline-flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 6px;">
             <h1 class="view-title">Research & Legal Disclaimer</h1>
             <span class="badge badge-warning">Mandatory Notice</span>
           </div>
-          <p class="view-subtitle">Terms of access, research-boundary disclosures, and risk acknowledgments for QuantPits Arena</p>
-        </div>
-      </div>
-
-      <div style="display: flex; flex-direction: column; gap: 24px; max-width: 980px;">
-        <!-- 1. General Notice & Educational Boundary -->
-        <div class="card" style="border-left: 4px solid var(--accent-amber); background: rgba(245, 158, 11, 0.03);">
-          <h2 style="font-size: 18px; font-weight: 700; color: var(--accent-amber); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
-            <span>🛡️</span> General Notice & Educational Boundary
-          </h2>
-          <p style="font-size: 14px; color: var(--text-primary); line-height: 1.8; margin-bottom: 12px; font-weight: 500;">
-            QuantPits Arena is provided solely for <b>research, educational, experimental, and informational purposes</b>.
-          </p>
-          <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 12px;">
-            Nothing presented on this website constitutes investment advice, a recommendation, solicitation, endorsement, or offer to buy or sell any security, financial instrument, investment strategy, or financial product.
-          </p>
-          <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 12px;">
-            Content made available through QuantPits Arena — including interactive visualizations, model outputs, strategy leaderboards, downloadable data, research notes, experiment reports, and historical records — should not be construed as personalized financial, investment, legal, tax, or professional advice.
-          </p>
-          <p style="font-size: 13px; color: var(--text-muted); line-height: 1.7; margin-bottom: 0;">
-            No fiduciary, advisory, brokerage, client, or similar professional relationship is created through access to or use of this website.
-          </p>
+          <p class="view-subtitle" style="text-align: center; max-width: 750px; margin: 0 auto;">Terms of access, research-boundary disclosures, and risk acknowledgments for QuantPits Arena</p>
         </div>
 
-        <!-- 2. Nature of Results & Past Performance -->
-        <div class="card" style="border-left: 4px solid var(--accent-cyan);">
-          <h3 style="font-size: 17px; font-weight: 700; color: var(--accent-cyan); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
-            <span>🔬</span> Nature of Results & Past Performance
-          </h3>
-          <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 12px;">
-            Results presented on QuantPits Arena may include:
-          </p>
-          <ul style="font-size: 13px; color: var(--text-secondary); line-height: 1.7; margin-left: 20px; margin-bottom: 16px;">
-            <li>historical live performance;</li>
-            <li>delayed production records;</li>
-            <li>shadow-trading results;</li>
-            <li>simulated or backtested results;</li>
-            <li>frozen-artifact replay experiments;</li>
-            <li>counterfactual decision trials;</li>
-            <li>randomized benchmark simulations;</li>
-            <li>exploratory stress-test variants.</li>
-          </ul>
-          <p style="font-size: 13px; color: var(--text-primary); line-height: 1.7; margin-bottom: 14px; font-weight: 500;">
-            Each result should be interpreted only within the methodology, evaluation period, assumptions, and experimental boundaries stated for that specific experiment.
-          </p>
-
-          <div style="background: rgba(0,0,0,0.25); padding: 16px; border-radius: var(--radius-sm); display: flex; flex-direction: column; gap: 12px; font-size: 13px; line-height: 1.7; color: var(--text-secondary);">
-            <div>
-              <strong style="color: var(--text-primary);">No Guarantee of Future Results:</strong>
-              <div>Historical, live, out-of-sample, simulated, counterfactual, or shadow-trading performance does not guarantee or predict future investment results.</div>
-            </div>
-            <div>
-              <strong style="color: var(--text-primary);">Execution Approximations:</strong>
-              <div>Simulations may rely on predefined transaction-cost assumptions, 100-share trading-lot rounding, finite capital constraints, simplified liquidity assumptions, and other execution approximations. Actual market execution may differ materially.</div>
-            </div>
-            <div>
-              <strong style="color: var(--text-primary);">Counterfactual and Experimental Variants:</strong>
-              <div>Counterfactual decision trials, animal-policy stress tests, frozen-model replays, randomized agents, and similar variants are experimental research constructs. They are not proposed trading strategies or recommendations for capital deployment.</div>
-            </div>
-            <div>
-              <strong style="color: var(--text-primary);">Leaderboard Interpretation:</strong>
-              <div>Leaderboard position describes performance within a particular experimental configuration and observation window only. It does not represent investment suitability, expected profitability, or a recommendation to adopt the displayed model or policy.</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 3. Research Integrity & Statistical Interpretation -->
-        <div class="card" style="border-left: 4px solid var(--accent-indigo);">
-          <h3 style="font-size: 17px; font-weight: 700; color: var(--accent-indigo); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
-            <span>🧪</span> Research Integrity & Statistical Interpretation
-          </h3>
-          <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 12px;">
-            QuantPits Arena contains both confirmatory and exploratory research. Some experiments involve historically selected models, recovered artifacts, multiple policy variants, repeated comparisons, or post-hoc research questions. Accordingly, raw rankings, percentiles, empirical p-values, and other statistical measures should not automatically be interpreted as independent confirmatory evidence.
-          </p>
-          <div style="background: rgba(255, 255, 255, 0.02); padding: 14px 16px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); font-size: 13px; color: var(--text-secondary); line-height: 1.7;">
-            <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 8px;">Unless explicitly stated otherwise:</div>
-            <ul style="margin: 0; padding-left: 18px;">
-              <li>model inclusion may be historically or experimentally selected;</li>
-              <li>multiple comparisons may be present;</li>
-              <li>short evaluation windows may materially increase uncertainty;</li>
-              <li>statistical significance in one experiment does not establish persistent investment alpha;</li>
-              <li>exploratory findings should be treated as hypothesis-generating rather than definitive evidence.</li>
-            </ul>
-            <p style="margin-top: 10px; margin-bottom: 0; color: var(--text-muted); font-size: 12px;">
-              Matched random-ranking agents and other null benchmarks are intended to characterize experimental reference distributions, not to certify investment performance.
+        <div style="display: flex; flex-direction: column; gap: 24px;">
+          <!-- 1. General Notice & Educational Boundary -->
+          <div class="card" style="border-left: 4px solid var(--accent-amber); background: rgba(245, 158, 11, 0.03);">
+            <h2 style="font-size: 18px; font-weight: 700; color: var(--accent-amber); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+              <span>🛡️</span> General Notice & Educational Boundary
+            </h2>
+            <p style="font-size: 14px; color: var(--text-primary); line-height: 1.8; margin-bottom: 12px; font-weight: 500;">
+              QuantPits Arena is provided solely for <b>research, educational, experimental, and informational purposes</b>.
+            </p>
+            <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 12px;">
+              Nothing presented on this website constitutes investment advice, a recommendation, solicitation, endorsement, or offer to buy or sell any security, financial instrument, investment strategy, or financial product.
+            </p>
+            <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 12px;">
+              Content made available through QuantPits Arena — including interactive visualizations, model outputs, strategy leaderboards, downloadable data, research notes, experiment reports, and historical records — should not be construed as personalized financial, investment, legal, tax, or professional advice.
+            </p>
+            <p style="font-size: 13px; color: var(--text-muted); line-height: 1.7; margin-bottom: 0;">
+              No fiduciary, advisory, brokerage, client, or similar professional relationship is created through access to or use of this website.
             </p>
           </div>
-        </div>
 
-        <!-- 4. Market Data Latency & Copy-Trading Policy -->
-        <div class="card" style="border-left: 4px solid var(--accent-purple);">
-          <h3 style="font-size: 17px; font-weight: 700; color: var(--accent-purple); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
-            <span>⏱️</span> Market Data Latency & Copy-Trading Policy
-          </h3>
-          <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 12px;">
-            Market, model, and portfolio information displayed on QuantPits Arena is intentionally published with an approximate delay of <b>one week</b>.
-          </p>
-          <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 12px;">
-            This delay is a publication policy, <b>not a representation that the information is incapable of being acted upon</b>. Certain research variants may themselves study delayed execution, stale signals, or intentionally deferred portfolio actions.
-          </p>
-          <div style="background: rgba(239, 68, 68, 0.05); border: 1px solid rgba(239, 68, 68, 0.25); border-radius: var(--radius-sm); padding: 12px 16px; font-size: 13px; line-height: 1.7; color: var(--text-secondary);">
+          <!-- 2. Nature of Results & Past Performance -->
+          <div class="card" style="border-left: 4px solid var(--accent-cyan);">
+            <h3 style="font-size: 17px; font-weight: 700; color: var(--accent-cyan); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+              <span>🔬</span> Nature of Results & Past Performance
+            </h3>
+            <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 12px;">
+              Results presented on QuantPits Arena may include:
+            </p>
+            <ul style="font-size: 13px; color: var(--text-secondary); line-height: 1.7; margin-left: 20px; margin-bottom: 16px;">
+              <li>historical live performance;</li>
+              <li>delayed production records;</li>
+              <li>shadow-trading results;</li>
+              <li>simulated or backtested results;</li>
+              <li>frozen-artifact replay experiments;</li>
+              <li>counterfactual decision trials;</li>
+              <li>randomized benchmark simulations;</li>
+              <li>exploratory stress-test variants.</li>
+            </ul>
             <p style="margin: 0 0 8px 0; font-weight: 600; color: var(--accent-rose);">
               QuantPits Arena is not a real-time or delayed trading-signal service, copy-trading service, portfolio-management service, or trade-replication system.
             </p>
@@ -221,6 +161,7 @@ window.DisclaimerView = {
           <button class="btn btn-primary" onclick="window.appRouter.navigate('methodology')">
             Read Methodology &amp; Axioms &rarr;
           </button>
+        </div>
         </div>
       </div>
     `;

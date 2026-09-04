@@ -37,12 +37,14 @@
   line-height: 1.15;
   background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #94a3b8 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 [data-theme="light"] .hero-title {
   background: linear-gradient(135deg, #0f172a 0%, #334155 50%, #475569 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
@@ -283,3 +285,17 @@
   justify-content: space-around;
   text-align: center;
 }
+
+/* --------------------------------------------------------------------------
+   8. Document Reading Layout (Centered for Methodology & Disclaimer)
+   -------------------------------------------------------------------------- */
+.doc-page-container {
+  max-width: 1040px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.doc-page-container .view-header {
+  margin-bottom: 2rem;
+}
+

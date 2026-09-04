@@ -11,10 +11,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- Core Stylesheets -->
-  <link rel="stylesheet" href="css/variables.css?v=2.2">
-  <link rel="stylesheet" href="css/main.css?v=2.2">
-  <link rel="stylesheet" href="css/components.css?v=2.2">
-  <link rel="stylesheet" href="css/views.css?v=2.2">
+  <link rel="stylesheet" href="css/variables.css?v=2.5">
+  <link rel="stylesheet" href="css/main.css?v=2.5">
+  <link rel="stylesheet" href="css/components.css?v=2.5">
+  <link rel="stylesheet" href="css/views.css?v=2.5">
 
   <!-- Apache ECharts CDN -->
   <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
@@ -55,9 +55,47 @@
         <button id="theme-toggle-btn" class="theme-toggle-btn" aria-label="Toggle Theme" title="Toggle Dark/Light Mode">
           <span>☀️</span>
         </button>
+        <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-label="Toggle Navigation Menu" title="Open Navigation Menu">
+          <span>☰</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation Drawer -->
+    <div id="mobile-nav-drawer" class="mobile-nav-drawer">
+      <div class="mobile-nav-inner">
+        <div class="mobile-nav-group">
+          <div class="mobile-nav-heading">Tournament Views</div>
+          <div class="mobile-nav-grid">
+            <a href="#overview" class="mobile-nav-link" data-route="overview"><span>📊</span> Overview</a>
+            <a href="#leaderboard" class="mobile-nav-link" data-route="leaderboard"><span>🏆</span> Leaderboard</a>
+            <a href="#contestants" class="mobile-nav-link" data-route="contestants"><span>🧬</span> Contestants</a>
+            <a href="#animals" class="mobile-nav-link" data-route="animals"><span>🦁</span> The Zoo</a>
+            <a href="#decision-audit" class="mobile-nav-link" data-route="decision-audit"><span>⚖️</span> Archaeology</a>
+          </div>
+        </div>
+        <div class="mobile-nav-group">
+          <div class="mobile-nav-heading">Platform &amp; Theory</div>
+          <div class="mobile-nav-grid">
+            <a href="#intro" class="mobile-nav-link" data-route="intro"><span>🏛️</span> Exhibition</a>
+            <a href="#methodology" class="mobile-nav-link" data-route="methodology"><span>📐</span> Methodology</a>
+            <a href="#disclaimer" class="mobile-nav-link" data-route="disclaimer"><span>🛡️</span> Disclaimer</a>
+          </div>
+        </div>
       </div>
     </div>
   </header>
+
+  <!-- Mobile Quick Subnav Swipe Bar (Visible on mobile/tablet <= 1024px) -->
+  <nav class="mobile-subnav-bar" id="mobile-subnav">
+    <div class="mobile-subnav-container">
+      <a href="#overview" class="mobile-subnav-link" data-route="overview">Overview</a>
+      <a href="#leaderboard" class="mobile-subnav-link" data-route="leaderboard">Leaderboard</a>
+      <a href="#contestants" class="mobile-subnav-link" data-route="contestants">Contestants</a>
+      <a href="#animals" class="mobile-subnav-link" data-route="animals">The Zoo</a>
+      <a href="#decision-audit" class="mobile-subnav-link" data-route="decision-audit">Archaeology</a>
+    </div>
+  </nav>
 
   <!-- Main Application Container -->
   <main class="app-main">
@@ -108,29 +146,29 @@
   </footer>
 
   <!-- Data Payload (Offline, Self-contained) -->
-  <script src="js/data/arena_data.js?v=2.4"></script>
+  <script src="js/data/arena_data.js?v=2.5"></script>
 
   <!-- Data Adapter -->
-  <script src="js/adapter.js?v=2.4"></script>
+  <script src="js/adapter.js?v=2.5"></script>
 
   <!-- ECharts Suite -->
-  <script src="js/components/charts.js?v=2.4"></script>
+  <script src="js/components/charts.js?v=2.5"></script>
 
   <!-- Global Filters -->
-  <script src="js/components/filters.js?v=2.4"></script>
+  <script src="js/components/filters.js?v=2.5"></script>
 
   <!-- Application Views -->
-  <script src="js/views/landing.js?v=2.4"></script>
-  <script src="js/views/overview.js?v=2.4"></script>
-  <script src="js/views/leaderboard_view.js?v=2.4"></script>
-  <script src="js/views/animals_view.js?v=2.4"></script>
-  <script src="js/views/path_detail.js?v=2.4"></script>
-  <script src="js/views/contestant_detail.js?v=2.4"></script>
-  <script src="js/views/decision_audit.js?v=2.4"></script>
-  <script src="js/views/methodology.js?v=2.4"></script>
-  <script src="js/views/disclaimer.js?v=2.4"></script>
+  <script src="js/views/landing.js?v=2.5"></script>
+  <script src="js/views/overview.js?v=2.5"></script>
+  <script src="js/views/leaderboard_view.js?v=2.5"></script>
+  <script src="js/views/animals_view.js?v=2.5"></script>
+  <script src="js/views/path_detail.js?v=2.5"></script>
+  <script src="js/views/contestant_detail.js?v=2.5"></script>
+  <script src="js/views/decision_audit.js?v=2.5"></script>
+  <script src="js/views/methodology.js?v=2.5"></script>
+  <script src="js/views/disclaimer.js?v=2.5"></script>
 
   <!-- Main Controller & Router -->
-  <script src="js/app.js?v=2.4"></script>
+  <script src="js/app.js?v=2.5"></script>
 </body>
 </html>

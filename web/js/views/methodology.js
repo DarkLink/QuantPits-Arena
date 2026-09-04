@@ -11,18 +11,17 @@ window.MethodologyView = {
     if (!el) return;
 
     el.innerHTML = `
-      <div class="view-header">
-        <div>
-          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 6px;">
+      <div class="doc-page-container" style="max-width: 1040px; margin: 0 auto; width: 100%;">
+        <div class="view-header" style="text-align: center; margin-bottom: 2rem; display: flex; flex-direction: column; align-items: center;">
+          <div style="display: inline-flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 6px;">
             <h1 class="view-title">Methodology & Statistical Axioms</h1>
             <span class="badge badge-primary">Empirical Quantitative Standards</span>
           </div>
-          <p class="view-subtitle">The testing architecture, null benchmark suite, execution constraints, and statistical interpretation rules of QuantPits Arena</p>
+          <p class="view-subtitle" style="text-align: center; max-width: 750px; margin: 0 auto;">The testing architecture, null benchmark suite, execution constraints, and statistical interpretation rules of QuantPits Arena</p>
         </div>
-      </div>
 
-      <div style="display: flex; flex-direction: column; gap: 24px; max-width: 1000px;">
-        <!-- 1. Core Axiom: Historical Biography != Arena Record -->
+        <div style="display: flex; flex-direction: column; gap: 24px;">
+          <!-- 1. Core Axiom: Historical Biography != Arena Record -->
         <div class="card" style="border-left: 4px solid var(--accent-amber);">
           <h2 style="font-size: 18px; font-weight: 700; color: var(--accent-amber); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
             <span>⚖️</span> 1. Core Axiom: Historical Biography ≠ Arena Record
@@ -218,6 +217,7 @@ window.MethodologyView = {
             The Rock asks whether any of this complexity was worth it.”
           </p>
         </div>
+      </div>
       </div>
     `;
   }

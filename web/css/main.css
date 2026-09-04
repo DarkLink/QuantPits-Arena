@@ -268,6 +268,155 @@ a:hover {
   background: var(--bg-surface-elevated);
 }
 
+/* Mobile Menu Toggle Button (hidden on desktop) */
+.mobile-menu-toggle {
+  display: none;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.15rem;
+  transition: all var(--transition-fast);
+}
+
+.mobile-menu-toggle:hover, .mobile-menu-toggle.active {
+  background: var(--bg-surface-elevated);
+  border-color: var(--brand-cyan);
+  color: var(--brand-cyan);
+}
+
+/* Mobile Slide-down Navigation Drawer */
+.mobile-nav-drawer {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--bg-surface-elevated);
+  border-bottom: 1px solid var(--border-medium);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  z-index: 999;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.28s ease, padding 0.28s ease;
+}
+
+.mobile-nav-drawer.open {
+  max-height: 520px;
+  padding: 1.25rem 1.25rem 1.75rem 1.25rem;
+}
+
+.mobile-nav-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.mobile-nav-heading {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin-bottom: 0.4rem;
+}
+
+.mobile-nav-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+}
+
+.mobile-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 0.85rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+}
+
+.mobile-nav-link:hover {
+  background: var(--bg-surface-elevated);
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+.mobile-nav-link.active {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(168, 85, 247, 0.2));
+  border-color: rgba(56, 189, 248, 0.5);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* Mobile Quick Subnav Bar (Sticky below header on tablet & mobile) */
+.mobile-subnav-bar {
+  display: none;
+  position: sticky;
+  top: 64px;
+  z-index: 990;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-subtle);
+  padding: 0.45rem 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.mobile-subnav-container {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding: 0 1rem;
+}
+
+.mobile-subnav-container::-webkit-scrollbar {
+  display: none;
+}
+
+.mobile-subnav-link {
+  flex-shrink: 0;
+  padding: 0.38rem 0.85rem;
+  border-radius: var(--radius-full);
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-decoration: none;
+  background: var(--bg-base);
+  border: 1px solid var(--border-subtle);
+  transition: all var(--transition-fast);
+}
+
+.mobile-subnav-link:hover {
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+.mobile-subnav-link.active {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.25), rgba(168, 85, 247, 0.25));
+  border-color: rgba(56, 189, 248, 0.5);
+  color: #ffffff;
+  font-weight: 600;
+}
+
 /* Main Container & View Router */
 .app-main {
   flex: 1;
@@ -278,6 +427,11 @@ a:hover {
   margin: 0 auto;
   padding: 1.5rem;
   gap: 1.5rem;
+}
+
+.container {
+  width: 100%;
+  margin: 0 auto;
 }
 
 .view-container {
@@ -317,3 +471,87 @@ a:hover {
   display: flex;
   flex-direction: column;
 }
+
+/* Responsive Media Queries for Mobile & Tablet */
+@media (max-width: 1024px) {
+  .nav-segmented {
+    display: none;
+  }
+  .nav-secondary-links {
+    display: none;
+  }
+  .mobile-menu-toggle {
+    display: flex;
+  }
+  .mobile-nav-drawer {
+    display: block;
+  }
+  .mobile-subnav-bar {
+    display: block;
+  }
+  .header-actions {
+    gap: 0.6rem;
+  }
+  .season-badge {
+    padding: 0.3rem 0.65rem;
+    font-size: 0.72rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .app-main {
+    padding: 1rem 0.75rem;
+    gap: 1rem;
+  }
+  .header-container {
+    padding: 0 1rem;
+  }
+  .brand-name {
+    font-size: 1.02rem;
+  }
+  .brand-edition {
+    display: none;
+  }
+  .mobile-nav-grid {
+    grid-template-columns: 1fr;
+  }
+  .hero-title {
+    font-size: 2rem !important;
+  }
+  .hero-description {
+    font-size: 0.98rem !important;
+  }
+  .hero-actions {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    width: 100% !important;
+    gap: 0.6rem !important;
+  }
+  .hero-actions .btn {
+    width: 100% !important;
+    justify-content: center !important;
+    padding: 0.7rem 0.5rem !important;
+    font-size: 0.82rem !important;
+  }
+  .disclaimer-banner {
+    flex-direction: column !important;
+    padding: 1rem !important;
+    gap: 0.6rem !important;
+    margin: 1.25rem 0 !important;
+  }
+  .card {
+    padding: 1.1rem !important;
+  }
+  .view-header {
+    margin-bottom: 1.25rem !important;
+  }
+  .footer-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  .footer-col:last-child {
+    text-align: left !important;
+  }
+}
+

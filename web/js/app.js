@@ -103,8 +103,8 @@ window.ArenaApp = {
     this.currentRoute = route;
     this.routeParams = params;
 
-    // Update active nav highlights (both segmented primary nav and secondary docs links)
-    document.querySelectorAll(".nav-link, .nav-link-secondary").forEach(link => {
+    // Update active nav highlights (segmented desktop nav, secondary nav, mobile drawer, and mobile subnav)
+    document.querySelectorAll(".nav-link, .nav-link-secondary, .mobile-nav-link, .mobile-subnav-link").forEach(link => {
       const linkRoute = link.getAttribute("data-route");
       if (linkRoute === route || (route === "path-detail" && linkRoute === "leaderboard")) {
         link.classList.add("active");
@@ -224,12 +224,27 @@ window.ArenaApp = {
 
   bindNavEvents() {
     const mobileBtn = document.getElementById("mobile-menu-toggle");
-    const navMenu = document.getElementById("nav-menu");
-    if (mobileBtn && navMenu) {
+    const drawer = document.getElementById("mobile-nav-drawer");
+    if (mobileBtn && drawer) {
       mobileBtn.addEventListener("click", () => {
-        navMenu.classList.toggle("open");
+        const isOpen = drawer.classList.toggle("open");
+        mobileBtn.classList.toggle("active", isOpen);
+        mobileBtn.innerHTML = isOpen ? "<span>✕</span>" : "<span>☰</span>";
       });
     }
+
+    // Auto-close drawer on navigation click
+    document.querySelectorAll(".mobile-nav-link, .mobile-subnav-link").forEach(link => {
+      link.addEventListener("click", () => {
+        if (drawer) {
+          drawer.classList.remove("open");
+          if (mobileBtn) {
+            mobileBtn.classList.remove("active");
+            mobileBtn.innerHTML = "<span>☰</span>";
+          }
+        }
+      });
+    });
   }
 };
 
