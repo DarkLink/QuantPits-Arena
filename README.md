@@ -1,121 +1,136 @@
-# QuantPits Graveyard Arena (Zoo)
+# QuantPits Arena | Empirical Strategy Testbed & Benchmark Zoo
 
-> **A reproducible, historical alpha benchmark and execution arena.**
-> Recovering frozen model artifacts in a unified prospective timeline under standardized execution and portfolio policies.
+> **An empirical research testbed, execution zoo, and parametric null benchmark for quantitative alpha models.**
+> Reviving historical model artifacts at an identical prospective starting line under standardized finite-capital execution constraints.
 
----
-
-## Overview
-
-**QuantPits Graveyard Arena** is an independent benchmark and research framework designed to evaluate machine learning alpha models across time. Rather than retraining or fine-tuning, the Arena revives historical, frozen model artifacts and evaluates them through standardized **execution animals (handlers)** in an out-of-sample weekly cycle.
-
-### Core Objectives
-
-1. **Signal Decay Profiling**: Measure how rapidly alpha degrades under execution delays (Sloth handlers).
-2. **Turnover & Capacity Sensitivity**: Compare high-bandwidth vs. low-turnover policies (Rabbit vs. Turtle handlers).
-3. **Hypothesis Testing vs. Random Controls**: Rigorously contrast every model path against a 1,000-member **Monkey Colony** null distribution.
-4. **Historical Decision Auditing**: Statistically evaluate historical model retirement/promotion decisions (e.g. Static vs. Cross-Validated variants).
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-emerald.svg)](LICENSE)
+[![Status: Research Testbed](https://img.shields.io/badge/Status-Research%20Testbed-purple.svg)](#disclaimer)
 
 ---
 
-## Architectural Principles
+## 🧭 Repository Scope & System Architecture
 
-```
-  ┌─────────────────┐       ┌─────────────────┐       ┌─────────────────┐
-  │   Contestant    │       │     Animal      │       │    Portfolio    │
-  │    (Signal)     │ ────▶ │    (Policy)     │ ────▶ │    (Engine)     │
-  └─────────────────┘       └─────────────────┘       └─────────────────┘
-     Raw Prediction            Transformed              NAV & Trades
-        Score                     Score
-```
+QuantPits Arena is an **empirical evaluation framework, benchmark zoo, and interactive visualization testbed**.
 
-- **Contestant**: Pure prediction layer. Generates cross-sectional stock rankings for each time step. Does not control execution or turnover.
-- **Animal**: Execution handler. Transforms signal timing, bandwidth, or direction according to deterministic, pre-registered rules.
-- **Portfolio Engine**: Canonical portfolio construction and transaction accounting with explicit trading cost models.
+### 1. Interactive Research Testbed (100% Offline Ready)
+The web research platform (`web/`) is completely self-contained and pre-packaged with complete tournament simulation data:
+- Zero external package dependencies (native Python standard library server).
+- Complete coverage of **168 contestant-animal execution paths**, **11,000 parametric monkey null simulations**, **cross-model trajectory curves**, **counterfactual decision audits**, and **behavioral fingerprints**.
 
----
+```bash
+# Clone the repository
+git clone https://github.com/QuantPits/QuantPits-Arena.git
+cd QuantPits-Arena
 
-## The Zoo (Animal Taxonomy)
+# Launch local exploration server
+python3 -m http.server 8080 --directory web
 
-| Animal | Family | Policy Specification | Research Purpose |
-|---|---|---|---|
-| **Robot** | Benchmark | Canonical Top-22, Drop-3, weekly rebalance | Standard execution benchmark |
-| **Sloth-1** | Latency | 1-week signal delay | Measure 1-week signal latency decay |
-| **Sloth-2** | Latency | 2-week signal delay | Measure 2-week signal latency decay |
-| **Sloth-3** | Latency | 3-week signal delay | Measure 3-week signal latency decay |
-| **Sloth-4** | Latency | 4-week signal delay | Measure 4-week signal latency decay |
-| **Snail-1** | Latency-Warm | Day 1 match Robot, then 1-week signal delay | Decouple latency decay from cold-start exposure truncation |
-| **Snail-2** | Latency-Warm | Day 1 match Robot, then 2-week signal delay | Decouple latency decay from cold-start exposure truncation |
-| **Snail-3** | Latency-Warm | Day 1 match Robot, then 3-week signal delay | Decouple latency decay from cold-start exposure truncation |
-| **Snail-4** | Latency-Warm | Day 1 match Robot, then 4-week signal delay | Decouple latency decay from cold-start exposure truncation |
-| **Rabbit-1** | Bandwidth | Half-turnover: Drop-11 (50% of Top-22) | Test aggressive opinion deployment |
-| **Rabbit-2** | Bandwidth | Full-turnover: Drop-22 (complete replacement) | Measure maximum turnover performance |
-| **Turtle** | Low Turnover | Drop-1 minimal turnover | Test extreme turnover minimization |
-| **Koala** | Inversion | Cross-sectional rank reversal (`1.0 - rank_norm`) | Anti-alpha & signal symmetry check (100% percentile) |
-| **Meerkat-10% ~ 90%** | Percentile | 9 percentile slices ($P \in [10\%, 90\%]$), Top-22, Drop-3 | Test cross-sectional signal linearity & alpha depth |
-| **Eagle-5/1 ~ 88/12** | Capacity | (5/1, 11/2, 44/6, 66/9, 88/12) TopK/DropN matrix | Stress-test portfolio capacity, concentration & cost boundary |
-| **WhaleShark-50%** | Broad-Market | TopK=50% of Universe (123), DropN~13.8% (17) | Broad-market half-pool capacity benchmark |
-| **Taotie-All** | All-Market | TopK=100% of Universe, DropN=0 (Pure Passive) | Full-market index tracking with passive exit/entry rebalancing |
-
-### Controls
-
-- **Monkey Colony ($N=1000$)**: Matched null distribution sharing the identical canonical portfolio policy, testing whether alpha outperforms random stock selection.
-- **Rock (Permanent Portfolio)**: Multi-asset benchmark providing market baseline context.
-
----
-
-## Weekly Synchronous Cycle Runner
-
-Execution is anchored to real market calendar dates rather than bulk historical simulation:
-
-```
-  anchor_date (Fri) ──▶ PREDICT(data ≤ anchor) ──▶ ORDER(first_trade_date)
-                              │
-  first_trade (Mon) ──▶ EXECUTE_FULL_POSITION (TopK Full Entry)
-                              │
-  settle_day (Fri)  ──▶ SETTLE(NAV & Return) ──▶ PREDICT(data ≤ settle_day) ──▶ ORDER(next_monday)
-                              │
-  rebalance (Mon)   ──▶ REBALANCE(per Animal DropN) ──▶ [LOOP]
+# Open in your browser
+# http://localhost:8080
 ```
 
-1. **Information Cutoff**: Predictions are generated after Friday market close using strictly past data ($t \le \text{Friday}$).
-2. **First Week Full Entry**: On Week 1 ($T+1$ Monday), all models enter full positions up to TopK.
-3. **Subsequent Rebalances**: On subsequent Mondays, portfolios adjust positions based on respective Animal policies (`n_drop`).
-4. **Weekly Settlement**: Every Friday close, weekly performance, NAV, and execution statistics are settled.
+### 2. Operational Scope & Running Custom Tournaments
+- **Visual Exploration vs. Raw Execution**:
+  - **Offline Analytics (Out-of-the-Box)**: The web testbed comes with pre-compiled tournament datasets, allowing immediate visual exploration and cross-model comparison without any training or inference setup.
+  - **Running Custom Evaluations**: If you wish to run the evaluation pipeline from scratch or benchmark your own custom models through the Zoo:
+    1. **User-Provided Models**: Model weights are not bundled in this repository. Users must supply their own local model artifacts or checkpoints (conforming to the configuration manifests in `manifests/public/`).
+    2. **User-Provided Market Data**: Historical market quote feeds and feature matrices for your target stock universe and evaluation dates must be provided locally.
+    3. **Included Components**: This repository supplies the 28 animal execution policies, finite-capital transaction and portfolio accounting engine, parametric monkey null generators, and report export tooling.
+- **Not a Live Trading Engine**: The repository is an empirical evaluation testbed; it does not provide real-time order routing, brokerage gateway connectivity, or continuous live execution infrastructure.
+- **Declarative Manifests**: Strategy models are specified as reproducible configuration manifests (`manifests/public/`) documenting architectural parameters, feature groupings, and standardized inference adapters.
 
 ---
 
-## Privacy & Anonymization Architecture
+## 🏛️ Core Research Axioms
 
-This repository is engineered for open publication under strict privacy standards:
+QuantPits Arena is built on six foundational methodological principles:
 
-- **Model Weight Isolation**: Binary weights (`*.pkl`, `trained_model`) remain strictly in local private directories and are barred from version control.
-- **Contestant Anonymization**: Public metadata uses standardized anonymous IDs (`CONTESTANT_A` through `CONTESTANT_F`).
-- **Zero Raw Capital/Position Fingerprints**: All reported NAV time series are strictly normalized (Initial NAV $\equiv 1.0000$). Individual stock codes in public reports are securely masked.
-- **Automated Privacy Auditor**: Includes `scripts/audit_privacy.py` enforcing zero-leakage reporting.
+1. **Historical Biography ≠ Arena Record**: Past in-sample backtests, former production roles, and historical accolades exist only as biography. They contribute **zero weight** to Arena standings. Every model enters the common Arena at the same anchor date (2026-07-03) with a normalized base NAV of 1.0000 and CNY 500,000 initial capital.
+2. **High-Resolution Parametric Monkey Null Benchmark**: Absolute return alone says very little about signal quality. For each of the 11 portfolio execution policies, an independent colony of **1,000 deterministic pseudo-random monkey portfolios** (11,000 total) is evaluated under identical capital and lot constraints.
+3. **Statistical Interpretation Nuance**: A nominal $p_{\text{upper}} < 0.05$ indicates the result is difficult to reproduce with the random-ranking null. **The Arena deliberately does NOT translate this into "Alpha confirmed."**
+4. **The 28-Animal Execution Zoo**: The same underlying model signal is deployed through 28 distinct portfolio behaviors to isolate signal decay, holding inertia, turnover friction, capacity scalability, and directional polarity.
+5. **Real Trading & Finite-Capital Constraints**: Fixed initial capital (CNY 500,000), 100-share trading-lot roundings, unaffordable order skipping (preserving real cash drag), and standard transaction costs.
+6. **External Simplicity Reference (The Rock)**: The Permanent Portfolio is displayed alongside the arena as a simplicity benchmark: *"Four buckets. No ranking. No ensemble. No retraining. No comment. Complexity is not free."*
 
 ---
 
-## Repository Structure
+## 🦁 The 28-Animal Zoo Taxonomy
+
+| Family | Animals | Specification | Research Hypothesis Tested |
+| :--- | :--- | :--- | :--- |
+| **Baseline Control** | 🤖 **Robot** | TopK=22, DropN=3, Weekly | Canonical production baseline policy. |
+| **Cash Lag** | 🦥 **Sloth 1–4** | 1, 2, 3, 4 Weeks Delay | Delays execution while holding cash; measures signal timing decay. |
+| **Holding Inertia** | 🐌 **Snail 1–4** | 1, 2, 3, 4 Weeks Lag | Delays rebalances while holding stale positions; measures inertia friction. |
+| **Turnover Extremes** | 🐢 **Turtle**<br>🐇 **Rabbit 1–2** | DropN=1 (Low)<br>DropN=11 / 22 (High) | Tests whether aggressive deployment extracts alpha or ingests noise. |
+| **Polarity Inversion** | 🐨 **Koala** | Bottom-22 Worst Stocks | Directional sanity check: inverted ranking should underperform baseline. |
+| **Rank Geometry** | 🦡 **Meerkat 10%–90%** | 9 Decile Slices (P10–P90) | Tests cross-sectional monotonicity and signal depth across deciles. |
+| **Concentration** | 🦅 **Eagle Suite** | 5/1, 11/2, 44/6, 66/9, 88/12 | Evaluates concentration risk vs. diversification capacity. |
+| **Market Breadth** | 🐋 **Whale Shark**<br>🐉 **Taotie** | 50% Universe (123 stocks)<br>100% Full Universe (246) | Tests survival of signal under broad diversification up to the passive limit. |
+
+### External Reference Standards
+- **Parametric Monkey Null ($N = 1,000$ per spec, 11,000 total)**: Strict random-ranking null reference distributions.
+- **CSI 300 Index (SH000300)**: Broad mainland China equity market benchmark.
+- **Taotie Baseline**: Equal-weight, capital-constrained passive reference tracking the full eligible universe.
+- **The Rock (Permanent Portfolio)**: External 4-bucket simplicity anchor (Equity, Gold, Bonds, Cash).
+
+---
+
+## 🖥️ Interactive Web Application Architecture
+
+The frontend application (`web/`) is an institutional, dependency-free single-page research dashboard:
 
 ```
-QuantPits-Arena/
-├── manifests/
-│   ├── public/              # Anonymized contestant definitions (Git tracked)
-│   └── private/             # Local private contestant manifests & mappings (Git ignored)
-├── scripts/
-│   ├── audit_privacy.py     # Local zero-leakage privacy & compliance scanner
-│   └── anonymize_manifests.py # Deterministic public manifest generator
-├── AGENTS.md                # AI agent operating guidelines & security rules
-└── .gitignore               # Strict exclusion rules
+web/
+├── index.html                  # Single-page application shell
+├── css/
+│   ├── variables.css           # Institutional color palettes & design tokens
+│   ├── main.css                # Typography & layout fundamentals
+│   ├── components.css          # Tables, cards, compact filter bars, buttons
+│   └── views.css               # Specific view layouts
+└── js/
+    ├── data/
+    │   └── arena_data.js       # Pre-compiled offline tournament payload (168 paths, 11k monkeys)
+    ├── adapter.js              # In-memory query engine & statistical aggregator
+    ├── components/
+    │   ├── charts.js           # Apache ECharts wrapper (trajectories, heatmaps, regret curves)
+    │   └── filters.js          # Single-row compact filter toolbar
+    ├── views/
+    │   ├── landing.js          # Platform Exhibition & tournament introduction (/#intro)
+    │   ├── overview.js         # KPI metrics, scatter distributions & standings (/#overview)
+    │   ├── leaderboard_view.js # Sortable leaderboard & Model × Animal heatmap matrix (/#leaderboard)
+    │   ├── animals_view.js     # 28 Animal containers, dual-scope telemetry & curves (/#animals)
+    │   ├── contestant_detail.js# Model biography, burial annualized returns & fingerprints (/#contestants)
+    │   ├── decision_audit.js   # Counterfactual decision archaeology & regret analysis (/#decision-audit)
+    │   ├── methodology.js      # Statistical axioms & experimental standards (/#methodology)
+    │   └── disclaimer.js       # Full 8-section legal and research disclosures (/#disclaimer)
+    └── app.js                  # Client-side hash router & lifecycle controller
 ```
 
 ---
 
-## Compliance Audit
+## 🔧 Repository Verification
 
-To audit the repository before any commit or release:
+To audit repository integrity and data formatting consistency:
 
 ```bash
 python3 scripts/audit_privacy.py
 ```
+
+---
+
+## 🛡️ Disclaimer
+
+> **For research, educational, and informational purposes only.**  
+> Nothing contained herein constitutes investment advice, a recommendation, endorsement, or solicitation to buy or sell any security or financial product.  
+> Results may include live, delayed, simulated, backtested, counterfactual, or shadow-trading performance and are not indicative of future performance. Data are published with an approximately one-week delay. Investing involves risk, including the possible loss of principal.  
+> 
+> *“QuantPits Arena is a research testbed. It studies models, portfolio policies, historical decisions, failures, and occasionally monkeys. **It does not tell you what to buy.**”*  
+>
+> For full disclosures, visit the [Research & Legal Disclaimer](http://localhost:8080/#disclaimer).
+
+---
+
+## 📜 License
+
+MIT License. Copyright (c) QuantPits Research.
