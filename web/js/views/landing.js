@@ -34,6 +34,22 @@ window.LandingView = {
         </div>
       </section>
 
+      <!-- QuantPits Ecosystem Bridge Banner -->
+      <div class="ecosystem-bridge-banner">
+        <div class="bridge-content">
+          <div class="bridge-badge">
+            <span>🌐</span> QuantPits Ecosystem Integration
+          </div>
+          <p class="bridge-text">
+            Arena is the empirical tournament &amp; benchmark laboratory of the <strong>QuantPits</strong> production quantitative trading engine.
+          </p>
+        </div>
+        <a href="https://quantpits.com/" target="_blank" rel="noopener" class="bridge-link-btn">
+          <span>Visit QuantPits Main Platform</span>
+          <span class="bridge-arrow">&rarr;</span>
+        </a>
+      </div>
+
       <!-- Key Methodology Card: Historical Context vs Arena Record -->
       <div class="disclaimer-banner" style="border-left: 4px solid var(--accent-cyan); background: rgba(56, 189, 248, 0.05);">
         <div class="disclaimer-icon">⚖️</div>

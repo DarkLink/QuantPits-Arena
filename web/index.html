@@ -11,22 +11,27 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- Core Stylesheets -->
-  <link rel="stylesheet" href="css/variables.css?v=2.5">
-  <link rel="stylesheet" href="css/main.css?v=2.5">
-  <link rel="stylesheet" href="css/components.css?v=2.5">
-  <link rel="stylesheet" href="css/views.css?v=2.5">
+  <link rel="stylesheet" href="css/variables.css?v=2.6">
+  <link rel="stylesheet" href="css/main.css?v=2.6">
+  <link rel="stylesheet" href="css/components.css?v=2.6">
+  <link rel="stylesheet" href="css/views.css?v=2.6">
 
   <!-- Apache ECharts CDN -->
   <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
 </head>
 <body>
+  <!-- Ambient Ecosystem Grid & Glows (Aligned with QuantPits.com) -->
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="bg-glow bg-glow--1" aria-hidden="true"></div>
+  <div class="bg-glow bg-glow--2" aria-hidden="true"></div>
+
   <!-- Institutional Header & Navigation Bar -->
   <header class="app-header">
     <div class="header-container">
       <a href="#intro" class="brand-link" title="QuantPits Arena Exhibition & Platform Home">
         <div class="brand-logo-badge">QP</div>
         <div class="brand-text">
-          <span class="brand-name">QuantPits Arena</span>
+          <span class="brand-name">Quant<span class="brand-hl">Pits</span> Arena</span>
           <span class="brand-edition">Tournament Testbed</span>
         </div>
       </a>
@@ -42,6 +47,13 @@
 
       <!-- Right Header Actions & Global Docs Links -->
       <div class="header-actions">
+        <!-- Return Link to Main Platform -->
+        <a href="https://quantpits.com/" class="main-site-badge-btn" target="_blank" rel="noopener" title="Return to QuantPits Main Platform (quantpits.com)">
+          <span class="btn-arrow">&larr;</span>
+          <span class="btn-text">QuantPits.com</span>
+          <span class="btn-ext">&nearr;</span>
+        </a>
+
         <!-- Secondary Platform Infrastructure / Theory Links -->
         <nav class="nav-secondary-links">
           <a href="#intro" class="nav-link-secondary" data-route="intro" title="Exhibition & Platform Intro">Exhibition</a>
@@ -75,11 +87,12 @@
           </div>
         </div>
         <div class="mobile-nav-group">
-          <div class="mobile-nav-heading">Platform &amp; Theory</div>
+          <div class="mobile-nav-heading">Platform &amp; Ecosystem</div>
           <div class="mobile-nav-grid">
             <a href="#intro" class="mobile-nav-link" data-route="intro"><span>🏛️</span> Exhibition</a>
             <a href="#methodology" class="mobile-nav-link" data-route="methodology"><span>📐</span> Methodology</a>
             <a href="#disclaimer" class="mobile-nav-link" data-route="disclaimer"><span>🛡️</span> Disclaimer</a>
+            <a href="https://quantpits.com/" target="_blank" rel="noopener" class="mobile-nav-link" style="color: var(--brand-cyan); font-weight: 600;"><span>🌐</span> QuantPits.com ↗</a>
           </div>
         </div>
       </div>
@@ -130,11 +143,14 @@
         </p>
       </div>
       <div class="footer-col" style="text-align: right;">
-        <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 4px;">
-          <span>Institutional Testing Framework · Non-Stationary Financial Regime Testbed</span>
+        <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 6px; display: flex; gap: 14px; justify-content: flex-end; flex-wrap: wrap;">
+          <a href="https://quantpits.com/" target="_blank" rel="noopener" style="color: var(--brand-cyan); font-weight: 600;">QuantPits Main ↗</a>
+          <a href="https://github.com/DarkLink/QuantPits" target="_blank" rel="noopener" style="color: var(--text-secondary);">GitHub</a>
+          <a href="https://arxiv.org/abs/2604.11477" target="_blank" rel="noopener" style="color: var(--text-secondary);">Paper</a>
+          <a href="https://github.com/DarkLink/QuantPits/blob/main/docs/en/70_WALKTHROUGH.md" target="_blank" rel="noopener" style="color: var(--text-secondary);">Walkthrough</a>
         </div>
         <div style="font-size: 11px; color: var(--text-muted);">
-          QuantPits Open Research · Strategy Durability & Empirical Significance
+          QuantPits Open Research · Strategy Durability &amp; Empirical Significance
         </div>
       </div>
     </div>
@@ -146,29 +162,29 @@
   </footer>
 
   <!-- Data Payload (Offline, Self-contained) -->
-  <script src="js/data/arena_data.js?v=2.5"></script>
+  <script src="js/data/arena_data.js?v=2.6"></script>
 
   <!-- Data Adapter -->
-  <script src="js/adapter.js?v=2.5"></script>
+  <script src="js/adapter.js?v=2.6"></script>
 
   <!-- ECharts Suite -->
-  <script src="js/components/charts.js?v=2.5"></script>
+  <script src="js/components/charts.js?v=2.6"></script>
 
   <!-- Global Filters -->
-  <script src="js/components/filters.js?v=2.5"></script>
+  <script src="js/components/filters.js?v=2.6"></script>
 
   <!-- Application Views -->
-  <script src="js/views/landing.js?v=2.5"></script>
-  <script src="js/views/overview.js?v=2.5"></script>
-  <script src="js/views/leaderboard_view.js?v=2.5"></script>
-  <script src="js/views/animals_view.js?v=2.5"></script>
-  <script src="js/views/path_detail.js?v=2.5"></script>
-  <script src="js/views/contestant_detail.js?v=2.5"></script>
-  <script src="js/views/decision_audit.js?v=2.5"></script>
-  <script src="js/views/methodology.js?v=2.5"></script>
-  <script src="js/views/disclaimer.js?v=2.5"></script>
+  <script src="js/views/landing.js?v=2.6"></script>
+  <script src="js/views/overview.js?v=2.6"></script>
+  <script src="js/views/leaderboard_view.js?v=2.6"></script>
+  <script src="js/views/animals_view.js?v=2.6"></script>
+  <script src="js/views/path_detail.js?v=2.6"></script>
+  <script src="js/views/contestant_detail.js?v=2.6"></script>
+  <script src="js/views/decision_audit.js?v=2.6"></script>
+  <script src="js/views/methodology.js?v=2.6"></script>
+  <script src="js/views/disclaimer.js?v=2.6"></script>
 
   <!-- Main Controller & Router -->
-  <script src="js/app.js?v=2.5"></script>
+  <script src="js/app.js?v=2.6"></script>
 </body>
 </html>

@@ -8,30 +8,34 @@
   --font-heading: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', Consolas, Monaco, monospace;
 
-  /* Theme: Dark Mode (Default) */
-  --bg-base: #0a0d14;
-  --bg-subtle: #0f1422;
-  --bg-surface: #141b2d;
-  --bg-surface-elevated: #1a233a;
-  --bg-glass: rgba(20, 27, 45, 0.75);
-  --bg-glass-elevated: rgba(26, 35, 58, 0.85);
+  /* Theme: Dark Mode (Default) - Aligned with quantpits.com */
+  --bg-base: #06080f;
+  --bg-subtle: #0c1120;
+  --bg-surface: rgba(15, 23, 42, 0.7);
+  --bg-surface-elevated: rgba(30, 41, 59, 0.75);
+  --bg-card: rgba(15, 23, 42, 0.6);
+  --bg-glass: rgba(6, 8, 15, 0.78);
+  --bg-glass-elevated: rgba(12, 17, 32, 0.88);
 
   --border-subtle: rgba(255, 255, 255, 0.07);
   --border-medium: rgba(255, 255, 255, 0.14);
   --border-bright: rgba(255, 255, 255, 0.25);
   --border-accent: rgba(56, 189, 248, 0.4);
+  --border-glow: rgba(56, 189, 248, 0.15);
 
   --text-primary: #f8fafc;
   --text-secondary: #94a3b8;
   --text-tertiary: #64748b;
   --text-muted: #475569;
-  --text-inverse: #090d16;
+  --text-inverse: #06080f;
 
-  /* Semantic Brand & Accents */
+  /* Semantic Brand & Accents (Exact QuantPits Palette) */
   --brand-cyan: #38bdf8;
-  --brand-blue: #3b82f6;
-  --brand-purple: #a855f7;
-  --brand-pink: #ec4899;
+  --brand-blue: #818cf8;
+  --brand-purple: #a78bfa;
+  --brand-pink: #f472b6;
+  --gradient-main: linear-gradient(135deg, #38bdf8, #818cf8, #a78bfa);
+  --gradient-hero: linear-gradient(135deg, rgba(56, 189, 248, 0.08), rgba(167, 139, 250, 0.08));
 
   --accent-positive: #10b981;
   --accent-positive-bg: rgba(16, 185, 129, 0.12);

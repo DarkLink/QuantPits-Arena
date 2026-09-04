@@ -23,6 +23,42 @@ body {
   flex-direction: column;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+  position: relative;
+}
+
+/* Ambient Background Grid & Glows (Aligned with quantpits.com) */
+.bg-grid {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(56, 189, 248, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(56, 189, 248, 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+.bg-glow {
+  position: fixed;
+  z-index: 0;
+  pointer-events: none;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  filter: blur(140px);
+  opacity: 0.12;
+}
+
+.bg-glow--1 {
+  top: -200px;
+  left: -100px;
+  background: var(--brand-cyan);
+}
+
+.bg-glow--2 {
+  bottom: -200px;
+  right: -100px;
+  background: var(--brand-purple);
 }
 
 /* Custom Scrollbars */
@@ -103,15 +139,21 @@ a:hover {
   width: 32px;
   height: 32px;
   border-radius: 8px;
-  background: linear-gradient(135deg, var(--brand-cyan), var(--brand-purple));
+  background: var(--gradient-main);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
+  color: #0f172a;
   font-family: var(--font-heading);
   font-size: 0.95rem;
-  font-weight: 800;
-  box-shadow: 0 0 16px rgba(56, 189, 248, 0.35);
+  font-weight: 900;
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.35);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.brand-link:hover .brand-logo-badge {
+  transform: scale(1.05);
+  box-shadow: 0 0 24px rgba(56, 189, 248, 0.5);
 }
 
 .brand-text {
@@ -122,10 +164,17 @@ a:hover {
 .brand-name {
   font-family: var(--font-heading);
   font-size: 1.15rem;
-  font-weight: 700;
+  font-weight: 800;
   color: var(--text-primary);
   line-height: 1.2;
   letter-spacing: -0.02em;
+}
+
+.brand-name span.brand-hl {
+  background: var(--gradient-main);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .brand-edition {
@@ -219,6 +268,46 @@ a:hover {
   gap: 0.85rem;
 }
 
+/* Link back to QuantPits.com Main Platform */
+.main-site-badge-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: var(--radius-full);
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid rgba(56, 189, 248, 0.22);
+  color: var(--brand-cyan);
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.main-site-badge-btn:hover {
+  background: rgba(56, 189, 248, 0.18);
+  border-color: rgba(56, 189, 248, 0.45);
+  color: #7dd3fc;
+  text-decoration: none;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(56, 189, 248, 0.2);
+}
+
+.main-site-badge-btn .btn-arrow {
+  font-size: 0.85rem;
+  transition: transform var(--transition-fast);
+}
+
+.main-site-badge-btn:hover .btn-arrow {
+  transform: translateX(-2px);
+}
+
+.main-site-badge-btn .btn-ext {
+  font-size: 0.72rem;
+  opacity: 0.75;
+}
+
 .season-badge {
   display: flex;
   align-items: center;
@@ -297,11 +386,11 @@ a:hover {
   top: 100%;
   left: 0;
   right: 0;
-  background: var(--bg-surface-elevated);
+  background: rgba(8, 12, 22, 0.98);
   border-bottom: 1px solid var(--border-medium);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   z-index: 999;
   max-height: 0;
   overflow: hidden;
@@ -478,6 +567,9 @@ a:hover {
     display: none;
   }
   .nav-secondary-links {
+    display: none;
+  }
+  .main-site-badge-btn {
     display: none;
   }
   .mobile-menu-toggle {

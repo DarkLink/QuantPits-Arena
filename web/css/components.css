@@ -354,24 +354,28 @@
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, var(--brand-cyan), var(--brand-blue));
-  color: #fff;
-  box-shadow: var(--shadow-glow-cyan);
+  background: var(--gradient-main);
+  color: #0f172a;
+  font-weight: 700;
+  box-shadow: 0 4px 20px rgba(56, 189, 248, 0.28);
 }
 .btn-primary:hover {
-  opacity: 0.92;
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(56, 189, 248, 0.42);
+  color: #0f172a;
   text-decoration: none;
 }
 
 .btn-secondary {
-  background: var(--bg-surface-elevated);
-  border-color: var(--border-medium);
+  background: rgba(56, 189, 248, 0.08);
+  border-color: rgba(56, 189, 248, 0.2);
   color: var(--text-primary);
 }
 .btn-secondary:hover {
-  background: var(--border-subtle);
-  border-color: var(--border-bright);
+  background: rgba(56, 189, 248, 0.16);
+  border-color: rgba(56, 189, 248, 0.4);
+  transform: translateY(-2px);
+  color: #ffffff;
   text-decoration: none;
 }
 
