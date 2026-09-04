@@ -44,6 +44,10 @@
 | **Sloth-2** | Latency | 2-week signal delay | Measure 2-week signal latency decay |
 | **Sloth-3** | Latency | 3-week signal delay | Measure 3-week signal latency decay |
 | **Sloth-4** | Latency | 4-week signal delay | Measure 4-week signal latency decay |
+| **Snail-1** | Latency-Warm | Day 1 match Robot, then 1-week signal delay | Decouple latency decay from cold-start exposure truncation |
+| **Snail-2** | Latency-Warm | Day 1 match Robot, then 2-week signal delay | Decouple latency decay from cold-start exposure truncation |
+| **Snail-3** | Latency-Warm | Day 1 match Robot, then 3-week signal delay | Decouple latency decay from cold-start exposure truncation |
+| **Snail-4** | Latency-Warm | Day 1 match Robot, then 4-week signal delay | Decouple latency decay from cold-start exposure truncation |
 | **Rabbit-1** | Bandwidth | Half-turnover: Drop-11 (50% of Top-22) | Test aggressive opinion deployment |
 | **Rabbit-2** | Bandwidth | Full-turnover: Drop-22 (complete replacement) | Measure maximum turnover performance |
 | **Turtle** | Low Turnover | Drop-1 minimal turnover | Test extreme turnover minimization |

@@ -35,17 +35,18 @@ def simulate_cross_sectional_score(dates: list, instruments: list):
 
 
 from arena.animals import (
-    Robot, Sloth, Rabbit, Turtle, Koala, get_all_animals
+    Robot, Sloth, Snail, Rabbit, Turtle, Koala, get_all_animals
 )
 
 
 def test_get_all_animals_completeness():
-    """验证 9 种动物齐备"""
+    """验证 13 种动物齐备（含 4 种预热延迟 Snail）"""
     animals = get_all_animals()
-    assert len(animals) == 9
+    assert len(animals) == 13
     ids = [a.animal_id for a in animals]
     assert ids == [
         "robot", "sloth-1", "sloth-2", "sloth-3", "sloth-4",
+        "snail-1", "snail-2", "snail-3", "snail-4",
         "rabbit-1", "rabbit-2", "turtle", "koala"
     ]
 
@@ -124,4 +125,47 @@ def test_sloth_option_b_cold_start_contract():
     # Cycle 2: 达到 2 周延迟 -> 首次建仓使用 Cycle 0 信号
     sig2_c2 = sloth2.transform_signal(score_c2, history, cycle_idx=2)
     assert sig2_c2.equals(score_c0)
+
+
+def test_snail_warm_start_contract():
+    """
+    验证 Snail (蜗牛) 方案 C 预热平稳建仓：
+    - cycle 0: 必须使用当期最新信号 (current_score)，与 Robot 完全一致，不返回 None，立即满额建仓
+    - 0 < cycle_idx < delay_weeks: 延迟信号未到时，复用 cycle 0 信号保持持仓不换手 (不空仓)
+    - cycle_idx >= delay_weeks: 延迟信号到达后，严格以 cycle_idx - delay_weeks 信号进行调仓
+    """
+    stocks = [f"STOCK_{i:02d}" for i in range(10)]
+    score_c0 = pd.Series(np.linspace(0.1, 0.9, 10), index=stocks)
+    score_c1 = pd.Series(np.linspace(0.2, 0.8, 10), index=stocks)
+    score_c2 = pd.Series(np.linspace(0.3, 0.7, 10), index=stocks)
+    score_c3 = pd.Series(np.linspace(0.4, 0.6, 10), index=stocks)
+
+    history = {0: score_c0, 1: score_c1, 2: score_c2, 3: score_c3}
+
+    # 测试 Snail-1
+    snail1 = Snail(delay_weeks=1)
+    # Cycle 0: 立即使用 score_c0 建仓 (与 Robot 一致，绝非 None)
+    assert snail1.transform_signal(score_c0, history, cycle_idx=0).equals(score_c0)
+    # Cycle 1: 延迟 1 周 -> 使用 score_c0
+    assert snail1.transform_signal(score_c1, history, cycle_idx=1).equals(score_c0)
+    # Cycle 2: 延迟 1 周 -> 使用 score_c1
+    assert snail1.transform_signal(score_c2, history, cycle_idx=2).equals(score_c1)
+
+    # 测试 Snail-3
+    snail3 = Snail(delay_weeks=3)
+    # Cycle 0: 立即使用 score_c0 建仓
+    assert snail3.transform_signal(score_c0, history, cycle_idx=0).equals(score_c0)
+    # Cycle 1: 尚未到达 3 周 -> 复用 score_c0 (持仓保持，不换手，不空仓)
+    assert snail3.transform_signal(score_c1, history, cycle_idx=1).equals(score_c0)
+    # Cycle 2: 尚未到达 3 周 -> 复用 score_c0
+    assert snail3.transform_signal(score_c2, history, cycle_idx=2).equals(score_c0)
+    # Cycle 3: 达到 3 周延迟 -> 使用 cycle 0 信号 (3 - 3 = 0)
+    assert snail3.transform_signal(score_c3, history, cycle_idx=3).equals(score_c0)
+
+    # 验证 policy 参数
+    pol = snail3.get_portfolio_policy()
+    assert pol["topk"] == 22
+    assert pol["n_drop"] == 3
+    assert pol["delay_weeks"] == 3
+
 
