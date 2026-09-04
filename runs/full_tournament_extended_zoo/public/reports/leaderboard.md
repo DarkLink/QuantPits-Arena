@@ -19,7 +19,7 @@ Run ID: `full_tournament_extended_zoo`
 | CONTESTANT_A    | koala       | -10.48%            | 13.27%             |      0.8952 |
 | CONTESTANT_A    | meerkat-10  | 2.58%              | 6.23%              |      1.0258 |
 | CONTESTANT_A    | meerkat-20  | 4.65%              | 4.21%              |      1.0465 |
-| CONTESTANT_A    | meerkat-30  | 4.11%              | 2.74%              |      1.0411 |
+| CONTESTANT_A    | meerkat-30  | 4.27%              | 2.66%              |      1.0427 |
 | CONTESTANT_A    | meerkat-40  | 3.46%              | 5.76%              |      1.0346 |
 | CONTESTANT_A    | meerkat-50  | 5.20%              | 3.06%              |      1.052  |
 | CONTESTANT_A    | meerkat-60  | 1.10%              | 4.50%              |      1.011  |
@@ -28,11 +28,11 @@ Run ID: `full_tournament_extended_zoo`
 | CONTESTANT_A    | meerkat-90  | -1.58%             | 5.37%              |      0.9842 |
 | CONTESTANT_A    | eagle-5-1   | 12.67%             | 8.17%              |      1.1267 |
 | CONTESTANT_A    | eagle-11-2  | 14.68%             | 6.58%              |      1.1468 |
-| CONTESTANT_A    | eagle-44-6  | 10.19%             | 3.21%              |      1.1019 |
+| CONTESTANT_A    | eagle-44-6  | 9.59%              | 3.25%              |      1.0959 |
 | CONTESTANT_A    | eagle-66-9  | 6.41%              | 2.52%              |      1.0641 |
 | CONTESTANT_A    | eagle-88-12 | 6.80%              | 2.00%              |      1.068  |
 | CONTESTANT_A    | whale-shark | 4.61%              | 2.56%              |      1.0461 |
-| CONTESTANT_A    | taotie      | 3.77%              | 3.13%              |      1.0377 |
+| CONTESTANT_A    | taotie      | 2.32%              | 1.36%              |      1.0232 |
 | CONTESTANT_B    | robot       | 12.07%             | 5.65%              |      1.1207 |
 | CONTESTANT_B    | sloth-1     | 12.42%             | 4.28%              |      1.1242 |
 | CONTESTANT_B    | sloth-2     | 9.27%              | 5.34%              |      1.0927 |
@@ -52,7 +52,7 @@ Run ID: `full_tournament_extended_zoo`
 | CONTESTANT_B    | meerkat-40  | 6.76%              | 2.74%              |      1.0676 |
 | CONTESTANT_B    | meerkat-50  | 2.45%              | 5.12%              |      1.0245 |
 | CONTESTANT_B    | meerkat-60  | -0.85%             | 4.54%              |      0.9915 |
-| CONTESTANT_B    | meerkat-70  | 0.44%              | 5.62%              |      1.0044 |
+| CONTESTANT_B    | meerkat-70  | 0.83%              | 5.25%              |      1.0083 |
 | CONTESTANT_B    | meerkat-80  | -2.96%             | 5.52%              |      0.9704 |
 | CONTESTANT_B    | meerkat-90  | -10.32%            | 12.17%             |      0.8968 |
 | CONTESTANT_B    | eagle-5-1   | 20.75%             | 7.13%              |      1.2075 |
@@ -61,7 +61,7 @@ Run ID: `full_tournament_extended_zoo`
 | CONTESTANT_B    | eagle-66-9  | 6.85%              | 2.83%              |      1.0685 |
 | CONTESTANT_B    | eagle-88-12 | 7.19%              | 2.08%              |      1.0719 |
 | CONTESTANT_B    | whale-shark | 4.83%              | 2.12%              |      1.0483 |
-| CONTESTANT_B    | taotie      | 3.77%              | 3.13%              |      1.0377 |
+| CONTESTANT_B    | taotie      | 2.32%              | 1.36%              |      1.0232 |
 | CONTESTANT_C    | robot       | 6.93%              | 4.66%              |      1.0693 |
 | CONTESTANT_C    | sloth-1     | 7.76%              | 3.99%              |      1.0776 |
 | CONTESTANT_C    | sloth-2     | 8.09%              | 3.53%              |      1.0809 |
@@ -90,7 +90,7 @@ Run ID: `full_tournament_extended_zoo`
 | CONTESTANT_C    | eagle-66-9  | 4.62%              | 3.03%              |      1.0462 |
 | CONTESTANT_C    | eagle-88-12 | 6.03%              | 2.51%              |      1.0603 |
 | CONTESTANT_C    | whale-shark | 5.57%              | 2.39%              |      1.0557 |
-| CONTESTANT_C    | taotie      | 3.77%              | 3.13%              |      1.0377 |
+| CONTESTANT_C    | taotie      | 2.32%              | 1.36%              |      1.0232 |
 | CONTESTANT_D    | robot       | 7.67%              | 5.54%              |      1.0767 |
 | CONTESTANT_D    | sloth-1     | 7.34%              | 3.42%              |      1.0734 |
 | CONTESTANT_D    | sloth-2     | 6.40%              | 4.55%              |      1.064  |
@@ -119,7 +119,7 @@ Run ID: `full_tournament_extended_zoo`
 | CONTESTANT_D    | eagle-66-9  | 6.19%              | 2.29%              |      1.0619 |
 | CONTESTANT_D    | eagle-88-12 | 6.88%              | 2.30%              |      1.0688 |
 | CONTESTANT_D    | whale-shark | 4.33%              | 2.49%              |      1.0433 |
-| CONTESTANT_D    | taotie      | 3.77%              | 3.13%              |      1.0377 |
+| CONTESTANT_D    | taotie      | 2.32%              | 1.36%              |      1.0232 |
 | CONTESTANT_E    | robot       | 1.99%              | 4.14%              |      1.0199 |
 | CONTESTANT_E    | sloth-1     | 2.75%              | 3.41%              |      1.0275 |
 | CONTESTANT_E    | sloth-2     | 5.22%              | 4.47%              |      1.0522 |
@@ -148,7 +148,7 @@ Run ID: `full_tournament_extended_zoo`
 | CONTESTANT_E    | eagle-66-9  | 3.34%              | 2.40%              |      1.0334 |
 | CONTESTANT_E    | eagle-88-12 | 2.75%              | 2.78%              |      1.0275 |
 | CONTESTANT_E    | whale-shark | 3.72%              | 2.35%              |      1.0372 |
-| CONTESTANT_E    | taotie      | 3.77%              | 3.13%              |      1.0377 |
+| CONTESTANT_E    | taotie      | 2.32%              | 1.36%              |      1.0232 |
 | CONTESTANT_F    | robot       | 5.27%              | 2.61%              |      1.0527 |
 | CONTESTANT_F    | sloth-1     | 4.45%              | 2.78%              |      1.0445 |
 | CONTESTANT_F    | sloth-2     | 5.26%              | 2.61%              |      1.0526 |
@@ -177,4 +177,189 @@ Run ID: `full_tournament_extended_zoo`
 | CONTESTANT_F    | eagle-66-9  | 1.49%              | 3.94%              |      1.0149 |
 | CONTESTANT_F    | eagle-88-12 | 3.32%              | 2.79%              |      1.0332 |
 | CONTESTANT_F    | whale-shark | 3.29%              | 2.42%              |      1.0329 |
-| CONTESTANT_F    | taotie      | 3.77%              | 3.13%              |      1.0377 |
+| CONTESTANT_F    | taotie      | 2.32%              | 1.36%              |      1.0232 |
+
+---
+
+## Capital Granularity Diagnostics Summary
+
+Below is the affordability and cash deployment diagnostics across capacity breadth groups:
+
+| contestant_id   | animal_id   |   target_holdings_mean |   actual_holdings_mean |   unaffordable_buy_count | unaffordable_buy_ratio   | mean_cash_ratio   | final_cash_ratio   |
+|:----------------|:------------|-----------------------:|-----------------------:|-------------------------:|:-------------------------|:------------------|:-------------------|
+| CONTESTANT_A    | robot       |                     22 |                  22    |                        0 | 0.00%                    | 2.15%             | 0.56%              |
+| CONTESTANT_A    | sloth-1     |                     22 |                  19.25 |                        0 | 0.00%                    | 14.50%            | 0.48%              |
+| CONTESTANT_A    | sloth-2     |                     22 |                  16.5  |                        0 | 0.00%                    | 27.16%            | 3.11%              |
+| CONTESTANT_A    | sloth-3     |                     22 |                  13.75 |                        0 | 0.00%                    | 38.92%            | 1.65%              |
+| CONTESTANT_A    | sloth-4     |                     22 |                  11    |                        0 | 0.00%                    | 51.65%            | 1.64%              |
+| CONTESTANT_A    | snail-1     |                     22 |                  22    |                        0 | 0.00%                    | 2.72%             | 0.49%              |
+| CONTESTANT_A    | snail-2     |                     22 |                  22    |                        0 | 0.00%                    | 3.47%             | 1.98%              |
+| CONTESTANT_A    | snail-3     |                     22 |                  22    |                        0 | 0.00%                    | 4.21%             | 2.13%              |
+| CONTESTANT_A    | snail-4     |                     22 |                  22    |                        0 | 0.00%                    | 4.71%             | 1.66%              |
+| CONTESTANT_A    | rabbit-1    |                     22 |                  22    |                        0 | 0.00%                    | 4.30%             | 4.45%              |
+| CONTESTANT_A    | rabbit-2    |                     22 |                  22    |                        0 | 0.00%                    | 5.37%             | 4.72%              |
+| CONTESTANT_A    | turtle      |                     22 |                  22    |                        0 | 0.00%                    | 1.37%             | 0.43%              |
+| CONTESTANT_A    | koala       |                     22 |                  22    |                        0 | 0.00%                    | 3.07%             | 0.30%              |
+| CONTESTANT_A    | meerkat-10  |                     22 |                  22    |                        0 | 0.00%                    | 1.76%             | 0.97%              |
+| CONTESTANT_A    | meerkat-20  |                     22 |                  22    |                        0 | 0.00%                    | 1.69%             | 1.65%              |
+| CONTESTANT_A    | meerkat-30  |                     22 |                  22    |                        0 | 0.00%                    | 1.81%             | 1.09%              |
+| CONTESTANT_A    | meerkat-40  |                     22 |                  22    |                        0 | 0.00%                    | 1.16%             | 0.54%              |
+| CONTESTANT_A    | meerkat-50  |                     22 |                  22    |                        0 | 0.00%                    | 1.92%             | 0.90%              |
+| CONTESTANT_A    | meerkat-60  |                     22 |                  22    |                        0 | 0.00%                    | 1.82%             | 2.19%              |
+| CONTESTANT_A    | meerkat-70  |                     22 |                  22    |                        0 | 0.00%                    | 1.54%             | 1.81%              |
+| CONTESTANT_A    | meerkat-80  |                     22 |                  22    |                        0 | 0.00%                    | 1.89%             | 1.69%              |
+| CONTESTANT_A    | meerkat-90  |                     22 |                  22    |                        0 | 0.00%                    | 2.08%             | 0.85%              |
+| CONTESTANT_A    | eagle-5-1   |                      5 |                   5    |                        0 | 0.00%                    | 1.37%             | 1.07%              |
+| CONTESTANT_A    | eagle-11-2  |                     11 |                  11    |                        0 | 0.00%                    | 2.22%             | 5.84%              |
+| CONTESTANT_A    | eagle-44-6  |                     44 |                  44    |                        0 | 0.00%                    | 3.00%             | 0.58%              |
+| CONTESTANT_A    | eagle-66-9  |                     66 |                  66    |                        0 | 0.00%                    | 3.53%             | 0.91%              |
+| CONTESTANT_A    | eagle-88-12 |                     88 |                  88    |                        0 | 0.00%                    | 3.88%             | 2.21%              |
+| CONTESTANT_A    | whale-shark |                    123 |                 123    |                        0 | 0.00%                    | 4.55%             | 2.77%              |
+| CONTESTANT_A    | taotie      |                    246 |                 140    |                      848 | 85.40%                   | 50.67%            | 47.91%             |
+| CONTESTANT_B    | robot       |                     22 |                  22    |                        0 | 0.00%                    | 1.95%             | 0.25%              |
+| CONTESTANT_B    | sloth-1     |                     22 |                  19.25 |                        0 | 0.00%                    | 14.29%            | 1.32%              |
+| CONTESTANT_B    | sloth-2     |                     22 |                  16.5  |                        0 | 0.00%                    | 26.30%            | 0.36%              |
+| CONTESTANT_B    | sloth-3     |                     22 |                  13.75 |                        0 | 0.00%                    | 38.81%            | 1.38%              |
+| CONTESTANT_B    | sloth-4     |                     22 |                  11    |                        0 | 0.00%                    | 51.34%            | 2.56%              |
+| CONTESTANT_B    | snail-1     |                     22 |                  22    |                        0 | 0.00%                    | 2.37%             | 1.37%              |
+| CONTESTANT_B    | snail-2     |                     22 |                  22    |                        0 | 0.00%                    | 2.72%             | 0.38%              |
+| CONTESTANT_B    | snail-3     |                     22 |                  22    |                        0 | 0.00%                    | 3.28%             | 1.35%              |
+| CONTESTANT_B    | snail-4     |                     22 |                  22    |                        0 | 0.00%                    | 3.82%             | 1.57%              |
+| CONTESTANT_B    | rabbit-1    |                     22 |                  22    |                        0 | 0.00%                    | 3.23%             | 1.09%              |
+| CONTESTANT_B    | rabbit-2    |                     22 |                  22    |                        0 | 0.00%                    | 4.33%             | 0.82%              |
+| CONTESTANT_B    | turtle      |                     22 |                  22    |                        0 | 0.00%                    | 0.97%             | 0.11%              |
+| CONTESTANT_B    | koala       |                     22 |                  21.88 |                        1 | 2.27%                    | 3.52%             | 0.77%              |
+| CONTESTANT_B    | meerkat-10  |                     22 |                  22    |                        0 | 0.00%                    | 0.92%             | 0.46%              |
+| CONTESTANT_B    | meerkat-20  |                     22 |                  22    |                        0 | 0.00%                    | 1.22%             | 1.23%              |
+| CONTESTANT_B    | meerkat-30  |                     22 |                  22    |                        0 | 0.00%                    | 2.44%             | 1.64%              |
+| CONTESTANT_B    | meerkat-40  |                     22 |                  22    |                        0 | 0.00%                    | 2.37%             | 1.80%              |
+| CONTESTANT_B    | meerkat-50  |                     22 |                  22    |                        0 | 0.00%                    | 1.29%             | 1.36%              |
+| CONTESTANT_B    | meerkat-60  |                     22 |                  22    |                        0 | 0.00%                    | 1.64%             | 1.10%              |
+| CONTESTANT_B    | meerkat-70  |                     22 |                  22    |                        0 | 0.00%                    | 1.48%             | 1.87%              |
+| CONTESTANT_B    | meerkat-80  |                     22 |                  22    |                        0 | 0.00%                    | 2.52%             | 1.57%              |
+| CONTESTANT_B    | meerkat-90  |                     22 |                  22    |                        0 | 0.00%                    | 2.55%             | 2.56%              |
+| CONTESTANT_B    | eagle-5-1   |                      5 |                   5    |                        0 | 0.00%                    | 0.63%             | 1.66%              |
+| CONTESTANT_B    | eagle-11-2  |                     11 |                  11    |                        0 | 0.00%                    | 1.36%             | 0.48%              |
+| CONTESTANT_B    | eagle-44-6  |                     44 |                  44    |                        0 | 0.00%                    | 2.54%             | 1.04%              |
+| CONTESTANT_B    | eagle-66-9  |                     66 |                  66    |                        0 | 0.00%                    | 3.42%             | 2.02%              |
+| CONTESTANT_B    | eagle-88-12 |                     88 |                  88    |                        0 | 0.00%                    | 3.55%             | 3.05%              |
+| CONTESTANT_B    | whale-shark |                    123 |                 123    |                        0 | 0.00%                    | 4.58%             | 3.45%              |
+| CONTESTANT_B    | taotie      |                    246 |                 140    |                      848 | 85.40%                   | 50.67%            | 47.91%             |
+| CONTESTANT_C    | robot       |                     22 |                  22    |                        0 | 0.00%                    | 1.98%             | 0.99%              |
+| CONTESTANT_C    | sloth-1     |                     22 |                  19.25 |                        0 | 0.00%                    | 14.42%            | 1.31%              |
+| CONTESTANT_C    | sloth-2     |                     22 |                  16.5  |                        0 | 0.00%                    | 26.54%            | 0.63%              |
+| CONTESTANT_C    | sloth-3     |                     22 |                  13.75 |                        0 | 0.00%                    | 39.33%            | 1.59%              |
+| CONTESTANT_C    | sloth-4     |                     22 |                  11    |                        0 | 0.00%                    | 51.43%            | 0.60%              |
+| CONTESTANT_C    | snail-1     |                     22 |                  22    |                        0 | 0.00%                    | 2.61%             | 1.24%              |
+| CONTESTANT_C    | snail-2     |                     22 |                  22    |                        0 | 0.00%                    | 3.22%             | 0.58%              |
+| CONTESTANT_C    | snail-3     |                     22 |                  22    |                        0 | 0.00%                    | 3.82%             | 1.68%              |
+| CONTESTANT_C    | snail-4     |                     22 |                  22    |                        0 | 0.00%                    | 3.97%             | 0.45%              |
+| CONTESTANT_C    | rabbit-1    |                     22 |                  22    |                        0 | 0.00%                    | 4.19%             | 6.18%              |
+| CONTESTANT_C    | rabbit-2    |                     22 |                  22    |                        0 | 0.00%                    | 5.83%             | 6.52%              |
+| CONTESTANT_C    | turtle      |                     22 |                  22    |                        0 | 0.00%                    | 1.24%             | 0.19%              |
+| CONTESTANT_C    | koala       |                     22 |                  22    |                        0 | 0.00%                    | 3.28%             | 1.20%              |
+| CONTESTANT_C    | meerkat-10  |                     22 |                  22    |                        0 | 0.00%                    | 1.36%             | 0.49%              |
+| CONTESTANT_C    | meerkat-20  |                     22 |                  22    |                        0 | 0.00%                    | 1.84%             | 0.58%              |
+| CONTESTANT_C    | meerkat-30  |                     22 |                  22    |                        0 | 0.00%                    | 1.28%             | 0.53%              |
+| CONTESTANT_C    | meerkat-40  |                     22 |                  22    |                        0 | 0.00%                    | 2.14%             | 1.17%              |
+| CONTESTANT_C    | meerkat-50  |                     22 |                  22    |                        0 | 0.00%                    | 1.47%             | 2.15%              |
+| CONTESTANT_C    | meerkat-60  |                     22 |                  22    |                        0 | 0.00%                    | 1.70%             | 0.47%              |
+| CONTESTANT_C    | meerkat-70  |                     22 |                  22    |                        0 | 0.00%                    | 1.80%             | 1.76%              |
+| CONTESTANT_C    | meerkat-80  |                     22 |                  22    |                        0 | 0.00%                    | 1.88%             | 0.61%              |
+| CONTESTANT_C    | meerkat-90  |                     22 |                  22    |                        0 | 0.00%                    | 1.47%             | 0.82%              |
+| CONTESTANT_C    | eagle-5-1   |                      5 |                   5    |                        0 | 0.00%                    | 1.45%             | 0.83%              |
+| CONTESTANT_C    | eagle-11-2  |                     11 |                  11    |                        0 | 0.00%                    | 1.87%             | 1.75%              |
+| CONTESTANT_C    | eagle-44-6  |                     44 |                  44    |                        0 | 0.00%                    | 2.74%             | 1.67%              |
+| CONTESTANT_C    | eagle-66-9  |                     66 |                  66    |                        0 | 0.00%                    | 3.19%             | 1.47%              |
+| CONTESTANT_C    | eagle-88-12 |                     88 |                  88    |                        0 | 0.00%                    | 3.98%             | 2.07%              |
+| CONTESTANT_C    | whale-shark |                    123 |                 123    |                        0 | 0.00%                    | 4.65%             | 2.64%              |
+| CONTESTANT_C    | taotie      |                    246 |                 140    |                      848 | 85.40%                   | 50.67%            | 47.91%             |
+| CONTESTANT_D    | robot       |                     22 |                  22    |                        0 | 0.00%                    | 2.06%             | 0.79%              |
+| CONTESTANT_D    | sloth-1     |                     22 |                  19.25 |                        0 | 0.00%                    | 14.58%            | 0.16%              |
+| CONTESTANT_D    | sloth-2     |                     22 |                  16.5  |                        0 | 0.00%                    | 26.77%            | 1.53%              |
+| CONTESTANT_D    | sloth-3     |                     22 |                  13.75 |                        0 | 0.00%                    | 39.18%            | 0.57%              |
+| CONTESTANT_D    | sloth-4     |                     22 |                  11    |                        0 | 0.00%                    | 51.83%            | 1.29%              |
+| CONTESTANT_D    | snail-1     |                     22 |                  22    |                        0 | 0.00%                    | 2.89%             | 0.31%              |
+| CONTESTANT_D    | snail-2     |                     22 |                  22    |                        0 | 0.00%                    | 4.03%             | 1.13%              |
+| CONTESTANT_D    | snail-3     |                     22 |                  22    |                        0 | 0.00%                    | 4.86%             | 1.23%              |
+| CONTESTANT_D    | snail-4     |                     22 |                  22    |                        0 | 0.00%                    | 6.02%             | 1.30%              |
+| CONTESTANT_D    | rabbit-1    |                     22 |                  22    |                        0 | 0.00%                    | 4.06%             | 3.18%              |
+| CONTESTANT_D    | rabbit-2    |                     22 |                  22    |                        0 | 0.00%                    | 5.34%             | 3.99%              |
+| CONTESTANT_D    | turtle      |                     22 |                  22    |                        0 | 0.00%                    | 1.49%             | 0.38%              |
+| CONTESTANT_D    | koala       |                     22 |                  22    |                        0 | 0.00%                    | 2.97%             | 1.27%              |
+| CONTESTANT_D    | meerkat-10  |                     22 |                  22    |                        0 | 0.00%                    | 1.55%             | 2.97%              |
+| CONTESTANT_D    | meerkat-20  |                     22 |                  22    |                        0 | 0.00%                    | 1.43%             | 0.20%              |
+| CONTESTANT_D    | meerkat-30  |                     22 |                  22    |                        0 | 0.00%                    | 1.53%             | 0.85%              |
+| CONTESTANT_D    | meerkat-40  |                     22 |                  22    |                        0 | 0.00%                    | 1.62%             | 0.26%              |
+| CONTESTANT_D    | meerkat-50  |                     22 |                  22    |                        0 | 0.00%                    | 2.32%             | 1.79%              |
+| CONTESTANT_D    | meerkat-60  |                     22 |                  22    |                        0 | 0.00%                    | 1.24%             | 0.88%              |
+| CONTESTANT_D    | meerkat-70  |                     22 |                  22    |                        0 | 0.00%                    | 2.10%             | 0.87%              |
+| CONTESTANT_D    | meerkat-80  |                     22 |                  22    |                        0 | 0.00%                    | 1.60%             | 0.42%              |
+| CONTESTANT_D    | meerkat-90  |                     22 |                  22    |                        0 | 0.00%                    | 1.41%             | 0.27%              |
+| CONTESTANT_D    | eagle-5-1   |                      5 |                   5    |                        0 | 0.00%                    | 0.66%             | 0.61%              |
+| CONTESTANT_D    | eagle-11-2  |                     11 |                  11    |                        0 | 0.00%                    | 1.15%             | 0.94%              |
+| CONTESTANT_D    | eagle-44-6  |                     44 |                  44    |                        0 | 0.00%                    | 3.33%             | 1.50%              |
+| CONTESTANT_D    | eagle-66-9  |                     66 |                  66    |                        0 | 0.00%                    | 3.49%             | 2.61%              |
+| CONTESTANT_D    | eagle-88-12 |                     88 |                  88    |                        0 | 0.00%                    | 4.08%             | 1.95%              |
+| CONTESTANT_D    | whale-shark |                    123 |                 123    |                        0 | 0.00%                    | 5.12%             | 2.91%              |
+| CONTESTANT_D    | taotie      |                    246 |                 140    |                      848 | 85.40%                   | 50.67%            | 47.91%             |
+| CONTESTANT_E    | robot       |                     22 |                  22    |                        0 | 0.00%                    | 1.78%             | 0.63%              |
+| CONTESTANT_E    | sloth-1     |                     22 |                  19.25 |                        0 | 0.00%                    | 14.04%            | 0.20%              |
+| CONTESTANT_E    | sloth-2     |                     22 |                  16.5  |                        0 | 0.00%                    | 26.66%            | 1.41%              |
+| CONTESTANT_E    | sloth-3     |                     22 |                  13.75 |                        0 | 0.00%                    | 38.70%            | 0.37%              |
+| CONTESTANT_E    | sloth-4     |                     22 |                  11    |                        0 | 0.00%                    | 51.13%            | 0.82%              |
+| CONTESTANT_E    | snail-1     |                     22 |                  22    |                        0 | 0.00%                    | 2.80%             | 0.18%              |
+| CONTESTANT_E    | snail-2     |                     22 |                  22    |                        0 | 0.00%                    | 3.82%             | 1.23%              |
+| CONTESTANT_E    | snail-3     |                     22 |                  22    |                        0 | 0.00%                    | 4.81%             | 0.45%              |
+| CONTESTANT_E    | snail-4     |                     22 |                  22    |                        0 | 0.00%                    | 5.89%             | 0.42%              |
+| CONTESTANT_E    | rabbit-1    |                     22 |                  22    |                        0 | 0.00%                    | 3.72%             | 2.41%              |
+| CONTESTANT_E    | rabbit-2    |                     22 |                  22    |                        0 | 0.00%                    | 5.67%             | 5.19%              |
+| CONTESTANT_E    | turtle      |                     22 |                  22    |                        0 | 0.00%                    | 1.40%             | 0.12%              |
+| CONTESTANT_E    | koala       |                     22 |                  22    |                        0 | 0.00%                    | 1.54%             | 1.00%              |
+| CONTESTANT_E    | meerkat-10  |                     22 |                  22    |                        0 | 0.00%                    | 1.82%             | 0.47%              |
+| CONTESTANT_E    | meerkat-20  |                     22 |                  22    |                        0 | 0.00%                    | 1.61%             | 0.58%              |
+| CONTESTANT_E    | meerkat-30  |                     22 |                  22    |                        0 | 0.00%                    | 1.66%             | 0.85%              |
+| CONTESTANT_E    | meerkat-40  |                     22 |                  22    |                        0 | 0.00%                    | 1.75%             | 0.44%              |
+| CONTESTANT_E    | meerkat-50  |                     22 |                  22    |                        0 | 0.00%                    | 1.75%             | 0.68%              |
+| CONTESTANT_E    | meerkat-60  |                     22 |                  22    |                        0 | 0.00%                    | 1.62%             | 0.17%              |
+| CONTESTANT_E    | meerkat-70  |                     22 |                  22    |                        0 | 0.00%                    | 1.56%             | 0.69%              |
+| CONTESTANT_E    | meerkat-80  |                     22 |                  22    |                        0 | 0.00%                    | 1.86%             | 0.22%              |
+| CONTESTANT_E    | meerkat-90  |                     22 |                  22    |                        0 | 0.00%                    | 1.81%             | 2.52%              |
+| CONTESTANT_E    | eagle-5-1   |                      5 |                   5    |                        0 | 0.00%                    | 0.44%             | 0.25%              |
+| CONTESTANT_E    | eagle-11-2  |                     11 |                  11    |                        0 | 0.00%                    | 0.92%             | 0.28%              |
+| CONTESTANT_E    | eagle-44-6  |                     44 |                  44    |                        0 | 0.00%                    | 2.77%             | 0.95%              |
+| CONTESTANT_E    | eagle-66-9  |                     66 |                  66    |                        0 | 0.00%                    | 3.02%             | 2.61%              |
+| CONTESTANT_E    | eagle-88-12 |                     88 |                  87.88 |                        1 | 0.58%                    | 3.87%             | 2.09%              |
+| CONTESTANT_E    | whale-shark |                    123 |                 123    |                        0 | 0.00%                    | 4.94%             | 2.97%              |
+| CONTESTANT_E    | taotie      |                    246 |                 140    |                      848 | 85.40%                   | 50.67%            | 47.91%             |
+| CONTESTANT_F    | robot       |                     22 |                  22    |                        0 | 0.00%                    | 1.80%             | 0.53%              |
+| CONTESTANT_F    | sloth-1     |                     22 |                  19.25 |                        0 | 0.00%                    | 14.38%            | 0.82%              |
+| CONTESTANT_F    | sloth-2     |                     22 |                  16.5  |                        0 | 0.00%                    | 26.63%            | 0.79%              |
+| CONTESTANT_F    | sloth-3     |                     22 |                  13.75 |                        0 | 0.00%                    | 39.07%            | 0.26%              |
+| CONTESTANT_F    | sloth-4     |                     22 |                  11    |                        0 | 0.00%                    | 51.32%            | 1.03%              |
+| CONTESTANT_F    | snail-1     |                     22 |                  22    |                        0 | 0.00%                    | 3.13%             | 0.22%              |
+| CONTESTANT_F    | snail-2     |                     22 |                  22    |                        0 | 0.00%                    | 4.16%             | 0.94%              |
+| CONTESTANT_F    | snail-3     |                     22 |                  22    |                        0 | 0.00%                    | 5.35%             | 0.47%              |
+| CONTESTANT_F    | snail-4     |                     22 |                  22    |                        0 | 0.00%                    | 6.60%             | 0.91%              |
+| CONTESTANT_F    | rabbit-1    |                     22 |                  22    |                        0 | 0.00%                    | 4.45%             | 5.25%              |
+| CONTESTANT_F    | rabbit-2    |                     22 |                  22    |                        0 | 0.00%                    | 7.37%             | 7.94%              |
+| CONTESTANT_F    | turtle      |                     22 |                  22    |                        0 | 0.00%                    | 1.52%             | 0.71%              |
+| CONTESTANT_F    | koala       |                     22 |                  22    |                        0 | 0.00%                    | 2.24%             | 1.01%              |
+| CONTESTANT_F    | meerkat-10  |                     22 |                  22    |                        0 | 0.00%                    | 2.16%             | 1.06%              |
+| CONTESTANT_F    | meerkat-20  |                     22 |                  22    |                        0 | 0.00%                    | 1.30%             | 1.82%              |
+| CONTESTANT_F    | meerkat-30  |                     22 |                  22    |                        0 | 0.00%                    | 1.73%             | 0.66%              |
+| CONTESTANT_F    | meerkat-40  |                     22 |                  22    |                        0 | 0.00%                    | 1.78%             | 0.80%              |
+| CONTESTANT_F    | meerkat-50  |                     22 |                  22    |                        0 | 0.00%                    | 1.61%             | 1.19%              |
+| CONTESTANT_F    | meerkat-60  |                     22 |                  22    |                        0 | 0.00%                    | 2.02%             | 1.15%              |
+| CONTESTANT_F    | meerkat-70  |                     22 |                  22    |                        0 | 0.00%                    | 1.63%             | 1.25%              |
+| CONTESTANT_F    | meerkat-80  |                     22 |                  22    |                        0 | 0.00%                    | 1.73%             | 0.58%              |
+| CONTESTANT_F    | meerkat-90  |                     22 |                  22    |                        0 | 0.00%                    | 2.00%             | 2.80%              |
+| CONTESTANT_F    | eagle-5-1   |                      5 |                   5    |                        0 | 0.00%                    | 0.53%             | 0.27%              |
+| CONTESTANT_F    | eagle-11-2  |                     11 |                  11    |                        0 | 0.00%                    | 1.40%             | 0.85%              |
+| CONTESTANT_F    | eagle-44-6  |                     44 |                  44    |                        0 | 0.00%                    | 3.10%             | 2.38%              |
+| CONTESTANT_F    | eagle-66-9  |                     66 |                  66    |                        0 | 0.00%                    | 3.14%             | 2.32%              |
+| CONTESTANT_F    | eagle-88-12 |                     88 |                  88    |                        0 | 0.00%                    | 3.91%             | 2.34%              |
+| CONTESTANT_F    | whale-shark |                    123 |                 123    |                        0 | 0.00%                    | 4.61%             | 3.68%              |
+| CONTESTANT_F    | taotie      |                    246 |                 140    |                      848 | 85.40%                   | 50.67%            | 47.91%             |
+
+> See `reports/capital_granularity_diagnostics.md` for full methodology, environment constraints, and group comparisons.

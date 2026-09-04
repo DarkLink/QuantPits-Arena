@@ -5,7 +5,7 @@ arena/portfolio/types.py
 """
 
 from dataclasses import dataclass, field
-from typing import List, Dict, Optional
+from typing import List, Dict, Optional, Any
 import pandas as pd
 
 
@@ -39,6 +39,7 @@ class DailyValuation:
     total_asset: float                      # 资产总值 = cash + holdings_value
     nav: float                              # 归一化净值 (以初始资金为 1.0000)
     daily_return: float                     # 当日相对前一交易日的收益率
+    num_holdings: int = 0                   # 当日实际持仓股票只数
 
 
 @dataclass
@@ -63,6 +64,7 @@ class PortfolioPath:
     weekly_settlements: List[WeeklySettlement] = field(default_factory=list)
     trades: List[TradeRecord] = field(default_factory=list)
     final_holdings: Dict[str, float] = field(default_factory=dict)  # {instrument: shares}
+    diagnostics: Dict[str, Any] = field(default_factory=dict)       # 资本粒度约束诊断指标字典
 
     @property
     def nav_series(self) -> pd.Series:

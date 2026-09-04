@@ -247,3 +247,60 @@ def test_taotie_passive_pool_rebalance():
     assert set(order_w2.sell_instruments) == {"STOCK_00", "STOCK_01"}, "出池标的应全部被动卖出"
     assert set(order_w2.buy_instruments) == {"STOCK_98", "STOCK_99"}, "新入池标的应全部被动买入"
 
+
+def test_capital_granularity_diagnostics_instrumentation():
+    """验证资本粒度与 Affordability 诊断指标采集的准确性"""
+    stocks = ["STOCK_CHEAP", "STOCK_EXPENSIVE"]
+    score = pd.Series([0.9, 0.8], index=stocks)
+
+    prices = {
+        "STOCK_CHEAP": 10.0,      # 10元 * 100股 = 1000元 (买得起)
+        "STOCK_EXPENSIVE": 80.0,  # 80元 * 100股 = 8000元 (分配 5000元买不起)
+    }
+
+    def price_lookup(inst: str, date: str, field: str) -> float:
+        return prices[inst]
+
+    engine = PortfolioEngine(
+        contestant_id="CONTESTANT_A",
+        animal_id="robot",
+        topk=2,
+        initial_cash=10_000.0,
+        allow_fractional_shares=False,
+        lot_size=100
+    )
+
+    # 调仓指令：尝试买入 2 只
+    order = Order(
+        trade_date="2026-07-06",
+        buy_instruments=["STOCK_CHEAP", "STOCK_EXPENSIVE"],
+        sell_instruments=[],
+        is_first_entry=True
+    )
+    engine.target_capacities.append(2)
+
+    cycle = WeeklyCycle(
+        cycle_idx=0,
+        decision_date="2026-07-03",
+        trade_date="2026-07-06",
+        settle_date="2026-07-10",
+        trading_days=["2026-07-06", "2026-07-07"]
+    )
+    engine.execute_weekly_cycle(cycle, order, price_lookup)
+
+    path = engine.to_portfolio_path()
+    diag = path.diagnostics
+
+    assert diag["target_holdings_mean"] == 2.0
+    assert diag["actual_holdings_mean"] == 1.0, "实际仅买入 1 只便宜标的，贵价标的跳过"
+    assert diag["actual_holdings_min"] == 1
+    assert diag["actual_holdings_max"] == 1
+    assert diag["buy_attempt_count"] == 2
+    assert diag["unaffordable_buy_count"] == 1
+    assert diag["unaffordable_buy_ratio"] == 0.5
+    assert diag["unaffordable_event_days"] == 1
+    assert diag["unaffordable_event_day_ratio"] == 1.0
+    assert 0.0 < diag["mean_cash_ratio"] < 1.0
+    assert diag["mean_invested_ratio"] == round(1.0 - diag["mean_cash_ratio"], 4)
+
+

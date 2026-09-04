@@ -62,6 +62,13 @@ class PortfolioEngine:
         self.weekly_settlements: List[WeeklySettlement] = []
         self.trades: List[TradeRecord] = []
 
+        # 资本粒度与 Affordability 诊断采集器 (Capital-Granularity Instrumentation)
+        self.target_capacities: List[int] = []
+        self.buy_attempt_count: int = 0
+        self.unaffordable_buy_count: int = 0
+        self.rebalance_days_with_buy: int = 0
+        self.unaffordable_event_days: int = 0
+
     def get_current_held_instruments(self) -> Set[str]:
         return {inst for inst, shares in self.holdings.items() if shares > 0}
 
@@ -108,7 +115,9 @@ class PortfolioEngine:
                 continue
 
             # 2. 资金承受能力过滤：若不支持碎股且买不起一手 (100股)，跳过并顺延
-            if not self.allow_fractional_shares and price_lookup is not None:
+            # 注意：对于全池纯被动动物 (passive_pool=True，如饕餮)，目标是全量覆盖池中所有标的，
+            # 无后续标的可以顺延，因此不在候选阶段提前截断剔除，而是在撮合执行阶段真实体现资本粒度受阻与跳过！
+            if not passive_pool and not self.allow_fractional_shares and price_lookup is not None:
                 p = price_lookup(inst, trade_date, self.deal_price_mode)
                 if p > 0 and (p * self.lot_size) > est_per_stock_cash:
                     continue
@@ -120,6 +129,8 @@ class PortfolioEngine:
             target_capacity = len(tradable_candidates)
         else:
             target_capacity = topk
+
+        self.target_capacities.append(target_capacity)
 
         # 1. 首次建仓（或持仓为空时的首次买入）
         if is_first_entry or len(current_held) == 0:
@@ -259,12 +270,16 @@ class PortfolioEngine:
 
             # 1.2 执行买入订单
             if order.buy_instruments:
+                self.rebalance_days_with_buy += 1
+                day_had_unaffordable = False
+
                 # 等权分配当前可用资金
                 # 为防止佣金滑点导致透支，保留 0.5% 现金缓冲
                 investable_cash = self.cash_balance * 0.995
                 per_stock_cash = investable_cash / len(order.buy_instruments)
 
                 for inst in order.buy_instruments:
+                    self.buy_attempt_count += 1
                     price = price_lookup(inst, cycle.trade_date, exec_field)
                     if self.allow_fractional_shares:
                         shares = per_stock_cash / price
@@ -273,7 +288,9 @@ class PortfolioEngine:
                         shares = float(lots * self.lot_size)
 
                     if shares < (1.0 if self.allow_fractional_shares else float(self.lot_size)):
-                        # 买不起一手 (100股)，跳过
+                        # 买不起一手 (100股)，严格记录不可负担跳过次数 (Affordability Skip)
+                        self.unaffordable_buy_count += 1
+                        day_had_unaffordable = True
                         continue
                     gross_val = shares * price
                     cost = self.cost_model.calculate_buy_cost(gross_val)
@@ -297,14 +314,19 @@ class PortfolioEngine:
                             )
                         )
 
+                if day_had_unaffordable:
+                    self.unaffordable_event_days += 1
+
         # --- Phase 2: 周内日频盯市估值 (Daily Marked-to-Market) ---
         for day in cycle.trading_days:
             # 每日以当日收盘价核算持仓市值
             held_market_value = 0.0
+            act_held_count = 0
             for inst, shares in self.holdings.items():
                 if shares > 0:
                     c_price = price_lookup(inst, day, "close")
                     held_market_value += shares * c_price
+                    act_held_count += 1
 
             total_asset = self.cash_balance + held_market_value
             nav = total_asset / self.initial_cash
@@ -319,7 +341,8 @@ class PortfolioEngine:
                     holdings_value=held_market_value,
                     total_asset=total_asset,
                     nav=nav,
-                    daily_return=daily_ret
+                    daily_return=daily_ret,
+                    num_holdings=act_held_count
                 )
             )
 
@@ -352,12 +375,55 @@ class PortfolioEngine:
         return settlement
 
     def to_portfolio_path(self) -> PortfolioPath:
-        """导出完整的回测路径对象"""
+        """导出完整的回测路径对象并汇总资本粒度诊断指标 (Capital Granularity Diagnostics)"""
+        # 1. 目标与实际持仓统计 (排除尚未入场的 T0 锚定决策日)
+        market_valuations = self.daily_valuations[1:] if len(self.daily_valuations) > 1 else self.daily_valuations
+
+        target_mean = float(np.mean(self.target_capacities)) if self.target_capacities else float(self.topk)
+
+        daily_holdings = [v.num_holdings for v in market_valuations]
+        act_mean = float(np.mean(daily_holdings)) if daily_holdings else 0.0
+        act_min = int(np.min(daily_holdings)) if daily_holdings else 0
+        act_max = int(np.max(daily_holdings)) if daily_holdings else 0
+
+        # 2. Affordability 统计
+        unaff_buy_cnt = self.unaffordable_buy_count
+        buy_att_cnt = self.buy_attempt_count
+        unaff_ratio = (unaff_buy_cnt / buy_att_cnt) if buy_att_cnt > 0 else 0.0
+
+        unaff_days = self.unaffordable_event_days
+        reb_buy_days = self.rebalance_days_with_buy
+        unaff_day_ratio = (unaff_days / reb_buy_days) if reb_buy_days > 0 else 0.0
+
+        # 3. 现金与仓位暴露统计 (交易期)
+        cash_ratios = [v.cash / v.total_asset for v in market_valuations if v.total_asset > 0]
+        mean_cash = float(np.mean(cash_ratios)) if cash_ratios else 1.0
+        max_cash = float(np.max(cash_ratios)) if cash_ratios else 1.0
+        final_cash = float(cash_ratios[-1]) if cash_ratios else 1.0
+        mean_invested = max(0.0, 1.0 - mean_cash)
+
+        diagnostics = {
+            "target_holdings_mean": round(target_mean, 2),
+            "actual_holdings_mean": round(act_mean, 2),
+            "actual_holdings_min": act_min,
+            "actual_holdings_max": act_max,
+            "buy_attempt_count": buy_att_cnt,
+            "unaffordable_buy_count": unaff_buy_cnt,
+            "unaffordable_buy_ratio": round(unaff_ratio, 4),
+            "unaffordable_event_days": unaff_days,
+            "unaffordable_event_day_ratio": round(unaff_day_ratio, 4),
+            "mean_cash_ratio": round(mean_cash, 4),
+            "max_cash_ratio": round(max_cash, 4),
+            "final_cash_ratio": round(final_cash, 4),
+            "mean_invested_ratio": round(mean_invested, 4),
+        }
+
         return PortfolioPath(
             contestant_id=self.contestant_id,
             animal_id=self.animal_id,
             daily_valuations=list(self.daily_valuations),
             weekly_settlements=list(self.weekly_settlements),
             trades=list(self.trades),
-            final_holdings=dict(self.holdings)
+            final_holdings=dict(self.holdings),
+            diagnostics=diagnostics
         )

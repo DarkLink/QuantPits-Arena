@@ -101,6 +101,7 @@ def cmd_run(args):
     print("[3/3] 产物已完成双层隔离与自动化脱敏导出：")
     print(f"    🟢 脱敏公开 NAV:     {artifacts['public_nav']}")
     print(f"    🟢 脱敏指标汇总:     {artifacts['public_metrics']}")
+    print(f"    🟢 资本粒度诊断:     {artifacts['public_diagnostics']}")
     print(f"    🟢 收益率衰减矩阵:   {artifacts['public_matrix']}")
     print(f"    🔴 本地私有交易明细: {artifacts['private_trades']}")
     print("=" * 70 + "\n")
