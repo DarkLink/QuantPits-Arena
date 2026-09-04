@@ -7,9 +7,11 @@ burial_date: '2026-06-28'
 historical_role: Production candidate initially rejected, later reinstated
 training_mode: multi_factor_ensemble
 feature_set: mixed_multi_dim
-historical_is_sharpe: 2.14
-historical_is_return_pct: 28.5
-historical_is_mdd_pct: 8.2
+historical_is_sharpe: 0.82
+historical_is_return_pct: 9.87
+historical_is_mdd_pct: 14.50
+historical_sys_ann_return_pct: 5.8
+historical_metric_basis: Cashflow-adjusted cumulative system return from weekly inception (2024-10-21) up to burial date
 members:
 - name: member_1
   member_count: 4

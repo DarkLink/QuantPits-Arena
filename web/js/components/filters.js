@@ -35,66 +35,55 @@ window.ArenaFilters = {
     const categories = window.arenaAdapter.getAnimalCategories();
 
     container.innerHTML = `
-      <div class="filters-card">
-        <div class="filters-grid">
-          <!-- 1. Contestant / Model Filter -->
-          <div class="filter-group">
-            <label class="filter-label">Strategy Model:</label>
-            <select id="filter-contestant" class="filter-select">
-              <option value="ALL">All Models</option>
-              ${contestants.map(c => `
-                <option value="${c.id || c.contestant_id}" ${this.currentFilters.contestantId === (c.id || c.contestant_id) ? 'selected' : ''}>
-                  ${c.display_name || c.anonymous_name || c.contestant_id}
-                </option>
-              `).join('')}
-            </select>
-          </div>
-
-          <!-- 2. Animal Category Filter -->
-          <div class="filter-group">
-            <label class="filter-label">Handler Category:</label>
-            <select id="filter-category" class="filter-select">
-              <option value="ALL">All Categories</option>
-              ${categories.map(cat => `
-                <option value="${cat}" ${this.currentFilters.animalCategory === cat ? 'selected' : ''}>
-                  ${cat}
-                </option>
-              `).join('')}
-            </select>
-          </div>
-
-          <!-- 3. Significance Filter -->
-          <div class="filter-group">
-            <label class="filter-label">Statistical Alpha:</label>
-            <select id="filter-significance" class="filter-select">
-              <option value="ALL" ${this.currentFilters.significance === 'ALL' ? 'selected' : ''}>All Paths</option>
-              <option value="SIG" ${this.currentFilters.significance === 'SIG' ? 'selected' : ''}>Statistically Alpha (p &lt; 0.05 / &ge; 95%)</option>
-              <option value="NOT_SIG" ${this.currentFilters.significance === 'NOT_SIG' ? 'selected' : ''}>Within Null Distribution (p &ge; 0.05)</option>
-            </select>
-          </div>
-
-          <!-- 4. Return Polarity Filter -->
-          <div class="filter-group">
-            <label class="filter-label">Return Polarity:</label>
-            <select id="filter-return" class="filter-select">
-              <option value="ALL" ${this.currentFilters.returnFilter === 'ALL' ? 'selected' : ''}>All Returns</option>
-              <option value="POSITIVE" ${this.currentFilters.returnFilter === 'POSITIVE' ? 'selected' : ''}>Positive Only (&gt; 0%)</option>
-            </select>
-          </div>
-
-          <!-- 5. Search Box -->
-          <div class="filter-group" style="flex-grow: 1;">
-            <label class="filter-label">Search Paths:</label>
-            <input type="text" id="filter-search" class="filter-input" placeholder="Search by Path ID, Model, or Handler..." value="${this.currentFilters.search}">
-          </div>
-
-          <!-- Reset Button -->
-          <div class="filter-group" style="justify-content: flex-end;">
-            <button id="filter-reset-btn" class="btn btn-secondary" style="height: 34px; padding: 0 12px; font-size: 12px;">
-              Reset Filters
-            </button>
-          </div>
+      <div class="filters-card-compact">
+        <div class="filter-item">
+          <label class="filter-label">Model:</label>
+          <select id="filter-contestant" class="filter-select">
+            <option value="ALL">All Models</option>
+            ${contestants.map(c => `
+              <option value="${c.id || c.contestant_id}" ${this.currentFilters.contestantId === (c.id || c.contestant_id) ? 'selected' : ''}>
+                ${c.display_name || c.anonymous_name || c.contestant_id}
+              </option>
+            `).join('')}
+          </select>
         </div>
+
+        <div class="filter-item">
+          <label class="filter-label">Category:</label>
+          <select id="filter-category" class="filter-select">
+            <option value="ALL">All Categories</option>
+            ${categories.map(cat => `
+              <option value="${cat}" ${this.currentFilters.animalCategory === cat ? 'selected' : ''}>
+                ${cat}
+              </option>
+            `).join('')}
+          </select>
+        </div>
+
+        <div class="filter-item">
+          <label class="filter-label">Null Test:</label>
+          <select id="filter-significance" class="filter-select">
+            <option value="ALL" ${this.currentFilters.significance === 'ALL' ? 'selected' : ''}>All Paths</option>
+            <option value="SIG" ${this.currentFilters.significance === 'SIG' ? 'selected' : ''}>Upper Tail (p &lt; 0.05)</option>
+            <option value="NOT_SIG" ${this.currentFilters.significance === 'NOT_SIG' ? 'selected' : ''}>Within Null</option>
+          </select>
+        </div>
+
+        <div class="filter-item">
+          <label class="filter-label">Return:</label>
+          <select id="filter-return" class="filter-select">
+            <option value="ALL" ${this.currentFilters.returnFilter === 'ALL' ? 'selected' : ''}>All Returns</option>
+            <option value="POSITIVE" ${this.currentFilters.returnFilter === 'POSITIVE' ? 'selected' : ''}>Positive (&gt; 0%)</option>
+          </select>
+        </div>
+
+        <div class="filter-item" style="flex: 1; min-width: 170px;">
+          <input type="text" id="filter-search" class="filter-input" style="width: 100%;" placeholder="Search path, model, animal..." value="${this.currentFilters.search}">
+        </div>
+
+        <button id="filter-reset-btn" class="btn btn-sm btn-outline" style="font-size: 11px; padding: 4px 10px; white-space: nowrap;">
+          Reset
+        </button>
       </div>
     `;
 

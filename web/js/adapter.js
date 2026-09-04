@@ -30,6 +30,8 @@ class ArenaDataAdapter {
       c.legacy_is_sharpe = c.historical_is_sharpe;
       c.historical_is_return_pct = c.historical_is_return_pct !== undefined ? c.historical_is_return_pct : 20.0;
       c.historical_is_mdd_pct = c.historical_is_mdd_pct !== undefined ? c.historical_is_mdd_pct : 8.0;
+      c.historical_sys_ann_return_pct = c.historical_sys_ann_return_pct !== undefined ? c.historical_sys_ann_return_pct : null;
+      c.historical_metric_basis = c.historical_metric_basis || "Cashflow-adjusted cumulative system return from weekly inception (2024-10-21) up to burial date";
 
       this.contestantMap.set(c.contestant_id, c);
       this.contestantMap.set(c.id, c);
@@ -221,7 +223,7 @@ class ArenaDataAdapter {
         spec: "P_22_3",
         topk: 22,
         n_drop: 3,
-        description: "Selects the bottom-22 worst-ranked stocks. A robust alpha model should deliver significant negative return; positive return indicates signal inversion or overfit noise."
+        description: "Selects from the bottom of the ranking as a directional sanity check. A sound ranking should maintain meaningful positive separation from its inverted selection."
       },
       // 6. Capacity & Breadth (Eagle & Whale Shark)
       {

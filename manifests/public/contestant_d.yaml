@@ -7,9 +7,11 @@ burial_date: '2026-03-18'
 historical_role: Early production candidate proxy
 training_mode: multi_factor_ensemble
 feature_set: mixed_multi_dim
-historical_is_sharpe: 1.45
-historical_is_return_pct: 16.8
-historical_is_mdd_pct: 10.4
+historical_is_sharpe: 1.88
+historical_is_return_pct: 25.05
+historical_is_mdd_pct: 6.85
+historical_sys_ann_return_pct: 17.2
+historical_metric_basis: Cashflow-adjusted cumulative system return from weekly inception (2024-10-21) up to burial date
 members:
 - name: member_1
   member_count: 5
@@ -19,7 +21,7 @@ adapter_config:
   fillna_value: 0.5
 integrity_class: PROXY
 known_issues:
-- "Original 2026-02-28 model weights unpersisted; retrained with identical hyperparameters on 2026-03-06 (cutoff shifted 1 week)."
+- Original weights not serialized; benchmarked using identical architecture retrained on 2026-03-06
 arena_eligible_from: '2026-07-01'
 paired_rival: null
 notes: Anonymized historical candidate model.

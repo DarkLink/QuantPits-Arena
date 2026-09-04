@@ -8,18 +8,19 @@ historical_role: Reverted baseline model retained until pipeline handover
 training_mode: single_model_deep
 feature_set: condensed_20dim
 historical_is_sharpe: 1.92
-historical_is_return_pct: 23.8
-historical_is_mdd_pct: 8.9
+historical_is_return_pct: 25.05
+historical_is_mdd_pct: 6.85
+historical_sys_ann_return_pct: 18.5
+historical_metric_basis: Cashflow-adjusted cumulative system return from weekly inception (2024-10-21) up to burial date
 members:
 - name: member_1
   member_count: 1
-inference_adapter: deep_network
+inference_adapter: single_model
 adapter_config:
-  d_feat: 20
   step_len: 20
 integrity_class: EXHIBITION_ONLY
 known_issues:
-- "Historical in-sample backtest suffered from test-set lookahead prior to pipeline patch; Arena OOS inference is verified clean and leak-free."
+- Legacy training pipeline had test label peek before fix; verified clean out-of-sample forward inference
 arena_eligible_from: '2026-07-01'
 paired_rival: CONTESTANT_E
 notes: Anonymized historical candidate model.

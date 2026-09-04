@@ -59,6 +59,8 @@ def export_data():
                 "historical_is_sharpe": float(data.get("historical_is_sharpe", 1.85)),
                 "historical_is_return_pct": float(data.get("historical_is_return_pct", 20.0)),
                 "historical_is_mdd_pct": float(data.get("historical_is_mdd_pct", 8.0)),
+                "historical_sys_ann_return_pct": float(data.get("historical_sys_ann_return_pct", 10.0)),
+                "historical_metric_basis": data.get("historical_metric_basis", "Cashflow-adjusted cumulative system return up to burial date"),
                 "integrity_class": data.get("integrity_class", "VERIFIED"),
                 "known_issues": data.get("known_issues", []),
                 "paired_rival": data.get("paired_rival", ""),

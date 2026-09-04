@@ -27,9 +27,9 @@ window.OverviewView = {
           <div class="kpi-subtext">6 Model Candidates × 28 Zoo Handlers</div>
         </div>
         <div class="kpi-card positive">
-          <div class="kpi-label">Statistically Alpha (p &lt; 0.05)</div>
+          <div class="kpi-label">Upper Tail vs Null (p &lt; 0.05)</div>
           <div class="kpi-value positive">${kpis.statSignificantCount}</div>
-          <div class="kpi-subtext">${kpis.statSignificantPct} beats 95% of monkey colony</div>
+          <div class="kpi-subtext">${kpis.statSignificantPct} exceed 95th %ile of matched nulls</div>
         </div>
         <div class="kpi-card positive">
           <div class="kpi-label">Peak OOS Return</div>

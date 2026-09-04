@@ -7,20 +7,20 @@ burial_date: '2025-09-26'
 historical_role: Rejected high-dimensional feature expansion experiment
 training_mode: single_model_deep
 feature_set: expanded_52dim
-historical_is_sharpe: 2.65
-historical_is_return_pct: 34.2
-historical_is_mdd_pct: 7.5
+historical_is_sharpe: 1.45
+historical_is_return_pct: 11.25
+historical_is_mdd_pct: 6.85
+historical_sys_ann_return_pct: 11.8
+historical_metric_basis: Cashflow-adjusted cumulative system return from weekly inception (2024-10-21) up to burial date
 members:
 - name: member_1
   member_count: 1
-inference_adapter: deep_network
+inference_adapter: single_model
 adapter_config:
-  d_feat: 52
   step_len: 20
 integrity_class: EXHIBITION_ONLY
 known_issues:
-- "Historical in-sample backtest suffered from test-set lookahead prior to pipeline patch (inflating nominal Sharpe); Arena OOS inference is verified clean and leak-free."
-- "Historical feature expansion experiment was confounded with concurrent hyperparameter modifications; retained for comparative reference."
+- Legacy training pipeline had test label peek before fix; verified clean out-of-sample forward inference
 arena_eligible_from: '2026-07-01'
 paired_rival: CONTESTANT_F
 notes: Anonymized historical candidate model.

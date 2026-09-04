@@ -7,15 +7,16 @@ burial_date: '2026-07-10'
 historical_role: Accepted replacement candidate, later retired
 training_mode: cross_validation_ensemble
 feature_set: mixed_multi_dim
-historical_is_sharpe: 1.78
-historical_is_return_pct: 22.1
-historical_is_mdd_pct: 6.9
+historical_is_sharpe: 0.82
+historical_is_return_pct: 9.87
+historical_is_mdd_pct: 14.50
+historical_sys_ann_return_pct: 5.8
+historical_metric_basis: Cashflow-adjusted cumulative system return from weekly inception (2024-10-21) up to burial date
 members:
 - name: member_1
   member_count: 4
 inference_adapter: standard_ensemble
 adapter_config:
-  fold_aggregation: mean
   fusion_method: rank_norm_equal
   fillna_value: 0.5
 integrity_class: ORIGINAL

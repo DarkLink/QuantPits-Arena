@@ -106,28 +106,44 @@ window.AnimalsView = {
             </div>
           </div>
 
-          <!-- Category Filter Pills -->
-          <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 18px;">
-            <span style="font-size: 12px; color: var(--text-secondary); font-weight: 600; margin-right: 4px;">Category:</span>
-            ${categories.map(cat => {
-              const count = cat === "All" ? allAnimals.length : allAnimals.filter(a => a.category === cat).length;
-              const isActive = this.activeCategory === cat;
-              return `
-                <button class="btn btn-sm ${isActive ? 'btn-primary' : 'btn-outline'} animal-cat-btn" data-cat="${cat}" style="font-size: 11px; padding: 4px 10px;">
-                  ${cat} <span style="opacity: 0.75; font-size: 10px;">(${count})</span>
-                </button>
-              `;
-            }).join("")}
+          <!-- Category Filter Pills + Quick Dropdown Selector -->
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-top: 18px; padding-bottom: 8px; border-bottom: 1px solid var(--border-subtle);">
+            <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+              <span style="font-size: 11px; color: var(--text-secondary); font-weight: 600; margin-right: 4px;">Category:</span>
+              ${categories.map(cat => {
+                const count = cat === "All" ? allAnimals.length : allAnimals.filter(a => a.category === cat).length;
+                const isActive = this.activeCategory === cat;
+                return `
+                  <button class="btn btn-sm ${isActive ? 'btn-primary' : 'btn-outline'} animal-cat-btn" data-cat="${cat}" style="font-size: 11px; padding: 4px 9px;">
+                    ${cat} <span style="opacity: 0.75; font-size: 10px;">(${count})</span>
+                  </button>
+                `;
+              }).join("")}
+            </div>
+
+            <!-- Direct Container Dropdown Selector -->
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <label for="zoo-animal-dropdown" style="font-size: 11px; color: var(--text-secondary); font-weight: 600; white-space: nowrap;">
+                Quick Select:
+              </label>
+              <select id="zoo-animal-dropdown" class="form-control" style="font-size: 11px; padding: 4px 10px; min-width: 220px; background: var(--bg-surface); border: 1px solid var(--border-subtle); color: var(--text-primary); border-radius: var(--radius-sm);">
+                ${filteredAnimals.map(a => `
+                  <option value="${a.id}" ${a.id === this.activeAnimalId ? 'selected' : ''}>
+                    ${a.name} (${a.spec || a.category})
+                  </option>
+                `).join("")}
+              </select>
+            </div>
           </div>
 
-          <!-- Animal Selector Chips -->
-          <div style="display: flex; gap: 8px; overflow-x: auto; padding: 12px 0 4px 0; margin-top: 6px;" id="animal-chip-bar">
+          <!-- Wrapping Animal Selector Chips (Wrap cleanly so all 28 are visible and clickable!) -->
+          <div style="display: flex; flex-wrap: wrap; gap: 6px; padding: 10px 0 6px 0;" id="animal-chip-bar">
             ${filteredAnimals.map(a => {
               const isSelected = a.id === this.activeAnimalId;
               return `
-                <button class="btn btn-sm ${isSelected ? 'btn-primary' : 'btn-outline'} animal-chip-btn" data-animal-id="${a.id}" style="white-space: nowrap; font-size: 11px; padding: 6px 12px; display: flex; align-items: center; gap: 6px; border-radius: 20px;">
-                  <span>${a.name}</span>
-                  <span class="badge ${isSelected ? 'badge-neutral' : 'badge-primary'}" style="font-size: 9px; padding: 2px 6px;">${a.badge || a.category}</span>
+                <button class="btn btn-sm ${isSelected ? 'btn-primary' : 'btn-outline'} animal-chip-btn" data-animal-id="${a.id}" style="font-size: 11px; padding: 4px 10px; display: inline-flex; align-items: center; gap: 6px; border-radius: 16px;">
+                  <span>${a.name.split(' (')[0]}</span>
+                  <span class="badge ${isSelected ? 'badge-neutral' : 'badge-primary'}" style="font-size: 9px; padding: 1px 5px;">${a.badge || a.category}</span>
                 </button>
               `;
             }).join("")}
@@ -215,12 +231,12 @@ window.AnimalsView = {
               </div>
 
               <div style="background: var(--surface-hover); padding: 12px; border-radius: 8px; border: 1px solid var(--border-subtle);">
-                <div style="font-size: 11px; color: var(--text-muted);">Alpha Significance Rate</div>
+                <div style="font-size: 11px; color: var(--text-muted);">Upper-Tail Rate (p &lt; 0.05)</div>
                 <div style="font-size: 18px; font-weight: 700; color: var(--color-accent);">
                   ${sigPct}%
                 </div>
                 <div style="font-size: 10px; color: var(--text-secondary); margin-top: 2px;">
-                  <b>${sigCount}/${targetPaths.length}</b> beat 95% of monkey nulls
+                  <b>${sigCount}/${targetPaths.length}</b> exceed 95th %ile of matched nulls
                 </div>
               </div>
             </div>
@@ -391,6 +407,18 @@ window.AnimalsView = {
         this.render(containerId);
       });
     });
+
+    // Dropdown selection change
+    const animalDropdown = container.querySelector("#zoo-animal-dropdown");
+    if (animalDropdown) {
+      animalDropdown.addEventListener("change", (e) => {
+        const aId = e.target.value;
+        this.activeAnimalId = aId;
+        this.telemetryScope = "container";
+        window.location.hash = `#animals/${aId}`;
+        this.render(containerId);
+      });
+    }
 
     // Animal chip button clicks
     container.querySelectorAll(".animal-chip-btn").forEach(btn => {
