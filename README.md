@@ -5,6 +5,7 @@
 
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-emerald.svg)](LICENSE)
+[![Live Arena](https://img.shields.io/badge/Live%20Arena-arena.quantpits.com-success.svg)](https://arena.quantpits.com/)
 [![Status: Research Testbed](https://img.shields.io/badge/Status-Research%20Testbed-purple.svg)](#disclaimer)
 
 ---
@@ -13,10 +14,11 @@
 
 QuantPits Arena is an **empirical evaluation framework, benchmark zoo, and interactive visualization testbed**.
 
-### 1. Interactive Research Testbed (100% Offline Ready)
-The web research platform (`web/`) is completely self-contained and pre-packaged with complete tournament simulation data:
-- Zero external package dependencies (native Python standard library server).
-- Complete coverage of **168 contestant-animal execution paths**, **11,000 parametric monkey null simulations**, **cross-model trajectory curves**, **counterfactual decision audits**, and **behavioral fingerprints**.
+### 1. Interactive Research Testbed
+- **Live Platform**: Access the hosted arena directly at **[arena.quantpits.com](https://arena.quantpits.com/)**.
+- **100% Offline Ready**: The web research platform (`web/`) is completely self-contained and pre-packaged with complete tournament simulation data:
+  - Zero external package dependencies (native Python standard library server).
+  - Complete coverage of **168 contestant-animal execution paths**, **11,000 parametric monkey null simulations**, **cross-model trajectory curves**, **counterfactual decision audits**, and **behavioral fingerprints**.
 
 ```bash
 # Clone the repository
@@ -127,7 +129,7 @@ python3 scripts/audit_privacy.py
 > 
 > *“QuantPits Arena is a research testbed. It studies models, portfolio policies, historical decisions, failures, and occasionally monkeys. **It does not tell you what to buy.**”*  
 >
-> For full disclosures, visit the [Research & Legal Disclaimer](http://localhost:8080/#disclaimer).
+> For full disclosures, visit the [Research & Legal Disclaimer](https://arena.quantpits.com/#disclaimer).
 
 ---
 
