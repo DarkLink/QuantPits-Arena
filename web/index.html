@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QuantPits Arena | Empirical Strategy Testbed & Benchmark Zoo</title>
+  
+  <!-- Modern Typography Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Core Stylesheets -->
+  <link rel="stylesheet" href="css/variables.css?v=2.2">
+  <link rel="stylesheet" href="css/main.css?v=2.2">
+  <link rel="stylesheet" href="css/components.css?v=2.2">
+  <link rel="stylesheet" href="css/views.css?v=2.2">
+
+  <!-- Apache ECharts CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+</head>
+<body>
+  <!-- Institutional Header & Navigation Bar -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="#intro" class="brand-link" title="QuantPits Arena Exhibition & Platform Home">
+        <div class="brand-logo-badge">QP</div>
+        <div class="brand-text">
+          <span class="brand-name">QuantPits Arena</span>
+          <span class="brand-edition">Tournament Testbed</span>
+        </div>
+      </a>
+
+      <!-- Primary Tournament Navigation Menu -->
+      <nav class="nav-segmented" id="nav-menu">
+        <a href="#overview" class="nav-link" data-route="overview">Overview</a>
+        <a href="#leaderboard" class="nav-link" data-route="leaderboard">Leaderboard</a>
+        <a href="#contestants" class="nav-link" data-route="contestants">Contestants</a>
+        <a href="#animals" class="nav-link" data-route="animals">The Zoo</a>
+        <a href="#decision-audit" class="nav-link" data-route="decision-audit">Archaeology</a>
+      </nav>
+
+      <!-- Right Header Actions & Global Docs Links -->
+      <div class="header-actions">
+        <!-- Secondary Platform Infrastructure / Theory Links -->
+        <nav class="nav-secondary-links">
+          <a href="#intro" class="nav-link-secondary" data-route="intro" title="Exhibition & Platform Intro">Exhibition</a>
+          <a href="#methodology" class="nav-link-secondary" data-route="methodology" title="Empirical Evaluation Methodology">Methodology</a>
+        </nav>
+        <div class="season-badge">
+          <span class="pulse-indicator"></span>
+          <span class="season-label">Season 1</span>
+        </div>
+        <button id="theme-toggle-btn" class="theme-toggle-btn" aria-label="Toggle Theme" title="Toggle Dark/Light Mode">
+          <span>☀️</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Application Container -->
+  <main class="app-main">
+    <div class="container">
+      <!-- Global Filter Bar (Contextually displayed in Leaderboard) -->
+      <div id="global-filters-container"></div>
+
+      <!-- Single Page Application Views -->
+      <section id="view-landing" class="view-container"></section>
+      <section id="view-overview" class="view-container"></section>
+      <section id="view-leaderboard" class="view-container"></section>
+      <section id="view-animals" class="view-container"></section>
+      <section id="view-path-detail" class="view-container"></section>
+      <section id="view-contestant-detail" class="view-container"></section>
+      <section id="view-decision-audit" class="view-container"></section>
+      <section id="view-methodology" class="view-container"></section>
+    </div>
+  </main>
+
+  <!-- Clean, Multi-Season Ready Footer (Decoupled from Season 1 Specific Results) -->
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div class="footer-col">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+          <div class="brand-logo-badge" style="width: 20px; height: 20px; font-size: 9px; border-radius: 4px;">QP</div>
+          <strong style="color: var(--text-primary); font-size: 13px;">QuantPits Arena</strong>
+          <span style="font-size: 11px; color: var(--text-muted);">· Empirical Testbed & Benchmark Zoo</span>
+        </div>
+        <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5; margin: 0; max-width: 560px;">
+          An empirical research platform for evaluating quantitative alpha models against execution friction, parametric monkey null distributions, and capital constraints.
+        </p>
+      </div>
+      <div class="footer-col" style="text-align: right;">
+        <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 4px;">
+          <span>Institutional Testing Framework · Non-Stationary Financial Regime Testbed</span>
+        </div>
+        <div style="font-size: 11px; color: var(--text-muted);">
+          QuantPits Open Research · Strategy Durability & Empirical Significance
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Data Payload (Offline, Self-contained) -->
+  <script src="js/data/arena_data.js?v=2.2"></script>
+
+  <!-- Data Adapter -->
+  <script src="js/adapter.js?v=2.2"></script>
+
+  <!-- ECharts Suite -->
+  <script src="js/components/charts.js?v=2.2"></script>
+
+  <!-- Global Filters -->
+  <script src="js/components/filters.js?v=2.2"></script>
+
+  <!-- Application Views -->
+  <script src="js/views/landing.js?v=2.2"></script>
+  <script src="js/views/overview.js?v=2.2"></script>
+  <script src="js/views/leaderboard_view.js?v=2.2"></script>
+  <script src="js/views/animals_view.js?v=2.2"></script>
+  <script src="js/views/path_detail.js?v=2.2"></script>
+  <script src="js/views/contestant_detail.js?v=2.2"></script>
+  <script src="js/views/decision_audit.js?v=2.2"></script>
+  <script src="js/views/methodology.js?v=2.2"></script>
+
+  <!-- Main Controller & Router -->
+  <script src="js/app.js?v=2.2"></script>
+</body>
+</html>

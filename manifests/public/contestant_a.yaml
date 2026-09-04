@@ -1,15 +1,19 @@
 contestant_id: CONTESTANT_A
-display_name: Ensemble-A (06-26)
+display_name: Candidate-A (06-26)
 family: Family-Alpha
 artifact_date: '2026-06-26'
 train_cutoff: '2026-06-26'
-historical_role: Rejected production candidate, later reinstated
-training_mode: ensemble_static
+burial_date: '2026-06-28'
+historical_role: Production candidate initially rejected, later reinstated
+training_mode: multi_factor_ensemble
 feature_set: mixed_multi_dim
+historical_is_sharpe: 2.14
+historical_is_return_pct: 28.5
+historical_is_mdd_pct: 8.2
 members:
 - name: member_1
   member_count: 4
-inference_adapter: ensemble_static
+inference_adapter: standard_ensemble
 adapter_config:
   fusion_method: rank_norm_equal
   fillna_value: 0.5
@@ -17,4 +21,4 @@ integrity_class: ORIGINAL
 known_issues: []
 arena_eligible_from: '2026-07-01'
 paired_rival: CONTESTANT_B
-notes: Anonymized contestant metadata for public benchmark.
+notes: Anonymized historical candidate model.

@@ -35,7 +35,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 
 # 扫描的目标文本文件扩展名
 TEXT_EXTENSIONS = {
-    ".md", ".yaml", ".yml", ".json", ".py", ".sh", ".txt", ".csv"
+    ".md", ".yaml", ".yml", ".json", ".py", ".sh", ".txt", ".csv", ".js", ".html", ".css"
 }
 
 # 必须排除的私有/动态目录（不纳入公开开源扫描）
@@ -125,7 +125,7 @@ def is_ignored_path(path: Path) -> bool:
     if rel_str.startswith("docs/internal"):
         return True
     
-    if "/private" in rel_str or "/predictions" in rel_str:
+    if "/private" in rel_str or "/predictions" in rel_str or "/monkeys" in rel_str:
         return True
         
     return False

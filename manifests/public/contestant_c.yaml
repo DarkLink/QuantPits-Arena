@@ -1,15 +1,19 @@
 contestant_id: CONTESTANT_C
-display_name: Ensemble-C (06-12)
+display_name: Candidate-C (06-12)
 family: Family-Beta
 artifact_date: '2026-06-12'
 train_cutoff: '2026-06-12'
+burial_date: '2026-06-14'
 historical_role: Rejected production candidate
-training_mode: ensemble_static
+training_mode: multi_factor_ensemble
 feature_set: mixed_multi_dim
+historical_is_sharpe: 1.62
+historical_is_return_pct: 19.4
+historical_is_mdd_pct: 9.1
 members:
 - name: member_1
   member_count: 3
-inference_adapter: ensemble_static
+inference_adapter: standard_ensemble
 adapter_config:
   fusion_method: rank_norm_equal
   fillna_value: 0.5
@@ -17,4 +21,4 @@ integrity_class: ORIGINAL
 known_issues: []
 arena_eligible_from: '2026-07-01'
 paired_rival: null
-notes: Anonymized contestant metadata for public benchmark.
+notes: Anonymized historical candidate model.
