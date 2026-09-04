@@ -67,7 +67,7 @@ def test_dual_tier_exporter(tmp_path):
     df_nav = pd.read_csv(pub_nav)
     for col in df_nav.columns:
         if col != "datetime":
-            assert col.startswith("CONTESTANT_"), f"公开列名必须以匿名代号开头: {col}"
+            assert col.startswith("CONTESTANT_") or col.startswith("BENCHMARK_"), f"公开列名必须以匿名代号或基准代号开头: {col}"
             # 首日净值接近 1.0
             assert 0.99 <= df_nav[col].iloc[0] <= 1.01
 

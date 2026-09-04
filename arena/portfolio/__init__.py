@@ -10,6 +10,7 @@ from arena.portfolio.types import (
     DailyValuation,
     WeeklySettlement,
     PortfolioPath,
+    EngineCheckpoint,
 )
 from arena.portfolio.costs import CostModel
 from arena.portfolio.engine import PortfolioEngine
@@ -20,6 +21,7 @@ __all__ = [
     "DailyValuation",
     "WeeklySettlement",
     "PortfolioPath",
+    "EngineCheckpoint",
     "CostModel",
     "PortfolioEngine",
 ]

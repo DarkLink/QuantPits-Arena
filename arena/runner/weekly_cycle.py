@@ -2,10 +2,12 @@
 arena/runner/weekly_cycle.py
 ============================
 周频同步执行主运行器 (Weekly Cycle Runner)
+支持全量巡回回测、参数化猴子群落、饕餮独立基准与按周增量滚动推进 (State Checkpoint)
 """
 
-from typing import List, Dict, Optional, Callable, Any
+from typing import List, Dict, Optional, Callable, Any, Tuple
 from pathlib import Path
+import pickle
 import datetime
 import pandas as pd
 import numpy as np
@@ -24,7 +26,14 @@ from arena.contestants.registry import ContestantRegistry
 from arena.contestants.adapters import create_adapter, BaseInferenceAdapter
 from arena.animals import get_all_animals, Animal
 from arena.portfolio import PortfolioEngine, PortfolioPath
-from arena.controls import MonkeyColony, RockBenchmark
+from arena.controls import (
+    MonkeyColony,
+    RockBenchmark,
+    TaotieBenchmark,
+    CANONICAL_STRATEGY_SPECS,
+    StrategySpec,
+    map_animal_to_spec_id,
+)
 from arena.data.market import MarketDataProvider
 
 
@@ -33,7 +42,9 @@ class WeeklyCycleRunner:
     周频同步执行运行器：
     - 按真实交易日历循环推进周期 (Cycle 0, 1, 2, ... 7)
     - 统一协调 Contestant 预测 -> Animal 信号变换 -> PortfolioEngine 调仓执行与日频盯市估值
-    - 同步推进 Monkey Colony 零假设对照组与 Rock 基准
+    - 独立运行全池饕餮基准 (Taotie Benchmark)
+    - 支持参数化猴子群落 (Parametric Monkey Colony: 11 组策略 × 100 只)
+    - 支持按周增量滚动更新 (Checkpoint State Serialization & Step Advance)
     """
 
     def __init__(
@@ -62,16 +73,21 @@ class WeeklyCycleRunner:
         self.market_provider = market_provider
 
         self.cycles = self.calendar.build_weekly_cycles(anchor_date, end_date)
-        self.monkey_colony = MonkeyColony(colony_size=100)  # 默认 100 只用于快速执行，支持配置 1000
+        self.monkey_colony = MonkeyColony(colony_size=1000)
         self.rock_benchmark = RockBenchmark()
+        self.taotie_benchmark = TaotieBenchmark(
+            initial_cash=self.initial_cash,
+            deal_price_mode=self.deal_price_mode
+        )
 
         # 运行实例映射: {(contestant_id, animal_id): PortfolioEngine}
         self.engines: Dict[tuple, PortfolioEngine] = {}
         # 各选手的历史信号记录: {contestant_id: {cycle_idx: score_series}}
         self.signal_history: Dict[str, Dict[int, pd.Series]] = {}
-
         # 适配器缓存: {contestant_id: adapter}
         self.adapters: Dict[str, BaseInferenceAdapter] = {}
+        # 当前已完成的最新周期索引
+        self.last_completed_cycle_idx: int = -1
 
     def _init_engines(self, contestants: List[ContestantManifest]):
         """初始化所有 (Contestant, Animal) 组合的回测引擎"""
@@ -94,26 +110,18 @@ class WeeklyCycleRunner:
                     deal_price_mode=self.deal_price_mode
                 )
 
-    def run(
+        self.taotie_benchmark = TaotieBenchmark(
+            initial_cash=self.initial_cash,
+            deal_price_mode=self.deal_price_mode
+        )
+        self.last_completed_cycle_idx = -1
+
+    def _setup_market_provider(
         self,
-        contestants: Optional[List[ContestantManifest]] = None,
-        price_lookup_fn: Optional[Callable[[str, str, str], float]] = None,
-        tradability_filter_fn: Optional[Callable[[str, str], bool]] = None,
-        max_cycles: Optional[int] = None
-    ) -> Dict[tuple, PortfolioPath]:
-        """
-        执行周频同步推进回测。
-
-        Args:
-            contestants: 参赛选手列表（默认全部注册选手）
-            price_lookup_fn: 价格查询函数 (instrument, date, field) -> float
-            tradability_filter_fn: 可交易性过滤函数 (instrument, date) -> bool
-            max_cycles: 最大运行周期数（用于快速验证，None 表示跑完全部周期）
-        """
-        active_contestants = contestants or self.registry.list_contestants()
-        self._init_engines(active_contestants)
-
-        # 行情与可交易性数据提供
+        active_contestants: List[ContestantManifest],
+        price_lookup_fn: Optional[Callable[[str, str, str], float]],
+        tradability_filter_fn: Optional[Callable[[str, str], bool]]
+    ) -> Tuple[Callable[[str, str, str], float], Optional[Callable[[str, str], bool]]]:
         if price_lookup_fn is None:
             if not self.mock_mode:
                 if self.market_provider is None:
@@ -131,73 +139,235 @@ class WeeklyCycleRunner:
                     tradability_filter_fn = self.market_provider.is_tradable
             else:
                 def default_price_lookup(inst: str, date: str, field: str) -> float:
-                    base = (abs(hash(inst)) % 3000 + 1000) / 100.0  # 10.0 ~ 40.0 元
-                    day_offset = ((abs(hash(f"{inst}_{date}")) % 20) - 10) / 1000.0  # -1% ~ +1% 波动
+                    base = (abs(hash(inst)) % 3000 + 1000) / 100.0
+                    day_offset = ((abs(hash(f"{inst}_{date}")) % 20) - 10) / 1000.0
                     if field == "open":
                         return base
                     return base * (1.0 + day_offset)
                 price_lookup_fn = default_price_lookup
+        return price_lookup_fn, tradability_filter_fn
+
+    def step_cycle(
+        self,
+        cycle: WeeklyCycle,
+        active_contestants: List[ContestantManifest],
+        price_lookup_fn: Callable[[str, str, str], float],
+        tradability_filter_fn: Optional[Callable[[str, str], bool]] = None,
+    ):
+        """
+        单周推进核心逻辑（无论是全量批量还是增量滚动，统一调用此方法保证绝对幂等与一致性）。
+        """
+        c_idx = cycle.cycle_idx
+
+        # 1. 决策日（周五收盘）：各模型产出本周期的原始预测分数
+        for c in active_contestants:
+            cid = c.contestant_id
+            if cid not in self.adapters:
+                self.adapters[cid] = create_adapter(c, mock=self.mock_mode, use_replay=not self.mock_mode)
+            adapter = self.adapters[cid]
+
+            raw_score = adapter.predict(
+                start_date=cycle.decision_date,
+                end_date=cycle.decision_date
+            )
+            if cid not in self.signal_history:
+                self.signal_history[cid] = {}
+            self.signal_history[cid][c_idx] = raw_score
+
+        # 2. 各 Animal 进行信号变换并生成下周一的订单
+        for c in active_contestants:
+            cid = c.contestant_id
+            history = self.signal_history[cid]
+            current_raw = history[c_idx]
+
+            for a in self.animals:
+                key = (cid, a.animal_id)
+                if key not in self.engines:
+                    self.engines[key] = PortfolioEngine(
+                        contestant_id=cid,
+                        animal_id=a.animal_id,
+                        topk=self.topk,
+                        initial_cash=self.initial_cash,
+                        deal_price_mode=self.deal_price_mode
+                    )
+                engine = self.engines[key]
+
+                transformed_score = a.transform_signal(
+                    current_score=current_raw,
+                    history_scores=history,
+                    cycle_idx=c_idx
+                )
+
+                policy = a.get_portfolio_policy()
+                n_drop = policy.get("n_drop", 3)
+                topk = policy.get("topk", self.topk)
+                passive_pool = policy.get("passive_pool", False)
+
+                is_first = (c_idx == 0)
+                order = engine.generate_order(
+                    score=transformed_score,
+                    topk=topk,
+                    n_drop=n_drop,
+                    trade_date=cycle.trade_date,
+                    is_first_entry=is_first,
+                    tradability_filter=tradability_filter_fn,
+                    price_lookup=price_lookup_fn,
+                    passive_pool=passive_pool
+                )
+
+                # 3. 撮合成交与周内日频估值
+                engine.execute_weekly_cycle(
+                    cycle=cycle,
+                    order=order,
+                    price_lookup=price_lookup_fn
+                )
+
+        # 4. 推进独立基准：饕餮 (Taotie Benchmark)
+        first_raw = next(iter(self.signal_history.values()))[c_idx]
+        universe = list(first_raw.index)
+        self.taotie_benchmark.step(
+            cycle=cycle,
+            universe=universe,
+            price_lookup_fn=price_lookup_fn,
+            tradability_filter_fn=tradability_filter_fn,
+        )
+
+        self.last_completed_cycle_idx = c_idx
+
+    def run(
+        self,
+        contestants: Optional[List[ContestantManifest]] = None,
+        price_lookup_fn: Optional[Callable[[str, str, str], float]] = None,
+        tradability_filter_fn: Optional[Callable[[str, str], bool]] = None,
+        max_cycles: Optional[int] = None
+    ) -> Dict[tuple, PortfolioPath]:
+        """
+        全量批处理回测运行。
+        """
+        active_contestants = contestants or self.registry.list_contestants()
+        self._init_engines(active_contestants)
+        price_lookup_fn, tradability_filter_fn = self._setup_market_provider(
+            active_contestants, price_lookup_fn, tradability_filter_fn
+        )
 
         cycles_to_run = self.cycles[:max_cycles] if max_cycles else self.cycles
 
         for cycle in cycles_to_run:
-            c_idx = cycle.cycle_idx
+            self.step_cycle(
+                cycle=cycle,
+                active_contestants=active_contestants,
+                price_lookup_fn=price_lookup_fn,
+                tradability_filter_fn=tradability_filter_fn
+            )
 
-            # 1. 决策日（周五收盘）：各模型产出本周期的原始预测分数
-            for c in active_contestants:
-                cid = c.contestant_id
-                adapter = self.adapters[cid]
-
-                raw_score = adapter.predict(
-                    start_date=cycle.decision_date,
-                    end_date=cycle.decision_date
-                )
-                self.signal_history[cid][c_idx] = raw_score
-
-            # 2. 各 Animal 进行信号变换并生成下周一的订单
-            for c in active_contestants:
-                cid = c.contestant_id
-                history = self.signal_history[cid]
-                current_raw = history[c_idx]
-
-                for a in self.animals:
-                    key = (cid, a.animal_id)
-                    engine = self.engines[key]
-
-                    # 动物信号变换（处理 Sloth 方案 B 空仓延迟、Koala 排名反转等）
-                    transformed_score = a.transform_signal(
-                        current_score=current_raw,
-                        history_scores=history,
-                        cycle_idx=c_idx
-                    )
-
-                    policy = a.get_portfolio_policy()
-                    n_drop = policy.get("n_drop", 3)
-                    topk = policy.get("topk", self.topk)
-                    passive_pool = policy.get("passive_pool", False)
-
-                    is_first = (c_idx == 0)
-                    order = engine.generate_order(
-                        score=transformed_score,
-                        topk=topk,
-                        n_drop=n_drop,
-                        trade_date=cycle.trade_date,
-                        is_first_entry=is_first,
-                        tradability_filter=tradability_filter_fn,
-                        price_lookup=price_lookup_fn,
-                        passive_pool=passive_pool
-                    )
-
-                    # 3. 撮合成交与周内日频估值
-                    engine.execute_weekly_cycle(
-                        cycle=cycle,
-                        order=order,
-                        price_lookup=price_lookup_fn
-                    )
-
-        # 导出所有组合的完整回测路径
+        # 导出所有组合的完整回测路径，包含统一控制基准 BENCHMARK_taotie
         results = {
             key: engine.to_portfolio_path()
             for key, engine in self.engines.items()
         }
+        results[("BENCHMARK", "taotie")] = self.taotie_benchmark.engine.to_portfolio_path()
         return results
+
+    def run_parametric_monkeys(
+        self,
+        specs: Optional[List[StrategySpec]] = None,
+        colony_size: Optional[int] = None,
+        price_lookup_fn: Optional[Callable[[str, str, str], float]] = None,
+        tradability_filter_fn: Optional[Callable[[str, str], bool]] = None,
+        max_cycles: Optional[int] = None
+    ) -> Dict[str, List[PortfolioPath]]:
+        """
+        为指定的策略规格组运行参数化猴子群落。
+        默认覆盖全部 11 种策略规格。
+        """
+        if colony_size is not None:
+            self.monkey_colony.colony_size = colony_size
+
+        target_specs = specs or list(CANONICAL_STRATEGY_SPECS.values())
+        cycles_to_run = self.cycles[:max_cycles] if max_cycles else self.cycles
+
+        if price_lookup_fn is None:
+            price_lookup_fn, tradability_filter_fn = self._setup_market_provider(
+                self.registry.list_contestants(), None, None
+            )
+
+        def universe_provider(decision_date: str) -> List[str]:
+            if self.signal_history:
+                first_history = next(iter(self.signal_history.values()))
+                for c_idx, s in first_history.items():
+                    if c_idx < len(self.cycles) and self.cycles[c_idx].decision_date == decision_date:
+                        return list(s.index)
+            # 兜底从适配器采样
+            first_c = self.registry.list_contestants()[0]
+            if first_c.contestant_id not in self.adapters:
+                self.adapters[first_c.contestant_id] = create_adapter(first_c, mock=self.mock_mode, use_replay=not self.mock_mode)
+            ad = self.adapters[first_c.contestant_id]
+            sc = ad.predict(decision_date, decision_date)
+            return list(sc.index)
+
+        monkey_results = {}
+        for spec in target_specs:
+            paths = self.monkey_colony.run_group(
+                spec=spec,
+                cycles=cycles_to_run,
+                universe_provider_fn=universe_provider,
+                price_lookup_fn=price_lookup_fn,
+                tradability_filter_fn=tradability_filter_fn,
+                initial_cash=self.initial_cash,
+                deal_price_mode=self.deal_price_mode
+            )
+            monkey_results[spec.spec_id] = paths
+        return monkey_results
+
+    # =========================================================================
+    # 按周增量滚动更新机制 (Rolling Incremental Checkpointing)
+    # =========================================================================
+
+    def export_checkpoint(self) -> Dict[str, Any]:
+        """导出整个 Arena 运行器的完整状态快照字典"""
+        return {
+            "last_completed_cycle_idx": self.last_completed_cycle_idx,
+            "anchor_date": self.anchor_date,
+            "end_date": self.end_date,
+            "signal_history": self.signal_history,
+            "engines": {
+                key: engine.export_checkpoint()
+                for key, engine in self.engines.items()
+            },
+            "taotie_engine": self.taotie_benchmark.engine.export_checkpoint(),
+        }
+
+    def load_checkpoint(self, state: Dict[str, Any]):
+        """从状态快照字典恢复运行器状态"""
+        self.last_completed_cycle_idx = state["last_completed_cycle_idx"]
+        self.signal_history = state.get("signal_history", {})
+
+        self.engines = {}
+        for key, cp in state.get("engines", {}).items():
+            self.engines[key] = PortfolioEngine.from_checkpoint(cp)
+
+        if "taotie_engine" in state:
+            self.taotie_benchmark = TaotieBenchmark(
+                initial_cash=self.initial_cash,
+                deal_price_mode=self.deal_price_mode
+            )
+            self.taotie_benchmark.engine = PortfolioEngine.from_checkpoint(state["taotie_engine"])
+
+    def save_checkpoint_to_disk(self, checkpoint_dir: Path, cycle_idx: int):
+        """将状态快照持久化落盘至 runs/<run_id>/checkpoints/"""
+        checkpoint_dir.mkdir(parents=True, exist_ok=True)
+        state = self.export_checkpoint()
+
+        latest_path = checkpoint_dir / "latest_state.pkl"
+        cycle_path = checkpoint_dir / f"cycle_{cycle_idx}.pkl"
+
+        with open(latest_path, "wb") as f:
+            pickle.dump(state, f)
+        with open(cycle_path, "wb") as f:
+            pickle.dump(state, f)
+
+    def load_checkpoint_from_disk(self, checkpoint_path: Path):
+        """从指定文件加载状态快照"""
+        with open(checkpoint_path, "rb") as f:
+            state = pickle.load(f)
+        self.load_checkpoint(state)

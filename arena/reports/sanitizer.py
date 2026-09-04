@@ -150,23 +150,27 @@ class DualTierExporter:
             "private_trades": priv_trades_file
         }
 
+    @staticmethod
+    def _to_markdown_table(df: pd.DataFrame, include_index: bool = False) -> str:
+        """生成标准 GitHub Markdown 管道表格（无需第三方 tabulate 依赖）"""
+        try:
+            return df.to_markdown(index=include_index)
+        except Exception:
+            headers = list(df.columns)
+            if include_index:
+                headers = [""] + headers
+            header_line = "| " + " | ".join(str(h) for h in headers) + " |"
+            sep_line = "| " + " | ".join("---" for _ in headers) + " |"
+            lines = [header_line, sep_line]
+            for idx, row in df.iterrows():
+                vals = [str(idx)] if include_index else []
+                vals.extend([str(v) for v in row.values])
+                lines.append("| " + " | ".join(vals) + " |")
+            return "\n".join(lines)
+
     def _export_markdown_reports(self, df_summary: pd.DataFrame, df_matrix: pd.DataFrame, df_diag: pd.DataFrame):
-        """生成脱敏公开的 Markdown 报告 (无需依赖 tabulate)"""
-        def to_md(df: pd.DataFrame, include_index: bool = True) -> str:
-            try:
-                return df.to_markdown(index=include_index)
-            except Exception:
-                headers = list(df.columns)
-                if include_index:
-                    headers = [""] + headers
-                header_line = "| " + " | ".join(str(h) for h in headers) + " |"
-                sep_line = "| " + " | ".join("---" for _ in headers) + " |"
-                lines = [header_line, sep_line]
-                for idx, row in df.iterrows():
-                    vals = [str(idx)] if include_index else []
-                    vals.extend([str(v) for v in row.values])
-                    lines.append("| " + " | ".join(vals) + " |")
-                return "\n".join(lines)
+        """生成脱敏公开的 Markdown 报告"""
+        to_md = self._to_markdown_table
 
         # 1. Leaderboard (公开层核心排行榜，保持简洁核心字段)
         lb_file = self.reports_dir / "leaderboard.md"
@@ -246,4 +250,120 @@ class DualTierExporter:
             f.write("## 5. Comprehensive Diagnostics Matrix (All Contestants × Animals)\n\n")
             f.write(to_md(df_diag, include_index=False))
             f.write("\n")
+
+    def export_monkey_reports(
+        self,
+        monkey_results: Dict[str, List[PortfolioPath]],
+        contestant_results: Dict[tuple, PortfolioPath],
+        registry: ContestantRegistry
+    ) -> Dict[str, Path]:
+        """
+        导出参数化猴子群落零假设分布报告与经验显著性检验报告。
+        """
+        from arena.controls.monkey import CANONICAL_STRATEGY_SPECS, map_animal_to_spec_id, MonkeyColony
+
+        colony = MonkeyColony()
+        summary_rows = []
+        spec_distributions = {}
+
+        # 1. 汇总各策略规格的零假设分布指标
+        for spec_id, paths in monkey_results.items():
+            spec = CANONICAL_STRATEGY_SPECS.get(spec_id)
+            returns = [p.total_return for p in paths]
+            dist = colony.summarize_distribution(returns)
+            spec_distributions[spec_id] = {
+                "paths": paths,
+                "returns": returns,
+                "dist": dist
+            }
+
+            topk_str = "全池" if (spec and spec.topk == 0) else str(spec.topk if spec else "N/A")
+            ndrop_str = "被动" if (spec and spec.n_drop == 0 and spec.passive_pool) else str(spec.n_drop if spec else "N/A")
+            desc = spec.description if spec else ""
+
+            summary_rows.append({
+                "strategy_spec": spec_id,
+                "topk": topk_str,
+                "n_drop": ndrop_str,
+                "description": desc,
+                "colony_size": len(paths),
+                "monkey_min": f"{dist['min'] * 100:.2f}%",
+                "monkey_p05": f"{dist['p05'] * 100:.2f}%",
+                "monkey_median": f"{dist['median'] * 100:.2f}%",
+                "monkey_mean": f"{dist['mean'] * 100:.2f}%",
+                "monkey_p95": f"{dist['p95'] * 100:.2f}%",
+                "monkey_max": f"{dist['max'] * 100:.2f}%",
+                "monkey_std": f"{dist['std'] * 100:.2f}%",
+            })
+
+        pub_dist_csv = self.public_dir / "monkey_null_distributions.csv"
+        df_dist = pd.DataFrame(summary_rows)
+        df_dist.to_csv(pub_dist_csv, index=False)
+
+        # 2. 计算各参赛选手对标对应猴子分布的显著性指标
+        significance_rows = []
+        for (cid, aid), path in contestant_results.items():
+            anon_cid = registry.get_anonymous_id(cid)
+            spec_id = map_animal_to_spec_id(aid)
+            spec_info = spec_distributions.get(spec_id)
+
+            act_ret = path.total_return
+            if spec_info and spec_info["returns"]:
+                monkey_rets = spec_info["returns"]
+                p_val = colony.compute_empirical_pvalue(act_ret, monkey_rets, higher_is_better=True)
+                pct_rank = colony.compute_percentile_rank(act_ret, monkey_rets)
+                median_monkey = spec_info["dist"]["median"]
+                excess_over_monkey = act_ret - median_monkey
+            else:
+                p_val = 1.0
+                pct_rank = 0.5
+                median_monkey = 0.0
+                excess_over_monkey = 0.0
+
+            significance_rows.append({
+                "contestant_id": anon_cid,
+                "animal_id": aid,
+                "strategy_spec": spec_id,
+                "actual_return_pct": f"{act_ret * 100:.2f}%",
+                "monkey_median_pct": f"{median_monkey * 100:.2f}%",
+                "excess_over_monkey_pct": f"{excess_over_monkey * 100:+.2f}%",
+                "percentile_rank": f"{pct_rank * 100:.1f}%",
+                "empirical_p_value": f"{p_val:.4f}",
+                "significant_95pct": "YES (p < 0.05)" if p_val < 0.05 else "NO"
+            })
+
+        pub_sig_csv = self.public_dir / "contestant_monkey_significance.csv"
+        df_sig = pd.DataFrame(significance_rows)
+        df_sig.to_csv(pub_sig_csv, index=False)
+
+        actual_colony_size = len(next(iter(monkey_results.values()))) if monkey_results else 1000
+        total_groups = len(monkey_results)
+        total_monkeys = total_groups * actual_colony_size
+
+        # 3. 产出 Markdown 报告
+        report_md = self.reports_dir / "monkey_null_distributions.md"
+        with open(report_md, "w", encoding="utf-8") as f:
+            f.write("# QuantPits Graveyard Arena — Parametric Monkey Colony Diagnostics\n\n")
+            f.write(f"Run ID: `{self.run_id}`\n\n")
+            f.write("## 1. Methodology & Scientific Rationale\n\n")
+            f.write("The **Parametric Monkey Colony** serves as the rigorous empirical null model for evaluating whether contestants' alpha returns are statistically distinguishable from pure random stock picking.\n\n")
+            f.write("- **Zero Future Information**: Every monkey draws uniform random scores across the cross-section using deterministic seeds: `seed = (2026 + m * 10007 + t * 37) % (2**31 - 1)`.\n")
+            f.write("- **Strict Parity**: Each monkey group operates under the **exact same 100-share minimum trading lot and CNY 500,000 capital constraints** as the real models.\n")
+            f.write(f"- **Complete Parameter Coverage**: All {total_groups} distinct portfolio execution policies (TopK / DropN pairs, including Taotie passive full-universe) are individually benchmarked by {actual_colony_size} random monkeys ({total_monkeys:,} monkeys total).\n")
+            f.write("- **Empirical P-Value**: Formally defined as $p = \\frac{1}{N} \\sum_{i=1}^N \\mathbb{I}(\\text{monkey}_i \\ge \\text{actual_return})$. $p < 0.05$ indicates significant alpha superiority over random chance at 95% confidence.\n\n")
+
+            f.write(f"## 2. Null Distributions by Strategy Parameter Group ({total_groups} Groups × {actual_colony_size} Monkeys)\n\n")
+            f.write(self._to_markdown_table(df_dist, include_index=False))
+            f.write("\n\n")
+
+            f.write("## 3. Contestant Significance vs. Corresponding Monkey Colony\n\n")
+            f.write(self._to_markdown_table(df_sig, include_index=False))
+            f.write("\n")
+
+        return {
+            "monkey_distributions_csv": pub_dist_csv,
+            "contestant_significance_csv": pub_sig_csv,
+            "monkey_report_md": report_md
+        }
+
 

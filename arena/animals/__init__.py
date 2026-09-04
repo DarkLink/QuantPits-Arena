@@ -45,9 +45,9 @@ def get_all_animals() -> list:
     for topk, n_drop in eagle_specs:
         animals.append(Eagle(topk=topk, n_drop=n_drop))
 
-    # 鲸鲨 (半池 50%) 与 饕餮 (全池 100% 纯被动)
+    # 鲸鲨 (半池 50%)
     animals.append(WhaleShark())
-    animals.append(Taotie())
+    # 注：饕餮 (Taotie) 作为全池纯被动控制基准，已解耦并迁移至 arena.controls.TaotieBenchmark
 
     return animals
 

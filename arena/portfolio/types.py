@@ -91,3 +91,29 @@ class PortfolioPath:
         cummax = s.cummax()
         dd = (s - cummax) / cummax
         return abs(float(dd.min()))
+
+
+@dataclass
+class EngineCheckpoint:
+    """组合引擎无损状态快照 (用于按周增量滚动更新与断点恢复)"""
+    contestant_id: str
+    animal_id: str
+    topk: int
+    initial_cash: float
+    cash_balance: float
+    deal_price_mode: str
+    allow_fractional_shares: bool
+    lot_size: int
+    holdings: Dict[str, float]
+    daily_valuations: List[DailyValuation]
+    weekly_settlements: List[WeeklySettlement]
+    trades: List[TradeRecord]
+    target_capacities: List[int]
+    buy_attempt_count: int
+    unaffordable_buy_count: int
+    rebalance_days_with_buy: int
+    unaffordable_event_days: int
+    cost_model_state: Dict[str, Any]
+    last_cycle_idx: int
+    last_settle_date: str
+

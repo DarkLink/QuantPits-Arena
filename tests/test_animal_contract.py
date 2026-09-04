@@ -41,9 +41,9 @@ from arena.animals import (
 
 
 def test_get_all_animals_completeness():
-    """验证 29 种动物齐备（含狐獴群、鹰群、鲸鲨与饕餮）"""
+    """验证 28 种选手 Alpha 执行动物齐备（饕餮已解耦为独立基准控制组）"""
     animals = get_all_animals()
-    assert len(animals) == 29
+    assert len(animals) == 28
     ids = [a.animal_id for a in animals]
     expected_ids = [
         "robot", "sloth-1", "sloth-2", "sloth-3", "sloth-4",
@@ -52,9 +52,10 @@ def test_get_all_animals_completeness():
         "meerkat-10", "meerkat-20", "meerkat-30", "meerkat-40", "meerkat-50",
         "meerkat-60", "meerkat-70", "meerkat-80", "meerkat-90",
         "eagle-5-1", "eagle-11-2", "eagle-44-6", "eagle-66-9", "eagle-88-12",
-        "whale-shark", "taotie"
+        "whale-shark"
     ]
     assert ids == expected_ids
+
 
 
 def test_robot_contract():

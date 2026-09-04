@@ -18,7 +18,8 @@ from arena.portfolio.types import (
     TradeRecord,
     DailyValuation,
     WeeklySettlement,
-    PortfolioPath
+    PortfolioPath,
+    EngineCheckpoint,
 )
 from arena.portfolio.costs import CostModel
 from arena.calendar import WeeklyCycle
@@ -427,3 +428,65 @@ class PortfolioEngine:
             final_holdings=dict(self.holdings),
             diagnostics=diagnostics
         )
+
+    def export_checkpoint(self) -> EngineCheckpoint:
+        """导出当前组合引擎的完整无损状态快照"""
+        last_cycle = self.weekly_settlements[-1].week_idx if self.weekly_settlements else -1
+        last_date = self.weekly_settlements[-1].settle_date if self.weekly_settlements else ""
+        return EngineCheckpoint(
+            contestant_id=self.contestant_id,
+            animal_id=self.animal_id,
+            topk=self.topk,
+            initial_cash=self.initial_cash,
+            cash_balance=self.cash_balance,
+            deal_price_mode=self.deal_price_mode,
+            allow_fractional_shares=self.allow_fractional_shares,
+            lot_size=self.lot_size,
+            holdings=dict(self.holdings),
+            daily_valuations=list(self.daily_valuations),
+            weekly_settlements=list(self.weekly_settlements),
+            trades=list(self.trades),
+            target_capacities=list(self.target_capacities),
+            buy_attempt_count=self.buy_attempt_count,
+            unaffordable_buy_count=self.unaffordable_buy_count,
+            rebalance_days_with_buy=self.rebalance_days_with_buy,
+            unaffordable_event_days=self.unaffordable_event_days,
+            cost_model_state={
+                "open_cost": self.cost_model.open_cost,
+                "close_cost": self.cost_model.close_cost,
+                "min_cost": self.cost_model.min_cost,
+            },
+            last_cycle_idx=last_cycle,
+            last_settle_date=last_date
+        )
+
+    @classmethod
+    def from_checkpoint(cls, cp: EngineCheckpoint) -> "PortfolioEngine":
+        """从无损状态快照恢复组合引擎实例"""
+        cost_model = CostModel(
+            open_cost=cp.cost_model_state.get("open_cost", 0.0005),
+            close_cost=cp.cost_model_state.get("close_cost", 0.0015),
+            min_cost=cp.cost_model_state.get("min_cost", 5.0),
+        )
+        engine = cls(
+            contestant_id=cp.contestant_id,
+            animal_id=cp.animal_id,
+            topk=cp.topk,
+            initial_cash=cp.initial_cash,
+            cost_model=cost_model,
+            deal_price_mode=cp.deal_price_mode,
+            allow_fractional_shares=cp.allow_fractional_shares,
+            lot_size=cp.lot_size,
+        )
+        engine.cash_balance = float(cp.cash_balance)
+        engine.holdings = dict(cp.holdings)
+        engine.daily_valuations = list(cp.daily_valuations)
+        engine.weekly_settlements = list(cp.weekly_settlements)
+        engine.trades = list(cp.trades)
+        engine.target_capacities = list(cp.target_capacities)
+        engine.buy_attempt_count = int(cp.buy_attempt_count)
+        engine.unaffordable_buy_count = int(cp.unaffordable_buy_count)
+        engine.rebalance_days_with_buy = int(cp.rebalance_days_with_buy)
+        engine.unaffordable_event_days = int(cp.unaffordable_event_days)
+        return engine
+
