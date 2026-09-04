@@ -83,6 +83,38 @@ window.LandingView = {
           <a href="#overview" style="font-size:0.84rem; font-weight:600; margin-top:auto; color:var(--accent-cyan);">Compare Benchmarks →</a>
         </div>
       </div>
+
+      <!-- Institutional Research & Legal Disclaimer -->
+      <div class="card" style="margin-top: 36px; border-left: 4px solid var(--accent-amber); background: rgba(245, 158, 11, 0.03); padding: 24px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
+          <h2 style="font-size: 17px; font-weight: 700; color: var(--accent-amber); margin: 0; display: flex; align-items: center; gap: 8px;">
+            <span>🛡️</span> Disclaimer
+          </h2>
+          <a href="#disclaimer" class="btn btn-sm btn-outline" style="font-size: 11px; padding: 4px 10px; text-decoration: none;">
+            Full Legal Notice &rarr;
+          </a>
+        </div>
+        <div style="font-size: 13px; color: var(--text-secondary); line-height: 1.75; display: flex; flex-direction: column; gap: 12px;">
+          <p style="margin: 0; color: var(--text-primary); font-weight: 500;">
+            This website is provided solely for research, educational, and informational purposes. It does not constitute investment advice, a recommendation, solicitation, or offer to buy or sell any security or financial product.
+          </p>
+          <p style="margin: 0;">
+            Results shown may include live, delayed, simulated, backtested, counterfactual, or shadow-trading performance and should be interpreted only within the methodology stated for each experiment. Historical and simulated results are not indicative of future performance.
+          </p>
+          <p style="margin: 0;">
+            Market and portfolio data are published with a delay of approximately one week and are not intended for real-time trading or investment decision-making.
+          </p>
+          <p style="margin: 0;">
+            All models, strategies, benchmarks, and experimental variants are presented as research subjects. Their inclusion, ranking, or historical performance does not imply endorsement, expected profitability, or statistical validity beyond the stated experiment.
+          </p>
+          <p style="margin: 0; font-weight: 600; color: var(--text-primary);">
+            Investing involves risk, including the possible loss of principal.
+          </p>
+          <div style="margin-top: 6px; padding-top: 12px; border-top: 1px dashed var(--border-subtle); font-style: italic; color: var(--text-muted); font-size: 12px;">
+            “QuantPits Arena is a research testbed. It studies models, portfolio policies, historical decisions, failures, and occasionally monkeys. <b style="color: var(--accent-rose);">It does not tell you what to buy.</b>”
+          </div>
+        </div>
+      </div>
     `;
   }
 };

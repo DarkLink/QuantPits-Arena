@@ -132,7 +132,8 @@ window.ArenaApp = {
       "view-path-detail",
       "view-contestant-detail",
       "view-decision-audit",
-      "view-methodology"
+      "view-methodology",
+      "view-disclaimer"
     ];
     viewIds.forEach(id => {
       const el = document.getElementById(id);
@@ -183,6 +184,11 @@ window.ArenaApp = {
       case "methodology":
         this.showView("view-methodology");
         window.MethodologyView.render("view-methodology");
+        break;
+
+      case "disclaimer":
+        this.showView("view-disclaimer");
+        window.DisclaimerView.render("view-disclaimer");
         break;
 
       default:
