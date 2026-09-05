@@ -168,11 +168,11 @@ window.LeaderboardView = {
           </td>
           <td class="numeric">
             <span class="badge ${isSig ? 'badge-green' : 'badge-neutral'}">
-              ${pct.toFixed(1)}%
+              ${window.formatPercentile ? window.formatPercentile(pct) : pct.toFixed(1) + '%'}
             </span>
           </td>
           <td class="numeric" style="font-family:monospace; color:${isSig ? 'var(--accent-positive)' : 'var(--text-tertiary)'};">
-            ${pVal.toFixed(4)}
+            ${window.formatPValue ? window.formatPValue(pVal) : pVal.toFixed(4)}
           </td>
           <td class="numeric" style="color:var(--accent-negative);">
             ${p.max_drawdown_pct.toFixed(2)}%

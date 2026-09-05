@@ -93,10 +93,10 @@ window.PathDetailView = {
             <div style="text-align:right; border-left:1px solid var(--border-subtle); padding-left:1.25rem;">
               <div style="font-size:0.75rem; color:var(--text-tertiary); text-transform:uppercase;">Monkey Percentile</div>
               <div style="font-size:2.2rem; font-weight:800; color:${isSig ? 'var(--accent-positive)' : 'var(--accent-warning)'};">
-                ${pRank.toFixed(1)}%
+                ${window.formatPercentile ? window.formatPercentile(pRank) : pRank.toFixed(1) + '%'}
               </div>
               <div style="font-size:0.75rem; color:var(--text-tertiary);">
-                Empirical p-value: <b>${pVal.toFixed(4)}</b>
+                Empirical p-value: <b>${window.formatPValue ? window.formatPValue(pVal) : pVal.toFixed(4)}</b>
               </div>
             </div>
           </div>

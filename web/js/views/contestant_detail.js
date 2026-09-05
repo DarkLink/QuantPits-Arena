@@ -160,11 +160,11 @@ window.ContestantDetailView = {
                 <div class="kpi-hint">Across 28 Handlers</div>
               </div>
               <div class="kpi-card" style="padding: 12px;">
-                <div class="kpi-title">Monkey Alpha (p &lt; 0.05)</div>
+                <div class="kpi-title">Paths p &lt; 0.05 vs Null</div>
                 <div class="kpi-value text-gold" style="font-size: 20px;">
                   ${beatMonkeys} / 28
                 </div>
-                <div class="kpi-hint">Mean Rank: ${avgMonkeyPct}%</div>
+                <div class="kpi-hint">Mean Rank: ${window.formatPercentile ? window.formatPercentile(avgMonkeyPct) : avgMonkeyPct + '%'}</div>
               </div>
             </div>
             <div style="font-size: 12px; color: var(--text-secondary); background: rgba(0,0,0,0.2); padding: 10px 12px; border-radius: var(--radius-sm); line-height: 1.5;">
@@ -303,11 +303,11 @@ window.ContestantDetailView = {
                       <td style="text-align: right; font-weight: 600;">${p.sharpe_ratio !== undefined ? p.sharpe_ratio.toFixed(2) : '-'}</td>
                       <td style="text-align: right;">
                         <span class="badge ${isSig ? 'badge-success' : 'badge-neutral'}" style="font-weight: 700;">
-                          ${pRank.toFixed(1)}%
+                          ${window.formatPercentile ? window.formatPercentile(pRank) : pRank.toFixed(1) + '%'}
                         </span>
                       </td>
                       <td style="text-align: right; font-family: monospace; color: ${isSig ? 'var(--accent-cyan)' : 'var(--text-muted)'};">
-                        ${pVal.toFixed(4)}
+                        ${window.formatPValue ? window.formatPValue(pVal) : pVal.toFixed(4)}
                       </td>
                       <td style="text-align: right; color: ${p.unaffordable_buy_count > 0 ? 'var(--accent-amber)' : 'var(--text-muted)'};">
                         ${p.unaffordable_buy_count ?? 0}

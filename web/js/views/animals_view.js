@@ -300,9 +300,11 @@ window.AnimalsView = {
               </thead>
               <tbody>
                 ${animalPaths.map((p, idx) => {
-                  const pct = (p.percentile_rank !== undefined ? p.percentile_rank : (p.monkey_percentile || 0)).toFixed(1);
-                  const pVal = (p.empirical_p_value !== undefined ? p.empirical_p_value : (p.p_value || 1.0)).toFixed(4);
-                  const isSig = parseFloat(pct) >= 95;
+                  const rawPct = p.percentile_rank !== undefined ? p.percentile_rank : (p.monkey_percentile || 0);
+                  const pct = window.formatPercentile ? window.formatPercentile(rawPct) : rawPct.toFixed(1) + "%";
+                  const rawP = p.empirical_p_value !== undefined ? p.empirical_p_value : (p.p_value !== undefined ? p.p_value : 1.0);
+                  const pVal = window.formatPValue ? window.formatPValue(rawP) : rawP.toFixed(4);
+                  const isSig = (typeof rawPct === "number" ? rawPct : parseFloat(pct)) >= 95;
                   const spreadCsi = p.total_return_pct - csi300Ret;
                   const spreadTaotie = p.total_return_pct - taotieRet;
 
@@ -327,8 +329,8 @@ window.AnimalsView = {
                         ${p.sharpe_ratio !== undefined ? p.sharpe_ratio.toFixed(2) : 'N/A'}
                       </td>
                       <td style="padding: 12px 16px; text-align: right; font-family: monospace;">
-                        <span style="font-weight: 600; color: ${isSig ? 'var(--color-success)' : 'var(--text-primary)'};">${pct}%</span>
-                        <div style="font-size: 10px; color: var(--text-muted);">p = ${pVal}</div>
+                        <span style="font-weight: 600; color: ${isSig ? 'var(--color-success)' : 'var(--text-primary)'};">${pct}</span>
+                        <div style="font-size: 10px; color: var(--text-muted);">${pVal.startsWith('<') ? 'p ' + pVal : 'p = ' + pVal}</div>
                       </td>
                       <td style="padding: 12px 16px; text-align: center;">
                         <span class="badge ${isSig ? 'badge-success' : 'badge-neutral'}" style="font-size: 10px;">

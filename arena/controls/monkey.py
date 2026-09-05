@@ -212,21 +212,29 @@ class MonkeyColony:
         higher_is_better: bool = True
     ) -> float:
         """
-        计算实证单侧 p-value：
-        若 higher_is_better=True (如收益率)，p = (猴子优于等于目标的比例)。
-        若 p < 0.05，表示在 95% 置信度下超越随机水平。
+        计算实证单侧 p-value (含 plus-one 有限样本校正)：
+        p = (count + 1) / (N + 1)
+        避免在有限样本下得出 p = 0.0 的非物理结论。
+        若 p < 0.05，表示在经验零假设下具有统计显著性。
         """
         arr = np.array(monkey_values)
-        if len(arr) == 0:
+        n = len(arr)
+        if n == 0:
             return 1.0
         if higher_is_better:
-            return float(np.mean(arr >= target_value))
+            count = int(np.sum(arr >= target_value))
         else:
-            return float(np.mean(arr <= target_value))
+            count = int(np.sum(arr <= target_value))
+        return float((count + 1) / (n + 1))
 
     def compute_percentile_rank(self, target_value: float, monkey_values: List[float]) -> float:
-        """计算目标模型在猴子群落中的百分位排名 (0.0 ~ 1.0, 越大越好)"""
+        """
+        计算目标模型在猴子群落中的百分位排名 (0.0 ~ 1.0, 越大越好)。
+        含 plus-one 有限样本校正：count / (N + 1)，最高不超过 N / (N + 1)。
+        """
         arr = np.array(monkey_values)
-        if len(arr) == 0:
+        n = len(arr)
+        if n == 0:
             return 0.5
-        return float(np.mean(arr < target_value))
+        count = int(np.sum(arr < target_value))
+        return float(count / (n + 1))

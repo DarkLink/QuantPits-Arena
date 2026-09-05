@@ -54,10 +54,46 @@ class ArenaDataAdapter {
     });
 
     this.pathMap = new Map();
-    this.paths.forEach(p => this.pathMap.set(p.path_id, p));
+    this.paths.forEach(p => {
+      // Statistical integrity clamp: finite-sample bounds for N=1000 null controls
+      if (p.percentile_rank !== undefined && p.percentile_rank !== null) {
+        p.percentile_rank = Math.min(Number(p.percentile_rank), 99.9);
+      }
+      if (p.monkey_percentile !== undefined && p.monkey_percentile !== null) {
+        p.monkey_percentile = Math.min(Number(p.monkey_percentile), 99.9);
+      }
+      if (p.empirical_p_value !== undefined && p.empirical_p_value !== null) {
+        p.empirical_p_value = Math.max(Number(p.empirical_p_value), 0.001);
+      }
+      if (p.p_value !== undefined && p.p_value !== null) {
+        p.p_value = Math.max(Number(p.p_value), 0.001);
+      }
+      // Badge text normalization: replace any legacy "Alpha (p < 0.05)" or "Monkey Slayer"
+      if (Array.isArray(p.badges)) {
+        p.badges = p.badges.map(b => {
+          if (b === "Top 1% Monkey Slayer") return "Top 1% vs Null";
+          if (b === "Alpha (p < 0.05)") return "p < 0.05 vs Null";
+          return b;
+        });
+      }
+      this.pathMap.set(p.path_id, p);
+    });
 
     this.monkeyMap = new Map();
     this.monkeyDistributions.forEach(m => this.monkeyMap.set(m.strategy_spec, m));
+  }
+
+  formatPValue(pVal) {
+    if (pVal === undefined || pVal === null || isNaN(pVal)) return "N/A";
+    const num = Number(pVal);
+    if (num <= 0.001) return "< 0.001";
+    return num.toFixed(4);
+  }
+
+  formatPercentile(rank) {
+    if (rank === undefined || rank === null || isNaN(rank)) return "N/A";
+    const num = Math.min(Number(rank), 99.9);
+    return num.toFixed(1) + "%";
   }
 
   getContestants() {
@@ -547,6 +583,20 @@ class ArenaDataAdapter {
     return this.metadata.preview_embargo_until || "2026-09-11";
   }
 }
+
+// Global statistical formatting helpers
+window.formatPValue = function(pVal) {
+  if (pVal === undefined || pVal === null || isNaN(pVal)) return "N/A";
+  const num = Number(pVal);
+  if (num <= 0.001) return "< 0.001";
+  return num.toFixed(4);
+};
+
+window.formatPercentile = function(rank) {
+  if (rank === undefined || rank === null || isNaN(rank)) return "N/A";
+  const num = Math.min(Number(rank), 99.9);
+  return num.toFixed(1) + "%";
+};
 
 // Attach singleton adapter to global window scope
 window.arenaAdapter = new ArenaDataAdapter(window.ARENA_DATA);

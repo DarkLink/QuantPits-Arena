@@ -158,7 +158,10 @@ def export_data(run_dir: Path = None, is_preview: bool = False):
         monkey_med = parse_pct(s_info.get("monkey_median_pct", 0.0))
         excess_monkey = parse_pct(s_info.get("excess_over_monkey_pct", tot_ret - monkey_med))
         pct_rank = parse_pct(s_info.get("percentile_rank", 50.0))
+        pct_rank = min(pct_rank, 99.9)
         p_val = float(s_info.get("empirical_p_value", 1.0)) if s_info.get("empirical_p_value") is not None else 1.0
+        if p_val < 0.001:
+            p_val = 0.001
 
         # Calculate Sharpe
         col_key = f"{cid}_{aid}"
@@ -195,9 +198,9 @@ def export_data(run_dir: Path = None, is_preview: bool = False):
 
         badges = []
         if pct_rank >= 99.0:
-            badges.append("Top 1% Monkey Slayer")
+            badges.append("Top 1% vs Null")
         elif pct_rank >= 95.0:
-            badges.append("Alpha (p < 0.05)")
+            badges.append("p < 0.05 vs Null")
         if tot_ret > 15.0:
             badges.append("High Absolute Return")
         if mdd < 3.5 and tot_ret > 5.0:

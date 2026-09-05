@@ -78,18 +78,20 @@ def test_parametric_monkey_specs_and_mapping():
 
 
 def test_monkey_empirical_pvalue():
-    """验证单侧经验 p-value 计算"""
+    """验证单侧经验 p-value 计算 (含 plus-one 校正)"""
     colony = MonkeyColony()
     # 假设 100 只猴子的收益率
     monkey_rets = [0.01 * i for i in range(100)]  # 0.00 ~ 0.99
 
     # 目标实际收益为 0.95 (只有 5 只猴子 >= 0.95: 95, 96, 97, 98, 99)
+    # plus-one: (5 + 1) / (100 + 1) = 6 / 101
     p_val = colony.compute_empirical_pvalue(0.95, monkey_rets, higher_is_better=True)
-    assert np.isclose(p_val, 0.05)
+    assert np.isclose(p_val, 6.0 / 101.0)
 
     # 目标实际收益为 1.05 (0 只猴子 >= 1.05)
+    # plus-one: (0 + 1) / (100 + 1) = 1 / 101, 绝不为 0.0
     p_val_top = colony.compute_empirical_pvalue(1.05, monkey_rets, higher_is_better=True)
-    assert p_val_top == 0.0
+    assert np.isclose(p_val_top, 1.0 / 101.0)
 
 
 def test_portfolio_engine_checkpoint_roundtrip():

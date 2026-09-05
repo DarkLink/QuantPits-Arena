@@ -59,14 +59,17 @@ window.ArenaCharts = {
         textStyle: { color: tc.textPrimary },
         formatter: (params) => {
           const p = params.data[3];
-          const pct = (p.percentile_rank !== undefined ? p.percentile_rank : (p.monkey_percentile || 0)).toFixed(1);
-          const pVal = (p.empirical_p_value !== undefined ? p.empirical_p_value : (p.p_value || 1.0)).toFixed(4);
+          const rawPct = p.percentile_rank !== undefined ? p.percentile_rank : p.monkey_percentile;
+          const pct = window.formatPercentile ? window.formatPercentile(rawPct) : (rawPct !== undefined ? rawPct.toFixed(1) + "%" : "N/A");
+          const rawP = p.empirical_p_value !== undefined ? p.empirical_p_value : p.p_value;
+          const pVal = window.formatPValue ? window.formatPValue(rawP) : (rawP !== undefined ? rawP.toFixed(4) : "N/A");
+          const pLabel = pVal.startsWith("<") ? `p ${pVal}` : `p = ${pVal}`;
           return `
             <div style="font-weight:700; color:#38bdf8; margin-bottom:4px;">${p.path_id}</div>
             <div style="font-size:12px; line-height:1.5;">
               <div>Model: <b>${p.contestant_id}</b> | Handler: <b>${p.animal_id}</b></div>
               <div>Return: <b style="color:${p.total_return_pct >= 0 ? '#10b981' : '#f43f5e'}">${p.total_return_pct >= 0 ? '+' : ''}${p.total_return_pct.toFixed(2)}%</b></div>
-              <div>Monkey Percentile: <b>${pct}%</b> (p = ${pVal})</div>
+              <div>Monkey Percentile: <b>${pct}</b> (${pLabel})</div>
               <div>Max Drawdown: <b style="color:#f43f5e;">${p.max_drawdown_pct.toFixed(2)}%</b> | Sharpe: <b>${p.sharpe_ratio}</b></div>
               <div style="margin-top:4px; font-size:11px; color:#94a3b8;">Click bubble to inspect path details</div>
             </div>
@@ -123,7 +126,7 @@ window.ArenaCharts = {
               {
                 xAxis: 95,
                 lineStyle: { color: "#10b981", type: "dashed", width: 2 },
-                label: { formatter: "p = 0.05 (Top 5% Alpha)", position: "insideEndTop", color: "#10b981", fontSize: 10 }
+                label: { formatter: "p = 0.05 (95th Percentile)", position: "insideEndTop", color: "#10b981", fontSize: 10 }
               },
               {
                 yAxis: 0,
@@ -667,7 +670,12 @@ window.ArenaCharts = {
               {
                 xAxis: actualReturnPct,
                 label: {
-                  formatter: `Actual: ${actualReturnPct >= 0 ? '+' : ''}${actualReturnPct.toFixed(2)}%\n(Rank: ${pctRank.toFixed(1)}%, p=${pValue.toFixed(4)})`,
+                  formatter: () => {
+                    const pctStr = window.formatPercentile ? window.formatPercentile(pctRank) : `${pctRank.toFixed(1)}%`;
+                    const pValStr = window.formatPValue ? window.formatPValue(pValue) : pValue.toFixed(4);
+                    const pLabel = pValStr.startsWith("<") ? `p ${pValStr}` : `p = ${pValStr}`;
+                    return `Actual: ${actualReturnPct >= 0 ? '+' : ''}${actualReturnPct.toFixed(2)}%\n(Rank: ${pctStr}, ${pLabel})`;
+                  },
                   position: "end",
                   color: "#38bdf8",
                   fontWeight: 700

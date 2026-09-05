@@ -74,3 +74,6 @@ tmp/
 web/js/data/arena_data_preview.js
 runs/preview_*/
 runs/*_preview*/
+
+# Weekly Arena Chronicles (Private empirical drama serial)
+chronicles/

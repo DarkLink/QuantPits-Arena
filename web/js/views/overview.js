@@ -89,7 +89,11 @@ window.OverviewView = {
                       #${idx + 1} ${p.path_id}
                     </div>
                     <div style="font-size:0.75rem; color:var(--text-tertiary);">
-                      Monkey Pct: <b style="color:#a855f7;">${(p.percentile_rank || p.monkey_percentile || 0).toFixed(1)}%</b> | p=${(p.empirical_p_value || p.p_value || 1.0).toFixed(4)}
+                      Monkey Pct: <b style="color:#a855f7;">${window.formatPercentile ? window.formatPercentile(p.percentile_rank ?? p.monkey_percentile) : (p.percentile_rank || 0).toFixed(1) + '%'}</b> | ${(() => {
+                        const rawP = p.empirical_p_value !== undefined ? p.empirical_p_value : p.p_value;
+                        const pVal = window.formatPValue ? window.formatPValue(rawP) : '1.0000';
+                        return pVal.startsWith('<') ? `p ${pVal}` : `p=${pVal}`;
+                      })()}
                     </div>
                   </div>
                   <div style="text-align:right;">
@@ -118,7 +122,7 @@ window.OverviewView = {
                       ${p.path_id}
                     </div>
                     <div style="font-size:0.75rem; color:var(--text-tertiary);">
-                      ${p.animal_id === 'koala' ? '⚡ Inverted Polarity Test' : 'Monkey Pct: ' + (p.percentile_rank || p.monkey_percentile || 0).toFixed(1) + '%'}
+                      ${p.animal_id === 'koala' ? '⚡ Inverted Polarity Test' : 'Monkey Pct: ' + (window.formatPercentile ? window.formatPercentile(p.percentile_rank ?? p.monkey_percentile) : (p.percentile_rank || 0).toFixed(1) + '%')}
                     </div>
                   </div>
                   <div style="text-align:right;">

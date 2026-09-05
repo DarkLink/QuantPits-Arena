@@ -41,8 +41,10 @@ def test_monkey_colony_distribution_summary():
     assert np.isclose(summary["p05"], 5.0)
     assert np.isclose(summary["p95"], 95.0)
 
-    # 分位数排名
-    assert np.isclose(colony.compute_percentile_rank(50.0, values), 50.0 / 101.0)
+    # 分位数排名 (含 plus-one 校正: count / (N + 1) = 50 / 102)
+    assert np.isclose(colony.compute_percentile_rank(50.0, values), 50.0 / 102.0)
+    # 当超过所有猴子时，最高分位数不得超过 N / (N + 1) = 101 / 102 < 1.0 (绝非 100%)
+    assert np.isclose(colony.compute_percentile_rank(150.0, values), 101.0 / 102.0)
 
 
 def test_rock_benchmark_fallback_mode(tmp_path):

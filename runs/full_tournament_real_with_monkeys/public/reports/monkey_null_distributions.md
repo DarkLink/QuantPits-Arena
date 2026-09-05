@@ -40,8 +40,8 @@ The **Parametric Monkey Colony** serves as the rigorous empirical null model for
 | CONTESTANT_A | snail-2 | P_22_3 | 3.50% | 0.89% | +2.61% | 84.0% | 0.1600 | NO |
 | CONTESTANT_A | snail-3 | P_22_3 | 3.85% | 0.89% | +2.97% | 89.0% | 0.1100 | NO |
 | CONTESTANT_A | snail-4 | P_22_3 | 2.52% | 0.89% | +1.63% | 73.0% | 0.2700 | NO |
-| CONTESTANT_A | rabbit-1 | P_22_11 | 13.13% | 0.75% | +12.38% | 100.0% | 0.0000 | YES (p < 0.05) |
-| CONTESTANT_A | rabbit-2 | P_22_22 | 10.40% | 0.12% | +10.28% | 100.0% | 0.0000 | YES (p < 0.05) |
+| CONTESTANT_A | rabbit-1 | P_22_11 | 13.13% | 0.75% | +12.38% | 99.9% | 0.0010 | YES (p < 0.05) |
+| CONTESTANT_A | rabbit-2 | P_22_22 | 10.40% | 0.12% | +10.28% | 99.9% | 0.0010 | YES (p < 0.05) |
 | CONTESTANT_A | turtle | P_22_1 | 5.72% | 1.02% | +4.71% | 97.0% | 0.0300 | YES (p < 0.05) |
 | CONTESTANT_A | koala | P_22_3 | -10.48% | 0.89% | -11.37% | 0.0% | 1.0000 | NO |
 | CONTESTANT_A | meerkat-10 | P_22_3 | 2.58% | 0.89% | +1.69% | 73.0% | 0.2700 | NO |
@@ -53,24 +53,24 @@ The **Parametric Monkey Colony** serves as the rigorous empirical null model for
 | CONTESTANT_A | meerkat-70 | P_22_3 | -4.01% | 0.89% | -4.90% | 3.0% | 0.9700 | NO |
 | CONTESTANT_A | meerkat-80 | P_22_3 | -1.23% | 0.89% | -2.12% | 22.0% | 0.7800 | NO |
 | CONTESTANT_A | meerkat-90 | P_22_3 | -2.01% | 0.89% | -2.90% | 14.0% | 0.8600 | NO |
-| CONTESTANT_A | eagle-5-1 | P_5_1 | 12.67% | 0.68% | +12.00% | 100.0% | 0.0000 | YES (p < 0.05) |
-| CONTESTANT_A | eagle-11-2 | P_11_2 | 14.68% | 0.66% | +14.03% | 100.0% | 0.0000 | YES (p < 0.05) |
-| CONTESTANT_A | eagle-44-6 | P_44_6 | 9.59% | 1.52% | +8.07% | 100.0% | 0.0000 | YES (p < 0.05) |
-| CONTESTANT_A | eagle-66-9 | P_66_9 | 6.41% | 1.97% | +4.44% | 100.0% | 0.0000 | YES (p < 0.05) |
-| CONTESTANT_A | eagle-88-12 | P_88_12 | 6.80% | 2.50% | +4.30% | 100.0% | 0.0000 | YES (p < 0.05) |
+| CONTESTANT_A | eagle-5-1 | P_5_1 | 12.67% | 0.68% | +12.00% | 99.9% | 0.0010 | YES (p < 0.05) |
+| CONTESTANT_A | eagle-11-2 | P_11_2 | 14.68% | 0.66% | +14.03% | 99.9% | 0.0010 | YES (p < 0.05) |
+| CONTESTANT_A | eagle-44-6 | P_44_6 | 9.59% | 1.52% | +8.07% | 99.9% | 0.0010 | YES (p < 0.05) |
+| CONTESTANT_A | eagle-66-9 | P_66_9 | 6.41% | 1.97% | +4.44% | 99.9% | 0.0010 | YES (p < 0.05) |
+| CONTESTANT_A | eagle-88-12 | P_88_12 | 6.80% | 2.50% | +4.30% | 99.9% | 0.0010 | YES (p < 0.05) |
 | CONTESTANT_A | whale-shark | P_123_17 | 4.61% | 3.72% | +0.90% | 95.0% | 0.0500 | NO |
-| CONTESTANT_B | robot | P_22_3 | 12.20% | 0.89% | +11.32% | 100.0% | 0.0000 | YES (p < 0.05) |
-| CONTESTANT_B | sloth-1 | P_22_3 | 14.38% | 0.89% | +13.49% | 100.0% | 0.0000 | YES (p < 0.05) |
+| CONTESTANT_B | robot | P_22_3 | 12.20% | 0.89% | +11.32% | 99.9% | 0.0010 | YES (p < 0.05) |
+| CONTESTANT_B | sloth-1 | P_22_3 | 14.38% | 0.89% | +13.49% | 99.9% | 0.0010 | YES (p < 0.05) |
 | CONTESTANT_B | sloth-2 | P_22_3 | 8.69% | 0.89% | +7.80% | 99.0% | 0.0100 | YES (p < 0.05) |
 | CONTESTANT_B | sloth-3 | P_22_3 | 4.69% | 0.89% | +3.80% | 93.0% | 0.0700 | NO |
 | CONTESTANT_B | sloth-4 | P_22_3 | 0.11% | 0.89% | -0.78% | 39.0% | 0.6100 | NO |
-| CONTESTANT_B | snail-1 | P_22_3 | 11.19% | 0.89% | +10.30% | 100.0% | 0.0000 | YES (p < 0.05) |
+| CONTESTANT_B | snail-1 | P_22_3 | 11.19% | 0.89% | +10.30% | 99.9% | 0.0010 | YES (p < 0.05) |
 | CONTESTANT_B | snail-2 | P_22_3 | 6.29% | 0.89% | +5.41% | 99.0% | 0.0100 | YES (p < 0.05) |
 | CONTESTANT_B | snail-3 | P_22_3 | 7.50% | 0.89% | +6.61% | 99.0% | 0.0100 | YES (p < 0.05) |
 | CONTESTANT_B | snail-4 | P_22_3 | 6.28% | 0.89% | +5.39% | 99.0% | 0.0100 | YES (p < 0.05) |
-| CONTESTANT_B | rabbit-1 | P_22_11 | 10.76% | 0.75% | +10.01% | 100.0% | 0.0000 | YES (p < 0.05) |
-| CONTESTANT_B | rabbit-2 | P_22_22 | 8.95% | 0.12% | +8.83% | 100.0% | 0.0000 | YES (p < 0.05) |
-| CONTESTANT_B | turtle | P_22_1 | 10.60% | 1.02% | +9.58% | 100.0% | 0.0000 | YES (p < 0.05) |
+| CONTESTANT_B | rabbit-1 | P_22_11 | 10.76% | 0.75% | +10.01% | 99.9% | 0.0010 | YES (p < 0.05) |
+| CONTESTANT_B | rabbit-2 | P_22_22 | 8.95% | 0.12% | +8.83% | 99.9% | 0.0010 | YES (p < 0.05) |
+| CONTESTANT_B | turtle | P_22_1 | 10.60% | 1.02% | +9.58% | 99.9% | 0.0010 | YES (p < 0.05) |
 | CONTESTANT_B | koala | P_22_3 | -10.60% | 0.89% | -11.48% | 0.0% | 1.0000 | NO |
 | CONTESTANT_B | meerkat-10 | P_22_3 | 6.34% | 0.89% | +5.46% | 99.0% | 0.0100 | YES (p < 0.05) |
 | CONTESTANT_B | meerkat-20 | P_22_3 | 7.41% | 0.89% | +6.53% | 99.0% | 0.0100 | YES (p < 0.05) |
@@ -81,11 +81,11 @@ The **Parametric Monkey Colony** serves as the rigorous empirical null model for
 | CONTESTANT_B | meerkat-70 | P_22_3 | 0.44% | 0.89% | -0.45% | 41.0% | 0.5900 | NO |
 | CONTESTANT_B | meerkat-80 | P_22_3 | -2.96% | 0.89% | -3.85% | 7.0% | 0.9300 | NO |
 | CONTESTANT_B | meerkat-90 | P_22_3 | -10.32% | 0.89% | -11.21% | 0.0% | 1.0000 | NO |
-| CONTESTANT_B | eagle-5-1 | P_5_1 | 19.71% | 0.68% | +19.03% | 100.0% | 0.0000 | YES (p < 0.05) |
+| CONTESTANT_B | eagle-5-1 | P_5_1 | 19.71% | 0.68% | +19.03% | 99.9% | 0.0010 | YES (p < 0.05) |
 | CONTESTANT_B | eagle-11-2 | P_11_2 | 11.38% | 0.66% | +10.72% | 99.0% | 0.0100 | YES (p < 0.05) |
-| CONTESTANT_B | eagle-44-6 | P_44_6 | 10.74% | 1.52% | +9.23% | 100.0% | 0.0000 | YES (p < 0.05) |
-| CONTESTANT_B | eagle-66-9 | P_66_9 | 6.85% | 1.97% | +4.88% | 100.0% | 0.0000 | YES (p < 0.05) |
-| CONTESTANT_B | eagle-88-12 | P_88_12 | 7.19% | 2.50% | +4.68% | 100.0% | 0.0000 | YES (p < 0.05) |
+| CONTESTANT_B | eagle-44-6 | P_44_6 | 10.74% | 1.52% | +9.23% | 99.9% | 0.0010 | YES (p < 0.05) |
+| CONTESTANT_B | eagle-66-9 | P_66_9 | 6.85% | 1.97% | +4.88% | 99.9% | 0.0010 | YES (p < 0.05) |
+| CONTESTANT_B | eagle-88-12 | P_88_12 | 7.19% | 2.50% | +4.68% | 99.9% | 0.0010 | YES (p < 0.05) |
 | CONTESTANT_B | whale-shark | P_123_17 | 4.83% | 3.72% | +1.12% | 97.0% | 0.0300 | YES (p < 0.05) |
 | CONTESTANT_C | robot | P_22_3 | 6.93% | 0.89% | +6.04% | 99.0% | 0.0100 | YES (p < 0.05) |
 | CONTESTANT_C | sloth-1 | P_22_3 | 7.76% | 0.89% | +6.88% | 99.0% | 0.0100 | YES (p < 0.05) |
@@ -111,10 +111,10 @@ The **Parametric Monkey Colony** serves as the rigorous empirical null model for
 | CONTESTANT_C | meerkat-90 | P_22_3 | -1.47% | 0.89% | -2.36% | 20.0% | 0.8000 | NO |
 | CONTESTANT_C | eagle-5-1 | P_5_1 | 12.14% | 0.68% | +11.46% | 99.0% | 0.0100 | YES (p < 0.05) |
 | CONTESTANT_C | eagle-11-2 | P_11_2 | 7.08% | 0.66% | +6.42% | 98.0% | 0.0200 | YES (p < 0.05) |
-| CONTESTANT_C | eagle-44-6 | P_44_6 | 5.27% | 1.52% | +3.75% | 100.0% | 0.0000 | YES (p < 0.05) |
+| CONTESTANT_C | eagle-44-6 | P_44_6 | 5.27% | 1.52% | +3.75% | 99.9% | 0.0010 | YES (p < 0.05) |
 | CONTESTANT_C | eagle-66-9 | P_66_9 | 4.62% | 1.97% | +2.65% | 97.0% | 0.0300 | YES (p < 0.05) |
-| CONTESTANT_C | eagle-88-12 | P_88_12 | 6.03% | 2.50% | +3.53% | 100.0% | 0.0000 | YES (p < 0.05) |
-| CONTESTANT_C | whale-shark | P_123_17 | 5.57% | 3.72% | +1.85% | 100.0% | 0.0000 | YES (p < 0.05) |
+| CONTESTANT_C | eagle-88-12 | P_88_12 | 6.03% | 2.50% | +3.53% | 99.9% | 0.0010 | YES (p < 0.05) |
+| CONTESTANT_C | whale-shark | P_123_17 | 5.57% | 3.72% | +1.85% | 99.9% | 0.0010 | YES (p < 0.05) |
 | CONTESTANT_D | robot | P_22_3 | 7.67% | 0.89% | +6.78% | 99.0% | 0.0100 | YES (p < 0.05) |
 | CONTESTANT_D | sloth-1 | P_22_3 | 7.34% | 0.89% | +6.45% | 99.0% | 0.0100 | YES (p < 0.05) |
 | CONTESTANT_D | sloth-2 | P_22_3 | 6.40% | 0.89% | +5.51% | 99.0% | 0.0100 | YES (p < 0.05) |
@@ -124,8 +124,8 @@ The **Parametric Monkey Colony** serves as the rigorous empirical null model for
 | CONTESTANT_D | snail-2 | P_22_3 | 1.71% | 0.89% | +0.82% | 63.0% | 0.3700 | NO |
 | CONTESTANT_D | snail-3 | P_22_3 | 1.50% | 0.89% | +0.62% | 60.0% | 0.4000 | NO |
 | CONTESTANT_D | snail-4 | P_22_3 | 1.13% | 0.89% | +0.25% | 51.0% | 0.4900 | NO |
-| CONTESTANT_D | rabbit-1 | P_22_11 | 12.47% | 0.75% | +11.71% | 100.0% | 0.0000 | YES (p < 0.05) |
-| CONTESTANT_D | rabbit-2 | P_22_22 | 10.90% | 0.12% | +10.78% | 100.0% | 0.0000 | YES (p < 0.05) |
+| CONTESTANT_D | rabbit-1 | P_22_11 | 12.47% | 0.75% | +11.71% | 99.9% | 0.0010 | YES (p < 0.05) |
+| CONTESTANT_D | rabbit-2 | P_22_22 | 10.90% | 0.12% | +10.78% | 99.9% | 0.0010 | YES (p < 0.05) |
 | CONTESTANT_D | turtle | P_22_1 | 1.51% | 1.02% | +0.49% | 58.0% | 0.4200 | NO |
 | CONTESTANT_D | koala | P_22_3 | -13.52% | 0.89% | -14.41% | 0.0% | 1.0000 | NO |
 | CONTESTANT_D | meerkat-10 | P_22_3 | 2.69% | 0.89% | +1.80% | 75.0% | 0.2500 | NO |
@@ -137,11 +137,11 @@ The **Parametric Monkey Colony** serves as the rigorous empirical null model for
 | CONTESTANT_D | meerkat-70 | P_22_3 | 2.68% | 0.89% | +1.80% | 75.0% | 0.2500 | NO |
 | CONTESTANT_D | meerkat-80 | P_22_3 | 0.85% | 0.89% | -0.04% | 50.0% | 0.5000 | NO |
 | CONTESTANT_D | meerkat-90 | P_22_3 | -5.24% | 0.89% | -6.13% | 0.0% | 1.0000 | NO |
-| CONTESTANT_D | eagle-5-1 | P_5_1 | 12.79% | 0.68% | +12.11% | 100.0% | 0.0000 | YES (p < 0.05) |
-| CONTESTANT_D | eagle-11-2 | P_11_2 | 12.96% | 0.66% | +12.30% | 100.0% | 0.0000 | YES (p < 0.05) |
-| CONTESTANT_D | eagle-44-6 | P_44_6 | 8.31% | 1.52% | +6.79% | 100.0% | 0.0000 | YES (p < 0.05) |
-| CONTESTANT_D | eagle-66-9 | P_66_9 | 6.19% | 1.97% | +4.22% | 100.0% | 0.0000 | YES (p < 0.05) |
-| CONTESTANT_D | eagle-88-12 | P_88_12 | 6.88% | 2.50% | +4.38% | 100.0% | 0.0000 | YES (p < 0.05) |
+| CONTESTANT_D | eagle-5-1 | P_5_1 | 12.79% | 0.68% | +12.11% | 99.9% | 0.0010 | YES (p < 0.05) |
+| CONTESTANT_D | eagle-11-2 | P_11_2 | 12.96% | 0.66% | +12.30% | 99.9% | 0.0010 | YES (p < 0.05) |
+| CONTESTANT_D | eagle-44-6 | P_44_6 | 8.31% | 1.52% | +6.79% | 99.9% | 0.0010 | YES (p < 0.05) |
+| CONTESTANT_D | eagle-66-9 | P_66_9 | 6.19% | 1.97% | +4.22% | 99.9% | 0.0010 | YES (p < 0.05) |
+| CONTESTANT_D | eagle-88-12 | P_88_12 | 6.88% | 2.50% | +4.38% | 99.9% | 0.0010 | YES (p < 0.05) |
 | CONTESTANT_D | whale-shark | P_123_17 | 4.33% | 3.72% | +0.61% | 81.0% | 0.1900 | NO |
 | CONTESTANT_E | robot | P_22_3 | 1.99% | 0.89% | +1.11% | 68.0% | 0.3200 | NO |
 | CONTESTANT_E | sloth-1 | P_22_3 | 2.75% | 0.89% | +1.86% | 76.0% | 0.2400 | NO |
