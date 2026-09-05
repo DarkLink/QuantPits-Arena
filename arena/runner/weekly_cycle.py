@@ -128,6 +128,9 @@ class WeeklyCycleRunner:
                     self.market_provider = MarketDataProvider(use_real_qlib=True)
                 # 获取首个预测标的池并预加载真实 Qlib 价格
                 try:
+                    if not self.adapters and active_contestants:
+                        for c in active_contestants:
+                            self.adapters[c.contestant_id] = create_adapter(c, mock=self.mock_mode, use_replay=not self.mock_mode)
                     first_adapter = next(iter(self.adapters.values()))
                     sample_score = first_adapter.predict(start_date=self.anchor_date, end_date=self.anchor_date)
                     insts = list(sample_score.index)

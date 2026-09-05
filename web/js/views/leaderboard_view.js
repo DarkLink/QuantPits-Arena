@@ -49,6 +49,9 @@ window.LeaderboardView = {
               </tbody>
             </table>
           </div>
+          <div style="font-size: 11px; color: var(--text-tertiary); padding: 12px 16px 4px 16px; border-top: 1px solid var(--border-subtle);">
+            * Note: Return, Sharpe Ratio, and MDD are computed over <strong>${window.arenaAdapter.getPeriodLabel()}</strong>. All path statistics update dynamically across incremental evaluation cycles.
+          </div>
         </div>
       </div>
 

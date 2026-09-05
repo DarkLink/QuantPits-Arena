@@ -163,33 +163,40 @@
       <strong style="color: var(--text-secondary);">Disclaimer:</strong> For research and informational purposes only. Not investment advice or a solicitation. Results may be live, delayed, simulated, backtested, counterfactual, or shadow-trading and are not indicative of future performance. Data are published with an approximately one-week delay. Investing involves risk, including loss of principal.
       <a href="#disclaimer" style="color: var(--accent-cyan); text-decoration: underline; margin-left: 6px;">Read Full Legal &amp; Research Notice &rarr;</a>
     </div>
+    <!-- Cryptographic Timeliness Proof Commitment Notice -->
+    <div style="max-width: 1280px; margin: 8px auto 0 auto; padding-top: 6px; font-size: 11px; color: var(--text-muted); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+      <span>🔐 <strong style="color: var(--text-secondary);">Proof of Timeliness:</strong> Next cycle (through 2026-09-04) cryptographically committed on 2026-09-05 (<code style="font-size: 10px; color: var(--brand-cyan);">SHA-256: 8fca6717...</code>). Public reveal embargoed until 2026-09-11.</span>
+      <a href="https://github.com/DarkLink/QuantPits-Arena/blob/master/commitments/embargo_commitments.yaml" target="_blank" rel="noopener" style="color: var(--brand-cyan); text-decoration: underline;">Verify Commitment Manifest ↗</a>
+    </div>
   </footer>
 
   <!-- Data Payload (Offline, Self-contained) -->
-  <script src="js/data/arena_data.js?v=2.7"></script>
+  <script src="js/data/arena_data.js?v=2.8"></script>
+  <!-- Optional Local Preview Data Payload (Embargoed unreleased data, gitignored) -->
+  <script src="js/data/arena_data_preview.js?v=2.8" onerror="/* No preview data payload present; running official baseline */"></script>
 
   <!-- Data Adapter -->
-  <script src="js/adapter.js?v=2.7"></script>
+  <script src="js/adapter.js?v=2.8"></script>
 
   <!-- ECharts Suite -->
-  <script src="js/components/charts.js?v=2.7"></script>
+  <script src="js/components/charts.js?v=2.9"></script>
 
   <!-- Global Filters -->
-  <script src="js/components/filters.js?v=2.7"></script>
+  <script src="js/components/filters.js?v=2.8"></script>
 
   <!-- Application Views -->
-  <script src="js/views/landing.js?v=2.7"></script>
-  <script src="js/views/overview.js?v=2.7"></script>
-  <script src="js/views/leaderboard_view.js?v=2.7"></script>
-  <script src="js/views/animals_view.js?v=2.7"></script>
-  <script src="js/views/path_detail.js?v=2.7"></script>
-  <script src="js/views/contestant_detail.js?v=2.7"></script>
-  <script src="js/views/decision_audit.js?v=2.7"></script>
-  <script src="js/views/methodology.js?v=2.7"></script>
-  <script src="js/views/disclaimer.js?v=2.7"></script>
-  <script src="js/views/discussion.js?v=2.7"></script>
+  <script src="js/views/landing.js?v=2.8"></script>
+  <script src="js/views/overview.js?v=2.8"></script>
+  <script src="js/views/leaderboard_view.js?v=2.8"></script>
+  <script src="js/views/animals_view.js?v=2.8"></script>
+  <script src="js/views/path_detail.js?v=2.8"></script>
+  <script src="js/views/contestant_detail.js?v=2.8"></script>
+  <script src="js/views/decision_audit.js?v=2.8"></script>
+  <script src="js/views/methodology.js?v=2.8"></script>
+  <script src="js/views/disclaimer.js?v=2.8"></script>
+  <script src="js/views/discussion.js?v=2.8"></script>
 
   <!-- Main Controller & Router -->
-  <script src="js/app.js?v=2.7"></script>
+  <script src="js/app.js?v=2.8"></script>
 </body>
 </html>

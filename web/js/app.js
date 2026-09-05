@@ -10,6 +10,9 @@ window.ArenaApp = {
   init() {
     console.log("Initializing QuantPits-Arena Web App...");
 
+    // 0. Initialize Local Preview Watermark (if preview data present)
+    this.initPreviewBanner();
+
     // 1. Initialize Theme
     this.initTheme();
 
@@ -27,6 +30,45 @@ window.ArenaApp = {
 
     // 5. Bind Navigation Events
     this.bindNavEvents();
+  },
+
+  initPreviewBanner() {
+    const isPreview = window._ARENA_IS_PREVIEW || (window.arenaAdapter && window.arenaAdapter.isPreviewMode && window.arenaAdapter.isPreviewMode());
+    if (!isPreview) return;
+
+    if (document.getElementById("arena-preview-watermark-bar")) return;
+
+    const banner = document.createElement("div");
+    banner.id = "arena-preview-watermark-bar";
+    banner.style.cssText = `
+      background: linear-gradient(90deg, #d97706, #b45309);
+      color: #ffffff;
+      font-weight: 600;
+      font-size: 12px;
+      padding: 7px 16px;
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+      position: sticky;
+      top: 0;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      letter-spacing: 0.02em;
+    `;
+
+    const embargoDate = window.arenaAdapter ? window.arenaAdapter.getEmbargoDate() : "2026-09-11";
+    const periodLabel = window.arenaAdapter ? window.arenaAdapter.getPeriodLabel() : "extended through 2026-09-04";
+
+    banner.innerHTML = `
+      <span>⚡ <strong style="text-transform: uppercase; letter-spacing: 0.05em; background: rgba(0,0,0,0.25); padding: 2px 6px; border-radius: 4px; margin-right: 4px;">Local Preview Mode</strong>
+      ${periodLabel} &bull; Public production release embargoed until <strong>${embargoDate}</strong></span>
+      <span style="font-size: 11px; background: rgba(255,255,255,0.2); padding: 2px 8px; border-radius: 4px; font-weight: 700; border: 1px solid rgba(255,255,255,0.4);">CONFIDENTIAL / UNRELEASED</span>
+    `;
+
+    document.body.prepend(banner);
   },
 
   initTheme() {

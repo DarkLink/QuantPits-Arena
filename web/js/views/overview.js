@@ -34,7 +34,7 @@ window.OverviewView = {
         <div class="kpi-card positive">
           <div class="kpi-label">Peak OOS Return</div>
           <div class="kpi-value positive">+${kpis.topReturn.toFixed(2)}%</div>
-          <div class="kpi-subtext">Top performer across 40 trading days</div>
+          <div class="kpi-subtext">Top performer across ${window.arenaAdapter.getTradingDays()} trading days</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-label">Median OOS Return</div>
@@ -51,6 +51,9 @@ window.OverviewView = {
           <div class="kpi-value" style="color:#f59e0b;">${kpis.csi300Return.toFixed(2)}%</div>
           <div class="kpi-subtext">A-share broad market benchmark</div>
         </div>
+      </div>
+      <div style="font-size: 11px; color: var(--text-tertiary); margin-top: -16px; margin-bottom: 22px; text-align: right;">
+        * Metrics evaluated over <strong>${window.arenaAdapter.getPeriodLabel()}</strong>. Cumulative &amp; risk-adjusted figures reflect the full horizon.
       </div>
 
       <!-- Main Overview Layout: Scatter Plot + Top Performers -->

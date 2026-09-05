@@ -704,13 +704,69 @@ window.ArenaCharts = {
       return Number((r - c).toFixed(4));
     });
 
+    const series = [
+      {
+        name: `Chosen: ${chosenName}`,
+        type: "line",
+        xAxisIndex: 0,
+        yAxisIndex: 0,
+        data: chosenCurve,
+        color: "#10b981",
+        itemStyle: { color: "#10b981" },
+        lineStyle: { width: 2.5, color: "#10b981" },
+        showSymbol: false
+      },
+      {
+        name: `Rejected: ${rejectedName}`,
+        type: "line",
+        xAxisIndex: 0,
+        yAxisIndex: 0,
+        data: rejectedCurve,
+        color: "#f43f5e",
+        itemStyle: { color: "#f43f5e" },
+        lineStyle: { width: 2.5, color: "#f43f5e", type: "dashed" },
+        showSymbol: false
+      },
+      {
+        name: "Counterfactual Regret (NAV_rej - NAV_cho)",
+        type: "line",
+        xAxisIndex: 1,
+        yAxisIndex: 1,
+        data: regretCurve,
+        color: "#f59e0b",
+        itemStyle: { color: "#f59e0b" },
+        areaStyle: {
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            { offset: 0, color: "rgba(244, 63, 94, 0.3)" },
+            { offset: 1, color: "rgba(16, 185, 129, 0.3)" }
+          ])
+        },
+        lineStyle: { width: 2, color: "#f59e0b" },
+        showSymbol: false
+      }
+    ];
+
     const option = {
       backgroundColor: tc.bg,
       tooltip: {
         trigger: "axis",
         backgroundColor: tc.tooltipBg,
         borderColor: tc.tooltipBorder,
-        textStyle: { color: tc.textPrimary }
+        textStyle: { color: tc.textPrimary, fontSize: 12 },
+        formatter: (params) => {
+          if (!params || !params.length) return "";
+          let html = `<div style="font-weight:700; margin-bottom:6px; color:${tc.textPrimary};">${params[0].axisValue}</div>`;
+          params.forEach(item => {
+            const val = typeof item.value === "number" ? item.value.toFixed(4) : item.value;
+            const color = item.color || "#38bdf8";
+            const marker = `<span style="display:inline-block;margin-right:4px;border-radius:10px;width:9px;height:9px;background-color:${color};"></span>`;
+            html += `<div style="display:flex; justify-content:space-between; align-items:center; gap:14px; font-size:11px; margin-bottom:2px;">
+              <span style="display:flex; align-items:center;">${marker}${item.seriesName}:</span>
+              <b style="color:${color}; font-family:monospace;">${val}</b>
+            </div>`;
+          });
+          return html;
+        }
       },
       legend: {
         data: [`Chosen: ${chosenName}`, `Rejected: ${rejectedName}`, "Counterfactual Regret (NAV_rej - NAV_cho)"],
@@ -744,48 +800,8 @@ window.ArenaCharts = {
           axisLabel: { color: tc.textSecondary }
         }
       ],
-      series: [
-        {
-          name: `Chosen: ${chosenName}`,
-          type: "line",
-          xAxisIndex: 0,
-          yAxisIndex: 0,
-          data: chosenCurve,
-          color: "#10b981",
-          itemStyle: { color: "#10b981" },
-          lineStyle: { width: 2.5, color: "#10b981" },
-          showSymbol: false
-        },
-        {
-          name: `Rejected: ${rejectedName}`,
-          type: "line",
-          xAxisIndex: 0,
-          yAxisIndex: 0,
-          data: rejectedCurve,
-          color: "#f43f5e",
-          itemStyle: { color: "#f43f5e" },
-          lineStyle: { width: 2.5, color: "#f43f5e", type: "dashed" },
-          showSymbol: false
-        },
-        {
-          name: "Counterfactual Regret (NAV_rej - NAV_cho)",
-          type: "line",
-          xAxisIndex: 1,
-          yAxisIndex: 1,
-          data: regretCurve,
-          color: "#f59e0b",
-          itemStyle: { color: "#f59e0b" },
-          areaStyle: {
-            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-              { offset: 0, color: "rgba(244, 63, 94, 0.3)" },
-              { offset: 1, color: "rgba(16, 185, 129, 0.3)" }
-            ])
-          },
-          lineStyle: { width: 2, color: "#f59e0b" },
-          showSymbol: false
-        }
-      ],
-      color: series.map(s => s.color || (s.itemStyle && s.itemStyle.color)).filter(Boolean)
+      color: ["#10b981", "#f43f5e", "#f59e0b"],
+      series: series
     };
 
     chart.setOption(option, true);

@@ -8,6 +8,7 @@ web/js/data/arena_data.js
 
 import sys
 import json
+import argparse
 import yaml
 from pathlib import Path
 import pandas as pd
@@ -16,10 +17,16 @@ import numpy as np
 REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT))
 MANIFESTS_PUBLIC = REPO_ROOT / "manifests" / "public"
+from scripts.validate_incremental_update import validate_dataframe_against_canonical
 
 
-def find_latest_run_dir() -> Path:
+def find_latest_run_dir(is_preview: bool = False) -> Path:
     runs_dir = REPO_ROOT / "runs"
+    if is_preview:
+        for p in sorted(runs_dir.glob("preview_*"), reverse=True):
+            if p.is_dir() and (p / "public" / "daily_nav_curves.csv").exists():
+                return p
+
     preferred = [
         runs_dir / "tournament_real_1000_monkeys",
         runs_dir / "full_tournament_real_with_monkeys",
@@ -35,10 +42,12 @@ def find_latest_run_dir() -> Path:
     raise FileNotFoundError("Could not find tournament run artifacts in runs/")
 
 
-def export_data():
-    run_dir = find_latest_run_dir()
+def export_data(run_dir: Path = None, is_preview: bool = False):
+    if run_dir is None:
+        run_dir = find_latest_run_dir(is_preview=is_preview)
     pub_dir = run_dir / "public"
-    print(f"[1/4] Loading tournament data from: {run_dir.name}")
+    mode_str = "PREVIEW (Local Unreleased Sandbox)" if is_preview else "PRODUCTION (Public Baseline)"
+    print(f"[1/4] Loading tournament data from: {run_dir.name} [{mode_str}]")
 
     # 1. Load Contestant Manifests
     contestants = []
@@ -82,6 +91,13 @@ def export_data():
     
     # 3. NAV Timelines
     df_nav = pd.read_csv(pub_dir / "daily_nav_curves.csv") if (pub_dir / "daily_nav_curves.csv").exists() else pd.DataFrame()
+    if is_preview:
+        print("[*] Performing strict historical immutability audit against canonical arena_data.js...")
+        if not validate_dataframe_against_canonical(df_nav):
+            print("[ERROR] Historical immutability audit failed! Aborting preview export.")
+            sys.exit(1)
+        print("    [PASS] Historical immutability verified: 0 regressions found.")
+
     nav_dates = df_nav["datetime"].tolist() if "datetime" in df_nav.columns else []
     nav_series_map = {}
     for col in df_nav.columns:
@@ -246,6 +262,27 @@ def export_data():
         })
 
     # Add Taotie as reference path
+    taotie_curve = nav_series_map.get("BENCHMARK_taotie", [])
+    if taotie_curve:
+        taotie_final_nav = taotie_curve[-1]
+        taotie_tot_ret = round((taotie_final_nav - 1.0) * 100.0, 2)
+        peak = taotie_curve[0]
+        max_dd = 0.0
+        for val in taotie_curve:
+            if val > peak:
+                peak = val
+            dd = (val / peak - 1.0) * 100.0 if peak > 0 else 0.0
+            if dd < max_dd:
+                max_dd = dd
+        taotie_mdd = round(abs(max_dd), 2)
+        s_rets = pd.Series(taotie_curve).pct_change().dropna()
+        taotie_sharpe = round(float((s_rets.mean() / s_rets.std()) * (250 ** 0.5)), 2) if len(s_rets) > 1 and s_rets.std() > 0 else 0.85
+    else:
+        taotie_tot_ret = 2.32
+        taotie_mdd = 3.82
+        taotie_final_nav = 1.0232
+        taotie_sharpe = 0.85
+
     taotie_path = {
         "path_id": "BENCHMARK_taotie",
         "contestant_id": "BENCHMARK",
@@ -253,11 +290,11 @@ def export_data():
         "animal_name": "Taotie (Full Pool Passive Executable)",
         "animal_category": "Benchmark",
         "strategy_spec": "P_ALL_0",
-        "total_return_pct": 2.32,
-        "max_drawdown_pct": 3.82,
-        "final_nav": 1.0232,
-        "sharpe_ratio": 0.85,
-        "monkey_median_pct": 2.32,
+        "total_return_pct": taotie_tot_ret,
+        "max_drawdown_pct": taotie_mdd,
+        "final_nav": taotie_final_nav,
+        "sharpe_ratio": taotie_sharpe,
+        "monkey_median_pct": taotie_tot_ret,
         "excess_over_monkey_pct": 0.0,
         "percentile_rank": 50.0,
         "monkey_percentile": 50.0,
@@ -378,8 +415,8 @@ def export_data():
             "season_id": "season_1",
             "season_name": "Season 1: Summer 2026 Tournament",
             "run_id": run_dir.name,
-            "anchor_date": "2026-07-03",
-            "end_date": "2026-08-28",
+            "anchor_date": nav_dates[0] if nav_dates else "2026-07-03",
+            "end_date": nav_dates[-1] if nav_dates else "2026-08-28",
             "initial_cash": 500000.0,
             "currency": "CNY",
             "lot_size": 100,
@@ -387,7 +424,11 @@ def export_data():
             "total_paths": len(path_records),
             "total_contestants": len(contestants),
             "csi300_return_pct": csi300_ret,
-            "taotie_return_pct": 2.32
+            "taotie_return_pct": taotie_tot_ret,
+            "trading_days": len(nav_dates),
+            "preview": is_preview,
+            "preview_embargo_until": "2026-09-11" if is_preview else None,
+            "period_label": f"Evaluation Window: {nav_dates[0] if nav_dates else '2026-07-03'} ~ {nav_dates[-1] if nav_dates else '2026-08-28'} ({len(nav_dates)} trading days)" + (" [PREVIEW]" if is_preview else "")
         },
         "contestants": contestants,
         "paths": path_records,
@@ -406,16 +447,32 @@ def export_data():
         }
     }
 
-    out_file = REPO_ROOT / "web" / "js" / "data" / "arena_data.js"
+    if is_preview:
+        out_file = REPO_ROOT / "web" / "js" / "data" / "arena_data_preview.js"
+        var_name = "window.ARENA_DATA_PREVIEW"
+    else:
+        out_file = REPO_ROOT / "web" / "js" / "data" / "arena_data.js"
+        var_name = "window.ARENA_DATA"
+
     out_file.parent.mkdir(parents=True, exist_ok=True)
     with open(out_file, "w", encoding="utf-8") as f:
-        f.write("/**\n * QuantPits-Arena Pre-compiled Public Data Payload\n * Auto-generated by scripts/export_web_data.py\n */\n")
-        f.write("window.ARENA_DATA = ")
+        f.write("/**\n * QuantPits-Arena Pre-compiled " + ("Preview " if is_preview else "Public ") + "Data Payload\n * Auto-generated by scripts/export_web_data.py\n */\n")
+        f.write(f"{var_name} = ")
         json.dump(web_payload, f, ensure_ascii=False, indent=2)
         f.write(";\n")
 
     print(f"[3/4] Exported data payload to {out_file} ({out_file.stat().st_size / 1024:.1f} KB)")
 
 
+def main():
+    parser = argparse.ArgumentParser(description="Export web data payload")
+    parser.add_argument("--run-dir", type=str, default=None, help="Explicit run directory to export")
+    parser.add_argument("--preview", action="store_true", help="Export to arena_data_preview.js with preview metadata")
+    args = parser.parse_args()
+
+    target_run = Path(args.run_dir) if args.run_dir else None
+    export_data(run_dir=target_run, is_preview=args.preview)
+
+
 if __name__ == "__main__":
-    export_data()
+    main()

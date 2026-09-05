@@ -5,8 +5,14 @@
 
 class ArenaDataAdapter {
   constructor(rawData) {
+    if (window.ARENA_DATA_PREVIEW) {
+      window.ARENA_DATA = window.ARENA_DATA_PREVIEW;
+      window._ARENA_IS_PREVIEW = true;
+      rawData = window.ARENA_DATA_PREVIEW;
+    }
     this.raw = rawData || window.ARENA_DATA || {};
     this.metadata = this.raw.metadata || {};
+    this.isPreview = !!this.metadata.preview || !!window._ARENA_IS_PREVIEW;
     this.contestants = this.raw.contestants || [];
     this.paths = this.raw.paths || [];
     this.navTimeline = this.raw.nav_timeline || { dates: [], curves: {} };
@@ -523,6 +529,22 @@ class ArenaDataAdapter {
       directionData,
       meerkatData
     };
+  }
+
+  isPreviewMode() {
+    return this.isPreview;
+  }
+
+  getPeriodLabel() {
+    return this.metadata.period_label || `${this.metadata.anchor_date || '2026-07-03'} ~ ${this.metadata.end_date || '2026-08-28'} (${this.getTradingDays()} trading days)`;
+  }
+
+  getTradingDays() {
+    return this.metadata.trading_days || (this.navTimeline && this.navTimeline.dates ? this.navTimeline.dates.length : 41);
+  }
+
+  getEmbargoDate() {
+    return this.metadata.preview_embargo_until || "2026-09-11";
   }
 }
 

@@ -69,3 +69,8 @@ runs/*/private/
 scratch/
 tmp/
 *.tmp
+
+# Unreleased embargoed preview data payload & sandbox runs
+web/js/data/arena_data_preview.js
+runs/preview_*/
+runs/*_preview*/

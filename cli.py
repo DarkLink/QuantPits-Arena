@@ -204,6 +204,23 @@ def cmd_step(args):
     exporter = DualTierExporter(run_id=run_id, base_dir=base_dir)
     artifacts = exporter.export(results, registry)
 
+    # 可选：运行参数化猴子群落
+    if getattr(args, "monkeys", False):
+        m_count = getattr(args, "monkey_count", 1000)
+        print("\n" + "=" * 70)
+        print(f" 🐒 启动参数化猴子群落零假设评估 (11 组策略规格 × {m_count} 只随机猴子)...")
+        print("=" * 70)
+        monkey_results = runner.run_parametric_monkeys(
+            max_cycles=next_idx + 1,
+            colony_size=m_count,
+            price_lookup_fn=price_lookup_fn,
+            tradability_filter_fn=tradability_filter_fn
+        )
+        m_artifacts = exporter.export_monkey_reports(monkey_results, results, registry)
+        print(f"    🟢 猴子零假设分布数据: {m_artifacts['monkey_distributions_csv']}")
+        print(f"    🟢 选手显著性检验报告: {m_artifacts['contestant_significance_csv']}")
+        print(f"    🟢 猴群零假设分析文档: {m_artifacts['monkey_report_md']}")
+
     print("\n[✔] 增量推进成功，最新状态与累计指标已落盘：")
     print(f"    🟢 脱敏公开 NAV:     {artifacts['public_nav']}")
     print(f"    🟢 脱敏指标汇总:     {artifacts['public_metrics']}")
@@ -247,6 +264,8 @@ def main():
     p_step.add_argument("--end-date", type=str, default=DEFAULT_END_DATE, help="回测结束日期")
     p_step.add_argument("--initial-cash", type=float, default=500_000.0, help="初始资金规模 (默认 500,000 元)")
     p_step.add_argument("--mock", action="store_true", help="使用 Mock 适配器运行")
+    p_step.add_argument("--monkeys", action="store_true", help="同时运行参数化猴子群落零假设评估")
+    p_step.add_argument("--monkey-count", type=int, default=1000, help="每组策略规格的猴子数量 (默认 1000 只)")
     p_step.add_argument("--contestants", type=str, default=None, help="逗号分隔的参赛选手 ID")
     p_step.add_argument("--output", type=str, default=None, help="指定输出根目录")
 
