@@ -30,6 +30,28 @@ window.ArenaApp = {
 
     // 5. Bind Navigation Events
     this.bindNavEvents();
+
+    // 6. Initialize Proof of Timeliness notice from commitments.json
+    this.initTimelinessNotice();
+  },
+
+  async initTimelinessNotice() {
+    try {
+      const bannerSpan = document.getElementById("timeliness-proof-text");
+      if (!bannerSpan) return;
+      const res = await fetch("js/data/commitments.json?v=3.0");
+      if (!res.ok) return;
+      const data = await res.json();
+      const list = data.commitments || [];
+      const latest = list.length > 0 ? list[list.length - 1] : null;
+      if (!latest) return;
+
+      const hashShort = (latest.sha256_digests?.daily_nav_curves_csv || "").slice(0, 8);
+      const commitDate = (latest.committed_at || "").split("T")[0];
+      bannerSpan.innerHTML = `🔐 <strong style="color: var(--text-secondary);">Proof of Timeliness:</strong> Next cycle (through ${latest.cutoff_date}) cryptographically committed on ${commitDate} (<code style="font-size: 10px; color: var(--brand-cyan);">SHA-256: ${hashShort}...</code>). Public reveal embargoed until ${latest.embargo_until}.`;
+    } catch (e) {
+      // Graceful fallback to static HTML
+    }
   },
 
   initPreviewBanner() {

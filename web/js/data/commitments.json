@@ -2,7 +2,7 @@
   "title": "QuantPits-Arena Timeliness & Anti-Tampering Commitments",
   "protocol": "Commitment Scheme (SHA-256 Proof-of-Timeliness)",
   "description": "Cryptographic proofs that out-of-sample arena evaluations were frozen in real-time before public embargo reveal.",
-  "last_updated": "2026-09-05T21:36:21+08:00",
+  "last_updated": "2026-09-05T23:42:07+08:00",
   "commitments": [
     {
       "cycle_id": "cycle_9",
@@ -10,7 +10,7 @@
       "cutoff_date": "2026-09-04",
       "trading_days": 46,
       "embargo_until": "2026-09-11",
-      "committed_at": "2026-09-05T21:36:21+08:00",
+      "committed_at": "2026-09-05T23:42:07+08:00",
       "status": "EMBARGOED",
       "merkle_root": "d1c75e327dbcf0115eb8505df15167c132ec04be66096e1f759144ae461298f8",
       "sha256_digests": {
@@ -18,7 +18,7 @@
         "summary_metrics_csv": "51c40f2e1147d5f48dcaed5b8ff8299ab5d0d127c939c0c55f2de442241c3265",
         "model_animal_matrix_csv": "2bad9213817fe4a93caf35138625a60d892b69d9d60f9aa264ecad28ff9fc86c",
         "monkey_null_distributions_csv": "ed219c1ea0a21da67c536f929b13897f6b5ae9739d909555fd90e32e3dfe3ac6",
-        "arena_data_preview_js": "0bcdb6bb630c39d02e39c04b7f8bbabd1a45a02f4c23931841347cb61b3f95d8"
+        "arena_data_preview_js": "3f10abff3e8ae2563f728f22351e96cf1ef6e75af886d67bc2fd2f48b618aa9b"
       },
       "verification_command": "python3 scripts/verify_commitment.py --cycle cycle_9"
     }

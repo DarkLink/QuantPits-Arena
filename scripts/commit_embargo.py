@@ -15,6 +15,7 @@ and zero hindsight parameter tuning.
 """
 
 import sys
+import re
 import json
 import hashlib
 from datetime import datetime
@@ -142,6 +143,28 @@ def commit_cycle(run_dir: Path = None, embargo_until: str = "2026-09-11"):
     COMMITMENTS_JSON.parent.mkdir(parents=True, exist_ok=True)
     with open(COMMITMENTS_JSON, "w", encoding="utf-8") as f:
         json.dump(yaml_doc, f, ensure_ascii=False, indent=2)
+
+    # 4. Auto-update web/index.html Proof of Timeliness notice banner
+    index_html = REPO_ROOT / "web" / "index.html"
+    if index_html.exists():
+        commit_date = now_iso.split("T")[0]
+        hash_short = digests["daily_nav_curves_csv"][:8]
+        new_span = (
+            f'<span>🔐 <strong style="color: var(--text-secondary);">Proof of Timeliness:</strong> '
+            f'Next cycle (through {cutoff_date}) cryptographically committed on {commit_date} '
+            f'(<code style="font-size: 10px; color: var(--brand-cyan);">SHA-256: {hash_short}...</code>). '
+            f'Public reveal embargoed until {embargo_until}.</span>'
+        )
+        html_text = index_html.read_text(encoding="utf-8")
+        updated_html = re.sub(
+            r'<span>🔐\s*<strong style="color: var\(--text-secondary\);">Proof of Timeliness:</strong>.*?</span>',
+            new_span,
+            html_text,
+            flags=re.DOTALL
+        )
+        if updated_html != html_text:
+            index_html.write_text(updated_html, encoding="utf-8")
+            print(f"    • 网页横幅已同步自动更新: {index_html.relative_to(REPO_ROOT)}")
 
     print(f"\n[✔] 密码学承诺已成功落盘！")
     print(f"    • 评估周期: {anchor_date} ~ {cutoff_date} ({trading_days} 个交易日, {cycle_id})")
