@@ -45,6 +45,11 @@ window.ArenaApp = {
 
         // Re-render active view to refresh theme colors
         this.handleRouting();
+
+        // Synchronize Giscus comments theme
+        if (window.DiscussionView && window.DiscussionView.isGiscusLoaded) {
+          window.DiscussionView.syncTheme();
+        }
       });
     }
   },
@@ -133,7 +138,8 @@ window.ArenaApp = {
       "view-contestant-detail",
       "view-decision-audit",
       "view-methodology",
-      "view-disclaimer"
+      "view-disclaimer",
+      "view-discussion"
     ];
     viewIds.forEach(id => {
       const el = document.getElementById(id);
@@ -189,6 +195,12 @@ window.ArenaApp = {
       case "disclaimer":
         this.showView("view-disclaimer");
         window.DisclaimerView.render("view-disclaimer");
+        break;
+
+      case "discussion":
+      case "comments":
+        this.showView("view-discussion");
+        window.DiscussionView.render("view-discussion");
         break;
 
       default:

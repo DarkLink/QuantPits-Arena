@@ -131,6 +131,26 @@ window.LandingView = {
           </div>
         </div>
       </div>
+
+      <!-- Community Discussion & Peer Review Invitation Card -->
+      <div class="card" style="margin-top: 24px; border-left: 4px solid var(--brand-purple); background: rgba(167, 139, 250, 0.04); padding: 22px 26px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+          <div style="max-width: 720px;">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+              <span style="font-size: 1.25rem;">💬</span>
+              <h3 style="margin: 0; font-size: 1.1rem; color: var(--brand-purple); font-weight: 700;">
+                Community Discussion &amp; Peer Review
+              </h3>
+            </div>
+            <p style="margin: 0; font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
+              Have questions regarding model decay, methodology nuances, or want to suggest new animal execution handlers? Join the open peer review powered by GitHub Discussions (Thread #2).
+            </p>
+          </div>
+          <button class="btn btn-secondary" style="border-color: rgba(167, 139, 250, 0.4); color: var(--brand-purple);" onclick="window.appRouter.navigate('discussion')">
+            <span>Open Discussion &rarr;</span>
+          </button>
+        </div>
+      </div>
     `;
   }
 };

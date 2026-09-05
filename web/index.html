@@ -11,10 +11,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- Core Stylesheets -->
-  <link rel="stylesheet" href="css/variables.css?v=2.6">
-  <link rel="stylesheet" href="css/main.css?v=2.6">
-  <link rel="stylesheet" href="css/components.css?v=2.6">
-  <link rel="stylesheet" href="css/views.css?v=2.6">
+  <link rel="stylesheet" href="css/variables.css?v=2.7">
+  <link rel="stylesheet" href="css/main.css?v=2.7">
+  <link rel="stylesheet" href="css/components.css?v=2.7">
+  <link rel="stylesheet" href="css/views.css?v=2.7">
 
   <!-- Apache ECharts CDN -->
   <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
@@ -58,6 +58,7 @@
         <nav class="nav-secondary-links">
           <a href="#intro" class="nav-link-secondary" data-route="intro" title="Exhibition & Platform Intro">Exhibition</a>
           <a href="#methodology" class="nav-link-secondary" data-route="methodology" title="Empirical Evaluation Methodology">Methodology</a>
+          <a href="#discussion" class="nav-link-secondary" data-route="discussion" title="Community Discussion & Peer Review">Discussion</a>
           <a href="#disclaimer" class="nav-link-secondary" data-route="disclaimer" title="Legal & Research Disclaimer">Disclaimer</a>
         </nav>
         <div class="season-badge">
@@ -91,6 +92,7 @@
           <div class="mobile-nav-grid">
             <a href="#intro" class="mobile-nav-link" data-route="intro"><span>🏛️</span> Exhibition</a>
             <a href="#methodology" class="mobile-nav-link" data-route="methodology"><span>📐</span> Methodology</a>
+            <a href="#discussion" class="mobile-nav-link" data-route="discussion"><span>💬</span> Discussion</a>
             <a href="#disclaimer" class="mobile-nav-link" data-route="disclaimer"><span>🛡️</span> Disclaimer</a>
             <a href="https://quantpits.com/" target="_blank" rel="noopener" class="mobile-nav-link" style="color: var(--brand-cyan); font-weight: 600;"><span>🌐</span> QuantPits.com ↗</a>
           </div>
@@ -126,6 +128,7 @@
       <section id="view-decision-audit" class="view-container"></section>
       <section id="view-methodology" class="view-container"></section>
       <section id="view-disclaimer" class="view-container"></section>
+      <section id="view-discussion" class="view-container"></section>
     </div>
   </main>
 
@@ -146,6 +149,7 @@
         <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 6px; display: flex; gap: 14px; justify-content: flex-end; flex-wrap: wrap;">
           <a href="https://quantpits.com/" target="_blank" rel="noopener" style="color: var(--brand-cyan); font-weight: 600;">QuantPits Main ↗</a>
           <a href="https://github.com/DarkLink/QuantPits" target="_blank" rel="noopener" style="color: var(--text-secondary);">GitHub</a>
+          <a href="#discussion" style="color: var(--brand-purple); font-weight: 600;">💬 Discussion (#2)</a>
           <a href="https://arxiv.org/abs/2604.11477" target="_blank" rel="noopener" style="color: var(--text-secondary);">Paper</a>
           <a href="https://github.com/DarkLink/QuantPits/blob/main/docs/en/70_WALKTHROUGH.md" target="_blank" rel="noopener" style="color: var(--text-secondary);">Walkthrough</a>
         </div>
@@ -162,29 +166,30 @@
   </footer>
 
   <!-- Data Payload (Offline, Self-contained) -->
-  <script src="js/data/arena_data.js?v=2.6"></script>
+  <script src="js/data/arena_data.js?v=2.7"></script>
 
   <!-- Data Adapter -->
-  <script src="js/adapter.js?v=2.6"></script>
+  <script src="js/adapter.js?v=2.7"></script>
 
   <!-- ECharts Suite -->
-  <script src="js/components/charts.js?v=2.6"></script>
+  <script src="js/components/charts.js?v=2.7"></script>
 
   <!-- Global Filters -->
-  <script src="js/components/filters.js?v=2.6"></script>
+  <script src="js/components/filters.js?v=2.7"></script>
 
   <!-- Application Views -->
-  <script src="js/views/landing.js?v=2.6"></script>
-  <script src="js/views/overview.js?v=2.6"></script>
-  <script src="js/views/leaderboard_view.js?v=2.6"></script>
-  <script src="js/views/animals_view.js?v=2.6"></script>
-  <script src="js/views/path_detail.js?v=2.6"></script>
-  <script src="js/views/contestant_detail.js?v=2.6"></script>
-  <script src="js/views/decision_audit.js?v=2.6"></script>
-  <script src="js/views/methodology.js?v=2.6"></script>
-  <script src="js/views/disclaimer.js?v=2.6"></script>
+  <script src="js/views/landing.js?v=2.7"></script>
+  <script src="js/views/overview.js?v=2.7"></script>
+  <script src="js/views/leaderboard_view.js?v=2.7"></script>
+  <script src="js/views/animals_view.js?v=2.7"></script>
+  <script src="js/views/path_detail.js?v=2.7"></script>
+  <script src="js/views/contestant_detail.js?v=2.7"></script>
+  <script src="js/views/decision_audit.js?v=2.7"></script>
+  <script src="js/views/methodology.js?v=2.7"></script>
+  <script src="js/views/disclaimer.js?v=2.7"></script>
+  <script src="js/views/discussion.js?v=2.7"></script>
 
   <!-- Main Controller & Router -->
-  <script src="js/app.js?v=2.6"></script>
+  <script src="js/app.js?v=2.7"></script>
 </body>
 </html>
