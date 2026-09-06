@@ -55,12 +55,12 @@ class ArenaDataAdapter {
 
     this.pathMap = new Map();
     this.paths.forEach(p => {
-      // Statistical integrity clamp: finite-sample bounds for N=1000 null controls
+      // Statistical data normalization: preserve empirical values, floor p-values at 0.001 (plus-one limit)
       if (p.percentile_rank !== undefined && p.percentile_rank !== null) {
-        p.percentile_rank = Math.min(Number(p.percentile_rank), 99.9);
+        p.percentile_rank = Number(p.percentile_rank);
       }
       if (p.monkey_percentile !== undefined && p.monkey_percentile !== null) {
-        p.monkey_percentile = Math.min(Number(p.monkey_percentile), 99.9);
+        p.monkey_percentile = Number(p.monkey_percentile);
       }
       if (p.empirical_p_value !== undefined && p.empirical_p_value !== null) {
         p.empirical_p_value = Math.max(Number(p.empirical_p_value), 0.001);
@@ -90,10 +90,17 @@ class ArenaDataAdapter {
     return num.toFixed(4);
   }
 
-  formatPercentile(rank) {
+  formatPercentile(rank, n = 1000) {
     if (rank === undefined || rank === null || isNaN(rank)) return "N/A";
-    const num = Math.min(Number(rank), 99.9);
-    return num.toFixed(1) + "%";
+    const num = Number(rank);
+    const resolution = 100 / (n + 1);
+    if (num <= 0) {
+      return `<${resolution.toFixed(1)}%`;
+    }
+    if (num >= 100 - resolution - 0.005) {
+      return `>${(100 - resolution).toFixed(1)}%`;
+    }
+    return `${num.toFixed(1)}%`;
   }
 
   getContestants() {
@@ -592,10 +599,17 @@ window.formatPValue = function(pVal) {
   return num.toFixed(4);
 };
 
-window.formatPercentile = function(rank) {
+window.formatPercentile = function(rank, n = 1000) {
   if (rank === undefined || rank === null || isNaN(rank)) return "N/A";
-  const num = Math.min(Number(rank), 99.9);
-  return num.toFixed(1) + "%";
+  const num = Number(rank);
+  const resolution = 100 / (n + 1);
+  if (num <= 0) {
+    return `<${resolution.toFixed(1)}%`;
+  }
+  if (num >= 100 - resolution - 0.005) {
+    return `>${(100 - resolution).toFixed(1)}%`;
+  }
+  return `${num.toFixed(1)}%`;
 };
 
 // Attach singleton adapter to global window scope

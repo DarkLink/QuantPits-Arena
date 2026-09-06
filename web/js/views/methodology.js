@@ -74,8 +74,11 @@ window.MethodologyView = {
               p_upper = ( #{Monkey Return &ge; Candidate Return} + 1 ) / ( N + 1 )
             </div>
             <p style="margin-top: 8px; margin-bottom: 8px; font-size: 12px;">
-              With N = 1,000, minimum reportable empirical p-value is 1 / 1001 &approx; 0.001, providing &approx; 0.1 percentage-point empirical rank resolution.
+              With <b>N = 1,000</b> in each matched-null control group, the minimum reportable empirical p-value is <code>1 / 1001 &approx; 0.001</code>, providing &approx; 0.1 percentage-point empirical rank resolution.
             </p>
+            <div style="background: rgba(56, 189, 248, 0.06); border-left: 3px solid var(--accent-cyan); padding: 8px 12px; margin-bottom: 8px; font-size: 12px; color: var(--text-secondary);">
+              <b>Jurisdiction of Null Controls (11,000 &ne; Single N=11,000 Test)</b>: While QuantPits Arena simulates 11,000 random monkey paths across all 11 parameter policies, <b>each contestant variant is strictly evaluated only against its own matched 1,000-monkey colony</b> sharing identical TopK/DropN rules. Monkeys cannot be pooled across different execution regimes to inflate statistical power. Furthermore, finite-simulation boundaries are rendered as <code>&lt;0.1%</code> (when 0 monkeys fall below) and <code>&gt;99.9%</code> (when outperforming all 1,000 monkeys) to prevent misleading interpretations of absolute zero or certainty.
+            </div>
 
             <div style="background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 6px; padding: 10px 14px; margin-top: 10px;">
               <strong style="color: var(--accent-amber); display: block; margin-bottom: 4px;">Important Interpretation Nuance:</strong>
