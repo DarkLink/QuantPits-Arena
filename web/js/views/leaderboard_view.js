@@ -75,10 +75,10 @@ window.LeaderboardView = {
           </div>
           <div id="chart-leaderboard-matrix" class="chart-container" style="height: 520px;"></div>
           <div style="display:flex; justify-content:space-between; align-items:center; margin-top:12px; padding:10px 16px; background:var(--bg-surface-elevated); border-radius:var(--radius-sm); font-size:0.8rem; border:1px solid var(--border-subtle); flex-wrap:wrap; gap:10px;">
-            <span style="color:var(--text-muted); font-weight:600;">External Benchmark Reference Standards:</span>
+            <span style="color:var(--text-muted); font-weight:600;">Benchmark Reference Standards:</span>
             <div style="display:flex; gap:20px; flex-wrap:wrap;">
-              <span>Taotie Baseline (Full-Pool Passive): <b style="color:var(--accent-positive);">+2.32%</b></span>
-              <span>CSI 300 Index (SH000300): <b style="color:var(--accent-negative);">-4.81%</b></span>
+              <span title="A capital-constrained, round-lot-constrained full-universe portfolio designed to approximate broad exposure with minimal active selection">Taotie (Executable Universe Benchmark): <b style="color:var(--accent-positive);">+2.32%</b></span>
+              <span title="External broad market index context (SH000300)">CSI 300 (External Market Anchor): <b style="color:var(--accent-negative);">-4.81%</b></span>
             </div>
           </div>
         </div>

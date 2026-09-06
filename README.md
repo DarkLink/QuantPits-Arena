@@ -44,6 +44,30 @@ python3 -m http.server 8080 --directory web
 
 ---
 
+## 📜 Tournament Chronicles & Market Climate
+
+### 🏆 Current Official Status (Released: Season 1, Episodes 01–08)
+- **Official Evaluation Baseline**: 2026-07-03 ~ 2026-08-28 (41 trading days, Weeks 1–8).
+- **Evaluation Nature**: Retrospective backtest baseline simulated with knowledge of July–August market conditions to establish initial tournament standings.
+- **Official Release**: Complete 168 execution paths, parameter distributions, and [Episodes 01–08 Dispatch](chronicles/en/episodes_01_08_the_forty_one_day_king.md).
+- **Current Standing**: High selection intensity dominated during the summer momentum regime, with `CONTESTANT_B_eagle-5-1` topping the baseline at NAV `1.1971` (+19.71%).
+
+---
+
+### 🌪️ Weekly Market Climate Report (August 31 – September 04, 2026)
+> *"The weather outside the cage is public knowledge. How the animals inside handled the storm remains sealed until embargo lift."*
+
+* **The Market Backdrop**: Following two months of steady trending conditions, the first week of September 2026 delivered sharp regime volatility across broader Chinese equity benchmarks.
+* **The September 02 Breadth Shock (Arena Designation: "Black Wednesday")**: Broader Chinese equity benchmarks experienced an abrupt intraday market breadth shock and turnover contraction. Growth-heavy and previously strong market segments suffered sharp localized drawdowns, pushing over 80% of traded equities into localized pullbacks within a 48-hour window.
+* **The Structural Questions on the Table**:
+  - For quantitative systems whose weights were frozen before July 2026, did prolonged signal persistence hold up when market leadership abruptly rotated?
+  - How did high-turnover execution handlers (Rabbits) fare against delayed, multi-week inertia strategies (Sloths & Snails) during severe intraday turbulence?
+  - Did extreme selection intensity (Eagles) protect capital or amplify the drawdown?
+
+⏳ **Broadcast Embargo**: Episode 09 evaluation data and empirical dispatches unlock on **Friday, September 11, 2026**.
+
+---
+
 ## 🏛️ Core Research Axioms
 
 QuantPits Arena is built on six foundational methodological principles:
@@ -70,11 +94,12 @@ QuantPits Arena is built on six foundational methodological principles:
 | **Concentration** | 🦅 **Eagle Suite** | 5/1, 11/2, 44/6, 66/9, 88/12 | Evaluates concentration risk vs. diversification capacity. |
 | **Market Breadth** | 🐋 **Whale Shark**<br>🐉 **Taotie** | 50% Universe (123 stocks)<br>100% Full Universe (246) | Tests survival of signal under broad diversification up to the passive limit. |
 
-### External Reference Standards
-- **Parametric Monkey Null ($N = 1,000$ per spec, 11,000 total)**: Strict random-ranking null reference distributions.
-- **CSI 300 Index (SH000300)**: Broad mainland China equity market benchmark.
-- **Taotie Baseline**: Equal-weight, capital-constrained passive reference tracking the full eligible universe.
-- **The Rock (Permanent Portfolio)**: External 4-bucket simplicity anchor (Equity, Gold, Bonds, Cash).
+### Benchmark Suite & Reference Hierarchy
+QuantPits Arena maintains three distinct tiers of benchmarks answering different research questions:
+- **CSI 300 Index (SH000300) — External Market Anchor**: Reflects external mainland China broad equity market performance and macro context. Not a selection-skill benchmark.
+- **Taotie — Executable Universe Benchmark**: A capital-constrained (CNY 500,000) and round-lot-constrained full-universe portfolio designed to approximate broad exposure with minimal active selection. It is not a theoretical fractional equal-weight index.
+- **Matched Monkey Distributions — Statistical Selection Null**: 11 unique specifications × 1,000 deterministic pseudo-random ranking simulations (11,000 total). Primary statistical reference isolating model ranking signal from portfolio mechanics.
+- **The Rock (Permanent Portfolio)**: External 4-bucket simplicity anchor (Equity, Gold, Bonds, Cash) questioning whether model complexity was worth it.
 
 ---
 

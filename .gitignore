@@ -75,5 +75,5 @@ web/js/data/arena_data_preview.js
 runs/preview_*/
 runs/*_preview*/
 
-# Weekly Arena Chronicles (Private empirical drama serial)
-chronicles/
+# Internal Chinese chronicles (unreleased / private internal editions)
+chronicles/zh/

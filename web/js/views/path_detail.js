@@ -87,7 +87,7 @@ window.PathDetailView = {
                 ${path.total_return_pct >= 0 ? '+' : ''}${path.total_return_pct.toFixed(2)}%
               </div>
               <div style="font-size:0.75rem; color:var(--text-tertiary);">
-                Excess vs Taotie: <b>${(path.total_return_pct - 2.32) >= 0 ? '+' : ''}${(path.total_return_pct - 2.32).toFixed(2)}%</b>
+                Excess vs Executable Taotie: <b>${(path.total_return_pct - 2.32) >= 0 ? '+' : ''}${(path.total_return_pct - 2.32).toFixed(2)}%</b>
               </div>
             </div>
             <div style="text-align:right; border-left:1px solid var(--border-subtle); padding-left:1.25rem;">

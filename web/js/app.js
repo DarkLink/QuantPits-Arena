@@ -195,6 +195,7 @@ window.ArenaApp = {
     // Hide all views
     const viewIds = [
       "view-landing",
+      "view-dispatches",
       "view-overview",
       "view-leaderboard",
       "view-animals",
@@ -265,6 +266,13 @@ window.ArenaApp = {
       case "comments":
         this.showView("view-discussion");
         window.DiscussionView.render("view-discussion");
+        break;
+
+      case "dispatches":
+      case "chronicles":
+      case "episodes":
+        this.showView("view-dispatches");
+        window.DispatchesView.render("view-dispatches", params);
         break;
 
       default:

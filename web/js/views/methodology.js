@@ -52,10 +52,59 @@ window.MethodologyView = {
           </div>
         </div>
 
-        <!-- 2. Parametric Monkey Null Benchmark Suite -->
+        <!-- 2. Benchmark Roles & Interpretation Hierarchy -->
+        <div class="card" style="border-left: 4px solid var(--accent-indigo);">
+          <h2 style="font-size: 18px; font-weight: 700; color: var(--accent-indigo); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+            <span>🧭</span> 2. Benchmark Roles &amp; Interpretation Hierarchy
+          </h2>
+          <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 14px;">
+            QuantPits Arena deliberately maintains multiple reference standards rather than forcing an artificial single benchmark. Different benchmarks answer fundamentally different quantitative research questions:
+          </p>
+
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 14px;">
+            <div style="background: rgba(255, 255, 255, 0.02); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); display: flex; flex-direction: column;">
+              <strong style="color: var(--accent-amber); font-size: 13px; margin-bottom: 4px;">1. CSI 300 (Market Anchor)</strong>
+              <span style="font-size: 11px; color: var(--text-tertiary); text-transform: uppercase; margin-bottom: 8px;">External Market Benchmark</span>
+              <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.6; margin: 0;">
+                Answers: <i>"How did the broad external market perform during this period?"</i>
+                <br><br>
+                CSI 300 is a market-cap-weighted index (SH000300). Outperforming it reflects market-relative performance, but cannot be automatically interpreted as pure model-selection skill.
+              </p>
+            </div>
+
+            <div style="background: rgba(255, 255, 255, 0.02); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); display: flex; flex-direction: column;">
+              <strong style="color: #c084fc; font-size: 13px; margin-bottom: 4px;">2. Taotie (Executable Universe)</strong>
+              <span style="font-size: 11px; color: var(--text-tertiary); text-transform: uppercase; margin-bottom: 8px;">Executable Universe Benchmark</span>
+              <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.6; margin: 0;">
+                Answers: <i>"What happens under identical execution constraints with minimal active selection?"</i>
+                <br><br>
+                A capital-constrained (CNY 500k), round-lot-constrained full-universe portfolio. <b>Not a theoretical fractional equal-weight index.</b> Realized weights deviate due to lot constraints, stock price dispersion, residual cash, and trading frictions.
+              </p>
+            </div>
+
+            <div style="background: rgba(255, 255, 255, 0.02); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); display: flex; flex-direction: column;">
+              <strong style="color: var(--accent-cyan); font-size: 13px; margin-bottom: 4px;">3. Matched Monkeys (Selection Null)</strong>
+              <span style="font-size: 11px; color: var(--text-tertiary); text-transform: uppercase; margin-bottom: 8px;">Statistical Selection Null</span>
+              <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.6; margin: 0;">
+                Answers: <i>"If rankings were purely random while preserving all portfolio mechanics, how much value did the signal add?"</i>
+                <br><br>
+                The <b>primary statistical reference for model selection skill</b>. Isolates ranking information from portfolio mechanics by replacing model rankings with deterministic pseudo-random rankings.
+              </p>
+            </div>
+          </div>
+
+          <div style="background: rgba(0, 0, 0, 0.25); padding: 12px 16px; border-radius: var(--radius-sm); font-size: 12px; color: var(--text-secondary); font-family: monospace; line-height: 1.7;">
+            CSI 300 &rarr; External Market Context (Market Anchor)<br>
+            Taotie  &rarr; Executable Full-Universe Reference (Minimal Selection Under Frictions)<br>
+            Matched Monkeys &rarr; Strategy-Specific Random-Ranking Null (Selection-Skill Arbiter)<br>
+            Model / Zoo Variant &rarr; Actual Signal + Portfolio Behavior
+          </div>
+        </div>
+
+        <!-- 3. Parametric Monkey Null Benchmark Suite -->
         <div class="card" style="border-left: 4px solid var(--accent-purple);">
           <h2 style="font-size: 18px; font-weight: 700; color: var(--accent-purple); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
-            <span>🐒</span> 2. High-Resolution Parametric Monkey Null Benchmark
+            <span>🐒</span> 3. High-Resolution Parametric Monkey Null Benchmark
           </h2>
           <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 12px;">
             Absolute return alone says very little about signal quality. A strategy can earn money because its universe rises, or lose money during a drawdown while still selecting unusually well. A highly concentrated random portfolio can occasionally generate spectacular returns purely by chance. QuantPits Arena therefore maintains a large empirical <b>random-ranking null benchmark</b>:
@@ -73,11 +122,11 @@ window.MethodologyView = {
             <div style="font-family: monospace; background: rgba(0,0,0,0.35); padding: 8px 12px; border-radius: 4px; color: var(--accent-cyan); display: inline-block;">
               p_upper = ( #{Monkey Return &ge; Candidate Return} + 1 ) / ( N + 1 )
             </div>
-            <p style="margin-top: 8px; margin-bottom: 8px; font-size: 12px;">
-              With <b>N = 1,000</b> in each matched-null control group, the minimum reportable empirical p-value is <code>1 / 1001 &approx; 0.001</code>, providing &approx; 0.1 percentage-point empirical rank resolution.
+            <p style="margin-top: 8px; margin-bottom: 8px; font-size: 12px; line-height: 1.6;">
+              With <b>N = 1,000</b> in each matched-null control group, the minimum reportable empirical p-value is <code>1 / (1000 + 1) &approx; 0.000999 &approx; 0.001</code>, providing &approx; 0.1 percentage-point empirical rank resolution. Under a 168-way Bonferroni upper bound across actively enumerated tournament paths (<code>168 &times; 0.001 &approx; 0.168 &gt; 0.05</code>), this simulation scale is inherently bounded by finite Monte Carlo resolution limits and cannot mathematically reach a family-wise 0.05 significance threshold. This represents a known resolution limitation of finite matched simulation rather than a mandate to artificially inflate monkey count.
             </p>
             <div style="background: rgba(56, 189, 248, 0.06); border-left: 3px solid var(--accent-cyan); padding: 8px 12px; margin-bottom: 8px; font-size: 12px; color: var(--text-secondary);">
-              <b>Jurisdiction of Null Controls (11,000 &ne; Single N=11,000 Test)</b>: While QuantPits Arena simulates 11,000 random monkey paths across all 11 parameter policies, <b>each contestant variant is strictly evaluated only against its own matched 1,000-monkey colony</b> sharing identical TopK/DropN rules. Monkeys cannot be pooled across different execution regimes to inflate statistical power. Furthermore, finite-simulation boundaries are rendered as <code>&lt;0.1%</code> (when 0 monkeys fall below) and <code>&gt;99.9%</code> (when outperforming all 1,000 monkeys) to prevent misleading interpretations of absolute zero or certainty.
+              <b>Jurisdiction of Null Controls (11,000 &ne; Single N=11,000 Test)</b>: While QuantPits Arena simulates 11,000 random monkey paths across all 11 parameter policies, <b>each contestant variant is strictly evaluated only against its own matched 1,000-monkey colony</b> sharing identical TopK/DropN rules. Monkeys cannot be pooled across different execution regimes to artificially inflate statistical power. Furthermore, finite-simulation boundaries are rendered as <code>&lt;0.1%</code> (when 0 monkeys fall below) and <code>&gt;99.9%</code> (when outperforming all 1,000 monkeys) to prevent misleading interpretations of absolute zero or certainty.
             </div>
 
             <div style="background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 6px; padding: 10px 14px; margin-top: 10px;">
@@ -91,11 +140,11 @@ window.MethodologyView = {
           </div>
         </div>
 
-        <!-- 3. The 28-Animal Execution Zoo Framework -->
+        <!-- 4. The 28-Animal Execution Zoo Framework -->
         <div class="card" style="border-left: 4px solid var(--accent-cyan);">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
             <h2 style="font-size: 18px; font-weight: 700; color: var(--accent-cyan); margin: 0; display: flex; align-items: center; gap: 8px;">
-              <span>🦁</span> 3. The 28-Animal Execution Zoo Framework
+              <span>🦁</span> 4. The 28-Animal Execution Zoo Framework
             </h2>
             <a href="#animals" class="btn btn-sm btn-primary" style="font-size: 11px; padding: 4px 10px; text-decoration: none;">
               Explore In The Zoo &rarr;
@@ -142,16 +191,16 @@ window.MethodologyView = {
             </div>
 
             <div style="background: rgba(255,255,255,0.02); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
-              <strong style="color: var(--accent-emerald);">🐋 Whale Shark & 🐉 Taotie</strong>
-              <div style="color: var(--text-secondary); font-size: 12px; margin-top: 4px; line-height: 1.5;">Whale Shark holds &approx;50% of the universe (123 stocks). Taotie holds 100% of universe, acting as the structural reference where selection intensity &rarr; zero.</div>
+              <strong style="color: var(--accent-emerald);">🐋 Whale Shark &amp; 🐉 Taotie</strong>
+              <div style="color: var(--text-secondary); font-size: 12px; margin-top: 4px; line-height: 1.5;">Whale Shark holds &approx;50% of the universe (123 stocks). Taotie holds 100% of universe, acting as the Executable Universe Benchmark where selection intensity &rarr; zero under capital and lot frictions.</div>
             </div>
           </div>
         </div>
 
-        <!-- 4. Finite Capital & Real Trading Constraints -->
+        <!-- 5. Finite Capital & Real Trading Constraints -->
         <div class="card" style="border-left: 4px solid var(--accent-emerald);">
           <h2 style="font-size: 18px; font-weight: 700; color: var(--accent-emerald); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
-            <span>💰</span> 4. Real Trading & Finite-Capital Constraints
+            <span>💰</span> 5. Real Trading & Finite-Capital Constraints
           </h2>
           <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 12px;">
             Arena portfolios are simulated as finite-capital executable portfolios rather than frictionless continuous-weight portfolios:
@@ -165,10 +214,10 @@ window.MethodologyView = {
           </ul>
         </div>
 
-        <!-- 5. Statistical Interpretation & Multiple Comparisons -->
+        <!-- 6. Statistical Interpretation & Multiple Comparisons -->
         <div class="card" style="border-left: 4px solid var(--accent-indigo);">
           <h2 style="font-size: 18px; font-weight: 700; color: var(--accent-indigo); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
-            <span>🔬</span> 5. Statistical Interpretation & Multiple Comparisons
+            <span>🔬</span> 6. Statistical Interpretation &amp; Multiple Comparisons
           </h2>
           <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 12px;">
             QuantPits Arena contains multiple historical artifacts, multiple animal policies, multiple concentration levels, and multiple exploratory comparisons. Therefore the Arena is not interpreted as a collection of independent confirmatory hypothesis tests.
@@ -190,10 +239,10 @@ window.MethodologyView = {
           </div>
         </div>
 
-        <!-- 6. External Simplicity Reference (The Rock) -->
+        <!-- 7. External Simplicity Reference (The Rock) -->
         <div class="card" style="border-left: 4px solid var(--accent-rose);">
           <h2 style="font-size: 18px; font-weight: 700; color: var(--accent-rose); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
-            <span>🪨</span> 6. External Simplicity Reference (The Permanent Portfolio)
+            <span>🪨</span> 7. External Simplicity Reference (The Permanent Portfolio)
           </h2>
           <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 12px;">
             The Permanent Portfolio is displayed separately from the stock-selection Arena. It is not a random-ranking null and does not participate in monkey significance testing.

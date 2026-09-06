@@ -19,6 +19,17 @@ window.OverviewView = {
     const bottom5 = sorted.slice(-5).reverse();
 
     el.innerHTML = `
+      <!-- Tournament Dispatches & Climate Alert Banner -->
+      <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-subtle); border-left: 4px solid var(--brand-cyan); border-radius: 6px; padding: 10px 16px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+        <div style="font-size: 13px; color: var(--text-secondary); display: flex; align-items: center; gap: 8px;">
+          <span>🎙️</span>
+          <span><strong>Tournament Dispatches:</strong> <em>Episodes 01–08 Released</em> ("The 41-Day King", Retrospective Baseline). Week 9 Market Climate Report active.</span>
+        </div>
+        <a href="#dispatches" class="btn btn-xs btn-primary" style="font-size: 11px; padding: 4px 10px; text-decoration: none;">
+          Read Dispatches &rarr;
+        </a>
+      </div>
+
       <!-- Top KPI Metric Cards -->
       <div class="kpi-grid" style="margin-bottom: 24px;">
         <div class="kpi-card">
@@ -42,14 +53,14 @@ window.OverviewView = {
           <div class="kpi-subtext">Cross-path median performance</div>
         </div>
         <div class="kpi-card purple">
-          <div class="kpi-label">Taotie Baseline (Full Universe)</div>
+          <div class="kpi-label">Taotie (Executable Universe)</div>
           <div class="kpi-value" style="color:#c084fc;">+${kpis.taotieReturn.toFixed(2)}%</div>
-          <div class="kpi-subtext">CNY 500k capital-constrained full pool</div>
+          <div class="kpi-subtext">CNY 500k capital & round-lot full pool</div>
         </div>
         <div class="kpi-card">
-          <div class="kpi-label">CSI 300 Index (SH000300)</div>
+          <div class="kpi-label">CSI 300 (External Market Anchor)</div>
           <div class="kpi-value" style="color:#f59e0b;">${kpis.csi300Return.toFixed(2)}%</div>
-          <div class="kpi-subtext">A-share broad market benchmark</div>
+          <div class="kpi-subtext">A-share broad market index (SH000300)</div>
         </div>
       </div>
       <div style="font-size: 11px; color: var(--text-tertiary); margin-top: -16px; margin-bottom: 22px; text-align: right;">

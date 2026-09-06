@@ -473,7 +473,7 @@ window.ArenaCharts = {
           lineStyle: { width: 1.8, color: "#c084fc", type: "dashed" }
         },
         {
-          name: "CSI 300 Index (SH000300)",
+          name: "CSI 300 Index (Market Anchor)",
           type: "line",
           data: csi300Curve && csi300Curve.length ? csi300Curve : [],
           smooth: true,
@@ -483,7 +483,7 @@ window.ArenaCharts = {
           lineStyle: { width: 2, color: "#f59e0b", type: "dashed" }
         },
         {
-          name: "Taotie Baseline (Full Universe Executable)",
+          name: "Taotie (Executable Universe Benchmark)",
           type: "line",
           data: taotieCurve && taotieCurve.length ? taotieCurve : [],
           smooth: true,
@@ -514,8 +514,8 @@ window.ArenaCharts = {
         targetLabel,
         `Monkey 90% Null Envelope (P05 ~ P95)`,
         `Monkey Median Null (${med >= 0 ? '+' : ''}${med.toFixed(2)}%)`,
-        "Taotie Baseline (Full Universe Executable)",
-        "CSI 300 Index (SH000300)"
+        "Taotie (Executable Universe Benchmark)",
+        "CSI 300 Index (Market Anchor)"
       ];
     }
 

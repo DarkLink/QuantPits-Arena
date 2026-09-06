@@ -92,11 +92,11 @@ window.LandingView = {
 
         <div class="concept-card">
           <div class="concept-icon">🏛️</div>
-          <h3>Taotie & CSI 300</h3>
+          <h3>Taotie &amp; CSI 300</h3>
           <p style="font-size:0.88rem; color:var(--text-secondary);">
-            Two primary reference benchmarks: Taotie (a capital-constrained, full-universe passive executable portfolio) and CSI 300 (SH000300 A-share broad market index).
+            Dual reference standards: Taotie (executable universe benchmark under capital &amp; lot frictions) and CSI 300 (external broad market anchor).
           </p>
-          <a href="#overview" style="font-size:0.84rem; font-weight:600; margin-top:auto; color:var(--accent-cyan);">Compare Benchmarks →</a>
+          <a href="#overview" style="font-size:0.84rem; font-weight:600; margin-top:auto; color:var(--accent-cyan);">Compare Benchmarks &rarr;</a>
         </div>
       </div>
 
