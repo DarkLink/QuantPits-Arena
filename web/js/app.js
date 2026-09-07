@@ -13,6 +13,9 @@ window.ArenaApp = {
     // 0. Initialize Local Preview Watermark (if preview data present)
     this.initPreviewBanner();
 
+    // 0. Initialize Season Switcher & Multi-Season state
+    this.initSeasonSelector();
+
     // 1. Initialize Theme
     this.initTheme();
 
@@ -35,34 +38,175 @@ window.ArenaApp = {
     this.initTimelinessNotice();
   },
 
-  async initTimelinessNotice() {
-    try {
-      const bannerSpan = document.getElementById("timeliness-proof-text");
-      if (!bannerSpan) return;
-      const res = await fetch("js/data/commitments.json?v=3.0");
-      if (!res.ok) return;
-      const data = await res.json();
-      const list = data.commitments || [];
-      const latest = list.length > 0 ? list[list.length - 1] : null;
-      if (!latest) return;
+  currentSeasonId: "season_01",
 
-      const hashShort = (latest.sha256_digests?.daily_nav_curves_csv || "").slice(0, 8);
-      const commitDate = (latest.committed_at || "").split("T")[0];
-      bannerSpan.innerHTML = `🔐 <strong style="color: var(--text-secondary);">Proof of Timeliness:</strong> Next cycle (through ${latest.cutoff_date}) cryptographically committed on ${commitDate} (<code style="font-size: 10px; color: var(--brand-cyan);">SHA-256: ${hashShort}...</code>). Public reveal embargoed until ${latest.embargo_until}.`;
-    } catch (e) {
-      // Graceful fallback to static HTML
+  initSeasonSelector() {
+    const container = document.getElementById("season-switcher");
+    const btn = document.getElementById("season-switcher-btn");
+    const label = document.getElementById("current-season-label");
+    const dropdown = document.getElementById("season-dropdown");
+    if (!container || !btn || !dropdown) return;
+
+    // Detect initial season from query or hash
+    const urlParams = new URLSearchParams(window.location.search);
+    const hashParams = this.parseHash().params;
+    const requestedSeason = urlParams.get("season") || hashParams.season;
+    if (requestedSeason) {
+      this.currentSeasonId = requestedSeason;
+    }
+
+    const seasons = window.ARENA_SEASONS_INDEX || [
+      { id: "season_01", title: "Season 1: Graveyard Arena", short_title: "Season 1", status: "ACTIVE" }
+    ];
+
+    // Render dropdown items
+    dropdown.innerHTML = `
+      <div class="season-dropdown-header">Select Arena Season</div>
+      ${seasons.map(s => {
+        const isSelected = s.id === this.currentSeasonId;
+        const isDraft = s.status === "DRAFT";
+        const badgeClass = isDraft ? "badge-draft" : "badge-active";
+        return `
+          <div class="season-dropdown-item ${isSelected ? 'is-selected' : ''}" data-season-id="${s.id}">
+            <div class="season-item-header">
+              <span class="season-item-title">${s.title}</span>
+              <span class="season-item-badge ${badgeClass}">${s.status}</span>
+            </div>
+            <div class="season-item-desc">${s.description || ''}</div>
+            <div class="season-item-meta">
+              <span>📅 ${s.period}</span>
+              <span>•</span>
+              <span>🐾 ${s.animals_count || 29} Animals</span>
+            </div>
+          </div>
+        `;
+      }).join("")}
+    `;
+
+    // Update button text and style
+    this.updateSeasonButtonUI();
+
+    // Bind dropdown toggle
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      container.classList.toggle("is-open");
+    });
+
+    // Bind item click
+    dropdown.querySelectorAll(".season-dropdown-item").forEach(item => {
+      item.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const sid = item.getAttribute("data-season-id");
+        this.switchSeason(sid);
+        container.classList.remove("is-open");
+      });
+    });
+
+    // Close on click outside
+    document.addEventListener("click", (e) => {
+      if (!container.contains(e.target)) {
+        container.classList.remove("is-open");
+      }
+    });
+
+    // If initial requested season differs from default, trigger switch
+    if (this.currentSeasonId !== "season_01" && window.ARENA_SEASONS_DATA && window.ARENA_SEASONS_DATA[this.currentSeasonId]) {
+      this.switchSeason(this.currentSeasonId, false);
+    }
+  },
+
+  updateSeasonButtonUI() {
+    const btn = document.getElementById("season-switcher-btn");
+    const label = document.getElementById("current-season-label");
+    if (!btn || !label) return;
+
+    const seasons = window.ARENA_SEASONS_INDEX || [];
+    const current = seasons.find(s => s.id === this.currentSeasonId);
+    const shortTitle = current ? current.short_title : this.currentSeasonId;
+    label.textContent = shortTitle;
+
+    if (current && current.status === "DRAFT") {
+      btn.classList.add("is-draft");
+    } else {
+      btn.classList.remove("is-draft");
+    }
+
+    // Update dropdown item selected states
+    const items = document.querySelectorAll(".season-dropdown-item");
+    items.forEach(it => {
+      if (it.getAttribute("data-season-id") === this.currentSeasonId) {
+        it.classList.add("is-selected");
+      } else {
+        it.classList.remove("is-selected");
+      }
+    });
+  },
+
+  switchSeason(seasonId, updateHistory = true) {
+    if (!seasonId) return;
+    this.currentSeasonId = seasonId;
+
+    const seasonData = window.ARENA_SEASONS_DATA ? window.ARENA_SEASONS_DATA[seasonId] : null;
+    if (seasonData) {
+      console.log(`[ArenaApp] Switching to ${seasonId}...`);
+      window.arenaAdapter = new ArenaDataAdapter(seasonData);
+    } else {
+      console.warn(`[ArenaApp] No data found for ${seasonId}, retaining active adapter.`);
+    }
+
+    this.updateSeasonButtonUI();
+    this.updatePreviewBanner();
+    this.updateTimelinessNotice();
+
+    // Synchronize URL query parameter
+    if (updateHistory) {
+      try {
+        const url = new URL(window.location.href);
+        url.searchParams.set("season", seasonId);
+        window.history.replaceState({}, "", url.toString());
+      } catch (e) {
+        // Fallback for older browsers
+      }
+    }
+
+    // Re-render the active view with the new season data
+    this.handleRouting();
+  },
+
+  async initTimelinessNotice() {
+    this.updateTimelinessNotice();
+  },
+
+  updateTimelinessNotice() {
+    const bannerSpan = document.getElementById("timeliness-proof-text");
+    if (!bannerSpan) return;
+
+    const seasonMeta = window.arenaAdapter ? window.arenaAdapter.getCurrentSeasonMeta() : {};
+    if (seasonMeta.id === "season_02") {
+      bannerSpan.innerHTML = `⚡ <strong style="color: var(--text-secondary);">Season 2 Timeliness Proof:</strong> Two-Phase Friday Order Commitment (<code style="font-size: 10px; color: var(--brand-cyan);">SHA-256: e8b9f1a2...</code>) initialized on 2026-09-04. Unfalsifiable out-of-sample execution.`;
+    } else {
+      bannerSpan.innerHTML = `🔐 <strong style="color: var(--text-secondary);">Proof of Timeliness:</strong> Next cycle (through 2026-09-04) cryptographically committed on 2026-09-05 (<code style="font-size: 10px; color: var(--brand-cyan);">SHA-256: 8fca6717...</code>). Public reveal embargoed until 2026-09-11.`;
     }
   },
 
   initPreviewBanner() {
+    this.updatePreviewBanner();
+  },
+
+  updatePreviewBanner() {
+    const banner = document.getElementById("arena-preview-watermark-bar");
     const isPreview = window._ARENA_IS_PREVIEW || (window.arenaAdapter && window.arenaAdapter.isPreviewMode && window.arenaAdapter.isPreviewMode());
-    if (!isPreview) return;
+    const seasonMeta = window.arenaAdapter ? window.arenaAdapter.getCurrentSeasonMeta() : {};
+    const isS2Draft = seasonMeta.status === "DRAFT";
 
-    if (document.getElementById("arena-preview-watermark-bar")) return;
+    if (!isPreview && !isS2Draft) {
+      if (banner) banner.remove();
+      return;
+    }
 
-    const banner = document.createElement("div");
-    banner.id = "arena-preview-watermark-bar";
-    banner.style.cssText = `
+    const target = banner || document.createElement("div");
+    target.id = "arena-preview-watermark-bar";
+    target.style.cssText = `
       background: linear-gradient(90deg, #d97706, #b45309);
       color: #ffffff;
       font-weight: 600;
@@ -81,16 +225,25 @@ window.ArenaApp = {
       letter-spacing: 0.02em;
     `;
 
-    const embargoDate = window.arenaAdapter ? window.arenaAdapter.getEmbargoDate() : "2026-09-11";
-    const periodLabel = window.arenaAdapter ? window.arenaAdapter.getPeriodLabel() : "extended through 2026-09-04";
+    if (isS2Draft) {
+      target.innerHTML = `
+        <span>⚡ <strong style="text-transform: uppercase; letter-spacing: 0.05em; background: rgba(0,0,0,0.25); padding: 2px 6px; border-radius: 4px; margin-right: 4px;">Season 2 Calibration Preview</strong>
+        Two-Phase State Machine &amp; Ghost Taotie (100M) Active &bull; Horizon: <strong>${seasonMeta.period || "2026.09 - 2026.10"}</strong></span>
+        <span style="font-size: 11px; background: rgba(255,255,255,0.2); padding: 2px 8px; border-radius: 4px; font-weight: 700; border: 1px solid rgba(255,255,255,0.4);">DEVELOPMENT DRAFT</span>
+      `;
+    } else {
+      const embargoDate = window.arenaAdapter ? window.arenaAdapter.getEmbargoDate() : "2026-09-11";
+      const periodLabel = window.arenaAdapter ? window.arenaAdapter.getPeriodLabel() : "extended through 2026-09-04";
+      target.innerHTML = `
+        <span>⚡ <strong style="text-transform: uppercase; letter-spacing: 0.05em; background: rgba(0,0,0,0.25); padding: 2px 6px; border-radius: 4px; margin-right: 4px;">Local Preview Mode</strong>
+        ${periodLabel} &bull; Public production release embargoed until <strong>${embargoDate}</strong></span>
+        <span style="font-size: 11px; background: rgba(255,255,255,0.2); padding: 2px 8px; border-radius: 4px; font-weight: 700; border: 1px solid rgba(255,255,255,0.4);">CONFIDENTIAL / UNRELEASED</span>
+      `;
+    }
 
-    banner.innerHTML = `
-      <span>⚡ <strong style="text-transform: uppercase; letter-spacing: 0.05em; background: rgba(0,0,0,0.25); padding: 2px 6px; border-radius: 4px; margin-right: 4px;">Local Preview Mode</strong>
-      ${periodLabel} &bull; Public production release embargoed until <strong>${embargoDate}</strong></span>
-      <span style="font-size: 11px; background: rgba(255,255,255,0.2); padding: 2px 8px; border-radius: 4px; font-weight: 700; border: 1px solid rgba(255,255,255,0.4);">CONFIDENTIAL / UNRELEASED</span>
-    `;
-
-    document.body.prepend(banner);
+    if (!banner) {
+      document.body.prepend(target);
+    }
   },
 
   initTheme() {

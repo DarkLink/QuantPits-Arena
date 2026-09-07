@@ -9,10 +9,13 @@ window.LandingView = {
     const el = document.getElementById(containerId);
     if (!el) return;
 
+    const seasonMeta = window.arenaAdapter ? window.arenaAdapter.getCurrentSeasonMeta() : {};
+    const hasGhost = window.arenaAdapter ? window.arenaAdapter.hasGhostTaotie() : false;
+
     el.innerHTML = `
       <section class="landing-hero">
         <div class="hero-tag">
-          <span>🏛️ QuantPits Arena · Season 1 (Summer 2026)</span>
+          <span>🏛️ QuantPits Arena · ${seasonMeta.title || "Season 1: Summer 2026"}</span>
         </div>
         <h1 class="hero-title">Where Quantitative Strategies Face the Execution Zoo</h1>
         <p class="hero-description">
@@ -56,7 +59,7 @@ window.LandingView = {
         <div>
           <h4 style="color:var(--accent-cyan); margin-bottom:4px;">Core Scientific Boundary: Historical Biography ≠ Arena Record</h4>
           <p style="font-size:0.9rem; color:var(--text-secondary); line-height:1.6; margin:0;">
-            Every strategy model in this tournament carries historical context (e.g. why it was accepted or superseded in production, historical training metrics). <b>In the Arena, all models start strictly from zero (NAV = 1.0000) on 2026-07-03 under identical capital constraints</b>. Historical biography provides qualitative context, not arena advantage.
+            Every strategy model in this tournament carries historical context (e.g. why it was accepted or superseded in production, historical training metrics). <b>In the Arena, all models start strictly from zero (NAV = 1.0000) on ${seasonMeta.anchor_date || "2026-07-03"} under ${seasonMeta.methodology?.capital_spec || "identical capital constraints"}</b>. Historical biography provides qualitative context, not arena advantage.
           </p>
         </div>
       </div>
@@ -92,9 +95,9 @@ window.LandingView = {
 
         <div class="concept-card">
           <div class="concept-icon">🏛️</div>
-          <h3>Taotie &amp; CSI 300</h3>
+          <h3>${hasGhost ? 'Taotie, Ghost &amp; CSI 300' : 'Taotie &amp; CSI 300'}</h3>
           <p style="font-size:0.88rem; color:var(--text-secondary);">
-            Dual reference standards: Taotie (executable universe benchmark under capital &amp; lot frictions) and CSI 300 (external broad market anchor).
+            ${hasGhost ? 'Triple reference standards: Executable Taotie (CNY 500k), Theoretical Ghost Taotie (CNY 100M unconstrained), and CSI 300 (external broad market anchor).' : 'Dual reference standards: Taotie (executable universe benchmark under capital &amp; lot frictions) and CSI 300 (external broad market anchor).'}
           </p>
           <a href="#overview" style="font-size:0.84rem; font-weight:600; margin-top:auto; color:var(--accent-cyan);">Compare Benchmarks &rarr;</a>
         </div>

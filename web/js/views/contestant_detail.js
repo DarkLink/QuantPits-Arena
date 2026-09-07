@@ -37,6 +37,7 @@ window.ContestantDetailView = {
       this.activeContestantId = contestant.id || contestant.contestant_id;
 
       // Extract fingerprints and paths
+      const seasonMeta = window.arenaAdapter ? window.arenaAdapter.getCurrentSeasonMeta() : {};
       const fingerprints = window.arenaAdapter.getContestantFingerprints(this.activeContestantId);
       const paths = window.arenaAdapter.getFilteredPaths({ contestantId: this.activeContestantId });
 
@@ -140,7 +141,7 @@ window.ContestantDetailView = {
           <div class="card" style="border-left: 4px solid var(--accent-cyan);">
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
               <h3 style="font-size: 15px; font-weight: 700; color: var(--accent-cyan); display: flex; align-items: center; gap: 8px;">
-                Arena OOS Reality (Season 1 Tournament)
+                Arena OOS Reality (${seasonMeta.short_title || "Season 1"} Tournament)
               </h3>
               <span class="badge badge-info" style="font-size: 10px;">Normalized Base NAV 1.0000</span>
             </div>
@@ -168,7 +169,7 @@ window.ContestantDetailView = {
               </div>
             </div>
             <div style="font-size: 12px; color: var(--text-secondary); background: rgba(0,0,0,0.2); padding: 10px 12px; border-radius: var(--radius-sm); line-height: 1.5;">
-              All models start from zero on 2026-07-03 under identical market conditions, CNY 500,000 cash, and 100-share trading lots.
+              All models start from zero on ${seasonMeta.anchor_date || "2026-07-03"} under ${seasonMeta.methodology?.capital_spec || "identical market conditions, CNY 500,000 cash, and 100-share trading lots"}.
             </div>
           </div>
         </div>
@@ -180,10 +181,27 @@ window.ContestantDetailView = {
               <h3 class="card-title">Cross-Animal Execution Trajectories</h3>
               <div class="card-subtitle">Comparing key execution handlers of ${contestant.display_name || contestant.anonymous_name} against Taotie and CSI 300 benchmarks</div>
             </div>
-            <div class="chart-metric-btn-group" id="contestant-metric-btn-group">
-              <button class="chart-metric-btn active" data-metric="nav">Cumulative NAV</button>
-              <button class="chart-metric-btn" data-metric="drawdown">Underwater Drawdown</button>
-              <button class="chart-metric-btn" data-metric="excess_csi300">Excess vs. CSI 300</button>
+            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+              <div class="chart-metric-btn-group" id="contestant-metric-btn-group">
+                <button class="chart-metric-btn active" data-metric="nav">Cumulative NAV</button>
+                <button class="chart-metric-btn" data-metric="drawdown">Underwater Drawdown</button>
+                <button class="chart-metric-btn" data-metric="excess_csi300">Excess vs. CSI 300</button>
+              </div>
+
+              <!-- Benchmark Standards Independent Controls -->
+              <div class="benchmark-pill-group" id="contestant-benchmark-pill-group">
+                <span class="benchmark-pill-label">Benchmarks:</span>
+                ${window.arenaAdapter.hasGhostTaotie() ? `
+                <button type="button" class="benchmark-pill ghost-taotie is-active" data-benchmark="ghost" title="Toggle Ghost Taotie (100M)">
+                  <span class="bm-line-badge"></span> Ghost (100M)
+                </button>` : ''}
+                <button type="button" class="benchmark-pill taotie is-active" data-benchmark="taotie" title="Toggle Taotie (500k)">
+                  <span class="bm-line-badge"></span> Taotie (500k)
+                </button>
+                <button type="button" class="benchmark-pill csi300 is-active" data-benchmark="csi300" title="Toggle CSI 300">
+                  <span class="bm-line-badge"></span> CSI 300
+                </button>
+              </div>
             </div>
           </div>
           <div id="chart-contestant-multi-curves" style="height: 380px; width: 100%;"></div>
@@ -386,9 +404,25 @@ window.ContestantDetailView = {
           const metric = e.currentTarget.getAttribute("data-metric");
           currentMetric = metric;
           drawMultiCurves(metric);
+
+          // Maintain pill state
+          document.querySelectorAll("#contestant-benchmark-pill-group .benchmark-pill").forEach(pill => {
+            const bmKey = pill.getAttribute("data-benchmark");
+            window.ArenaCharts.toggleBenchmark("chart-contestant-multi-curves", bmKey, pill.classList.contains("is-active"));
+          });
         });
       });
     }
+
+    // Bind benchmark pills
+    const contestantBmPills = document.querySelectorAll("#contestant-benchmark-pill-group .benchmark-pill");
+    contestantBmPills.forEach(pill => {
+      pill.addEventListener("click", () => {
+        const isActive = pill.classList.toggle("is-active");
+        const bmKey = pill.getAttribute("data-benchmark");
+        window.ArenaCharts.toggleBenchmark("chart-contestant-multi-curves", bmKey, isActive);
+      });
+    });
 
     // 2. Render 4 fingerprint charts
     window.ArenaCharts.renderFingerprintGroup(

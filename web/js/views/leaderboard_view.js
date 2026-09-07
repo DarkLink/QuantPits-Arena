@@ -1,18 +1,26 @@
 /**
  * web/js/views/leaderboard_view.js
  * ================================
- * Leaderboard & Heatmap Matrix View Component (English Edition)
+ * Leaderboard & Heatmap Matrix View Component:
+ * Features multi-benchmark alpha perspective toggles, visual spread bars,
+ * and cross-sectional robustness heatmaps.
  */
 
 window.LeaderboardView = {
   activeTab: "table", // "table" or "matrix"
   sortField: "total_return_pct",
   sortAsc: false,
+  viewMode: "return", // "return", "vs_taotie", "vs_ghost", "vs_csi300"
   matrixMetric: "total_return_pct",
 
   render(containerId) {
     const el = document.getElementById(containerId);
     if (!el) return;
+
+    const taotieRet = window.arenaAdapter.getTaotieReturn();
+    const hasGhost = window.arenaAdapter.hasGhostTaotie();
+    const ghostRet = hasGhost ? window.arenaAdapter.getGhostTaotieReturn() : null;
+    const csiRet = window.arenaAdapter.getCsi300Return();
 
     el.innerHTML = `
       <!-- View Sub-Navigation Tabs -->
@@ -27,6 +35,30 @@ window.LeaderboardView = {
 
       <!-- Tab Content 1: Table View -->
       <div id="tab-content-table" style="display: ${this.activeTab === 'table' ? 'block' : 'none'};">
+        <!-- Benchmark Alpha Perspective Switcher -->
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; padding: 10px 14px; background: rgba(30, 41, 59, 0.4); border-radius: 8px; border: 1px solid var(--border-color);">
+          <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+            <span style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Benchmark Perspective:</span>
+            <button class="btn btn-sm ${this.viewMode === 'return' ? 'btn-primary' : 'btn-secondary'}" onclick="window.LeaderboardView.switchViewMode('return')">
+              📊 Absolute Return
+            </button>
+            <button class="btn btn-sm ${this.viewMode === 'vs_taotie' ? 'btn-primary' : 'btn-secondary'}" onclick="window.LeaderboardView.switchViewMode('vs_taotie')">
+              🐾 Alpha vs Taotie (${taotieRet >= 0 ? '+' : ''}${taotieRet.toFixed(2)}%)
+            </button>
+            ${hasGhost ? `
+              <button class="btn btn-sm ${this.viewMode === 'vs_ghost' ? 'btn-primary' : 'btn-secondary'}" onclick="window.LeaderboardView.switchViewMode('vs_ghost')">
+                👻 Alpha vs Ghost (${ghostRet >= 0 ? '+' : ''}${ghostRet.toFixed(2)}%)
+              </button>
+            ` : ''}
+            <button class="btn btn-sm ${this.viewMode === 'vs_csi300' ? 'btn-primary' : 'btn-secondary'}" onclick="window.LeaderboardView.switchViewMode('vs_csi300')">
+              🏛️ Alpha vs CSI 300 (${csiRet >= 0 ? '+' : ''}${csiRet.toFixed(2)}%)
+            </button>
+          </div>
+          <div style="font-size: 11px; color: var(--text-tertiary); font-family: monospace;">
+            Showing 168 Execution Paths
+          </div>
+        </div>
+
         <div class="card">
           <div class="table-wrapper">
             <table class="data-table">
@@ -35,7 +67,9 @@ window.LeaderboardView = {
                   <th onclick="window.LeaderboardView.handleSort('path_id')">Path ID</th>
                   <th onclick="window.LeaderboardView.handleSort('contestant_id')">Model</th>
                   <th onclick="window.LeaderboardView.handleSort('animal_id')">Execution Handler</th>
-                  <th class="numeric" onclick="window.LeaderboardView.handleSort('total_return_pct')">Return (%)</th>
+                  <th class="numeric" onclick="window.LeaderboardView.handleSort('total_return_pct')">
+                    ${this.getReturnColumnHeader()}
+                  </th>
                   <th class="numeric" onclick="window.LeaderboardView.handleSort('excess_over_monkey_pct')">Excess vs Monkey</th>
                   <th class="numeric" onclick="window.LeaderboardView.handleSort('percentile_rank')">Monkey Pct (%)</th>
                   <th class="numeric" onclick="window.LeaderboardView.handleSort('empirical_p_value')">p-value</th>
@@ -77,8 +111,11 @@ window.LeaderboardView = {
           <div style="display:flex; justify-content:space-between; align-items:center; margin-top:12px; padding:10px 16px; background:var(--bg-surface-elevated); border-radius:var(--radius-sm); font-size:0.8rem; border:1px solid var(--border-subtle); flex-wrap:wrap; gap:10px;">
             <span style="color:var(--text-muted); font-weight:600;">Benchmark Reference Standards:</span>
             <div style="display:flex; gap:20px; flex-wrap:wrap;">
-              <span title="A capital-constrained, round-lot-constrained full-universe portfolio designed to approximate broad exposure with minimal active selection">Taotie (Executable Universe Benchmark): <b style="color:var(--accent-positive);">+2.32%</b></span>
-              <span title="External broad market index context (SH000300)">CSI 300 (External Market Anchor): <b style="color:var(--accent-negative);">-4.81%</b></span>
+              <span title="A capital-constrained, round-lot-constrained full-universe portfolio designed to approximate broad exposure with minimal active selection">Taotie (Executable Universe Benchmark): <b style="color:var(--accent-positive);">+${taotieRet.toFixed(2)}%</b></span>
+              ${hasGhost ? `
+              <span title="Theoretical unconstrained equal-weight universe benchmark under CNY 100M capital">Ghost Taotie (Theoretical Equal-Weight): <b style="color:#00f0ff;">+${ghostRet.toFixed(2)}%</b></span>
+              ` : ''}
+              <span title="External broad market index context (SH000300)">CSI 300 (External Market Anchor): <b style="color:var(--accent-negative);">${csiRet.toFixed(2)}%</b></span>
             </div>
           </div>
         </div>
@@ -90,6 +127,18 @@ window.LeaderboardView = {
     } else {
       this.renderMatrixChart();
     }
+  },
+
+  getReturnColumnHeader() {
+    if (this.viewMode === "vs_taotie") return "Alpha vs Taotie (%)";
+    if (this.viewMode === "vs_ghost") return "Alpha vs Ghost (%)";
+    if (this.viewMode === "vs_csi300") return "Alpha vs CSI 300 (%)";
+    return "Return (%)";
+  },
+
+  switchViewMode(mode) {
+    this.viewMode = mode;
+    this.render("route-container");
   },
 
   switchTab(tab) {
@@ -134,10 +183,28 @@ window.LeaderboardView = {
     if (!tbody) return;
 
     const filtered = window.arenaAdapter.getFilteredPaths(window.ArenaFilters ? window.ArenaFilters.currentFilters : {});
+    const taotieRet = window.arenaAdapter.getTaotieReturn();
+    const hasGhost = window.arenaAdapter.hasGhostTaotie();
+    const ghostRet = hasGhost ? window.arenaAdapter.getGhostTaotieReturn() : 0;
+    const csiRet = window.arenaAdapter.getCsi300Return();
 
     const sorted = [...filtered].sort((a, b) => {
       let vA = a[this.sortField];
       let vB = b[this.sortField];
+
+      if (this.sortField === "total_return_pct") {
+        if (this.viewMode === "vs_taotie") {
+          vA = a.total_return_pct - taotieRet;
+          vB = b.total_return_pct - taotieRet;
+        } else if (this.viewMode === "vs_ghost") {
+          vA = a.total_return_pct - ghostRet;
+          vB = b.total_return_pct - ghostRet;
+        } else if (this.viewMode === "vs_csi300") {
+          vA = a.total_return_pct - csiRet;
+          vB = b.total_return_pct - csiRet;
+        }
+      }
+
       if (typeof vA === "string") {
         return this.sortAsc ? vA.localeCompare(vB) : vB.localeCompare(vA);
       }
@@ -155,13 +222,61 @@ window.LeaderboardView = {
       const isSig = pct >= 95.0;
       const pVal = (p.empirical_p_value !== undefined ? p.empirical_p_value : (p.p_value || 1.0));
 
+      const alphaTao = p.total_return_pct - taotieRet;
+      const alphaGhost = p.total_return_pct - ghostRet;
+      const alphaCsi = p.total_return_pct - csiRet;
+
+      let returnCellHtml = "";
+      if (this.viewMode === "vs_taotie") {
+        const isAlphaPos = alphaTao >= 0;
+        returnCellHtml = `
+          <div style="display: flex; flex-direction: column; align-items: flex-end;">
+            <b style="color: ${isAlphaPos ? 'var(--accent-positive)' : 'var(--accent-negative)'}; font-family: monospace;">
+              ${isAlphaPos ? '+' : ''}${alphaTao.toFixed(2)}%
+            </b>
+            <span style="font-size: 10px; color: var(--text-tertiary);">Abs: ${p.total_return_pct >= 0 ? '+' : ''}${p.total_return_pct.toFixed(2)}%</span>
+          </div>
+        `;
+      } else if (this.viewMode === "vs_ghost") {
+        const isAlphaPos = alphaGhost >= 0;
+        returnCellHtml = `
+          <div style="display: flex; flex-direction: column; align-items: flex-end;">
+            <b style="color: ${isAlphaPos ? '#00f0ff' : 'var(--accent-negative)'}; font-family: monospace;">
+              ${isAlphaPos ? '+' : ''}${alphaGhost.toFixed(2)}%
+            </b>
+            <span style="font-size: 10px; color: var(--text-tertiary);">Abs: ${p.total_return_pct >= 0 ? '+' : ''}${p.total_return_pct.toFixed(2)}%</span>
+          </div>
+        `;
+      } else if (this.viewMode === "vs_csi300") {
+        const isAlphaPos = alphaCsi >= 0;
+        returnCellHtml = `
+          <div style="display: flex; flex-direction: column; align-items: flex-end;">
+            <b style="color: ${isAlphaPos ? 'var(--accent-positive)' : 'var(--accent-negative)'}; font-family: monospace;">
+              ${isAlphaPos ? '+' : ''}${alphaCsi.toFixed(2)}%
+            </b>
+            <span style="font-size: 10px; color: var(--text-tertiary);">Abs: ${p.total_return_pct >= 0 ? '+' : ''}${p.total_return_pct.toFixed(2)}%</span>
+          </div>
+        `;
+      } else {
+        returnCellHtml = `
+          <div style="display: flex; flex-direction: column; align-items: flex-end;">
+            <b class="${isPositive ? 'positive' : 'negative'}">
+              ${isPositive ? '+' : ''}${p.total_return_pct.toFixed(2)}%
+            </b>
+            <span style="font-size: 10px; color: var(--text-muted); font-family: monospace;">
+              α_Tao: ${alphaTao >= 0 ? '+' : ''}${alphaTao.toFixed(1)}%
+            </span>
+          </div>
+        `;
+      }
+
       return `
         <tr class="clickable-row" onclick="window.appRouter.navigate('path-detail', { pathId: '${p.path_id}' })">
           <td><b>${p.path_id}</b></td>
           <td><span class="badge badge-cyan">${p.contestant_id}</span></td>
           <td><span class="badge badge-purple">${p.animal_id}</span></td>
-          <td class="numeric ${isPositive ? 'positive' : 'negative'}">
-            <b>${isPositive ? '+' : ''}${p.total_return_pct.toFixed(2)}%</b>
+          <td class="numeric">
+            ${returnCellHtml}
           </td>
           <td class="numeric ${p.excess_over_monkey_pct >= 0 ? 'positive' : 'negative'}">
             ${p.excess_over_monkey_pct >= 0 ? '+' : ''}${p.excess_over_monkey_pct.toFixed(2)}%

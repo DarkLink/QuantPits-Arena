@@ -1,0 +1,47 @@
+# ==============================================================================
+# QuantPits-Arena Season 1 Frozen Environment Configuration (season_config.yaml)
+# ==============================================================================
+
+season_id: season_01
+title: "QuantPits Graveyard Arena Season 1"
+status: ACTIVE
+description: "Season 1 baseline tournament: 6 contestant models x 29 zoo parameter arrays x parameterized monkey control group"
+
+# Calendar and Horizon
+calendar:
+  anchor_date: "2026-07-03"        # Friday close initial decision cutoff (T=0)
+  first_trade_date: "2026-07-06"   # Monday market open entry
+  end_date: "2026-08-28"           # Data cutoff Friday settlement
+  cycle_freq: "weekly"
+
+# Account and Match Execution Parameters
+execution:
+  initial_cash: 500000.0           # Baseline capital: CNY 500,000
+  deal_price_mode: "open"          # Monday open execution
+  lot_size: 100                    # 100 shares per lot
+  allow_fractional_shares: false   # No fractional shares
+  open_cost: 0.0005                # Buy commission: 0.05%
+  close_cost: 0.0015               # Sell commission + stamp tax: 0.15%
+  min_cost: 5.0                    # Minimum ticket cost: CNY 5.0
+  topk: 22                         # Default holding capacity
+  n_drop: 3                        # Default weekly turnover capacity
+
+# Universe Definition
+universe:
+  provider: "manifest_feature_universe"
+  market: "csirun300"
+  benchmark_index: "SH000300"
+
+# Enabled Benchmarks (First-Class Citizens)
+benchmarks:
+  - id: "taotie"
+    type: "EXECUTABLE"
+    initial_cash: 500000.0
+    display_name: "Taotie (Physical Baseline 500k)"
+  - id: "csi300"
+    type: "INDEX"
+    symbol: "SH000300"
+    display_name: "CSI 300 (Market Benchmark)"
+  - id: "monkeys"
+    type: "STATISTICAL"
+    colony_size_per_spec: 100

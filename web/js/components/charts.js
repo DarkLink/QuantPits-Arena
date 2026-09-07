@@ -32,6 +32,57 @@ window.ArenaCharts = {
     };
   },
 
+  toggleBenchmark(domId, benchmarkKey, forceState) {
+    const dom = document.getElementById(domId);
+    if (!dom) return;
+    const chart = echarts.getInstanceByDom(dom);
+    if (!chart) return;
+    const opt = chart.getOption();
+    if (!opt || !opt.series) return;
+
+    const currentLegend = (opt.legend && opt.legend[0]) || {};
+    const selected = Object.assign({}, currentLegend.selected || {});
+
+    opt.series.forEach(s => {
+      const sName = s.name || "";
+      let match = false;
+      if (benchmarkKey === "ghost") {
+        match = sName.includes("Ghost");
+      } else if (benchmarkKey === "taotie") {
+        match = sName.includes("Taotie") && !sName.includes("Ghost");
+      } else if (benchmarkKey === "csi300") {
+        match = sName.includes("CSI 300") || sName.includes("CSI300") || sName.includes("CSI-300");
+      } else if (benchmarkKey === "monkey") {
+        match = sName.includes("Monkey");
+      }
+      if (match) {
+        if (typeof forceState === "boolean") {
+          selected[sName] = forceState;
+        } else {
+          const isVisible = selected[sName] !== false;
+          selected[sName] = !isVisible;
+        }
+      }
+    });
+
+    chart.setOption({
+      legend: {
+        selected: selected
+      }
+    });
+  },
+
+  toggleSeries(domId, seriesName) {
+    const dom = document.getElementById(domId);
+    if (!dom) return;
+    const chart = echarts.getInstanceByDom(dom);
+    if (!chart) return;
+    chart.dispatchAction({
+      type: "legendToggleSelect",
+      name: seriesName
+    });
+  },
+
   /**
    * 1. Return vs Monkey Percentile Significance Scatter Plot
    */
@@ -318,51 +369,64 @@ window.ArenaCharts = {
       const targetDD = window.arenaAdapter.getPathDrawdown(targetPath.path_id);
       const csi300DD = window.arenaAdapter.getCsi300Drawdown();
       const taotieDD = window.arenaAdapter.getTaotieDrawdown();
+      const ghostDD = window.arenaAdapter.hasGhostTaotie() ? window.arenaAdapter.getGhostTaotieDrawdown() : null;
 
       series = [
         {
-          name: "CSI 300 Drawdown",
+          name: "CSI 300",
           type: "line",
           data: csi300DD,
           smooth: true,
           showSymbol: false,
           color: "#f59e0b",
           itemStyle: { color: "#f59e0b" },
-          lineStyle: { width: 1.8, color: "#f59e0b", type: "dashed" }
+          lineStyle: { width: 2.0, color: "#f59e0b", type: [6, 6], opacity: 0.9 }
         },
         {
-          name: "Taotie Drawdown",
+          name: "Taotie (500k)",
           type: "line",
           data: taotieDD,
           smooth: true,
           showSymbol: false,
-          color: "#94a3b8",
-          itemStyle: { color: "#94a3b8" },
-          lineStyle: { width: 1.8, color: "#94a3b8", type: "dotted" }
-        },
-        {
-          name: `Current Drawdown (${targetPath.path_id})`,
-          type: "line",
-          data: targetDD,
-          smooth: true,
-          showSymbol: false,
-          color: "#f43f5e",
-          itemStyle: { color: "#f43f5e" },
-          lineStyle: { width: 2.5, color: "#f43f5e" },
-          areaStyle: {
-            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-              { offset: 0, color: "rgba(244, 63, 94, 0.35)" },
-              { offset: 1, color: "rgba(244, 63, 94, 0.04)" }
-            ])
-          }
+          color: "#c084fc",
+          itemStyle: { color: "#c084fc" },
+          lineStyle: { width: 2.2, color: "#c084fc", type: [4, 4], opacity: 0.9 }
         }
       ];
 
       legendData = [
-        `Current Drawdown (${targetPath.path_id})`,
-        "Taotie Drawdown",
-        "CSI 300 Drawdown"
+        `Path: ${targetPath.path_id}`
       ];
+
+      if (ghostDD && ghostDD.length > 0) {
+        series.push({
+          name: "Ghost Taotie (100M)",
+          type: "line",
+          data: ghostDD,
+          smooth: true,
+          showSymbol: false,
+          color: "#00f0ff",
+          itemStyle: { color: "#00f0ff" },
+          lineStyle: { width: 2.2, color: "#00f0ff", type: [8, 4], opacity: 0.9 }
+        });
+      }
+
+      series.push({
+        name: `Path: ${targetPath.path_id}`,
+        type: "line",
+        data: targetDD,
+        smooth: true,
+        showSymbol: false,
+        color: "#f43f5e",
+        itemStyle: { color: "#f43f5e" },
+        lineStyle: { width: 2.5, color: "#f43f5e", type: "solid" },
+        areaStyle: {
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            { offset: 0, color: "rgba(244, 63, 94, 0.35)" },
+            { offset: 1, color: "rgba(244, 63, 94, 0.04)" }
+          ])
+        }
+      });
 
     } else if (metricType === "excess_csi300") {
       yAxisName = "Active Excess Return vs. CSI 300 (%)";
@@ -370,51 +434,64 @@ window.ArenaCharts = {
 
       const targetExcess = window.arenaAdapter.getPathExcessCSI300(targetPath.path_id);
       const taotieExcess = window.arenaAdapter.getPathExcessCSI300("BENCHMARK_taotie");
+      const ghostExcess = window.arenaAdapter.hasGhostTaotie() ? window.arenaAdapter.getPathExcessCSI300("BENCHMARK_ghost_taotie") : null;
       const zeroBase = dates.map(() => 0.0);
 
       series = [
         {
-          name: "CSI 300 Benchmark (0.00%)",
+          name: "CSI 300 (0.00%)",
           type: "line",
           data: zeroBase,
           color: "#f59e0b",
           itemStyle: { color: "#f59e0b" },
-          lineStyle: { width: 2, color: "#f59e0b", type: "dashed" },
+          lineStyle: { width: 2.0, color: "#f59e0b", type: [6, 6], opacity: 0.9 },
           showSymbol: false
         },
         {
-          name: "Taotie vs. CSI 300",
+          name: "Taotie vs CSI 300",
           type: "line",
           data: taotieExcess,
           smooth: true,
           showSymbol: false,
-          color: "#94a3b8",
-          itemStyle: { color: "#94a3b8" },
-          lineStyle: { width: 1.8, color: "#94a3b8", type: "dotted" }
-        },
-        {
-          name: `Active Spread: ${targetPath.path_id}`,
-          type: "line",
-          data: targetExcess,
-          smooth: true,
-          showSymbol: false,
-          color: "#10b981",
-          itemStyle: { color: "#10b981" },
-          lineStyle: { width: 2.5, color: "#10b981" },
-          areaStyle: {
-            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-              { offset: 0, color: "rgba(160, 185, 129, 0.30)" },
-              { offset: 1, color: "rgba(16, 185, 129, 0.02)" }
-            ])
-          }
+          color: "#c084fc",
+          itemStyle: { color: "#c084fc" },
+          lineStyle: { width: 2.2, color: "#c084fc", type: [4, 4], opacity: 0.9 }
         }
       ];
 
       legendData = [
-        `Active Spread: ${targetPath.path_id}`,
-        "Taotie vs. CSI 300",
-        "CSI 300 Benchmark (0.00%)"
+        `Active Spread: ${targetPath.path_id}`
       ];
+
+      if (ghostExcess && ghostExcess.length > 0) {
+        series.push({
+          name: "Ghost Taotie vs CSI 300",
+          type: "line",
+          data: ghostExcess,
+          smooth: true,
+          showSymbol: false,
+          color: "#00f0ff",
+          itemStyle: { color: "#00f0ff" },
+          lineStyle: { width: 2.2, color: "#00f0ff", type: [8, 4], opacity: 0.9 }
+        });
+      }
+
+      series.push({
+        name: `Active Spread: ${targetPath.path_id}`,
+        type: "line",
+        data: targetExcess,
+        smooth: true,
+        showSymbol: false,
+        color: "#10b981",
+        itemStyle: { color: "#10b981" },
+        lineStyle: { width: 2.5, color: "#10b981", type: "solid" },
+        areaStyle: {
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            { offset: 0, color: "rgba(16, 185, 129, 0.30)" },
+            { offset: 1, color: "rgba(16, 185, 129, 0.02)" }
+          ])
+        }
+      });
 
     } else {
       // Default: Cumulative NAV
@@ -436,7 +513,7 @@ window.ArenaCharts = {
       });
       const monkeyMedCurve = dates.map((_, i) => round(1.0 + (med / 100) * (i / Math.max(1, numPoints - 1)), 4));
 
-      const targetLabel = `Current: ${targetPath.path_id} (${targetPath.total_return_pct >= 0 ? '+' : ''}${targetPath.total_return_pct.toFixed(2)}%)`;
+      const targetLabel = `Path: ${targetPath.path_id}`;
 
       series = [
         {
@@ -450,73 +527,84 @@ window.ArenaCharts = {
           tooltip: { show: false }
         },
         {
-          name: `Monkey 90% Null Envelope (P05 ~ P95)`,
+          name: "Monkey 90% Null",
           type: "line",
           stack: "monkey-envelope",
           data: monkeyDiff,
           showSymbol: false,
-          color: "#c084fc",
-          itemStyle: { color: "#c084fc" },
+          color: "rgba(192, 132, 252, 0.18)",
+          itemStyle: { color: "rgba(192, 132, 252, 0.18)" },
           lineStyle: { opacity: 0 },
-          areaStyle: {
-            color: "rgba(168, 85, 247, 0.18)"
-          }
+          areaStyle: { color: "rgba(192, 132, 252, 0.18)" }
         },
         {
-          name: `Monkey Median Null (${med >= 0 ? '+' : ''}${med.toFixed(2)}%)`,
+          name: "Monkey Median",
           type: "line",
           data: monkeyMedCurve,
           smooth: true,
           showSymbol: false,
-          color: "#c084fc",
-          itemStyle: { color: "#c084fc" },
-          lineStyle: { width: 1.8, color: "#c084fc", type: "dashed" }
+          color: "#94a3b8",
+          itemStyle: { color: "#94a3b8" },
+          lineStyle: { width: 1.8, color: "#94a3b8", type: [3, 3], opacity: 0.85 }
         },
         {
-          name: "CSI 300 Index (Market Anchor)",
+          name: "CSI 300",
           type: "line",
           data: csi300Curve && csi300Curve.length ? csi300Curve : [],
           smooth: true,
           showSymbol: false,
           color: "#f59e0b",
           itemStyle: { color: "#f59e0b" },
-          lineStyle: { width: 2, color: "#f59e0b", type: "dashed" }
+          lineStyle: { width: 2.0, color: "#f59e0b", type: [6, 6], opacity: 0.9 }
         },
         {
-          name: "Taotie (Executable Universe Benchmark)",
+          name: "Taotie (500k)",
           type: "line",
           data: taotieCurve && taotieCurve.length ? taotieCurve : [],
           smooth: true,
           showSymbol: false,
-          color: "#94a3b8",
-          itemStyle: { color: "#94a3b8" },
-          lineStyle: { width: 2, color: "#94a3b8", type: "dotted" }
-        },
-        {
-          name: targetLabel,
-          type: "line",
-          data: targetCurve,
-          smooth: true,
-          showSymbol: false,
-          color: "#38bdf8",
-          itemStyle: { color: "#38bdf8" },
-          lineStyle: { width: 3, color: "#38bdf8" },
-          areaStyle: {
-            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-              { offset: 0, color: "rgba(56, 189, 248, 0.28)" },
-              { offset: 1, color: "rgba(56, 189, 248, 0.0)" }
-            ])
-          }
+          color: "#c084fc",
+          itemStyle: { color: "#c084fc" },
+          lineStyle: { width: 2.2, color: "#c084fc", type: [4, 4], opacity: 0.9 }
         }
       ];
 
       legendData = [
-        targetLabel,
-        `Monkey 90% Null Envelope (P05 ~ P95)`,
-        `Monkey Median Null (${med >= 0 ? '+' : ''}${med.toFixed(2)}%)`,
-        "Taotie (Executable Universe Benchmark)",
-        "CSI 300 Index (Market Anchor)"
+        targetLabel
       ];
+
+      if (window.arenaAdapter && window.arenaAdapter.hasGhostTaotie()) {
+        const ghostCurve = window.arenaAdapter.getBenchmarkGhostTaotieCurve();
+        if (ghostCurve && ghostCurve.length > 0) {
+          series.push({
+            name: "Ghost Taotie (100M)",
+            type: "line",
+            data: ghostCurve,
+            smooth: true,
+            showSymbol: false,
+            color: "#00f0ff",
+            itemStyle: { color: "#00f0ff" },
+            lineStyle: { width: 2.2, color: "#00f0ff", type: [8, 4], opacity: 0.9 }
+          });
+        }
+      }
+
+      series.push({
+        name: targetLabel,
+        type: "line",
+        data: targetCurve,
+        smooth: true,
+        showSymbol: false,
+        color: "#38bdf8",
+        itemStyle: { color: "#38bdf8" },
+        lineStyle: { width: 3, color: "#38bdf8", type: "solid" },
+        areaStyle: {
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            { offset: 0, color: "rgba(56, 189, 248, 0.28)" },
+            { offset: 1, color: "rgba(56, 189, 248, 0.0)" }
+          ])
+        }
+      });
     }
 
     const option = {
@@ -556,8 +644,10 @@ window.ArenaCharts = {
         }
       },
       legend: {
+        type: "scroll",
         data: legendData,
         textStyle: { color: tc.textSecondary, fontSize: 11 },
+        pageTextStyle: { color: tc.textSecondary },
         top: 0
       },
       grid: {
@@ -951,6 +1041,20 @@ window.ArenaCharts = {
         }
       });
 
+      const ghostDD = window.arenaAdapter.hasGhostTaotie() ? window.arenaAdapter.getGhostTaotieDrawdown() : null;
+      if (ghostDD && ghostDD.length > 0) {
+        series.push({
+          name: "Ghost Taotie Drawdown",
+          type: "line",
+          data: ghostDD,
+          smooth: true,
+          showSymbol: false,
+          color: "#00f0ff",
+          itemStyle: { color: "#00f0ff" },
+          lineStyle: { width: 2.2, color: "#00f0ff", type: [8, 4], opacity: 0.9 }
+        });
+      }
+
       const taotieDD = window.arenaAdapter.getTaotieDrawdown();
       if (taotieDD && taotieDD.length > 0) {
         series.push({
@@ -959,9 +1063,9 @@ window.ArenaCharts = {
           data: taotieDD,
           smooth: true,
           showSymbol: false,
-          color: "#94a3b8",
-          itemStyle: { color: "#94a3b8" },
-          lineStyle: { width: 2, color: "#94a3b8", type: "dotted" }
+          color: "#c084fc",
+          itemStyle: { color: "#c084fc" },
+          lineStyle: { width: 2.2, color: "#c084fc", type: [4, 4], opacity: 0.9 }
         });
       }
 
@@ -975,7 +1079,7 @@ window.ArenaCharts = {
           showSymbol: false,
           color: "#f59e0b",
           itemStyle: { color: "#f59e0b" },
-          lineStyle: { width: 2, color: "#f59e0b", type: "dashed" }
+          lineStyle: { width: 2.0, color: "#f59e0b", type: [6, 6], opacity: 0.9 }
         });
       }
 
@@ -987,7 +1091,7 @@ window.ArenaCharts = {
       paths.forEach((p, idx) => {
         const curve = window.arenaAdapter.getPathExcessCSI300(p.path_id);
         if (curve && curve.length > 0) {
-          const color = p.animal_id === "robot" ? "#38bdf8" : (p.animal_id === "koala" ? "#f43f5e" : colorPalette[idx % colorPalette.length]);
+          const color = p.animal_id === "robot" ? "#38bdf8" : colorPalette[idx % colorPalette.length];
           series.push({
             name: `${p.animal_id} (${p.total_return_pct >= 0 ? '+' : ''}${p.total_return_pct.toFixed(2)}%)`,
             type: "line",
@@ -997,9 +1101,9 @@ window.ArenaCharts = {
             color: color,
             itemStyle: { color: color },
             lineStyle: {
-              width: p.animal_id === "robot" ? 3 : (p.animal_id === "koala" ? 2.5 : 1.8),
+              width: p.animal_id === "robot" ? 2.8 : 1.8,
               color: color,
-              type: p.animal_id === "koala" ? "dashed" : "solid"
+              type: "solid"
             }
           });
         }
@@ -1007,26 +1111,40 @@ window.ArenaCharts = {
 
       const zeroBase = dates.map(() => 0.0);
       series.push({
-        name: "CSI 300 Benchmark (0.00%)",
+        name: "CSI 300 (0.00%)",
         type: "line",
         data: zeroBase,
         color: "#f59e0b",
         itemStyle: { color: "#f59e0b" },
-        lineStyle: { width: 2, color: "#f59e0b", type: "dashed" },
+        lineStyle: { width: 2.0, color: "#f59e0b", type: [6, 6], opacity: 0.9 },
         showSymbol: false
       });
 
       const taotieExcess = window.arenaAdapter.getPathExcessCSI300("BENCHMARK_taotie");
       if (taotieExcess && taotieExcess.length > 0) {
         series.push({
-          name: "Taotie vs. CSI 300",
+          name: "Taotie vs CSI 300",
           type: "line",
           data: taotieExcess,
           smooth: true,
           showSymbol: false,
-          color: "#94a3b8",
-          itemStyle: { color: "#94a3b8" },
-          lineStyle: { width: 2, color: "#94a3b8", type: "dotted" }
+          color: "#c084fc",
+          itemStyle: { color: "#c084fc" },
+          lineStyle: { width: 2.2, color: "#c084fc", type: [4, 4], opacity: 0.9 }
+        });
+      }
+
+      const ghostExcess = window.arenaAdapter.hasGhostTaotie() ? window.arenaAdapter.getPathExcessCSI300("BENCHMARK_ghost_taotie") : null;
+      if (ghostExcess && ghostExcess.length > 0) {
+        series.push({
+          name: "Ghost Taotie vs CSI 300",
+          type: "line",
+          data: ghostExcess,
+          smooth: true,
+          showSymbol: false,
+          color: "#00f0ff",
+          itemStyle: { color: "#00f0ff" },
+          lineStyle: { width: 2.2, color: "#00f0ff", type: [8, 4], opacity: 0.9 }
         });
       }
 
@@ -1039,7 +1157,7 @@ window.ArenaCharts = {
       paths.forEach((p, idx) => {
         const curve = window.arenaAdapter.getNavCurve(p.path_id);
         if (curve && curve.length > 0) {
-          const color = p.animal_id === "robot" ? "#38bdf8" : (p.animal_id === "koala" ? "#f43f5e" : colorPalette[idx % colorPalette.length]);
+          const color = p.animal_id === "robot" ? "#38bdf8" : colorPalette[idx % colorPalette.length];
           series.push({
             name: `${p.animal_id} (${p.total_return_pct >= 0 ? '+' : ''}${p.total_return_pct.toFixed(2)}%)`,
             type: "line",
@@ -1049,37 +1167,53 @@ window.ArenaCharts = {
             color: color,
             itemStyle: { color: color },
             lineStyle: {
-              width: p.animal_id === "robot" ? 3 : (p.animal_id === "koala" ? 2.5 : 1.8),
+              width: p.animal_id === "robot" ? 2.8 : 1.8,
               color: color,
-              type: p.animal_id === "koala" ? "dashed" : "solid"
+              type: "solid"
             }
           });
         }
       });
 
+      if (window.arenaAdapter && window.arenaAdapter.hasGhostTaotie()) {
+        const ghostCurve = window.arenaAdapter.getBenchmarkGhostTaotieCurve();
+        if (ghostCurve && ghostCurve.length > 0) {
+          series.push({
+            name: "Ghost Taotie (100M)",
+            type: "line",
+            data: ghostCurve,
+            smooth: true,
+            showSymbol: false,
+            color: "#00f0ff",
+            itemStyle: { color: "#00f0ff" },
+            lineStyle: { width: 2.2, color: "#00f0ff", type: [8, 4], opacity: 0.9 }
+          });
+        }
+      }
+
       if (taotieCurve && taotieCurve.length > 0) {
         series.push({
-          name: "Taotie Baseline (+2.32%)",
+          name: "Taotie (500k)",
           type: "line",
           data: taotieCurve,
           smooth: true,
           showSymbol: false,
-          color: "#94a3b8",
-          itemStyle: { color: "#94a3b8" },
-          lineStyle: { width: 2, color: "#94a3b8", type: "dotted" }
+          color: "#c084fc",
+          itemStyle: { color: "#c084fc" },
+          lineStyle: { width: 2.2, color: "#c084fc", type: [4, 4], opacity: 0.9 }
         });
       }
 
       if (csi300Curve && csi300Curve.length > 0) {
         series.push({
-          name: "CSI 300 Index (-4.81%)",
+          name: "CSI 300",
           type: "line",
           data: csi300Curve,
           smooth: true,
           showSymbol: false,
           color: "#f59e0b",
           itemStyle: { color: "#f59e0b" },
-          lineStyle: { width: 2, color: "#f59e0b", type: "dashed" }
+          lineStyle: { width: 2.0, color: "#f59e0b", type: [6, 6], opacity: 0.9 }
         });
       }
     }
@@ -1117,7 +1251,9 @@ window.ArenaCharts = {
       legend: {
         type: "scroll",
         top: 25,
-        textStyle: { color: tc.textSecondary, fontSize: 10 }
+        data: series.filter(s => !s.name.includes("Taotie") && !s.name.includes("Ghost") && !s.name.includes("CSI 300")).map(s => s.name),
+        textStyle: { color: tc.textSecondary, fontSize: 10 },
+        pageTextStyle: { color: tc.textSecondary }
       },
       grid: {
         left: "3%",
@@ -1202,31 +1338,45 @@ window.ArenaCharts = {
         }
       });
 
-      const csi300DD = window.arenaAdapter.getCsi300Drawdown();
-      if (csi300DD && csi300DD.length > 0) {
+      const ghostDD = window.arenaAdapter.hasGhostTaotie() ? window.arenaAdapter.getGhostTaotieDrawdown() : null;
+      if (ghostDD && ghostDD.length > 0) {
         series.push({
-          name: "CSI 300 Index Drawdown",
+          name: "Ghost Taotie Drawdown",
           type: "line",
-          data: csi300DD,
+          data: ghostDD,
           smooth: true,
           showSymbol: false,
-          color: "#f59e0b",
-          itemStyle: { color: "#f59e0b" },
-          lineStyle: { width: 1.8, color: "#f59e0b", type: "dashed" }
+          color: "#00f0ff",
+          itemStyle: { color: "#00f0ff" },
+          lineStyle: { width: 2.2, color: "#00f0ff", type: [8, 4], opacity: 0.9 }
         });
       }
 
       const taotieDD = window.arenaAdapter.getTaotieDrawdown();
       if (taotieDD && taotieDD.length > 0) {
         series.push({
-          name: "Taotie Baseline Drawdown",
+          name: "Taotie Drawdown",
           type: "line",
           data: taotieDD,
           smooth: true,
           showSymbol: false,
-          color: "#94a3b8",
-          itemStyle: { color: "#94a3b8" },
-          lineStyle: { width: 1.8, color: "#94a3b8", type: "dotted" }
+          color: "#c084fc",
+          itemStyle: { color: "#c084fc" },
+          lineStyle: { width: 2.2, color: "#c084fc", type: [4, 4], opacity: 0.9 }
+        });
+      }
+
+      const csi300DD = window.arenaAdapter.getCsi300Drawdown();
+      if (csi300DD && csi300DD.length > 0) {
+        series.push({
+          name: "CSI 300 Drawdown",
+          type: "line",
+          data: csi300DD,
+          smooth: true,
+          showSymbol: false,
+          color: "#f59e0b",
+          itemStyle: { color: "#f59e0b" },
+          lineStyle: { width: 2.0, color: "#f59e0b", type: [6, 6], opacity: 0.9 }
         });
       }
 
@@ -1247,33 +1397,47 @@ window.ArenaCharts = {
             showSymbol: false,
             color: color,
             itemStyle: { color: color },
-            lineStyle: { width: 2, color: color }
+            lineStyle: { width: 2.5, color: color, type: "solid" }
           });
         }
       });
 
       const zeroBase = dates.map(() => 0.0);
       series.push({
-        name: "CSI 300 Benchmark (0.00%)",
+        name: "CSI 300 (0.00%)",
         type: "line",
         data: zeroBase,
         color: "#f59e0b",
         itemStyle: { color: "#f59e0b" },
-        lineStyle: { width: 1.8, color: "#f59e0b", type: "dashed" },
+        lineStyle: { width: 2.0, color: "#f59e0b", type: [6, 6], opacity: 0.9 },
         showSymbol: false
       });
 
       const taotieExcess = window.arenaAdapter.getPathExcessCSI300("BENCHMARK_taotie");
       if (taotieExcess && taotieExcess.length > 0) {
         series.push({
-          name: "Taotie vs. CSI 300",
+          name: "Taotie vs CSI 300",
           type: "line",
           data: taotieExcess,
           smooth: true,
           showSymbol: false,
-          color: "#94a3b8",
-          itemStyle: { color: "#94a3b8" },
-          lineStyle: { width: 1.8, color: "#94a3b8", type: "dotted" }
+          color: "#c084fc",
+          itemStyle: { color: "#c084fc" },
+          lineStyle: { width: 2.2, color: "#c084fc", type: [4, 4], opacity: 0.9 }
+        });
+      }
+
+      const ghostExcess = window.arenaAdapter.hasGhostTaotie() ? window.arenaAdapter.getPathExcessCSI300("BENCHMARK_ghost_taotie") : null;
+      if (ghostExcess && ghostExcess.length > 0) {
+        series.push({
+          name: "Ghost Taotie vs CSI 300",
+          type: "line",
+          data: ghostExcess,
+          smooth: true,
+          showSymbol: false,
+          color: "#00f0ff",
+          itemStyle: { color: "#00f0ff" },
+          lineStyle: { width: 2.2, color: "#00f0ff", type: [8, 4], opacity: 0.9 }
         });
       }
 
@@ -1295,34 +1459,50 @@ window.ArenaCharts = {
             showSymbol: false,
             color: color,
             itemStyle: { color: color },
-            lineStyle: { width: 2.2, color: color }
+            lineStyle: { width: 2.5, color: color, type: "solid" }
           });
         }
       });
 
+      if (window.arenaAdapter && window.arenaAdapter.hasGhostTaotie()) {
+        const ghostCurve = window.arenaAdapter.getBenchmarkGhostTaotieCurve();
+        if (ghostCurve && ghostCurve.length > 0) {
+          series.push({
+            name: "Ghost Taotie (100M)",
+            type: "line",
+            data: ghostCurve,
+            smooth: true,
+            showSymbol: false,
+            color: "#00f0ff",
+            itemStyle: { color: "#00f0ff" },
+            lineStyle: { width: 2.2, color: "#00f0ff", type: [8, 4], opacity: 0.9 }
+          });
+        }
+      }
+
       if (taotieCurve && taotieCurve.length > 0) {
         series.push({
-          name: `Taotie Baseline (${window.arenaAdapter.getTaotieReturn() >= 0 ? '+' : ''}${window.arenaAdapter.getTaotieReturn().toFixed(2)}%)`,
+          name: "Taotie (500k)",
           type: "line",
           data: taotieCurve,
           smooth: true,
           showSymbol: false,
-          color: "#94a3b8",
-          itemStyle: { color: "#94a3b8" },
-          lineStyle: { width: 1.8, color: "#94a3b8", type: "dotted" }
+          color: "#c084fc",
+          itemStyle: { color: "#c084fc" },
+          lineStyle: { width: 2.2, color: "#c084fc", type: [4, 4], opacity: 0.9 }
         });
       }
 
       if (csi300Curve && csi300Curve.length > 0) {
         series.push({
-          name: `CSI 300 Index (${window.arenaAdapter.getCsi300Return() >= 0 ? '+' : ''}${window.arenaAdapter.getCsi300Return().toFixed(2)}%)`,
+          name: "CSI 300",
           type: "line",
           data: csi300Curve,
           smooth: true,
           showSymbol: false,
           color: "#f59e0b",
           itemStyle: { color: "#f59e0b" },
-          lineStyle: { width: 1.8, color: "#f59e0b", type: "dashed" }
+          lineStyle: { width: 2.0, color: "#f59e0b", type: [6, 6], opacity: 0.9 }
         });
       }
     }
@@ -1360,7 +1540,9 @@ window.ArenaCharts = {
       legend: {
         type: "scroll",
         top: 25,
-        textStyle: { color: tc.textSecondary, fontSize: 11 }
+        data: series.filter(s => !s.name.includes("Taotie") && !s.name.includes("Ghost") && !s.name.includes("CSI 300")).map(s => s.name),
+        textStyle: { color: tc.textSecondary, fontSize: 11 },
+        pageTextStyle: { color: tc.textSecondary }
       },
       grid: {
         left: "3%",
@@ -1393,5 +1575,306 @@ window.ArenaCharts = {
     chart.setOption(option, true);
     window.addEventListener("resize", () => chart.resize());
     return chart;
+  },
+
+  /**
+   * 8. Arena Horizon & Benchmark Zoo Trajectories (Macro Panorama)
+   */
+  renderMacroPanorama(domId, panoramaData) {
+    const dom = document.getElementById(domId);
+    if (!dom) return null;
+    let chart = echarts.getInstanceByDom(dom);
+    if (!chart) chart = echarts.init(dom);
+
+    const { dates, seriesList, metricMode } = panoramaData;
+    if (!dates || dates.length === 0) return null;
+    const tc = this.getThemeColors();
+
+    const isExcess = metricMode && metricMode.startsWith("excess_");
+    const isDD = metricMode === "drawdown";
+
+    let yAxisName = "Normalized NAV (Starting 1.0000)";
+    let yAxisFormatter = v => v.toFixed(3);
+
+    if (isExcess) {
+      if (metricMode === "excess_taotie") yAxisName = "Excess Return vs Taotie (%)";
+      else if (metricMode === "excess_ghost") yAxisName = "Excess Return vs Ghost Taotie (%)";
+      else yAxisName = "Excess Return vs CSI 300 (%)";
+      yAxisFormatter = v => `${v >= 0 ? '+' : ''}${v.toFixed(1)}%`;
+    } else if (isDD) {
+      yAxisName = "Underwater Drawdown (%)";
+      yAxisFormatter = v => `${v.toFixed(1)}%`;
+    }
+
+    const series = seriesList.map(item => {
+      const isBenchmark = item.type.startsWith("benchmark");
+      const isGhost = item.type === "benchmark_ghost";
+      const isTaotie = item.type === "benchmark_taotie";
+      const isCsi = item.type === "benchmark_csi300";
+      const isZero = item.type === "benchmark_zero";
+
+      const s = {
+        name: item.name,
+        type: "line",
+        data: item.data,
+        smooth: true,
+        showSymbol: false,
+        lineStyle: item.lineStyle || {
+          width: isBenchmark ? 2.5 : 2.5,
+          color: item.color
+        },
+        itemStyle: { color: item.color }
+      };
+
+      if (isGhost) {
+        s.lineStyle = {
+          width: 3,
+          type: "dashDot",
+          color: "#00f0ff",
+          shadowBlur: 10,
+          shadowColor: "rgba(0, 240, 255, 0.4)"
+        };
+      } else if (isTaotie) {
+        s.lineStyle = {
+          width: 2.8,
+          type: "solid",
+          color: "#c084fc",
+          shadowBlur: 6,
+          shadowColor: "rgba(192, 132, 252, 0.3)"
+        };
+      } else if (isCsi) {
+        s.lineStyle = {
+          width: 2,
+          type: "dashed",
+          color: "#f59e0b"
+        };
+      } else if (isZero) {
+        s.lineStyle = {
+          width: 2,
+          type: "solid",
+          color: item.color
+        };
+        s.markLine = {
+          silent: true,
+          symbol: ["none", "none"],
+          data: [{ yAxis: 0, lineStyle: { color: item.color, width: 1.5, type: "solid" } }]
+        };
+      }
+
+      return s;
+    });
+
+    const option = {
+      backgroundColor: tc.bg,
+      tooltip: {
+        trigger: "axis",
+        backgroundColor: tc.tooltipBg,
+        borderColor: tc.tooltipBorder,
+        textStyle: { color: tc.textPrimary },
+        axisPointer: { type: "cross", lineStyle: { color: tc.gridLine } },
+        formatter: (params) => {
+          if (!params || !params.length) return "";
+          let html = `<div style="font-weight:700; margin-bottom:6px; color:#38bdf8;">${params[0].axisValue}</div>`;
+          params.forEach(p => {
+            const val = p.value;
+            const displayVal = (isExcess || isDD)
+              ? `${val >= 0 ? '+' : ''}${val.toFixed(2)}%`
+              : (typeof val === "number" ? val.toFixed(4) : val);
+            const marker = p.marker || `<span style="display:inline-block;margin-right:4px;border-radius:10px;width:10px;height:10px;background-color:${p.color};"></span>`;
+            html += `<div style="display:flex; justify-content:space-between; align-items:center; gap:14px; font-size:11px; margin-bottom:2px;">
+              <span style="display:flex; align-items:center;">${marker} ${p.seriesName}</span>
+              <b style="color:${p.color};">${displayVal}</b>
+            </div>`;
+          });
+          return html;
+        }
+      },
+      legend: {
+        type: "scroll",
+        top: 0,
+        data: series.filter(s => !s.name.includes("Taotie") && !s.name.includes("Ghost") && !s.name.includes("CSI 300")).map(s => s.name),
+        textStyle: { color: tc.textSecondary, fontSize: 11 },
+        pageTextStyle: { color: tc.textSecondary }
+      },
+      grid: {
+        left: "3%",
+        right: "4%",
+        top: "14%",
+        bottom: "12%",
+        containLabel: true
+      },
+      dataZoom: [
+        { type: "inside" },
+        { type: "slider", bottom: "0%", height: 16, textStyle: { color: tc.textSecondary } }
+      ],
+      xAxis: {
+        type: "category",
+        data: dates,
+        axisLabel: { color: tc.textSecondary, fontSize: 11 }
+      },
+      yAxis: {
+        type: "value",
+        scale: true,
+        name: yAxisName,
+        nameTextStyle: { color: tc.textSecondary, fontSize: 11 },
+        splitLine: { lineStyle: { color: tc.gridLine } },
+        axisLabel: { color: tc.textSecondary, formatter: yAxisFormatter }
+      },
+      series: series
+    };
+
+    chart.setOption(option, true);
+    window.addEventListener("resize", () => chart.resize());
+    return chart;
+  },
+
+  /**
+   * 9. Interactive Decision Archaeology Head-to-Head Comparison
+   */
+  renderCustomArchaeology(domId, dates, modelsData, activeAnimal = "robot") {
+    const dom = document.getElementById(domId);
+    if (!dom) return null;
+    let chart = echarts.getInstanceByDom(dom);
+    if (!chart) chart = echarts.init(dom);
+
+    if (!dates || dates.length === 0 || !modelsData || modelsData.length < 2) return null;
+    const tc = this.getThemeColors();
+
+    const m1 = modelsData[0];
+    const m2 = modelsData[1];
+    const m3 = modelsData[2] || null;
+
+    const len = Math.min(m1.curve.length, m2.curve.length);
+    const spreadM1M2 = [];
+    for (let i = 0; i < len; i++) {
+      spreadM1M2.push(Number(((m1.curve[i] - m2.curve[i]) * 100).toFixed(2)));
+    }
+
+    const series = [
+      {
+        name: m1.name,
+        type: "line",
+        xAxisIndex: 0,
+        yAxisIndex: 0,
+        data: m1.curve,
+        smooth: true,
+        showSymbol: false,
+        lineStyle: { width: 3, color: m1.color || "#10b981" },
+        itemStyle: { color: m1.color || "#10b981" }
+      },
+      {
+        name: m2.name,
+        type: "line",
+        xAxisIndex: 0,
+        yAxisIndex: 0,
+        data: m2.curve,
+        smooth: true,
+        showSymbol: false,
+        lineStyle: { width: 3, color: m2.color || "#f43f5e" },
+        itemStyle: { color: m2.color || "#f43f5e" }
+      }
+    ];
+
+    if (m3 && m3.curve && m3.curve.length > 0) {
+      series.push({
+        name: m3.name,
+        type: "line",
+        xAxisIndex: 0,
+        yAxisIndex: 0,
+        data: m3.curve,
+        smooth: true,
+        showSymbol: false,
+        lineStyle: {
+          width: 2.5,
+          color: m3.color || "#38bdf8",
+          type: m3.isBenchmark ? "dashDot" : "solid"
+        },
+        itemStyle: { color: m3.color || "#38bdf8" }
+      });
+    }
+
+    series.push({
+      name: `Spread (${m1.name} − ${m2.name})`,
+      type: "line",
+      xAxisIndex: 1,
+      yAxisIndex: 1,
+      data: spreadM1M2,
+      smooth: true,
+      showSymbol: false,
+      lineStyle: { width: 2, color: "#a855f7" },
+      itemStyle: { color: "#a855f7" },
+      areaStyle: {
+        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+          { offset: 0, color: "rgba(168, 85, 247, 0.35)" },
+          { offset: 1, color: "rgba(168, 85, 247, 0.02)" }
+        ])
+      },
+      markLine: {
+        silent: true,
+        symbol: ["none", "none"],
+        data: [{ yAxis: 0, lineStyle: { color: tc.gridLine, width: 1.5, type: "solid" } }]
+      }
+    });
+
+    const option = {
+      backgroundColor: tc.bg,
+      tooltip: {
+        trigger: "axis",
+        backgroundColor: tc.tooltipBg,
+        borderColor: tc.tooltipBorder,
+        textStyle: { color: tc.textPrimary },
+        axisPointer: { type: "cross", lineStyle: { color: tc.gridLine } }
+      },
+      legend: {
+        top: 0,
+        textStyle: { color: tc.textSecondary, fontSize: 11 }
+      },
+      axisPointer: { link: [{ xAxisIndex: "all" }] },
+      grid: [
+        { left: "3%", right: "4%", top: "12%", height: "50%", containLabel: true },
+        { left: "3%", right: "4%", top: "70%", height: "22%", containLabel: true }
+      ],
+      xAxis: [
+        {
+          type: "category",
+          gridIndex: 0,
+          data: dates,
+          axisLabel: { show: false },
+          axisTick: { show: false }
+        },
+        {
+          type: "category",
+          gridIndex: 1,
+          data: dates,
+          axisLabel: { color: tc.textSecondary, fontSize: 11 }
+        }
+      ],
+      yAxis: [
+        {
+          type: "value",
+          gridIndex: 0,
+          scale: true,
+          name: "Cumulative NAV",
+          nameTextStyle: { color: tc.textSecondary, fontSize: 11 },
+          splitLine: { lineStyle: { color: tc.gridLine } },
+          axisLabel: { color: tc.textSecondary, formatter: v => v.toFixed(3) }
+        },
+        {
+          type: "value",
+          gridIndex: 1,
+          scale: true,
+          name: "Spread (%)",
+          nameTextStyle: { color: tc.textSecondary, fontSize: 10 },
+          splitLine: { lineStyle: { color: tc.gridLine } },
+          axisLabel: { color: tc.textSecondary, formatter: v => `${v >= 0 ? '+' : ''}${v.toFixed(1)}%` }
+        }
+      ],
+      series: series
+    };
+
+    chart.setOption(option, true);
+    window.addEventListener("resize", () => chart.resize());
+    return chart;
   }
 };
+

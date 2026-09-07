@@ -6,22 +6,69 @@
  */
 
 window.DispatchesView = {
-  currentEpisode: "ep08",
+  currentEpisode: null,
 
   render(containerId, params = {}) {
     const el = document.getElementById(containerId);
     if (!el) return;
 
-    if (params.episode) {
+    const seasonMeta = window.arenaAdapter ? window.arenaAdapter.getCurrentSeasonMeta() : {};
+    const dispatches = window.arenaAdapter ? window.arenaAdapter.getDispatchesData() : null;
+
+    // Fallback if no dispatches object exists
+    const exec = dispatches?.executive || {
+      tag: "🏆 Official Released Standing",
+      badge: "Active",
+      title: "Tournament Standing & Baseline",
+      window_label: seasonMeta.period || "Current Season Window",
+      nature_label: "Empirical strategy evaluation under execution constraints.",
+      leader_summary: "Evaluation active across all animal variants."
+    };
+
+    const climate = dispatches?.climate || {
+      tag: "🌪️ Market Climate Report",
+      status_badge: "Active",
+      title: "Cross-Market Volatility & Execution Dynamics",
+      summary: "Tracking market liquidity, factor dispersion, and execution friction.",
+      bullets: [
+        "Active monitoring of cross-sectional return dispersion.",
+        "Zero alpha leakage under cryptographic verification."
+      ],
+      decrypt_label: "Standard Weekly Cycle"
+    };
+
+    const episodes = dispatches?.episodes || [
+      {
+        id: "ep08",
+        tab_label: "📜 Ep 01–08: The Forty-One Day King",
+        badge: "Released",
+        title: "Episodes 01–08: The 41-Day Baseline & The Eagle King",
+        content_type: "ep08_baseline"
+      },
+      {
+        id: "ep09",
+        tab_label: "🔒 Ep 09: Sep 02 Breadth Shock",
+        badge: "Embargoed",
+        title: "Episode 09: The September 02 Breadth Shock",
+        content_type: "ep09_embargoed"
+      }
+    ];
+
+    // Ensure valid current episode
+    if (params.episode && episodes.some(e => e.id === params.episode)) {
       this.currentEpisode = params.episode;
+    } else if (!this.currentEpisode || !episodes.some(e => e.id === this.currentEpisode)) {
+      this.currentEpisode = episodes[0]?.id || "ep08";
     }
+
+    const firstEpId = episodes[0]?.id || "ep08";
 
     el.innerHTML = `
       <div class="doc-page-container">
         <!-- View Header -->
         <div class="view-header" style="text-align: center; margin-bottom: 2rem;">
           <div class="hero-tag" style="margin-bottom: 0.75rem;">
-            <span>📜 Season 1 Tournament Dispatches &amp; Market Climate</span>
+            <span>📜 ${seasonMeta.title || "QuantPits Arena"} Dispatches &amp; Market Climate</span>
           </div>
           <h1 class="view-title" style="font-size: 2.2rem; margin-bottom: 0.5rem;">Arena Dispatches</h1>
           <p class="view-subtitle" style="max-width: 720px; margin: 0 auto; font-size: 0.95rem; color: var(--text-secondary); line-height: 1.6;">
@@ -36,23 +83,23 @@ window.DispatchesView = {
           <div class="card" style="border-left: 4px solid var(--brand-cyan); background: rgba(15, 23, 42, 0.55); padding: 1.25rem 1.5rem;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
               <span style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--brand-cyan); font-weight: 700;">
-                🏆 Official Released Standing
+                ${exec.tag || "🏆 Official Baseline"}
               </span>
               <span class="badge" style="background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.3); font-size: 0.75rem;">
-                Episodes 01–08 Active
+                ${exec.badge || "Active"}
               </span>
             </div>
             <h3 style="font-size: 1.15rem; color: var(--text-primary); margin: 0 0 0.5rem 0;">
-              The 41-Day Retrospective Baseline
+              ${exec.title}
             </h3>
             <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">
-              <strong>Window:</strong> 2026-07-03 ~ 2026-08-28 (41 Trading Days, Weeks 1–8).<br>
-              <strong>Nature:</strong> Retrospective backtest baseline simulated with knowledge of July–August market conditions to establish initial tournament standings.<br>
-              <strong>Leader:</strong> <code>CONTESTANT_B_eagle-5-1</code> finished the baseline at <strong>NAV 1.1971 (+19.71%)</strong>, outperforming benchmark by +17.39pp (zero of 1,000 matched monkeys exceeded it, <em>p</em> &approx; 0.001).
+              <strong>Window:</strong> ${exec.window_label}<br>
+              <strong>Nature:</strong> ${exec.nature_label}<br>
+              <strong>Status:</strong> ${exec.leader_summary}
             </p>
             <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-              <button class="btn btn-sm btn-primary" onclick="window.DispatchesView.selectEpisode('ep08')" style="font-size: 0.8rem; padding: 4px 10px;">
-                <span>📖 Read Episodes 01–08 Dispatch &rarr;</span>
+              <button class="btn btn-sm btn-primary" onclick="window.DispatchesView.selectEpisode('${firstEpId}')" style="font-size: 0.8rem; padding: 4px 10px;">
+                <span>📖 Read Latest Dispatch &rarr;</span>
               </button>
               <a href="#leaderboard" class="btn btn-sm btn-secondary" style="font-size: 0.8rem; padding: 4px 10px; text-decoration: none;">
                 <span>🏆 View Leaderboard</span>
@@ -64,24 +111,23 @@ window.DispatchesView = {
           <div class="card" style="border-left: 4px solid var(--accent-amber); background: rgba(15, 23, 42, 0.55); padding: 1.25rem 1.5rem;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
               <span style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-amber); font-weight: 700;">
-                🌪️ Weekly Market Climate (Aug 31 – Sep 04)
+                ${climate.tag || "🌪️ Market Climate"}
               </span>
               <span class="badge" style="background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); font-size: 0.75rem;">
-                🔒 Embargoed until Sep 11
+                ${climate.status_badge || "Active"}
               </span>
             </div>
             <h3 style="font-size: 1.15rem; color: var(--text-primary); margin: 0 0 0.5rem 0;">
-              The September 02 Breadth Shock (Arena Designation: "Black Wednesday")
+              ${climate.title}
             </h3>
             <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">
-              <em>The weather outside the cage is public knowledge. How the animals inside handled the storm remains sealed under institutional embargo.</em>
+              <em>${climate.summary}</em>
             </p>
             <ul style="font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5; margin: 0 0 0.75rem 1.25rem; padding: 0;">
-              <li><strong>Sep 02 Market Breadth Shock</strong>: Growth-heavy and previously strong market segments experienced a sharp reversal, pushing over 80% of traded equities into localized pullbacks within 48 hours.</li>
-              <li><strong>Structural Suspense</strong>: Did prolonged signal persistence hold? Did the Eagle's extreme concentration survive, or did high-turnover Rabbits strike back?</li>
+              ${(climate.bullets || []).map(b => `<li>${b}</li>`).join("")}
             </ul>
             <div style="font-size: 0.78rem; color: var(--accent-amber); display: flex; align-items: center; gap: 6px;">
-              <span>⏳</span> <strong>Full performance decrypts: Friday, September 11, 2026</strong>
+              <span>⏳</span> <strong>${climate.decrypt_label || "Continuous Monitoring"}</strong>
             </div>
           </div>
         </div>
@@ -93,19 +139,17 @@ window.DispatchesView = {
           <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 1rem; margin-bottom: 1.5rem;">
             
             <!-- Episode Tabs -->
-            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-              <button id="tab-btn-ep08" class="btn btn-sm ${this.currentEpisode === 'ep08' ? 'btn-primary' : 'btn-secondary'}" onclick="window.DispatchesView.selectEpisode('ep08')">
-                <span>📜 Ep 01–08: The Forty-One Day King</span>
-                <span style="font-size: 10px; opacity: 0.8; margin-left: 4px;">(Released)</span>
-              </button>
-              <button id="tab-btn-ep09" class="btn btn-sm ${this.currentEpisode === 'ep09' ? 'btn-primary' : 'btn-secondary'}" onclick="window.DispatchesView.selectEpisode('ep09')">
-                <span>🔒 Ep 09: Sep 02 Breadth Shock</span>
-                <span style="font-size: 10px; color: var(--accent-amber); margin-left: 4px;">(Embargoed)</span>
-              </button>
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;" id="dispatch-tabs-container">
+              ${episodes.map(ep => `
+                <button id="tab-btn-${ep.id}" class="btn btn-sm ${this.currentEpisode === ep.id ? 'btn-primary' : 'btn-secondary'}" onclick="window.DispatchesView.selectEpisode('${ep.id}')">
+                  <span>${ep.tab_label}</span>
+                  ${ep.badge ? `<span style="font-size: 10px; opacity: 0.8; margin-left: 4px;">(${ep.badge})</span>` : ''}
+                </button>
+              `).join("")}
             </div>
 
             <div style="font-size: 0.8rem; color: var(--text-tertiary);">
-              Official Tournament Log
+              Official Tournament Log · ${seasonMeta.short_title || "Arena"}
             </div>
           </div>
 
@@ -125,20 +169,60 @@ window.DispatchesView = {
     if (bodyEl) {
       bodyEl.innerHTML = this.renderArticleContent();
     }
-    const btn08 = document.getElementById("tab-btn-ep08");
-    const btn09 = document.getElementById("tab-btn-ep09");
-    if (btn08 && btn09) {
-      if (epId === "ep08") {
-        btn08.className = "btn btn-sm btn-primary";
-        btn09.className = "btn btn-sm btn-secondary";
-      } else {
-        btn08.className = "btn btn-sm btn-secondary";
-        btn09.className = "btn btn-sm btn-primary";
-      }
+    
+    // Update button states dynamically
+    const container = document.getElementById("dispatch-tabs-container");
+    if (container) {
+      const btns = container.querySelectorAll("button");
+      btns.forEach(btn => {
+        if (btn.id === `tab-btn-${epId}`) {
+          btn.className = "btn btn-sm btn-primary";
+        } else {
+          btn.className = "btn btn-sm btn-secondary";
+        }
+      });
     }
   },
 
   renderArticleContent() {
+    const dispatches = window.arenaAdapter ? window.arenaAdapter.getDispatchesData() : null;
+    const episodes = dispatches?.episodes || [];
+    const activeEp = episodes.find(e => e.id === this.currentEpisode);
+
+    if (activeEp) {
+      if (activeEp.content_html) {
+        return `
+          <article class="prose" style="max-width: 820px; margin: 0 auto; color: var(--text-secondary); line-height: 1.75; font-size: 0.95rem;">
+            <div style="border-bottom: 1px solid var(--border-subtle); padding-bottom: 1.25rem; margin-bottom: 1.5rem;">
+              <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.5rem;">
+                <span class="badge" style="background: rgba(56, 189, 248, 0.15); color: var(--brand-cyan); border: 1px solid rgba(56, 189, 248, 0.3);">
+                  ${activeEp.badge || "Dispatch"}
+                </span>
+                <span style="font-size: 0.8rem; color: var(--text-tertiary);">
+                  Date: ${activeEp.date || "2026"} · ${activeEp.read_time || "4 min read"}
+                </span>
+              </div>
+              <h2 style="font-size: 1.9rem; color: var(--text-primary); margin: 0 0 0.5rem 0;">
+                ${activeEp.title}
+              </h2>
+              ${activeEp.summary ? `
+                <p style="font-size: 0.95rem; color: var(--text-muted); margin-top: 0.5rem; font-style: italic;">
+                  ${activeEp.summary}
+                </p>
+              ` : ''}
+            </div>
+            ${activeEp.content_html}
+            <div style="margin-top: 2.5rem; padding-top: 1.25rem; border-top: 1px solid var(--border-subtle); text-align: center; font-size: 0.85rem; color: var(--text-tertiary);">
+              🏛️ <em>QuantPits Arena Official Tournament Log</em>
+            </div>
+          </article>
+        `;
+      }
+      if (activeEp.content_type === "ep09_embargoed") {
+        return this.renderEp09Embargoed();
+      }
+    }
+
     if (this.currentEpisode === "ep09") {
       return this.renderEp09Embargoed();
     }

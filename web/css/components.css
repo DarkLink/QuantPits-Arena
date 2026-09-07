@@ -476,3 +476,280 @@
   font-weight: 600;
 }
 
+/* ==========================================================================
+   Interactive Season Switcher & Dropdown (Multi-Season Navigation)
+   ========================================================================== */
+
+.season-switcher {
+  position: relative;
+  display: inline-block;
+}
+
+.season-switcher-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: var(--radius-full);
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.28);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--accent-positive);
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  outline: none;
+}
+
+.season-switcher-btn:hover,
+.season-switcher.is-open .season-switcher-btn {
+  background: rgba(16, 185, 129, 0.18);
+  border-color: rgba(16, 185, 129, 0.55);
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.2);
+}
+
+.season-switcher-btn.is-draft {
+  background: rgba(245, 158, 11, 0.1);
+  border-color: rgba(245, 158, 11, 0.35);
+  color: #f59e0b;
+}
+
+.season-switcher-btn.is-draft .pulse-indicator {
+  background: #f59e0b;
+  box-shadow: 0 0 8px #f59e0b;
+}
+
+.season-switcher-btn .switcher-arrow {
+  font-size: 0.68rem;
+  transition: transform var(--transition-fast);
+  opacity: 0.8;
+}
+
+.season-switcher.is-open .switcher-arrow {
+  transform: rotate(180deg);
+}
+
+.season-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 330px;
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.65), 0 0 1px rgba(255, 255, 255, 0.1);
+  padding: 8px;
+  z-index: 1000;
+  display: none;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
+}
+
+.season-switcher.is-open .season-dropdown {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.season-dropdown-header {
+  padding: 6px 10px 8px 10px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border-subtle);
+  margin-bottom: 6px;
+}
+
+.season-dropdown-item {
+  display: block;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border: 1px solid transparent;
+  margin-bottom: 4px;
+  text-decoration: none;
+}
+
+.season-dropdown-item:last-child {
+  margin-bottom: 0;
+}
+
+.season-dropdown-item:hover {
+  background: var(--bg-surface-elevated);
+  border-color: var(--border-subtle);
+}
+
+.season-dropdown-item.is-selected {
+  background: rgba(56, 189, 248, 0.1);
+  border-color: rgba(56, 189, 248, 0.35);
+}
+
+.season-item-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.season-item-title {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.season-dropdown-item.is-selected .season-item-title {
+  color: var(--brand-cyan);
+}
+
+.season-item-badge {
+  font-size: 0.65rem;
+  padding: 2px 7px;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.season-item-badge.badge-active {
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--accent-positive);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.season-item-badge.badge-draft {
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.season-item-desc {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+  margin-bottom: 5px;
+}
+
+.season-item-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.68rem;
+  color: var(--text-secondary);
+}
+
+.season-item-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Benchmark Standards Independent Toggle Controls */
+.benchmark-pill-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 6px;
+  background: rgba(15, 23, 42, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-md);
+}
+
+.benchmark-pill-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-tertiary);
+  padding: 0 4px;
+}
+
+.benchmark-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+  user-select: none;
+}
+
+.benchmark-pill:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-primary);
+}
+
+.benchmark-pill.is-active {
+  background: rgba(var(--bm-rgb, 56, 189, 248), 0.14);
+  border-color: var(--bm-color, var(--accent-cyan));
+  color: #fff;
+  box-shadow: 0 0 8px rgba(var(--bm-rgb, 56, 189, 248), 0.25);
+}
+
+.benchmark-pill .bm-line-badge {
+  display: inline-block;
+  width: 12px;
+  height: 0px;
+  border-top: 2px dashed var(--bm-color, #fff);
+}
+
+.benchmark-pill.ghost-taotie {
+  --bm-color: #00f0ff;
+  --bm-rgb: 0, 240, 255;
+}
+
+.benchmark-pill.taotie {
+  --bm-color: #c084fc;
+  --bm-rgb: 192, 132, 252;
+}
+
+.benchmark-pill.csi300 {
+  --bm-color: #f59e0b;
+  --bm-rgb: 245, 158, 11;
+}
+
+.benchmark-pill.monkey {
+  --bm-color: #94a3b8;
+  --bm-rgb: 148, 163, 184;
+}
+
+.model-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-tertiary);
+  transition: all var(--transition-fast);
+}
+
+.model-pill.is-active {
+  background: rgba(56, 189, 248, 0.12);
+  border-color: var(--model-color, #38bdf8);
+  color: var(--text-primary);
+}
+
+.model-pill .model-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--model-color, #38bdf8);
+}
+

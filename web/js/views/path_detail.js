@@ -107,7 +107,7 @@ window.PathDetailView = {
           <div class="kpi-card">
             <div class="kpi-label">Final NAV</div>
             <div class="kpi-value">${path.final_nav.toFixed(4)}</div>
-            <div class="kpi-subtext">Base 1.0000 on 2026-07-03</div>
+            <div class="kpi-subtext">Base 1.0000 on ${window.arenaAdapter?.getCurrentSeasonMeta()?.anchor_date || '2026-07-03'}</div>
           </div>
           <div class="kpi-card">
             <div class="kpi-label">Max Drawdown</div>
@@ -136,10 +136,30 @@ window.PathDetailView = {
               <h3 class="card-title">Trajectory & Risk Visualizer</h3>
               <div class="card-subtitle">Examine daily performance dynamics across cumulative return, drawdown, and excess spread</div>
             </div>
-            <div class="chart-metric-btn-group" id="path-metric-btn-group">
-              <button class="chart-metric-btn active" data-metric="nav">Cumulative NAV</button>
-              <button class="chart-metric-btn" data-metric="drawdown">Underwater Drawdown</button>
-              <button class="chart-metric-btn" data-metric="excess_csi300">Excess vs. CSI 300</button>
+            <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+              <div class="chart-metric-btn-group" id="path-metric-btn-group">
+                <button class="chart-metric-btn active" data-metric="nav">Cumulative NAV</button>
+                <button class="chart-metric-btn" data-metric="drawdown">Underwater Drawdown</button>
+                <button class="chart-metric-btn" data-metric="excess_csi300">Excess vs. CSI 300</button>
+              </div>
+
+              <!-- Benchmark Standards Independent Controls -->
+              <div class="benchmark-pill-group" id="path-benchmark-pill-group">
+                <span class="benchmark-pill-label">Benchmarks:</span>
+                <button type="button" class="benchmark-pill monkey is-active" data-benchmark="monkey" title="Toggle Monkey Null Standard">
+                  <span class="bm-line-badge"></span> Monkey Null
+                </button>
+                ${window.arenaAdapter.hasGhostTaotie() ? `
+                <button type="button" class="benchmark-pill ghost-taotie is-active" data-benchmark="ghost" title="Toggle Ghost Taotie (100M)">
+                  <span class="bm-line-badge"></span> Ghost (100M)
+                </button>` : ''}
+                <button type="button" class="benchmark-pill taotie is-active" data-benchmark="taotie" title="Toggle Taotie (500k)">
+                  <span class="bm-line-badge"></span> Taotie (500k)
+                </button>
+                <button type="button" class="benchmark-pill csi300 is-active" data-benchmark="csi300" title="Toggle CSI 300">
+                  <span class="bm-line-badge"></span> CSI 300
+                </button>
+              </div>
             </div>
           </div>
           <div id="chart-path-equity-curves" class="chart-container tall"></div>
@@ -215,9 +235,25 @@ window.PathDetailView = {
             const metric = e.currentTarget.getAttribute("data-metric");
             this.activeMetric = metric;
             renderChart(metric);
+
+            // Maintain benchmark pill selection state
+            document.querySelectorAll("#path-benchmark-pill-group .benchmark-pill").forEach(pill => {
+              const bmKey = pill.getAttribute("data-benchmark");
+              window.ArenaCharts.toggleBenchmark("chart-path-equity-curves", bmKey, pill.classList.contains("is-active"));
+            });
           });
         });
       }
+
+      // Bind benchmark pills
+      const pathBmPills = document.querySelectorAll("#path-benchmark-pill-group .benchmark-pill");
+      pathBmPills.forEach(pill => {
+        pill.addEventListener("click", () => {
+          const isActive = pill.classList.toggle("is-active");
+          const bmKey = pill.getAttribute("data-benchmark");
+          window.ArenaCharts.toggleBenchmark("chart-path-equity-curves", bmKey, isActive);
+        });
+      });
     }, 50);
   }
 };

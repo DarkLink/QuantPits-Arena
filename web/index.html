@@ -11,10 +11,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- Core Stylesheets -->
-  <link rel="stylesheet" href="css/variables.css?v=3.3">
-  <link rel="stylesheet" href="css/main.css?v=3.3">
-  <link rel="stylesheet" href="css/components.css?v=3.3">
-  <link rel="stylesheet" href="css/views.css?v=3.3">
+  <link rel="stylesheet" href="css/variables.css?v=4.3">
+  <link rel="stylesheet" href="css/main.css?v=4.3">
+  <link rel="stylesheet" href="css/components.css?v=4.3">
+  <link rel="stylesheet" href="css/views.css?v=4.3">
 
   <!-- Apache ECharts CDN -->
   <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
@@ -61,9 +61,15 @@
           <a href="#discussion" class="nav-link-secondary" data-route="discussion" title="Community Discussion &amp; Peer Review">Discussion</a>
           <a href="#disclaimer" class="nav-link-secondary" data-route="disclaimer" title="Legal &amp; Research Disclaimer">Disclaimer</a>
         </nav>
-        <div class="season-badge">
-          <span class="pulse-indicator"></span>
-          <span class="season-label">Season 1</span>
+        <div class="season-switcher" id="season-switcher">
+          <button class="season-switcher-btn" id="season-switcher-btn" aria-haspopup="true" aria-expanded="false" title="Switch Tournament Season">
+            <span class="pulse-indicator"></span>
+            <span class="season-label" id="current-season-label">Season 1</span>
+            <span class="switcher-arrow">▾</span>
+          </button>
+          <div class="season-dropdown" id="season-dropdown" role="menu">
+            <!-- Dynamic Season Items rendered by app.js -->
+          </div>
         </div>
         <button id="theme-toggle-btn" class="theme-toggle-btn" aria-label="Toggle Theme" title="Toggle Dark/Light Mode">
           <span>☀️</span>
@@ -172,33 +178,37 @@
   </footer>
 
   <!-- Data Payload (Offline, Self-contained) -->
-  <script src="js/data/arena_data.js?v=3.3"></script>
+  <script src="js/data/arena_data.js?v=4.4"></script>
   <!-- Optional Local Preview Data Payload (Embargoed unreleased data, gitignored) -->
-  <script src="js/data/arena_data_preview.js?v=3.3" onerror="/* No preview data payload present; running official baseline */"></script>
+  <script src="js/data/arena_data_preview.js?v=4.4" onerror="/* No preview data payload present; running official baseline */"></script>
+  <!-- Multi-Season Data Registry & Providers -->
+  <script src="js/data/seasons_index.js?v=4.4"></script>
+  <script src="js/data/season_01.js?v=4.4"></script>
+  <script src="js/data/season_02.js?v=4.4"></script>
 
   <!-- Data Adapter -->
-  <script src="js/adapter.js?v=3.3"></script>
+  <script src="js/adapter.js?v=4.4"></script>
 
   <!-- ECharts Suite -->
-  <script src="js/components/charts.js?v=3.3"></script>
+  <script src="js/components/charts.js?v=4.4"></script>
 
   <!-- Global Filters -->
-  <script src="js/components/filters.js?v=3.3"></script>
+  <script src="js/components/filters.js?v=4.4"></script>
 
   <!-- Application Views -->
-  <script src="js/views/landing.js?v=3.3"></script>
-  <script src="js/views/dispatches.js?v=3.3"></script>
-  <script src="js/views/overview.js?v=3.3"></script>
-  <script src="js/views/leaderboard_view.js?v=3.3"></script>
-  <script src="js/views/animals_view.js?v=3.3"></script>
-  <script src="js/views/path_detail.js?v=3.3"></script>
-  <script src="js/views/contestant_detail.js?v=3.3"></script>
-  <script src="js/views/decision_audit.js?v=3.3"></script>
-  <script src="js/views/methodology.js?v=3.3"></script>
-  <script src="js/views/disclaimer.js?v=3.3"></script>
-  <script src="js/views/discussion.js?v=3.3"></script>
+  <script src="js/views/landing.js?v=4.4"></script>
+  <script src="js/views/dispatches.js?v=4.4"></script>
+  <script src="js/views/overview.js?v=4.4"></script>
+  <script src="js/views/leaderboard_view.js?v=4.4"></script>
+  <script src="js/views/animals_view.js?v=4.4"></script>
+  <script src="js/views/path_detail.js?v=4.4"></script>
+  <script src="js/views/contestant_detail.js?v=4.4"></script>
+  <script src="js/views/decision_audit.js?v=4.4"></script>
+  <script src="js/views/methodology.js?v=4.4"></script>
+  <script src="js/views/disclaimer.js?v=4.4"></script>
+  <script src="js/views/discussion.js?v=4.4"></script>
 
   <!-- Main Controller & Router -->
-  <script src="js/app.js?v=3.3"></script>
+  <script src="js/app.js?v=4.4"></script>
 </body>
 </html>

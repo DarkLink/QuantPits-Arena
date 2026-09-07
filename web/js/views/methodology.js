@@ -10,12 +10,16 @@ window.MethodologyView = {
     const el = document.getElementById(containerId);
     if (!el) return;
 
+    const seasonMeta = window.arenaAdapter ? window.arenaAdapter.getCurrentSeasonMeta() : {};
+    const isSeason2 = seasonMeta.id === "season_02";
+    const hasGhost = window.arenaAdapter ? window.arenaAdapter.hasGhostTaotie() : false;
+
     el.innerHTML = `
       <div class="doc-page-container" style="max-width: 1040px; margin: 0 auto; width: 100%;">
         <div class="view-header" style="text-align: center; margin-bottom: 2rem; display: flex; flex-direction: column; align-items: center;">
           <div style="display: inline-flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 6px;">
             <h1 class="view-title">Methodology & Statistical Axioms</h1>
-            <span class="badge badge-primary">Empirical Quantitative Standards</span>
+            <span class="badge badge-primary">${seasonMeta.short_title || "Season 1"} · ${seasonMeta.methodology?.framework_name || "Empirical Quantitative Standards"}</span>
           </div>
           <p class="view-subtitle" style="text-align: center; max-width: 750px; margin: 0 auto;">The testing architecture, null benchmark suite, execution constraints, and statistical interpretation rules of QuantPits Arena</p>
         </div>
@@ -31,7 +35,7 @@ window.MethodologyView = {
           </p>
           <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 8px;">
             <div style="background: rgba(255, 255, 255, 0.02); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
-              <strong style="color: var(--accent-amber); display: block; margin-bottom: 6px;">Historical Biography & Context</strong>
+              <strong style="color: var(--accent-amber); display: block; margin-bottom: 6px;">Historical Biography &amp; Context</strong>
               <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.6; margin: 0;">
                 Includes original research thesis, architecture, feature set, training period, historical backtest statistics, former production role, replacement history, and retirement reason. 
                 <br><br>
@@ -39,12 +43,13 @@ window.MethodologyView = {
               </p>
             </div>
             <div style="background: rgba(255, 255, 255, 0.02); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
-              <strong style="color: var(--accent-cyan); display: block; margin-bottom: 6px;">Arena Out-of-Sample Record</strong>
+              <strong style="color: var(--accent-cyan); display: block; margin-bottom: 6px;">Arena Out-of-Sample Record (${seasonMeta.short_title || "Current Season"})</strong>
               <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.6; margin: 0;">
                 Every eligible artifact enters the common Arena at the same anchor:
-                <br>• <b>Anchor Date:</b> 2026-07-03
+                <br>• <b>Anchor Date:</b> ${seasonMeta.anchor_date || "2026-07-03"}
                 <br>• <b>Initial NAV:</b> 1.0000
-                <br>• <b>Initial Capital:</b> CNY 500,000
+                <br>• <b>Capital Model:</b> ${seasonMeta.methodology?.capital_spec || "CNY 500,000"}
+                <br>• <b>Pipeline Schedule:</b> ${seasonMeta.methodology?.execution_flow || "Weekly Rebalance, Daily Marked-to-Market Valuation"}
                 <br><br>
                 All Arena metrics are calculated from this common starting point. The frozen artifacts had no access to Arena-period market data during training. <b>Historical reputation is biography; Arena performance starts from zero.</b>
               </p>
@@ -61,7 +66,7 @@ window.MethodologyView = {
             QuantPits Arena deliberately maintains multiple reference standards rather than forcing an artificial single benchmark. Different benchmarks answer fundamentally different quantitative research questions:
           </p>
 
-          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 14px;">
+          <div style="display: grid; grid-template-columns: repeat(${hasGhost ? '4' : '3'}, 1fr); gap: 14px; margin-bottom: 14px;">
             <div style="background: rgba(255, 255, 255, 0.02); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); display: flex; flex-direction: column;">
               <strong style="color: var(--accent-amber); font-size: 13px; margin-bottom: 4px;">1. CSI 300 (Market Anchor)</strong>
               <span style="font-size: 11px; color: var(--text-tertiary); text-transform: uppercase; margin-bottom: 8px;">External Market Benchmark</span>
@@ -82,8 +87,20 @@ window.MethodologyView = {
               </p>
             </div>
 
+            ${hasGhost ? `
+            <div style="background: rgba(255, 255, 255, 0.02); padding: 14px; border-radius: var(--radius-sm); border: 1px solid rgba(56, 189, 248, 0.4); display: flex; flex-direction: column;">
+              <strong style="color: var(--brand-cyan); font-size: 13px; margin-bottom: 4px;">3. Ghost Taotie (Theoretical)</strong>
+              <span style="font-size: 11px; color: var(--text-tertiary); text-transform: uppercase; margin-bottom: 8px;">Unconstrained Equal-Weight</span>
+              <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.6; margin: 0;">
+                Answers: <i>"What is the true unconstrained equal-weight return of the investable universe?"</i>
+                <br><br>
+                A large-capital (CNY 100M) portfolio with zero round-lot exclusions. Eliminates the retail cash drag and price-dispersion biases present in physical Taotie.
+              </p>
+            </div>
+            ` : ''}
+
             <div style="background: rgba(255, 255, 255, 0.02); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); display: flex; flex-direction: column;">
-              <strong style="color: var(--accent-cyan); font-size: 13px; margin-bottom: 4px;">3. Matched Monkeys (Selection Null)</strong>
+              <strong style="color: var(--accent-cyan); font-size: 13px; margin-bottom: 4px;">${hasGhost ? '4' : '3'}. Matched Monkeys (Null)</strong>
               <span style="font-size: 11px; color: var(--text-tertiary); text-transform: uppercase; margin-bottom: 8px;">Statistical Selection Null</span>
               <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.6; margin: 0;">
                 Answers: <i>"If rankings were purely random while preserving all portfolio mechanics, how much value did the signal add?"</i>
@@ -95,10 +112,18 @@ window.MethodologyView = {
 
           <div style="background: rgba(0, 0, 0, 0.25); padding: 12px 16px; border-radius: var(--radius-sm); font-size: 12px; color: var(--text-secondary); font-family: monospace; line-height: 1.7;">
             CSI 300 &rarr; External Market Context (Market Anchor)<br>
-            Taotie  &rarr; Executable Full-Universe Reference (Minimal Selection Under Frictions)<br>
+            Taotie  &rarr; Executable Full-Universe Reference (CNY 500k, Small Capital Frictions)<br>
+            ${hasGhost ? 'Ghost Taotie &rarr; Theoretical Full-Universe Reference (CNY 100M, Pure Unconstrained Equal-Weight)<br>' : ''}
             Matched Monkeys &rarr; Strategy-Specific Random-Ranking Null (Selection-Skill Arbiter)<br>
             Model / Zoo Variant &rarr; Actual Signal + Portfolio Behavior
           </div>
+
+          ${hasGhost ? `
+          <div style="background: rgba(56, 189, 248, 0.06); border-left: 3px solid var(--accent-cyan); padding: 10px 14px; margin-top: 10px; font-size: 12px; color: var(--text-secondary); border-radius: 4px;">
+            <strong>Season 2 Breakthrough: Resolving Retail Round-Lot Distortions</strong><br>
+            In Season 1, physical Taotie tracking under CNY 500k capital rejected over 40% of universe buys because share prices exceeded lot budget (100 shares × price > cash allotment), forcing an involuntary low-price bias. In Season 2, <strong>Ghost Taotie</strong> scales capital to CNY 100M, completely eliminating lot-size rejections. This enables researchers to decompose candidate performance into pure alpha versus execution-friction drag.
+          </div>
+          ` : ''}
         </div>
 
         <!-- 3. Parametric Monkey Null Benchmark Suite -->
@@ -256,6 +281,41 @@ window.MethodologyView = {
             </p>
           </div>
         </div>
+
+        ${isSeason2 ? `
+        <!-- 8. Season 2 Two-Phase Timeline & Cryptographic Pre-Commitment -->
+        <div class="card" style="border-left: 4px solid var(--brand-cyan);">
+          <h2 style="font-size: 18px; font-weight: 700; color: var(--brand-cyan); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+            <span>⚡</span> 8. Season 2 Two-Phase Timeline &amp; Cryptographic Pre-Commitment
+          </h2>
+          <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 14px;">
+            To eliminate hindsight and operator lookahead bias in weekly quantitative workflows, Season 2 enforces a strict two-phase state machine decoupled between signal generation and order settlement:
+          </p>
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 12px;">
+            <div style="background: rgba(255, 255, 255, 0.02); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+              <strong style="color: var(--brand-cyan); display: block; margin-bottom: 4px; font-size: 13px;">Phase 1: Friday Close 15:30</strong>
+              <span style="font-size: 11px; color: var(--text-tertiary); text-transform: uppercase; margin-bottom: 6px; display: block;">Order Generation &amp; Hashing</span>
+              <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5; margin: 0;">
+                Models infer rankings on data strictly &le; Friday 15:00. Target orders are generated, frozen into JSON, and their SHA-256 hash is immediately committed to the public ledger before the weekend.
+              </p>
+            </div>
+            <div style="background: rgba(255, 255, 255, 0.02); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+              <strong style="color: var(--accent-amber); display: block; margin-bottom: 4px; font-size: 13px;">Phase 2: Monday Open 09:30</strong>
+              <span style="font-size: 11px; color: var(--text-tertiary); text-transform: uppercase; margin-bottom: 6px; display: block;">Execution Lock</span>
+              <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5; margin: 0;">
+                Frozen orders execute at real Monday auction open prices. Since the hash was committed on Friday, the operator cannot retroactively alter portfolio composition over the weekend.
+              </p>
+            </div>
+            <div style="background: rgba(255, 255, 255, 0.02); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+              <strong style="color: #4ade80; display: block; margin-bottom: 4px; font-size: 13px;">Phase 3: Friday Close 15:00</strong>
+              <span style="font-size: 11px; color: var(--text-tertiary); text-transform: uppercase; margin-bottom: 6px; display: block;">Unified Cycle Step</span>
+              <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5; margin: 0;">
+                Weekly NAV and fills are calculated and settled. Immediately thereafter, Phase 1 for the upcoming week executes in the same Friday CLI cycle step (<code>cli.py cycle-step</code>).
+              </p>
+            </div>
+          </div>
+        </div>
+        ` : ''}
 
         <!-- Final Axiom Banner -->
         <div class="card" style="background: linear-gradient(135deg, rgba(56, 189, 248, 0.08), rgba(168, 85, 247, 0.08)); border: 1px solid rgba(56, 189, 248, 0.3); text-align: center; padding: 24px;">

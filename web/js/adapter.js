@@ -5,10 +5,17 @@
 
 class ArenaDataAdapter {
   constructor(rawData) {
-    if (window.ARENA_DATA_PREVIEW) {
-      window.ARENA_DATA = window.ARENA_DATA_PREVIEW;
-      window._ARENA_IS_PREVIEW = true;
-      rawData = window.ARENA_DATA_PREVIEW;
+    if (!rawData) {
+      const activeSid = window.ArenaApp?.currentSeasonId || "season_01";
+      if (window.ARENA_SEASONS_DATA && window.ARENA_SEASONS_DATA[activeSid]) {
+        rawData = window.ARENA_SEASONS_DATA[activeSid];
+      } else if (window.ARENA_DATA_PREVIEW) {
+        window.ARENA_DATA = window.ARENA_DATA_PREVIEW;
+        window._ARENA_IS_PREVIEW = true;
+        rawData = window.ARENA_DATA_PREVIEW;
+      } else {
+        rawData = window.ARENA_DATA;
+      }
     }
     this.raw = rawData || window.ARENA_DATA || {};
     this.metadata = this.raw.metadata || {};
@@ -358,31 +365,66 @@ class ArenaDataAdapter {
   }
 
   getNavCurve(pathId) {
-    return this.navTimeline.curves[pathId] || [];
+    if (!pathId) return [];
+    if (pathId === "BENCHMARK_taotie" || pathId === "taotie") return this.getBenchmarkTaotieCurve();
+    if (pathId === "BENCHMARK_ghost_taotie" || pathId === "ghost_taotie") return this.getBenchmarkGhostTaotieCurve();
+    if (pathId === "BENCHMARK_csi300" || pathId === "csi300") return this.getBenchmarkCsi300Curve();
+    return (this.navTimeline && this.navTimeline.curves && this.navTimeline.curves[pathId]) || [];
   }
 
   getBenchmarkTaotieCurve() {
-    return this.navTimeline.curves["BENCHMARK_taotie"] || [];
+    return (this.navTimeline && this.navTimeline.curves && this.navTimeline.curves["BENCHMARK_taotie"]) || [];
   }
 
   getBenchmarkCsi300Curve() {
-    return this.navTimeline.curves["BENCHMARK_csi300"] || [];
+    return (this.navTimeline && this.navTimeline.curves && this.navTimeline.curves["BENCHMARK_csi300"]) || [];
   }
 
   getPathDrawdown(pathId) {
-    return this.navTimeline.drawdowns?.[pathId] || [];
+    if (!pathId) return [];
+    if (pathId === "BENCHMARK_taotie" || pathId === "taotie") return this.getTaotieDrawdown();
+    if (pathId === "BENCHMARK_ghost_taotie" || pathId === "ghost_taotie") return this.getGhostTaotieDrawdown();
+    if (pathId === "BENCHMARK_csi300" || pathId === "csi300") return this.getCsi300Drawdown();
+    return (this.navTimeline && this.navTimeline.drawdowns && this.navTimeline.drawdowns[pathId]) || [];
   }
 
   getPathExcessCSI300(pathId) {
-    return this.navTimeline.excess_csi300?.[pathId] || [];
+    if (this.navTimeline && this.navTimeline.excess_csi300 && this.navTimeline.excess_csi300[pathId]) {
+      return this.navTimeline.excess_csi300[pathId];
+    }
+    if (pathId === "BENCHMARK_ghost_taotie" || pathId === "ghost_taotie") {
+      const gCurve = this.getBenchmarkGhostTaotieCurve();
+      const cCurve = this.getBenchmarkCsi300Curve();
+      if (gCurve && gCurve.length && cCurve && cCurve.length) {
+        const len = Math.min(gCurve.length, cCurve.length);
+        const res = [];
+        for (let i = 0; i < len; i++) {
+          res.push(Number(((gCurve[i] - cCurve[i]) * 100).toFixed(2)));
+        }
+        return res;
+      }
+    }
+    if (pathId === "BENCHMARK_taotie" || pathId === "taotie") {
+      const tCurve = this.getBenchmarkTaotieCurve();
+      const cCurve = this.getBenchmarkCsi300Curve();
+      if (tCurve && tCurve.length && cCurve && cCurve.length) {
+        const len = Math.min(tCurve.length, cCurve.length);
+        const res = [];
+        for (let i = 0; i < len; i++) {
+          res.push(Number(((tCurve[i] - cCurve[i]) * 100).toFixed(2)));
+        }
+        return res;
+      }
+    }
+    return [];
   }
 
   getCsi300Drawdown() {
-    return this.navTimeline.drawdowns?.["BENCHMARK_csi300"] || [];
+    return (this.navTimeline && this.navTimeline.drawdowns && this.navTimeline.drawdowns["BENCHMARK_csi300"]) || [];
   }
 
   getTaotieDrawdown() {
-    return this.navTimeline.drawdowns?.["BENCHMARK_taotie"] || [];
+    return (this.navTimeline && this.navTimeline.drawdowns && this.navTimeline.drawdowns["BENCHMARK_taotie"]) || [];
   }
 
   getCsi300Return() {
@@ -391,6 +433,359 @@ class ArenaDataAdapter {
 
   getTaotieReturn() {
     return this.metadata.taotie_return_pct !== undefined ? this.metadata.taotie_return_pct : 2.32;
+  }
+
+  hasGhostTaotie() {
+    return !!this.paths.find(p => p.animal_id === "ghost_taotie") || !!this.navTimeline.curves?.["BENCHMARK_ghost_taotie"];
+  }
+
+  getGhostTaotieReturn() {
+    const p = this.paths.find(p => p.animal_id === "ghost_taotie");
+    return p ? p.total_return_pct : 3.85;
+  }
+
+  getBenchmarkGhostTaotieCurve() {
+    return this.navTimeline.curves?.["BENCHMARK_ghost_taotie"] || [];
+  }
+
+  getPathExcessTaotie(pathId) {
+    const pCurve = this.getNavCurve(pathId);
+    const bCurve = this.getBenchmarkTaotieCurve();
+    if (!pCurve || !bCurve || pCurve.length === 0) return [];
+    const len = Math.min(pCurve.length, bCurve.length);
+    const res = [];
+    for (let i = 0; i < len; i++) {
+      res.push(Number(((pCurve[i] - bCurve[i]) * 100).toFixed(2)));
+    }
+    return res;
+  }
+
+  getPathExcessGhostTaotie(pathId) {
+    const pCurve = this.getNavCurve(pathId);
+    const bCurve = this.getBenchmarkGhostTaotieCurve();
+    if (!pCurve || !bCurve || pCurve.length === 0) return [];
+    const len = Math.min(pCurve.length, bCurve.length);
+    const res = [];
+    for (let i = 0; i < len; i++) {
+      res.push(Number(((pCurve[i] - bCurve[i]) * 100).toFixed(2)));
+    }
+    return res;
+  }
+
+  getSpreadCurve(pathIdA, pathIdB) {
+    const curveA = this.getNavCurve(pathIdA);
+    const curveB = this.getNavCurve(pathIdB);
+    if (!curveA || !curveB || curveA.length === 0) return [];
+    const len = Math.min(curveA.length, curveB.length);
+    const res = [];
+    for (let i = 0; i < len; i++) {
+      res.push(Number(((curveA[i] - curveB[i]) * 100).toFixed(2)));
+    }
+    return res;
+  }
+
+  getGhostTaotieDrawdown() {
+    const curve = this.getBenchmarkGhostTaotieCurve();
+    if (!curve || curve.length === 0) return [];
+    let peak = curve[0] || 1.0;
+    const dds = [];
+    for (let i = 0; i < curve.length; i++) {
+      if (curve[i] > peak) peak = curve[i];
+      const dd = peak > 0 ? ((curve[i] - peak) / peak) * 100 : 0;
+      dds.push(Number(dd.toFixed(2)));
+    }
+    return dds;
+  }
+
+  getAllContestantsAndBenchmarks() {
+    const list = this.contestants.map(c => ({
+      id: c.id || c.contestant_id,
+      name: c.display_name || c.anonymous_name || c.id,
+      isBenchmark: false,
+      tag: "Model Candidate"
+    }));
+
+    list.push({
+      id: "BENCHMARK_taotie",
+      name: "Taotie (Physical Baseline 500k)",
+      isBenchmark: true,
+      tag: "Executable Benchmark"
+    });
+
+    if (this.hasGhostTaotie()) {
+      list.push({
+        id: "BENCHMARK_ghost_taotie",
+        name: "Ghost Taotie (Theoretical Equal-Weight 100M)",
+        isBenchmark: true,
+        tag: "Theoretical Benchmark"
+      });
+    }
+
+    list.push({
+      id: "BENCHMARK_csi300",
+      name: "CSI 300 (Market Benchmark)",
+      isBenchmark: true,
+      tag: "Market Anchor"
+    });
+
+    return list;
+  }
+
+  getSubjectProfile(subjectId, animalId = "robot") {
+    if (!subjectId) return null;
+
+    if (subjectId === "BENCHMARK_taotie" || subjectId === "taotie") {
+      const curve = this.getBenchmarkTaotieCurve();
+      const dd = this.getTaotieDrawdown();
+      const minDd = dd && dd.length ? Math.min(...dd) * 100 : 0;
+      const lastVal = curve && curve.length ? curve[curve.length - 1] : 1.0;
+      return {
+        id: "BENCHMARK_taotie",
+        name: "Taotie (Physical Baseline 500k)",
+        shortName: "Taotie",
+        isBenchmark: true,
+        tag: "Executable Benchmark",
+        curve: curve,
+        totalReturnPct: Number(((lastVal - 1.0) * 100).toFixed(2)),
+        maxDrawdownPct: Math.abs(Number(minDd.toFixed(2))),
+        sharpeRatio: null,
+        nullCourt: "Physical Floor"
+      };
+    }
+
+    if (subjectId === "BENCHMARK_ghost_taotie" || subjectId === "ghost_taotie") {
+      const curve = this.getBenchmarkGhostTaotieCurve();
+      const dd = this.getGhostTaotieDrawdown();
+      const minDd = dd && dd.length ? Math.min(...dd) * 100 : 0;
+      const lastVal = curve && curve.length ? curve[curve.length - 1] : 1.0;
+      return {
+        id: "BENCHMARK_ghost_taotie",
+        name: "Ghost Taotie (Theoretical Equal-Weight 100M)",
+        shortName: "Ghost Taotie",
+        isBenchmark: true,
+        tag: "Theoretical Benchmark",
+        curve: curve,
+        totalReturnPct: Number(((lastVal - 1.0) * 100).toFixed(2)),
+        maxDrawdownPct: Math.abs(Number(minDd.toFixed(2))),
+        sharpeRatio: null,
+        nullCourt: "Theoretical Ceiling"
+      };
+    }
+
+    if (subjectId === "BENCHMARK_csi300" || subjectId === "csi300") {
+      const curve = this.getBenchmarkCsi300Curve();
+      const dd = this.getCsi300Drawdown();
+      const minDd = dd && dd.length ? Math.min(...dd) * 100 : 0;
+      const lastVal = curve && curve.length ? curve[curve.length - 1] : 1.0;
+      return {
+        id: "BENCHMARK_csi300",
+        name: "CSI 300 (Market Benchmark)",
+        shortName: "CSI 300",
+        isBenchmark: true,
+        tag: "Market Anchor",
+        curve: curve,
+        totalReturnPct: Number(((lastVal - 1.0) * 100).toFixed(2)),
+        maxDrawdownPct: Math.abs(Number(minDd.toFixed(2))),
+        sharpeRatio: null,
+        nullCourt: "Beta Anchor"
+      };
+    }
+
+    const contestant = this.getContestant(subjectId);
+    const path = this.getPath(`${subjectId}_${animalId}`) || this.getPath(`${subjectId}_robot`) || (this.paths.find(p => p.contestant_id === subjectId));
+    const curve = path ? this.getNavCurve(path.path_id) : [];
+    const ret = path ? path.total_return_pct : (curve && curve.length ? Number(((curve[curve.length - 1] - 1.0) * 100).toFixed(2)) : 0);
+    const mdd = path ? path.max_drawdown_pct : 0;
+    const sharpe = path ? path.sharpe_ratio : null;
+    const nullCourt = path && path.null_court && path.null_court.verdict ? path.null_court.verdict : "Pass";
+
+    return {
+      id: subjectId,
+      name: contestant ? (contestant.display_name || contestant.anonymous_name || contestant.id) : subjectId,
+      shortName: contestant ? (contestant.display_name || contestant.anonymous_name || contestant.id) : subjectId,
+      isBenchmark: false,
+      tag: contestant ? (contestant.role || contestant.category || "Contestant") : "Model Candidate",
+      curve: curve,
+      totalReturnPct: ret,
+      maxDrawdownPct: mdd,
+      sharpeRatio: sharpe,
+      nullCourt: nullCourt,
+      contestant: contestant,
+      path: path
+    };
+  }
+
+  getMacroPanoramaData(metricMode = "nav", filterGroup = "top5") {
+    const dates = this.getNavDates();
+    if (!dates || dates.length === 0) return { dates: [], seriesList: [] };
+
+    let candidatePaths = [];
+    const alphaPaths = this.paths.filter(p => p.contestant_id !== "BENCHMARK");
+
+    if (filterGroup === "top5") {
+      candidatePaths = [...alphaPaths].sort((a, b) => b.total_return_pct - a.total_return_pct).slice(0, 5);
+    } else if (filterGroup === "robot") {
+      candidatePaths = alphaPaths.filter(p => p.animal_id === "robot");
+    } else if (filterGroup === "eagle") {
+      candidatePaths = alphaPaths.filter(p => p.animal_id.startsWith("eagle")).slice(0, 6);
+    } else if (filterGroup === "sloth") {
+      candidatePaths = alphaPaths.filter(p => p.animal_id.startsWith("sloth")).slice(0, 6);
+    } else {
+      candidatePaths = alphaPaths.slice(0, 5);
+    }
+
+    const taotieCurve = this.getBenchmarkTaotieCurve();
+    const ghostTaotieCurve = this.getBenchmarkGhostTaotieCurve();
+    const csi300Curve = this.getBenchmarkCsi300Curve();
+
+    const taotieDD = this.getTaotieDrawdown();
+    const ghostDD = this.getGhostTaotieDrawdown();
+    const csiDD = this.getCsi300Drawdown();
+
+    const hasGhost = this.hasGhostTaotie();
+    const seriesList = [];
+    const palette = ["#10b981", "#38bdf8", "#818cf8", "#f43f5e", "#fb923c", "#ec4899"];
+
+    candidatePaths.forEach((p, idx) => {
+      let data = [];
+      if (metricMode === "nav") {
+        data = this.getNavCurve(p.path_id);
+      } else if (metricMode === "excess_taotie") {
+        data = this.getPathExcessTaotie(p.path_id);
+      } else if (metricMode === "excess_ghost") {
+        data = this.getPathExcessGhostTaotie(p.path_id);
+      } else if (metricMode === "excess_csi300") {
+        data = this.getPathExcessCSI300(p.path_id);
+      } else if (metricMode === "drawdown") {
+        data = this.getPathDrawdown(p.path_id);
+      }
+
+      seriesList.push({
+        id: p.path_id,
+        name: p.path_id,
+        type: "candidate",
+        color: palette[idx % palette.length],
+        data: data || [],
+        path: p
+      });
+    });
+
+    if (metricMode === "nav") {
+      if (hasGhost && ghostTaotieCurve.length > 0) {
+        seriesList.push({
+          id: "BENCHMARK_ghost_taotie",
+          name: "Ghost Taotie (100M)",
+          type: "benchmark_ghost",
+          color: "#00f0ff",
+          lineStyle: { type: [8, 4], width: 2.2 },
+          data: ghostTaotieCurve
+        });
+      }
+
+      if (taotieCurve.length > 0) {
+        seriesList.push({
+          id: "BENCHMARK_taotie",
+          name: "Taotie (500k)",
+          type: "benchmark_taotie",
+          color: "#c084fc",
+          lineStyle: { type: [4, 4], width: 2.2 },
+          data: taotieCurve
+        });
+      }
+
+      if (csi300Curve.length > 0) {
+        seriesList.push({
+          id: "BENCHMARK_csi300",
+          name: "CSI 300",
+          type: "benchmark_csi300",
+          color: "#f59e0b",
+          lineStyle: { type: [6, 6], width: 2.0 },
+          data: csi300Curve
+        });
+      }
+    } else if (metricMode === "drawdown") {
+      if (hasGhost && ghostDD.length > 0) {
+        seriesList.push({
+          id: "BENCHMARK_ghost_taotie",
+          name: "Ghost Taotie (100M)",
+          type: "benchmark_ghost",
+          color: "#00f0ff",
+          lineStyle: { type: [8, 4], width: 2.2 },
+          data: ghostDD
+        });
+      }
+
+      if (taotieDD.length > 0) {
+        seriesList.push({
+          id: "BENCHMARK_taotie",
+          name: "Taotie (500k)",
+          type: "benchmark_taotie",
+          color: "#c084fc",
+          lineStyle: { type: [4, 4], width: 2.2 },
+          data: taotieDD
+        });
+      }
+
+      if (csiDD.length > 0) {
+        seriesList.push({
+          id: "BENCHMARK_csi300",
+          name: "CSI 300",
+          type: "benchmark_csi300",
+          color: "#f59e0b",
+          lineStyle: { type: [6, 6], width: 2.0 },
+          data: csiDD
+        });
+      }
+    } else if (metricMode === "excess_taotie") {
+      const zeroBase = dates.map(() => 0.0);
+      seriesList.push({
+        id: "BENCHMARK_zero_taotie",
+        name: "Taotie (500k)",
+        type: "benchmark_zero",
+        color: "#c084fc",
+        lineStyle: { type: [4, 4], width: 2.2 },
+        data: zeroBase
+      });
+    } else if (metricMode === "excess_ghost") {
+      const zeroBase = dates.map(() => 0.0);
+      seriesList.push({
+        id: "BENCHMARK_zero_ghost",
+        name: "Ghost Taotie (100M)",
+        type: "benchmark_zero",
+        color: "#00f0ff",
+        lineStyle: { type: [8, 4], width: 2.2 },
+        data: zeroBase
+      });
+    } else if (metricMode === "excess_csi300") {
+      const zeroBase = dates.map(() => 0.0);
+      seriesList.push({
+        id: "BENCHMARK_zero_csi300",
+        name: "CSI 300",
+        type: "benchmark_zero",
+        color: "#f59e0b",
+        lineStyle: { type: [6, 6], width: 2.0 },
+        data: zeroBase
+      });
+    }
+
+    return {
+      dates: dates,
+      seriesList: seriesList,
+      metricMode: metricMode,
+      filterGroup: filterGroup
+    };
+  }
+
+  getCurrentSeasonMeta() {
+    let sid = this.metadata.season_id || window.ArenaApp?.currentSeasonId || "season_01";
+    if (sid === "season_1") sid = "season_01";
+    if (sid === "season_2") sid = "season_02";
+    const seasons = window.ARENA_SEASONS_INDEX || [];
+    return seasons.find(s => s.id === sid) || seasons[0] || {};
+  }
+
+  getDispatchesData() {
+    return this.raw.dispatches || null;
   }
 
   getDecisionForks() {
@@ -612,5 +1007,6 @@ window.formatPercentile = function(rank, n = 1000) {
   return `${num.toFixed(1)}%`;
 };
 
-// Attach singleton adapter to global window scope
-window.arenaAdapter = new ArenaDataAdapter(window.ARENA_DATA);
+// Attach class and singleton adapter to global window scope
+window.ArenaDataAdapter = ArenaDataAdapter;
+window.arenaAdapter = new ArenaDataAdapter();

@@ -253,17 +253,34 @@ window.AnimalsView = {
               </p>
             </div>
 
-            <!-- Metric Switcher Buttons -->
-            <div class="chart-metric-btn-group" style="display: flex; gap: 4px; background: var(--surface-hover); padding: 3px; border-radius: 6px; border: 1px solid var(--border-subtle);">
-              <button class="btn btn-sm ${this.activeMetric === 'nav' ? 'btn-primary' : 'btn-outline'} animal-metric-btn" data-metric="nav" style="font-size: 11px; padding: 4px 10px;">
-                Cumulative NAV
-              </button>
-              <button class="btn btn-sm ${this.activeMetric === 'drawdown' ? 'btn-primary' : 'btn-outline'} animal-metric-btn" data-metric="drawdown" style="font-size: 11px; padding: 4px 10px;">
-                Underwater Drawdown
-              </button>
-              <button class="btn btn-sm ${this.activeMetric === 'excess_csi300' ? 'btn-primary' : 'btn-outline'} animal-metric-btn" data-metric="excess_csi300" style="font-size: 11px; padding: 4px 10px;">
-                Excess vs. CSI 300
-              </button>
+            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+              <!-- Metric Switcher Buttons -->
+              <div class="chart-metric-btn-group" style="display: flex; gap: 4px; background: var(--surface-hover); padding: 3px; border-radius: 6px; border: 1px solid var(--border-subtle);">
+                <button class="btn btn-sm ${this.activeMetric === 'nav' ? 'btn-primary' : 'btn-outline'} animal-metric-btn" data-metric="nav" style="font-size: 11px; padding: 4px 10px;">
+                  Cumulative NAV
+                </button>
+                <button class="btn btn-sm ${this.activeMetric === 'drawdown' ? 'btn-primary' : 'btn-outline'} animal-metric-btn" data-metric="drawdown" style="font-size: 11px; padding: 4px 10px;">
+                  Underwater Drawdown
+                </button>
+                <button class="btn btn-sm ${this.activeMetric === 'excess_csi300' ? 'btn-primary' : 'btn-outline'} animal-metric-btn" data-metric="excess_csi300" style="font-size: 11px; padding: 4px 10px;">
+                  Excess vs. CSI 300
+                </button>
+              </div>
+
+              <!-- Benchmark Standards Independent Controls -->
+              <div class="benchmark-pill-group" id="animal-benchmarks-pill-group">
+                <span class="benchmark-pill-label">Benchmarks:</span>
+                ${window.arenaAdapter.hasGhostTaotie() ? `
+                <button type="button" class="benchmark-pill ghost-taotie is-active" data-benchmark="ghost" title="Toggle Ghost Taotie (100M)">
+                  <span class="bm-line-badge"></span> Ghost (100M)
+                </button>` : ''}
+                <button type="button" class="benchmark-pill taotie is-active" data-benchmark="taotie" title="Toggle Taotie (500k)">
+                  <span class="bm-line-badge"></span> Taotie (500k)
+                </button>
+                <button type="button" class="benchmark-pill csi300 is-active" data-benchmark="csi300" title="Toggle CSI 300">
+                  <span class="bm-line-badge"></span> CSI 300
+                </button>
+              </div>
             </div>
           </div>
 
@@ -457,6 +474,21 @@ window.AnimalsView = {
           csi300Curve,
           this.activeMetric
         );
+
+        // Maintain benchmark pill selection state
+        container.querySelectorAll("#animal-benchmarks-pill-group .benchmark-pill").forEach(pill => {
+          const bmKey = pill.getAttribute("data-benchmark");
+          window.ArenaCharts.toggleBenchmark("animal-cross-model-chart", bmKey, pill.classList.contains("is-active"));
+        });
+      });
+    });
+
+    // Benchmark pill clicks
+    container.querySelectorAll("#animal-benchmarks-pill-group .benchmark-pill").forEach(pill => {
+      pill.addEventListener("click", () => {
+        const isActive = pill.classList.toggle("is-active");
+        const bmKey = pill.getAttribute("data-benchmark");
+        window.ArenaCharts.toggleBenchmark("animal-cross-model-chart", bmKey, isActive);
       });
     });
   }

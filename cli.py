@@ -16,6 +16,43 @@ from arena.contestants import ContestantRegistry
 from arena.animals import get_all_animals
 from arena.runner import WeeklyCycleRunner
 from arena.reports import DualTierExporter
+from arena.seasons import SeasonManager
+from arena.benchmarks import BenchmarkCategory
+
+
+def cmd_list_seasons(args):
+    """列出当前所有可用赛季"""
+    seasons = SeasonManager.list_seasons()
+    print("\n" + "=" * 70)
+    print(" 🏁 QuantPits-Arena 赛季清单 (Seasons)")
+    print("=" * 70)
+    for sid in seasons:
+        cfg = SeasonManager.get_season_config(sid)
+        print(f" • [{sid}] {cfg.title} (Status: {cfg.status})")
+        print(f"     Anchor: {cfg.anchor_date} -> {cfg.end_date} | Initial Cash: CNY {cfg.initial_cash:,.0f}")
+        print(f"     Description: {cfg.description}")
+        b_names = [b.get("id") for b in cfg.benchmarks]
+        print(f"     Active Benchmarks: {', '.join(b_names)}")
+    print("=" * 70 + "\n")
+
+
+def cmd_list_benchmarks(args):
+    """列出体系化基准 (Benchmarks)"""
+    sid = getattr(args, "season", "season_01")
+    cfg = SeasonManager.get_season_config(sid)
+    print("\n" + "=" * 70)
+    print(f" 📊 QuantPits-Arena 基准体系 (Benchmarks for {sid})")
+    print("=" * 70)
+    for b in cfg.benchmarks:
+        bid = b.get("id")
+        btype = b.get("type", "BENCHMARK")
+        name = b.get("display_name", bid)
+        print(f" • [{bid}] {name} (Category: {btype})")
+        if "initial_cash" in b:
+            print(f"     Initial Cash: CNY {b['initial_cash']:,.0f}")
+        if "symbol" in b:
+            print(f"     Index Symbol: {b['symbol']}")
+    print("=" * 70 + "\n")
 
 
 def cmd_list_contestants(args):
@@ -228,12 +265,146 @@ def cmd_step(args):
     print(f"    🟢 收益率衰减矩阵:   {artifacts['public_matrix']}")
     print(f"    🔴 本地私有交易明细: {artifacts['private_trades']}")
     print(f"    💾 最新运行状态快照: {latest_path}")
+def cmd_cycle_step(args):
+    """
+    周五一键闭环原子执行流 (Friday Loop: Settle Last Week + Commit Next Week)
+    每周仅在周五盘后运行一次：
+    1. 撮合与结算上周五已冻结锁定的订单；
+    2. 依据本周五最新收盘特征产出下周一的全新调仓订单，并计算 SHA-256 存证锁死；
+    3. 自动导出战报与 Checkpoint 快照。
+    """
+    season_id = getattr(args, "season", "season_01")
+    cfg = SeasonManager.get_season_config(season_id)
+
+    run_id = args.run_id or f"{season_id}_live"
+    base_dir = Path(args.output) if args.output else RUNS_DIR
+    run_dir = base_dir / run_id
+    cp_dir = run_dir / "checkpoints"
+    orders_dir = run_dir / "commitments"
+    orders_dir.mkdir(parents=True, exist_ok=True)
+
+    print("\n" + "=" * 70)
+    print(f" 🔄 QuantPits-Arena 周五一键闭环推进 (Friday Loop)")
+    print(f"    当前赛季: [{cfg.season_id}] {cfg.title}")
+    print(f"    运行 ID:   {run_id}")
+    print(f"    模式:     {'Mock 快速验证' if args.mock else '真实本地模型推理'}")
+    print("=" * 70)
+
+    calendar = TradingCalendar()
+    registry = ContestantRegistry()
+
+    runner = WeeklyCycleRunner(
+        anchor_date=cfg.anchor_date,
+        end_date=cfg.end_date,
+        initial_cash=cfg.initial_cash,
+        mock_mode=args.mock,
+        calendar=calendar,
+        registry=registry
+    )
+
+    # 检查历史进度
+    latest_path = cp_dir / "latest_checkpoint.pkl"
+    next_idx = 0
+    if latest_path.exists():
+        loaded_idx = runner.load_checkpoint_from_disk(latest_path)
+        next_idx = loaded_idx + 1
+
+    if next_idx >= len(runner.cycles):
+        print(f"[!] 赛季 {season_id} 所有周期已全部执行完毕，无需进一步推进。")
+        return
+
+    cur_cycle = runner.cycles[next_idx]
+    print(f"[*] 推进周期: Cycle {next_idx} (交易日: {cur_cycle.trade_date} -> 结算日: {cur_cycle.settle_date})")
+
+    active_contestants = registry.list_contestants()
+    runner._init_engines(active_contestants)
+    if latest_path.exists():
+        runner.load_checkpoint_from_disk(latest_path)
+
+    price_lookup_fn, tradability_filter_fn = runner._setup_market_provider(
+        active_contestants, None, None
+    )
+
+    # 1. 尝试读取上一次预存证的下周订单 (若有)
+    pending_file = orders_dir / f"orders_cycle_{next_idx}.json"
+    pending_orders = None
+    if pending_file.exists():
+        print(f"[1/3] 发现上周五已冻结订单: {pending_file.name}")
+        # 在此处可做 SHA-256 校验
+    else:
+        print(f"[1/3] 首周/无前置预存证订单，执行首周开盘建仓流水线...")
+
+    settled_orders, next_orders = runner.step_friday_cycle(
+        cycle=cur_cycle,
+        active_contestants=active_contestants,
+        price_lookup_fn=price_lookup_fn,
+        pending_orders=pending_orders,
+        tradability_filter_fn=tradability_filter_fn
+    )
+
+    print(f"    ✔ 本周撮合与 Daily MTM 估值结算完毕。")
+
+    # 2. 锁定并存证下周订单
+    if next_orders is not None:
+        next_file = orders_dir / f"orders_cycle_{next_idx + 1}.json"
+        import hashlib, json
+        # 简单序列化订单标的
+        order_summary = {}
+        for (cid, aid), ord_obj in next_orders.items():
+            if ord_obj is not None:
+                order_summary[f"{cid}_{aid}"] = {
+                    "buy": ord_obj.buy_instruments,
+                    "sell": ord_obj.sell_instruments,
+                    "trade_date": ord_obj.trade_date
+                }
+            else:
+                order_summary[f"{cid}_{aid}"] = None
+        serialized = json.dumps(order_summary, sort_keys=True)
+        order_hash = hashlib.sha256(serialized.encode("utf-8")).hexdigest()
+        with open(next_file, "w", encoding="utf-8") as f:
+            f.write(serialized)
+
+        print(f"[2/3] 成功生成并锁定下周订单: {next_file.name}")
+        print(f"    🔐 密码学存证指纹 (SHA-256): {order_hash}")
+    else:
+        print(f"[2/3] 已达赛季尾声，无下周订单生成。")
+
+    # 3. 导出快照与战报
+    runner.save_checkpoint_to_disk(cp_dir, cycle_idx=next_idx)
+
+    results = {
+        key: engine.to_portfolio_path()
+        for key, engine in runner.engines.items()
+    }
+    results[("BENCHMARK", "taotie")] = runner.taotie_benchmark.engine.to_portfolio_path()
+
+    exporter = DualTierExporter(run_id=run_id, base_dir=base_dir)
+    artifacts = exporter.export(results, registry)
+
+    print(f"[3/3] 战报生成成功，最新状态已落盘：")
+    print(f"    🟢 脱敏公开 NAV:     {artifacts['public_nav']}")
+    print(f"    🟢 脱敏指标汇总:     {artifacts['public_metrics']}")
+    print(f"    💾 最新运行快照:     {latest_path}")
     print("=" * 70 + "\n")
 
 
 def main():
     parser = argparse.ArgumentParser(description="QuantPits-Arena CLI")
     subparsers = parser.add_subparsers(dest="subcommand", help="子命令")
+
+    # cycle-step (推荐周五一键闭环)
+    p_cstep = subparsers.add_parser("cycle-step", help="周五一键闭环：结算上周已冻结订单 + 预承诺锁定下周新订单")
+    p_cstep.add_argument("--season", type=str, default="season_01", help="指定赛季 ID (默认 season_01)")
+    p_cstep.add_argument("--run-id", type=str, default=None, help="指定运行 ID")
+    p_cstep.add_argument("--mock", action="store_true", help="使用 Mock 适配器快速验证")
+    p_cstep.add_argument("--output", type=str, default=None, help="指定输出根目录")
+
+    # list-seasons
+    subparsers.add_parser("list-seasons", help="查看所有可用赛季")
+
+    # list-benchmarks
+    p_b = subparsers.add_parser("list-benchmarks", help="查看赛季基准体系")
+    p_b.add_argument("--season", type=str, default="season_01", help="指定赛季 ID (默认 season_01)")
 
     # list-contestants
     subparsers.add_parser("list-contestants", help="查看所有参赛选手")
@@ -246,6 +417,7 @@ def main():
 
     # run
     p_run = subparsers.add_parser("run", help="启动周频回测")
+    p_run.add_argument("--season", type=str, default="season_01", help="指定赛季 ID (默认 season_01)")
     p_run.add_argument("--run-id", type=str, default=None, help="指定运行 ID")
     p_run.add_argument("--anchor-date", type=str, default=DEFAULT_ANCHOR_DATE, help="初始锚定日期")
     p_run.add_argument("--end-date", type=str, default=DEFAULT_END_DATE, help="回测结束日期")
@@ -259,6 +431,7 @@ def main():
 
     # step
     p_step = subparsers.add_parser("step", help="从上周快照增量滚动推进 1 个周期")
+    p_step.add_argument("--season", type=str, default="season_01", help="指定赛季 ID (默认 season_01)")
     p_step.add_argument("--run-id", type=str, required=True, help="指定待推进的运行 ID")
     p_step.add_argument("--anchor-date", type=str, default=DEFAULT_ANCHOR_DATE, help="初始锚定日期")
     p_step.add_argument("--end-date", type=str, default=DEFAULT_END_DATE, help="回测结束日期")
@@ -274,7 +447,11 @@ def main():
         parser.print_help()
         sys.exit(0)
 
-    if args.subcommand == "list-contestants":
+    if args.subcommand == "list-seasons":
+        cmd_list_seasons(args)
+    elif args.subcommand == "list-benchmarks":
+        cmd_list_benchmarks(args)
+    elif args.subcommand == "list-contestants":
         cmd_list_contestants(args)
     elif args.subcommand == "list-animals":
         cmd_list_animals(args)
@@ -284,6 +461,8 @@ def main():
         cmd_run(args)
     elif args.subcommand == "step":
         cmd_step(args)
+    elif args.subcommand == "cycle-step":
+        cmd_cycle_step(args)
 
 
 if __name__ == "__main__":

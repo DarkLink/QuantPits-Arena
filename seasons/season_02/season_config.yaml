@@ -1,0 +1,51 @@
+# ==============================================================================
+# QuantPits-Arena Season 2 Preview Environment Configuration (season_config.yaml)
+# ==============================================================================
+
+season_id: season_02
+title: "QuantPits Arena Season 2 (Next-Gen Preview)"
+status: DRAFT
+description: "Season 2 evolving tournament scaffold: introducing Ghost Taotie (Theoretical Equal-Weight) and Two-Phase lookahead-free execution"
+
+# Calendar and Horizon
+calendar:
+  anchor_date: "2026-09-04"        # Friday decision cutoff following Season 1
+  first_trade_date: "2026-09-07"   # Monday market open entry
+  end_date: "2026-10-30"           # Planned tournament horizon
+  cycle_freq: "weekly"
+
+# Account and Match Execution Parameters
+execution:
+  initial_cash: 500000.0           # Standard baseline capital: CNY 500,000
+  deal_price_mode: "open"          # Monday open execution
+  lot_size: 100                    # 100 shares per lot
+  allow_fractional_shares: false
+  open_cost: 0.0005
+  close_cost: 0.0015
+  min_cost: 5.0
+  topk: 22
+  n_drop: 3
+
+# Universe Definition
+universe:
+  provider: "manifest_feature_universe"
+  market: "csirun300"
+  benchmark_index: "SH000300"
+
+# Enabled Benchmarks (Introducing Ghost Taotie)
+benchmarks:
+  - id: "taotie"
+    type: "EXECUTABLE"
+    initial_cash: 500000.0
+    display_name: "Taotie (Physical Baseline 500k)"
+  - id: "ghost_taotie"
+    type: "THEORETICAL"
+    initial_cash: 100000000.0      # Institutional CNY 100M capital to eliminate round-lot friction
+    display_name: "Ghost Taotie (Theoretical Equal-Weight 100M)"
+  - id: "csi300"
+    type: "INDEX"
+    symbol: "SH000300"
+    display_name: "CSI 300 (Market Benchmark)"
+  - id: "monkeys"
+    type: "STATISTICAL"
+    colony_size_per_spec: 100

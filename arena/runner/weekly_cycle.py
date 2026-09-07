@@ -150,15 +150,20 @@ class WeeklyCycleRunner:
                 price_lookup_fn = default_price_lookup
         return price_lookup_fn, tradability_filter_fn
 
-    def step_cycle(
+    def commit_orders(
         self,
         cycle: WeeklyCycle,
         active_contestants: List[ContestantManifest],
-        price_lookup_fn: Callable[[str, str, str], float],
         tradability_filter_fn: Optional[Callable[[str, str], bool]] = None,
-    ):
+        price_lookup_fn: Optional[Callable[[str, str, str], float]] = None,
+    ) -> Dict[tuple, Any]:
         """
-        单周推进核心逻辑（无论是全量批量还是增量滚动，统一调用此方法保证绝对幂等与一致性）。
+        【阶段一：周五决策日 (Decision Phase)】
+        - 严格仅使用 <= decision_date 的信息；
+        - 模型生成原始打分截面；
+        - 各动物执行信号转换；
+        - 生成各策略组合与基准在下周一的目标调仓订单 (Orders)；
+        - 可在此阶段将订单哈希写入存证，杜绝事后窥探与过拟合。
         """
         c_idx = cycle.cycle_idx
 
@@ -176,6 +181,8 @@ class WeeklyCycleRunner:
             if cid not in self.signal_history:
                 self.signal_history[cid] = {}
             self.signal_history[cid][c_idx] = raw_score
+
+        orders: Dict[tuple, Any] = {}
 
         # 2. 各 Animal 进行信号变换并生成下周一的订单
         for c in active_contestants:
@@ -217,25 +224,130 @@ class WeeklyCycleRunner:
                     price_lookup=price_lookup_fn,
                     passive_pool=passive_pool
                 )
+                orders[key] = order
 
-                # 3. 撮合成交与周内日频估值
+        # 3. 生成独立基准 (Taotie) 的目标订单
+        first_raw = next(iter(self.signal_history.values()))[c_idx]
+        universe = list(first_raw.index)
+        is_first_taotie = (c_idx == 0)
+        mock_score = pd.Series(1.0, index=universe)
+        taotie_order = self.taotie_benchmark.engine.generate_order(
+            score=mock_score,
+            topk=0,
+            n_drop=0,
+            trade_date=cycle.trade_date,
+            is_first_entry=is_first_taotie,
+            tradability_filter=tradability_filter_fn,
+            price_lookup=price_lookup_fn,
+            passive_pool=True
+        )
+        orders[("BENCHMARK", "taotie")] = taotie_order
+
+        return orders
+
+    def execute_orders(
+        self,
+        cycle: WeeklyCycle,
+        orders: Dict[tuple, Any],
+        price_lookup_fn: Callable[[str, str, str], float]
+    ) -> None:
+        """
+        【阶段二：周一开盘执行与周内日频估值 (Execution & Valuation Phase)】
+        - 接收周五已锁定的订单字典；
+        - 按周一实际集合竞价价格和停牌状态撮合成交；
+        - 记录周内每一个交易日的 Daily Marked-to-Market 市值与 NAV。
+        """
+        c_idx = cycle.cycle_idx
+
+        # 执行各选手参赛动物组合
+        for key, order in orders.items():
+            if key == ("BENCHMARK", "taotie"):
+                self.taotie_benchmark.engine.execute_weekly_cycle(
+                    cycle=cycle,
+                    order=order,
+                    price_lookup=price_lookup_fn
+                )
+            else:
+                engine = self.engines[key]
                 engine.execute_weekly_cycle(
                     cycle=cycle,
                     order=order,
                     price_lookup=price_lookup_fn
                 )
 
-        # 4. 推进独立基准：饕餮 (Taotie Benchmark)
-        first_raw = next(iter(self.signal_history.values()))[c_idx]
-        universe = list(first_raw.index)
-        self.taotie_benchmark.step(
+        self.last_completed_cycle_idx = c_idx
+
+    def step_cycle(
+        self,
+        cycle: WeeklyCycle,
+        active_contestants: List[ContestantManifest],
+        price_lookup_fn: Callable[[str, str, str], float],
+        tradability_filter_fn: Optional[Callable[[str, str], bool]] = None,
+    ):
+        """
+        单周推进核心逻辑（无论是全量批量还是增量滚动，统一编排两阶段流水线保证绝对一致性）。
+        """
+        orders = self.commit_orders(
             cycle=cycle,
-            universe=universe,
-            price_lookup_fn=price_lookup_fn,
+            active_contestants=active_contestants,
             tradability_filter_fn=tradability_filter_fn,
+            price_lookup_fn=price_lookup_fn
+        )
+        self.execute_orders(
+            cycle=cycle,
+            orders=orders,
+            price_lookup_fn=price_lookup_fn
         )
 
-        self.last_completed_cycle_idx = c_idx
+    def step_friday_cycle(
+        self,
+        cycle: WeeklyCycle,
+        active_contestants: List[ContestantManifest],
+        price_lookup_fn: Callable[[str, str, str], float],
+        pending_orders: Optional[Dict[tuple, Any]] = None,
+        tradability_filter_fn: Optional[Callable[[str, str], bool]] = None,
+    ) -> Tuple[Dict[tuple, Any], Optional[Dict[tuple, Any]]]:
+        """
+        周五闭环原子执行流 (Friday All-in-One Cycle):
+        1. 若提供了 pending_orders (上周五已冻结的下周一调仓订单)，
+           则以本周一实际开盘价与周内行情进行撮合成交与盯市估值 (execute_orders)；
+        2. 接着读取本周五收盘最新截面特征，为下周一生成全新目标订单 (commit_orders)；
+        3. 返回 (settled_orders, next_orders)。
+        """
+        # 1. 撮合与结算已冻结的订单 (若首周无 pending_orders，则先 commit 再 execute 首周建仓)
+        if pending_orders is not None:
+            self.execute_orders(
+                cycle=cycle,
+                orders=pending_orders,
+                price_lookup_fn=price_lookup_fn
+            )
+            settled_orders = pending_orders
+        else:
+            settled_orders = self.commit_orders(
+                cycle=cycle,
+                active_contestants=active_contestants,
+                tradability_filter_fn=tradability_filter_fn,
+                price_lookup_fn=price_lookup_fn
+            )
+            self.execute_orders(
+                cycle=cycle,
+                orders=settled_orders,
+                price_lookup_fn=price_lookup_fn
+            )
+
+        # 2. 为下周一预生成调仓订单并锁定
+        next_cycle_idx = cycle.cycle_idx + 1
+        next_orders = None
+        if next_cycle_idx < len(self.cycles):
+            next_cycle = self.cycles[next_cycle_idx]
+            next_orders = self.commit_orders(
+                cycle=next_cycle,
+                active_contestants=active_contestants,
+                tradability_filter_fn=tradability_filter_fn,
+                price_lookup_fn=price_lookup_fn
+            )
+
+        return settled_orders, next_orders
 
     def run(
         self,
