@@ -705,6 +705,9 @@ window.ArenaCharts = {
     const p95 = parse(monkeyDist.monkey_p95);
     const maxVal = parse(monkeyDist.monkey_max);
 
+    const xMin = Math.min(minVal, actualReturnPct) - 2.0;
+    const xMax = Math.max(maxVal, actualReturnPct) + 3.0;
+
     const option = {
       backgroundColor: tc.bg,
       title: {
@@ -728,6 +731,8 @@ window.ArenaCharts = {
       },
       xAxis: {
         type: "value",
+        min: Math.floor(xMin),
+        max: Math.ceil(xMax),
         name: "Total Return (%)",
         nameLocation: "middle",
         nameGap: 25,
@@ -1309,7 +1314,40 @@ window.ArenaCharts = {
       'CONTESTANT_E': '#f97316', // Orange
       'CONTESTANT_F': '#eab308'  // Amber/Gold
     };
-    const fallbackPalette = ['#38bdf8', '#10b981', '#a855f7', '#ec4899', '#f97316', '#eab308'];
+    const fallbackPalette = [
+      '#38bdf8', '#10b981', '#a855f7', '#ec4899', '#f97316', '#eab308',
+      '#06b6d4', '#84cc16', '#f43f5e', '#d946ef', '#6366f1', '#14b8a6',
+      '#fb923c', '#c084fc', '#4ade80', '#facc15', '#94a3b8'
+    ];
+
+    const uniqueAnimals = new Set(animalPaths.map(p => p.animal_id));
+    const uniqueModels = new Set(animalPaths.map(p => p.contestant_id));
+    const isMultiAnimal = uniqueAnimals.size > 1;
+    const isSingleModel = uniqueModels.size === 1;
+
+    const getSeriesName = (p, metric) => {
+      let label = "";
+      if (isMultiAnimal && isSingleModel) {
+        label = p.animal_name || p.animal_id;
+      } else if (isMultiAnimal) {
+        label = `${p.contestant_id} · ${p.animal_name || p.animal_id}`;
+      } else {
+        label = p.contestant_id;
+      }
+
+      if (metric === "drawdown") {
+        return `${label} (Max: -${p.max_drawdown_pct.toFixed(1)}%)`;
+      } else {
+        return `${label} (${p.total_return_pct >= 0 ? '+' : ''}${p.total_return_pct.toFixed(2)}%)`;
+      }
+    };
+
+    const getColor = (p, idx) => {
+      if (isMultiAnimal && isSingleModel) {
+        return fallbackPalette[idx % fallbackPalette.length];
+      }
+      return modelColors[p.contestant_id] || fallbackPalette[idx % fallbackPalette.length];
+    };
 
     const series = [];
     let titleText = "";
@@ -1317,16 +1355,16 @@ window.ArenaCharts = {
     let yAxisFormatter = null;
 
     if (metricType === "drawdown") {
-      titleText = "Cross-Model Underwater Drawdown Comparison";
+      titleText = isMultiAnimal ? "Multi-Animal Underwater Drawdown Comparison" : "Cross-Model Underwater Drawdown Comparison";
       yAxisName = "Drawdown (%)";
       yAxisFormatter = v => `${v.toFixed(1)}%`;
 
       animalPaths.forEach((p, idx) => {
         const dd = window.arenaAdapter.getPathDrawdown(p.path_id);
         if (dd && dd.length > 0) {
-          const color = modelColors[p.contestant_id] || fallbackPalette[idx % fallbackPalette.length];
+          const color = getColor(p, idx);
           series.push({
-            name: `${p.contestant_id} (Max: -${p.max_drawdown_pct.toFixed(1)}%)`,
+            name: getSeriesName(p, "drawdown"),
             type: "line",
             data: dd,
             smooth: true,
@@ -1381,23 +1419,23 @@ window.ArenaCharts = {
       }
 
     } else if (metricType === "excess_csi300") {
-      titleText = "Cross-Model Active Excess Return vs. CSI 300";
+      titleText = isMultiAnimal ? "Multi-Animal Active Excess Return vs. CSI 300" : "Cross-Model Active Excess Return vs. CSI 300";
       yAxisName = "Excess vs. CSI 300 (%)";
       yAxisFormatter = v => `${v >= 0 ? '+' : ''}${v.toFixed(1)}%`;
 
       animalPaths.forEach((p, idx) => {
         const curve = window.arenaAdapter.getPathExcessCSI300(p.path_id);
         if (curve && curve.length > 0) {
-          const color = modelColors[p.contestant_id] || fallbackPalette[idx % fallbackPalette.length];
+          const color = getColor(p, idx);
           series.push({
-            name: `${p.contestant_id} (${p.total_return_pct >= 0 ? '+' : ''}${p.total_return_pct.toFixed(2)}%)`,
+            name: getSeriesName(p, "excess"),
             type: "line",
             data: curve,
             smooth: true,
             showSymbol: false,
             color: color,
             itemStyle: { color: color },
-            lineStyle: { width: 2.5, color: color, type: "solid" }
+            lineStyle: { width: 2.2, color: color, type: "solid" }
           });
         }
       });
@@ -1443,23 +1481,23 @@ window.ArenaCharts = {
 
     } else {
       // Default: NAV
-      titleText = "Cross-Model Trajectory Overlay";
+      titleText = isMultiAnimal ? "Multi-Animal Trajectory Overlay" : "Cross-Model Trajectory Overlay";
       yAxisName = "Cumulative NAV";
       yAxisFormatter = v => v.toFixed(4);
 
       animalPaths.forEach((p, idx) => {
         const curve = window.arenaAdapter.getNavCurve(p.path_id);
         if (curve && curve.length > 0) {
-          const color = modelColors[p.contestant_id] || fallbackPalette[idx % fallbackPalette.length];
+          const color = getColor(p, idx);
           series.push({
-            name: `${p.contestant_id} (${p.total_return_pct >= 0 ? '+' : ''}${p.total_return_pct.toFixed(2)}%)`,
+            name: getSeriesName(p, "nav"),
             type: "line",
             data: curve,
             smooth: true,
             showSymbol: false,
             color: color,
             itemStyle: { color: color },
-            lineStyle: { width: 2.5, color: color, type: "solid" }
+            lineStyle: { width: 2.2, color: color, type: "solid" }
           });
         }
       });

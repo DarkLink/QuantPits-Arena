@@ -14,6 +14,29 @@
 
 window.ContestantDetailView = {
   activeContestantId: "CONTESTANT_A",
+  activeAnimalCluster: "rep",
+
+  getClusterPaths(paths, clusterKey) {
+    switch (clusterKey) {
+      case "sloth":
+        return paths.filter(p => p.animal_id.startsWith("sloth") || p.animal_id === "robot");
+      case "snail":
+        return paths.filter(p => p.animal_id.startsWith("snail") || p.animal_id === "robot");
+      case "turnover":
+        return paths.filter(p => ["turtle", "robot", "rabbit-1", "rabbit-2"].includes(p.animal_id));
+      case "capacity":
+        return paths.filter(p => p.animal_id.startsWith("eagle") || p.animal_id === "whale-shark" || p.animal_id === "robot");
+      case "meerkats":
+        return paths.filter(p => p.animal_id.startsWith("meerkat") || p.animal_id === "robot");
+      case "all":
+        return paths;
+      case "rep":
+      default: {
+        const repAnimalIds = ["robot", "sloth-2", "snail-2", "turtle", "rabbit-1", "koala", "eagle-11-2", "whale-shark"];
+        return repAnimalIds.map(aid => paths.find(p => p.animal_id === aid)).filter(Boolean);
+      }
+    }
+  },
 
   render(containerId, contestantId) {
     const container = document.getElementById(containerId);
@@ -49,10 +72,6 @@ window.ContestantDetailView = {
       const robotRet = robotPath ? robotPath.total_return_pct : 0;
       const beatMonkeys = paths.filter(p => (p.percentile_rank !== undefined ? p.percentile_rank : (p.monkey_percentile || 0)) >= 95).length;
       const avgMonkeyPct = (paths.reduce((s, p) => s + (p.percentile_rank !== undefined ? p.percentile_rank : (p.monkey_percentile || 0)), 0) / Math.max(1, paths.length)).toFixed(1);
-
-      // Representative paths for multi-curve chart
-      const repAnimalIds = ["robot", "sloth-2", "snail-2", "turtle", "rabbit-1", "koala", "eagle-11-2", "whale-shark"];
-      const repPaths = repAnimalIds.map(aid => paths.find(p => p.animal_id === aid)).filter(Boolean);
 
       container.innerHTML = `
         <div class="view-header">
@@ -204,6 +223,26 @@ window.ContestantDetailView = {
               </div>
             </div>
           </div>
+
+          <!-- Animal Family Cluster Toolbar -->
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; padding: 10px 16px; background: rgba(0,0,0,0.15); border-bottom: 1px solid var(--border-subtle);">
+            <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+              <span style="font-size: 11px; color: var(--text-secondary); text-transform: uppercase; font-weight: 600; margin-right: 4px;">Animal Family:</span>
+              <div class="chart-metric-btn-group" id="contestant-cluster-btn-group">
+                <button class="chart-metric-btn ${this.activeAnimalCluster === 'rep' ? 'active' : ''}" data-cluster="rep">Representative (8)</button>
+                <button class="chart-metric-btn ${this.activeAnimalCluster === 'sloth' ? 'active' : ''}" data-cluster="sloth">Sloths (Lag 1-4)</button>
+                <button class="chart-metric-btn ${this.activeAnimalCluster === 'snail' ? 'active' : ''}" data-cluster="snail">Snails (Delay 1-4)</button>
+                <button class="chart-metric-btn ${this.activeAnimalCluster === 'turnover' ? 'active' : ''}" data-cluster="turnover">Turnover (Friction)</button>
+                <button class="chart-metric-btn ${this.activeAnimalCluster === 'capacity' ? 'active' : ''}" data-cluster="capacity">Capacity (Eagles &amp; Whale)</button>
+                <button class="chart-metric-btn ${this.activeAnimalCluster === 'meerkats' ? 'active' : ''}" data-cluster="meerkats">Deciles (Meerkats)</button>
+                <button class="chart-metric-btn ${this.activeAnimalCluster === 'all' ? 'active' : ''}" data-cluster="all">All Animals (28)</button>
+              </div>
+            </div>
+            <div id="contestant-cluster-count" style="font-size: 11px; color: var(--text-muted);">
+              Showing ${this.getClusterPaths(paths, this.activeAnimalCluster).length} animal trajectories
+            </div>
+          </div>
+
           <div id="chart-contestant-multi-curves" style="height: 380px; width: 100%;"></div>
         </div>
 
@@ -357,7 +396,7 @@ window.ContestantDetailView = {
 
       // Render fingerprint charts & multi-curve chart
       setTimeout(() => {
-        this.renderCharts(fingerprints, repPaths);
+        this.renderCharts(fingerprints, paths);
       }, 50);
 
     } catch (err) {
@@ -374,25 +413,50 @@ window.ContestantDetailView = {
     }
   },
 
-  renderCharts(fingerprints, repPaths) {
+  renderCharts(fingerprints, paths) {
     let currentMetric = "nav";
     const dates = window.arenaAdapter.getNavDates();
     const taotieCurve = window.arenaAdapter.getBenchmarkTaotieCurve();
     const csi300Curve = window.arenaAdapter.getBenchmarkCsi300Curve();
 
-    const drawMultiCurves = (metric) => {
+    const drawMultiCurves = () => {
+      const currentPaths = this.getClusterPaths(paths, this.activeAnimalCluster);
       window.ArenaCharts.renderMultiAnimalCurves(
         "chart-contestant-multi-curves",
         dates,
-        repPaths,
+        currentPaths,
         taotieCurve,
         csi300Curve,
-        metric
+        currentMetric
       );
+
+      // Maintain benchmark pill selection state
+      document.querySelectorAll("#contestant-benchmark-pill-group .benchmark-pill").forEach(pill => {
+        const bmKey = pill.getAttribute("data-benchmark");
+        window.ArenaCharts.toggleBenchmark("chart-contestant-multi-curves", bmKey, pill.classList.contains("is-active"));
+      });
+
+      const countEl = document.getElementById("contestant-cluster-count");
+      if (countEl) {
+        countEl.textContent = `Showing ${currentPaths.length} animal trajectories`;
+      }
     };
 
     // 1. Initial render of multi-animal curves
-    drawMultiCurves(currentMetric);
+    drawMultiCurves();
+
+    // Bind animal cluster buttons
+    const clusterGroup = document.getElementById("contestant-cluster-btn-group");
+    if (clusterGroup) {
+      clusterGroup.querySelectorAll(".chart-metric-btn").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+          clusterGroup.querySelectorAll(".chart-metric-btn").forEach(b => b.classList.remove("active"));
+          e.currentTarget.classList.add("active");
+          this.activeAnimalCluster = e.currentTarget.getAttribute("data-cluster");
+          drawMultiCurves();
+        });
+      });
+    }
 
     // Bind metric buttons
     const btnGroup = document.getElementById("contestant-metric-btn-group");
@@ -401,15 +465,8 @@ window.ContestantDetailView = {
         btn.addEventListener("click", (e) => {
           btnGroup.querySelectorAll(".chart-metric-btn").forEach(b => b.classList.remove("active"));
           e.currentTarget.classList.add("active");
-          const metric = e.currentTarget.getAttribute("data-metric");
-          currentMetric = metric;
-          drawMultiCurves(metric);
-
-          // Maintain pill state
-          document.querySelectorAll("#contestant-benchmark-pill-group .benchmark-pill").forEach(pill => {
-            const bmKey = pill.getAttribute("data-benchmark");
-            window.ArenaCharts.toggleBenchmark("chart-contestant-multi-curves", bmKey, pill.classList.contains("is-active"));
-          });
+          currentMetric = e.currentTarget.getAttribute("data-metric");
+          drawMultiCurves();
         });
       });
     }

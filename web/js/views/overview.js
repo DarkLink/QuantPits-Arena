@@ -6,6 +6,10 @@
  */
 
 window.OverviewView = {
+  activeFilterGroup: "top5",
+  activeFocusModel: "all",
+  activeMetricMode: "nav",
+
   render(containerId) {
     const el = document.getElementById(containerId);
     if (!el) return;
@@ -38,8 +42,8 @@ window.OverviewView = {
         </a>
       </div>
 
-      <!-- Top KPI Metric Cards -->
-      <div class="kpi-grid" style="margin-bottom: 24px;">
+      <!-- Candidate Strategy Highlights (Clean 4-column Grid) -->
+      <div class="kpi-grid" style="grid-template-columns: repeat(4, 1fr); margin-bottom: 14px;">
         <div class="kpi-card">
           <div class="kpi-label">Active Strategy Paths</div>
           <div class="kpi-value">${kpis.totalPaths}</div>
@@ -60,26 +64,37 @@ window.OverviewView = {
           <div class="kpi-value" style="color:#38bdf8;">+${kpis.medianReturn.toFixed(2)}%</div>
           <div class="kpi-subtext">Cross-path median performance</div>
         </div>
-        <div class="kpi-card purple">
-          <div class="kpi-label">Taotie (Executable Universe)</div>
-          <div class="kpi-value" style="color:#c084fc;">+${kpis.taotieReturn.toFixed(2)}%</div>
-          <div class="kpi-subtext">CNY 500k capital & round-lot full pool</div>
-        </div>
-        ${window.arenaAdapter.hasGhostTaotie() ? `
-        <div class="kpi-card" style="border-color: rgba(56, 189, 248, 0.4); background: rgba(56, 189, 248, 0.05);">
-          <div class="kpi-label">Ghost Taotie (Theoretical Universe)</div>
-          <div class="kpi-value" style="color:#38bdf8;">+${window.arenaAdapter.getGhostTaotieReturn().toFixed(2)}%</div>
-          <div class="kpi-subtext">CNY 100M capital unconstrained equal-weight</div>
-        </div>
-        ` : ''}
-        <div class="kpi-card">
-          <div class="kpi-label">CSI 300 (External Market Anchor)</div>
-          <div class="kpi-value" style="color:#f59e0b;">${kpis.csi300Return.toFixed(2)}%</div>
-          <div class="kpi-subtext">A-share broad market index (SH000300)</div>
-        </div>
       </div>
-      <div style="font-size: 11px; color: var(--text-tertiary); margin-top: -16px; margin-bottom: 22px; text-align: right;">
-        * Metrics evaluated over <strong>${window.arenaAdapter.getPeriodLabel()}</strong>. Cumulative &amp; risk-adjusted figures reflect the full horizon.
+
+      <!-- Benchmark Baseline Reference Standards Strip (Dedicated Full-Width Row) -->
+      <div style="background: rgba(15, 23, 42, 0.65); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 12px 18px; margin-bottom: 22px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 11px; font-weight: 700; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em;">
+            Benchmark Reference Standards:
+          </span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 24px; flex-wrap: wrap;">
+          <div style="display: flex; align-items: center; gap: 8px;" title="Executable baseline: CNY 500k capital, 100-share trading lot friction">
+            <span class="bm-line-badge" style="border-top-color: #c084fc; width: 14px;"></span>
+            <span style="font-size: 12px; color: var(--text-secondary);">Taotie (Physical Baseline 500k):</span>
+            <b style="font-size: 13px; font-family: monospace; color: #c084fc;">+${kpis.taotieReturn.toFixed(2)}%</b>
+          </div>
+          ${window.arenaAdapter.hasGhostTaotie() ? `
+          <div style="display: flex; align-items: center; gap: 8px;" title="Theoretical equal-weight baseline: CNY 100M institutional capital, zero lot friction">
+            <span class="bm-line-badge" style="border-top-color: #00f0ff; width: 14px;"></span>
+            <span style="font-size: 12px; color: var(--text-secondary);">Ghost Taotie (Theoretical Equal-Weight 100M):</span>
+            <b style="font-size: 13px; font-family: monospace; color: #00f0ff;">+${window.arenaAdapter.getGhostTaotieReturn().toFixed(2)}%</b>
+          </div>
+          ` : ''}
+          <div style="display: flex; align-items: center; gap: 8px;" title="External broad market equity anchor (SH000300)">
+            <span class="bm-line-badge" style="border-top-color: #f59e0b; width: 14px;"></span>
+            <span style="font-size: 12px; color: var(--text-secondary);">CSI 300 (Market Benchmark):</span>
+            <b style="font-size: 13px; font-family: monospace; color: #f59e0b;">${kpis.csi300Return.toFixed(2)}%</b>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: var(--text-tertiary);">
+          * Evaluated over <strong>${window.arenaAdapter.getPeriodLabel()}</strong>
+        </div>
       </div>
 
       <!-- Arena Horizon & Benchmark Zoo Trajectories (Macro Panorama) -->
@@ -97,16 +112,30 @@ window.OverviewView = {
             </div>
           </div>
 
-          <!-- Controls: Metric Mode & Filter Group -->
+          <!-- Controls: Metric Mode, Model Focus & Filter Group -->
           <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-            <!-- Group Filter Select -->
+            <!-- Model Focus Filter -->
+            <div class="filter-group" style="display: flex; align-items: center; gap: 6px;">
+              <span style="font-size: 11px; color: var(--text-secondary); text-transform: uppercase; font-weight: 600;">Model Focus:</span>
+              <select id="panorama-model-focus-select" class="form-control" style="font-size: 11px; padding: 3px 8px; width: auto; background: rgba(15,23,42,0.8); border: 1px solid var(--border-subtle); color: var(--text-primary); border-radius: 4px;">
+                <option value="all" ${this.activeFocusModel === 'all' ? 'selected' : ''}>All Contestant Models</option>
+                ${window.arenaAdapter.getAllContestants().map(c => `
+                  <option value="${c.id}" ${this.activeFocusModel === c.id ? 'selected' : ''}>${c.display_name || c.id}</option>
+                `).join('')}
+              </select>
+            </div>
+
+            <!-- Cohort Preset Filter Select -->
             <div class="filter-group" style="display: flex; align-items: center; gap: 6px;">
               <span style="font-size: 11px; color: var(--text-secondary); text-transform: uppercase; font-weight: 600;">Cohort:</span>
               <div class="chart-metric-btn-group" id="panorama-cohort-btn-group">
-                <button class="chart-metric-btn ${this.activeFilterGroup === 'top5' ? 'active' : ''}" data-cohort="top5">Top 5 Leaders</button>
+                <button class="chart-metric-btn ${this.activeFilterGroup === 'top5' ? 'active' : ''}" data-cohort="top5">Top Leaders</button>
                 <button class="chart-metric-btn ${this.activeFilterGroup === 'robot' ? 'active' : ''}" data-cohort="robot">Robots (22/3)</button>
+                <button class="chart-metric-btn ${this.activeFilterGroup === 'sloth' ? 'active' : ''}" data-cohort="sloth">Sloths (Lag)</button>
+                <button class="chart-metric-btn ${this.activeFilterGroup === 'snail' ? 'active' : ''}" data-cohort="snail">Snails (Delay)</button>
                 <button class="chart-metric-btn ${this.activeFilterGroup === 'eagle' ? 'active' : ''}" data-cohort="eagle">Eagles (TopK)</button>
-                <button class="chart-metric-btn ${this.activeFilterGroup === 'sloth' ? 'active' : ''}" data-cohort="sloth">Sloths (Lagged)</button>
+                <button class="chart-metric-btn ${this.activeFilterGroup === 'turnover' ? 'active' : ''}" data-cohort="turnover">Turnover (Friction)</button>
+                <button class="chart-metric-btn ${this.activeFilterGroup === 'koala' ? 'active' : ''}" data-cohort="koala">Inversion (Koala)</button>
               </div>
             </div>
 
@@ -229,6 +258,15 @@ window.OverviewView = {
       </div>
     `;
 
+    // Bind model focus select
+    const modelFocusSelect = el.querySelector("#panorama-model-focus-select");
+    if (modelFocusSelect) {
+      modelFocusSelect.addEventListener("change", (e) => {
+        this.activeFocusModel = e.target.value;
+        this.updatePanoramaChart();
+      });
+    }
+
     // Bind cohort group buttons
     const cohortBtns = el.querySelectorAll("#panorama-cohort-btn-group button");
     cohortBtns.forEach(btn => {
@@ -272,7 +310,7 @@ window.OverviewView = {
 
   updatePanoramaChart() {
     if (!window.arenaAdapter || !window.ArenaCharts) return;
-    const data = window.arenaAdapter.getMacroPanoramaData(this.activeMetricMode, this.activeFilterGroup);
+    const data = window.arenaAdapter.getMacroPanoramaData(this.activeMetricMode, this.activeFilterGroup, this.activeFocusModel);
     window.ArenaCharts.renderMacroPanorama("chart-arena-panorama", data);
 
     // Maintain benchmark pill selection state

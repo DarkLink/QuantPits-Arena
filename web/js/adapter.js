@@ -615,23 +615,33 @@ class ArenaDataAdapter {
     };
   }
 
-  getMacroPanoramaData(metricMode = "nav", filterGroup = "top5") {
+  getMacroPanoramaData(metricMode = "nav", filterGroup = "top5", focusModel = "all") {
     const dates = this.getNavDates();
     if (!dates || dates.length === 0) return { dates: [], seriesList: [] };
 
     let candidatePaths = [];
-    const alphaPaths = this.paths.filter(p => p.contestant_id !== "BENCHMARK");
+    let alphaPaths = this.paths.filter(p => p.contestant_id !== "BENCHMARK");
+
+    if (focusModel && focusModel !== "all") {
+      alphaPaths = alphaPaths.filter(p => p.contestant_id === focusModel);
+    }
 
     if (filterGroup === "top5") {
-      candidatePaths = [...alphaPaths].sort((a, b) => b.total_return_pct - a.total_return_pct).slice(0, 5);
+      candidatePaths = [...alphaPaths].sort((a, b) => b.total_return_pct - a.total_return_pct).slice(0, 6);
     } else if (filterGroup === "robot") {
       candidatePaths = alphaPaths.filter(p => p.animal_id === "robot");
     } else if (filterGroup === "eagle") {
       candidatePaths = alphaPaths.filter(p => p.animal_id.startsWith("eagle")).slice(0, 6);
     } else if (filterGroup === "sloth") {
       candidatePaths = alphaPaths.filter(p => p.animal_id.startsWith("sloth")).slice(0, 6);
+    } else if (filterGroup === "snail") {
+      candidatePaths = alphaPaths.filter(p => p.animal_id.startsWith("snail")).slice(0, 6);
+    } else if (filterGroup === "turnover") {
+      candidatePaths = alphaPaths.filter(p => p.animal_id.startsWith("rabbit") || p.animal_id === "turtle").slice(0, 6);
+    } else if (filterGroup === "koala") {
+      candidatePaths = alphaPaths.filter(p => p.animal_id === "koala").slice(0, 6);
     } else {
-      candidatePaths = alphaPaths.slice(0, 5);
+      candidatePaths = alphaPaths.slice(0, 6);
     }
 
     const taotieCurve = this.getBenchmarkTaotieCurve();

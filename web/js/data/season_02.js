@@ -16,7 +16,7 @@
       var s2 = JSON.parse(JSON.stringify(baseData));
       s2.metadata.season_id = "season_02";
       s2.metadata.season_name = "Season 2: Next-Gen Arena (Preview)";
-      s2.metadata.period_label = "Planned Window: 2026-09-04 ~ 2026-10-30";
+      s2.metadata.period_label = "Calibration Baseline: 2026-07-03 ~ 2026-08-28 (Season 2 Live Anchor: 2026-09-04)";
       s2.metadata.preview = true;
       s2.metadata.active_benchmarks = ["CSI300", "Taotie (500k)", "Ghost Taotie (100M)", "1100 Monkeys"];
 
@@ -61,7 +61,7 @@
           tag: "⚡ Season 2 Baseline Standing",
           badge: "Calibration Active",
           title: "Season 2 Pre-Launch Standing & Baseline Calibration",
-          window_label: "2026-09-04 ~ 2026-10-30 (Planned Tournament Window)",
+          window_label: "Calibration Baseline: 2026-07-03 ~ 2026-08-28 (Season 2 Live Anchor: 2026-09-04)",
           nature_label: "Next-Gen Arena incorporating Two-Phase Order Commitment and Dual-Universe Reference Architecture.",
           leader_summary: "Calibration baseline running. Ghost Taotie benchmark established at CNY 100M unconstrained baseline, revealing true universe return potential."
         },

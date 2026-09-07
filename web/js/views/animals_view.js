@@ -3,19 +3,20 @@
  * ============================
  * The Zoo: Execution Containers View
  * Deep-dive analysis for all 28 animal execution policies.
- * Enables cross-model comparisons for a single animal handler:
- *   - Category filtering (Baseline, Execution Lag, Stale Holding, Turnover, Polarity, Capacity, Deciles)
- *   - Animal selector chip bar
- *   - Container Profile Card with behavioral stress specifications
- *   - Interactive Cross-Model Trajectory Chart (NAV, Drawdown, Excess vs. CSI 300)
- *   - Contestant Standings & Statistical Significance table under the selected handler
+ * Enables:
+ *   - Single Container Profile: deep dive into 1 animal across 6 contestant models
+ *   - Uncapped Multi-Animal Comparison: freely select and compare any number of animal containers
+ *     with optional Model Focus filter and benchmark overlays.
  */
 
 window.AnimalsView = {
   activeAnimalId: "robot",
   activeCategory: "All",
   activeMetric: "nav",
-  telemetryScope: "container", // "container" (active animal 6 models) or "category" (all paths in category)
+  telemetryScope: "container", // "container" or "category"
+  comparisonMode: "single", // "single" or "multi"
+  selectedAnimalIds: ["robot", "sloth-2", "snail-2", "turtle", "rabbit-1", "koala", "eagle-11-2", "whale-shark"],
+  activeFocusModel: "all", // "all" or specific contestant_id
 
   render(containerId, params) {
     const container = document.getElementById(containerId);
@@ -24,7 +25,9 @@ window.AnimalsView = {
     try {
       if (params) {
         if (typeof params === "object") {
-          this.activeAnimalId = params.animalId || params.id || this.activeAnimalId;
+          if (params.mode) this.comparisonMode = params.mode;
+          if (params.animalId || params.id) this.activeAnimalId = params.animalId || params.id;
+          if (params.modelFocus) this.activeFocusModel = params.modelFocus;
         } else if (typeof params === "string") {
           this.activeAnimalId = params;
         }
@@ -37,7 +40,6 @@ window.AnimalsView = {
         this.activeAnimalId = activeAnimal.id;
       }
 
-      // Exact category names aligned with adapter.js
       const categories = [
         "All",
         "Baseline",
@@ -49,49 +51,52 @@ window.AnimalsView = {
         "Percentile Deciles"
       ];
 
-      // Filtered animal list for the chip bar
       const filteredAnimals = this.activeCategory === "All"
         ? allAnimals
         : allAnimals.filter(a => a.category === this.activeCategory);
 
-      // Extract contestant paths under active animal
-      const animalPaths = window.arenaAdapter.getAnimalPaths(this.activeAnimalId);
+      // Paths determination based on single vs multi comparison mode
+      let chartPaths = [];
+      if (this.comparisonMode === "single") {
+        chartPaths = window.arenaAdapter.getAnimalPaths(this.activeAnimalId);
+      } else {
+        if (this.activeFocusModel === "all") {
+          chartPaths = window.arenaAdapter.getAllPaths().filter(p => 
+            p.contestant_id !== "BENCHMARK" && this.selectedAnimalIds.includes(p.animal_id)
+          );
+        } else {
+          chartPaths = window.arenaAdapter.getAllPaths().filter(p => 
+            p.contestant_id === this.activeFocusModel && this.selectedAnimalIds.includes(p.animal_id)
+          );
+        }
+        if (chartPaths.length === 0 && this.selectedAnimalIds.length === 0) {
+          this.selectedAnimalIds = ["robot"];
+          chartPaths = window.arenaAdapter.getAnimalPaths("robot");
+        }
+      }
 
-      // Extract all contestant paths under the active category scope
-      const categoryPaths = this.activeCategory === "All"
-        ? window.arenaAdapter.getAllPaths().filter(p => p.contestant_id !== "BENCHMARK")
-        : window.arenaAdapter.getAllPaths().filter(p => {
-            if (p.contestant_id === "BENCHMARK") return false;
-            const a = allAnimals.find(item => item.id === p.animal_id);
-            return a && a.category === this.activeCategory;
-          });
+      // Benchmark metrics for reference
+      const csi300Ret = window.arenaAdapter.getCsi300Return();
+      const taotieRet = window.arenaAdapter.getTaotieReturn();
+      const allContestants = window.arenaAdapter.getAllContestants();
 
-      // Compute statistics based on selected telemetry scope
-      const isContainerScope = this.telemetryScope !== "category";
-      const targetPaths = isContainerScope ? animalPaths : categoryPaths;
-      const targetSub = isContainerScope
-        ? `Testing alpha durability across all 6 contestant models under <b>${activeAnimal.name}</b>`
-        : `Macro aggregate across ${filteredAnimals.length} ${this.activeCategory} container${filteredAnimals.length > 1 ? 's' : ''} (${categoryPaths.length} paths)`;
-
-      const returns = targetPaths.map(p => p.total_return_pct);
-      const drawdowns = targetPaths.map(p => p.max_drawdown_pct);
-      const bestPath = targetPaths.length > 0 ? [...targetPaths].sort((a, b) => b.total_return_pct - a.total_return_pct)[0] : null;
+      // Compute statistics
+      const returns = chartPaths.map(p => p.total_return_pct);
+      const drawdowns = chartPaths.map(p => p.max_drawdown_pct);
+      const bestPath = chartPaths.length > 0 ? [...chartPaths].sort((a, b) => b.total_return_pct - a.total_return_pct)[0] : null;
       const medianReturn = returns.length > 0
         ? [...returns].sort((a, b) => a - b)[Math.floor(returns.length / 2)]
         : 0;
       const avgDrawdown = drawdowns.length > 0
         ? drawdowns.reduce((s, v) => s + v, 0) / drawdowns.length
         : 0;
-      const sigCount = targetPaths.filter(p => {
+      const sigCount = chartPaths.filter(p => {
         const pct = p.percentile_rank !== undefined ? p.percentile_rank : (p.monkey_percentile || 0);
         return pct >= 95;
       }).length;
-      const sigPct = targetPaths.length > 0
-        ? ((sigCount / targetPaths.length) * 100).toFixed(0)
+      const sigPct = chartPaths.length > 0
+        ? ((sigCount / chartPaths.length) * 100).toFixed(0)
         : 0;
-
-      const csi300Ret = window.arenaAdapter.getCsi300Return();
-      const taotieRet = window.arenaAdapter.getTaotieReturn();
 
       container.innerHTML = `
         <div class="view-header">
@@ -100,9 +105,19 @@ window.AnimalsView = {
               <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 6px;">
                 <h1 class="view-title">The Zoo | Execution Handlers</h1>
                 <span class="badge badge-primary">28 Containers</span>
-                <span class="badge badge-neutral">Cross-Model Stress Suite</span>
+                <span class="badge badge-neutral">Execution Stress Suite</span>
               </div>
               <p class="view-subtitle">Explore operational execution containers testing latency, exit inertia, turnover constraints, portfolio capacity, and polarity sanity across all contestant models.</p>
+            </div>
+
+            <!-- Single vs Multi-Animal Mode Switcher -->
+            <div style="display: flex; gap: 6px; background: rgba(0,0,0,0.25); padding: 4px; border-radius: 8px; border: 1px solid var(--border-subtle);">
+              <button class="btn btn-sm ${this.comparisonMode === 'single' ? 'btn-primary' : 'btn-outline'} zoo-mode-btn" data-mode="single" style="font-size: 11px; padding: 5px 12px; font-weight: 600;">
+                Single Container Profile
+              </button>
+              <button class="btn btn-sm ${this.comparisonMode === 'multi' ? 'btn-primary' : 'btn-outline'} zoo-mode-btn" data-mode="multi" style="font-size: 11px; padding: 5px 12px; font-weight: 600;">
+                ⚡ Multi-Animal Comparison (${this.selectedAnimalIds.length})
+              </button>
             </div>
           </div>
 
@@ -121,7 +136,8 @@ window.AnimalsView = {
               }).join("")}
             </div>
 
-            <!-- Direct Container Dropdown Selector -->
+            <!-- Direct Container Dropdown Selector (Single Mode) or Multi Quick Action Toolbar -->
+            ${this.comparisonMode === 'single' ? `
             <div style="display: flex; align-items: center; gap: 8px;">
               <label for="zoo-animal-dropdown" style="font-size: 11px; color: var(--text-secondary); font-weight: 600; white-space: nowrap;">
                 Quick Select:
@@ -134,12 +150,30 @@ window.AnimalsView = {
                 `).join("")}
               </select>
             </div>
+            ` : `
+            <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+              <button class="btn btn-sm btn-outline zoo-multi-action-btn" data-action="rep" style="font-size: 10px; padding: 3px 8px;" title="Select 8 canonical representative handlers">
+                Representative (8)
+              </button>
+              <button class="btn btn-sm btn-outline zoo-multi-action-btn" data-action="all_cat" style="font-size: 10px; padding: 3px 8px;" title="Select all containers in the active category">
+                Select All in Category
+              </button>
+              <button class="btn btn-sm btn-outline zoo-multi-action-btn" data-action="clear" style="font-size: 10px; padding: 3px 8px;" title="Reset selection">
+                Reset Selection
+              </button>
+              <span class="badge badge-neutral" style="font-size: 10px; padding: 3px 7px;">
+                ${this.selectedAnimalIds.length} Selected (Uncapped)
+              </span>
+            </div>
+            `}
           </div>
 
-          <!-- Wrapping Animal Selector Chips (Wrap cleanly so all 28 are visible and clickable!) -->
+          <!-- Wrapping Animal Selector Chips -->
           <div style="display: flex; flex-wrap: wrap; gap: 6px; padding: 10px 0 6px 0;" id="animal-chip-bar">
             ${filteredAnimals.map(a => {
-              const isSelected = a.id === this.activeAnimalId;
+              const isSelected = this.comparisonMode === 'single'
+                ? a.id === this.activeAnimalId
+                : this.selectedAnimalIds.includes(a.id);
               return `
                 <button class="btn btn-sm ${isSelected ? 'btn-primary' : 'btn-outline'} animal-chip-btn" data-animal-id="${a.id}" style="font-size: 11px; padding: 4px 10px; display: inline-flex; align-items: center; gap: 6px; border-radius: 16px;">
                   <span>${a.name.split(' (')[0]}</span>
@@ -152,31 +186,53 @@ window.AnimalsView = {
 
         <!-- Animal Container Profile & Key Performance Card -->
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; margin-bottom: 24px;">
-          <!-- Left: Animal Container Specifications -->
+          <!-- Left: Animal Container Specifications / Sandbox Summary -->
           <div class="card" style="padding: 20px;">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
-              <div>
-                <span class="badge badge-primary" style="margin-bottom: 6px;">${activeAnimal.category}</span>
-                <h3 style="font-size: 18px; font-weight: 700; color: var(--text-primary); margin: 0;">${activeAnimal.name}</h3>
+            ${this.comparisonMode === 'single' ? `
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+                <div>
+                  <span class="badge badge-primary" style="margin-bottom: 6px;">${activeAnimal.category}</span>
+                  <h3 style="font-size: 18px; font-weight: 700; color: var(--text-primary); margin: 0;">${activeAnimal.name}</h3>
+                </div>
+                <span class="badge badge-neutral" style="font-family: monospace; font-size: 11px;">Target: ${activeAnimal.spec || `P_${activeAnimal.topk}_${activeAnimal.n_drop}`}</span>
               </div>
-              <span class="badge badge-neutral" style="font-family: monospace; font-size: 11px;">Target: ${activeAnimal.spec || `P_${activeAnimal.topk}_${activeAnimal.n_drop}`}</span>
-            </div>
-            <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 16px;">
-              ${activeAnimal.description}
-            </p>
-            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; background: var(--surface-hover); padding: 12px; border-radius: 8px; border: 1px solid var(--border-subtle);">
-              <div>
-                <div style="font-size: 11px; color: var(--text-muted);">Portfolio Holdings (topk)</div>
-                <div style="font-size: 16px; font-weight: 700; color: var(--text-primary); font-family: monospace;">${activeAnimal.topk} stocks</div>
+              <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 16px;">
+                ${activeAnimal.description}
+              </p>
+              <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; background: var(--surface-hover); padding: 12px; border-radius: 8px; border: 1px solid var(--border-subtle);">
+                <div>
+                  <div style="font-size: 11px; color: var(--text-muted);">Portfolio Holdings (topk)</div>
+                  <div style="font-size: 16px; font-weight: 700; color: var(--text-primary); font-family: monospace;">${activeAnimal.topk} stocks</div>
+                </div>
+                <div>
+                  <div style="font-size: 11px; color: var(--text-muted);">Rebalance Churn (n_drop)</div>
+                  <div style="font-size: 16px; font-weight: 700; color: var(--text-primary); font-family: monospace;">${activeAnimal.n_drop} stocks/wk</div>
+                </div>
               </div>
-              <div>
-                <div style="font-size: 11px; color: var(--text-muted);">Rebalance Churn (n_drop)</div>
-                <div style="font-size: 16px; font-weight: 700; color: var(--text-primary); font-family: monospace;">${activeAnimal.n_drop} stocks/wk</div>
+            ` : `
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+                <div>
+                  <span class="badge badge-success" style="margin-bottom: 6px;">Uncapped Comparison Sandbox</span>
+                  <h3 style="font-size: 18px; font-weight: 700; color: var(--text-primary); margin: 0;">Multi-Animal Sandbox</h3>
+                </div>
+                <span class="badge badge-neutral" style="font-family: monospace; font-size: 11px;">${this.selectedAnimalIds.length} Animals Active</span>
               </div>
-            </div>
+              <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 16px;">
+                Simultaneously comparing execution paths across selected animal policies. Toggle chips to add or remove any containers without restrictions.
+              </p>
+              <div style="background: var(--surface-hover); padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border-subtle); font-size: 12px;">
+                <div style="color: var(--text-muted); font-size: 11px; margin-bottom: 4px;">Active Selection (${this.selectedAnimalIds.length}):</div>
+                <div style="display: flex; flex-wrap: wrap; gap: 4px;">
+                  ${this.selectedAnimalIds.map(aid => {
+                    const an = allAnimals.find(a => a.id === aid);
+                    return `<span class="badge badge-primary" style="font-size: 10px;">${an ? an.name.split(' (')[0] : aid}</span>`;
+                  }).join('')}
+                </div>
+              </div>
+            `}
           </div>
 
-          <!-- Right: Execution Stress Telemetry Card with Dual Scope Switcher -->
+          <!-- Right: Execution Stress Telemetry Card -->
           <div class="card" style="padding: 20px;">
             <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
               <div>
@@ -184,34 +240,26 @@ window.AnimalsView = {
                   Execution Stress Telemetry
                 </h4>
                 <div style="font-size: 11px; color: var(--text-secondary); margin-top: 3px;">
-                  ${targetSub}
+                  ${this.comparisonMode === 'single'
+                    ? `Testing alpha durability across all 6 contestant models under <b>${activeAnimal.name}</b>`
+                    : `Telemetry across ${chartPaths.length} evaluated path${chartPaths.length > 1 ? 's' : ''} in comparison scope`}
                 </div>
-              </div>
-
-              <!-- Scope Toggle Pills -->
-              <div style="display: flex; gap: 4px; background: var(--surface-hover); padding: 2px; border-radius: 6px; border: 1px solid var(--border-subtle);">
-                <button class="btn btn-sm ${isContainerScope ? 'btn-primary' : 'btn-outline'} scope-toggle-btn" data-scope="container" style="font-size: 10px; padding: 3px 8px;" title="View telemetry for selected container (${activeAnimal.name}) across 6 models">
-                  Container (${activeAnimal.id})
-                </button>
-                <button class="btn btn-sm ${!isContainerScope ? 'btn-primary' : 'btn-outline'} scope-toggle-btn" data-scope="category" style="font-size: 10px; padding: 3px 8px;" title="View macro telemetry across all ${filteredAnimals.length} containers in category ${this.activeCategory}">
-                  ${this.activeCategory} (${categoryPaths.length})
-                </button>
               </div>
             </div>
 
             <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
               <div style="background: var(--surface-hover); padding: 12px; border-radius: 8px; border: 1px solid var(--border-subtle);">
-                <div style="font-size: 11px; color: var(--text-muted);">${isContainerScope ? 'Top Contestant Return' : 'Top Path in Scope'}</div>
+                <div style="font-size: 11px; color: var(--text-muted);">Top Return in Scope</div>
                 <div style="font-size: 18px; font-weight: 700; color: ${bestPath && bestPath.total_return_pct >= 0 ? 'var(--color-success)' : 'var(--color-danger)'};">
                   ${bestPath ? (bestPath.total_return_pct >= 0 ? '+' : '') + bestPath.total_return_pct.toFixed(2) + '%' : 'N/A'}
                 </div>
                 <div style="font-size: 10px; color: var(--text-secondary); margin-top: 2px;">
-                  ${isContainerScope ? 'Model' : 'Path'}: <b>${bestPath ? (isContainerScope ? bestPath.contestant_id : bestPath.path_id) : 'N/A'}</b>
+                  Leader: <b>${bestPath ? `${bestPath.contestant_id} (${bestPath.animal_id})` : 'N/A'}</b>
                 </div>
               </div>
 
               <div style="background: var(--surface-hover); padding: 12px; border-radius: 8px; border: 1px solid var(--border-subtle);">
-                <div style="font-size: 11px; color: var(--text-muted);">${isContainerScope ? 'Model Median Return' : 'Scope Median Return'}</div>
+                <div style="font-size: 11px; color: var(--text-muted);">Median Return</div>
                 <div style="font-size: 18px; font-weight: 700; color: ${medianReturn >= 0 ? 'var(--color-success)' : 'var(--color-danger)'};">
                   ${medianReturn >= 0 ? '+' : ''}${medianReturn.toFixed(2)}%
                 </div>
@@ -226,7 +274,7 @@ window.AnimalsView = {
                   -${avgDrawdown.toFixed(2)}%
                 </div>
                 <div style="font-size: 10px; color: var(--text-secondary); margin-top: 2px;">
-                  Across ${targetPaths.length} evaluated path${targetPaths.length > 1 ? 's' : ''}
+                  Across ${chartPaths.length} path${chartPaths.length > 1 ? 's' : ''}
                 </div>
               </div>
 
@@ -236,24 +284,43 @@ window.AnimalsView = {
                   ${sigPct}%
                 </div>
                 <div style="font-size: 10px; color: var(--text-secondary); margin-top: 2px;">
-                  <b>${sigCount}/${targetPaths.length}</b> exceed 95th %ile of matched nulls
+                  <b>${sigCount}/${chartPaths.length}</b> beat null 95th %ile
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Cross-Model Trajectory Overlay Chart Card -->
+        <!-- Trajectory Chart Card -->
         <div class="card" style="margin-bottom: 24px;">
           <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; border-bottom: 1px solid var(--border-subtle); padding: 16px 20px;">
             <div>
-              <h3 style="font-size: 15px; font-weight: 700; color: var(--text-primary); margin: 0;">Cross-Model Execution Curves</h3>
+              <h3 style="font-size: 15px; font-weight: 700; color: var(--text-primary); margin: 0;">
+                ${this.comparisonMode === 'single'
+                  ? `Cross-Model Execution Curves: ${activeAnimal.name}`
+                  : `Multi-Animal Comparison Curves (${this.selectedAnimalIds.length} Containers)`}
+              </h3>
               <p style="font-size: 12px; color: var(--text-secondary); margin: 2px 0 0 0;">
-                Comparing performance trajectories of all 6 contestant models under <b>${activeAnimal.name}</b> vs. Taotie and CSI 300 benchmarks
+                ${this.comparisonMode === 'single'
+                  ? `Comparing performance trajectories of all 6 contestant models under <b>${activeAnimal.name}</b> vs. benchmarks`
+                  : `Overlaying trajectories for ${this.selectedAnimalIds.length} animal containers (Model Focus: <b>${this.activeFocusModel === 'all' ? 'All Models' : this.activeFocusModel}</b>)`}
               </p>
             </div>
 
             <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+              <!-- Model Focus Filter (Multi-Animal Mode) -->
+              ${this.comparisonMode === 'multi' ? `
+              <div class="filter-group" style="display: flex; align-items: center; gap: 6px;">
+                <span style="font-size: 11px; color: var(--text-secondary); text-transform: uppercase; font-weight: 600;">Model Focus:</span>
+                <select id="zoo-focus-model-select" class="form-control" style="font-size: 11px; padding: 3px 8px; width: auto; background: var(--bg-surface); border: 1px solid var(--border-subtle); color: var(--text-primary); border-radius: 4px;">
+                  <option value="all" ${this.activeFocusModel === 'all' ? 'selected' : ''}>All Models</option>
+                  ${allContestants.map(c => `
+                    <option value="${c.id}" ${this.activeFocusModel === c.id ? 'selected' : ''}>${c.display_name || c.id}</option>
+                  `).join('')}
+                </select>
+              </div>
+              ` : ''}
+
               <!-- Metric Switcher Buttons -->
               <div class="chart-metric-btn-group" style="display: flex; gap: 4px; background: var(--surface-hover); padding: 3px; border-radius: 6px; border: 1px solid var(--border-subtle);">
                 <button class="btn btn-sm ${this.activeMetric === 'nav' ? 'btn-primary' : 'btn-outline'} animal-metric-btn" data-metric="nav" style="font-size: 11px; padding: 4px 10px;">
@@ -289,10 +356,14 @@ window.AnimalsView = {
           </div>
         </div>
 
-        <!-- Contestant Model Standings Under Selected Animal Table -->
+        <!-- Standings Table -->
         <div class="card">
           <div class="card-header" style="border-bottom: 1px solid var(--border-subtle); padding: 16px 20px;">
-            <h3 style="font-size: 15px; font-weight: 700; color: var(--text-primary); margin: 0;">Contestant Standings under ${activeAnimal.name}</h3>
+            <h3 style="font-size: 15px; font-weight: 700; color: var(--text-primary); margin: 0;">
+              ${this.comparisonMode === 'single'
+                ? `Contestant Standings under ${activeAnimal.name}`
+                : `Multi-Animal Comparison Matrix (${chartPaths.length} Paths)`}
+            </h3>
             <p style="font-size: 12px; color: var(--text-secondary); margin: 2px 0 0 0;">
               Ranked by Out-of-Sample Return. Compare empirical significance against the 1,000-monkey null benchmark.
             </p>
@@ -304,6 +375,7 @@ window.AnimalsView = {
                 <tr style="border-bottom: 1px solid var(--border-subtle); background: var(--surface-hover); text-align: left;">
                   <th style="padding: 10px 16px; width: 48px;">Rank</th>
                   <th style="padding: 10px 16px;">Contestant Model</th>
+                  <th style="padding: 10px 16px;">Animal Container</th>
                   <th style="padding: 10px 16px;">Path Identifier</th>
                   <th style="padding: 10px 16px; text-align: right;">Total Return</th>
                   <th style="padding: 10px 16px; text-align: right;">Max Drawdown</th>
@@ -316,7 +388,7 @@ window.AnimalsView = {
                 </tr>
               </thead>
               <tbody>
-                ${animalPaths.map((p, idx) => {
+                ${[...chartPaths].sort((a, b) => b.total_return_pct - a.total_return_pct).map((p, idx) => {
                   const rawPct = p.percentile_rank !== undefined ? p.percentile_rank : (p.monkey_percentile || 0);
                   const pct = window.formatPercentile ? window.formatPercentile(rawPct) : rawPct.toFixed(1) + "%";
                   const rawP = p.empirical_p_value !== undefined ? p.empirical_p_value : (p.p_value !== undefined ? p.p_value : 1.0);
@@ -332,6 +404,9 @@ window.AnimalsView = {
                         <a href="#contestants/${p.contestant_id}" style="font-weight: 600; color: var(--color-accent); text-decoration: none;">
                           ${p.contestant_id}
                         </a>
+                      </td>
+                      <td style="padding: 12px 16px;">
+                        <span class="badge badge-neutral">${p.animal_name || p.animal_id}</span>
                       </td>
                       <td style="padding: 12px 16px; font-family: monospace; color: var(--text-secondary);">
                         ${p.path_id}
@@ -375,21 +450,11 @@ window.AnimalsView = {
       `;
 
       // Attach event listeners
-      this.attachEvents(containerId);
+      this.attachEvents(containerId, chartPaths);
 
-      // Render cross-model chart with valid dates!
+      // Render cross-model chart
       setTimeout(() => {
-        const dates = window.arenaAdapter.getNavDates();
-        const taotieCurve = window.arenaAdapter.getBenchmarkTaotieCurve();
-        const csi300Curve = window.arenaAdapter.getBenchmarkCsi300Curve();
-        window.ArenaCharts.renderCrossModelAnimalCurves(
-          "animal-cross-model-chart",
-          dates,
-          animalPaths,
-          taotieCurve,
-          csi300Curve,
-          this.activeMetric
-        );
+        this.updateChart(chartPaths);
       }, 50);
 
     } catch (err) {
@@ -398,16 +463,74 @@ window.AnimalsView = {
     }
   },
 
-  attachEvents(containerId) {
+  updateChart(paths) {
+    const dates = window.arenaAdapter.getNavDates();
+    const taotieCurve = window.arenaAdapter.getBenchmarkTaotieCurve();
+    const csi300Curve = window.arenaAdapter.getBenchmarkCsi300Curve();
+    window.ArenaCharts.renderCrossModelAnimalCurves(
+      "animal-cross-model-chart",
+      dates,
+      paths,
+      taotieCurve,
+      csi300Curve,
+      this.activeMetric
+    );
+
+    // Maintain benchmark pill selection state
+    document.querySelectorAll("#animal-benchmarks-pill-group .benchmark-pill").forEach(pill => {
+      const bmKey = pill.getAttribute("data-benchmark");
+      window.ArenaCharts.toggleBenchmark("animal-cross-model-chart", bmKey, pill.classList.contains("is-active"));
+    });
+  },
+
+  attachEvents(containerId, currentPaths) {
     const container = document.getElementById(containerId);
     if (!container) return;
+
+    // Zoo Mode Switcher (Single vs Multi)
+    container.querySelectorAll(".zoo-mode-btn").forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        const mode = e.currentTarget.getAttribute("data-mode");
+        this.comparisonMode = mode;
+        this.render(containerId);
+      });
+    });
+
+    // Model Focus select (Multi-Animal Mode)
+    const modelFocusSelect = container.querySelector("#zoo-focus-model-select");
+    if (modelFocusSelect) {
+      modelFocusSelect.addEventListener("change", (e) => {
+        this.activeFocusModel = e.target.value;
+        this.render(containerId);
+      });
+    }
+
+    // Multi-Action Buttons (Representative, All in Category, Clear)
+    container.querySelectorAll(".zoo-multi-action-btn").forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        const action = e.currentTarget.getAttribute("data-action");
+        const allAnimals = window.arenaAdapter.getAllAnimals();
+        const filteredAnimals = this.activeCategory === "All"
+          ? allAnimals
+          : allAnimals.filter(a => a.category === this.activeCategory);
+
+        if (action === "rep") {
+          this.selectedAnimalIds = ["robot", "sloth-2", "snail-2", "turtle", "rabbit-1", "koala", "eagle-11-2", "whale-shark"];
+        } else if (action === "all_cat") {
+          const idsToAdd = filteredAnimals.map(a => a.id);
+          this.selectedAnimalIds = Array.from(new Set([...this.selectedAnimalIds, ...idsToAdd]));
+        } else if (action === "clear") {
+          this.selectedAnimalIds = ["robot"];
+        }
+        this.render(containerId);
+      });
+    });
 
     // Category button clicks
     container.querySelectorAll(".animal-cat-btn").forEach(btn => {
       btn.addEventListener("click", (e) => {
         const cat = e.currentTarget.getAttribute("data-cat");
         this.activeCategory = cat;
-        // If current animal not in this category, pick the first in this category
         if (cat !== "All") {
           const matching = window.arenaAdapter.getAllAnimals().filter(a => a.category === cat);
           if (matching.length > 0 && !matching.some(a => a.id === this.activeAnimalId)) {
@@ -418,22 +541,12 @@ window.AnimalsView = {
       });
     });
 
-    // Scope toggle button clicks (container vs category)
-    container.querySelectorAll(".scope-toggle-btn").forEach(btn => {
-      btn.addEventListener("click", (e) => {
-        const scope = e.currentTarget.getAttribute("data-scope");
-        this.telemetryScope = scope;
-        this.render(containerId);
-      });
-    });
-
-    // Dropdown selection change
+    // Dropdown selection change (Single mode)
     const animalDropdown = container.querySelector("#zoo-animal-dropdown");
     if (animalDropdown) {
       animalDropdown.addEventListener("change", (e) => {
         const aId = e.target.value;
         this.activeAnimalId = aId;
-        this.telemetryScope = "container";
         window.location.hash = `#animals/${aId}`;
         this.render(containerId);
       });
@@ -443,10 +556,21 @@ window.AnimalsView = {
     container.querySelectorAll(".animal-chip-btn").forEach(btn => {
       btn.addEventListener("click", (e) => {
         const aId = e.currentTarget.getAttribute("data-animal-id");
-        this.activeAnimalId = aId;
-        this.telemetryScope = "container"; // Auto-focus on the chosen container
-        window.location.hash = `#animals/${aId}`;
-        this.render(containerId);
+        if (this.comparisonMode === "single") {
+          this.activeAnimalId = aId;
+          window.location.hash = `#animals/${aId}`;
+          this.render(containerId);
+        } else {
+          // Uncapped multi-toggle!
+          if (this.selectedAnimalIds.includes(aId)) {
+            if (this.selectedAnimalIds.length > 1) {
+              this.selectedAnimalIds = this.selectedAnimalIds.filter(id => id !== aId);
+            }
+          } else {
+            this.selectedAnimalIds.push(aId);
+          }
+          this.render(containerId);
+        }
       });
     });
 
@@ -462,24 +586,7 @@ window.AnimalsView = {
         e.currentTarget.classList.add("btn-primary");
         e.currentTarget.classList.remove("btn-outline");
 
-        const animalPaths = window.arenaAdapter.getAnimalPaths(this.activeAnimalId);
-        const dates = window.arenaAdapter.getNavDates();
-        const taotieCurve = window.arenaAdapter.getBenchmarkTaotieCurve();
-        const csi300Curve = window.arenaAdapter.getBenchmarkCsi300Curve();
-        window.ArenaCharts.renderCrossModelAnimalCurves(
-          "animal-cross-model-chart",
-          dates,
-          animalPaths,
-          taotieCurve,
-          csi300Curve,
-          this.activeMetric
-        );
-
-        // Maintain benchmark pill selection state
-        container.querySelectorAll("#animal-benchmarks-pill-group .benchmark-pill").forEach(pill => {
-          const bmKey = pill.getAttribute("data-benchmark");
-          window.ArenaCharts.toggleBenchmark("animal-cross-model-chart", bmKey, pill.classList.contains("is-active"));
-        });
+        this.updateChart(currentPaths);
       });
     });
 

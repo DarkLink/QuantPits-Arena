@@ -14,7 +14,8 @@ window.LeaderboardView = {
   matrixMetric: "total_return_pct",
 
   render(containerId) {
-    const el = document.getElementById(containerId);
+    this.containerId = containerId || this.containerId || "view-leaderboard";
+    const el = document.getElementById(this.containerId);
     if (!el) return;
 
     const taotieRet = window.arenaAdapter.getTaotieReturn();
@@ -138,7 +139,7 @@ window.LeaderboardView = {
 
   switchViewMode(mode) {
     this.viewMode = mode;
-    this.render("route-container");
+    this.render(this.containerId);
   },
 
   switchTab(tab) {
