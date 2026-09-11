@@ -40,6 +40,44 @@ window.ArenaApp = {
 
   currentSeasonId: "season_01",
 
+  normalizeSeasonId(rawId) {
+    if (!rawId) return "season_01";
+    const cleaned = String(rawId).trim().toLowerCase();
+    const seasons = window.ARENA_SEASONS_INDEX || [];
+
+    // 1. Direct match (case-insensitive)
+    const exact = seasons.find(s => s.id.toLowerCase() === cleaned);
+    if (exact) return exact.id;
+
+    // 2. Useful alias mappings
+    const aliasMap = {
+      "1": "season_01",
+      "s1": "season_01",
+      "season1": "season_01",
+      "season_1": "season_01",
+      "graveyard": "season_01",
+      "500": "season_csi500",
+      "csi500": "season_csi500",
+      "s500": "season_csi500",
+      "season500": "season_csi500",
+      "800": "season_csi800",
+      "csi800": "season_csi800",
+      "s800": "season_csi800",
+      "season800": "season_csi800",
+      "1000": "season_csi1000",
+      "csi1000": "season_csi1000",
+      "s1000": "season_csi1000",
+      "season1000": "season_csi1000"
+    };
+
+    if (aliasMap[cleaned]) {
+      const mapped = aliasMap[cleaned];
+      if (seasons.some(s => s.id === mapped)) return mapped;
+    }
+
+    return null;
+  },
+
   initSeasonSelector() {
     const container = document.getElementById("season-switcher");
     const btn = document.getElementById("season-switcher-btn");
@@ -50,14 +88,37 @@ window.ArenaApp = {
     // Detect initial season from query or hash
     const urlParams = new URLSearchParams(window.location.search);
     const hashParams = this.parseHash().params;
-    const requestedSeason = urlParams.get("season") || hashParams.season;
-    if (requestedSeason) {
-      this.currentSeasonId = requestedSeason;
-    }
+    const rawRequestedSeason = urlParams.get("season") || hashParams.season;
 
     const seasons = window.ARENA_SEASONS_INDEX || [
       { id: "season_01", title: "Season 1: Graveyard Arena", short_title: "Season 1", status: "ACTIVE" }
     ];
+
+    if (rawRequestedSeason) {
+      const normalized = this.normalizeSeasonId(rawRequestedSeason);
+      if (normalized) {
+        this.currentSeasonId = normalized;
+        // If user used an alias like ?season=csi500, clean up URL to canonical ?season=season_csi500
+        if (urlParams.get("season") && urlParams.get("season") !== normalized) {
+          try {
+            const url = new URL(window.location.href);
+            url.searchParams.set("season", normalized);
+            window.history.replaceState({}, "", url.toString());
+          } catch (e) {}
+        }
+      } else {
+        // Unknown/garbage season like ?season=season_123: Clean up and redirect to canonical season_01
+        console.warn(`[ArenaApp] Unrecognized season '${rawRequestedSeason}'. Sanitizing to canonical 'season_01' and cleaning URL.`);
+        this.currentSeasonId = "season_01";
+        try {
+          const url = new URL(window.location.href);
+          url.searchParams.set("season", "season_01");
+          window.history.replaceState({}, "", url.toString());
+        } catch (e) {}
+      }
+    } else {
+      this.currentSeasonId = "season_01";
+    }
 
     // Render dropdown items
     dropdown.innerHTML = `
@@ -65,7 +126,8 @@ window.ArenaApp = {
       ${seasons.map(s => {
         const isSelected = s.id === this.currentSeasonId;
         const isDraft = s.status === "DRAFT";
-        const badgeClass = isDraft ? "badge-draft" : "badge-active";
+        const isPreview = s.status === "PREVIEW" || s.badge_type === "preview";
+        const badgeClass = isDraft ? "badge-draft" : (isPreview ? "badge-preview" : "badge-active");
         return `
           <div class="season-dropdown-item ${isSelected ? 'is-selected' : ''}" data-season-id="${s.id}">
             <div class="season-item-header">
@@ -122,7 +184,7 @@ window.ArenaApp = {
 
     const seasons = window.ARENA_SEASONS_INDEX || [];
     const current = seasons.find(s => s.id === this.currentSeasonId);
-    const shortTitle = current ? current.short_title : this.currentSeasonId;
+    const shortTitle = current ? current.short_title : "Season 1";
     label.textContent = shortTitle;
 
     if (current && current.status === "DRAFT") {
@@ -144,14 +206,15 @@ window.ArenaApp = {
 
   switchSeason(seasonId, updateHistory = true) {
     if (!seasonId) return;
-    this.currentSeasonId = seasonId;
+    const validatedSeason = this.normalizeSeasonId(seasonId) || "season_01";
+    this.currentSeasonId = validatedSeason;
 
-    const seasonData = window.ARENA_SEASONS_DATA ? window.ARENA_SEASONS_DATA[seasonId] : null;
+    const seasonData = window.ARENA_SEASONS_DATA ? window.ARENA_SEASONS_DATA[validatedSeason] : null;
     if (seasonData) {
-      console.log(`[ArenaApp] Switching to ${seasonId}...`);
+      console.log(`[ArenaApp] Switching to ${validatedSeason}...`);
       window.arenaAdapter = new ArenaDataAdapter(seasonData);
     } else {
-      console.warn(`[ArenaApp] No data found for ${seasonId}, retaining active adapter.`);
+      console.warn(`[ArenaApp] No data found for ${validatedSeason}, retaining active adapter.`);
     }
 
     this.updateSeasonButtonUI();
