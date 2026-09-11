@@ -33,7 +33,10 @@ universe:
   name: "CSI 1000 Universe (~1,000 Stocks)"
   market_benchmark_name: "CSI 1000"
   market_benchmark_symbol: "SH000852"
-  benchmark_index: "SH000852"
+  testbed_desc: "1,000-stock small-cap testbed"
+
+banner:
+  proof_text: "🔬 <strong style=\"color: var(--text-secondary);\">CSI 1000 Testbed Proof:</strong> 1,000 small-cap equities with 11,000 empirical random monkeys verified over 2026-07-03 ~ 2026-08-28. Unfalsifiable empirical null resolution."
 
 # Enabled Benchmarks
 benchmarks:

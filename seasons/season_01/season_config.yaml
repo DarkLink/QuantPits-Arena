@@ -30,7 +30,14 @@ execution:
 universe:
   provider: "manifest_feature_universe"
   market: "csirun300"
+  name: "Season 1 Constituent Universe (246 Stocks)"
+  market_benchmark_name: "CSI 300"
+  market_benchmark_symbol: "SH000300"
   benchmark_index: "SH000300"
+  testbed_desc: "246-stock high-liquidity testbed"
+
+banner:
+  proof_text: "🔐 <strong style=\"color: var(--text-secondary);\">Proof of Timeliness:</strong> Next cycle (through 2026-09-04) cryptographically committed on 2026-09-05 (<code style=\"font-size: 10px; color: var(--brand-cyan);\">SHA-256: 8fca6717...</code>). Public reveal embargoed until 2026-09-11."
 
 # Enabled Benchmarks (First-Class Citizens)
 benchmarks:

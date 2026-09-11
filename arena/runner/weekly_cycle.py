@@ -77,18 +77,18 @@ class WeeklyCycleRunner:
         if auth_store_path is not None:
             self.auth_store_path = auth_store_path
         elif season_id:
-            season_pred_file = REPO_ROOT / "artifacts" / "predictions" / f"{season_id}_contestants_oos.pkl"
-            csi_univ_file = REPO_ROOT / "artifacts" / "predictions" / f"{season_id.replace('season_', '')}_contestants_oos.pkl"
-            if season_pred_file.exists():
-                self.auth_store_path = season_pred_file
-            elif csi_univ_file.exists():
-                self.auth_store_path = csi_univ_file
-            elif season_id == "season_csi1000":
-                self.auth_store_path = REPO_ROOT / "artifacts" / "predictions" / "csi1000_contestants_oos.pkl"
-            elif season_id == "season_csi500":
-                self.auth_store_path = REPO_ROOT / "artifacts" / "predictions" / "csi500_contestants_oos.pkl"
+            raw_univ = season_id.replace("season_", "").lower()
+            candidates = [
+                REPO_ROOT / "artifacts" / "predictions" / f"{season_id}_contestants_oos.pkl",
+                REPO_ROOT / "artifacts" / "predictions" / f"{raw_univ}_contestants_oos.pkl",
+            ]
+            for p in candidates:
+                if p.exists():
+                    self.auth_store_path = p
+                    break
             else:
-                self.auth_store_path = REPO_ROOT / "artifacts" / "predictions" / "all_contestants_oos.pkl"
+                fallback = REPO_ROOT / "artifacts" / "predictions" / "all_contestants_oos.pkl"
+                self.auth_store_path = fallback if fallback.exists() else candidates[1]
         else:
             self.auth_store_path = REPO_ROOT / "artifacts" / "predictions" / "all_contestants_oos.pkl"
 

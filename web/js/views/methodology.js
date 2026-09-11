@@ -11,7 +11,7 @@ window.MethodologyView = {
     if (!el) return;
 
     const seasonMeta = window.arenaAdapter ? window.arenaAdapter.getCurrentSeasonMeta() : {};
-    const isSeason2 = seasonMeta.id === "season_02";
+    const hasTwoPhase = seasonMeta.has_two_phase || (seasonMeta.methodology?.execution_flow && seasonMeta.methodology.execution_flow.includes("Two-Phase")) || seasonMeta.id !== "season_01";
     const hasGhost = window.arenaAdapter ? window.arenaAdapter.hasGhostTaotie() : false;
 
     el.innerHTML = `
@@ -288,14 +288,14 @@ window.MethodologyView = {
           </div>
         </div>
 
-        ${isSeason2 ? `
-        <!-- 8. Season 2 Two-Phase Timeline & Cryptographic Pre-Commitment -->
+        ${hasTwoPhase ? `
+        <!-- 8. Two-Phase Timeline & Cryptographic Pre-Commitment -->
         <div class="card" style="border-left: 4px solid var(--brand-cyan);">
           <h2 style="font-size: 18px; font-weight: 700; color: var(--brand-cyan); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
-            <span>⚡</span> 8. Season 2 Two-Phase Timeline &amp; Cryptographic Pre-Commitment
+            <span>⚡</span> 8. ${seasonMeta.short_title || "Arena"} Two-Phase Timeline &amp; Cryptographic Pre-Commitment
           </h2>
           <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 14px;">
-            To eliminate hindsight and operator lookahead bias in weekly quantitative workflows, Season 2 enforces a strict two-phase state machine decoupled between signal generation and order settlement:
+            To eliminate hindsight and operator lookahead bias in weekly quantitative workflows, ${seasonMeta.short_title || "the Arena"} enforces a strict two-phase state machine decoupled between signal generation and order settlement:
           </p>
           <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 12px;">
             <div style="background: rgba(255, 255, 255, 0.02); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">

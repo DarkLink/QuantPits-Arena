@@ -387,8 +387,11 @@ class ArenaDataAdapter {
       const code = (this.metadata.universe_code || "").toLowerCase();
       if (code && this.navTimeline.curves[`BENCHMARK_${code}`]) return this.navTimeline.curves[`BENCHMARK_${code}`];
       if (this.navTimeline.curves["BENCHMARK_market"]) return this.navTimeline.curves["BENCHMARK_market"];
-      if (this.navTimeline.curves["BENCHMARK_csi500"]) return this.navTimeline.curves["BENCHMARK_csi500"];
-      if (this.navTimeline.curves["BENCHMARK_csi1000"]) return this.navTimeline.curves["BENCHMARK_csi1000"];
+      for (const k of Object.keys(this.navTimeline.curves)) {
+        if (k.startsWith("BENCHMARK_") && !k.toLowerCase().includes("taotie")) {
+          return this.navTimeline.curves[k];
+        }
+      }
       if (this.navTimeline.curves["BENCHMARK_csi300"]) return this.navTimeline.curves["BENCHMARK_csi300"];
     }
     return [];
@@ -399,8 +402,11 @@ class ArenaDataAdapter {
       const code = (this.metadata.universe_code || "").toLowerCase();
       if (code && this.navTimeline.drawdowns[`BENCHMARK_${code}`]) return this.navTimeline.drawdowns[`BENCHMARK_${code}`];
       if (this.navTimeline.drawdowns["BENCHMARK_market"]) return this.navTimeline.drawdowns["BENCHMARK_market"];
-      if (this.navTimeline.drawdowns["BENCHMARK_csi500"]) return this.navTimeline.drawdowns["BENCHMARK_csi500"];
-      if (this.navTimeline.drawdowns["BENCHMARK_csi1000"]) return this.navTimeline.drawdowns["BENCHMARK_csi1000"];
+      for (const k of Object.keys(this.navTimeline.drawdowns)) {
+        if (k.startsWith("BENCHMARK_") && !k.toLowerCase().includes("taotie")) {
+          return this.navTimeline.drawdowns[k];
+        }
+      }
       if (this.navTimeline.drawdowns["BENCHMARK_csi300"]) return this.navTimeline.drawdowns["BENCHMARK_csi300"];
     }
     return [];
@@ -410,7 +416,7 @@ class ArenaDataAdapter {
     if (!pathId) return [];
     if (pathId === "BENCHMARK_taotie" || pathId === "taotie") return this.getBenchmarkTaotieCurve();
     if (pathId === "BENCHMARK_ghost_taotie" || pathId === "ghost_taotie") return this.getBenchmarkGhostTaotieCurve();
-    if (pathId === "BENCHMARK_csi300" || pathId === "csi300" || pathId === "BENCHMARK_csi1000" || pathId === "csi1000" || pathId === "BENCHMARK_market") {
+    if (pathId.startsWith("BENCHMARK_") || pathId === "market" || pathId.toLowerCase().startsWith("csi")) {
       return this.getBenchmarkMarketCurve();
     }
     return (this.navTimeline && this.navTimeline.curves && this.navTimeline.curves[pathId]) || [];
@@ -428,7 +434,7 @@ class ArenaDataAdapter {
     if (!pathId) return [];
     if (pathId === "BENCHMARK_taotie" || pathId === "taotie") return this.getTaotieDrawdown();
     if (pathId === "BENCHMARK_ghost_taotie" || pathId === "ghost_taotie") return this.getGhostTaotieDrawdown();
-    if (pathId === "BENCHMARK_csi300" || pathId === "csi300" || pathId === "BENCHMARK_csi1000" || pathId === "csi1000" || pathId === "BENCHMARK_market") {
+    if (pathId.startsWith("BENCHMARK_") || pathId === "market" || pathId.toLowerCase().startsWith("csi")) {
       return this.getMarketDrawdown();
     }
     return (this.navTimeline && this.navTimeline.drawdowns && this.navTimeline.drawdowns[pathId]) || [];

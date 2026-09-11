@@ -17,6 +17,8 @@ window.ARENA_SEASONS_DATA["season_csi500"] = {
     "market_benchmark_return_pct": -9.72,
     "universe_name": "CSI 500 Universe (~500 Stocks)",
     "universe_code": "csi500",
+    "testbed_desc": "500-stock mid-cap testbed",
+    "timeliness_proof": "🔬 <strong style=\"color: var(--text-secondary);\">CSI 500 Testbed Proof:</strong> 500 mid-cap equities with 11,000 empirical random monkeys verified over 2026-07-03 ~ 2026-08-28. Unfalsifiable empirical null resolution.",
     "taotie_return_pct": 0.9,
     "ghost_taotie_return_pct": -4.87,
     "active_benchmarks": [
@@ -43,6 +45,8 @@ window.ARENA_SEASONS_DATA["season_csi500"] = {
     "market_benchmark_return_pct": -9.72,
     "universe_name": "CSI 500 Universe (~500 Stocks)",
     "universe_code": "csi500",
+    "testbed_desc": "500-stock mid-cap testbed",
+    "timeliness_proof": "🔬 <strong style=\"color: var(--text-secondary);\">CSI 500 Testbed Proof:</strong> 500 mid-cap equities with 11,000 empirical random monkeys verified over 2026-07-03 ~ 2026-08-28. Unfalsifiable empirical null resolution.",
     "taotie_return_pct": 0.9,
     "ghost_taotie_return_pct": -4.87,
     "active_benchmarks": [

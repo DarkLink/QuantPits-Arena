@@ -226,11 +226,10 @@ window.DispatchesView = {
       }
     }
 
-    const currentSeasonId = window.arenaAdapter ? window.arenaAdapter.getCurrentSeasonMeta().id : "season_01";
-    if (currentSeasonId === "season_01") {
-      if (this.currentEpisode === "ep09") {
-        return this.renderEp09Embargoed();
-      }
+    if (this.currentEpisode === "ep09") {
+      return this.renderEp09Embargoed();
+    }
+    if (this.currentEpisode === "ep08") {
       return this.renderEp08En();
     }
 

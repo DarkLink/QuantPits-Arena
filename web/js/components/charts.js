@@ -52,7 +52,7 @@ window.ArenaCharts = {
         match = sName.includes("Taotie") && !sName.includes("Ghost");
       } else if (benchmarkKey === "csi300" || benchmarkKey === "market") {
         const mBm = (window.arenaAdapter && window.arenaAdapter.getMarketBenchmarkName) ? window.arenaAdapter.getMarketBenchmarkName() : "CSI 300";
-        match = sName.includes("CSI 300") || sName.includes("CSI300") || sName.includes("CSI-300") || sName.includes("CSI 1000") || sName.includes("CSI1000") || sName.includes(mBm);
+        match = s.isMarketBenchmark || sName.includes(mBm) || (mBm && sName.toLowerCase().includes(mBm.toLowerCase())) || sName.includes("Benchmark") || sName.includes("Index");
       } else if (benchmarkKey === "monkey") {
         match = sName.includes("Monkey");
       }
@@ -1262,7 +1262,7 @@ window.ArenaCharts = {
       legend: {
         type: "scroll",
         top: 25,
-        data: series.filter(s => !s.name.includes("Taotie") && !s.name.includes("Ghost") && !s.name.includes("CSI 300") && !s.name.includes("CSI 1000")).map(s => s.name),
+        data: series.filter(s => !s.isBenchmark && !s.name.includes("Taotie") && !s.name.includes("Ghost") && !s.name.toLowerCase().includes(marketBmName.toLowerCase())).map(s => s.name),
         textStyle: { color: tc.textSecondary, fontSize: 10 },
         pageTextStyle: { color: tc.textSecondary }
       },
@@ -1587,7 +1587,7 @@ window.ArenaCharts = {
       legend: {
         type: "scroll",
         top: 25,
-        data: series.filter(s => !s.name.includes("Taotie") && !s.name.includes("Ghost") && !s.name.includes("CSI 300") && !s.name.includes("CSI 1000")).map(s => s.name),
+        data: series.filter(s => !s.isBenchmark && !s.name.includes("Taotie") && !s.name.includes("Ghost") && !s.name.toLowerCase().includes(marketBmName.toLowerCase())).map(s => s.name),
         textStyle: { color: tc.textSecondary, fontSize: 11 },
         pageTextStyle: { color: tc.textSecondary }
       },
@@ -1739,7 +1739,7 @@ window.ArenaCharts = {
       legend: {
         type: "scroll",
         top: 0,
-        data: series.filter(s => !s.name.includes("Taotie") && !s.name.includes("Ghost") && !s.name.includes("CSI 300") && !s.name.includes("CSI 1000")).map(s => s.name),
+        data: series.filter(s => !s.isBenchmark && !s.name.includes("Taotie") && !s.name.includes("Ghost") && !s.name.toLowerCase().includes(marketBmName.toLowerCase())).map(s => s.name),
         textStyle: { color: tc.textSecondary, fontSize: 11 },
         pageTextStyle: { color: tc.textSecondary }
       },

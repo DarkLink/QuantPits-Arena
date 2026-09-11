@@ -630,6 +630,13 @@ class DualTierExporter:
                 "episodes": []
             }
 
+        testbed_desc = univ.get("testbed_desc", f"{univ_name} testbed")
+        timeliness_proof = raw_dict.get("banner", {}).get("proof_text") or (
+            f"🔬 <strong style=\"color: var(--text-secondary);\">{bench_name} Testbed Proof:</strong> "
+            f"{univ_name} with empirical random monkeys verified over {nav_dates[0] if nav_dates else ''} ~ {nav_dates[-1] if nav_dates else ''}. "
+            f"Unfalsifiable empirical null resolution."
+        )
+
         meta_dict = {
             "season_id": season_id,
             "season_title": getattr(season_cfg, "title", season_id),
@@ -643,6 +650,8 @@ class DualTierExporter:
             "market_benchmark_return_pct": bench_ret,
             "universe_name": univ_name,
             "universe_code": univ_code,
+            "testbed_desc": testbed_desc,
+            "timeliness_proof": timeliness_proof,
             "taotie_return_pct": taotie_tot_ret,
             "ghost_taotie_return_pct": ghost_tot_ret,
             "active_benchmarks": [bench_name, f"Taotie ({univ_code}) (500k)", f"Ghost Taotie ({univ_code}) (100M)", "1,000 Monkeys"],
@@ -761,7 +770,7 @@ class DualTierExporter:
             return
 
         content = html_file.read_text(encoding="utf-8")
-        target_script = f'<script src="js/data/{season_id}.js?v=4.8"></script>'
+        target_script = f'<script src="js/data/{season_id}.js?v=4.9"></script>'
         if f'js/data/{season_id}.js' in content:
             return
 

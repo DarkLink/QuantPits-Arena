@@ -182,15 +182,14 @@ window.ArenaApp = {
     if (!bannerSpan) return;
 
     const seasonMeta = window.arenaAdapter ? window.arenaAdapter.getCurrentSeasonMeta() : {};
-    if (seasonMeta.id === "season_02") {
-      bannerSpan.innerHTML = `⚡ <strong style="color: var(--text-secondary);">Season 2 Timeliness Proof:</strong> Two-Phase Friday Order Commitment (<code style="font-size: 10px; color: var(--brand-cyan);">SHA-256: e8b9f1a2...</code>) initialized on 2026-09-04. Unfalsifiable out-of-sample execution.`;
-    } else if (seasonMeta.id === "season_csi1000") {
-      bannerSpan.innerHTML = `🔬 <strong style="color: var(--text-secondary);">CSI 1000 Testbed Proof:</strong> 1,000 small-cap equities with 11,000 empirical random monkeys verified over 2026-07-03 ~ 2026-08-28. Unfalsifiable empirical null resolution.`;
-    } else if (seasonMeta.id === "season_csi500") {
-      bannerSpan.innerHTML = `🔬 <strong style="color: var(--text-secondary);">CSI 500 Testbed Proof:</strong> 500 mid-cap equities with 11,000 empirical random monkeys verified over 2026-07-03 ~ 2026-08-28. Unfalsifiable empirical null resolution.`;
-    } else {
-      bannerSpan.innerHTML = `🔐 <strong style="color: var(--text-secondary);">Proof of Timeliness:</strong> Next cycle (through 2026-09-04) cryptographically committed on 2026-09-05 (<code style="font-size: 10px; color: var(--brand-cyan);">SHA-256: 8fca6717...</code>). Public reveal embargoed until 2026-09-11.`;
+    if (seasonMeta.timeliness_proof) {
+      bannerSpan.innerHTML = seasonMeta.timeliness_proof;
+      return;
     }
+    const title = seasonMeta.short_title || seasonMeta.title || "Arena";
+    const univ = seasonMeta.universe_name || "Universe";
+    const windowLabel = seasonMeta.window_label || seasonMeta.period_label || "Active Window";
+    bannerSpan.innerHTML = `🔬 <strong style="color: var(--text-secondary);">${title} Proof:</strong> ${univ} verified over ${windowLabel}. Unfalsifiable empirical null resolution.`;
   },
 
   initPreviewBanner() {
