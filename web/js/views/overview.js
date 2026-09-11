@@ -56,12 +56,12 @@ window.OverviewView = {
         </div>
         <div class="kpi-card positive">
           <div class="kpi-label">Peak OOS Return</div>
-          <div class="kpi-value positive">+${kpis.topReturn.toFixed(2)}%</div>
+          <div class="kpi-value positive">${kpis.topReturn >= 0 ? '+' : ''}${kpis.topReturn.toFixed(2)}%</div>
           <div class="kpi-subtext">Top performer across ${window.arenaAdapter.getTradingDays()} trading days</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-label">Median OOS Return</div>
-          <div class="kpi-value" style="color:#38bdf8;">+${kpis.medianReturn.toFixed(2)}%</div>
+          <div class="kpi-value" style="color:#38bdf8;">${kpis.medianReturn >= 0 ? '+' : ''}${kpis.medianReturn.toFixed(2)}%</div>
           <div class="kpi-subtext">Cross-path median performance</div>
         </div>
       </div>
@@ -77,19 +77,19 @@ window.OverviewView = {
           <div style="display: flex; align-items: center; gap: 8px;" title="Executable baseline: CNY 500k capital, 100-share trading lot friction">
             <span class="bm-line-badge" style="border-top-color: #c084fc; width: 14px;"></span>
             <span style="font-size: 12px; color: var(--text-secondary);">Taotie (Physical Baseline 500k):</span>
-            <b style="font-size: 13px; font-family: monospace; color: #c084fc;">+${kpis.taotieReturn.toFixed(2)}%</b>
+            <b style="font-size: 13px; font-family: monospace; color: #c084fc;">${kpis.taotieReturn >= 0 ? '+' : ''}${kpis.taotieReturn.toFixed(2)}%</b>
           </div>
           ${window.arenaAdapter.hasGhostTaotie() ? `
           <div style="display: flex; align-items: center; gap: 8px;" title="Theoretical equal-weight baseline: CNY 100M institutional capital, zero lot friction">
             <span class="bm-line-badge" style="border-top-color: #00f0ff; width: 14px;"></span>
             <span style="font-size: 12px; color: var(--text-secondary);">Ghost Taotie (Theoretical Equal-Weight 100M):</span>
-            <b style="font-size: 13px; font-family: monospace; color: #00f0ff;">+${window.arenaAdapter.getGhostTaotieReturn().toFixed(2)}%</b>
+            <b style="font-size: 13px; font-family: monospace; color: #00f0ff;">${window.arenaAdapter.getGhostTaotieReturn() >= 0 ? '+' : ''}${window.arenaAdapter.getGhostTaotieReturn().toFixed(2)}%</b>
           </div>
           ` : ''}
-          <div style="display: flex; align-items: center; gap: 8px;" title="External broad market equity anchor (SH000300)">
+          <div style="display: flex; align-items: center; gap: 8px;" title="External broad market equity anchor (${window.arenaAdapter.getMarketBenchmarkCode()})">
             <span class="bm-line-badge" style="border-top-color: #f59e0b; width: 14px;"></span>
-            <span style="font-size: 12px; color: var(--text-secondary);">CSI 300 (Market Benchmark):</span>
-            <b style="font-size: 13px; font-family: monospace; color: #f59e0b;">${kpis.csi300Return.toFixed(2)}%</b>
+            <span style="font-size: 12px; color: var(--text-secondary);">${window.arenaAdapter.getMarketBenchmarkName()} (Market Benchmark):</span>
+            <b style="font-size: 13px; font-family: monospace; color: #f59e0b;">${kpis.csi300Return >= 0 ? '+' : ''}${kpis.csi300Return.toFixed(2)}%</b>
           </div>
         </div>
         <div style="font-size: 11px; color: var(--text-tertiary);">
@@ -108,7 +108,7 @@ window.OverviewView = {
               </h3>
             </div>
             <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">
-              Multi-line trajectory panorama comparing model strategies against Taotie (500k), ${window.arenaAdapter.hasGhostTaotie() ? 'Ghost Taotie (100M), ' : ''}and CSI 300
+              Multi-line trajectory panorama comparing model strategies against Taotie (500k), ${window.arenaAdapter.hasGhostTaotie() ? 'Ghost Taotie (100M), ' : ''}and ${window.arenaAdapter.getMarketBenchmarkName()}
             </div>
           </div>
 
@@ -148,7 +148,7 @@ window.OverviewView = {
                 ${window.arenaAdapter.hasGhostTaotie() ? `
                 <button class="chart-metric-btn ${this.activeMetricMode === 'excess_ghost' ? 'active' : ''}" data-metric="excess_ghost">👻 vs Ghost (100M)</button>
                 ` : ''}
-                <button class="chart-metric-btn ${this.activeMetricMode === 'excess_csi300' ? 'active' : ''}" data-metric="excess_csi300">🏛️ vs CSI 300</button>
+                <button class="chart-metric-btn ${this.activeMetricMode === 'excess_csi300' ? 'active' : ''}" data-metric="excess_csi300">🏛️ vs ${window.arenaAdapter.getMarketBenchmarkName()}</button>
                 <button class="chart-metric-btn ${this.activeMetricMode === 'drawdown' ? 'active' : ''}" data-metric="drawdown">🌊 Drawdown</button>
               </div>
             </div>
@@ -163,8 +163,8 @@ window.OverviewView = {
               <button type="button" class="benchmark-pill taotie is-active" data-benchmark="taotie" title="Toggle Taotie (500k)">
                 <span class="bm-line-badge"></span> Taotie (500k)
               </button>
-              <button type="button" class="benchmark-pill csi300 is-active" data-benchmark="csi300" title="Toggle CSI 300">
-                <span class="bm-line-badge"></span> CSI 300
+              <button type="button" class="benchmark-pill csi300 is-active" data-benchmark="csi300" title="Toggle ${window.arenaAdapter.getMarketBenchmarkName()}">
+                <span class="bm-line-badge"></span> ${window.arenaAdapter.getMarketBenchmarkName()}
               </button>
             </div>
           </div>
@@ -206,7 +206,7 @@ window.OverviewView = {
                       #${idx + 1} ${p.path_id}
                     </div>
                     <div style="font-size:0.75rem; color:var(--text-tertiary);">
-                      Monkey Pct: <b style="color:#a855f7;">${window.formatPercentile ? window.formatPercentile(p.percentile_rank ?? p.monkey_percentile) : (p.percentile_rank || 0).toFixed(1) + '%'}</b> | ${(() => {
+                      Monkey Pct: <b style="color:#a855f7;">${window.formatPercentile ? window.formatPercentile(p.percentile_rank ?? p.monkey_percentile ?? p.monkey_percentile_rank) : ((p.percentile_rank ?? p.monkey_percentile ?? p.monkey_percentile_rank) || 0).toFixed(1) + '%'}</b> | ${(() => {
                         const rawP = p.empirical_p_value !== undefined ? p.empirical_p_value : p.p_value;
                         const pVal = window.formatPValue ? window.formatPValue(rawP) : '1.0000';
                         return pVal.startsWith('<') ? `p ${pVal}` : `p=${pVal}`;
@@ -215,7 +215,7 @@ window.OverviewView = {
                   </div>
                   <div style="text-align:right;">
                     <div style="font-weight:700; color:var(--accent-positive); font-size:0.95rem;">
-                      +${p.total_return_pct.toFixed(2)}%
+                      ${p.total_return_pct >= 0 ? '+' : ''}${p.total_return_pct.toFixed(2)}%
                     </div>
                     <div style="font-size:0.75rem; color:var(--text-tertiary);">
                       MDD: ${p.max_drawdown_pct.toFixed(2)}%
@@ -239,7 +239,7 @@ window.OverviewView = {
                       ${p.path_id}
                     </div>
                     <div style="font-size:0.75rem; color:var(--text-tertiary);">
-                      ${p.animal_id === 'koala' ? '⚡ Inverted Polarity Test' : 'Monkey Pct: ' + (window.formatPercentile ? window.formatPercentile(p.percentile_rank ?? p.monkey_percentile) : (p.percentile_rank || 0).toFixed(1) + '%')}
+                      ${p.animal_id === 'koala' ? '⚡ Inverted Polarity Test' : 'Monkey Pct: ' + (window.formatPercentile ? window.formatPercentile(p.percentile_rank ?? p.monkey_percentile ?? p.monkey_percentile_rank) : ((p.percentile_rank ?? p.monkey_percentile ?? p.monkey_percentile_rank) || 0).toFixed(1) + '%')}
                     </div>
                   </div>
                   <div style="text-align:right;">

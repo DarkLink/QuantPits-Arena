@@ -52,7 +52,7 @@ window.LeaderboardView = {
               </button>
             ` : ''}
             <button class="btn btn-sm ${this.viewMode === 'vs_csi300' ? 'btn-primary' : 'btn-secondary'}" onclick="window.LeaderboardView.switchViewMode('vs_csi300')">
-              🏛️ Alpha vs CSI 300 (${csiRet >= 0 ? '+' : ''}${csiRet.toFixed(2)}%)
+              🏛️ Alpha vs ${window.arenaAdapter.getMarketBenchmarkName()} (${csiRet >= 0 ? '+' : ''}${csiRet.toFixed(2)}%)
             </button>
           </div>
           <div style="font-size: 11px; color: var(--text-tertiary); font-family: monospace;">
@@ -112,11 +112,11 @@ window.LeaderboardView = {
           <div style="display:flex; justify-content:space-between; align-items:center; margin-top:12px; padding:10px 16px; background:var(--bg-surface-elevated); border-radius:var(--radius-sm); font-size:0.8rem; border:1px solid var(--border-subtle); flex-wrap:wrap; gap:10px;">
             <span style="color:var(--text-muted); font-weight:600;">Benchmark Reference Standards:</span>
             <div style="display:flex; gap:20px; flex-wrap:wrap;">
-              <span title="A capital-constrained, round-lot-constrained full-universe portfolio designed to approximate broad exposure with minimal active selection">Taotie (Executable Universe Benchmark): <b style="color:var(--accent-positive);">+${taotieRet.toFixed(2)}%</b></span>
+              <span title="A capital-constrained, round-lot-constrained full-universe portfolio designed to approximate broad exposure with minimal active selection">Taotie (Executable Universe Benchmark): <b style="color:var(--accent-positive);">${taotieRet >= 0 ? '+' : ''}${taotieRet.toFixed(2)}%</b></span>
               ${hasGhost ? `
-              <span title="Theoretical unconstrained equal-weight universe benchmark under CNY 100M capital">Ghost Taotie (Theoretical Equal-Weight): <b style="color:#00f0ff;">+${ghostRet.toFixed(2)}%</b></span>
+              <span title="Theoretical unconstrained equal-weight universe benchmark under CNY 100M capital">Ghost Taotie (Theoretical Equal-Weight): <b style="color:#00f0ff;">${ghostRet >= 0 ? '+' : ''}${ghostRet.toFixed(2)}%</b></span>
               ` : ''}
-              <span title="External broad market index context (SH000300)">CSI 300 (External Market Anchor): <b style="color:var(--accent-negative);">${csiRet.toFixed(2)}%</b></span>
+              <span title="External broad market index context (${window.arenaAdapter.getMarketBenchmarkCode()})">${window.arenaAdapter.getMarketBenchmarkName()} (External Market Anchor): <b style="color:var(--accent-negative);">${csiRet >= 0 ? '+' : ''}${csiRet.toFixed(2)}%</b></span>
             </div>
           </div>
         </div>
@@ -133,7 +133,7 @@ window.LeaderboardView = {
   getReturnColumnHeader() {
     if (this.viewMode === "vs_taotie") return "Alpha vs Taotie (%)";
     if (this.viewMode === "vs_ghost") return "Alpha vs Ghost (%)";
-    if (this.viewMode === "vs_csi300") return "Alpha vs CSI 300 (%)";
+    if (this.viewMode === "vs_csi300") return `Alpha vs ${window.arenaAdapter.getMarketBenchmarkName()} (%)`;
     return "Return (%)";
   },
 
@@ -219,9 +219,9 @@ window.LeaderboardView = {
 
     tbody.innerHTML = sorted.map(p => {
       const isPositive = p.total_return_pct >= 0;
-      const pct = (p.percentile_rank !== undefined ? p.percentile_rank : (p.monkey_percentile || 0));
+      const pct = (p.percentile_rank !== undefined ? p.percentile_rank : (p.monkey_percentile !== undefined ? p.monkey_percentile : (p.monkey_percentile_rank || 0)));
       const isSig = pct >= 95.0;
-      const pVal = (p.empirical_p_value !== undefined ? p.empirical_p_value : (p.p_value || 1.0));
+      const pVal = (p.empirical_p_value !== undefined ? p.empirical_p_value : (p.p_value !== undefined ? p.p_value : 1.0));
 
       const alphaTao = p.total_return_pct - taotieRet;
       const alphaGhost = p.total_return_pct - ghostRet;

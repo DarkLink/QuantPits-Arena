@@ -1,0 +1,51 @@
+# ==============================================================================
+# QuantPits-Arena Season CSI 500 Configuration (season_config.yaml)
+# ==============================================================================
+
+season_id: season_csi500
+title: "QuantPits Arena Season CSI 500 (Mid-Cap Breadth Season)"
+status: ACTIVE
+description: "CSI 500 mid-cap universe benchmark: evaluating the 6 Alpha candidate models and 28 execution containers against CSI 500 (SH000905) benchmark"
+
+# Calendar and Horizon (Parallel Timeline with Season 1 & CSI 1000 for Direct Comparison)
+calendar:
+  anchor_date: "2026-07-03"        # Retrospective calibration anchor (Friday close)
+  first_trade_date: "2026-07-06"   # Monday market open entry
+  end_date: "2026-08-28"           # Tournament evaluation horizon
+  cycle_freq: "weekly"
+
+# Account and Match Execution Parameters
+execution:
+  initial_cash: 500000.0           # Standard baseline capital: CNY 500,000
+  deal_price_mode: "open"          # Monday open execution
+  lot_size: 100                    # 100 shares per lot
+  allow_fractional_shares: false
+  open_cost: 0.0005
+  close_cost: 0.0015
+  min_cost: 5.0
+  topk: 22
+  n_drop: 3
+
+# Universe Definition
+universe:
+  provider: "manifest_feature_universe"
+  market: "csi500"
+  benchmark_index: "SH000905"
+
+# Enabled Benchmarks
+benchmarks:
+  - id: "taotie"
+    type: "EXECUTABLE"
+    initial_cash: 500000.0
+    display_name: "Taotie 500 (CSI 500 Executable 500k)"
+  - id: "ghost_taotie"
+    type: "THEORETICAL"
+    initial_cash: 100000000.0      # Institutional CNY 100M capital
+    display_name: "Ghost Taotie 500 (Theoretical Equal-Weight 100M)"
+  - id: "csi500"
+    type: "INDEX"
+    symbol: "SH000905"
+    display_name: "CSI 500 (Market Benchmark)"
+  - id: "monkeys"
+    type: "STATISTICAL"
+    colony_size_per_spec: 1000

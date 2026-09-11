@@ -34,8 +34,8 @@ window.PathDetailView = {
     const monkeyDist = window.arenaAdapter.getMonkeyDistribution(path.strategy_spec);
 
     const isSig = path.is_statistically_significant || (path.empirical_p_value !== undefined && path.empirical_p_value < 0.05);
-    const pVal = path.empirical_p_value !== undefined ? path.empirical_p_value : 1.0;
-    const pRank = path.monkey_percentile !== undefined ? path.monkey_percentile : 50.0;
+    const pVal = path.empirical_p_value !== undefined ? path.empirical_p_value : (path.p_value !== undefined ? path.p_value : 1.0);
+    const pRank = path.percentile_rank !== undefined ? path.percentile_rank : (path.monkey_percentile !== undefined ? path.monkey_percentile : (path.monkey_percentile_rank !== undefined ? path.monkey_percentile_rank : 50.0));
     const retColor = path.total_return_pct >= 0 ? "var(--accent-positive)" : "var(--accent-negative)";
 
     this.activeMetric = "nav";
@@ -140,7 +140,7 @@ window.PathDetailView = {
               <div class="chart-metric-btn-group" id="path-metric-btn-group">
                 <button class="chart-metric-btn active" data-metric="nav">Cumulative NAV</button>
                 <button class="chart-metric-btn" data-metric="drawdown">Underwater Drawdown</button>
-                <button class="chart-metric-btn" data-metric="excess_csi300">Excess vs. CSI 300</button>
+                <button class="chart-metric-btn" data-metric="excess_csi300">Excess vs. ${window.arenaAdapter.getMarketBenchmarkName()}</button>
               </div>
 
               <!-- Benchmark Standards Independent Controls -->
@@ -156,8 +156,8 @@ window.PathDetailView = {
                 <button type="button" class="benchmark-pill taotie is-active" data-benchmark="taotie" title="Toggle Taotie (500k)">
                   <span class="bm-line-badge"></span> Taotie (500k)
                 </button>
-                <button type="button" class="benchmark-pill csi300 is-active" data-benchmark="csi300" title="Toggle CSI 300">
-                  <span class="bm-line-badge"></span> CSI 300
+                <button type="button" class="benchmark-pill csi300 is-active" data-benchmark="csi300" title="Toggle ${window.arenaAdapter.getMarketBenchmarkName()}">
+                  <span class="bm-line-badge"></span> ${window.arenaAdapter.getMarketBenchmarkName()}
                 </button>
               </div>
             </div>

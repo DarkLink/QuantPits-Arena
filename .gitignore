@@ -55,10 +55,11 @@ INIT.md
 REF.md
 
 # Arena run caches and private/raw outputs
-runs/*/predictions/
-runs/*/portfolios/
-runs/*/monkey/
-runs/*/private/
+runs/**/predictions/
+runs/**/portfolios/
+runs/**/monkey/
+runs/**/private/
+runs/**/checkpoints/
 
 # Keep run manifests and reports
 !runs/*/run_manifest.yaml
@@ -74,6 +75,7 @@ tmp/
 web/js/data/arena_data_preview.js
 runs/preview_*/
 runs/*_preview*/
+runs/season_*/
 
 # Internal Chinese chronicles (unreleased / private internal editions)
 chronicles/zh/

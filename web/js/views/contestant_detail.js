@@ -92,11 +92,11 @@ window.ContestantDetailView = {
                 ${contestants.map(c => {
                   const cid = c.id || c.contestant_id;
                   const isActive = cid === this.activeContestantId;
-                  const annRet = c.historical_sys_ann_return_pct ? `+${c.historical_sys_ann_return_pct}% p.a.` : '';
+                  const familyTag = c.family || c.lineage || 'Alpha';
                   return `
                     <button class="btn ${isActive ? 'btn-primary' : 'btn-secondary'} contestant-switch-btn" 
                             data-cid="${cid}" style="padding: 4px 10px; font-size: 11px; font-weight: 600;">
-                      ${c.display_name || c.anonymous_name || cid} <span style="font-size: 10px; opacity: 0.85; margin-left: 2px;">(${annRet})</span>
+                      ${c.display_name || c.anonymous_name || cid} <span style="font-size: 10px; opacity: 0.75; margin-left: 2px;">[${familyTag}]</span>
                     </button>
                   `;
                 }).join('')}
@@ -111,13 +111,24 @@ window.ContestantDetailView = {
           <div class="card" style="border-left: 4px solid var(--accent-amber);">
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
               <h3 style="font-size: 15px; font-weight: 700; color: var(--accent-amber); display: flex; align-items: center; gap: 8px; margin: 0;">
-                Historical Biography (Record at Burial)
+                Historical Biography (Legacy Production Pool Archive)
               </h3>
-              <div style="display: flex; gap: 6px;">
+              <div style="display: flex; gap: 6px; flex-wrap: wrap;">
                 <span class="badge badge-warning" style="font-size: 10px;">Prior to Arena Cutoff</span>
-                <span class="badge badge-neutral" style="font-size: 10px;">Cashflow-Adjusted</span>
+                <span class="badge" style="font-size: 10px; background: rgba(239,68,68,0.15); color: #f87171; border: 1px solid rgba(239,68,68,0.3);">Non-Comparable Cross-Pool</span>
               </div>
             </div>
+
+            <!-- Prominent Universe Incomparability Warning -->
+            <div class="callout-box" style="margin-bottom: 12px; padding: 10px 12px; background: rgba(245, 158, 11, 0.08); border-left: 3px solid var(--accent-amber); border-radius: 4px; font-size: 11.5px; line-height: 1.55;">
+              <strong style="color: var(--accent-amber); display: block; margin-bottom: 3px;">
+                ⚠️ Cross-Universe Incomparability Notice:
+              </strong>
+              <span style="color: var(--text-secondary);">
+                The historical production metrics below (annualized return, Sharpe ratio, maximum drawdown) were evaluated under each model's historical production universe and liquidity filter regime (e.g., legacy CSI 300 / dedicated high-liquidity stock pool). Different constituent universes diverge fundamentally in stock count, market capitalization, idiosyncratic volatility, and alpha capacity. <strong>These legacy metrics must not be compared across different asset pools</strong> (such as against the current <strong>${seasonMeta.title || 'CSI 1000'}</strong> 1,000-stock small-cap testbed) or between models from different eras, and are preserved solely as archival baseline reference at retirement.
+              </span>
+            </div>
+
             <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 14px; line-height: 1.6;">
               ${contestant.bio || contestant.historical_role || 'Historical quantitative production alpha candidate.'}
             </p>
@@ -125,7 +136,7 @@ window.ContestantDetailView = {
             <!-- Headline Metric: Annualized System Return at Burial -->
             <div style="background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.25); border-radius: 8px; padding: 12px 14px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
               <div>
-                <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">Burial Annualized Return (Comparable Standard)</div>
+                <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">Burial Annualized Return (Legacy Selection Pool Only)</div>
                 <div style="font-size: 22px; font-weight: 800; color: var(--accent-positive); font-family: monospace; margin-top: 2px;">
                   +${(contestant.historical_sys_ann_return_pct || 10.0).toFixed(1)}% <span style="font-size: 13px; font-weight: 500; color: var(--text-secondary);">p.a.</span>
                 </div>
@@ -142,11 +153,13 @@ window.ContestantDetailView = {
             <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; font-size: 12px; background: rgba(0,0,0,0.2); padding: 12px; border-radius: var(--radius-sm);">
               <div><span style="color: var(--text-muted);">Architecture:</span> <strong style="color: var(--text-primary);">${contestant.architecture_type || contestant.training_mode || 'Multi-Factor Ensemble'}</strong></div>
               <div><span style="color: var(--text-muted);">Family:</span> <strong style="color: var(--text-primary);">${contestant.lineage || contestant.family || 'Alpha Family'}</strong></div>
+              <div><span style="color: var(--text-muted);">Historical Stock Pool:</span> <strong style="color: #fbbf24;">Legacy Production Pool</strong></div>
+              <div><span style="color: var(--text-muted);">Current Arena Pool:</span> <strong style="color: var(--brand-cyan);">${seasonMeta.universe_name || (seasonMeta.id === 'season_csi1000' ? 'CSI 1000 (~1,000 Stocks)' : 'Season 1 (246 Stocks)')}</strong></div>
               <div><span style="color: var(--text-muted);">Training Cutoff:</span> <span style="color: var(--text-secondary); font-family: monospace;">${contestant.train_cutoff || '2026-06-26'}</span></div>
               <div><span style="color: var(--text-muted);">Burial Date:</span> <span style="color: var(--text-secondary); font-family: monospace;">${contestant.burial_date || contestant.retire_date || '2026-06-28'}</span></div>
               <div style="grid-column: span 2;"><span style="color: var(--text-muted);">Retirement Context:</span> <span style="color: var(--text-secondary);">${contestant.retire_reason || contestant.historical_role || 'Regular cycle retirement to evaluate out-of-sample decay.'}</span></div>
               <div style="grid-column: span 2; font-size: 11px; color: var(--text-muted); line-height: 1.5; margin-top: 4px; padding-top: 6px; border-top: 1px dashed var(--border-subtle);">
-                * Evaluated from production logs (<code>daily_amount_log_full.csv</code>) using time-weighted return formula (V<sub>t</sub> - V<sub>t-1</sub> - C<sub>t</sub>) / V<sub>t-1</sub> from weekly inception (2024-10-21) to model retirement, eliminating cashflow deposit/withdrawal distortions. Expressed as annualized return for fair cross-era comparison.
+                * Evaluated from production logs (<code>daily_amount_log_full.csv</code>) using cashflow-adjusted time-weighted return formula from weekly inception (2024-10-21) to model retirement. Due to differences in constituent universe breadth, liquidity hurdles, and macro market regimes, historical production performance is non-comparable across distinct asset pools or with out-of-sample arena horizons.
               </div>
               ${contestant.known_issues && contestant.known_issues.length > 0 ? `
                 <div style="grid-column: span 2; font-size: 11px; color: var(--accent-warning);">
@@ -158,11 +171,11 @@ window.ContestantDetailView = {
 
           <!-- 2. Arena OOS Performance -->
           <div class="card" style="border-left: 4px solid var(--accent-cyan);">
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
-              <h3 style="font-size: 15px; font-weight: 700; color: var(--accent-cyan); display: flex; align-items: center; gap: 8px;">
-                Arena OOS Reality (${seasonMeta.short_title || "Season 1"} Tournament)
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+              <h3 style="font-size: 15px; font-weight: 700; color: var(--accent-cyan); display: flex; align-items: center; gap: 8px; margin: 0;">
+                Arena OOS Reality (${seasonMeta.short_title || "Current Season"})
               </h3>
-              <span class="badge badge-info" style="font-size: 10px;">Normalized Base NAV 1.0000</span>
+              <span class="badge badge-info" style="font-size: 10px;">${seasonMeta.universe_name || (seasonMeta.id === 'season_csi1000' ? 'CSI 1000 Universe' : 'Season Universe')}</span>
             </div>
             <div class="kpi-grid" style="grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 12px;">
               <div class="kpi-card" style="padding: 12px;">
@@ -188,7 +201,7 @@ window.ContestantDetailView = {
               </div>
             </div>
             <div style="font-size: 12px; color: var(--text-secondary); background: rgba(0,0,0,0.2); padding: 10px 12px; border-radius: var(--radius-sm); line-height: 1.5;">
-              All models start from zero on ${seasonMeta.anchor_date || "2026-07-03"} under ${seasonMeta.methodology?.capital_spec || "identical market conditions, CNY 500,000 cash, and 100-share trading lots"}.
+              Evaluated across the <strong>${seasonMeta.universe_name || (seasonMeta.id === 'season_csi1000' ? 'CSI 1000 Universe (~1,000 Stocks)' : 'Season 1 Constituent Universe (246 Stocks)')}</strong> starting from zero on ${seasonMeta.anchor_date || "2026-07-03"} under ${seasonMeta.methodology?.capital_spec || "identical market conditions, CNY 500,000 cash, and 100-share trading lots"}.
             </div>
           </div>
         </div>
@@ -198,13 +211,13 @@ window.ContestantDetailView = {
           <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
             <div>
               <h3 class="card-title">Cross-Animal Execution Trajectories</h3>
-              <div class="card-subtitle">Comparing key execution handlers of ${contestant.display_name || contestant.anonymous_name} against Taotie and CSI 300 benchmarks</div>
+              <div class="card-subtitle">Comparing key execution handlers of ${contestant.display_name || contestant.anonymous_name} against Taotie and ${window.arenaAdapter.getMarketBenchmarkName()} benchmarks</div>
             </div>
             <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
               <div class="chart-metric-btn-group" id="contestant-metric-btn-group">
                 <button class="chart-metric-btn active" data-metric="nav">Cumulative NAV</button>
                 <button class="chart-metric-btn" data-metric="drawdown">Underwater Drawdown</button>
-                <button class="chart-metric-btn" data-metric="excess_csi300">Excess vs. CSI 300</button>
+                <button class="chart-metric-btn" data-metric="excess_csi300">Excess vs. ${window.arenaAdapter.getMarketBenchmarkName()}</button>
               </div>
 
               <!-- Benchmark Standards Independent Controls -->
@@ -217,8 +230,8 @@ window.ContestantDetailView = {
                 <button type="button" class="benchmark-pill taotie is-active" data-benchmark="taotie" title="Toggle Taotie (500k)">
                   <span class="bm-line-badge"></span> Taotie (500k)
                 </button>
-                <button type="button" class="benchmark-pill csi300 is-active" data-benchmark="csi300" title="Toggle CSI 300">
-                  <span class="bm-line-badge"></span> CSI 300
+                <button type="button" class="benchmark-pill csi300 is-active" data-benchmark="csi300" title="Toggle ${window.arenaAdapter.getMarketBenchmarkName()}">
+                  <span class="bm-line-badge"></span> ${window.arenaAdapter.getMarketBenchmarkName()}
                 </button>
               </div>
             </div>

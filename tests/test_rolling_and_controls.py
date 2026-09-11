@@ -182,6 +182,7 @@ def test_weekly_runner_incremental_step_identity(tmp_path):
         for key, engine in runner_step2.engines.items()
     }
     results_incremental[("BENCHMARK", "taotie")] = runner_step2.taotie_benchmark.engine.to_portfolio_path()
+    results_incremental[("BENCHMARK", "ghost_taotie")] = runner_step2.ghost_taotie_benchmark.engine.to_portfolio_path()
 
     # 3. 比对 Batch 与 Incremental 结果的完全一致性
     assert set(results_batch.keys()) == set(results_incremental.keys())

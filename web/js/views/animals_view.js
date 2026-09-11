@@ -91,7 +91,7 @@ window.AnimalsView = {
         ? drawdowns.reduce((s, v) => s + v, 0) / drawdowns.length
         : 0;
       const sigCount = chartPaths.filter(p => {
-        const pct = p.percentile_rank !== undefined ? p.percentile_rank : (p.monkey_percentile || 0);
+        const pct = p.percentile_rank !== undefined ? p.percentile_rank : (p.monkey_percentile !== undefined ? p.monkey_percentile : (p.monkey_percentile_rank || 0));
         return pct >= 95;
       }).length;
       const sigPct = chartPaths.length > 0
@@ -264,7 +264,7 @@ window.AnimalsView = {
                   ${medianReturn >= 0 ? '+' : ''}${medianReturn.toFixed(2)}%
                 </div>
                 <div style="font-size: 10px; color: var(--text-secondary); margin-top: 2px;">
-                  Active spread: <b>${(medianReturn - csi300Ret >= 0 ? '+' : '') + (medianReturn - csi300Ret).toFixed(2)}% vs CSI 300</b>
+                  Active spread: <b>${(medianReturn - csi300Ret >= 0 ? '+' : '') + (medianReturn - csi300Ret).toFixed(2)}% vs ${window.arenaAdapter.getMarketBenchmarkName()}</b>
                 </div>
               </div>
 
@@ -330,7 +330,7 @@ window.AnimalsView = {
                   Underwater Drawdown
                 </button>
                 <button class="btn btn-sm ${this.activeMetric === 'excess_csi300' ? 'btn-primary' : 'btn-outline'} animal-metric-btn" data-metric="excess_csi300" style="font-size: 11px; padding: 4px 10px;">
-                  Excess vs. CSI 300
+                  Excess vs. ${window.arenaAdapter.getMarketBenchmarkName()}
                 </button>
               </div>
 
@@ -344,8 +344,8 @@ window.AnimalsView = {
                 <button type="button" class="benchmark-pill taotie is-active" data-benchmark="taotie" title="Toggle Taotie (500k)">
                   <span class="bm-line-badge"></span> Taotie (500k)
                 </button>
-                <button type="button" class="benchmark-pill csi300 is-active" data-benchmark="csi300" title="Toggle CSI 300">
-                  <span class="bm-line-badge"></span> CSI 300
+                <button type="button" class="benchmark-pill csi300 is-active" data-benchmark="csi300" title="Toggle ${window.arenaAdapter.getMarketBenchmarkName()}">
+                  <span class="bm-line-badge"></span> ${window.arenaAdapter.getMarketBenchmarkName()}
                 </button>
               </div>
             </div>
@@ -382,14 +382,14 @@ window.AnimalsView = {
                   <th style="padding: 10px 16px; text-align: right;">Sharpe</th>
                   <th style="padding: 10px 16px; text-align: right;">Monkey Null %</th>
                   <th style="padding: 10px 16px; text-align: center;">Significance</th>
-                  <th style="padding: 10px 16px; text-align: right;">vs. CSI 300</th>
+                  <th style="padding: 10px 16px; text-align: right;">vs. ${window.arenaAdapter.getMarketBenchmarkName()}</th>
                   <th style="padding: 10px 16px; text-align: right;">vs. Taotie</th>
                   <th style="padding: 10px 16px; text-align: center;">Action</th>
                 </tr>
               </thead>
               <tbody>
                 ${[...chartPaths].sort((a, b) => b.total_return_pct - a.total_return_pct).map((p, idx) => {
-                  const rawPct = p.percentile_rank !== undefined ? p.percentile_rank : (p.monkey_percentile || 0);
+                  const rawPct = p.percentile_rank !== undefined ? p.percentile_rank : (p.monkey_percentile !== undefined ? p.monkey_percentile : (p.monkey_percentile_rank || 0));
                   const pct = window.formatPercentile ? window.formatPercentile(rawPct) : rawPct.toFixed(1) + "%";
                   const rawP = p.empirical_p_value !== undefined ? p.empirical_p_value : (p.p_value !== undefined ? p.p_value : 1.0);
                   const pVal = window.formatPValue ? window.formatPValue(rawP) : rawP.toFixed(4);

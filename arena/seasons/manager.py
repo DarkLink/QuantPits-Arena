@@ -46,6 +46,28 @@ class SeasonConfig:
     benchmarks: List[Dict[str, Any]]
     raw_dict: Dict[str, Any] = field(default_factory=dict)
 
+    @property
+    def universe_code(self) -> str:
+        univ = self.raw_dict.get("universe", {})
+        return univ.get("code", univ.get("market", "csi300"))
+
+    @property
+    def market_benchmark_symbol(self) -> str:
+        univ = self.raw_dict.get("universe", {})
+        for b in self.raw_dict.get("benchmarks", []):
+            if b.get("type") == "INDEX" or "symbol" in b:
+                return b.get("symbol", "SH000300")
+        return univ.get("market_benchmark_symbol", univ.get("benchmark_index", "SH000300"))
+
+    @property
+    def market_benchmark_name(self) -> str:
+        univ = self.raw_dict.get("universe", {})
+        for b in self.raw_dict.get("benchmarks", []):
+            if b.get("type") == "INDEX" or "symbol" in b:
+                return b.get("display_name", "Market Benchmark")
+        return univ.get("market_benchmark_name", "Market Benchmark")
+
+
 
 class SeasonManager:
     """
@@ -62,7 +84,7 @@ class SeasonManager:
             return [cls.DEFAULT_SEASON]
         seasons = [
             d.name for d in sorted(SEASONS_DIR.iterdir())
-            if d.is_dir() and (d / "season_config.yaml").exists()
+            if d.is_dir() and ((d / "season_config.yaml").exists() or (d / "season.yaml").exists())
         ]
         return seasons if seasons else [cls.DEFAULT_SEASON]
 
@@ -75,13 +97,15 @@ class SeasonManager:
         """
         sid = season_id or cls.DEFAULT_SEASON
         config_path = SEASONS_DIR / sid / "season_config.yaml"
+        if not config_path.exists():
+            config_path = SEASONS_DIR / sid / "season.yaml"
 
         if config_path.exists():
             with open(config_path, "r", encoding="utf-8") as f:
                 doc = yaml.safe_load(f) or {}
 
-            cal = doc.get("calendar", {})
-            exe = doc.get("execution", {})
+            cal = doc.get("horizon", doc.get("calendar", {}))
+            exe = doc.get("capital", doc.get("execution", {}))
             return SeasonConfig(
                 season_id=doc.get("season_id", sid),
                 title=doc.get("title", f"QuantPits Arena {sid}"),

@@ -221,12 +221,32 @@ window.DispatchesView = {
       if (activeEp.content_type === "ep09_embargoed") {
         return this.renderEp09Embargoed();
       }
+      if (activeEp.content_type === "ep08_baseline") {
+        return this.renderEp08En();
+      }
     }
 
-    if (this.currentEpisode === "ep09") {
-      return this.renderEp09Embargoed();
+    const currentSeasonId = window.arenaAdapter ? window.arenaAdapter.getCurrentSeasonMeta().id : "season_01";
+    if (currentSeasonId === "season_01") {
+      if (this.currentEpisode === "ep09") {
+        return this.renderEp09Embargoed();
+      }
+      return this.renderEp08En();
     }
-    return this.renderEp08En();
+
+    return `
+      <article class="prose" style="max-width: 820px; margin: 0 auto; color: var(--text-secondary); line-height: 1.75; font-size: 0.95rem;">
+        <div style="border-bottom: 1px solid var(--border-subtle); padding-bottom: 1.25rem; margin-bottom: 1.5rem;">
+          <h2 style="font-size: 1.9rem; color: var(--text-primary); margin: 0 0 0.5rem 0;">
+            ${activeEp?.title || "Season Chronicles"}
+          </h2>
+          <p style="font-size: 0.9rem; color: var(--text-secondary); margin: 0;">
+            ${activeEp?.summary || "Official empirical dispatch."}
+          </p>
+        </div>
+        <p>Detailed dispatch chronicle active for ${currentSeasonId}.</p>
+      </article>
+    `;
   },
 
   renderEp08En() {

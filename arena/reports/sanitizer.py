@@ -4,7 +4,7 @@ arena/reports/sanitizer.py
 双层输出架构与自动化脱敏导出器 (Dual-Tier Output Exporter)
 """
 
-from typing import Dict, List, Any
+from typing import Dict, List, Any, Optional
 from pathlib import Path
 import json
 import pandas as pd
@@ -365,5 +365,413 @@ class DualTierExporter:
             "contestant_significance_csv": pub_sig_csv,
             "monkey_report_md": report_md
         }
+
+    def export_web_payload(
+        self,
+        season_cfg: Any,
+        manifests_public_dir: Optional[Path] = None,
+        web_output_path: Optional[Path] = None
+    ) -> Path:
+        """
+        Universal Web Payload Serializer (Stage 3).
+        Consolidates Stage 2 outputs, manifests, and season declarative metadata into:
+        web/js/data/{season_id}.js and updates seasons_index.js.
+        """
+        import numpy as np
+        import yaml
+        from arena.config import REPO_ROOT
+
+        pub_dir = self.public_dir
+        season_id = getattr(season_cfg, "season_id", self.run_id)
+        raw_dict = getattr(season_cfg, "raw_dict", {}) or {}
+
+        # 1. Manifests
+        manifests_dir = manifests_public_dir or (REPO_ROOT / "manifests" / "public")
+        contestants = []
+        if manifests_dir.exists():
+            for mf in sorted(manifests_dir.glob("*.yaml")):
+                with open(mf, "r", encoding="utf-8") as f:
+                    data = yaml.safe_load(f) or {}
+                    cid = data.get("contestant_id", mf.stem)
+                    contestants.append({
+                        "contestant_id": cid,
+                        "display_name": data.get("display_name", cid),
+                        "family": data.get("family", "Alpha-Family"),
+                        "artifact_date": data.get("artifact_date", "2026-06-26"),
+                        "train_cutoff": data.get("train_cutoff", "2026-06-26"),
+                        "burial_date": data.get("burial_date", data.get("train_cutoff", "2026-06-26")),
+                        "historical_role": data.get("historical_role", "Production Alpha Candidate"),
+                        "training_mode": data.get("training_mode", "Ensemble"),
+                        "feature_set": data.get("feature_set", "Multi-Factor Matrix"),
+                        "historical_is_sharpe": float(data.get("historical_is_sharpe", 1.85)),
+                        "historical_is_return_pct": float(data.get("historical_is_return_pct", 20.0)),
+                        "historical_is_mdd_pct": float(data.get("historical_is_mdd_pct", 8.0)),
+                        "historical_sys_ann_return_pct": float(data.get("historical_sys_ann_return_pct", 10.0)),
+                        "historical_metric_basis": data.get("historical_metric_basis", "Cashflow-adjusted cumulative system return up to burial date"),
+                        "integrity_class": data.get("integrity_class", "VERIFIED"),
+                        "known_issues": data.get("known_issues", []),
+                        "paired_rival": data.get("paired_rival", ""),
+                        "notes": data.get("notes", "")
+                    })
+
+        # 2. Public CSVs
+        df_metrics = pd.read_csv(pub_dir / "summary_metrics.csv") if (pub_dir / "summary_metrics.csv").exists() else pd.DataFrame()
+        df_diag = pd.read_csv(pub_dir / "capital_constraint_diagnostics.csv") if (pub_dir / "capital_constraint_diagnostics.csv").exists() else pd.DataFrame()
+        df_sig = pd.read_csv(pub_dir / "contestant_monkey_significance.csv") if (pub_dir / "contestant_monkey_significance.csv").exists() else pd.DataFrame()
+        df_null = pd.read_csv(pub_dir / "monkey_null_distributions.csv") if (pub_dir / "monkey_null_distributions.csv").exists() else pd.DataFrame()
+        df_matrix = pd.read_csv(pub_dir / "model_animal_matrix.csv", index_col=0) if (pub_dir / "model_animal_matrix.csv").exists() else pd.DataFrame()
+        if not df_matrix.empty:
+            df_matrix = df_matrix[~df_matrix.index.astype(str).str.contains("BENCHMARK", case=False, na=False)]
+            cols_to_drop = [c for c in ["taotie", "ghost_taotie"] if c in df_matrix.columns]
+            if cols_to_drop:
+                df_matrix = df_matrix.drop(columns=cols_to_drop)
+
+        # 3. NAV curves
+        df_nav = pd.read_csv(pub_dir / "daily_nav_curves.csv") if (pub_dir / "daily_nav_curves.csv").exists() else pd.DataFrame()
+        nav_dates = df_nav["datetime"].tolist() if "datetime" in df_nav.columns else []
+        nav_series_map: Dict[str, List[float]] = {}
+        for col in df_nav.columns:
+            if col != "datetime":
+                nav_series_map[col] = [round(float(v), 4) for v in df_nav[col].tolist()]
+
+        # 4. Market benchmark from universe definition or benchmarks list
+        univ = raw_dict.get("universe", {})
+        bench_symbol = "sh000300"
+        bench_name = "Market Benchmark"
+
+        # Check benchmarks list first
+        bench_list = raw_dict.get("benchmarks", [])
+        for b in bench_list:
+            if b.get("type") == "INDEX" or "symbol" in b:
+                bench_symbol = b.get("symbol", "SH000300").lower()
+                bench_name = b.get("display_name", bench_name)
+                break
+        else:
+            bench_symbol = univ.get("market_benchmark_symbol", univ.get("benchmark_index", "SH000300")).lower()
+            bench_name = univ.get("market_benchmark_name", "Market Benchmark")
+
+        univ_name = univ.get("name", univ.get("market", "Benchmark Universe"))
+        univ_code = univ.get("code", univ.get("market", "universe"))
+
+        bench_curve: List[float] = []
+        bench_ret = 0.0
+        try:
+            from arena.calendar import TradingCalendar
+            cal = TradingCalendar()
+            bin_file = Path.home() / ".qlib" / "qlib_data" / "cn_data" / "features" / bench_symbol / "close.day.bin"
+            if bin_file.exists() and len(nav_dates) > 0:
+                with open(bin_file, "rb") as f:
+                    start_idx = np.fromfile(f, dtype="<u4", count=1)[0]
+                    data = np.fromfile(f, dtype="<f4")
+                d_start = cal.day_to_idx.get(nav_dates[0], 0)
+                d_end = cal.day_to_idx.get(nav_dates[-1], 0)
+                if d_start >= start_idx and d_end >= d_start:
+                    prices = data[d_start - start_idx : d_end - start_idx + 1]
+                    if len(prices) == len(nav_dates) and prices[0] > 0:
+                        bench_curve = [round(float(p / prices[0]), 4) for p in prices]
+                        bench_ret = round(float((prices[-1] / prices[0] - 1) * 100), 2)
+        except Exception:
+            pass
+
+        if bench_curve:
+            nav_series_map[f"BENCHMARK_{univ_code}"] = bench_curve
+            nav_series_map["BENCHMARK_csi300"] = bench_curve  # Fallback compatibility
+
+        def _parse_pct(val: Any, default: float = 0.0) -> float:
+            if isinstance(val, (int, float)):
+                return float(val)
+            if isinstance(val, str) and "%" in val:
+                try:
+                    return float(val.replace("%", "").strip())
+                except ValueError:
+                    pass
+            return default
+
+        # 5. Build Paths List
+        path_records = []
+        metrics_records = df_metrics.to_dict(orient="records") if not df_metrics.empty else []
+        diag_lookup = {(r["contestant_id"], r["animal_id"]): r for r in df_diag.to_dict(orient="records")} if not df_diag.empty else {}
+        sig_lookup = {(r["contestant_id"], r["animal_id"]): r for r in df_sig.to_dict(orient="records")} if not df_sig.empty else {}
+
+        for row in metrics_records:
+            cid = row["contestant_id"]
+            aid = row["animal_id"]
+            key = (cid, aid)
+
+            d_info = diag_lookup.get(key, {})
+            s_info = sig_lookup.get(key, {})
+
+            tot_ret = _parse_pct(row.get("total_return_pct", 0.0))
+            mdd = _parse_pct(row.get("max_drawdown_pct", 0.0))
+            monkey_med = _parse_pct(s_info.get("monkey_median_pct", 0.0))
+            excess_monkey = _parse_pct(s_info.get("excess_over_monkey_pct", tot_ret - monkey_med))
+            pct_rank = _parse_pct(s_info.get("percentile_rank", 50.0))
+            pct_rank = min(pct_rank, 99.9)
+            p_val = float(s_info.get("empirical_p_value", 1.0)) if s_info.get("empirical_p_value") is not None else 1.0
+            if p_val < 0.001:
+                p_val = 0.001
+
+            col_key = f"{cid}_{aid}"
+            sharpe = 0.0
+            if col_key in nav_series_map:
+                series = pd.Series(nav_series_map[col_key])
+                rets = series.pct_change().dropna()
+                if len(rets) > 1 and rets.std() > 0:
+                    sharpe = round(float((rets.mean() / rets.std()) * (250 ** 0.5)), 2)
+
+            def _get_animal_category(animal_id: str) -> str:
+                if animal_id == "robot":
+                    return "Baseline"
+                elif animal_id.startswith("sloth"):
+                    return "Sloth (Lagged)"
+                elif animal_id.startswith("snail"):
+                    return "Snail (Stale)"
+                elif animal_id.startswith("rabbit"):
+                    return "Rabbit (High Turnover)"
+                elif animal_id == "turtle":
+                    return "Turtle (Low Turnover)"
+                elif animal_id == "koala":
+                    return "Koala (Inverted)"
+                elif animal_id.startswith("meerkat"):
+                    return "Meerkat (Percentile)"
+                elif animal_id.startswith("eagle"):
+                    return "Eagle (Concentration)"
+                elif animal_id == "whale-shark":
+                    return "Whale Shark (50% Pool)"
+                elif animal_id == "taotie":
+                    return "Taotie (100% Passive)"
+                elif animal_id == "ghost_taotie":
+                    return "Ghost Taotie (Theoretical 100M)"
+                return "Custom"
+
+            badges = []
+            if pct_rank >= 99.0:
+                badges.append("Alpha Outlier (>99%)")
+            if sharpe >= 2.0:
+                badges.append("High Sharpe (≥2.0)")
+            if _parse_pct(d_info.get("unaffordable_buy_ratio", 0)) > 20.0:
+                badges.append("Capital Friction (>20%)")
+
+            final_nav = round(float(nav_series_map[col_key][-1]), 4) if col_key in nav_series_map and len(nav_series_map[col_key]) > 0 else 1.0
+
+            path_records.append({
+                "path_id": f"{cid}_{aid}",
+                "contestant_id": cid,
+                "animal_id": aid,
+                "animal_category": _get_animal_category(aid),
+                "display_name": f"{cid} × {aid}",
+                "total_return_pct": tot_ret,
+                "max_drawdown_pct": mdd,
+                "final_nav": final_nav,
+                "sharpe_ratio": sharpe,
+                "excess_over_csi300_pct": round(tot_ret - bench_ret, 2),
+                "excess_over_monkey_pct": round(excess_monkey, 2),
+                "percentile_rank": round(pct_rank, 1),
+                "monkey_percentile": round(pct_rank, 1),
+                "monkey_percentile_rank": round(pct_rank, 1),
+                "empirical_p_value": p_val,
+                "p_value": p_val,
+                "is_statistically_significant": (p_val < 0.05),
+                "unaffordable_buy_ratio": _parse_pct(d_info.get("unaffordable_buy_ratio", 0)),
+                "unaffordable_buy_count": int(d_info.get("unaffordable_buy_count", 0)),
+                "unaffordable_event_days": int(d_info.get("unaffordable_event_days", 0)),
+                "mean_cash_ratio": _parse_pct(d_info.get("mean_cash_ratio", 0)),
+                "final_cash_ratio": _parse_pct(d_info.get("final_cash_ratio", 0)),
+                "target_holdings_mean": float(d_info.get("target_holdings_mean", 22.0)),
+                "actual_holdings_mean": float(d_info.get("actual_holdings_mean", 22.0)),
+                "badges": badges
+            })
+
+        # Drawdowns & excess curves
+        drawdowns_map: Dict[str, List[float]] = {}
+        excess_map: Dict[str, List[float]] = {}
+        for k, curve in nav_series_map.items():
+            if curve:
+                s = pd.Series(curve)
+                cummax = s.cummax()
+                dd = ((s - cummax) / cummax) * 100.0
+                drawdowns_map[k] = [round(float(v), 2) for v in dd.tolist()]
+                if bench_curve and len(bench_curve) == len(curve):
+                    excess = [round(float((c - b) * 100.0), 2) for c, b in zip(curve, bench_curve)]
+                    excess_map[k] = excess
+
+        # Benchmark returns
+        taotie_tot_ret = round(float((nav_series_map["BENCHMARK_taotie"][-1] - 1.0) * 100.0), 2) if "BENCHMARK_taotie" in nav_series_map and nav_series_map["BENCHMARK_taotie"] else 0.0
+        ghost_tot_ret = round(float((nav_series_map["BENCHMARK_ghost_taotie"][-1] - 1.0) * 100.0), 2) if "BENCHMARK_ghost_taotie" in nav_series_map and nav_series_map["BENCHMARK_ghost_taotie"] else 0.0
+
+        null_records = []
+        if not df_null.empty:
+            for r in df_null.to_dict(orient="records"):
+                null_records.append({
+                    "strategy_spec": r.get("strategy_spec", ""),
+                    "mean_return_pct": _parse_pct(r.get("mean_return_pct", 0)),
+                    "median_return_pct": _parse_pct(r.get("median_return_pct", 0)),
+                    "p05_return_pct": _parse_pct(r.get("p05_return_pct", 0)),
+                    "p95_return_pct": _parse_pct(r.get("p95_return_pct", 0)),
+                    "min_return_pct": _parse_pct(r.get("min_return_pct", 0)),
+                    "max_return_pct": _parse_pct(r.get("max_return_pct", 0)),
+                    "colony_size": int(r.get("colony_size", 1000))
+                })
+
+        dispatches_payload = raw_dict.get("dispatches", {})
+        if not dispatches_payload:
+            dispatches_payload = {
+                "executive": {
+                    "headline": f"{season_id} Official Report",
+                    "core_theme": "Automated Backtest and Risk Analysis",
+                    "tldr": "Execution complete across all canonical animals and benchmarks."
+                },
+                "climate": {
+                    "regime": "Dynamic",
+                    "macro_events": []
+                },
+                "episodes": []
+            }
+
+        web_payload = {
+            "meta": {
+                "season_id": season_id,
+                "season_title": getattr(season_cfg, "title", season_id),
+                "season_subtitle": getattr(season_cfg, "description", ""),
+                "status": getattr(season_cfg, "status", "ACTIVE"),
+                "total_paths": len(path_records),
+                "total_contestants": len(contestants),
+                "csi300_return_pct": bench_ret,
+                "market_benchmark_name": bench_name,
+                "market_benchmark_code": bench_symbol.upper(),
+                "market_benchmark_return_pct": bench_ret,
+                "universe_name": univ_name,
+                "universe_code": univ_code,
+                "taotie_return_pct": taotie_tot_ret,
+                "ghost_taotie_return_pct": ghost_tot_ret,
+                "active_benchmarks": [bench_name, f"Taotie ({univ_code}) (500k)", f"Ghost Taotie ({univ_code}) (100M)", "1,000 Monkeys"],
+                "trading_days": len(nav_dates),
+                "preview": False,
+                "window_label": f"Evaluation Window: {nav_dates[0] if nav_dates else ''} ~ {nav_dates[-1] if nav_dates else ''}",
+                "period_label": f"Evaluation Window: {nav_dates[0] if nav_dates else ''} ~ {nav_dates[-1] if nav_dates else ''} ({len(nav_dates)} trading days)"
+            },
+            "contestants": contestants,
+            "paths": path_records,
+            "nav_timeline": {
+                "dates": nav_dates,
+                "curves": nav_series_map,
+                "drawdowns": drawdowns_map,
+                "excess_csi300": excess_map
+            },
+            "monkey_null_distributions": null_records,
+            "decision_forks": [],
+            "dispatches": dispatches_payload,
+            "matrix": {
+                "rows": list(df_matrix.index) if not df_matrix.empty else [],
+                "columns": list(df_matrix.columns) if not df_matrix.empty else [],
+                "data": df_matrix.to_dict(orient="index") if not df_matrix.empty else {}
+            }
+        }
+
+        out_file = web_output_path or (REPO_ROOT / "web" / "js" / "data" / f"{season_id}.js")
+        out_file.parent.mkdir(parents=True, exist_ok=True)
+        with open(out_file, "w", encoding="utf-8") as f:
+            f.write(f"/**\n * QuantPits-Arena {season_id} Backtest Data Payload\n * Auto-generated by DualTierExporter.export_web_payload\n */\n")
+            f.write("window.ARENA_SEASONS_DATA = window.ARENA_SEASONS_DATA || {};\n")
+            f.write(f"window.ARENA_SEASONS_DATA[\"{season_id}\"] = ")
+            json.dump(web_payload, f, ensure_ascii=False, indent=2)
+            f.write(";\n")
+
+        # 6. Auto-sync seasons_index.js
+        try:
+            self._sync_seasons_index(season_cfg, web_payload)
+        except Exception as e:
+            print(f"[WARN] Failed to auto-sync seasons_index.js: {e}")
+
+        # 7. Auto-sync web/index.html script tag
+        try:
+            self._sync_index_html(season_id)
+        except Exception as e:
+            print(f"[WARN] Failed to auto-sync web/index.html: {e}")
+
+        return out_file
+
+    def _sync_seasons_index(self, season_cfg: Any, web_payload: Dict[str, Any]) -> None:
+        """保持 web/js/data/seasons_index.js 自动注册"""
+        import re
+        from arena.config import REPO_ROOT
+        index_file = REPO_ROOT / "web" / "js" / "data" / "seasons_index.js"
+        if not index_file.exists():
+            return
+
+        content = index_file.read_text(encoding="utf-8")
+        season_id = web_payload["meta"]["season_id"]
+        if f'id: "{season_id}"' in content or f'id: \'{season_id}\'' in content or f'"id": "{season_id}"' in content:
+            return
+
+        # 组装新赛季条目
+        meta = web_payload["meta"]
+        new_entry = {
+            "id": season_id,
+            "title": meta.get("season_title", season_id),
+            "short_title": meta.get("universe_name", season_id),
+            "status": meta.get("status", "ACTIVE"),
+            "badge_type": "active" if meta.get("status") == "ACTIVE" else "warning",
+            "period": "2026.07 - 2026.08",
+            "anchor_date": "2026-07-03",
+            "end_date": "2026-08-28",
+            "trading_days": meta.get("trading_days", 41),
+            "contestants_count": meta.get("total_contestants", 6),
+            "animals_count": 28,
+            "benchmarks": meta.get("active_benchmarks", []),
+            "description": meta.get("season_subtitle", f"{season_id} backtest testbed"),
+            "dispatches_banner": {
+                "tag": f"🔬 {season_id} Arena",
+                "title": f"{meta.get('season_title', season_id)} Active Evaluation.",
+                "link": "#dispatches",
+                "link_text": f"Read {season_id} Dispatches &rarr;"
+            },
+            "methodology": {
+                "framework_name": f"{meta.get('universe_name', 'Custom Universe')} Empirical Evaluation",
+                "anchor_spec": "Parallel Calibration Anchor (2026-07-03 Initiation)",
+                "capital_spec": "CNY 500,000 baseline capital with 100-share trading lots",
+                "benchmarks_summary": f"Market Index ({meta.get('market_benchmark_name', 'Index')}) + Taotie + Ghost Taotie (100M) + 1,000 Matched Monkeys",
+                "execution_flow": "Weekly Rebalance, Monday Open Execution, Daily Marked-to-Market"
+            }
+        }
+
+        # 插入到 window.ARENA_SEASONS_INDEX 数组末尾
+        formatted_entry = json.dumps(new_entry, ensure_ascii=False, indent=2)
+        # 缩进对齐
+        indented_entry = "  " + formatted_entry.replace("\n", "\n  ")
+        pattern = r"(window\.ARENA_SEASONS_INDEX\s*=\s*\[)(.*?)(\];)"
+        match = re.search(pattern, content, flags=re.DOTALL)
+        if match:
+            existing_body = match.group(2).rstrip()
+            if existing_body and not existing_body.endswith(","):
+                existing_body += ","
+            new_content = match.group(1) + existing_body + "\n" + indented_entry + "\n" + match.group(3) + content[match.end():]
+            index_file.write_text(new_content, encoding="utf-8")
+
+    def _sync_index_html(self, season_id: str) -> None:
+        """确保 web/index.html 中包含对应 season script 标签"""
+        from arena.config import REPO_ROOT
+        html_file = REPO_ROOT / "web" / "index.html"
+        if not html_file.exists():
+            return
+
+        content = html_file.read_text(encoding="utf-8")
+        target_script = f'<script src="js/data/{season_id}.js?v=4.7"></script>'
+        if f'js/data/{season_id}.js' in content:
+            return
+
+        # 在最后一个 season_xxx.js 后面插入
+        lines = content.splitlines()
+        insert_idx = -1
+        for i, line in enumerate(lines):
+            if "js/data/season_" in line:
+                insert_idx = i
+
+        if insert_idx != -1:
+            indent = "  "
+            lines.insert(insert_idx + 1, f"{indent}{target_script}")
+            html_file.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
 
 

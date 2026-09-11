@@ -100,23 +100,36 @@ def cmd_audit(args):
 
 def cmd_run(args):
     """执行周频同步 Arena 回测"""
-    run_id = args.run_id or f"run_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}"
+    season_id = getattr(args, "season", "season_01")
+    season_cfg = SeasonManager.get_season_config(season_id)
+
+    run_id = args.run_id or f"{season_id}_run"
+    anchor_date = args.anchor_date if args.anchor_date != DEFAULT_ANCHOR_DATE else season_cfg.anchor_date
+    end_date = args.end_date if args.end_date != DEFAULT_END_DATE else season_cfg.end_date
+    initial_cash = args.initial_cash if args.initial_cash != 500000.0 else season_cfg.initial_cash
+
     print("\n" + "=" * 70)
     print(f" 🚀 启动 QuantPits-Arena 周频巡回锦标赛: {run_id}")
-    print(f"    起点: {args.anchor_date} (周五收盘) | 截止: {args.end_date}")
+    print(f"    赛季: [{season_cfg.season_id}] {season_cfg.title}")
+    print(f"    起点: {anchor_date} (周五收盘) | 截止: {end_date}")
     print(f"    模式: {'Mock 快速验证' if args.mock else '真实本地模型推理'}")
     print("=" * 70)
+
+    output_dir = Path(args.output) if args.output else RUNS_DIR
+    run_dir = output_dir / run_id
 
     calendar = TradingCalendar()
     registry = ContestantRegistry()
 
     runner = WeeklyCycleRunner(
-        anchor_date=args.anchor_date,
-        end_date=args.end_date,
-        initial_cash=args.initial_cash,
+        anchor_date=anchor_date,
+        end_date=end_date,
+        initial_cash=initial_cash,
         mock_mode=args.mock,
         calendar=calendar,
-        registry=registry
+        registry=registry,
+        season_id=season_id,
+        run_dir=run_dir,
     )
 
     print(f"[1/3] 已划分 {len(runner.cycles)} 个周频执行周期...")
@@ -299,7 +312,9 @@ def cmd_cycle_step(args):
         initial_cash=cfg.initial_cash,
         mock_mode=args.mock,
         calendar=calendar,
-        registry=registry
+        registry=registry,
+        season_id=season_id,
+        run_dir=run_dir,
     )
 
     # 检查历史进度
@@ -387,6 +402,86 @@ def cmd_cycle_step(args):
     print(f"    💾 最新运行快照:     {latest_path}")
     print("=" * 70 + "\n")
 
+def cmd_export_web(args):
+    """通用 Web Payload 导出命令 (Stage 3)"""
+    season_id = getattr(args, "season", "season_01")
+    cfg = SeasonManager.get_season_config(season_id)
+    run_id = args.run_id or f"{season_id}_run"
+    base_dir = Path(args.output) if args.output else RUNS_DIR
+    exporter = DualTierExporter(run_id=run_id, base_dir=base_dir)
+
+    print("\n" + "=" * 70)
+    print(f" 🌐 导出通用前端 Web Payload: {season_id}")
+    print(f"    来源目录: {base_dir / run_id / 'public'}")
+    print("=" * 70)
+
+    out_file = exporter.export_web_payload(season_cfg=cfg)
+    print(f"[✔] 成功导出前端 Payload: {out_file} ({out_file.stat().st_size / 1024:.1f} KB)")
+    print("=" * 70 + "\n")
+
+
+def cmd_infer(args):
+    """Stage 1: 通用股票池全量候选模型自动批处理推理"""
+    universe = getattr(args, "universe", "csi500")
+    force = getattr(args, "force", False)
+    from arena.inference.batch_infer import run_batch_inference
+    out_file = run_batch_inference(market=universe, force=force)
+    print(f"[✔] 推理完成，预测库已就绪: {out_file}")
+
+
+def cmd_pipeline(args):
+    """一键执行全流程赛季管线: Stage 1(Infer) -> Stage 2(Run) -> Stage 3(Export) -> Stage 4(Audit)"""
+    season_id = getattr(args, "season", "season_01")
+    cfg = SeasonManager.get_season_config(season_id)
+    run_id = args.run_id or f"{season_id}_run"
+    force_infer = getattr(args, "force_infer", False)
+
+    print("\n" + "=" * 70)
+    print(f" 🏁 启动全自动化赛季标准化管线 (The Season Pipeline)")
+    print(f"    赛季目标: [{season_id}] {cfg.title}")
+    print(f"    股票池:   {cfg.universe_code}")
+    print(f"    运行标识: {run_id}")
+    print("=" * 70)
+
+    # 1. Stage 1: 检查或自动执行股票池模型打分推理
+    universe = cfg.universe_code
+    pred_dir = REPO_ROOT / "artifacts" / "predictions"
+    season_pred = pred_dir / f"{season_id}_contestants_oos.pkl"
+    univ_pred = pred_dir / f"{universe}_contestants_oos.pkl"
+
+    if force_infer or (not season_pred.exists() and not univ_pred.exists() and universe not in ["csirun300", "csi300"]):
+        print(f"\n[Stage 1/4] 股票池 [{universe}] 预测库未就绪，自动启动全量候选模型批处理推理...")
+        from arena.inference.batch_infer import run_batch_inference
+        run_batch_inference(
+            market=universe,
+            oos_start="2026-06-29",
+            oos_end=cfg.end_date,
+            fit_start="2026-04-01",
+            fit_end=cfg.anchor_date,
+            output_file=univ_pred,
+            force=force_infer
+        )
+    else:
+        print(f"[Stage 1/4] 股票池 [{universe}] 预测库已就绪，跳过重复推理。")
+
+    # 2. Stage 2: 运行周频回测与参数化猴群评估
+    print(f"\n[Stage 2/4] 启动周频锦标赛与猴群零假设评估...")
+    args.monkeys = True
+    args.season = season_id
+    args.run_id = run_id
+    cmd_run(args)
+
+    # 3. Stage 3: 导出前端 Payload 并自动注册
+    print(f"\n[Stage 3/4] 导出前端 Web Payload 并自动注册...")
+    cmd_export_web(args)
+
+    # 4. Stage 4: 本地脱敏合规审计
+    print(f"\n[Stage 4/4] 运行本地零泄密隐私审计...")
+    cmd_audit(args)
+    print("\n" + "=" * 70)
+    print(f"[🎉] 赛季 [{season_id}] 全自动化标准化流水线圆满完成！")
+    print("=" * 70 + "\n")
+
 
 def main():
     parser = argparse.ArgumentParser(description="QuantPits-Arena CLI")
@@ -442,6 +537,31 @@ def main():
     p_step.add_argument("--contestants", type=str, default=None, help="逗号分隔的参赛选手 ID")
     p_step.add_argument("--output", type=str, default=None, help="指定输出根目录")
 
+    # pipeline (一键执行全自动化赛季管线)
+    p_pipe = subparsers.add_parser("pipeline", help="一键全自动化赛季标准化管线 (Infer -> Run -> Export -> Audit)")
+    p_pipe.add_argument("--season", type=str, default="season_01", help="指定赛季 ID")
+    p_pipe.add_argument("--run-id", type=str, default=None, help="指定运行 ID")
+    p_pipe.add_argument("--anchor-date", type=str, default=DEFAULT_ANCHOR_DATE, help="初始锚定日期")
+    p_pipe.add_argument("--end-date", type=str, default=DEFAULT_END_DATE, help="回测结束日期")
+    p_pipe.add_argument("--initial-cash", type=float, default=500_000.0, help="初始资金规模")
+    p_pipe.add_argument("--mock", action="store_true", help="使用 Mock 适配器运行全流程快速验证")
+    p_pipe.add_argument("--monkey-count", type=int, default=1000, help="每组策略规格的猴子数量")
+    p_pipe.add_argument("--contestants", type=str, default=None, help="逗号分隔的参赛选手 ID")
+    p_pipe.add_argument("--cycles", type=int, default=0, help="限制运行的最大周数")
+    p_pipe.add_argument("--output", type=str, default=None, help="指定输出根目录")
+    p_pipe.add_argument("--force-infer", action="store_true", help="强制重新执行 Stage 1 模型推理")
+
+    # infer (通用股票池批处理推理)
+    p_inf = subparsers.add_parser("infer", help="通用股票池批量特征提取与模型推理 (Stage 1)")
+    p_inf.add_argument("--universe", type=str, default="csi500", help="指定股票池代码 (默认 csi500)")
+    p_inf.add_argument("--force", action="store_true", help="强制重新推理")
+
+    # export-web
+    p_exp = subparsers.add_parser("export-web", help="导出通用前端 Web Payload (web/js/data/<season_id>.js)")
+    p_exp.add_argument("--season", type=str, default="season_01", help="指定赛季 ID")
+    p_exp.add_argument("--run-id", type=str, default=None, help="指定运行 ID")
+    p_exp.add_argument("--output", type=str, default=None, help="指定输出根目录")
+
     args = parser.parse_args()
     if not args.subcommand:
         parser.print_help()
@@ -457,14 +577,21 @@ def main():
         cmd_list_animals(args)
     elif args.subcommand == "audit":
         cmd_audit(args)
+    elif args.subcommand == "infer":
+        cmd_infer(args)
     elif args.subcommand == "run":
         cmd_run(args)
     elif args.subcommand == "step":
         cmd_step(args)
     elif args.subcommand == "cycle-step":
         cmd_cycle_step(args)
+    elif args.subcommand == "pipeline":
+        cmd_pipeline(args)
+    elif args.subcommand == "export-web":
+        cmd_export_web(args)
 
 
 if __name__ == "__main__":
     main()
+
 

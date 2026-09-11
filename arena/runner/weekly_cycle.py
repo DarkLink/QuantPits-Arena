@@ -13,6 +13,7 @@ import pandas as pd
 import numpy as np
 
 from arena.config import (
+    REPO_ROOT,
     DEFAULT_ANCHOR_DATE,
     DEFAULT_END_DATE,
     DEFAULT_TOPK,
@@ -34,6 +35,7 @@ from arena.controls import (
     StrategySpec,
     map_animal_to_spec_id,
 )
+from arena.benchmarks import GhostTaotieBenchmark
 from arena.data.market import MarketDataProvider
 
 
@@ -59,6 +61,9 @@ class WeeklyCycleRunner:
         registry: Optional[ContestantRegistry] = None,
         animals: Optional[List[Animal]] = None,
         market_provider: Optional[MarketDataProvider] = None,
+        season_id: Optional[str] = None,
+        auth_store_path: Optional[Path] = None,
+        run_dir: Optional[Path] = None,
     ):
         self.anchor_date = anchor_date
         self.end_date = end_date
@@ -66,6 +71,26 @@ class WeeklyCycleRunner:
         self.initial_cash = initial_cash
         self.deal_price_mode = deal_price_mode
         self.mock_mode = mock_mode
+        self.season_id = season_id
+        self.run_dir = run_dir
+
+        if auth_store_path is not None:
+            self.auth_store_path = auth_store_path
+        elif season_id:
+            season_pred_file = REPO_ROOT / "artifacts" / "predictions" / f"{season_id}_contestants_oos.pkl"
+            csi_univ_file = REPO_ROOT / "artifacts" / "predictions" / f"{season_id.replace('season_', '')}_contestants_oos.pkl"
+            if season_pred_file.exists():
+                self.auth_store_path = season_pred_file
+            elif csi_univ_file.exists():
+                self.auth_store_path = csi_univ_file
+            elif season_id == "season_csi1000":
+                self.auth_store_path = REPO_ROOT / "artifacts" / "predictions" / "csi1000_contestants_oos.pkl"
+            elif season_id == "season_csi500":
+                self.auth_store_path = REPO_ROOT / "artifacts" / "predictions" / "csi500_contestants_oos.pkl"
+            else:
+                self.auth_store_path = REPO_ROOT / "artifacts" / "predictions" / "all_contestants_oos.pkl"
+        else:
+            self.auth_store_path = REPO_ROOT / "artifacts" / "predictions" / "all_contestants_oos.pkl"
 
         self.calendar = calendar or TradingCalendar()
         self.registry = registry or ContestantRegistry()
@@ -77,6 +102,10 @@ class WeeklyCycleRunner:
         self.rock_benchmark = RockBenchmark()
         self.taotie_benchmark = TaotieBenchmark(
             initial_cash=self.initial_cash,
+            deal_price_mode=self.deal_price_mode
+        )
+        self.ghost_taotie_benchmark = GhostTaotieBenchmark(
+            initial_cash=100_000_000.0,
             deal_price_mode=self.deal_price_mode
         )
 
@@ -98,7 +127,12 @@ class WeeklyCycleRunner:
         for c in contestants:
             cid = c.contestant_id
             self.signal_history[cid] = {}
-            self.adapters[cid] = create_adapter(c, mock=self.mock_mode, use_replay=not self.mock_mode)
+            self.adapters[cid] = create_adapter(
+                c,
+                mock=self.mock_mode,
+                use_replay=not self.mock_mode,
+                auth_store_path=self.auth_store_path
+            )
 
             for a in self.animals:
                 key = (cid, a.animal_id)
@@ -112,6 +146,10 @@ class WeeklyCycleRunner:
 
         self.taotie_benchmark = TaotieBenchmark(
             initial_cash=self.initial_cash,
+            deal_price_mode=self.deal_price_mode
+        )
+        self.ghost_taotie_benchmark = GhostTaotieBenchmark(
+            initial_cash=100_000_000.0,
             deal_price_mode=self.deal_price_mode
         )
         self.last_completed_cycle_idx = -1
@@ -130,7 +168,12 @@ class WeeklyCycleRunner:
                 try:
                     if not self.adapters and active_contestants:
                         for c in active_contestants:
-                            self.adapters[c.contestant_id] = create_adapter(c, mock=self.mock_mode, use_replay=not self.mock_mode)
+                            self.adapters[c.contestant_id] = create_adapter(
+                                c,
+                                mock=self.mock_mode,
+                                use_replay=not self.mock_mode,
+                                auth_store_path=self.auth_store_path
+                            )
                     first_adapter = next(iter(self.adapters.values()))
                     sample_score = first_adapter.predict(start_date=self.anchor_date, end_date=self.anchor_date)
                     insts = list(sample_score.index)
@@ -171,7 +214,12 @@ class WeeklyCycleRunner:
         for c in active_contestants:
             cid = c.contestant_id
             if cid not in self.adapters:
-                self.adapters[cid] = create_adapter(c, mock=self.mock_mode, use_replay=not self.mock_mode)
+                self.adapters[cid] = create_adapter(
+                    c,
+                    mock=self.mock_mode,
+                    use_replay=not self.mock_mode,
+                    auth_store_path=self.auth_store_path
+                )
             adapter = self.adapters[cid]
 
             raw_score = adapter.predict(
@@ -226,7 +274,7 @@ class WeeklyCycleRunner:
                 )
                 orders[key] = order
 
-        # 3. 生成独立基准 (Taotie) 的目标订单
+        # 3. 生成独立基准 (Taotie & Ghost Taotie) 的目标订单
         first_raw = next(iter(self.signal_history.values()))[c_idx]
         universe = list(first_raw.index)
         is_first_taotie = (c_idx == 0)
@@ -242,6 +290,18 @@ class WeeklyCycleRunner:
             passive_pool=True
         )
         orders[("BENCHMARK", "taotie")] = taotie_order
+
+        ghost_order = self.ghost_taotie_benchmark.engine.generate_order(
+            score=mock_score,
+            topk=0,
+            n_drop=0,
+            trade_date=cycle.trade_date,
+            is_first_entry=is_first_taotie,
+            tradability_filter=tradability_filter_fn,
+            price_lookup=price_lookup_fn,
+            passive_pool=True
+        )
+        orders[("BENCHMARK", "ghost_taotie")] = ghost_order
 
         return orders
 
@@ -259,10 +319,16 @@ class WeeklyCycleRunner:
         """
         c_idx = cycle.cycle_idx
 
-        # 执行各选手参赛动物组合
+        # 执行各选手参赛动物组合与独立基准
         for key, order in orders.items():
             if key == ("BENCHMARK", "taotie"):
                 self.taotie_benchmark.engine.execute_weekly_cycle(
+                    cycle=cycle,
+                    order=order,
+                    price_lookup=price_lookup_fn
+                )
+            elif key == ("BENCHMARK", "ghost_taotie"):
+                self.ghost_taotie_benchmark.engine.execute_weekly_cycle(
                     cycle=cycle,
                     order=order,
                     price_lookup=price_lookup_fn
@@ -293,6 +359,8 @@ class WeeklyCycleRunner:
             tradability_filter_fn=tradability_filter_fn,
             price_lookup_fn=price_lookup_fn
         )
+        if self.run_dir is not None:
+            self.export_isolated_orders(cycle, orders, self.run_dir)
         self.execute_orders(
             cycle=cycle,
             orders=orders,
@@ -329,6 +397,8 @@ class WeeklyCycleRunner:
                 tradability_filter_fn=tradability_filter_fn,
                 price_lookup_fn=price_lookup_fn
             )
+            if self.run_dir is not None:
+                self.export_isolated_orders(cycle, settled_orders, self.run_dir)
             self.execute_orders(
                 cycle=cycle,
                 orders=settled_orders,
@@ -346,6 +416,8 @@ class WeeklyCycleRunner:
                 tradability_filter_fn=tradability_filter_fn,
                 price_lookup_fn=price_lookup_fn
             )
+            if self.run_dir is not None:
+                self.export_isolated_orders(next_cycle, next_orders, self.run_dir)
 
         return settled_orders, next_orders
 
@@ -375,12 +447,13 @@ class WeeklyCycleRunner:
                 tradability_filter_fn=tradability_filter_fn
             )
 
-        # 导出所有组合的完整回测路径，包含统一控制基准 BENCHMARK_taotie
+        # 导出所有组合的完整回测路径，包含统一控制基准 BENCHMARK_taotie 与 BENCHMARK_ghost_taotie
         results = {
             key: engine.to_portfolio_path()
             for key, engine in self.engines.items()
         }
         results[("BENCHMARK", "taotie")] = self.taotie_benchmark.engine.to_portfolio_path()
+        results[("BENCHMARK", "ghost_taotie")] = self.ghost_taotie_benchmark.engine.to_portfolio_path()
         return results
 
     def run_parametric_monkeys(
@@ -415,7 +488,12 @@ class WeeklyCycleRunner:
             # 兜底从适配器采样
             first_c = self.registry.list_contestants()[0]
             if first_c.contestant_id not in self.adapters:
-                self.adapters[first_c.contestant_id] = create_adapter(first_c, mock=self.mock_mode, use_replay=not self.mock_mode)
+                self.adapters[first_c.contestant_id] = create_adapter(
+                    first_c,
+                    mock=self.mock_mode,
+                    use_replay=not self.mock_mode,
+                    auth_store_path=self.auth_store_path
+                )
             ad = self.adapters[first_c.contestant_id]
             sc = ad.predict(decision_date, decision_date)
             return list(sc.index)
@@ -450,6 +528,7 @@ class WeeklyCycleRunner:
                 for key, engine in self.engines.items()
             },
             "taotie_engine": self.taotie_benchmark.engine.export_checkpoint(),
+            "ghost_taotie_engine": self.ghost_taotie_benchmark.engine.export_checkpoint(),
         }
 
     def load_checkpoint(self, state: Dict[str, Any]):
@@ -467,6 +546,13 @@ class WeeklyCycleRunner:
                 deal_price_mode=self.deal_price_mode
             )
             self.taotie_benchmark.engine = PortfolioEngine.from_checkpoint(state["taotie_engine"])
+
+        if "ghost_taotie_engine" in state:
+            self.ghost_taotie_benchmark = GhostTaotieBenchmark(
+                initial_cash=100_000_000.0,
+                deal_price_mode=self.deal_price_mode
+            )
+            self.ghost_taotie_benchmark.engine = PortfolioEngine.from_checkpoint(state["ghost_taotie_engine"])
 
     def save_checkpoint_to_disk(self, checkpoint_dir: Path, cycle_idx: int):
         """将状态快照持久化落盘至 runs/<run_id>/checkpoints/"""
@@ -486,3 +572,113 @@ class WeeklyCycleRunner:
         with open(checkpoint_path, "rb") as f:
             state = pickle.load(f)
         self.load_checkpoint(state)
+
+    def export_isolated_orders(
+        self,
+        cycle: WeeklyCycle,
+        orders: Dict[tuple, Any],
+        run_dir: Path,
+        secret_salt: Optional[str] = None
+    ) -> Dict[str, Any]:
+        """
+        严格分层隔离导出本周期的所有实体 orders.csv (不含猴群)。
+        命名空间:
+          - 参赛选手: runs/<season_id>/private/cycles/cycle_{idx}_{date}/contestants/<cid>/animal_<aid>.csv
+          - 独立基准: runs/<season_id>/private/cycles/cycle_{idx}_{date}/benchmarks/taotie_500k.csv 等
+        并生成加盐哈希存证清单 (分项 SHA-256 + 周期根哈希 Merkle Root)。
+        """
+        import hashlib
+        import json
+        import secrets
+
+        c_idx = cycle.cycle_idx
+        c_date = cycle.decision_date.replace("-", "")
+        cycle_folder_name = f"cycle_{c_idx:02d}_{c_date}"
+        priv_cycle_dir = run_dir / "private" / "cycles" / cycle_folder_name
+        priv_cycle_dir.mkdir(parents=True, exist_ok=True)
+
+        salt = secret_salt or secrets.token_hex(16)
+        salt_file = priv_cycle_dir / "salt.key"
+        with open(salt_file, "w", encoding="utf-8") as f:
+            f.write(salt)
+
+        items_manifest = []
+
+        for key, order_obj in orders.items():
+            if order_obj is None:
+                continue
+
+            entity_type, entity_name = key
+            if entity_type == "BENCHMARK":
+                target_dir = priv_cycle_dir / "benchmarks"
+                target_dir.mkdir(parents=True, exist_ok=True)
+                file_name = f"{entity_name}.csv"
+                file_path = target_dir / file_name
+                item_id = f"benchmark_{entity_name}"
+            else:
+                cid, aid = key
+                target_dir = priv_cycle_dir / "contestants" / cid
+                target_dir.mkdir(parents=True, exist_ok=True)
+                file_name = f"animal_{aid}.csv"
+                file_path = target_dir / file_name
+                item_id = f"{cid}_{aid}"
+
+            # 导出标准化 CSV
+            order_rows = []
+            for inst in order_obj.buy_instruments:
+                order_rows.append({
+                    "trade_date": order_obj.trade_date,
+                    "direction": "BUY",
+                    "instrument": inst,
+                    "is_first_entry": order_obj.is_first_entry
+                })
+            for inst in order_obj.sell_instruments:
+                order_rows.append({
+                    "trade_date": order_obj.trade_date,
+                    "direction": "SELL",
+                    "instrument": inst,
+                    "is_first_entry": order_obj.is_first_entry
+                })
+
+            df_order = pd.DataFrame(order_rows)
+            df_order.to_csv(file_path, index=False)
+
+            # 计算该文件的加盐 SHA-256
+            content_bytes = file_path.read_bytes()
+            salted_payload = content_bytes + salt.encode("utf-8") + cycle.decision_date.encode("utf-8")
+            file_hash = hashlib.sha256(salted_payload).hexdigest()
+
+            items_manifest.append({
+                "item_id": item_id,
+                "relative_path": str(file_path.relative_to(run_dir)),
+                "num_buys": len(order_obj.buy_instruments),
+                "num_sells": len(order_obj.sell_instruments),
+                "sha256": file_hash
+            })
+
+        # 排序后计算周期的聚合根哈希
+        items_manifest.sort(key=lambda x: x["item_id"])
+        concat_hashes = "".join([item["sha256"] for item in items_manifest])
+        cycle_root_hash = hashlib.sha256((concat_hashes + salt).encode("utf-8")).hexdigest()
+
+        manifest_data = {
+            "cycle_idx": c_idx,
+            "decision_date": cycle.decision_date,
+            "trade_date": cycle.trade_date,
+            "cycle_root_hash": cycle_root_hash,
+            "total_entities": len(items_manifest),
+            "items": items_manifest
+        }
+
+        manifest_file = priv_cycle_dir / "manifest.json"
+        with open(manifest_file, "w", encoding="utf-8") as f:
+            json.dump(manifest_data, f, ensure_ascii=False, indent=2)
+
+        return {
+            "cycle_folder": priv_cycle_dir,
+            "cycle_root_hash": cycle_root_hash,
+            "manifest_file": manifest_file,
+            "salt": salt,
+            "total_orders": len(items_manifest)
+        }
+

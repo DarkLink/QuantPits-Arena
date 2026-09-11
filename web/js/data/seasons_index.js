@@ -1,10 +1,3 @@
-/**
- * web/js/data/seasons_index.js
- * ============================
- * QuantPits-Arena Seasons Global Registry Index
- * Defines all available seasons, their lifecycle states, methodology specifications, and dispatches.
- */
-
 window.ARENA_SEASONS_INDEX = [
   {
     id: "season_01",
@@ -60,6 +53,67 @@ window.ARENA_SEASONS_INDEX = [
       capital_spec: "Dual-Tier Sizing: CNY 500,000 (Executable Contestants) vs. CNY 100,000,000 (Ghost Taotie Theoretical)",
       benchmarks_summary: "Four-Pillar Hierarchy: CSI 300 (Index Beta) + Taotie (Physical Executable) + Ghost Taotie (Theoretical Equal-Weight) + Matched Monkeys (Null Arbiter)",
       execution_flow: "Two-Phase Decoupled Pipeline: Friday Close Order Commitment (SHA-256) &rarr; Monday Open Execution &rarr; Friday Settle"
+    }
+  },
+  {
+    id: "season_csi1000",
+    title: "Season CSI 1000: Small-Cap Breadth Arena",
+    short_title: "CSI 1000 (Demo)",
+    status: "DEMO",
+    badge_type: "warning",
+    period: "2026.07 - 2026.08",
+    anchor_date: "2026-07-03",
+    end_date: "2026-08-28",
+    trading_days: 41,
+    contestants_count: 6,
+    animals_count: 28,
+    benchmarks: ["CSI 1000", "Taotie 1000 (500k)", "Ghost Taotie 1000 (100M)", "1000 Monkeys"],
+    description: "CSI 1000 small-cap universe testbed (SH000852 benchmark) evaluating the 6 candidate models across 28 execution containers.",
+    dispatches_banner: {
+      tag: "🔬 Season CSI 1000 Demo",
+      title: "CSI 1000 Small-Cap Calibration Active: Comparing Alpha Breadth vs. Liquidity Constraints.",
+      link: "#dispatches",
+      link_text: "Read CSI 1000 Chronicles &rarr;"
+    },
+    methodology: {
+      framework_name: "Small-Cap Breadth Empirical Evaluation & Liquidity Frictions",
+      anchor_spec: "Parallel Calibration Anchor (2026-07-03 Initiation)",
+      capital_spec: "CNY 500,000 baseline cash with 100-share trading lots over 1,000 constituent stocks",
+      benchmarks_summary: "CSI 1000 Tripartite System: CSI 1000 Index (SH000852 Beta) + Taotie 1000 + Ghost Taotie 1000 (100M) + 1,000 Matched Monkeys",
+      execution_flow: "Weekly Rebalance, Monday Open Execution, Daily Marked-to-Market"
+    }
+  },
+  {
+    "id": "season_csi500",
+    "title": "QuantPits Arena Season CSI 500 (Mid-Cap Breadth Season)",
+    "short_title": "csi500",
+    "status": "ACTIVE",
+    "badge_type": "active",
+    "period": "2026.07 - 2026.08",
+    "anchor_date": "2026-07-03",
+    "end_date": "2026-08-28",
+    "trading_days": 41,
+    "contestants_count": 6,
+    "animals_count": 28,
+    "benchmarks": [
+      "CSI 500 (Market Benchmark)",
+      "Taotie (csi500) (500k)",
+      "Ghost Taotie (csi500) (100M)",
+      "1,000 Monkeys"
+    ],
+    "description": "CSI 500 mid-cap universe benchmark: evaluating the 6 Alpha candidate models and 28 execution containers against CSI 500 (SH000905) benchmark",
+    "dispatches_banner": {
+      "tag": "🔬 season_csi500 Arena",
+      "title": "QuantPits Arena Season CSI 500 (Mid-Cap Breadth Season) Active Evaluation.",
+      "link": "#dispatches",
+      "link_text": "Read season_csi500 Dispatches &rarr;"
+    },
+    "methodology": {
+      "framework_name": "csi500 Empirical Evaluation",
+      "anchor_spec": "Parallel Calibration Anchor (2026-07-03 Initiation)",
+      "capital_spec": "CNY 500,000 baseline capital with 100-share trading lots",
+      "benchmarks_summary": "Market Index (CSI 500 (Market Benchmark)) + Taotie + Ghost Taotie (100M) + 1,000 Matched Monkeys",
+      "execution_flow": "Weekly Rebalance, Monday Open Execution, Daily Marked-to-Market"
     }
   }
 ];

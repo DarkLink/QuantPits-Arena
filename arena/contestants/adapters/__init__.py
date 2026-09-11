@@ -5,6 +5,7 @@ arena.contestants.adapters
 """
 
 from pathlib import Path
+from typing import Optional
 from arena.contestants.manifest import ContestantManifest
 from arena.contestants.adapters.base import (
     BaseInferenceAdapter,
@@ -21,7 +22,8 @@ from arena.contestants.adapters.historical import HistoricalReplayAdapter
 def create_adapter(
     manifest: ContestantManifest,
     mock: bool = False,
-    use_replay: bool = False
+    use_replay: bool = False,
+    auth_store_path: Optional[Path] = None
 ) -> BaseInferenceAdapter:
     """
     适配器工厂函数：
@@ -31,12 +33,14 @@ def create_adapter(
         return MockInferenceAdapter(manifest)
 
     # 优先检查权威全量预测库，或针对 Static/CPCV 检查生产历史快照
-    auth_store_path = Path(__file__).resolve().parent.parent.parent.parent / "artifacts" / "predictions" / "all_contestants_oos.pkl"
+    store_path = auth_store_path or (
+        Path(__file__).resolve().parent.parent.parent.parent / "artifacts" / "predictions" / "all_contestants_oos.pkl"
+    )
     snapshot_path = Path.home() / "src/QLIB-TEST-RUN/ARCHAEOLOGY/raw_preds.pkl"
     cid = manifest.contestant_id.lower()
-    if use_replay and (auth_store_path.exists() or snapshot_path.exists()):
-        if auth_store_path.exists() or "static" in cid or "cpcv" in cid:
-            return HistoricalReplayAdapter(manifest, snapshot_path=snapshot_path)
+    if use_replay and (store_path.exists() or snapshot_path.exists()):
+        if store_path.exists() or "static" in cid or "cpcv" in cid:
+            return HistoricalReplayAdapter(manifest, snapshot_path=snapshot_path, auth_store_path=store_path)
 
     adapter_name = manifest.inference_adapter.lower()
 

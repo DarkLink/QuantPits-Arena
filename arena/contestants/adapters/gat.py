@@ -37,16 +37,22 @@ class GATAdapter(BaseInferenceAdapter):
             raise FileNotFoundError(f"未找到 GAT 权重文件: {artifact_file}")
 
         try:
-            import torch
-            # 使用 torch.load 加载权重
-            self.model = torch.load(artifact_file, map_location="cpu", weights_only=False)
+            import pickle
+            with open(artifact_file, "rb") as f:
+                self.model = pickle.load(f)
             if hasattr(self.model, "eval"):
                 self.model.eval()
             self.is_loaded = True
-        except Exception as e:
-            # 若环境暂未初始化 torch 或存在依赖冲突，记录异常
-            self.is_loaded = False
-            raise RuntimeError(f"加载 GAT 模型权重失败: {e}")
+        except Exception as e1:
+            try:
+                import torch
+                self.model = torch.load(artifact_file, map_location="cpu", weights_only=False)
+                if hasattr(self.model, "eval"):
+                    self.model.eval()
+                self.is_loaded = True
+            except Exception as e2:
+                self.is_loaded = False
+                raise RuntimeError(f"加载 GAT 模型权重失败: {e1} / {e2}")
 
     def predict(
         self,

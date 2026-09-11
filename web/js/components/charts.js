@@ -50,8 +50,9 @@ window.ArenaCharts = {
         match = sName.includes("Ghost");
       } else if (benchmarkKey === "taotie") {
         match = sName.includes("Taotie") && !sName.includes("Ghost");
-      } else if (benchmarkKey === "csi300") {
-        match = sName.includes("CSI 300") || sName.includes("CSI300") || sName.includes("CSI-300");
+      } else if (benchmarkKey === "csi300" || benchmarkKey === "market") {
+        const mBm = (window.arenaAdapter && window.arenaAdapter.getMarketBenchmarkName) ? window.arenaAdapter.getMarketBenchmarkName() : "CSI 300";
+        match = sName.includes("CSI 300") || sName.includes("CSI300") || sName.includes("CSI-300") || sName.includes("CSI 1000") || sName.includes("CSI1000") || sName.includes(mBm);
       } else if (benchmarkKey === "monkey") {
         match = sName.includes("Monkey");
       }
@@ -95,7 +96,7 @@ window.ArenaCharts = {
     const tc = this.getThemeColors();
 
     const data = paths.map(p => {
-      const pctRank = p.percentile_rank !== undefined ? p.percentile_rank : (p.monkey_percentile || 50);
+      const pctRank = p.percentile_rank !== undefined ? p.percentile_rank : (p.monkey_percentile !== undefined ? p.monkey_percentile : (p.monkey_percentile_rank || 50));
       const ret = p.total_return_pct;
       const sharpe = Math.max(0.2, p.sharpe_ratio || 0.5);
       return [pctRank, ret, sharpe, p];
@@ -110,7 +111,7 @@ window.ArenaCharts = {
         textStyle: { color: tc.textPrimary },
         formatter: (params) => {
           const p = params.data[3];
-          const rawPct = p.percentile_rank !== undefined ? p.percentile_rank : p.monkey_percentile;
+          const rawPct = p.percentile_rank !== undefined ? p.percentile_rank : (p.monkey_percentile !== undefined ? p.monkey_percentile : p.monkey_percentile_rank);
           const pct = window.formatPercentile ? window.formatPercentile(rawPct) : (rawPct !== undefined ? rawPct.toFixed(1) + "%" : "N/A");
           const rawP = p.empirical_p_value !== undefined ? p.empirical_p_value : p.p_value;
           const pVal = window.formatPValue ? window.formatPValue(rawP) : (rawP !== undefined ? rawP.toFixed(4) : "N/A");
@@ -366,14 +367,15 @@ window.ArenaCharts = {
       yAxisName = "Underwater Drawdown (%)";
       yAxisFormatter = v => `${v.toFixed(1)}%`;
 
+      const marketBmName = (window.arenaAdapter && window.arenaAdapter.getMarketBenchmarkName) ? window.arenaAdapter.getMarketBenchmarkName() : "CSI 300";
       const targetDD = window.arenaAdapter.getPathDrawdown(targetPath.path_id);
-      const csi300DD = window.arenaAdapter.getCsi300Drawdown();
+      const csi300DD = window.arenaAdapter.getMarketDrawdown();
       const taotieDD = window.arenaAdapter.getTaotieDrawdown();
       const ghostDD = window.arenaAdapter.hasGhostTaotie() ? window.arenaAdapter.getGhostTaotieDrawdown() : null;
 
       series = [
         {
-          name: "CSI 300",
+          name: marketBmName,
           type: "line",
           data: csi300DD,
           smooth: true,
@@ -429,17 +431,18 @@ window.ArenaCharts = {
       });
 
     } else if (metricType === "excess_csi300") {
-      yAxisName = "Active Excess Return vs. CSI 300 (%)";
+      const marketBmName = (window.arenaAdapter && window.arenaAdapter.getMarketBenchmarkName) ? window.arenaAdapter.getMarketBenchmarkName() : "CSI 300";
+      yAxisName = `Active Excess Return vs. ${marketBmName} (%)`;
       yAxisFormatter = v => `${v >= 0 ? '+' : ''}${v.toFixed(1)}%`;
 
-      const targetExcess = window.arenaAdapter.getPathExcessCSI300(targetPath.path_id);
-      const taotieExcess = window.arenaAdapter.getPathExcessCSI300("BENCHMARK_taotie");
-      const ghostExcess = window.arenaAdapter.hasGhostTaotie() ? window.arenaAdapter.getPathExcessCSI300("BENCHMARK_ghost_taotie") : null;
+      const targetExcess = window.arenaAdapter.getPathExcessMarket(targetPath.path_id);
+      const taotieExcess = window.arenaAdapter.getPathExcessMarket("BENCHMARK_taotie");
+      const ghostExcess = window.arenaAdapter.hasGhostTaotie() ? window.arenaAdapter.getPathExcessMarket("BENCHMARK_ghost_taotie") : null;
       const zeroBase = dates.map(() => 0.0);
 
       series = [
         {
-          name: "CSI 300 (0.00%)",
+          name: `${marketBmName} (0.00%)`,
           type: "line",
           data: zeroBase,
           color: "#f59e0b",
@@ -448,7 +451,7 @@ window.ArenaCharts = {
           showSymbol: false
         },
         {
-          name: "Taotie vs CSI 300",
+          name: `Taotie vs ${marketBmName}`,
           type: "line",
           data: taotieExcess,
           smooth: true,
@@ -465,7 +468,7 @@ window.ArenaCharts = {
 
       if (ghostExcess && ghostExcess.length > 0) {
         series.push({
-          name: "Ghost Taotie vs CSI 300",
+          name: `Ghost Taotie vs ${marketBmName}`,
           type: "line",
           data: ghostExcess,
           smooth: true,
@@ -548,7 +551,7 @@ window.ArenaCharts = {
           lineStyle: { width: 1.8, color: "#94a3b8", type: [3, 3], opacity: 0.85 }
         },
         {
-          name: "CSI 300",
+          name: (window.arenaAdapter && window.arenaAdapter.getMarketBenchmarkName) ? window.arenaAdapter.getMarketBenchmarkName() : "CSI 300",
           type: "line",
           data: csi300Curve && csi300Curve.length ? csi300Curve : [],
           smooth: true,
@@ -1074,10 +1077,11 @@ window.ArenaCharts = {
         });
       }
 
-      const csi300DD = window.arenaAdapter.getCsi300Drawdown();
+      const marketBmName = (window.arenaAdapter && window.arenaAdapter.getMarketBenchmarkName) ? window.arenaAdapter.getMarketBenchmarkName() : "CSI 300";
+      const csi300DD = window.arenaAdapter.getMarketDrawdown();
       if (csi300DD && csi300DD.length > 0) {
         series.push({
-          name: "CSI 300 Drawdown",
+          name: `${marketBmName} Drawdown`,
           type: "line",
           data: csi300DD,
           smooth: true,
@@ -1089,12 +1093,13 @@ window.ArenaCharts = {
       }
 
     } else if (metricType === "excess_csi300") {
-      titleText = "Multi-Animal Active Spread vs. CSI 300";
-      yAxisName = "Excess vs. CSI 300 (%)";
+      const marketBmName = (window.arenaAdapter && window.arenaAdapter.getMarketBenchmarkName) ? window.arenaAdapter.getMarketBenchmarkName() : "CSI 300";
+      titleText = `Multi-Animal Active Spread vs. ${marketBmName}`;
+      yAxisName = `Excess vs. ${marketBmName} (%)`;
       yAxisFormatter = v => `${v >= 0 ? '+' : ''}${v.toFixed(1)}%`;
 
       paths.forEach((p, idx) => {
-        const curve = window.arenaAdapter.getPathExcessCSI300(p.path_id);
+        const curve = window.arenaAdapter.getPathExcessMarket(p.path_id);
         if (curve && curve.length > 0) {
           const color = p.animal_id === "robot" ? "#38bdf8" : colorPalette[idx % colorPalette.length];
           series.push({
@@ -1116,7 +1121,7 @@ window.ArenaCharts = {
 
       const zeroBase = dates.map(() => 0.0);
       series.push({
-        name: "CSI 300 (0.00%)",
+        name: `${marketBmName} (0.00%)`,
         type: "line",
         data: zeroBase,
         color: "#f59e0b",
@@ -1125,10 +1130,10 @@ window.ArenaCharts = {
         showSymbol: false
       });
 
-      const taotieExcess = window.arenaAdapter.getPathExcessCSI300("BENCHMARK_taotie");
+      const taotieExcess = window.arenaAdapter.getPathExcessMarket("BENCHMARK_taotie");
       if (taotieExcess && taotieExcess.length > 0) {
         series.push({
-          name: "Taotie vs CSI 300",
+          name: `Taotie vs ${marketBmName}`,
           type: "line",
           data: taotieExcess,
           smooth: true,
@@ -1139,10 +1144,10 @@ window.ArenaCharts = {
         });
       }
 
-      const ghostExcess = window.arenaAdapter.hasGhostTaotie() ? window.arenaAdapter.getPathExcessCSI300("BENCHMARK_ghost_taotie") : null;
+      const ghostExcess = window.arenaAdapter.hasGhostTaotie() ? window.arenaAdapter.getPathExcessMarket("BENCHMARK_ghost_taotie") : null;
       if (ghostExcess && ghostExcess.length > 0) {
         series.push({
-          name: "Ghost Taotie vs CSI 300",
+          name: `Ghost Taotie vs ${marketBmName}`,
           type: "line",
           data: ghostExcess,
           smooth: true,
@@ -1209,9 +1214,10 @@ window.ArenaCharts = {
         });
       }
 
+      const marketBmName = (window.arenaAdapter && window.arenaAdapter.getMarketBenchmarkName) ? window.arenaAdapter.getMarketBenchmarkName() : "CSI 300";
       if (csi300Curve && csi300Curve.length > 0) {
         series.push({
-          name: "CSI 300",
+          name: marketBmName,
           type: "line",
           data: csi300Curve,
           smooth: true,
@@ -1256,7 +1262,7 @@ window.ArenaCharts = {
       legend: {
         type: "scroll",
         top: 25,
-        data: series.filter(s => !s.name.includes("Taotie") && !s.name.includes("Ghost") && !s.name.includes("CSI 300")).map(s => s.name),
+        data: series.filter(s => !s.name.includes("Taotie") && !s.name.includes("Ghost") && !s.name.includes("CSI 300") && !s.name.includes("CSI 1000")).map(s => s.name),
         textStyle: { color: tc.textSecondary, fontSize: 10 },
         pageTextStyle: { color: tc.textSecondary }
       },
@@ -1404,10 +1410,11 @@ window.ArenaCharts = {
         });
       }
 
-      const csi300DD = window.arenaAdapter.getCsi300Drawdown();
+      const marketBmName = (window.arenaAdapter && window.arenaAdapter.getMarketBenchmarkName) ? window.arenaAdapter.getMarketBenchmarkName() : "CSI 300";
+      const csi300DD = window.arenaAdapter.getMarketDrawdown();
       if (csi300DD && csi300DD.length > 0) {
         series.push({
-          name: "CSI 300 Drawdown",
+          name: `${marketBmName} Drawdown`,
           type: "line",
           data: csi300DD,
           smooth: true,
@@ -1419,12 +1426,13 @@ window.ArenaCharts = {
       }
 
     } else if (metricType === "excess_csi300") {
-      titleText = isMultiAnimal ? "Multi-Animal Active Excess Return vs. CSI 300" : "Cross-Model Active Excess Return vs. CSI 300";
-      yAxisName = "Excess vs. CSI 300 (%)";
+      const marketBmName = (window.arenaAdapter && window.arenaAdapter.getMarketBenchmarkName) ? window.arenaAdapter.getMarketBenchmarkName() : "CSI 300";
+      titleText = isMultiAnimal ? `Multi-Animal Active Excess Return vs. ${marketBmName}` : `Cross-Model Active Excess Return vs. ${marketBmName}`;
+      yAxisName = `Excess vs. ${marketBmName} (%)`;
       yAxisFormatter = v => `${v >= 0 ? '+' : ''}${v.toFixed(1)}%`;
 
       animalPaths.forEach((p, idx) => {
-        const curve = window.arenaAdapter.getPathExcessCSI300(p.path_id);
+        const curve = window.arenaAdapter.getPathExcessMarket(p.path_id);
         if (curve && curve.length > 0) {
           const color = getColor(p, idx);
           series.push({
@@ -1442,7 +1450,7 @@ window.ArenaCharts = {
 
       const zeroBase = dates.map(() => 0.0);
       series.push({
-        name: "CSI 300 (0.00%)",
+        name: `${marketBmName} (0.00%)`,
         type: "line",
         data: zeroBase,
         color: "#f59e0b",
@@ -1451,10 +1459,10 @@ window.ArenaCharts = {
         showSymbol: false
       });
 
-      const taotieExcess = window.arenaAdapter.getPathExcessCSI300("BENCHMARK_taotie");
+      const taotieExcess = window.arenaAdapter.getPathExcessMarket("BENCHMARK_taotie");
       if (taotieExcess && taotieExcess.length > 0) {
         series.push({
-          name: "Taotie vs CSI 300",
+          name: `Taotie vs ${marketBmName}`,
           type: "line",
           data: taotieExcess,
           smooth: true,
@@ -1465,10 +1473,10 @@ window.ArenaCharts = {
         });
       }
 
-      const ghostExcess = window.arenaAdapter.hasGhostTaotie() ? window.arenaAdapter.getPathExcessCSI300("BENCHMARK_ghost_taotie") : null;
+      const ghostExcess = window.arenaAdapter.hasGhostTaotie() ? window.arenaAdapter.getPathExcessMarket("BENCHMARK_ghost_taotie") : null;
       if (ghostExcess && ghostExcess.length > 0) {
         series.push({
-          name: "Ghost Taotie vs CSI 300",
+          name: `Ghost Taotie vs ${marketBmName}`,
           type: "line",
           data: ghostExcess,
           smooth: true,
@@ -1531,9 +1539,10 @@ window.ArenaCharts = {
         });
       }
 
+      const marketBmName = (window.arenaAdapter && window.arenaAdapter.getMarketBenchmarkName) ? window.arenaAdapter.getMarketBenchmarkName() : "CSI 300";
       if (csi300Curve && csi300Curve.length > 0) {
         series.push({
-          name: "CSI 300",
+          name: marketBmName,
           type: "line",
           data: csi300Curve,
           smooth: true,
@@ -1578,7 +1587,7 @@ window.ArenaCharts = {
       legend: {
         type: "scroll",
         top: 25,
-        data: series.filter(s => !s.name.includes("Taotie") && !s.name.includes("Ghost") && !s.name.includes("CSI 300")).map(s => s.name),
+        data: series.filter(s => !s.name.includes("Taotie") && !s.name.includes("Ghost") && !s.name.includes("CSI 300") && !s.name.includes("CSI 1000")).map(s => s.name),
         textStyle: { color: tc.textSecondary, fontSize: 11 },
         pageTextStyle: { color: tc.textSecondary }
       },
@@ -1635,9 +1644,10 @@ window.ArenaCharts = {
     let yAxisFormatter = v => v.toFixed(3);
 
     if (isExcess) {
+      const marketBmName = (window.arenaAdapter && window.arenaAdapter.getMarketBenchmarkName) ? window.arenaAdapter.getMarketBenchmarkName() : "CSI 300";
       if (metricMode === "excess_taotie") yAxisName = "Excess Return vs Taotie (%)";
       else if (metricMode === "excess_ghost") yAxisName = "Excess Return vs Ghost Taotie (%)";
-      else yAxisName = "Excess Return vs CSI 300 (%)";
+      else yAxisName = `Excess Return vs ${marketBmName} (%)`;
       yAxisFormatter = v => `${v >= 0 ? '+' : ''}${v.toFixed(1)}%`;
     } else if (isDD) {
       yAxisName = "Underwater Drawdown (%)";
@@ -1730,7 +1740,7 @@ window.ArenaCharts = {
       legend: {
         type: "scroll",
         top: 0,
-        data: series.filter(s => !s.name.includes("Taotie") && !s.name.includes("Ghost") && !s.name.includes("CSI 300")).map(s => s.name),
+        data: series.filter(s => !s.name.includes("Taotie") && !s.name.includes("Ghost") && !s.name.includes("CSI 300") && !s.name.includes("CSI 1000")).map(s => s.name),
         textStyle: { color: tc.textSecondary, fontSize: 11 },
         pageTextStyle: { color: tc.textSecondary }
       },

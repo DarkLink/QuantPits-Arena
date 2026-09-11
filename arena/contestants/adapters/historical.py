@@ -20,24 +20,32 @@ from arena.contestants.adapters.base import BaseInferenceAdapter, rank_norm_scor
 class HistoricalReplayAdapter(BaseInferenceAdapter):
     """
     历史生产预测回放适配器：
-    从 ARCHAEOLOGY/raw_preds.pkl 中提取历史生产时点各子模型的真实预测并执行生产融合规则。
+    从 ARCHAEOLOGY/raw_preds.pkl 或权威全量预测库提取真实预测并执行生产融合规则。
     """
 
     _cached_raw_preds: Optional[Dict[str, Any]] = None
-    _cached_authoritative_store: Optional[Dict[str, Any]] = None
+    _cached_stores: Dict[str, Dict[str, Any]] = {}
 
-    def __init__(self, manifest: ContestantManifest, snapshot_path: Optional[Path] = None):
+    def __init__(
+        self,
+        manifest: ContestantManifest,
+        snapshot_path: Optional[Path] = None,
+        auth_store_path: Optional[Path] = None
+    ):
         super().__init__(manifest)
-        self.auth_store_path = Path(__file__).resolve().parent.parent.parent.parent / "artifacts" / "predictions" / "all_contestants_oos.pkl"
+        self.auth_store_path = auth_store_path or (
+            Path(__file__).resolve().parent.parent.parent.parent / "artifacts" / "predictions" / "all_contestants_oos.pkl"
+        )
         self.snapshot_path = snapshot_path or (Path.home() / "src/QLIB-TEST-RUN/ARCHAEOLOGY/raw_preds.pkl")
         self.role_key = "static" if "static" in manifest.contestant_id.lower() or "static" in manifest.training_mode.lower() else "cpcv"
         self._fused_cache: Dict[str, pd.Series] = {}
 
     def load_models(self) -> None:
         # 1. 优先载入权威全量预测库
-        if HistoricalReplayAdapter._cached_authoritative_store is None and self.auth_store_path.exists():
+        p_str = str(self.auth_store_path)
+        if p_str not in HistoricalReplayAdapter._cached_stores and self.auth_store_path.exists():
             with open(self.auth_store_path, "rb") as f:
-                HistoricalReplayAdapter._cached_authoritative_store = pickle.load(f)
+                HistoricalReplayAdapter._cached_stores[p_str] = pickle.load(f)
 
         # 2. 兜底载入历史原始快照
         if HistoricalReplayAdapter._cached_raw_preds is None and self.snapshot_path.exists():
@@ -60,8 +68,16 @@ class HistoricalReplayAdapter(BaseInferenceAdapter):
             return self._fused_cache[start_date]
 
         # 优先从权威预测库提取
-        if HistoricalReplayAdapter._cached_authoritative_store is not None:
-            c_store = HistoricalReplayAdapter._cached_authoritative_store.get(self.manifest.contestant_id)
+        p_str = str(self.auth_store_path)
+        auth_store = HistoricalReplayAdapter._cached_stores.get(p_str)
+        if auth_store is not None:
+            c_store = auth_store.get(self.manifest.contestant_id)
+            if not c_store:
+                # 尝试通过别名查找 (如 CONTESTANT_A)
+                for k, v in auth_store.items():
+                    if k.lower() == self.manifest.contestant_id.lower():
+                        c_store = v
+                        break
             if c_store and start_date in c_store:
                 res = c_store[start_date]
                 if instruments is not None:
