@@ -241,18 +241,7 @@ window.ArenaApp = {
   },
 
   updateTimelinessNotice() {
-    const bannerSpan = document.getElementById("timeliness-proof-text");
-    if (!bannerSpan) return;
-
-    const seasonMeta = window.arenaAdapter ? window.arenaAdapter.getCurrentSeasonMeta() : {};
-    if (seasonMeta.timeliness_proof) {
-      bannerSpan.innerHTML = seasonMeta.timeliness_proof;
-      return;
-    }
-    const title = seasonMeta.short_title || seasonMeta.title || "Arena";
-    const univ = seasonMeta.universe_name || "Universe";
-    const windowLabel = seasonMeta.window_label || seasonMeta.period_label || "Active Window";
-    bannerSpan.innerHTML = `🔬 <strong style="color: var(--text-secondary);">${title} Proof:</strong> ${univ} verified over ${windowLabel}. Unfalsifiable empirical null resolution.`;
+    // Static footer proof notice directs visitors to commitments/README.md and Git manifests
   },
 
   initPreviewBanner() {

@@ -82,8 +82,8 @@ RE_PROD_STATE_KEYS = re.compile(
 # 4. 精确到分角的账户资金金额模式（5位以上整数且精确带两位小数，例如 160610.43 等）
 RE_PRECISE_DECIMAL_AMOUNT = re.compile(r"\b\d{5,}\.\d{2}\b")
 
-# 5. 私有主机绝对主目录路径
-RE_PRIVATE_HOME_PATH = re.compile(r"/home/[a-zA-Z0-9_\-\.]+/(?!src/QuantPits-Arena)")
+# 5. 私有主机绝对主目录路径与 file:/// 本地协议
+RE_PRIVATE_HOME_PATH = re.compile(r"(\b/home/[a-zA-Z0-9_\-\.]+\b|file:///)")
 
 # 6. 真实模型身份关键词（在公开文件中检测是否残留真实模型名）
 #    注意：将模式串拆分存放以避免扫描器自身被误报

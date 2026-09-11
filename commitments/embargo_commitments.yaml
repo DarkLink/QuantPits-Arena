@@ -1,7 +1,10 @@
 title: QuantPits-Arena Timeliness & Anti-Tampering Commitments
-protocol: Commitment Scheme (SHA-256 Proof-of-Timeliness)
-description: Cryptographic proofs that out-of-sample arena evaluations were frozen
-  in real-time before public embargo reveal.
+protocol: Commit-and-Reveal Protocol (Git SHA-256 Proof-of-Timeliness)
+description: Cryptographic proofs that out-of-sample orders and holdings were frozen before execution.
+policy:
+  model_status: Historical research candidate models (Non-live / Non-production)
+  nav_release_schedule: Weekly targeting before Monday open (Best-effort, no hard guarantee)
+  holdings_orders_embargo_weeks: 4
 last_updated: '2026-09-05T23:42:07+08:00'
 commitments:
 - cycle_id: cycle_9
