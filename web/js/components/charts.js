@@ -347,6 +347,7 @@ window.ArenaCharts = {
 
     if (!dates || !Array.isArray(dates) || dates.length === 0) return null;
     const tc = this.getThemeColors();
+    const marketBmName = (window.arenaAdapter && window.arenaAdapter.getMarketBenchmarkName) ? window.arenaAdapter.getMarketBenchmarkName() : "CSI 300";
 
     function round(num, dec = 4) {
       return Number(Math.round(num + "e" + dec) + "e-" + dec);
@@ -367,7 +368,6 @@ window.ArenaCharts = {
       yAxisName = "Underwater Drawdown (%)";
       yAxisFormatter = v => `${v.toFixed(1)}%`;
 
-      const marketBmName = (window.arenaAdapter && window.arenaAdapter.getMarketBenchmarkName) ? window.arenaAdapter.getMarketBenchmarkName() : "CSI 300";
       const targetDD = window.arenaAdapter.getPathDrawdown(targetPath.path_id);
       const csi300DD = window.arenaAdapter.getMarketDrawdown();
       const taotieDD = window.arenaAdapter.getTaotieDrawdown();
@@ -431,7 +431,6 @@ window.ArenaCharts = {
       });
 
     } else if (metricType === "excess_csi300") {
-      const marketBmName = (window.arenaAdapter && window.arenaAdapter.getMarketBenchmarkName) ? window.arenaAdapter.getMarketBenchmarkName() : "CSI 300";
       yAxisName = `Active Excess Return vs. ${marketBmName} (%)`;
       yAxisFormatter = v => `${v >= 0 ? '+' : ''}${v.toFixed(1)}%`;
 
@@ -551,7 +550,7 @@ window.ArenaCharts = {
           lineStyle: { width: 1.8, color: "#94a3b8", type: [3, 3], opacity: 0.85 }
         },
         {
-          name: (window.arenaAdapter && window.arenaAdapter.getMarketBenchmarkName) ? window.arenaAdapter.getMarketBenchmarkName() : "CSI 300",
+          name: marketBmName,
           type: "line",
           data: csi300Curve && csi300Curve.length ? csi300Curve : [],
           smooth: true,
@@ -1012,6 +1011,7 @@ window.ArenaCharts = {
 
     if (!dates || !Array.isArray(dates) || dates.length === 0) return null;
     const tc = this.getThemeColors();
+    const marketBmName = (window.arenaAdapter && window.arenaAdapter.getMarketBenchmarkName) ? window.arenaAdapter.getMarketBenchmarkName() : "CSI 300";
 
     const colorPalette = [
       "#38bdf8", "#10b981", "#f59e0b", "#ec4899", "#8b5cf6",
@@ -1077,7 +1077,6 @@ window.ArenaCharts = {
         });
       }
 
-      const marketBmName = (window.arenaAdapter && window.arenaAdapter.getMarketBenchmarkName) ? window.arenaAdapter.getMarketBenchmarkName() : "CSI 300";
       const csi300DD = window.arenaAdapter.getMarketDrawdown();
       if (csi300DD && csi300DD.length > 0) {
         series.push({
@@ -1093,7 +1092,6 @@ window.ArenaCharts = {
       }
 
     } else if (metricType === "excess_csi300") {
-      const marketBmName = (window.arenaAdapter && window.arenaAdapter.getMarketBenchmarkName) ? window.arenaAdapter.getMarketBenchmarkName() : "CSI 300";
       titleText = `Multi-Animal Active Spread vs. ${marketBmName}`;
       yAxisName = `Excess vs. ${marketBmName} (%)`;
       yAxisFormatter = v => `${v >= 0 ? '+' : ''}${v.toFixed(1)}%`;
@@ -1214,7 +1212,6 @@ window.ArenaCharts = {
         });
       }
 
-      const marketBmName = (window.arenaAdapter && window.arenaAdapter.getMarketBenchmarkName) ? window.arenaAdapter.getMarketBenchmarkName() : "CSI 300";
       if (csi300Curve && csi300Curve.length > 0) {
         series.push({
           name: marketBmName,
@@ -1311,6 +1308,7 @@ window.ArenaCharts = {
     if (!chart) chart = echarts.init(dom);
 
     const tc = this.getThemeColors();
+    const marketBmName = (window.arenaAdapter && window.arenaAdapter.getMarketBenchmarkName) ? window.arenaAdapter.getMarketBenchmarkName() : "CSI 300";
 
     const modelColors = {
       'CONTESTANT_A': '#38bdf8', // Sky Blue
@@ -1410,7 +1408,6 @@ window.ArenaCharts = {
         });
       }
 
-      const marketBmName = (window.arenaAdapter && window.arenaAdapter.getMarketBenchmarkName) ? window.arenaAdapter.getMarketBenchmarkName() : "CSI 300";
       const csi300DD = window.arenaAdapter.getMarketDrawdown();
       if (csi300DD && csi300DD.length > 0) {
         series.push({
@@ -1426,7 +1423,6 @@ window.ArenaCharts = {
       }
 
     } else if (metricType === "excess_csi300") {
-      const marketBmName = (window.arenaAdapter && window.arenaAdapter.getMarketBenchmarkName) ? window.arenaAdapter.getMarketBenchmarkName() : "CSI 300";
       titleText = isMultiAnimal ? `Multi-Animal Active Excess Return vs. ${marketBmName}` : `Cross-Model Active Excess Return vs. ${marketBmName}`;
       yAxisName = `Excess vs. ${marketBmName} (%)`;
       yAxisFormatter = v => `${v >= 0 ? '+' : ''}${v.toFixed(1)}%`;
@@ -1539,7 +1535,6 @@ window.ArenaCharts = {
         });
       }
 
-      const marketBmName = (window.arenaAdapter && window.arenaAdapter.getMarketBenchmarkName) ? window.arenaAdapter.getMarketBenchmarkName() : "CSI 300";
       if (csi300Curve && csi300Curve.length > 0) {
         series.push({
           name: marketBmName,
@@ -1639,12 +1634,12 @@ window.ArenaCharts = {
 
     const isExcess = metricMode && metricMode.startsWith("excess_");
     const isDD = metricMode === "drawdown";
+    const marketBmName = (window.arenaAdapter && window.arenaAdapter.getMarketBenchmarkName) ? window.arenaAdapter.getMarketBenchmarkName() : "CSI 300";
 
     let yAxisName = "Normalized NAV (Starting 1.0000)";
     let yAxisFormatter = v => v.toFixed(3);
 
     if (isExcess) {
-      const marketBmName = (window.arenaAdapter && window.arenaAdapter.getMarketBenchmarkName) ? window.arenaAdapter.getMarketBenchmarkName() : "CSI 300";
       if (metricMode === "excess_taotie") yAxisName = "Excess Return vs Taotie (%)";
       else if (metricMode === "excess_ghost") yAxisName = "Excess Return vs Ghost Taotie (%)";
       else yAxisName = `Excess Return vs ${marketBmName} (%)`;

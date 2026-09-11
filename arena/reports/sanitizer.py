@@ -770,7 +770,7 @@ class DualTierExporter:
             return
 
         content = html_file.read_text(encoding="utf-8")
-        target_script = f'<script src="js/data/{season_id}.js?v=4.9"></script>'
+        target_script = f'<script src="js/data/{season_id}.js?v=5.0"></script>'
         if f'js/data/{season_id}.js' in content:
             return
 
