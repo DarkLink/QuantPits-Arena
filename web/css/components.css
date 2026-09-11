@@ -698,6 +698,14 @@
   box-shadow: 0 0 8px rgba(var(--bm-rgb, 56, 189, 248), 0.25);
 }
 
+.bm-line-badge {
+  display: inline-block;
+  width: 14px;
+  height: 0px;
+  border-top: 2px dashed currentColor;
+  vertical-align: middle;
+}
+
 .benchmark-pill .bm-line-badge {
   display: inline-block;
   width: 12px;

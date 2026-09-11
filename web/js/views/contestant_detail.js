@@ -125,7 +125,12 @@ window.ContestantDetailView = {
                 ⚠️ Cross-Universe Incomparability Notice:
               </strong>
               <span style="color: var(--text-secondary);">
-                The historical production metrics below (annualized return, Sharpe ratio, maximum drawdown) were evaluated under each model's historical production universe and liquidity filter regime (e.g., legacy CSI 300 / dedicated high-liquidity stock pool). Different constituent universes diverge fundamentally in stock count, market capitalization, idiosyncratic volatility, and alpha capacity. <strong>These legacy metrics must not be compared across different asset pools</strong> (such as against the current <strong>${seasonMeta.title || 'CSI 1000'}</strong> 1,000-stock small-cap testbed) or between models from different eras, and are preserved solely as archival baseline reference at retirement.
+                ${(() => {
+                  const poolDesc = seasonMeta.id === 'season_csi500' 
+                    ? '500-stock mid-cap testbed' 
+                    : (seasonMeta.id === 'season_csi1000' ? '1,000-stock small-cap testbed' : (seasonMeta.universe_name || 'testbed'));
+                  return `The historical production metrics below (annualized return, Sharpe ratio, maximum drawdown) were evaluated under each model's historical production universe and liquidity filter regime (e.g., legacy CSI 300 / dedicated high-liquidity stock pool). Different constituent universes diverge fundamentally in stock count, market capitalization, idiosyncratic volatility, and alpha capacity. <strong>These legacy metrics must not be compared across different asset pools</strong> (such as against the current <strong>${seasonMeta.title || 'Arena'}</strong> ${poolDesc}) or between models from different eras, and are preserved solely as archival baseline reference at retirement.`;
+                })()}
               </span>
             </div>
 
@@ -154,7 +159,7 @@ window.ContestantDetailView = {
               <div><span style="color: var(--text-muted);">Architecture:</span> <strong style="color: var(--text-primary);">${contestant.architecture_type || contestant.training_mode || 'Multi-Factor Ensemble'}</strong></div>
               <div><span style="color: var(--text-muted);">Family:</span> <strong style="color: var(--text-primary);">${contestant.lineage || contestant.family || 'Alpha Family'}</strong></div>
               <div><span style="color: var(--text-muted);">Historical Stock Pool:</span> <strong style="color: #fbbf24;">Legacy Production Pool</strong></div>
-              <div><span style="color: var(--text-muted);">Current Arena Pool:</span> <strong style="color: var(--brand-cyan);">${seasonMeta.universe_name || (seasonMeta.id === 'season_csi1000' ? 'CSI 1000 (~1,000 Stocks)' : 'Season 1 (246 Stocks)')}</strong></div>
+              <div><span style="color: var(--text-muted);">Current Arena Pool:</span> <strong style="color: var(--brand-cyan);">${seasonMeta.universe_name || (seasonMeta.id === 'season_csi500' ? 'CSI 500 (~500 Stocks)' : (seasonMeta.id === 'season_csi1000' ? 'CSI 1000 (~1,000 Stocks)' : 'Season 1 (246 Stocks)'))}</strong></div>
               <div><span style="color: var(--text-muted);">Training Cutoff:</span> <span style="color: var(--text-secondary); font-family: monospace;">${contestant.train_cutoff || '2026-06-26'}</span></div>
               <div><span style="color: var(--text-muted);">Burial Date:</span> <span style="color: var(--text-secondary); font-family: monospace;">${contestant.burial_date || contestant.retire_date || '2026-06-28'}</span></div>
               <div style="grid-column: span 2;"><span style="color: var(--text-muted);">Retirement Context:</span> <span style="color: var(--text-secondary);">${contestant.retire_reason || contestant.historical_role || 'Regular cycle retirement to evaluate out-of-sample decay.'}</span></div>
@@ -201,7 +206,7 @@ window.ContestantDetailView = {
               </div>
             </div>
             <div style="font-size: 12px; color: var(--text-secondary); background: rgba(0,0,0,0.2); padding: 10px 12px; border-radius: var(--radius-sm); line-height: 1.5;">
-              Evaluated across the <strong>${seasonMeta.universe_name || (seasonMeta.id === 'season_csi1000' ? 'CSI 1000 Universe (~1,000 Stocks)' : 'Season 1 Constituent Universe (246 Stocks)')}</strong> starting from zero on ${seasonMeta.anchor_date || "2026-07-03"} under ${seasonMeta.methodology?.capital_spec || "identical market conditions, CNY 500,000 cash, and 100-share trading lots"}.
+              Evaluated across the <strong>${seasonMeta.universe_name || (seasonMeta.id === 'season_csi500' ? 'CSI 500 Universe (~500 Stocks)' : (seasonMeta.id === 'season_csi1000' ? 'CSI 1000 Universe (~1,000 Stocks)' : 'Season 1 Constituent Universe (246 Stocks)'))}</strong> starting from zero on ${seasonMeta.anchor_date || "2026-07-03"} under ${seasonMeta.methodology?.capital_spec || "identical market conditions, CNY 500,000 cash, and 100-share trading lots"}.
             </div>
           </div>
         </div>

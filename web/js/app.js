@@ -186,6 +186,8 @@ window.ArenaApp = {
       bannerSpan.innerHTML = `⚡ <strong style="color: var(--text-secondary);">Season 2 Timeliness Proof:</strong> Two-Phase Friday Order Commitment (<code style="font-size: 10px; color: var(--brand-cyan);">SHA-256: e8b9f1a2...</code>) initialized on 2026-09-04. Unfalsifiable out-of-sample execution.`;
     } else if (seasonMeta.id === "season_csi1000") {
       bannerSpan.innerHTML = `🔬 <strong style="color: var(--text-secondary);">CSI 1000 Testbed Proof:</strong> 1,000 small-cap equities with 11,000 empirical random monkeys verified over 2026-07-03 ~ 2026-08-28. Unfalsifiable empirical null resolution.`;
+    } else if (seasonMeta.id === "season_csi500") {
+      bannerSpan.innerHTML = `🔬 <strong style="color: var(--text-secondary);">CSI 500 Testbed Proof:</strong> 500 mid-cap equities with 11,000 empirical random monkeys verified over 2026-07-03 ~ 2026-08-28. Unfalsifiable empirical null resolution.`;
     } else {
       bannerSpan.innerHTML = `🔐 <strong style="color: var(--text-secondary);">Proof of Timeliness:</strong> Next cycle (through 2026-09-04) cryptographically committed on 2026-09-05 (<code style="font-size: 10px; color: var(--brand-cyan);">SHA-256: 8fca6717...</code>). Public reveal embargoed until 2026-09-11.`;
     }
@@ -318,6 +320,7 @@ window.ArenaApp = {
     if (normalizedRoute === "zoo") normalizedRoute = "animals";
     if (normalizedRoute === "path") normalizedRoute = "path-detail";
     if (normalizedRoute === "archaeology") normalizedRoute = "decision-audit";
+    if (normalizedRoute === "contestant-detail") normalizedRoute = "contestants";
 
     return { route: normalizedRoute, params };
   },
@@ -366,21 +369,29 @@ window.ArenaApp = {
       if (el) el.style.display = "none";
     });
 
-    // Render active view
+    // Scroll to top upon route transition
+    window.scrollTo({ top: 0, behavior: "instant" });
+
+    // Render corresponding view component
     switch (route) {
-      case "intro":
+      case "landing":
         this.showView("view-landing");
         window.LandingView.render("view-landing");
         break;
 
+      case "dispatches":
+        this.showView("view-dispatches");
+        window.DispatchesView.render("view-dispatches");
+        break;
+
       case "overview":
         this.showView("view-overview");
-        window.OverviewView.render("view-overview", window.ArenaFilters.currentFilters);
+        window.OverviewView.render("view-overview");
         break;
 
       case "leaderboard":
         this.showView("view-leaderboard");
-        window.LeaderboardView.render("view-leaderboard", window.ArenaFilters.currentFilters);
+        window.LeaderboardView.render("view-leaderboard");
         break;
 
       case "animals":
@@ -391,13 +402,13 @@ window.ArenaApp = {
 
       case "path-detail":
         this.showView("view-path-detail");
-        const pathId = params.pathId || "CONTESTANT_B_robot";
+        const pathId = params.pathId || params.id || "CONTESTANT_B_robot";
         window.PathDetailView.render("view-path-detail", pathId);
         break;
 
       case "contestants":
         this.showView("view-contestant-detail");
-        const contestantId = params.contestantId || "CONTESTANT_A";
+        const contestantId = params.contestantId || params.id || "CONTESTANT_A";
         window.ContestantDetailView.render("view-contestant-detail", contestantId);
         break;
 

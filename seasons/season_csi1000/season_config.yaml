@@ -30,6 +30,9 @@ execution:
 universe:
   provider: "manifest_feature_universe"
   market: "csi1000"
+  name: "CSI 1000 Universe (~1,000 Stocks)"
+  market_benchmark_name: "CSI 1000"
+  market_benchmark_symbol: "SH000852"
   benchmark_index: "SH000852"
 
 # Enabled Benchmarks
@@ -45,7 +48,7 @@ benchmarks:
   - id: "csi1000"
     type: "INDEX"
     symbol: "SH000852"
-    display_name: "CSI 1000 (Market Benchmark)"
+    display_name: "CSI 1000"
   - id: "monkeys"
     type: "STATISTICAL"
     colony_size_per_spec: 1000

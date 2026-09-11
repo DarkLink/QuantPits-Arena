@@ -7,7 +7,7 @@ title: "QuantPits Arena Season CSI 500 (Mid-Cap Breadth Season)"
 status: ACTIVE
 description: "CSI 500 mid-cap universe benchmark: evaluating the 6 Alpha candidate models and 28 execution containers against CSI 500 (SH000905) benchmark"
 
-# Calendar and Horizon (Parallel Timeline with Season 1 & CSI 1000 for Direct Comparison)
+# Calendar and Horizon (Parallel Timeline with Season 1 for Direct Comparison)
 calendar:
   anchor_date: "2026-07-03"        # Retrospective calibration anchor (Friday close)
   first_trade_date: "2026-07-06"   # Monday market open entry
@@ -30,6 +30,9 @@ execution:
 universe:
   provider: "manifest_feature_universe"
   market: "csi500"
+  name: "CSI 500 Universe (~500 Stocks)"
+  market_benchmark_name: "CSI 500"
+  market_benchmark_symbol: "SH000905"
   benchmark_index: "SH000905"
 
 # Enabled Benchmarks
@@ -45,7 +48,7 @@ benchmarks:
   - id: "csi500"
     type: "INDEX"
     symbol: "SH000905"
-    display_name: "CSI 500 (Market Benchmark)"
+    display_name: "CSI 500"
   - id: "monkeys"
     type: "STATISTICAL"
     colony_size_per_spec: 1000

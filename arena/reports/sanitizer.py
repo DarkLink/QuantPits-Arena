@@ -437,7 +437,7 @@ class DualTierExporter:
         # 4. Market benchmark from universe definition or benchmarks list
         univ = raw_dict.get("universe", {})
         bench_symbol = "sh000300"
-        bench_name = "Market Benchmark"
+        bench_name = "CSI 300"
 
         # Check benchmarks list first
         bench_list = raw_dict.get("benchmarks", [])
@@ -448,9 +448,10 @@ class DualTierExporter:
                 break
         else:
             bench_symbol = univ.get("market_benchmark_symbol", univ.get("benchmark_index", "SH000300")).lower()
-            bench_name = univ.get("market_benchmark_name", "Market Benchmark")
+            bench_name = univ.get("market_benchmark_name", "CSI 300")
 
-        univ_name = univ.get("name", univ.get("market", "Benchmark Universe"))
+        bench_name = bench_name.replace("(Market Benchmark)", "").replace("()", "").strip()
+        univ_name = univ.get("name", univ.get("market", f"{bench_name} Universe"))
         univ_code = univ.get("code", univ.get("market", "universe"))
 
         bench_curve: List[float] = []
@@ -475,6 +476,7 @@ class DualTierExporter:
 
         if bench_curve:
             nav_series_map[f"BENCHMARK_{univ_code}"] = bench_curve
+            nav_series_map["BENCHMARK_market"] = bench_curve
             nav_series_map["BENCHMARK_csi300"] = bench_curve  # Fallback compatibility
 
         def _parse_pct(val: Any, default: float = 0.0) -> float:
@@ -628,28 +630,31 @@ class DualTierExporter:
                 "episodes": []
             }
 
+        meta_dict = {
+            "season_id": season_id,
+            "season_title": getattr(season_cfg, "title", season_id),
+            "season_subtitle": getattr(season_cfg, "description", ""),
+            "status": getattr(season_cfg, "status", "ACTIVE"),
+            "total_paths": len(path_records),
+            "total_contestants": len(contestants),
+            "csi300_return_pct": bench_ret,
+            "market_benchmark_name": bench_name,
+            "market_benchmark_code": bench_symbol.upper(),
+            "market_benchmark_return_pct": bench_ret,
+            "universe_name": univ_name,
+            "universe_code": univ_code,
+            "taotie_return_pct": taotie_tot_ret,
+            "ghost_taotie_return_pct": ghost_tot_ret,
+            "active_benchmarks": [bench_name, f"Taotie ({univ_code}) (500k)", f"Ghost Taotie ({univ_code}) (100M)", "1,000 Monkeys"],
+            "trading_days": len(nav_dates),
+            "preview": False,
+            "window_label": f"Evaluation Window: {nav_dates[0] if nav_dates else ''} ~ {nav_dates[-1] if nav_dates else ''}",
+            "period_label": f"Evaluation Window: {nav_dates[0] if nav_dates else ''} ~ {nav_dates[-1] if nav_dates else ''} ({len(nav_dates)} trading days)"
+        }
+
         web_payload = {
-            "meta": {
-                "season_id": season_id,
-                "season_title": getattr(season_cfg, "title", season_id),
-                "season_subtitle": getattr(season_cfg, "description", ""),
-                "status": getattr(season_cfg, "status", "ACTIVE"),
-                "total_paths": len(path_records),
-                "total_contestants": len(contestants),
-                "csi300_return_pct": bench_ret,
-                "market_benchmark_name": bench_name,
-                "market_benchmark_code": bench_symbol.upper(),
-                "market_benchmark_return_pct": bench_ret,
-                "universe_name": univ_name,
-                "universe_code": univ_code,
-                "taotie_return_pct": taotie_tot_ret,
-                "ghost_taotie_return_pct": ghost_tot_ret,
-                "active_benchmarks": [bench_name, f"Taotie ({univ_code}) (500k)", f"Ghost Taotie ({univ_code}) (100M)", "1,000 Monkeys"],
-                "trading_days": len(nav_dates),
-                "preview": False,
-                "window_label": f"Evaluation Window: {nav_dates[0] if nav_dates else ''} ~ {nav_dates[-1] if nav_dates else ''}",
-                "period_label": f"Evaluation Window: {nav_dates[0] if nav_dates else ''} ~ {nav_dates[-1] if nav_dates else ''} ({len(nav_dates)} trading days)"
-            },
+            "meta": meta_dict,
+            "metadata": meta_dict,
             "contestants": contestants,
             "paths": path_records,
             "nav_timeline": {
@@ -756,7 +761,7 @@ class DualTierExporter:
             return
 
         content = html_file.read_text(encoding="utf-8")
-        target_script = f'<script src="js/data/{season_id}.js?v=4.7"></script>'
+        target_script = f'<script src="js/data/{season_id}.js?v=4.8"></script>'
         if f'js/data/{season_id}.js' in content:
             return
 

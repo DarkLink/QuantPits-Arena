@@ -68,12 +68,18 @@ window.MethodologyView = {
 
           <div style="display: grid; grid-template-columns: repeat(${hasGhost ? '4' : '3'}, 1fr); gap: 14px; margin-bottom: 14px;">
             <div style="background: rgba(255, 255, 255, 0.02); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); display: flex; flex-direction: column;">
-              <strong style="color: var(--accent-amber); font-size: 13px; margin-bottom: 4px;">1. CSI 300 (Market Anchor)</strong>
+              <strong style="color: var(--accent-amber); font-size: 13px; margin-bottom: 4px;">1. ${(() => {
+                return (window.arenaAdapter && window.arenaAdapter.getMarketBenchmarkName) ? window.arenaAdapter.getMarketBenchmarkName() : "Market Benchmark";
+              })()} (Market Anchor)</strong>
               <span style="font-size: 11px; color: var(--text-tertiary); text-transform: uppercase; margin-bottom: 8px;">External Market Benchmark</span>
               <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.6; margin: 0;">
                 Answers: <i>"How did the broad external market perform during this period?"</i>
                 <br><br>
-                CSI 300 is a market-cap-weighted index (SH000300). Outperforming it reflects market-relative performance, but cannot be automatically interpreted as pure model-selection skill.
+                ${(() => {
+                  const mName = (window.arenaAdapter && window.arenaAdapter.getMarketBenchmarkName) ? window.arenaAdapter.getMarketBenchmarkName() : "Market Benchmark";
+                  const mCode = (window.arenaAdapter && window.arenaAdapter.getMarketBenchmarkCode) ? window.arenaAdapter.getMarketBenchmarkCode() : "SH000300";
+                  return `${mName} is a market-cap-weighted index (${mCode}). Outperforming it reflects market-relative performance, but cannot be automatically interpreted as pure model-selection skill.`;
+                })()}
               </p>
             </div>
 
@@ -111,7 +117,7 @@ window.MethodologyView = {
           </div>
 
           <div style="background: rgba(0, 0, 0, 0.25); padding: 12px 16px; border-radius: var(--radius-sm); font-size: 12px; color: var(--text-secondary); font-family: monospace; line-height: 1.7;">
-            CSI 300 &rarr; External Market Context (Market Anchor)<br>
+            ${(window.arenaAdapter && window.arenaAdapter.getMarketBenchmarkName) ? window.arenaAdapter.getMarketBenchmarkName() : "Market Benchmark"} &rarr; External Market Context (Market Anchor)<br>
             Taotie  &rarr; Executable Full-Universe Reference (CNY 500k, Small Capital Frictions)<br>
             ${hasGhost ? 'Ghost Taotie &rarr; Theoretical Full-Universe Reference (CNY 100M, Pure Unconstrained Equal-Weight)<br>' : ''}
             Matched Monkeys &rarr; Strategy-Specific Random-Ranking Null (Selection-Skill Arbiter)<br>

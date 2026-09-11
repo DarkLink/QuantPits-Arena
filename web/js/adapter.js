@@ -18,7 +18,8 @@ class ArenaDataAdapter {
       }
     }
     this.raw = rawData || window.ARENA_DATA || {};
-    this.metadata = this.raw.metadata || {};
+    this.metadata = this.raw.metadata || this.raw.meta || {};
+    this.meta = this.metadata;
     this.isPreview = !!this.metadata.preview || !!window._ARENA_IS_PREVIEW;
     this.contestants = this.raw.contestants || [];
     this.paths = this.raw.paths || [];
@@ -365,7 +366,9 @@ class ArenaDataAdapter {
   }
 
   getMarketBenchmarkName() {
-    return this.metadata.market_benchmark_name || "CSI 300";
+    let name = this.metadata.market_benchmark_name || "CSI 300";
+    name = name.replace(/\s*\(Market Benchmark\)/i, "").replace(/\(\)/g, "").trim();
+    return name || "CSI 300";
   }
 
   getMarketBenchmarkCode() {
@@ -381,7 +384,10 @@ class ArenaDataAdapter {
 
   getBenchmarkMarketCurve() {
     if (this.navTimeline && this.navTimeline.curves) {
+      const code = (this.metadata.universe_code || "").toLowerCase();
+      if (code && this.navTimeline.curves[`BENCHMARK_${code}`]) return this.navTimeline.curves[`BENCHMARK_${code}`];
       if (this.navTimeline.curves["BENCHMARK_market"]) return this.navTimeline.curves["BENCHMARK_market"];
+      if (this.navTimeline.curves["BENCHMARK_csi500"]) return this.navTimeline.curves["BENCHMARK_csi500"];
       if (this.navTimeline.curves["BENCHMARK_csi1000"]) return this.navTimeline.curves["BENCHMARK_csi1000"];
       if (this.navTimeline.curves["BENCHMARK_csi300"]) return this.navTimeline.curves["BENCHMARK_csi300"];
     }
@@ -390,7 +396,10 @@ class ArenaDataAdapter {
 
   getMarketDrawdown() {
     if (this.navTimeline && this.navTimeline.drawdowns) {
+      const code = (this.metadata.universe_code || "").toLowerCase();
+      if (code && this.navTimeline.drawdowns[`BENCHMARK_${code}`]) return this.navTimeline.drawdowns[`BENCHMARK_${code}`];
       if (this.navTimeline.drawdowns["BENCHMARK_market"]) return this.navTimeline.drawdowns["BENCHMARK_market"];
+      if (this.navTimeline.drawdowns["BENCHMARK_csi500"]) return this.navTimeline.drawdowns["BENCHMARK_csi500"];
       if (this.navTimeline.drawdowns["BENCHMARK_csi1000"]) return this.navTimeline.drawdowns["BENCHMARK_csi1000"];
       if (this.navTimeline.drawdowns["BENCHMARK_csi300"]) return this.navTimeline.drawdowns["BENCHMARK_csi300"];
     }
@@ -562,9 +571,10 @@ class ArenaDataAdapter {
       });
     }
 
+    const mName = this.getMarketBenchmarkName();
     list.push({
       id: "BENCHMARK_csi300",
-      name: "CSI 300 (Market Benchmark)",
+      name: `${mName} (Market Benchmark)`,
       isBenchmark: true,
       tag: "Market Anchor"
     });
@@ -613,15 +623,16 @@ class ArenaDataAdapter {
       };
     }
 
-    if (subjectId === "BENCHMARK_csi300" || subjectId === "csi300") {
+    if (subjectId === "BENCHMARK_csi300" || subjectId === "csi300" || subjectId === "BENCHMARK_market") {
       const curve = this.getBenchmarkCsi300Curve();
       const dd = this.getCsi300Drawdown();
       const minDd = dd && dd.length ? Math.min(...dd) * 100 : 0;
       const lastVal = curve && curve.length ? curve[curve.length - 1] : 1.0;
+      const mName = this.getMarketBenchmarkName();
       return {
         id: "BENCHMARK_csi300",
-        name: "CSI 300 (Market Benchmark)",
-        shortName: "CSI 300",
+        name: `${mName} (Market Benchmark)`,
+        shortName: mName,
         isBenchmark: true,
         tag: "Market Anchor",
         curve: curve,
@@ -832,7 +843,8 @@ class ArenaDataAdapter {
     if (sid === "season_1") sid = "season_01";
     if (sid === "season_2") sid = "season_02";
     const seasons = window.ARENA_SEASONS_INDEX || [];
-    return seasons.find(s => s.id === sid) || seasons[0] || {};
+    const fromIndex = seasons.find(s => s.id === sid) || {};
+    return { ...this.metadata, ...fromIndex, id: sid };
   }
 
   getDispatchesData() {

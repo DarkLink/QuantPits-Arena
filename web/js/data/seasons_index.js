@@ -85,8 +85,8 @@ window.ARENA_SEASONS_INDEX = [
   },
   {
     "id": "season_csi500",
-    "title": "QuantPits Arena Season CSI 500 (Mid-Cap Breadth Season)",
-    "short_title": "csi500",
+    "title": "Season CSI 500: Mid-Cap Breadth Arena",
+    "short_title": "CSI 500",
     "status": "ACTIVE",
     "badge_type": "active",
     "period": "2026.07 - 2026.08",
@@ -96,23 +96,23 @@ window.ARENA_SEASONS_INDEX = [
     "contestants_count": 6,
     "animals_count": 28,
     "benchmarks": [
-      "CSI 500 (Market Benchmark)",
-      "Taotie (csi500) (500k)",
-      "Ghost Taotie (csi500) (100M)",
+      "CSI 500",
+      "Taotie 500 (500k)",
+      "Ghost Taotie 500 (100M)",
       "1,000 Monkeys"
     ],
-    "description": "CSI 500 mid-cap universe benchmark: evaluating the 6 Alpha candidate models and 28 execution containers against CSI 500 (SH000905) benchmark",
+    "description": "CSI 500 mid-cap universe testbed (SH000905 benchmark) evaluating the 6 candidate models across 28 execution containers.",
     "dispatches_banner": {
-      "tag": "🔬 season_csi500 Arena",
-      "title": "QuantPits Arena Season CSI 500 (Mid-Cap Breadth Season) Active Evaluation.",
+      "tag": "🔬 Season CSI 500 Arena",
+      "title": "CSI 500 Mid-Cap Calibration Active: Evaluating Alpha Breadth in Liquid Mid-Caps.",
       "link": "#dispatches",
-      "link_text": "Read season_csi500 Dispatches &rarr;"
+      "link_text": "Read CSI 500 Dispatches &rarr;"
     },
     "methodology": {
-      "framework_name": "csi500 Empirical Evaluation",
+      "framework_name": "CSI 500 Mid-Cap Empirical Evaluation",
       "anchor_spec": "Parallel Calibration Anchor (2026-07-03 Initiation)",
-      "capital_spec": "CNY 500,000 baseline capital with 100-share trading lots",
-      "benchmarks_summary": "Market Index (CSI 500 (Market Benchmark)) + Taotie + Ghost Taotie (100M) + 1,000 Matched Monkeys",
+      "capital_spec": "CNY 500,000 baseline cash with 100-share trading lots over 500 constituent stocks",
+      "benchmarks_summary": "CSI 500 Tripartite System: CSI 500 Index (SH000905 Beta) + Taotie 500 + Ghost Taotie 500 (100M) + 1,000 Matched Monkeys",
       "execution_flow": "Weekly Rebalance, Monday Open Execution, Daily Marked-to-Market"
     }
   }

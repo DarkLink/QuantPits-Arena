@@ -1676,25 +1676,24 @@ window.ArenaCharts = {
 
       if (isGhost) {
         s.lineStyle = {
-          width: 3,
-          type: "dashDot",
+          width: 2.2,
+          type: [8, 4],
           color: "#00f0ff",
-          shadowBlur: 10,
-          shadowColor: "rgba(0, 240, 255, 0.4)"
+          opacity: 0.95
         };
       } else if (isTaotie) {
         s.lineStyle = {
-          width: 2.8,
-          type: "solid",
+          width: 2.2,
+          type: [4, 4],
           color: "#c084fc",
-          shadowBlur: 6,
-          shadowColor: "rgba(192, 132, 252, 0.3)"
+          opacity: 0.95
         };
       } else if (isCsi) {
         s.lineStyle = {
-          width: 2,
-          type: "dashed",
-          color: "#f59e0b"
+          width: 2.0,
+          type: [6, 6],
+          color: "#f59e0b",
+          opacity: 0.95
         };
       } else if (isZero) {
         s.lineStyle = {

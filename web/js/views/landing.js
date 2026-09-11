@@ -95,9 +95,15 @@ window.LandingView = {
 
         <div class="concept-card">
           <div class="concept-icon">🏛️</div>
-          <h3>${hasGhost ? 'Taotie, Ghost &amp; CSI 300' : 'Taotie &amp; CSI 300'}</h3>
+          <h3>${(() => {
+            const mBmName = (window.arenaAdapter && window.arenaAdapter.getMarketBenchmarkName) ? window.arenaAdapter.getMarketBenchmarkName() : "Market Benchmark";
+            return hasGhost ? `Taotie, Ghost &amp; ${mBmName}` : `Taotie &amp; ${mBmName}`;
+          })()}</h3>
           <p style="font-size:0.88rem; color:var(--text-secondary);">
-            ${hasGhost ? 'Triple reference standards: Executable Taotie (CNY 500k), Theoretical Ghost Taotie (CNY 100M unconstrained), and CSI 300 (external broad market anchor).' : 'Dual reference standards: Taotie (executable universe benchmark under capital &amp; lot frictions) and CSI 300 (external broad market anchor).'}
+            ${(() => {
+              const mBmName = (window.arenaAdapter && window.arenaAdapter.getMarketBenchmarkName) ? window.arenaAdapter.getMarketBenchmarkName() : "Market Benchmark";
+              return hasGhost ? `Triple reference standards: Executable Taotie (CNY 500k), Theoretical Ghost Taotie (CNY 100M unconstrained), and ${mBmName} (external broad market anchor).` : `Dual reference standards: Taotie (executable universe benchmark under capital &amp; lot frictions) and ${mBmName} (external broad market anchor).`;
+            })()}
           </p>
           <a href="#overview" style="font-size:0.84rem; font-weight:600; margin-top:auto; color:var(--accent-cyan);">Compare Benchmarks &rarr;</a>
         </div>
