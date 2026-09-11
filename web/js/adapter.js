@@ -11,7 +11,6 @@ class ArenaDataAdapter {
         rawData = window.ARENA_SEASONS_DATA[activeSid];
       } else if (window.ARENA_DATA_PREVIEW) {
         window.ARENA_DATA = window.ARENA_DATA_PREVIEW;
-        window._ARENA_IS_PREVIEW = true;
         rawData = window.ARENA_DATA_PREVIEW;
       } else {
         rawData = window.ARENA_DATA;
@@ -20,7 +19,7 @@ class ArenaDataAdapter {
     this.raw = rawData || window.ARENA_DATA || {};
     this.metadata = this.raw.metadata || this.raw.meta || {};
     this.meta = this.metadata;
-    this.isPreview = !!this.metadata.preview || !!window._ARENA_IS_PREVIEW;
+    this.isPreview = !!this.metadata.preview;
     this.contestants = this.raw.contestants || [];
     this.paths = this.raw.paths || [];
     this.navTimeline = this.raw.nav_timeline || { dates: [], curves: {} };

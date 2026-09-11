@@ -45,14 +45,14 @@
       s1.metadata.universe_name = "Season 1 Constituent Universe (246 Stocks)";
       s1.metadata.universe_code = "csirun300";
       s1.metadata.testbed_desc = "246-stock high-liquidity testbed";
-      s1.metadata.timeliness_proof = "🔐 <strong style=\"color: var(--text-secondary);\">Proof of Timeliness:</strong> Next cycle (through 2026-09-04) cryptographically committed on 2026-09-05 (<code style=\"font-size: 10px; color: var(--brand-cyan);\">SHA-256: 8fca6717...</code>). Public reveal embargoed until 2026-09-11.";
+      s1.metadata.timeliness_proof = "🔬 <strong style=\"color: var(--text-secondary);\">Season 1 Testbed Proof:</strong> 246 constituent universe with 1,000 empirical random monkeys verified over 2026-07-03 ~ 2026-09-04. Unfalsifiable empirical null resolution.";
       s1.metadata.active_benchmarks = [
         "CSI 300",
         "Taotie (csirun300) (500k)",
         "Ghost Taotie (csirun300) (100M)",
         "1,000 Monkeys"
       ];
-      s1.metadata.preview = !!s1.metadata.preview;
+      s1.metadata.preview = false;
       s1.metadata.window_label = "Evaluation Window: 2026-07-03 ~ " + effectiveEndDate;
       s1.metadata.period_label = "Evaluation Window: 2026-07-03 ~ " + effectiveEndDate + " (" + effectiveDays + " trading days)";
       s1.meta = s1.metadata;

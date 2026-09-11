@@ -11,7 +11,7 @@ description: "Season 1 baseline tournament: 6 contestant models x 29 zoo paramet
 calendar:
   anchor_date: "2026-07-03"        # Friday close initial decision cutoff (T=0)
   first_trade_date: "2026-07-06"   # Monday market open entry
-  end_date: "2026-08-28"           # Data cutoff Friday settlement
+  end_date: "2026-09-04"           # Data cutoff Friday settlement
   cycle_freq: "weekly"
 
 # Account and Match Execution Parameters

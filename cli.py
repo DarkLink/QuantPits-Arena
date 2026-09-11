@@ -177,13 +177,13 @@ def cmd_run(args):
 
 def cmd_step(args):
     """从上周快照状态继续往后滚动推进 1 个周期 (Rolling Incremental Weekly Execution)"""
-    run_id = args.run_id
-    if not run_id:
-        print("[ERROR] 必须指定 --run-id 才能恢复历史快照并推进！")
-        sys.exit(1)
+    season_id = getattr(args, "season", "season_01")
+    season_cfg = SeasonManager.get_season_config(season_id)
 
+    run_id = args.run_id or f"{season_id}_run"
     base_dir = Path(args.output) if args.output else RUNS_DIR
-    cp_dir = base_dir / run_id / "checkpoints"
+    run_dir = base_dir / run_id
+    cp_dir = run_dir / "checkpoints"
     latest_path = cp_dir / "latest_state.pkl"
 
     if not latest_path.exists():
@@ -191,20 +191,27 @@ def cmd_step(args):
         print("        请先执行一次完整或冷启动回测生成初始快照 (cli.py run --cycles 1 ...)")
         sys.exit(1)
 
+    anchor_date = args.anchor_date if args.anchor_date != DEFAULT_ANCHOR_DATE else season_cfg.anchor_date
+    end_date = args.end_date if args.end_date != DEFAULT_END_DATE else season_cfg.end_date
+    initial_cash = args.initial_cash if args.initial_cash != 500_000.0 else season_cfg.initial_cash
+
     calendar = TradingCalendar()
     registry = ContestantRegistry()
 
     runner = WeeklyCycleRunner(
-        anchor_date=args.anchor_date,
-        end_date=args.end_date,
-        initial_cash=args.initial_cash,
+        anchor_date=anchor_date,
+        end_date=end_date,
+        initial_cash=initial_cash,
         mock_mode=args.mock,
         calendar=calendar,
-        registry=registry
+        registry=registry,
+        season_id=season_id,
+        run_dir=run_dir
     )
 
     print("\n" + "=" * 70)
     print(f" ⏩ 启动 QuantPits-Arena 按周增量滚动推进: {run_id}")
+    print(f"    赛季: [{season_cfg.season_id}] {season_cfg.title}")
     print(f"    读取快照: {latest_path}")
     runner.load_checkpoint_from_disk(latest_path)
     print(f"    已恢复至周期: Cycle {runner.last_completed_cycle_idx}")
@@ -250,6 +257,7 @@ def cmd_step(args):
         for key, engine in runner.engines.items()
     }
     results[("BENCHMARK", "taotie")] = runner.taotie_benchmark.engine.to_portfolio_path()
+    results[("BENCHMARK", "ghost_taotie")] = runner.ghost_taotie_benchmark.engine.to_portfolio_path()
 
     exporter = DualTierExporter(run_id=run_id, base_dir=base_dir)
     artifacts = exporter.export(results, registry)

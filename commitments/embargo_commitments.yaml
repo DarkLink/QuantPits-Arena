@@ -9,7 +9,7 @@ policy:
   holdings_orders_embargo_weeks: 4
   evaluation_horizon: '2026-09-04'
   unlocked_boundary_date: '2026-08-07'
-last_updated: '2026-09-11T22:09:59.262458+08:00'
+last_updated: '2026-09-11T22:40:58.723839+08:00'
 commitments:
 - cycle_id: cycle_1
   trade_date: '2026-07-06'
@@ -58,4 +58,10 @@ commitments:
   status: EMBARGOED
   orders_sha256: cc97ccf396e9df7333addaf0d5f613b0a9ec88f9e617b82df85b8d2801554cd0
   total_orders: 1560
+  manifest_file: (embargoed)
+- cycle_id: cycle_9
+  trade_date: '2026-08-31'
+  status: EMBARGOED
+  orders_sha256: f524feed68e695b489a567b4b3fcaded3daa2dc0e2a9240323b40d0acf8534d2
+  total_orders: 1549
   manifest_file: (embargoed)

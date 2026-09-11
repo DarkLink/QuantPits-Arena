@@ -250,7 +250,7 @@ window.ArenaApp = {
 
   updatePreviewBanner() {
     const banner = document.getElementById("arena-preview-watermark-bar");
-    const isPreview = window._ARENA_IS_PREVIEW || (window.arenaAdapter && window.arenaAdapter.isPreviewMode && window.arenaAdapter.isPreviewMode());
+    const isPreview = window.arenaAdapter && window.arenaAdapter.isPreviewMode && window.arenaAdapter.isPreviewMode();
     const seasonMeta = window.arenaAdapter ? window.arenaAdapter.getCurrentSeasonMeta() : {};
     const isS2Draft = seasonMeta.status === "DRAFT";
 

@@ -11,7 +11,7 @@ description: "CSI 500 mid-cap universe benchmark: evaluating the 6 Alpha candida
 calendar:
   anchor_date: "2026-07-03"        # Retrospective calibration anchor (Friday close)
   first_trade_date: "2026-07-06"   # Monday market open entry
-  end_date: "2026-08-28"           # Tournament evaluation horizon
+  end_date: "2026-09-04"           # Tournament evaluation horizon
   cycle_freq: "weekly"
 
 # Account and Match Execution Parameters
@@ -36,7 +36,7 @@ universe:
   testbed_desc: "500-stock mid-cap testbed"
 
 banner:
-  proof_text: "🔬 <strong style=\"color: var(--text-secondary);\">CSI 500 Testbed Proof:</strong> 500 mid-cap equities with 11,000 empirical random monkeys verified over 2026-07-03 ~ 2026-08-28. Unfalsifiable empirical null resolution."
+  proof_text: "🔬 <strong style=\"color: var(--text-secondary);\">CSI 500 Testbed Proof:</strong> 500 mid-cap equities with 11,000 empirical random monkeys verified over 2026-07-03 ~ 2026-09-04. Unfalsifiable empirical null resolution."
 
 # Enabled Benchmarks
 benchmarks:
