@@ -115,6 +115,39 @@ window.ARENA_SEASONS_INDEX = [
       "benchmarks_summary": "CSI 500 Tripartite System: CSI 500 Index (SH000905 Beta) + Taotie 500 + Ghost Taotie 500 (100M) + 1,000 Matched Monkeys",
       "execution_flow": "Weekly Rebalance, Monday Open Execution, Daily Marked-to-Market"
     }
+  },
+  {
+    "id": "season_csi800",
+    "title": "QuantPits Arena Season CSI 800 (Broad-Cap Breadth Season)",
+    "short_title": "CSI 800 Universe (~800 Stocks)",
+    "status": "ACTIVE",
+    "badge_type": "active",
+    "period": "2026.07 - 2026.08",
+    "anchor_date": "2026-07-03",
+    "end_date": "2026-08-28",
+    "trading_days": 41,
+    "contestants_count": 6,
+    "animals_count": 28,
+    "benchmarks": [
+      "CSI 800",
+      "Taotie (csi800) (500k)",
+      "Ghost Taotie (csi800) (100M)",
+      "1,000 Monkeys"
+    ],
+    "description": "CSI 800 broad-cap universe benchmark: evaluating the 6 Alpha candidate models and 28 execution containers against CSI 800 (SH000906) benchmark",
+    "dispatches_banner": {
+      "tag": "🔬 season_csi800 Arena",
+      "title": "QuantPits Arena Season CSI 800 (Broad-Cap Breadth Season) Active Evaluation.",
+      "link": "#dispatches",
+      "link_text": "Read season_csi800 Dispatches &rarr;"
+    },
+    "methodology": {
+      "framework_name": "CSI 800 Universe (~800 Stocks) Empirical Evaluation",
+      "anchor_spec": "Parallel Calibration Anchor (2026-07-03 Initiation)",
+      "capital_spec": "CNY 500,000 baseline capital with 100-share trading lots",
+      "benchmarks_summary": "Market Index (CSI 800) + Taotie + Ghost Taotie (100M) + 1,000 Matched Monkeys",
+      "execution_flow": "Weekly Rebalance, Monday Open Execution, Daily Marked-to-Market"
+    }
   }
 ];
 

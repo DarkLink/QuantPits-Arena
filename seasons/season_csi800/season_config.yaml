@@ -1,0 +1,58 @@
+# ==============================================================================
+# QuantPits-Arena Season CSI 800 Configuration (season_config.yaml)
+# ==============================================================================
+
+season_id: season_csi800
+title: "QuantPits Arena Season CSI 800 (Broad-Cap Breadth Season)"
+status: ACTIVE
+description: "CSI 800 broad-cap universe benchmark: evaluating the 6 Alpha candidate models and 28 execution containers against CSI 800 (SH000906) benchmark"
+
+# Calendar and Horizon (Parallel Timeline with Season 1 for Direct Comparison)
+calendar:
+  anchor_date: "2026-07-03"        # Retrospective calibration anchor (Friday close)
+  first_trade_date: "2026-07-06"   # Monday market open entry
+  end_date: "2026-08-28"           # Tournament evaluation horizon
+  cycle_freq: "weekly"
+
+# Account and Match Execution Parameters
+execution:
+  initial_cash: 500000.0           # Standard baseline capital: CNY 500,000
+  deal_price_mode: "open"          # Monday open execution
+  lot_size: 100                    # 100 shares per lot
+  allow_fractional_shares: false
+  open_cost: 0.0005
+  close_cost: 0.0015
+  min_cost: 5.0
+  topk: 22
+  n_drop: 3
+
+# Universe Definition
+universe:
+  provider: "manifest_feature_universe"
+  market: "csi800"
+  name: "CSI 800 Universe (~800 Stocks)"
+  market_benchmark_name: "CSI 800"
+  market_benchmark_symbol: "SH000906"
+  benchmark_index: "SH000906"
+  testbed_desc: "800-stock broad-cap testbed"
+
+banner:
+  proof_text: "🔬 <strong style=\"color: var(--text-secondary);\">CSI 800 Testbed Proof:</strong> 800 broad-cap equities with 11,000 empirical random monkeys verified over 2026-07-03 ~ 2026-08-28. Unfalsifiable empirical null resolution."
+
+# Enabled Benchmarks
+benchmarks:
+  - id: "taotie"
+    type: "EXECUTABLE"
+    initial_cash: 500000.0
+    display_name: "Taotie 800 (CSI 800 Executable 500k)"
+  - id: "ghost_taotie"
+    type: "THEORETICAL"
+    initial_cash: 100000000.0      # Institutional CNY 100M capital
+    display_name: "Ghost Taotie 800 (Theoretical Equal-Weight 100M)"
+  - id: "csi800"
+    type: "INDEX"
+    symbol: "SH000906"
+    display_name: "CSI 800"
+  - id: "monkeys"
+    type: "STATISTICAL"
+    colony_size_per_spec: 1000
