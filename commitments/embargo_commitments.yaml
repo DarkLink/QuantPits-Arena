@@ -1,24 +1,61 @@
 title: QuantPits-Arena Timeliness & Anti-Tampering Commitments
 protocol: Commit-and-Reveal Protocol (Git SHA-256 Proof-of-Timeliness)
-description: Cryptographic proofs that out-of-sample orders and holdings were frozen before execution.
+description: Cryptographic proofs that out-of-sample orders and holdings were frozen
+  before execution.
 policy:
   model_status: Historical research candidate models (Non-live / Non-production)
-  nav_release_schedule: Weekly targeting before Monday open (Best-effort, no hard guarantee)
+  nav_release_schedule: Weekly targeting before Monday open (Best-effort, no hard
+    guarantee)
   holdings_orders_embargo_weeks: 4
-last_updated: '2026-09-05T23:42:07+08:00'
+  evaluation_horizon: '2026-09-04'
+  unlocked_boundary_date: '2026-08-07'
+last_updated: '2026-09-11T22:09:59.262458+08:00'
 commitments:
-- cycle_id: cycle_9
-  evaluation_window: 2026-07-03 ~ 2026-09-04
-  cutoff_date: '2026-09-04'
-  trading_days: 46
-  embargo_until: '2026-09-11'
-  committed_at: '2026-09-05T23:42:07+08:00'
+- cycle_id: cycle_1
+  trade_date: '2026-07-06'
+  status: UNLOCKED
+  orders_sha256: 3738797bd250efd0b2f82bf6035778ab4dda235bdb0a098735f62be8d155b7fa
+  total_orders: 4765
+  manifest_file: data/orders/season_01/cycle_1_orders.json
+- cycle_id: cycle_2
+  trade_date: '2026-07-13'
+  status: UNLOCKED
+  orders_sha256: b8b051c1ffa65708351fc6a10e9422f510e34424e7a17864feda764dfef37c51
+  total_orders: 1445
+  manifest_file: data/orders/season_01/cycle_2_orders.json
+- cycle_id: cycle_3
+  trade_date: '2026-07-20'
+  status: UNLOCKED
+  orders_sha256: 9c9720d9f5dc52eb03322f1f95d3e16a649cd103a0af0dd8b79b559910f692f0
+  total_orders: 1502
+  manifest_file: data/orders/season_01/cycle_3_orders.json
+- cycle_id: cycle_4
+  trade_date: '2026-07-27'
+  status: UNLOCKED
+  orders_sha256: 25cc0d3a384dee33518bee4503c6cc669c99e60e07e8b64a7111418459b8d244
+  total_orders: 1579
+  manifest_file: data/orders/season_01/cycle_4_orders.json
+- cycle_id: cycle_5
+  trade_date: '2026-08-03'
+  status: UNLOCKED
+  orders_sha256: 4da2374b47a4645888bdc814ba7e2a36c348c293cbf0f7c4b6af011b6d6ba901
+  total_orders: 1646
+  manifest_file: data/orders/season_01/cycle_5_orders.json
+- cycle_id: cycle_6
+  trade_date: '2026-08-10'
   status: EMBARGOED
-  merkle_root: d1c75e327dbcf0115eb8505df15167c132ec04be66096e1f759144ae461298f8
-  sha256_digests:
-    daily_nav_curves_csv: 8fca671724178338a9a11c871fe21fe00c0373cfd2a294ed941678a63373db00
-    summary_metrics_csv: 51c40f2e1147d5f48dcaed5b8ff8299ab5d0d127c939c0c55f2de442241c3265
-    model_animal_matrix_csv: 2bad9213817fe4a93caf35138625a60d892b69d9d60f9aa264ecad28ff9fc86c
-    monkey_null_distributions_csv: ed219c1ea0a21da67c536f929b13897f6b5ae9739d909555fd90e32e3dfe3ac6
-    arena_data_preview_js: 3f10abff3e8ae2563f728f22351e96cf1ef6e75af886d67bc2fd2f48b618aa9b
-  verification_command: python3 scripts/verify_commitment.py --cycle cycle_9
+  orders_sha256: 43c0a9351dc113757ab7048a7e85a22a1a96e83dc1dfc5bcfe1a51bbaaad061e
+  total_orders: 1606
+  manifest_file: (embargoed)
+- cycle_id: cycle_7
+  trade_date: '2026-08-17'
+  status: EMBARGOED
+  orders_sha256: 27cde366fbc5fa2bc10620737a7e98be312e3e2dacc5a1a7d700b2fdb6c5a13f
+  total_orders: 1582
+  manifest_file: (embargoed)
+- cycle_id: cycle_8
+  trade_date: '2026-08-24'
+  status: EMBARGOED
+  orders_sha256: cc97ccf396e9df7333addaf0d5f613b0a9ec88f9e617b82df85b8d2801554cd0
+  total_orders: 1560
+  manifest_file: (embargoed)

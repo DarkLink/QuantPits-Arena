@@ -42,88 +42,54 @@ def verify(cycle_id: str = None, run_dir: Path = None):
         print("[FAIL] 承诺注册清单为空！")
         sys.exit(1)
 
-    # Pick target commitment
-    if cycle_id:
-        target = next((c for c in commitments if c.get("cycle_id") == cycle_id), None)
-        if not target:
-            print(f"[FAIL] 清单中未找到周期为 {cycle_id} 的承诺！")
-            sys.exit(1)
-    else:
-        target = commitments[-1]
-
     print("=" * 70)
-    print(f" 🔍 QuantPits-Arena 密码学承诺可信核验 (Commitment Verification)")
-    print(f"    核验周期: {target['cycle_id']} ({target['evaluation_window']})")
-    print(f"    承诺提交时间: {target['committed_at']}")
-    print(f"    解禁解锁日期: {target['embargo_until']}")
+    print(" 🔍 QuantPits-Arena 密码学承诺可信核验 (Commitment Verification)")
+    policy = doc.get("policy", {})
+    if policy:
+        print(f"    评测基准截止日: {policy.get('evaluation_horizon')} | 解锁边界: <= {policy.get('unlocked_boundary_date')}")
+        print(f"    模型状态: {policy.get('model_status')}")
     print("=" * 70)
 
-    # Determine which run dir to inspect
-    if run_dir is None:
-        # Check standard paths in order
-        candidates = [
-            REPO_ROOT / "runs" / "preview_tournament_0904",
-            REPO_ROOT / "runs" / "tournament_real_1000_monkeys",
-        ]
-        for c in candidates:
-            if c.exists() and (c / "public" / "daily_nav_curves.csv").exists():
-                run_dir = c
-                break
-
-    if not run_dir or not run_dir.exists():
-        print("[FAIL] 未找到待核验的目标回测产物目录！")
+    targets = [c for c in commitments if c.get("cycle_id") == cycle_id] if cycle_id else commitments
+    if not targets:
+        print(f"[FAIL] 清单中未找到周期为 {cycle_id} 的承诺！")
         sys.exit(1)
 
-    print(f"[*] 检查目标目录: {run_dir.relative_to(REPO_ROOT)}")
-
-    pub = run_dir / "public"
-    files_to_check = {
-        "daily_nav_curves.csv": pub / "daily_nav_curves.csv",
-        "summary_metrics.csv": pub / "summary_metrics.csv",
-        "model_animal_matrix.csv": pub / "model_animal_matrix.csv",
-        "monkey_null_distributions.csv": pub / "monkey_null_distributions.csv",
-    }
-
-    expected_digests = target.get("sha256_digests", {})
     all_matched = True
 
-    for name, fpath in files_to_check.items():
-        key = name.replace(".", "_")
-        expected_hash = expected_digests.get(key)
-        if not expected_hash:
-            continue
+    for target in targets:
+        cid = target.get("cycle_id")
+        status = target.get("status")
+        expected_hash = target.get("orders_sha256")
+        manifest_rel = target.get("manifest_file")
+        t_date = target.get("trade_date")
 
-        if not fpath.exists():
-            print(f" ❌ [MISSING] {name}: 文件不存在")
-            all_matched = False
-            continue
+        if status == "UNLOCKED":
+            manifest_path = REPO_ROOT / manifest_rel
+            if not manifest_path.exists():
+                print(f" ❌ [MISSING] {cid} ({t_date}): 目标明细文件不存在 -> {manifest_rel}")
+                all_matched = False
+                continue
 
-        actual_hash = sha256_file(fpath)
-        if actual_hash == expected_hash:
-            print(f" ✅ [MATCH] {name}: SHA-256 吻合 ({actual_hash[:16]}...)")
+            with open(manifest_path, "rb") as f:
+                actual_hash = hashlib.sha256(f.read()).hexdigest()
+
+            if actual_hash == expected_hash:
+                print(f" ✅ [MATCH] {cid} ({t_date}) [UNLOCKED]: SHA-256 吻合 ({actual_hash[:16]}...) -> {manifest_rel}")
+            else:
+                print(f" ❌ [MISMATCH] {cid} ({t_date}): 哈希不匹配！预期 {expected_hash[:16]}... 实际 {actual_hash[:16]}...")
+                all_matched = False
         else:
-            print(f" ❌ [MISMATCH] {name}: 哈希不匹配！")
-            all_matched = False
-
-    # Check arena_data_preview.js if present
-    preview_js = REPO_ROOT / "web" / "js" / "data" / "arena_data_preview.js"
-    if "arena_data_preview_js" in expected_digests and preview_js.exists():
-        exp = expected_digests["arena_data_preview_js"]
-        act = sha256_file(preview_js)
-        if exp == act:
-            print(f" ✅ [MATCH] arena_data_preview.js: SHA-256 吻合 ({act[:16]}...)")
-        else:
-            print(f" ❌ [MISMATCH] arena_data_preview.js: 哈希不匹配！")
-            all_matched = False
+            print(f" 🔒 [EMBARGOED] {cid} ({t_date}): 处于4周保护期内，仅公开Git存证哈希 ({expected_hash[:16]}...)")
 
     print("-" * 70)
     if all_matched:
         print(" 🎉 [VERIFIED] 密码学核验 100% 成功通过！")
-        print(f"    该结果数学证明在 {target['committed_at']} 前已完全冻结，绝无事后修改或过拟合。")
+        print("    已解锁周期的明细哈希与 Git 存证完全一致，未解锁周期已锁定哈希防篡改。")
         print("=" * 70 + "\n")
         sys.exit(0)
     else:
-        print(" ⚠️ [FAIL] 密码学核验失败：文件与此前承诺指纹不一致！")
+        print(" ⚠️ [FAIL] 密码学核验失败：发现不匹配项！")
         print("=" * 70 + "\n")
         sys.exit(1)
 
