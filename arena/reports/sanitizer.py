@@ -637,6 +637,8 @@ class DualTierExporter:
             f"Unfalsifiable empirical null resolution."
         )
 
+        taotie_cash = getattr(season_cfg, "get_benchmark_initial_cash", lambda b, d=500000.0: d)("taotie", 500000.0)
+
         meta_dict = {
             "season_id": season_id,
             "season_title": getattr(season_cfg, "title", season_id),
@@ -654,7 +656,12 @@ class DualTierExporter:
             "timeliness_proof": timeliness_proof,
             "taotie_return_pct": taotie_tot_ret,
             "ghost_taotie_return_pct": ghost_tot_ret,
-            "active_benchmarks": [bench_name, f"Taotie ({univ_code}) (500k)", f"Ghost Taotie ({univ_code}) (100M)", "1,000 Monkeys"],
+            "active_benchmarks": [
+                bench_name,
+                f"Taotie ({univ_code}) ({f'{taotie_cash / 1e6:.1f}'.rstrip('0').rstrip('.') + 'M' if taotie_cash >= 1e6 else f'{int(taotie_cash / 1e3)}k'})",
+                f"Ghost Taotie ({univ_code}) (100M)",
+                "1,000 Monkeys"
+            ],
             "trading_days": len(nav_dates),
             "preview": False,
             "window_label": f"Evaluation Window: {nav_dates[0] if nav_dates else ''} ~ {nav_dates[-1] if nav_dates else ''}",
@@ -770,7 +777,7 @@ class DualTierExporter:
             return
 
         content = html_file.read_text(encoding="utf-8")
-        target_script = f'<script src="js/data/{season_id}.js?v=5.0"></script>'
+        target_script = f'<script src="js/data/{season_id}.js?v=5.1"></script>'
         if f'js/data/{season_id}.js' in content:
             return
 

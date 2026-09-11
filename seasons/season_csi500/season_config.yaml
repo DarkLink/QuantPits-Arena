@@ -42,8 +42,8 @@ banner:
 benchmarks:
   - id: "taotie"
     type: "EXECUTABLE"
-    initial_cash: 500000.0
-    display_name: "Taotie 500 (CSI 500 Executable 500k)"
+    initial_cash: 1000000.0          # Scaled for 500-stock universe capacity (~2000 RMB / stock budget)
+    display_name: "Taotie 500 (CSI 500 Executable 1M)"
   - id: "ghost_taotie"
     type: "THEORETICAL"
     initial_cash: 100000000.0      # Institutional CNY 100M capital

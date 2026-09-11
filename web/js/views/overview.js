@@ -76,7 +76,7 @@ window.OverviewView = {
         <div style="display: flex; align-items: center; gap: 24px; flex-wrap: wrap;">
           <div style="display: flex; align-items: center; gap: 8px;" title="Executable baseline: CNY 500k capital, 100-share trading lot friction">
             <span class="bm-line-badge" style="border-top-color: #c084fc; width: 14px;"></span>
-            <span style="font-size: 12px; color: var(--text-secondary);">Taotie (Physical Baseline 500k):</span>
+            <span style="font-size: 12px; color: var(--text-secondary);">${window.arenaAdapter.getTaotieDisplayName()}:</span>
             <b style="font-size: 13px; font-family: monospace; color: #c084fc;">${kpis.taotieReturn >= 0 ? '+' : ''}${kpis.taotieReturn.toFixed(2)}%</b>
           </div>
           ${window.arenaAdapter.hasGhostTaotie() ? `
@@ -108,7 +108,7 @@ window.OverviewView = {
               </h3>
             </div>
             <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">
-              Multi-line trajectory panorama comparing model strategies against Taotie (500k), ${window.arenaAdapter.hasGhostTaotie() ? 'Ghost Taotie (100M), ' : ''}and ${window.arenaAdapter.getMarketBenchmarkName()}
+              Multi-line trajectory panorama comparing model strategies against ${window.arenaAdapter.getTaotieShortName()}, ${window.arenaAdapter.hasGhostTaotie() ? 'Ghost Taotie (100M), ' : ''}and ${window.arenaAdapter.getMarketBenchmarkName()}
             </div>
           </div>
 
@@ -160,8 +160,8 @@ window.OverviewView = {
               <button type="button" class="benchmark-pill ghost-taotie is-active" data-benchmark="ghost" title="Toggle Ghost Taotie (100M)">
                 <span class="bm-line-badge"></span> Ghost (100M)
               </button>` : ''}
-              <button type="button" class="benchmark-pill taotie is-active" data-benchmark="taotie" title="Toggle Taotie (500k)">
-                <span class="bm-line-badge"></span> Taotie (500k)
+              <button type="button" class="benchmark-pill taotie is-active" data-benchmark="taotie" title="Toggle ${window.arenaAdapter.getTaotieDisplayName()}">
+                <span class="bm-line-badge"></span> ${window.arenaAdapter.getTaotieShortName()}
               </button>
               <button type="button" class="benchmark-pill csi300 is-active" data-benchmark="csi300" title="Toggle ${window.arenaAdapter.getMarketBenchmarkName()}">
                 <span class="bm-line-badge"></span> ${window.arenaAdapter.getMarketBenchmarkName()}

@@ -67,6 +67,31 @@ class SeasonConfig:
                 return b.get("display_name", "Market Benchmark")
         return univ.get("market_benchmark_name", "Market Benchmark")
 
+    def get_benchmark_config(self, benchmark_id: str) -> Dict[str, Any]:
+        """获取指定基准的配置字典"""
+        for b in self.raw_dict.get("benchmarks", []):
+            if b.get("id") == benchmark_id:
+                return b
+        return {}
+
+    def get_benchmark_initial_cash(self, benchmark_id: str, default: Optional[float] = None) -> float:
+        """获取指定基准的初始资金 (支持在 season_config.yaml 中显式配置，避免宽基等权被动复制时的严重资金摩擦)"""
+        b = self.get_benchmark_config(benchmark_id)
+        if "initial_cash" in b:
+            val = b["initial_cash"]
+            if val != "auto":
+                return float(val)
+        if default is not None:
+            return float(default)
+        if benchmark_id == "ghost_taotie":
+            return 100_000_000.0
+        return float(self.initial_cash)
+
+    def get_benchmark_display_name(self, benchmark_id: str, default: str = "") -> str:
+        """获取指定基准的展示名称"""
+        b = self.get_benchmark_config(benchmark_id)
+        return b.get("display_name", default)
+
 
 
 class SeasonManager:

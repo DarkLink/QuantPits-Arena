@@ -491,6 +491,30 @@ class ArenaDataAdapter {
     return this.metadata.taotie_return_pct !== undefined ? this.metadata.taotie_return_pct : 2.32;
   }
 
+  getTaotieDisplayName() {
+    const meta = this.metadata || {};
+    if (meta.active_benchmarks) {
+      const tb = meta.active_benchmarks.find(b => typeof b === 'string' && b.startsWith("Taotie"));
+      if (tb) return tb;
+    }
+    const p = this.getPath("BENCHMARK_taotie");
+    if (p && p.display_name && !p.display_name.includes("BENCHMARK")) return p.display_name;
+    return "Taotie (Physical Baseline 500k)";
+  }
+
+  getTaotieShortName() {
+    const meta = this.metadata || {};
+    if (meta.active_benchmarks) {
+      const tb = meta.active_benchmarks.find(b => typeof b === 'string' && b.startsWith("Taotie"));
+      if (tb) {
+        const m = tb.match(/\(([^)]+)\)$/);
+        if (m) return `Taotie (${m[1]})`;
+        return tb;
+      }
+    }
+    return "Taotie (500k)";
+  }
+
   hasGhostTaotie() {
     return !!this.paths.find(p => p.animal_id === "ghost_taotie") || !!this.navTimeline.curves?.["BENCHMARK_ghost_taotie"];
   }
@@ -563,7 +587,7 @@ class ArenaDataAdapter {
 
     list.push({
       id: "BENCHMARK_taotie",
-      name: "Taotie (Physical Baseline 500k)",
+      name: this.getTaotieDisplayName(),
       isBenchmark: true,
       tag: "Executable Benchmark"
     });
@@ -598,8 +622,8 @@ class ArenaDataAdapter {
       const lastVal = curve && curve.length ? curve[curve.length - 1] : 1.0;
       return {
         id: "BENCHMARK_taotie",
-        name: "Taotie (Physical Baseline 500k)",
-        shortName: "Taotie",
+        name: this.getTaotieDisplayName(),
+        shortName: this.getTaotieShortName(),
         isBenchmark: true,
         tag: "Executable Benchmark",
         curve: curve,
@@ -753,7 +777,7 @@ class ArenaDataAdapter {
       if (taotieCurve.length > 0) {
         seriesList.push({
           id: "BENCHMARK_taotie",
-          name: "Taotie (500k)",
+          name: this.getTaotieShortName(),
           type: "benchmark_taotie",
           color: "#c084fc",
           lineStyle: { type: [4, 4], width: 2.2 },
@@ -786,7 +810,7 @@ class ArenaDataAdapter {
       if (taotieDD.length > 0) {
         seriesList.push({
           id: "BENCHMARK_taotie",
-          name: "Taotie (500k)",
+          name: this.getTaotieShortName(),
           type: "benchmark_taotie",
           color: "#c084fc",
           lineStyle: { type: [4, 4], width: 2.2 },
@@ -808,7 +832,7 @@ class ArenaDataAdapter {
       const zeroBase = dates.map(() => 0.0);
       seriesList.push({
         id: "BENCHMARK_zero_taotie",
-        name: "Taotie (500k)",
+        name: this.getTaotieShortName(),
         type: "benchmark_zero",
         color: "#c084fc",
         lineStyle: { type: [4, 4], width: 2.2 },

@@ -230,8 +230,8 @@ window.ContestantDetailView = {
                 <button type="button" class="benchmark-pill ghost-taotie is-active" data-benchmark="ghost" title="Toggle Ghost Taotie (100M)">
                   <span class="bm-line-badge"></span> Ghost (100M)
                 </button>` : ''}
-                <button type="button" class="benchmark-pill taotie is-active" data-benchmark="taotie" title="Toggle Taotie (500k)">
-                  <span class="bm-line-badge"></span> Taotie (500k)
+                <button type="button" class="benchmark-pill taotie is-active" data-benchmark="taotie" title="Toggle ${window.arenaAdapter.getTaotieDisplayName()}">
+                  <span class="bm-line-badge"></span> ${window.arenaAdapter.getTaotieShortName()}
                 </button>
                 <button type="button" class="benchmark-pill csi300 is-active" data-benchmark="csi300" title="Toggle ${window.arenaAdapter.getMarketBenchmarkName()}">
                   <span class="bm-line-badge"></span> ${window.arenaAdapter.getMarketBenchmarkName()}

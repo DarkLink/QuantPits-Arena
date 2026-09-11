@@ -348,6 +348,7 @@ window.ArenaCharts = {
     if (!dates || !Array.isArray(dates) || dates.length === 0) return null;
     const tc = this.getThemeColors();
     const marketBmName = (window.arenaAdapter && window.arenaAdapter.getMarketBenchmarkName) ? window.arenaAdapter.getMarketBenchmarkName() : "CSI 300";
+    const taotieName = (window.arenaAdapter && window.arenaAdapter.getTaotieShortName) ? window.arenaAdapter.getTaotieShortName() : "Taotie";
 
     function round(num, dec = 4) {
       return Number(Math.round(num + "e" + dec) + "e-" + dec);
@@ -385,7 +386,7 @@ window.ArenaCharts = {
           lineStyle: { width: 2.0, color: "#f59e0b", type: [6, 6], opacity: 0.9 }
         },
         {
-          name: "Taotie (500k)",
+          name: taotieName,
           type: "line",
           data: taotieDD,
           smooth: true,
@@ -560,7 +561,7 @@ window.ArenaCharts = {
           lineStyle: { width: 2.0, color: "#f59e0b", type: [6, 6], opacity: 0.9 }
         },
         {
-          name: "Taotie (500k)",
+          name: taotieName,
           type: "line",
           data: taotieCurve && taotieCurve.length ? taotieCurve : [],
           smooth: true,
@@ -1012,6 +1013,7 @@ window.ArenaCharts = {
     if (!dates || !Array.isArray(dates) || dates.length === 0) return null;
     const tc = this.getThemeColors();
     const marketBmName = (window.arenaAdapter && window.arenaAdapter.getMarketBenchmarkName) ? window.arenaAdapter.getMarketBenchmarkName() : "CSI 300";
+    const taotieName = (window.arenaAdapter && window.arenaAdapter.getTaotieShortName) ? window.arenaAdapter.getTaotieShortName() : "Taotie";
 
     const colorPalette = [
       "#38bdf8", "#10b981", "#f59e0b", "#ec4899", "#8b5cf6",
@@ -1201,7 +1203,7 @@ window.ArenaCharts = {
 
       if (taotieCurve && taotieCurve.length > 0) {
         series.push({
-          name: "Taotie (500k)",
+          name: taotieName,
           type: "line",
           data: taotieCurve,
           smooth: true,
@@ -1309,6 +1311,7 @@ window.ArenaCharts = {
 
     const tc = this.getThemeColors();
     const marketBmName = (window.arenaAdapter && window.arenaAdapter.getMarketBenchmarkName) ? window.arenaAdapter.getMarketBenchmarkName() : "CSI 300";
+    const taotieName = (window.arenaAdapter && window.arenaAdapter.getTaotieShortName) ? window.arenaAdapter.getTaotieShortName() : "Taotie";
 
     const modelColors = {
       'CONTESTANT_A': '#38bdf8', // Sky Blue
@@ -1524,7 +1527,7 @@ window.ArenaCharts = {
 
       if (taotieCurve && taotieCurve.length > 0) {
         series.push({
-          name: "Taotie (500k)",
+          name: taotieName,
           type: "line",
           data: taotieCurve,
           smooth: true,

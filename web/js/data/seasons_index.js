@@ -67,7 +67,7 @@ window.ARENA_SEASONS_INDEX = [
     trading_days: 41,
     contestants_count: 6,
     animals_count: 28,
-    benchmarks: ["CSI 1000", "Taotie 1000 (500k)", "Ghost Taotie 1000 (100M)", "1000 Monkeys"],
+    benchmarks: ["CSI 1000", "Taotie 1000 (2M)", "Ghost Taotie 1000 (100M)", "1000 Monkeys"],
     description: "CSI 1000 small-cap universe testbed (SH000852 benchmark) evaluating the 6 candidate models across 28 execution containers.",
     dispatches_banner: {
       tag: "🔬 Season CSI 1000 Demo",
@@ -97,7 +97,7 @@ window.ARENA_SEASONS_INDEX = [
     "animals_count": 28,
     "benchmarks": [
       "CSI 500",
-      "Taotie 500 (500k)",
+      "Taotie 500 (1M)",
       "Ghost Taotie 500 (100M)",
       "1,000 Monkeys"
     ],
@@ -130,8 +130,8 @@ window.ARENA_SEASONS_INDEX = [
     "animals_count": 28,
     "benchmarks": [
       "CSI 800",
-      "Taotie (csi800) (500k)",
-      "Ghost Taotie (csi800) (100M)",
+      "Taotie 800 (1.6M)",
+      "Ghost Taotie 800 (100M)",
       "1,000 Monkeys"
     ],
     "description": "CSI 800 broad-cap universe benchmark: evaluating the 6 Alpha candidate models and 28 execution containers against CSI 800 (SH000906) benchmark",

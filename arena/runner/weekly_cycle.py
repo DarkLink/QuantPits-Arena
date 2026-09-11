@@ -100,14 +100,7 @@ class WeeklyCycleRunner:
         self.cycles = self.calendar.build_weekly_cycles(anchor_date, end_date)
         self.monkey_colony = MonkeyColony(colony_size=1000)
         self.rock_benchmark = RockBenchmark()
-        self.taotie_benchmark = TaotieBenchmark(
-            initial_cash=self.initial_cash,
-            deal_price_mode=self.deal_price_mode
-        )
-        self.ghost_taotie_benchmark = GhostTaotieBenchmark(
-            initial_cash=100_000_000.0,
-            deal_price_mode=self.deal_price_mode
-        )
+        self._create_benchmarks()
 
         # 运行实例映射: {(contestant_id, animal_id): PortfolioEngine}
         self.engines: Dict[tuple, PortfolioEngine] = {}
@@ -117,6 +110,35 @@ class WeeklyCycleRunner:
         self.adapters: Dict[str, BaseInferenceAdapter] = {}
         # 当前已完成的最新周期索引
         self.last_completed_cycle_idx: int = -1
+
+    def _create_benchmarks(self) -> None:
+        """根据赛季配置声明或动态估算初始化物理与理论全池基准 (支持可配置初始资金)"""
+        taotie_cash = self.initial_cash
+        ghost_cash = 100_000_000.0
+        taotie_name = "Taotie (全池物理被动)"
+        ghost_name = "Ghost Taotie (全池理论等权)"
+
+        if self.season_id:
+            try:
+                from arena.seasons.manager import SeasonManager
+                scfg = SeasonManager.get_season_config(self.season_id)
+                taotie_cash = scfg.get_benchmark_initial_cash("taotie", default=self.initial_cash)
+                ghost_cash = scfg.get_benchmark_initial_cash("ghost_taotie", default=100_000_000.0)
+                taotie_name = scfg.get_benchmark_display_name("taotie", default=taotie_name)
+                ghost_name = scfg.get_benchmark_display_name("ghost_taotie", default=ghost_name)
+            except Exception:
+                pass
+
+        self.taotie_benchmark = TaotieBenchmark(
+            initial_cash=taotie_cash,
+            deal_price_mode=self.deal_price_mode,
+            display_name=taotie_name
+        )
+        self.ghost_taotie_benchmark = GhostTaotieBenchmark(
+            initial_cash=ghost_cash,
+            deal_price_mode=self.deal_price_mode,
+            display_name=ghost_name
+        )
 
     def _init_engines(self, contestants: List[ContestantManifest]):
         """初始化所有 (Contestant, Animal) 组合的回测引擎"""
@@ -144,14 +166,7 @@ class WeeklyCycleRunner:
                     deal_price_mode=self.deal_price_mode
                 )
 
-        self.taotie_benchmark = TaotieBenchmark(
-            initial_cash=self.initial_cash,
-            deal_price_mode=self.deal_price_mode
-        )
-        self.ghost_taotie_benchmark = GhostTaotieBenchmark(
-            initial_cash=100_000_000.0,
-            deal_price_mode=self.deal_price_mode
-        )
+        self._create_benchmarks()
         self.last_completed_cycle_idx = -1
 
     def _setup_market_provider(
@@ -540,19 +555,12 @@ class WeeklyCycleRunner:
         for key, cp in state.get("engines", {}).items():
             self.engines[key] = PortfolioEngine.from_checkpoint(cp)
 
-        if "taotie_engine" in state:
-            self.taotie_benchmark = TaotieBenchmark(
-                initial_cash=self.initial_cash,
-                deal_price_mode=self.deal_price_mode
-            )
-            self.taotie_benchmark.engine = PortfolioEngine.from_checkpoint(state["taotie_engine"])
-
-        if "ghost_taotie_engine" in state:
-            self.ghost_taotie_benchmark = GhostTaotieBenchmark(
-                initial_cash=100_000_000.0,
-                deal_price_mode=self.deal_price_mode
-            )
-            self.ghost_taotie_benchmark.engine = PortfolioEngine.from_checkpoint(state["ghost_taotie_engine"])
+        if "taotie_engine" in state or "ghost_taotie_engine" in state:
+            self._create_benchmarks()
+            if "taotie_engine" in state:
+                self.taotie_benchmark.engine = PortfolioEngine.from_checkpoint(state["taotie_engine"])
+            if "ghost_taotie_engine" in state:
+                self.ghost_taotie_benchmark.engine = PortfolioEngine.from_checkpoint(state["ghost_taotie_engine"])
 
     def save_checkpoint_to_disk(self, checkpoint_dir: Path, cycle_idx: int):
         """将状态快照持久化落盘至 runs/<run_id>/checkpoints/"""
