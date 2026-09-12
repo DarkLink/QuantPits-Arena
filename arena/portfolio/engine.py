@@ -145,8 +145,14 @@ class PortfolioEngine:
 
         # 2. 常规周频调仓
         # 识别出池持仓与在池持仓
-        out_of_pool_held = [inst for inst in current_held if inst not in tradable_candidates]
-        in_pool_held = [inst for inst in current_held if inst in tradable_candidates]
+        # ⚠️ 关键真实摩擦与停牌防线：
+        # 若持仓中的标的在调仓日停牌/不可交易 (tradability_filter 返回 False)，
+        # 该标的绝对无法在二级市场卖出，必须强制锁定在持仓中（“烂在手里”），不可调仓卖出！
+        untradable_held = [inst for inst in current_held if tradability_filter is not None and not tradability_filter(inst, trade_date)]
+        tradable_current_held = [inst for inst in current_held if inst not in untradable_held]
+
+        out_of_pool_held = [inst for inst in tradable_current_held if inst not in tradable_candidates]
+        in_pool_held = [inst for inst in tradable_current_held if inst in tradable_candidates]
 
         target_topk = tradable_candidates[:target_capacity]
 
@@ -161,7 +167,7 @@ class PortfolioEngine:
         # 模式 B: 主动配额调仓模式（含出池被动优先调仓与 DropN 卖出上限约束）
         max_sells = n_drop
 
-        # 1) 出池优先卖出（上限不超过 DropN）
+        # 1) 出池优先卖出（上限不超过 DropN，仅限具备可交易性的出池标的）
         sells_from_out = out_of_pool_held[:max_sells]
         remaining_drop = max_sells - len(sells_from_out)
 
@@ -186,7 +192,7 @@ class PortfolioEngine:
 
         sell_list = sells_from_out + sells_from_active
 
-        # 3) 计算买入标的列表，维持目标持仓规模 (卖出后组合实际保留的总持股数)
+        # 3) 计算买入标的列表，维持目标持仓规模 (卖出后组合实际保留的总持股数，含停牌锁死的持仓)
         retained_held = [inst for inst in current_held if inst not in sell_list]
         need_to_buy = max(0, target_capacity - len(retained_held))
 
@@ -213,6 +219,7 @@ class PortfolioEngine:
         cycle: WeeklyCycle,
         order: Optional[Order],
         price_lookup: Callable[[str, str, str], float],
+        tradability_filter: Optional[Callable[[str, str], bool]] = None,
     ) -> WeeklySettlement:
         """
         执行一个完整周频周期的撮合与日频盯市估值。
@@ -221,6 +228,7 @@ class PortfolioEngine:
             cycle: WeeklyCycle 对象 (包含 trade_date, settle_date, trading_days)
             order: 周一调仓订单 (若为 None 则本周不调仓)
             price_lookup: 价格查询函数 (instrument, date, field='open'|'close') -> float
+            tradability_filter: 可交易性检查函数 (instrument, date) -> bool (停牌标的无法成交)
         """
         # 如果是首次运行，记录 T0 起点 (Anchor 收盘状态: NAV=1.000000, 现金=100%, 仓位=0%)
         if len(self.daily_valuations) == 0:
@@ -246,6 +254,10 @@ class PortfolioEngine:
             # 1.1 先执行卖出订单，释放现金
             for inst in order.sell_instruments:
                 if inst in self.holdings and self.holdings[inst] > 0:
+                    # 停牌/不可交易标的无法卖出，继续留在持仓中 ("烂在手里")
+                    if tradability_filter is not None and not tradability_filter(inst, cycle.trade_date):
+                        continue
+
                     shares = self.holdings[inst]
                     price = price_lookup(inst, cycle.trade_date, exec_field)
                     gross_val = shares * price

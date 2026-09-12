@@ -55,3 +55,33 @@ benchmarks:
   - id: "monkeys"
     type: "STATISTICAL"
     colony_size_per_spec: 1000
+
+# Dispatches & Narrative Chronicles (Retrospective Baseline M1-M2)
+dispatches:
+  executive:
+    tag: "🏆 CSI 1000 Baseline Standing"
+    badge: "M1–M2 Complete"
+    title: "CSI 1000 Retrospective Baseline: Small-Cap Frictions & The Sloth Anomaly"
+    window_label: "2026-07-03 ~ 2026-09-04 (46 Trading Days, Cycles 1–8)"
+    nature_label: "Retrospective backtest baseline evaluating alpha robustness across 1,000 small-cap equities."
+    leader_summary: "CONTESTANT_B_sloth-2 finished the baseline at NAV 1.1343 (+13.43%), outperforming the CSI 1000 benchmark by +26.34pp and Taotie 1000 by +11.78pp."
+  climate:
+    tag: "🌪️ Small-Cap Market Climate"
+    status_badge: "Active"
+    title: "Small-Cap Liquidity Frictions & Signal Longevity"
+    summary: "Evaluating alpha capture and friction costs across 1,000 small-cap Chinese equities."
+    bullets:
+      - "<strong>CSI 1000 Benchmark Contraction</strong>: The small-cap benchmark (SH000852) suffered a steep -12.91% drawdown across the 46 trading days."
+      - "<strong>Executable Taotie 1000 Buffer</strong>: Physical Taotie 1000 (2M capital) recorded +1.65% net return, providing solid defense."
+      - "<strong>The Sloth Phenomenon</strong>: Delaying model signals by 1 to 2 weekly cycles delivered the tournament's highest alpha, revealing prolonged small-cap factor half-life."
+    decrypt_label: "Monthly Calibration Cycle"
+  episodes:
+    - id: "csi1000_m1_m2"
+      tab_label: "📜 M1–M2 Baseline: Sloth Dominance"
+      badge: "Released"
+      title: "Episodes 01–08: The M1–M2 Baseline & Small-Cap Sloth Dominance"
+      date: "2026-08-28"
+      read_time: "7 min read"
+      summary: "Simulated retrospectively across 41 trading days in 1,000 small-cap stocks. Delayed signals (Sloth) swept the podium (+13.43%) amidst index collapse (-12.91%)."
+      file: "chronicles/en/season_csi1000_m1_m2.md"
+

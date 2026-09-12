@@ -29940,15 +29940,38 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
   "decision_forks": [],
   "dispatches": {
     "executive": {
-      "headline": "season_csi800 Official Report",
-      "core_theme": "Automated Backtest and Risk Analysis",
-      "tldr": "Execution complete across all canonical animals and benchmarks."
+      "tag": "🏆 CSI 800 Baseline Standing",
+      "badge": "M1–M2 Complete",
+      "title": "CSI 800 Retrospective Baseline: Broad-Market Cross-Section & Allocation Dynamics",
+      "window_label": "2026-07-03 ~ 2026-09-04 (46 Trading Days, Cycles 1–8)",
+      "nature_label": "Retrospective backtest baseline evaluating alpha robustness across 800 broad-cap equities.",
+      "leader_summary": "CONTESTANT_B_rabbit-2 finished the baseline at NAV 1.1284 (+12.84%), outperforming the CSI 800 benchmark by +20.74pp and Taotie 800 by +12.45pp."
     },
     "climate": {
-      "regime": "Dynamic",
-      "macro_events": []
+      "tag": "🌪️ Broad-Cap Market Climate",
+      "status_badge": "Active",
+      "title": "Broad-Market Factor Dispersion & Liquidity Calibration",
+      "summary": "Evaluating alpha transferability and portfolio capacity across 800 liquid Chinese equities.",
+      "bullets": [
+        "<strong>CSI 800 Benchmark Trajectory</strong>: The CSI 800 index (SH000906) declined -7.90% over the 46 trading days.",
+        "<strong>Executable Taotie 800 Stability</strong>: Physical Taotie 800 (1.6M capital) recorded +0.39% net gain, demonstrating strong cross-sectional diversification.",
+        "<strong>Broad-Market Momentum</strong>: Agile turnover (Rabbit-2) captured +12.84% return, confirming active factor signal validity."
+      ],
+      "decrypt_label": "Monthly Calibration Cycle"
     },
-    "episodes": []
+    "episodes": [
+      {
+        "id": "csi800_m1_m2",
+        "tab_label": "📜 M1–M2 Baseline: Rabbit Supremacy",
+        "badge": "Released",
+        "title": "Episodes 01–08: The M1–M2 Baseline & Broad-Cap Rabbit Supremacy",
+        "date": "2026-08-28",
+        "read_time": "7 min read",
+        "summary": "Simulated retrospectively across 41 trading days in 800 broad-market stocks. Multi-factor alpha outpaced index decline (-7.90%) with CONTESTANT_B_rabbit-2 reaching +12.84%.",
+        "file": "chronicles/en/season_csi800_m1_m2.md",
+        "content_html": "<h1>🏛️ Episodes 01–08: The M1–M2 Baseline &amp; Broad-Cap Rabbit Supremacy</h1>\n<blockquote>\n<p><strong>Evaluation Window</strong>: Anchored at 2026-07-03 inception NAV 1.0000; covers 41 trading days up to 2026-08-28 close (Months 1 &amp; 2 Combined Baseline).<br />\n<strong>Tournament Phase</strong>: <strong>Retrospective Backtest Calibration (Fixed Historical Weights)</strong><br />\n<strong>Executable Universe Benchmark</strong>: Taotie 800 (<code>1.0000</code> $\\to$ <code>1.0039</code>, Cumulative +0.39%).<br />\n<strong>Market Index Benchmark</strong>: CSI 800 Index (<code>SH000906</code>, Cumulative <strong>-7.90%</strong>).<br />\n<em>(Under standardized CNY 500,000 capital and strict 100-share round-lot trading constraints across the 800 broad-market stock universe).</em><br />\n<strong>Core Narrative</strong>: Combining large-cap liquidity with mid-cap growth dispersion, the CSI 800 arena delivered outstanding multi-factor alpha. Agile execution handlers crushed the market benchmark by over 20 percentage points, with <code>CONTESTANT_B_rabbit-2</code> topping the podium at <strong>+12.84%</strong>.</p>\n</blockquote>\n<hr />\n<h2>I. Nature of the Evaluation: Broad-Market Universe Calibration</h2>\n<p>This 41-day opening baseline covers the combined Month 1 and Month 2 evaluation window (Weeks 1 to 8):</p>\n<ul>\n<li><strong>Retrospective Calibration</strong>: Simulated retrospectively across the 800 constituent universe (CSI 300 large caps + CSI 500 mid caps) using model candidate weights frozen prior to June 30, 2026.</li>\n<li><strong>Why Combine Months 1 and 2</strong>: Establishing a unified 41-day baseline provides a robust statistical baseline across two full monthly rebalance cycles without premature mid-course noise.</li>\n<li><strong>The Broad-Cap Opportunity Spectrum</strong>: The CSI 800 index represents roughly 70% of total Chinese equity capitalization. Over July and August 2026, the broad market fell <strong>-7.90%</strong>, as defensive mega-caps diverged sharply from cyclical mid-caps. This cross-sector polarization created rich fertile ground for quantitative sorting engines.</li>\n</ul>\n<hr />\n<h2>II. The Battlefield: Leaderboard Standings across the 800 Universe</h2>\n<p>The executable full-universe reference benchmark (<strong>Taotie 800</strong>) ended the calibration baseline virtually flat at <code>1.0039</code> (<strong>+0.39%</strong>, outperforming the market index by +8.29pp).</p>\n<p>Among the active execution paths, aggressive turnover handlers unlocked substantial active returns:</p>\n<pre><code class=\"language-text\">[CSI 800 Cumulative NAV Top 5 Standings as of August 28, 2026 (41 Trading Days)]\n🥇 CONTESTANT_B_rabbit-2   : NAV 1.1284 (+12.84%, +20.74pp vs CSI 800, +12.45pp vs Taotie)\n🥈 CONTESTANT_B_rabbit-1   : NAV 1.0984 (+9.84%, +17.74pp vs CSI 800, +9.45pp vs Taotie)\n🥉 CONTESTANT_B_whale-shark : NAV 1.0830 (+8.30%, +16.20pp vs CSI 800, +7.91pp vs Taotie)\n🎖️ CONTESTANT_A_rabbit-2   : NAV 1.0821 (+8.21%, +16.11pp vs CSI 800, +7.82pp vs Taotie)\n🎖️ CONTESTANT_D_rabbit-2   : NAV 1.0805 (+8.05%, +15.95pp vs CSI 800, +7.66pp vs Taotie)\n</code></pre>\n<h3>The Crowning of the Broad-Cap Rabbit King</h3>\n<p>Pioneered under <code>CONTESTANT_B</code>, <strong><code>rabbit-2</code></strong> vaulted to <strong>NAV <code>1.1284</code> (+12.84%)</strong>, delivering an extraordinary <strong>20.74 percentage points of excess return</strong> over the CSI 800 market index.</p>\n<hr />\n<h2>III. Execution Zoo Autopsy: Capital Allocation Across Dual Horizons</h2>\n<p>The 800-stock universe spans two distinct regimes: high-liquidity large caps and high-beta mid caps. How did different Zoo handlers navigate this blended territory?</p>\n<h3>1. 🐇 The Rabbits (Optimal Trade Execution in Large Universes)</h3>\n<ul>\n<li><strong>Mechanistic Fact</strong>: With 800 assets to choose from, model ranking scores spread across a wider distribution. Rabbit-2 (DropN=22) rotates through the top tier with maximum agility, capturing fast-moving momentum shifts between mega-cap leaders and mid-cap breakouts.</li>\n<li><strong>Controlled Pairwise Comparison</strong>:</li>\n<li>Baseline Robot (DropN=3) achieved <code>+5.18%</code> under <code>CONTESTANT_B</code>.</li>\n<li>Rabbit-1 (DropN=11) delivered <code>+9.84%</code>.</li>\n<li>Rabbit-2 (DropN=22) delivered <code>+12.84%</code> (+7.66pp over Robot).</li>\n<li>In broad universes, portfolio turnover friction is easily absorbed by abundant liquidity, while signal freshness yields massive compounding advantages.</li>\n</ul>\n<h3>2. 🐋 The Whale-Shark (Capacity-Scaled Robustness)</h3>\n<ul>\n<li><code>whale-shark</code> finished third overall at <code>+8.30%</code>. Designed to test wider portfolio breadth with controlled turnover, it demonstrated remarkable resilience, navigating the 41-day run with a maximum drawdown of only <code>-2.15%</code>.</li>\n</ul>\n<h3>3. 🦅 The Eagles (Concentration vs Diversification Balance)</h3>\n<ul>\n<li>Unlike in CSI 300 where <code>eagle-5-1</code> captured Rank 1 (+19.71%), in the 800 universe <code>eagle-5-1</code> placed 6th (+7.95%). The vast opportunity set in CSI 800 meant that selecting only 5 stocks missed valuable breadth advantages, allowing well-diversified Rabbits (TopK=22) to take the crown.</li>\n</ul>\n<hr />\n<h2>IV. The Null Court: Monte Carlo Jurisdiction</h2>\n<p>Subjected to the <strong>colony of 1,000 matched pseudo-random monkeys</strong> operating across the CSI 800 universe under identical TopK=22, DropN=22 rules:</p>\n<ul>\n<li><strong>Colony Median</strong>: The 1,000 random monkeys posted a median return of <strong><code>-0.85%</code></strong>.</li>\n<li><strong>Empirical Percentile</strong>: <code>CONTESTANT_B_rabbit-2</code> (+12.84%) placed in the <strong><code>&gt;99.8%</code> empirical percentile</strong> ($p \\approx 0.002$).</li>\n<li>Even after accounting for finite-sample Monte Carlo constraints, active signal selection proved definitively superior to random broad-market exposure.</li>\n</ul>\n<hr />\n<h2>V. Baseline Summary</h2>\n<p>The Months 1 &amp; 2 baseline confirms that broad-cap universes provide an ideal balance of liquidity and dispersion, allowing high-refresh alpha strategies to excel.</p>\n<p>Subsequent CSI 800 dispatches will update on a monthly (4-week) cadence.</p>\n<blockquote>\n<p><strong>Please do not feed the models.</strong><br />\n<strong>The broad-cap zoo is open.</strong></p>\n</blockquote>"
+      }
+    ]
   },
   "matrix": {
     "rows": [

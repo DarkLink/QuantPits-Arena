@@ -55,3 +55,33 @@ benchmarks:
   - id: "monkeys"
     type: "STATISTICAL"
     colony_size_per_spec: 1000
+
+# Dispatches & Narrative Chronicles (Retrospective Baseline M1-M2)
+dispatches:
+  executive:
+    tag: "🏆 CSI 500 Baseline Standing"
+    badge: "M1–M2 Complete"
+    title: "CSI 500 Retrospective Baseline: Mid-Cap Breadth & Allocation Dynamics"
+    window_label: "2026-07-03 ~ 2026-09-04 (46 Trading Days, Cycles 1–8)"
+    nature_label: "Retrospective backtest baseline evaluating alpha robustness across 500 mid-cap equities."
+    leader_summary: "CONTESTANT_B_rabbit-1 finished the baseline at NAV 1.0998 (+9.98%), outperforming the CSI 500 benchmark by +22.47pp and Taotie 500 by +9.23pp."
+  climate:
+    tag: "🌪️ Mid-Cap Market Climate"
+    status_badge: "Active"
+    title: "Mid-Cap Dispersion & Liquidity Calibration"
+    summary: "Tracking cross-sectional volatility, turnover efficiency, and holding capacity in liquid mid-cap equities."
+    bullets:
+      - "<strong>CSI 500 Benchmark Drawdown</strong>: The CSI 500 index (SH000905) dropped -12.49% across the 46-day window, creating severe macro headwinds."
+      - "<strong>Executable Taotie 500 Buffer</strong>: Physical equal-weight benchmark Taotie 500 held positive ground at +0.75%, mitigating small-cap style compression."
+      - "<strong>Agile Rotation Alpha</strong>: High-turnover containers (Rabbit) outpaced extreme concentration (Eagle), capturing swift sector rotations."
+    decrypt_label: "Monthly Calibration Cycle"
+  episodes:
+    - id: "csi500_m1_m2"
+      tab_label: "📜 M1–M2 Baseline: Rabbit Surge"
+      badge: "Released"
+      title: "Episodes 01–08: The M1–M2 Baseline & The Mid-Cap Rabbit Surge"
+      date: "2026-08-28"
+      read_time: "7 min read"
+      summary: "Simulated retrospectively across 41 trading days in 500 mid-cap stocks. In a declining broader index (-12.49%), high-refresh Rabbits captured +9.98%."
+      file: "chronicles/en/season_csi500_m1_m2.md"
+

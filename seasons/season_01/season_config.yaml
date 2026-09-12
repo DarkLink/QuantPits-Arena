@@ -52,3 +52,42 @@ benchmarks:
   - id: "monkeys"
     type: "STATISTICAL"
     colony_size_per_spec: 100
+
+# Tournament Dispatches & Empirical Chronicles
+dispatches:
+  executive:
+    tag: "🏆 Official Released Standings"
+    badge: "Active"
+    title: "Tournament Standings & Retrospective Baseline"
+    window_label: "2026-07-03 ~ 2026-09-04 · 46 Trading Days"
+    nature_label: "Empirical tournament log tracking quantitative alpha models through execution frictions, market regime shifts, and monkey null courts."
+    leader_summary: "CONTESTANT_B_eagle-5-1 holds cumulative crown at +17.07% (NAV 1.1707). High-turnover Rabbits gained +2.41% on the week, compressing the lead gap to 1.89pp."
+  climate:
+    tag: "🌪️ Market Climate Report"
+    status_badge: "Released"
+    title: "The September 02 Breadth Shock (Black Wednesday)"
+    summary: "Intraday breadth contraction and rotation across Chinese equities. 99.4% of tournament paths recorded pullbacks while agile Rabbits rebounded."
+    bullets:
+      - "Taotie universe benchmark experienced mild -0.55% fluctuation on 09-02 while active paths dropped mean -1.26% (-0.71pp active exposure shock)."
+      - "Over 99% of active execution paths incurred synchronized active drawdowns, demonstrating shared systematic factor exposure."
+      - "High-refresh agile Rabbits (DropN=11/22) exploited cross-sectional dispersion, surging to top weekly performance (+2.41%)."
+      - "Signal half-life under pressure: Sloth signal decay penalty widened across the 1 to 4 week latency ladder."
+    decrypt_label: "Prospective Cycle 1 Released"
+  episodes:
+    - id: "ep08"
+      tab_label: "📜 Ep 01–08: The 41-Day King"
+      badge: "Released"
+      title: "Episodes 01–08: The 41-Day Baseline & The Eagle King"
+      date: "2026-08-28"
+      read_time: "6 min read"
+      summary: "Simulated retrospectively across 41 trading days. Extreme selection intensity delivered upside as CONTESTANT_B_eagle-5-1 took the throne (+19.71%)."
+      file: "chronicles/en/episodes_01_08_the_forty_one_day_king.md"
+    - id: "ep09"
+      tab_label: "⚡ Ep 09: Sep 02 Breadth Shock"
+      badge: "Released"
+      title: "Episode 09: The September 02 Breadth Shock & The Rabbit Rampage"
+      date: "2026-09-04"
+      read_time: "8 min read"
+      summary: "First prospective tracking cycle. Synchronized breadth shock on 09-02 challenged high concentration while agile Rabbits closed the tournament lead to 1.89pp."
+      file: "chronicles/en/episode_09_the_september_02_breadth_shock_and_rabbit_rampage.md"
+

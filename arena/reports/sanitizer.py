@@ -616,6 +616,27 @@ class DualTierExporter:
                 })
 
         dispatches_payload = raw_dict.get("dispatches", {})
+        if dispatches_payload and "episodes" in dispatches_payload:
+            try:
+                import markdown
+                for ep in dispatches_payload["episodes"]:
+                    f_path = ep.get("file")
+                    if f_path:
+                        candidates = [
+                            REPO_ROOT / f_path,
+                            REPO_ROOT / "web" / f_path,
+                            REPO_ROOT / "chronicles" / "en" / Path(f_path).name,
+                            REPO_ROOT / "web" / "chronicles" / "en" / Path(f_path).name,
+                        ]
+                        for c in candidates:
+                            if c.exists() and c.is_file():
+                                with open(c, "r", encoding="utf-8") as f_md:
+                                    md_content = f_md.read()
+                                ep["content_html"] = markdown.markdown(md_content, extensions=['tables', 'fenced_code'])
+                                break
+            except Exception as e:
+                print(f"[WARN] Failed to compile markdown file for dispatches: {e}")
+
         if not dispatches_payload:
             dispatches_payload = {
                 "executive": {

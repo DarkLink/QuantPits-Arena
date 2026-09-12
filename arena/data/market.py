@@ -75,7 +75,7 @@ class MarketDataProvider:
             data = self._cache[key]
             return data[f"real_{field}"]
 
-        # 若未命中缓存，生成或查询
+        # 若未命中缓存，优先寻找历史最后已知真实价格，防止异常暴涨暴跌
         return self._lookup_or_generate(instrument, date, field, return_real=True)
 
     def get_adj_price(self, instrument: str, date: str, field: str = "close") -> float:
@@ -97,8 +97,12 @@ class MarketDataProvider:
         if key in self._tradable_cache:
             return self._tradable_cache[key]
 
-        # 默认可交易性逻辑
-        # 模拟极端停牌情况（仅极少数标的不可交易）
+        # 若处于真实 Qlib 模式且未在缓存中，说明该日期无行情（停牌或未上市）
+        if self.use_real_qlib:
+            self._tradable_cache[key] = False
+            return False
+
+        # 默认可交易性逻辑：模拟极端停牌情况（仅极少数标的不可交易）
         h = abs(hash(f"tradable_{instrument}_{date}")) % 100
         tradable = (h >= 3)  # 约 3% 的停牌率
         self._tradable_cache[key] = tradable
@@ -111,30 +115,52 @@ class MarketDataProvider:
         field: str,
         return_real: bool = True
     ) -> float:
-        """从本地生成具有真实 A 股特性的价格与复权因子"""
+        """
+        行情缺失时的安全保底价格处理：
+        1. 优先在已加载缓存中回溯该标的最近一个已知交易日的真实价格 (Forward-fill)，防止除权或缺失停牌导致跳空暴涨/暴跌；
+        2. 仅在从未出现过的全新标的或纯 Mock 模式下，才基于确定性哈希生成合理的基准价格。
+        """
         key = (instrument, date)
         if key not in self._cache:
-            # 基础股价 10 ~ 80 元
-            base_real = (abs(hash(instrument)) % 7000 + 1000) / 100.0
-            # 真实复权因子 factor: 0.1 ~ 3.0 (例如茅台 ~0.14, 浦发 ~1.5)
-            raw_factor = (abs(hash(f"factor_{instrument}")) % 250 + 50) / 100.0
-            # 每日微幅波动
-            day_drift = ((abs(hash(f"drift_{instrument}_{date}")) % 40) - 20) / 1000.0
+            # 尝试回溯该标的已有的最近有效行情
+            known_dates = [d for (inst, d) in self._cache.keys() if inst == instrument and d < date]
+            if known_dates:
+                latest_date = max(known_dates)
+                last_data = self._cache[(instrument, latest_date)]
+                # 停牌缺失期间沿用最近收盘价
+                real_p = last_data["real_close"]
+                raw_factor = last_data["factor"]
+                adj_p = last_data["adj_close"]
+                self._cache[key] = {
+                    "factor": raw_factor,
+                    "real_open": real_p,
+                    "real_close": real_p,
+                    "adj_open": adj_p,
+                    "adj_close": adj_p,
+                }
+            else:
+                # 基础股价 10 ~ 80 元
+                base_real = (abs(hash(instrument)) % 7000 + 1000) / 100.0
+                # 真实复权因子 factor: 0.1 ~ 3.0 (例如茅台 ~0.14, 浦发 ~1.5)
+                raw_factor = (abs(hash(f"factor_{instrument}")) % 250 + 50) / 100.0
+                # 每日微幅波动
+                day_drift = ((abs(hash(f"drift_{instrument}_{date}")) % 40) - 20) / 1000.0
 
-            real_o = base_real
-            real_c = base_real * (1.0 + day_drift)
+                real_o = base_real
+                real_c = base_real * (1.0 + day_drift)
 
-            # Qlib 存储价格 = 真实价格 * factor
-            adj_o = real_o * raw_factor
-            adj_c = real_c * raw_factor
+                # Qlib 存储价格 = 真实价格 * factor
+                adj_o = real_o * raw_factor
+                adj_c = real_c * raw_factor
 
-            self._cache[key] = {
-                "factor": raw_factor,
-                "real_open": real_o,
-                "real_close": real_c,
-                "adj_open": adj_o,
-                "adj_close": adj_c,
-            }
+                self._cache[key] = {
+                    "factor": raw_factor,
+                    "real_open": real_o,
+                    "real_close": real_c,
+                    "adj_open": adj_o,
+                    "adj_close": adj_c,
+                }
 
         data = self._cache[key]
         return data[f"real_{field}"] if return_real else data[f"adj_{field}"]
+

@@ -161,14 +161,16 @@ window.DispatchesView = {
         </div>
       </div>
     `;
+
+    // Trigger async direct file loading if available
+    setTimeout(() => {
+      this.loadArticle(this.currentEpisode);
+    }, 0);
   },
 
   selectEpisode(epId) {
     this.currentEpisode = epId;
-    const bodyEl = document.getElementById("dispatch-article-body");
-    if (bodyEl) {
-      bodyEl.innerHTML = this.renderArticleContent();
-    }
+    this.loadArticle(epId);
     
     // Update button states dynamically
     const container = document.getElementById("dispatch-tabs-container");
@@ -184,6 +186,61 @@ window.DispatchesView = {
     }
   },
 
+  wrapArticle(activeEp, innerHtml) {
+    return `
+      <article class="prose" style="max-width: 820px; margin: 0 auto; color: var(--text-secondary); line-height: 1.75; font-size: 0.95rem;">
+        <div style="border-bottom: 1px solid var(--border-subtle); padding-bottom: 1.25rem; margin-bottom: 1.5rem;">
+          <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.5rem;">
+            <span class="badge" style="background: rgba(56, 189, 248, 0.15); color: var(--brand-cyan); border: 1px solid rgba(56, 189, 248, 0.3);">
+              ${activeEp?.badge || "Released"}
+            </span>
+            <span style="font-size: 0.8rem; color: var(--text-tertiary);">
+              Date: ${activeEp?.date || "2026"} · ${activeEp?.read_time || "6 min read"}
+            </span>
+          </div>
+          <h2 style="font-size: 1.9rem; color: var(--text-primary); margin: 0 0 0.5rem 0;">
+            ${activeEp?.title || "Tournament Chronicle"}
+          </h2>
+          ${activeEp?.summary ? `
+            <p style="font-size: 0.95rem; color: var(--text-muted); margin-top: 0.5rem; font-style: italic;">
+              ${activeEp.summary}
+            </p>
+          ` : ''}
+        </div>
+        ${innerHtml}
+        <div style="margin-top: 2.5rem; padding-top: 1.25rem; border-top: 1px solid var(--border-subtle); text-align: center; font-size: 0.85rem; color: var(--text-tertiary);">
+          🏛️ <em>QuantPits Arena Official Tournament Log</em>
+        </div>
+      </article>
+    `;
+  },
+
+  async loadArticle(epId) {
+    const bodyEl = document.getElementById("dispatch-article-body");
+    if (!bodyEl) return;
+
+    const dispatches = window.arenaAdapter ? window.arenaAdapter.getDispatchesData() : null;
+    const episodes = dispatches?.episodes || [];
+    const activeEp = episodes.find(e => e.id === epId);
+
+    // If file is specified and marked parser is available, fetch and render directly!
+    if (activeEp?.file && window.marked) {
+      try {
+        const res = await fetch(activeEp.file);
+        if (res.ok) {
+          const md = await res.text();
+          bodyEl.innerHTML = this.wrapArticle(activeEp, window.marked.parse(md));
+          return;
+        }
+      } catch (err) {
+        console.warn("Direct file fetch failed, falling back to embedded content:", err);
+      }
+    }
+
+    // Fallback to synchronous renderer
+    bodyEl.innerHTML = this.renderArticleContent();
+  },
+
   renderArticleContent() {
     const dispatches = window.arenaAdapter ? window.arenaAdapter.getDispatchesData() : null;
     const episodes = dispatches?.episodes || [];
@@ -191,43 +248,18 @@ window.DispatchesView = {
 
     if (activeEp) {
       if (activeEp.content_html) {
-        return `
-          <article class="prose" style="max-width: 820px; margin: 0 auto; color: var(--text-secondary); line-height: 1.75; font-size: 0.95rem;">
-            <div style="border-bottom: 1px solid var(--border-subtle); padding-bottom: 1.25rem; margin-bottom: 1.5rem;">
-              <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.5rem;">
-                <span class="badge" style="background: rgba(56, 189, 248, 0.15); color: var(--brand-cyan); border: 1px solid rgba(56, 189, 248, 0.3);">
-                  ${activeEp.badge || "Dispatch"}
-                </span>
-                <span style="font-size: 0.8rem; color: var(--text-tertiary);">
-                  Date: ${activeEp.date || "2026"} · ${activeEp.read_time || "4 min read"}
-                </span>
-              </div>
-              <h2 style="font-size: 1.9rem; color: var(--text-primary); margin: 0 0 0.5rem 0;">
-                ${activeEp.title}
-              </h2>
-              ${activeEp.summary ? `
-                <p style="font-size: 0.95rem; color: var(--text-muted); margin-top: 0.5rem; font-style: italic;">
-                  ${activeEp.summary}
-                </p>
-              ` : ''}
-            </div>
-            ${activeEp.content_html}
-            <div style="margin-top: 2.5rem; padding-top: 1.25rem; border-top: 1px solid var(--border-subtle); text-align: center; font-size: 0.85rem; color: var(--text-tertiary);">
-              🏛️ <em>QuantPits Arena Official Tournament Log</em>
-            </div>
-          </article>
-        `;
+        return this.wrapArticle(activeEp, activeEp.content_html);
       }
-      if (activeEp.content_type === "ep09_embargoed") {
-        return this.renderEp09Embargoed();
-      }
-      if (activeEp.content_type === "ep08_baseline") {
+      if (activeEp.content_type === "ep08_baseline" || activeEp.id === "ep08") {
         return this.renderEp08En();
+      }
+      if (activeEp.content_type === "ep09_released" || activeEp.id === "ep09") {
+        return this.renderEp09En();
       }
     }
 
     if (this.currentEpisode === "ep09") {
-      return this.renderEp09Embargoed();
+      return this.renderEp09En();
     }
     if (this.currentEpisode === "ep08") {
       return this.renderEp08En();
@@ -243,7 +275,7 @@ window.DispatchesView = {
             ${activeEp?.summary || "Official empirical dispatch."}
           </p>
         </div>
-        <p>Detailed dispatch chronicle active for ${currentSeasonId}.</p>
+        <p>Detailed dispatch chronicle active for this tournament season.</p>
       </article>
     `;
   },

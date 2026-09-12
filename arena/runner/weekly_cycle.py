@@ -324,12 +324,13 @@ class WeeklyCycleRunner:
         self,
         cycle: WeeklyCycle,
         orders: Dict[tuple, Any],
-        price_lookup_fn: Callable[[str, str, str], float]
+        price_lookup_fn: Callable[[str, str, str], float],
+        tradability_filter_fn: Optional[Callable[[str, str], bool]] = None,
     ) -> None:
         """
         【阶段二：周一开盘执行与周内日频估值 (Execution & Valuation Phase)】
         - 接收周五已锁定的订单字典；
-        - 按周一实际集合竞价价格和停牌状态撮合成交；
+        - 按周一实际集合竞价价格和停牌状态撮合成交（严格拦截停牌标的，不可交易标的烂在持仓中）；
         - 记录周内每一个交易日的 Daily Marked-to-Market 市值与 NAV。
         """
         c_idx = cycle.cycle_idx
@@ -340,20 +341,23 @@ class WeeklyCycleRunner:
                 self.taotie_benchmark.engine.execute_weekly_cycle(
                     cycle=cycle,
                     order=order,
-                    price_lookup=price_lookup_fn
+                    price_lookup=price_lookup_fn,
+                    tradability_filter=tradability_filter_fn
                 )
             elif key == ("BENCHMARK", "ghost_taotie"):
                 self.ghost_taotie_benchmark.engine.execute_weekly_cycle(
                     cycle=cycle,
                     order=order,
-                    price_lookup=price_lookup_fn
+                    price_lookup=price_lookup_fn,
+                    tradability_filter=tradability_filter_fn
                 )
             else:
                 engine = self.engines[key]
                 engine.execute_weekly_cycle(
                     cycle=cycle,
                     order=order,
-                    price_lookup=price_lookup_fn
+                    price_lookup=price_lookup_fn,
+                    tradability_filter=tradability_filter_fn
                 )
 
         self.last_completed_cycle_idx = c_idx
@@ -379,7 +383,8 @@ class WeeklyCycleRunner:
         self.execute_orders(
             cycle=cycle,
             orders=orders,
-            price_lookup_fn=price_lookup_fn
+            price_lookup_fn=price_lookup_fn,
+            tradability_filter_fn=tradability_filter_fn
         )
 
     def step_friday_cycle(
@@ -402,7 +407,8 @@ class WeeklyCycleRunner:
             self.execute_orders(
                 cycle=cycle,
                 orders=pending_orders,
-                price_lookup_fn=price_lookup_fn
+                price_lookup_fn=price_lookup_fn,
+                tradability_filter_fn=tradability_filter_fn
             )
             settled_orders = pending_orders
         else:
@@ -417,7 +423,8 @@ class WeeklyCycleRunner:
             self.execute_orders(
                 cycle=cycle,
                 orders=settled_orders,
-                price_lookup_fn=price_lookup_fn
+                price_lookup_fn=price_lookup_fn,
+                tradability_filter_fn=tradability_filter_fn
             )
 
         # 2. 为下周一预生成调仓订单并锁定
