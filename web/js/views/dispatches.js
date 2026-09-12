@@ -297,7 +297,7 @@ window.DispatchesView = {
             Episodes 01–08: The 41-Day Baseline &amp; The Eagle King
           </h2>
           <p style="font-size: 0.9rem; color: var(--text-secondary); margin: 0;">
-            Executable Universe Benchmark: Taotie <code>1.0000 &rarr; 1.0232 (+2.32%)</code>
+            Executable Universe Benchmark: Taotie <code>1.0000 &rarr; 0.9928 (-0.72%)</code>
           </p>
         </div>
 
@@ -319,15 +319,15 @@ window.DispatchesView = {
           II. Standings: High Selection Intensity Dominance
         </h3>
         <p>
-          Across the 41-day baseline, the executable universe benchmark (<strong>Taotie</strong>) gained <strong>+2.32%</strong> (NAV <code>1.0232</code>) under finite-capital and round-lot constraints. Strategies with elevated selection intensity achieved substantial upside:
+          Across the 41-day baseline, the executable universe benchmark (<strong>Taotie</strong>) registered <strong>-0.72%</strong> (NAV <code>0.9928</code>) under finite-capital (500k) and round-lot constraints with greedy waterfall allocation. Strategies with elevated selection intensity achieved substantial upside:
         </p>
         <div style="background: rgba(0, 0, 0, 0.35); border: 1px solid var(--border-subtle); border-radius: 6px; padding: 14px 18px; font-family: monospace; font-size: 0.88rem; margin-bottom: 1.25rem; color: var(--text-primary);">
           [Top 5 Cumulative Standings as of August 28, 2026 (41 Trading Days)]<br>
-          1. CONTESTANT_B_eagle-5-1  : NAV 1.1971 (+19.71%, +17.39pp vs executable Taotie benchmark)<br>
-          2. CONTESTANT_A_eagle-11-2 : NAV 1.1468 (+14.68%, +12.36pp vs executable Taotie benchmark)<br>
-          3. CONTESTANT_B_sloth-1    : NAV 1.1438 (+14.38%, +12.06pp vs executable Taotie benchmark)<br>
-          4. CONTESTANT_A_rabbit-1   : NAV 1.1313 (+13.13%, +10.81pp vs executable Taotie benchmark)<br>
-          5. CONTESTANT_D_rabbit-1   : NAV 1.1247 (+12.47%, +10.15pp vs executable Taotie benchmark)
+          1. CONTESTANT_B_eagle-5-1  : NAV 1.1971 (+19.71%, +20.43pp vs executable Taotie benchmark)<br>
+          2. CONTESTANT_A_eagle-11-2 : NAV 1.1468 (+14.68%, +15.40pp vs executable Taotie benchmark)<br>
+          3. CONTESTANT_B_sloth-1    : NAV 1.1438 (+14.38%, +15.10pp vs executable Taotie benchmark)<br>
+          4. CONTESTANT_A_rabbit-1   : NAV 1.1313 (+13.13%, +13.85pp vs executable Taotie benchmark)<br>
+          5. CONTESTANT_D_rabbit-1   : NAV 1.1247 (+12.47%, +13.19pp vs executable Taotie benchmark)
         </div>
         <p>
           <strong>CONTESTANT_B_eagle-5-1</strong> led all 168 variants with a cumulative return of <strong>+19.71%</strong> (NAV <code>1.1971</code>), posting an annualized Sharpe ratio of <code>2.64</code> and a maximum drawdown of <code>-2.41%</code> during this backtest window.
@@ -387,7 +387,7 @@ window.DispatchesView = {
         <p>
           As of Friday, August 28, 2026, the baseline standings are locked:
           <br>
-          <em style="color: var(--text-primary);">"41 Trading Days: Cumulative +19.71% (+17.39pp vs Benchmark); 0 / 1,000 matched monkeys exceeded it (p &approx; 0.001)."</em>
+          <em style="color: var(--text-primary);">"41 Trading Days: Cumulative +19.71% (+20.43pp vs Benchmark); 0 / 1,000 matched monkeys exceeded it (p &approx; 0.001)."</em>
         </p>
         <p>
           With Episodes 01–08 establishing the initial baseline, prospective forward tracking begins with Episode 09 (covering the forward trading window of August 31 to September 04, 2026).
