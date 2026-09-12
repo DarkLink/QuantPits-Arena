@@ -1,4 +1,4 @@
-# 🏛️ Episodes 01–08: The M1–M2 Baseline & Broad-Cap Rabbit Supremacy
+# 🏛️ Month 01–02: The Baseline & Broad-Cap Rabbit Supremacy
 
 > **Evaluation Window**: Anchored at 2026-07-03 inception NAV 1.0000; covers 41 trading days up to 2026-08-28 close (Months 1 & 2 Combined Baseline).  
 > **Tournament Phase**: **Retrospective Backtest Calibration (Fixed Historical Weights)**  
@@ -13,8 +13,9 @@
 
 This 41-day opening baseline covers the combined Month 1 and Month 2 evaluation window (Weeks 1 to 8):
 
+* **Monthly Reporting Cadence**: Unlike Season 01 (CSI 300) which follows weekly episodic dispatches (`Episodes 01–08`, `Episode 09`, ...), the broader-cap testbeds follow a monthly cadence: the initial baseline covers Month 01 and Month 02 combined (`M1–M2`), with subsequent dispatches updated monthly as `M3`, `M4`, and beyond.
 * **Retrospective Calibration**: Simulated retrospectively across the 800 constituent universe (CSI 300 large caps + CSI 500 mid caps) using model candidate weights frozen prior to June 30, 2026.
-* **Why Combine Months 1 and 2**: Establishing a unified 41-day baseline provides a robust statistical baseline across two full monthly rebalance cycles without premature mid-course noise.
+* **Why Combine Months 1 and 2**: Establishing a unified 41-day baseline provides a robust statistical baseline across two full monthly rebalance cycles (`M1–M2`) without premature mid-course noise.
 * **The Broad-Cap Opportunity Spectrum**: The CSI 800 index represents roughly 70% of total Chinese equity capitalization. Over July and August 2026, the broad market fell **-7.90%**, as defensive mega-caps diverged sharply from cyclical mid-caps. This cross-sector polarization created rich fertile ground for quantitative sorting engines.
 
 ---

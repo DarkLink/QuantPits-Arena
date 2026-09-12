@@ -1,4 +1,4 @@
-# 🏛️ Episodes 01–08: The M1–M2 Baseline & Small-Cap Sloth Dominance
+# 🏛️ Month 01–02: The Baseline & Small-Cap Sloth Dominance
 
 > **Evaluation Window**: Anchored at 2026-07-03 inception NAV 1.0000; covers 41 trading days up to 2026-08-28 close (Months 1 & 2 Combined Baseline).  
 > **Tournament Phase**: **Retrospective Backtest Calibration (Fixed Historical Weights)**  
@@ -13,8 +13,9 @@
 
 This 41-day opening baseline covers the combined Month 1 and Month 2 evaluation window (Weeks 1 to 8):
 
+* **Monthly Reporting Cadence**: Unlike Season 01 (CSI 300) which follows weekly episodic dispatches (`Episodes 01–08`, `Episode 09`, ...), the broader-cap testbeds follow a monthly cadence: the initial baseline covers Month 01 and Month 02 combined (`M1–M2`), with subsequent dispatches updated monthly as `M3`, `M4`, and beyond.
 * **Retrospective Calibration**: Simulated retrospectively across the 1,000 small-cap constituent universe using model candidate weights frozen prior to June 30, 2026.
-* **Why Combine Months 1 and 2**: Months 1 and 2 represent the foundational backtest calibration to measure capital constraints, lot-size indivisibility, and signal half-life under finite CNY 500,000 capital. Evaluating them as a combined 41-day retrospective block ensures an empirically sound baseline before forward prospective cycles.
+* **Why Combine Months 1 and 2**: Months 1 and 2 represent the foundational backtest calibration to measure capital constraints, lot-size indivisibility, and signal half-life under finite CNY 500,000 capital. Evaluating them as a combined 41-day retrospective block (`M1–M2`) ensures an empirically sound baseline before forward prospective cycles.
 * **The Small-Cap Crucible**: The CSI 1000 represents the growth and speculative frontier of Chinese equities. Over July and August 2026, the index suffered an aggressive **-12.91%** drawdown as market liquidity contracted. In this hostile territory, active selection engines faced a severe test of signal durability.
 
 ---

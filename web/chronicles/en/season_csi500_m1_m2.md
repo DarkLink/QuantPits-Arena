@@ -1,4 +1,4 @@
-# 🏛️ Episodes 01–08: The M1–M2 Baseline & The Mid-Cap Rabbit Surge
+# 🏛️ Month 01–02: The Baseline & The Mid-Cap Rabbit Surge
 
 > **Evaluation Window**: Anchored at 2026-07-03 inception NAV 1.0000; covers 41 trading days up to 2026-08-28 close (Months 1 & 2 Combined Baseline).  
 > **Tournament Phase**: **Retrospective Backtest Calibration (Fixed Historical Weights)**  
@@ -13,8 +13,9 @@
 
 This 41-day opening baseline covers the combined Month 1 and Month 2 evaluation window (Weeks 1 to 8):
 
+* **Monthly Reporting Cadence**: Unlike Season 01 (CSI 300) which follows weekly episodic dispatches (`Episodes 01–08`, `Episode 09`, ...), the broader-cap testbeds follow a monthly cadence: the initial baseline covers Month 01 and Month 02 combined (`M1–M2`), with subsequent dispatches updated monthly as `M3`, `M4`, and beyond.
 * **Retrospective Calibration**: The evaluation over this 41 trading-day period was conducted post-hoc with knowledge of July and August market data. The 6 core contestant candidate architectures had training data frozen prior to June 30, 2026, but the execution container parameters and testbed calibrations were verified retrospectively against known mid-cap market dynamics.
-* **Why Combine Months 1 and 2**: Because both months serve as the calibration baseline to measure execution frictions, capital granularity, and behavioral container mechanics before forward live tracking begins, they are evaluated as a cohesive 41-day foundation rather than artificially split.
+* **Why Combine Months 1 and 2**: Because both months serve as the calibration baseline to measure execution frictions, capital granularity, and behavioral container mechanics before forward live tracking begins, they are evaluated as a cohesive 41-day foundation (`M1–M2`) rather than artificially split.
 * **The Mid-Cap Market Regime**: Unlike large-cap stability, the CSI 500 universe experienced severe downward pressure during this window, with the benchmark index falling **-12.49%**. This challenging environment created an exceptional laboratory for evaluating whether alpha models could extract active returns amidst broader market attrition.
 
 ---
