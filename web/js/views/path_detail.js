@@ -27,11 +27,12 @@ window.PathDetailView = {
       return;
     }
 
+    const specId = path.strategy_spec || window.arenaAdapter.getAllAnimals()?.find(a => a.id === path.animal_id)?.spec || "P_22_3";
     const contestant = window.arenaAdapter.getContestant(path.contestant_id);
     const dates = window.arenaAdapter.getNavDates();
     const taotieCurve = window.arenaAdapter.getBenchmarkTaotieCurve();
     const csi300Curve = window.arenaAdapter.getBenchmarkCsi300Curve();
-    const monkeyDist = window.arenaAdapter.getMonkeyDistribution(path.strategy_spec);
+    const monkeyDist = window.arenaAdapter.getMonkeyDistribution(specId);
 
     const isSig = path.is_statistically_significant || (path.empirical_p_value !== undefined && path.empirical_p_value < 0.05);
     const pVal = path.empirical_p_value !== undefined ? path.empirical_p_value : (path.p_value !== undefined ? path.p_value : 1.0);
@@ -68,7 +69,7 @@ window.PathDetailView = {
                 ${path.animal_name || path.animal_id}
               </span>
               <span style="font-size:0.85rem; color:var(--text-tertiary);">
-                Specification: <b>${path.strategy_spec}</b> (${path.animal_category})
+                Specification: <b>${specId}</b> (${path.animal_category})
               </span>
             </div>
             <h1 style="font-size:2rem; font-weight:800; color:var(--text-primary); margin:0 0 6px 0;">
@@ -170,24 +171,41 @@ window.PathDetailView = {
           <div class="card-header">
             <div>
               <h3 class="card-title">Null Distribution & Statistical Significance</h3>
-              <div class="card-subtitle">Benchmarked against 1,000 random monkeys with identical portfolio parameters (${path.strategy_spec})</div>
+              <div class="card-subtitle">Benchmarked against 1,000 random monkeys with identical portfolio parameters (${specId})</div>
             </div>
           </div>
           <div id="chart-path-monkey-dist" class="chart-container" style="height:260px;"></div>
 
           <!-- Finite Capital Diagnostics & Metadata -->
           <div style="margin-top:1.5rem; padding-top:1rem; border-top:1px solid var(--border-subtle);">
-            <h4 style="font-size:0.95rem; margin-bottom:0.75rem;">Finite Capital Execution Diagnostics (CNY 500k Constraint)</h4>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+              <h4 style="font-size:0.95rem; margin:0;">Finite Capital Execution Diagnostics (CNY 500k Constraint)</h4>
+              <span class="badge badge-neutral" style="font-size:0.75rem;">100-Share Lot Enforced</span>
+            </div>
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; font-size:0.85rem;">
-              <div style="background:var(--bg-surface-elevated); padding:0.65rem 0.85rem; border-radius:var(--radius-sm);">
+              <div style="background:var(--bg-surface-elevated); padding:0.65rem 0.85rem; border-radius:var(--radius-sm); border:1px solid var(--border-subtle);">
                 <span style="color:var(--text-tertiary);">Unaffordable 1-Lot Skips:</span>
                 <b style="float:right; color:${path.unaffordable_buy_count > 0 ? 'var(--accent-warning)' : 'var(--text-primary)'};">
-                  ${path.unaffordable_buy_count} orders
+                  ${path.unaffordable_buy_count || 0} orders (${(path.unaffordable_buy_ratio || 0).toFixed(1)}%)
                 </b>
               </div>
-              <div style="background:var(--bg-surface-elevated); padding:0.65rem 0.85rem; border-radius:var(--radius-sm);">
-                <span style="color:var(--text-tertiary);">Mean Uninvested Cash Drag:</span>
-                <b style="float:right;">${(path.mean_cash_ratio_pct || 0).toFixed(2)}%</b>
+              <div style="background:var(--bg-surface-elevated); padding:0.65rem 0.85rem; border-radius:var(--radius-sm); border:1px solid var(--border-subtle);">
+                <span style="color:var(--text-tertiary);">Friction Event Days:</span>
+                <b style="float:right; color:${path.unaffordable_event_days > 0 ? 'var(--accent-warning)' : 'var(--text-primary)'};">
+                  ${path.unaffordable_event_days || 0} trading days
+                </b>
+              </div>
+              <div style="background:var(--bg-surface-elevated); padding:0.65rem 0.85rem; border-radius:var(--radius-sm); border:1px solid var(--border-subtle);">
+                <span style="color:var(--text-tertiary);">Mean Cash Drag (Uninvested):</span>
+                <b style="float:right; color:${(path.mean_cash_ratio !== undefined ? path.mean_cash_ratio : (path.mean_cash_ratio_pct || 0)) > 5 ? 'var(--accent-warning)' : 'var(--text-primary)'};">
+                  ${(path.mean_cash_ratio !== undefined ? path.mean_cash_ratio : (path.mean_cash_ratio_pct || 0)).toFixed(2)}%
+                </b>
+              </div>
+              <div style="background:var(--bg-surface-elevated); padding:0.65rem 0.85rem; border-radius:var(--radius-sm); border:1px solid var(--border-subtle);">
+                <span style="color:var(--text-tertiary);">Holdings Fulfillment Rate:</span>
+                <b style="float:right; color:var(--accent-cyan);">
+                  ${(path.actual_holdings_mean !== undefined ? path.actual_holdings_mean : 0).toFixed(1)} / ${(path.target_holdings_mean !== undefined ? path.target_holdings_mean : 0).toFixed(0)} stocks
+                </b>
               </div>
             </div>
 
@@ -223,6 +241,11 @@ window.PathDetailView = {
           pRank,
           pVal
         );
+      } else {
+        const dom = document.getElementById("chart-path-monkey-dist");
+        if (dom) {
+          dom.innerHTML = `<div style="display:flex; align-items:center; justify-content:center; height:100%; color:var(--text-tertiary); font-size:0.85rem;">Null distribution for ${specId} pending simulation</div>`;
+        }
       }
 
       // Bind metric switcher buttons

@@ -556,10 +556,14 @@ class DualTierExporter:
 
             final_nav = round(float(nav_series_map[col_key][-1]), 4) if col_key in nav_series_map and len(nav_series_map[col_key]) > 0 else 1.0
 
+            from arena.controls.monkey import map_animal_to_spec_id
+            spec_id = map_animal_to_spec_id(aid)
+
             path_records.append({
                 "path_id": f"{cid}_{aid}",
                 "contestant_id": cid,
                 "animal_id": aid,
+                "strategy_spec": spec_id,
                 "animal_category": _get_animal_category(aid),
                 "display_name": f"{cid} × {aid}",
                 "total_return_pct": tot_ret,
@@ -574,10 +578,14 @@ class DualTierExporter:
                 "empirical_p_value": p_val,
                 "p_value": p_val,
                 "is_statistically_significant": (p_val < 0.05),
+                "buy_attempt_count": int(d_info.get("buy_attempt_count", 0)),
                 "unaffordable_buy_ratio": _parse_pct(d_info.get("unaffordable_buy_ratio", 0)),
                 "unaffordable_buy_count": int(d_info.get("unaffordable_buy_count", 0)),
                 "unaffordable_event_days": int(d_info.get("unaffordable_event_days", 0)),
                 "mean_cash_ratio": _parse_pct(d_info.get("mean_cash_ratio", 0)),
+                "mean_cash_ratio_pct": _parse_pct(d_info.get("mean_cash_ratio", 0)),
+                "max_cash_ratio": _parse_pct(d_info.get("max_cash_ratio", 0)),
+                "max_cash_ratio_pct": _parse_pct(d_info.get("max_cash_ratio", 0)),
                 "final_cash_ratio": _parse_pct(d_info.get("final_cash_ratio", 0)),
                 "target_holdings_mean": float(d_info.get("target_holdings_mean", 22.0)),
                 "actual_holdings_mean": float(d_info.get("actual_holdings_mean", 22.0)),
@@ -604,14 +612,32 @@ class DualTierExporter:
         null_records = []
         if not df_null.empty:
             for r in df_null.to_dict(orient="records"):
+                min_v = _parse_pct(r.get("monkey_min", r.get("min_return_pct", 0)))
+                p05_v = _parse_pct(r.get("monkey_p05", r.get("p05_return_pct", 0)))
+                med_v = _parse_pct(r.get("monkey_median", r.get("median_return_pct", 0)))
+                mean_v = _parse_pct(r.get("monkey_mean", r.get("mean_return_pct", 0)))
+                p95_v = _parse_pct(r.get("monkey_p95", r.get("p95_return_pct", 0)))
+                max_v = _parse_pct(r.get("monkey_max", r.get("max_return_pct", 0)))
+                std_v = _parse_pct(r.get("monkey_std", r.get("std_return_pct", 0)))
+
                 null_records.append({
                     "strategy_spec": r.get("strategy_spec", ""),
-                    "mean_return_pct": _parse_pct(r.get("mean_return_pct", 0)),
-                    "median_return_pct": _parse_pct(r.get("median_return_pct", 0)),
-                    "p05_return_pct": _parse_pct(r.get("p05_return_pct", 0)),
-                    "p95_return_pct": _parse_pct(r.get("p95_return_pct", 0)),
-                    "min_return_pct": _parse_pct(r.get("min_return_pct", 0)),
-                    "max_return_pct": _parse_pct(r.get("max_return_pct", 0)),
+                    "description": r.get("description", ""),
+                    "topk": r.get("topk", ""),
+                    "n_drop": r.get("n_drop", ""),
+                    "monkey_min": min_v,
+                    "monkey_p05": p05_v,
+                    "monkey_median": med_v,
+                    "monkey_mean": mean_v,
+                    "monkey_p95": p95_v,
+                    "monkey_max": max_v,
+                    "monkey_std": std_v,
+                    "min_return_pct": min_v,
+                    "p05_return_pct": p05_v,
+                    "median_return_pct": med_v,
+                    "mean_return_pct": mean_v,
+                    "p95_return_pct": p95_v,
+                    "max_return_pct": max_v,
                     "colony_size": int(r.get("colony_size", 1000))
                 })
 

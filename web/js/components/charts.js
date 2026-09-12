@@ -503,9 +503,9 @@ window.ArenaCharts = {
       let p95 = 5.45;
       let med = 1.07;
       if (monkeyDist) {
-        p05 = parsePct(monkeyDist.monkey_p05);
-        p95 = parsePct(monkeyDist.monkey_p95);
-        med = parsePct(monkeyDist.monkey_median);
+        p05 = parsePct(monkeyDist.monkey_p05 ?? monkeyDist.p05_return_pct);
+        p95 = parsePct(monkeyDist.monkey_p95 ?? monkeyDist.p95_return_pct);
+        med = parsePct(monkeyDist.monkey_median ?? monkeyDist.median_return_pct);
       }
 
       const numPoints = dates.length;
@@ -701,12 +701,15 @@ window.ArenaCharts = {
     const tc = this.getThemeColors();
     if (!monkeyDist) return null;
 
-    const parse = v => parseFloat(String(v).replace("%", ""));
-    const minVal = parse(monkeyDist.monkey_min);
-    const p05 = parse(monkeyDist.monkey_p05);
-    const med = parse(monkeyDist.monkey_median);
-    const p95 = parse(monkeyDist.monkey_p95);
-    const maxVal = parse(monkeyDist.monkey_max);
+    const parse = v => {
+      if (v === undefined || v === null || isNaN(parseFloat(String(v).replace("%", "")))) return 0;
+      return parseFloat(String(v).replace("%", ""));
+    };
+    const minVal = parse(monkeyDist.monkey_min ?? monkeyDist.min_return_pct);
+    const p05 = parse(monkeyDist.monkey_p05 ?? monkeyDist.p05_return_pct);
+    const med = parse(monkeyDist.monkey_median ?? monkeyDist.median_return_pct);
+    const p95 = parse(monkeyDist.monkey_p95 ?? monkeyDist.p95_return_pct);
+    const maxVal = parse(monkeyDist.monkey_max ?? monkeyDist.max_return_pct);
 
     const xMin = Math.min(minVal, actualReturnPct) - 2.0;
     const xMax = Math.max(maxVal, actualReturnPct) + 3.0;

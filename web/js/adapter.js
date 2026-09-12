@@ -83,11 +83,32 @@ class ArenaDataAdapter {
           return b;
         });
       }
+      // Strategy spec fallback resolution
+      if (!p.strategy_spec) {
+        const animal = this.getAllAnimals().find(a => a.id === p.animal_id);
+        p.strategy_spec = animal ? animal.spec : "P_22_3";
+      }
+      if (p.mean_cash_ratio_pct === undefined && p.mean_cash_ratio !== undefined) {
+        p.mean_cash_ratio_pct = Number(p.mean_cash_ratio);
+      }
+      if (p.max_cash_ratio_pct === undefined && p.max_cash_ratio !== undefined) {
+        p.max_cash_ratio_pct = Number(p.max_cash_ratio);
+      }
+
       this.pathMap.set(p.path_id, p);
     });
 
     this.monkeyMap = new Map();
-    this.monkeyDistributions.forEach(m => this.monkeyMap.set(m.strategy_spec, m));
+    this.monkeyDistributions.forEach(m => {
+      const parseVal = v => (v !== undefined && v !== null ? parseFloat(String(v).replace("%", "")) : 0);
+      m.monkey_min = m.monkey_min !== undefined ? parseVal(m.monkey_min) : parseVal(m.min_return_pct);
+      m.monkey_p05 = m.monkey_p05 !== undefined ? parseVal(m.monkey_p05) : parseVal(m.p05_return_pct);
+      m.monkey_median = m.monkey_median !== undefined ? parseVal(m.monkey_median) : parseVal(m.median_return_pct);
+      m.monkey_mean = m.monkey_mean !== undefined ? parseVal(m.monkey_mean) : parseVal(m.mean_return_pct);
+      m.monkey_p95 = m.monkey_p95 !== undefined ? parseVal(m.monkey_p95) : parseVal(m.p95_return_pct);
+      m.monkey_max = m.monkey_max !== undefined ? parseVal(m.monkey_max) : parseVal(m.max_return_pct);
+      this.monkeyMap.set(m.strategy_spec, m);
+    });
   }
 
   formatPValue(pVal) {
