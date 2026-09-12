@@ -2,8 +2,8 @@
 
 > **Evaluation Window**: Anchored at 2026-09-04 close; prospective evaluation cycle covers 2026-09-07 ~ 2026-09-11 (5 trading days, Days 47 ~ 51 of the tournament calendar).  
 > **Tournament Phase**: **Prospective Forward Tracking (Cycle 2, Week 10)**  
-> **Executable Universe Benchmark**: Taotie (`1.0266` $\to$ `1.0170`, weekly return -0.94%, cumulative +1.70%).  
-> *(Capital-constrained CNY 500,000, 100-share round-lot full-universe reference portfolio; not theoretical fractional equal-weight).*  
+> **Executable Universe Benchmark**: Taotie (`0.9906` $\to$ `0.9685`, weekly return -2.23%, cumulative -3.15%).  
+> *(Capital-constrained CNY 500,000, 100-share round-lot full-universe reference portfolio under greedy waterfall allocation).*  
 > **Market Index Benchmark**: CSI 300 (`-6.07%` $\to$ `-6.86%`, weekly return -0.84%).  
 > **Core Narrative**: Facing a persistent downward drift in broad equities, high-selection intensity Eagles mounted a ferocious counter-strike. `CONTESTANT_A_eagle-5-1` led the entire tournament with **+4.38%** on the week, while reigning champion `CONTESTANT_B_eagle-5-1` (+2.06%) became the first strategy in tournament history to breach the **1.20 NAV milestone (+20.71%)**, expanding its tournament lead to **5.51 percentage points**.
 
@@ -21,17 +21,17 @@ During the 10th tournament week (2026-09-04 Friday close to 2026-09-11 Friday cl
 
 ```text
 [Daily Path Average vs Executable Taotie Benchmark: Sep 07 – Sep 11]
-• 09-07 (Mon): Taotie -0.55% | Broad market gap-down; defensive containers hold
-• 09-08 (Tue): Taotie -0.27% | Choppy consolidation; high-rank assets diverge
-• 09-09 (Wed): Taotie +0.36% | Midweek technical rebound; Eagles initiate ascent
-• 09-10 (Thu): Taotie -0.59% | Secondary retreat; Koalas and low-percentiles break down
-• 09-11 (Fri): Taotie +0.10% | Friday settlement; CONTESTANT_B_eagle-5-1 crowns at 1.2071
+• 09-07 (Mon): Taotie -0.77% | Broad market gap-down; defensive containers hold
+• 09-08 (Tue): Taotie +0.28% | Choppy consolidation; high-rank assets diverge
+• 09-09 (Wed): Taotie +0.32% | Midweek technical rebound; Eagles initiate ascent
+• 09-10 (Thu): Taotie -0.61% | Secondary retreat; Koalas and low-percentiles break down
+• 09-11 (Fri): Taotie -1.48% | Friday settlement; CONTESTANT_B_eagle-5-1 crowns at 1.2071
 ```
 
 ### 1. Empirical Observations (Level A: Directly Proved by Data)
 * **Persistent Benchmark Softening**:
   * The CSI 300 benchmark index (SH000300) retreated another **`-0.84%`**, extending its cumulative tournament deficit to **`-6.86%`**.
-  * The executable Taotie universe benchmark fell **`-0.94%`** on the week, closing at `1.0170` (cumulative `+1.70%`).
+  * The executable Taotie universe benchmark fell **`-2.23%`** on the week, closing at `0.9685` (cumulative `-3.15%`).
   * Theoretical equal-weight Ghost Taotie slid **`-1.83%`** to `0.9837` (cumulative `-1.63%`), demonstrating negative broad-market drag on unselected assets.
 * **Intra-Zoo Dispersion Explosion**:
   * While the median execution path absorbed a mild weekly slip of `-0.31%`, the spread between the week's top performer (`+4.38%`) and worst casualty (`-5.01%`) stretched to **9.39 percentage points**.
@@ -64,11 +64,11 @@ While broad indices drifted lower, apex concentration delivered stunning alpha d
 
 ```text
 [Cumulative NAV Leaderboard as of September 11, 2026 (51 Trading Days)]
-🥇 CONTESTANT_B_eagle-5-1 : NAV 1.2071 (+20.71%, +19.01pp vs Taotie benchmark)
-🥈 CONTESTANT_D_rabbit-1  : NAV 1.1520 (+15.20%, +13.50pp vs Taotie benchmark)
-🥉 CONTESTANT_A_rabbit-1  : NAV 1.1475 (+14.75%, +13.05pp vs Taotie benchmark)
-🎖️ CONTESTANT_B_rabbit-1  : NAV 1.1298 (+12.98%, +11.28pp vs Taotie benchmark)
-🎖️ CONTESTANT_D_eagle-11-2: NAV 1.1290 (+12.90%, +11.20pp vs Taotie benchmark)
+🥇 CONTESTANT_B_eagle-5-1 : NAV 1.2071 (+20.71%, +23.86pp vs Taotie benchmark)
+🥈 CONTESTANT_D_rabbit-1  : NAV 1.1520 (+15.20%, +18.35pp vs Taotie benchmark)
+🥉 CONTESTANT_A_rabbit-1  : NAV 1.1475 (+14.75%, +17.90pp vs Taotie benchmark)
+🎖️ CONTESTANT_B_rabbit-1  : NAV 1.1298 (+12.98%, +16.13pp vs Taotie benchmark)
+🎖️ CONTESTANT_D_eagle-11-2: NAV 1.1290 (+12.90%, +16.05pp vs Taotie benchmark)
 ```
 
 ### 1. The Eagle King Crosses the 1.20 Threshold
@@ -110,6 +110,6 @@ Even in the most challenging regime, all 6 models retain positive absolute cumul
 Fifty-one trading days into the Summer 2026 tournament, the field has separated into distinct, mathematically verifiable behavioral regimes:
 * **Apex Concentrators (Eagle)**: Capable of generating extraordinary single-week alpha bursts (+4.38%), carrying CONTESTANT_B across the historic 1.20 milestone.
 * **Agile Compounders (Rabbit)**: Delivering unyielding stability and commanding the upper podium.
-* **Passive Drift vs Execution Friction**: Demonstrating that passive equal-weight exposure (Taotie +1.70%) and market beta (CSI 300 -6.86%) are completely outclassed by dynamic alpha selection.
+* **Passive Drift vs Execution Friction**: Demonstrating that passive equal-weight exposure (Taotie -3.15%) and market beta (CSI 300 -6.86%) are completely outclassed by dynamic alpha selection.
 
 The tournament marches into Week 11.

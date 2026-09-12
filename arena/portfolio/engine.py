@@ -44,6 +44,7 @@ class PortfolioEngine:
         deal_price_mode: str = DEFAULT_DEAL_PRICE,
         allow_fractional_shares: bool = False,  # 默认不支持碎股
         lot_size: int = 100,                     # A股一手 100 股
+        greedy_allocation: bool = False,        # 是否开启贪心瀑布流再分配 (消除一手约束导致的死现金沉淀)
     ):
         self.contestant_id = contestant_id
         self.animal_id = animal_id
@@ -54,6 +55,7 @@ class PortfolioEngine:
         self.deal_price_mode = deal_price_mode
         self.allow_fractional_shares = allow_fractional_shares
         self.lot_size = lot_size
+        self.greedy_allocation = greedy_allocation
 
         # 当前持仓: {instrument: shares}
         self.holdings: Dict[str, float] = {}
@@ -340,6 +342,54 @@ class PortfolioEngine:
                 if day_had_unaffordable:
                     self.unaffordable_event_days += 1
 
+                # 1.3 贪心瀑布流再分配 (Greedy Waterfall Reallocation)
+                # 若开启 greedy_allocation 且存在买不起跳过/零头找零沉淀的富余现金：
+                # 只要剩余现金仍足以购买至少某只标的 1 手，优先挑选“当前持仓市值最低”的标的追加 1 手，
+                # 从而在最大化资金利用率 (投资仓位 >95%) 的同时以离散整手最佳逼近等权分配。
+                if self.greedy_allocation and not self.allow_fractional_shares and self.cash_balance > 0:
+                    price_cache: Dict[str, float] = {}
+                    for inst in order.buy_instruments:
+                        try:
+                            p = price_lookup(inst, cycle.trade_date, exec_field)
+                            if p > 0:
+                                price_cache[inst] = p
+                        except Exception:
+                            pass
+
+                    while True:
+                        candidates = []
+                        for inst, p in price_cache.items():
+                            lot_gross = self.lot_size * p
+                            lot_cost = self.cost_model.calculate_buy_cost(lot_gross)
+                            total_needed = lot_gross + lot_cost
+                            if total_needed <= self.cash_balance:
+                                cur_val = self.holdings.get(inst, 0.0) * p
+                                candidates.append((cur_val, p, inst, lot_gross, lot_cost, total_needed))
+
+                        if not candidates:
+                            break
+
+                        # 优先选择当前持仓市值最少者，若市值相同则选择单手成本较低者
+                        candidates.sort(key=lambda x: (x[0], x[1]))
+                        _, p, best_inst, lot_gross, lot_cost, total_spent = candidates[0]
+
+                        self.cash_balance -= total_spent
+                        self.holdings[best_inst] = self.holdings.get(best_inst, 0.0) + float(self.lot_size)
+                        weekly_cost += lot_cost
+                        turnover_value += lot_gross
+
+                        self.trades.append(
+                            TradeRecord(
+                                date=cycle.trade_date,
+                                instrument=best_inst,
+                                direction="BUY",
+                                price=p,
+                                shares=float(self.lot_size),
+                                value=lot_gross,
+                                cost=lot_cost
+                            )
+                        )
+
         # --- Phase 2: 周内日频盯市估值 (Daily Marked-to-Market) ---
         for day in cycle.trading_days:
             # 每日以当日收盘价核算持仓市值
@@ -479,7 +529,8 @@ class PortfolioEngine:
                 "min_cost": self.cost_model.min_cost,
             },
             last_cycle_idx=last_cycle,
-            last_settle_date=last_date
+            last_settle_date=last_date,
+            greedy_allocation=self.greedy_allocation
         )
 
     @classmethod
@@ -499,6 +550,7 @@ class PortfolioEngine:
             deal_price_mode=cp.deal_price_mode,
             allow_fractional_shares=cp.allow_fractional_shares,
             lot_size=cp.lot_size,
+            greedy_allocation=getattr(cp, "greedy_allocation", False),
         )
         engine.cash_balance = float(cp.cash_balance)
         engine.holdings = dict(cp.holdings)

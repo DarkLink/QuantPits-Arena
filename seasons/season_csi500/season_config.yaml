@@ -64,7 +64,7 @@ dispatches:
     title: "CSI 500 Retrospective Baseline: Mid-Cap Breadth & Allocation Dynamics"
     window_label: "2026-07-03 ~ 2026-09-11 (51 Trading Days, Cycles 1–9)"
     nature_label: "Retrospective backtest baseline evaluating alpha robustness across 500 mid-cap equities."
-    leader_summary: "CONTESTANT_B_rabbit-1 finished the baseline at NAV 1.0998 (+9.98%), outperforming the CSI 500 benchmark by +22.47pp and Taotie 500 by +9.23pp."
+    leader_summary: "CONTESTANT_B_rabbit-1 finished the baseline at NAV 1.0998 (+9.98%), outperforming the CSI 500 benchmark by +22.47pp and Taotie 500 by +18.73pp."
   climate:
     tag: "🌪️ Mid-Cap Market Climate"
     status_badge: "Active"
@@ -72,7 +72,7 @@ dispatches:
     summary: "Tracking cross-sectional volatility, turnover efficiency, and holding capacity in liquid mid-cap equities."
     bullets:
       - "<strong>CSI 500 Benchmark Drawdown</strong>: The CSI 500 index (SH000905) dropped -12.49% across the 46-day window, creating severe macro headwinds."
-      - "<strong>Executable Taotie 500 Buffer</strong>: Physical equal-weight benchmark Taotie 500 held positive ground at +0.75%, mitigating small-cap style compression."
+      - "<strong>Executable Taotie 500 Buffer</strong>: Physical equal-weight benchmark Taotie 500 finished at -8.75% with 403 active holdings via greedy waterfall execution, outperforming the market index by +3.74pp."
       - "<strong>Agile Rotation Alpha</strong>: High-turnover containers (Rabbit) outpaced extreme concentration (Eagle), capturing swift sector rotations."
     decrypt_label: "Monthly Cadence (M1–M2 Released; M3+ Monthly)"
   episodes:

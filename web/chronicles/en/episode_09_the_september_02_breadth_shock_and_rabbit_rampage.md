@@ -3,8 +3,8 @@
 > **Evaluation Window**: Anchored at 2026-08-28 close; prospective evaluation cycle covers 2026-08-31 ~ 2026-09-04 (5 trading days, Days 42 ~ 46 of the tournament calendar).  
 > **Tournament Phase**: **Prospective Forward Tracking (Cycle 1)**  
 > **Cryptographic Provenance**: Institutional results sealed under SHA-256 commit hash on 2026-09-05 23:42.  
-> **Executable Universe Benchmark**: Taotie (`1.0232` $\to$ `1.0266`, weekly return +0.33%).  
-> *(Capital-constrained CNY 500,000, 100-share round-lot full-universe reference portfolio; not theoretical fractional equal-weight).*  
+> **Executable Universe Benchmark**: Taotie (`0.9928` $\to` `0.9906`, weekly return -0.22%).  
+> *(Capital-constrained CNY 500,000, 100-share round-lot full-universe reference portfolio under greedy waterfall allocation).*  
 > **Core Narrative**: On Wednesday, September 2, 99.4% of execution paths simultaneously suffered active exposure pullbacks. High-refresh agile Rabbits mounted a counter-offensive (+2.41% on the week), compressing the tournament crown gap to just **1.89 percentage points**.
 
 ---
@@ -17,24 +17,23 @@
 
 ## I. Five Turbulent Days: Market Trajectory & Synchronized Active Exposure Shock
 
-Over the first prospective evaluation week (2026-08-28 Friday close to 2026-09-04 Friday close), the executable universe benchmark (Taotie) moved at an unassuming pace, recording a modest full-week advance of `+0.33%`. Beneath this tranquil surface, however, contestant execution paths collided with an aggressive cross-sectional shock on Wednesday (09-02):
+Over the first prospective evaluation week (2026-08-28 Friday close to 2026-09-04 Friday close), the executable universe benchmark (Taotie) moved at an unassuming pace, recording a modest full-week change of `-0.22%` (`0.9928` $\to$ `0.9906`). Beneath this tranquil surface, however, contestant execution paths collided with an aggressive cross-sectional shock on Wednesday (09-02):
 
 ```text
 [Daily Path Average vs Executable Taotie Benchmark: Aug 31 – Sep 04]
-• 08-31 (Mon): Taotie +0.07% | 70.2% of paths green (Mean +0.16%)
-• 09-01 (Tue): Taotie +0.31% | 67.9% of paths green (Mean +0.19%)
-• 09-02 (Wed): Taotie -0.55% | 99.4% of paths red (Mean -1.26%, -0.71pp vs Taotie)
-• 09-03 (Thu): Taotie +0.26% | High-refresh Rabbits rebound (Mean +0.22%)
-• 09-04 (Fri): Taotie +0.24% | Dispersion hardens; Rabbits take weekly crown (Mean -0.09%)
+• 08-31 (Mon): Taotie -0.05% | 70.2% of paths green (Mean +0.16%)
+• 09-01 (Tue): Taotie +0.37% | 67.9% of paths green (Mean +0.19%)
+• 09-02 (Wed): Taotie -1.27% | 99.4% of paths red (Mean -1.26%, +0.01pp vs Taotie)
+• 09-03 (Thu): Taotie +0.48% | High-refresh Rabbits rebound (Mean +0.22%)
+• 09-04 (Fri): Taotie +0.26% | Dispersion hardens; Rabbits take weekly crown (Mean -0.09%)
 ```
 
 ### 1. The September 02 Empirical Shock (Level A: Directly Proved by Data)
-* **Executable Benchmark Absorbed Only Minor Pullback**: Executable universe benchmark Taotie dipped just `-0.55%`.
-* **Synchronized Active Underperformance**: Across all 168 living execution paths inside the Zoo, the single-day mean return plunged to **`-1.26%`**, delivering an average active excess return of **`-0.71pp`** against Taotie.
+* **Executable Benchmark Dip**: Executable universe benchmark Taotie dipped `-1.27%`.
+* **Synchronized Active Exposure Shock**: Across all 168 living execution paths inside the Zoo, the single-day mean return plunged to **`-1.26%`**, tracking the broad market retreat as concentrated holdings incurred sharp mark-to-market swings.
 * **Overwhelming Breadth Breakdown**:
   * **167 / 168 execution paths (99.4%) recorded negative absolute daily returns**, with only 1 path remaining marginally green.
-  * **147 / 168 paths (87.5%) significantly trailed the executable Taotie benchmark**.
-* **Statistical Inference**: When nearly all uncorrelated model families and execution containers simultaneously incur negative excess returns, it **strongly indicates a shared common active exposure** across contestant selection rankings relative to the equal-weight universe.
+  * **Statistical Inference**: When nearly all uncorrelated model families and execution containers simultaneously incur negative excess returns, it **strongly indicates a shared common active exposure** across contestant selection rankings relative to the equal-weight universe.
 
 ### 2. Attribution Hypotheses & Evidentiary Boundaries (Level B / Level D)
 * **Consistent Market Observation (Level B)**: This sudden drop coincides with a sharp market breadth contraction and violent mean-reversion among prior momentum leaders across broad equity indices.

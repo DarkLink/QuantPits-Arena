@@ -65,7 +65,7 @@ dispatches:
     title: "CSI 800 Retrospective Baseline: Broad-Market Cross-Section & Allocation Dynamics"
     window_label: "2026-07-03 ~ 2026-09-11 (51 Trading Days, Cycles 1–9)"
     nature_label: "Retrospective backtest baseline evaluating alpha robustness across 800 broad-cap equities."
-    leader_summary: "CONTESTANT_B_rabbit-2 finished the baseline at NAV 1.1284 (+12.84%), outperforming the CSI 800 benchmark by +20.74pp and Taotie 800 by +12.45pp."
+    leader_summary: "CONTESTANT_B_rabbit-2 finished the baseline at NAV 1.1284 (+12.84%), outperforming the CSI 800 benchmark by +20.74pp and Taotie 800 by +19.77pp."
   climate:
     tag: "🌪️ Broad-Cap Market Climate"
     status_badge: "Active"
@@ -73,7 +73,7 @@ dispatches:
     summary: "Evaluating alpha transferability and portfolio capacity across 800 liquid Chinese equities."
     bullets:
       - "<strong>CSI 800 Benchmark Trajectory</strong>: The CSI 800 index (SH000906) declined -7.90% over the 46 trading days."
-      - "<strong>Executable Taotie 800 Stability</strong>: Physical Taotie 800 (1.6M capital) recorded +0.39% net gain, demonstrating strong cross-sectional diversification."
+      - "<strong>Executable Taotie 800 Stability</strong>: Physical Taotie 800 (1.6M capital, 634 active holdings) finished at -6.93%, outperforming the market index by +0.97pp under full greedy allocation."
       - "<strong>Broad-Market Momentum</strong>: Agile turnover (Rabbit-2) captured +12.84% return, confirming active factor signal validity."
     decrypt_label: "Monthly Cadence (M1–M2 Released; M3+ Monthly)"
   episodes:

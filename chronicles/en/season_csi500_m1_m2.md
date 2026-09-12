@@ -2,10 +2,10 @@
 
 > **Evaluation Window**: Anchored at 2026-07-03 inception NAV 1.0000; covers 41 trading days up to 2026-08-28 close (Months 1 & 2 Combined Baseline).  
 > **Tournament Phase**: **Retrospective Backtest Calibration (Fixed Historical Weights)**  
-> **Executable Universe Benchmark**: Taotie 500 (`1.0000` $\to$ `1.0075`, Cumulative +0.75%).  
+> **Executable Universe Benchmark**: Taotie 500 (`1.0000` $\to$ `0.9472`, Cumulative -5.28% at 41-day baseline; -8.75% across full 51-day horizon).  
 > **Market Index Benchmark**: CSI 500 Index (`SH000905`, Cumulative **-12.49%**).  
-> *(Under standardized CNY 500,000 capital and strict 100-share round-lot trading constraints across the 500 mid-cap stock universe).*  
-> **Core Narrative**: While the mid-cap index endured a severe -12.49% market drawdown, the executable Taotie reference held ground at +0.75%. High-refresh Rabbit handlers capitalized on heightened cross-sectional dispersion, generating nearly +10% absolute returns led by `CONTESTANT_B_rabbit-1` (+9.98%).
+> *(Under standardized CNY 1,000,000 capital and strict 100-share round-lot trading constraints with greedy waterfall allocation across the 500 mid-cap stock universe).*  
+> **Core Narrative**: While the mid-cap index endured a severe -12.49% market drawdown, the executable Taotie reference absorbed a milder -5.28% pullback (+7.21pp over the index), actively covering 403 equities through greedy waterfall allocation. High-refresh Rabbit handlers capitalized on heightened cross-sectional dispersion, generating nearly +10% absolute returns led by `CONTESTANT_B_rabbit-1` (+9.98%).
 
 ---
 
@@ -22,17 +22,17 @@ This 41-day opening baseline covers the combined Month 1 and Month 2 evaluation 
 
 ## II. The Battlefield: Leaderboard Standings in Mid-Cap Space
 
-Across the 41-day stretch, the executable reference portfolio (**Taotie 500**) successfully resisted the index decline, closing at `1.0075` (**+0.75%**, generating +13.24pp of active protection over the raw CSI 500 index).
+Across the 41-day stretch, the executable reference portfolio (**Taotie 500**) demonstrated equal-weight defensive cushioning against the index decline, closing at `0.9472` (**-5.28%**, generating +7.21pp of active protection over the raw CSI 500 index).
 
 Inside the Zoo, execution containers with agile rebalancing capabilities thoroughly decoupled from the market downturn:
 
 ```text
 [CSI 500 Cumulative NAV Top 5 Standings as of August 28, 2026 (41 Trading Days)]
-🥇 CONTESTANT_B_rabbit-1  : NAV 1.0998 (+9.98%, +22.47pp vs CSI 500, +9.23pp vs Taotie)
-🥈 CONTESTANT_B_rabbit-2  : NAV 1.0939 (+9.39%, +21.88pp vs CSI 500, +8.64pp vs Taotie)
-🥉 CONTESTANT_B_eagle-5-1 : NAV 1.0905 (+9.05%, +21.54pp vs CSI 500, +8.30pp vs Taotie)
-🎖️ CONTESTANT_B_whale-shark: NAV 1.0893 (+8.93%, +21.42pp vs CSI 500, +8.18pp vs Taotie)
-🎖️ CONTESTANT_A_rabbit-1  : NAV 1.0877 (+8.77%, +21.26pp vs CSI 500, +8.02pp vs Taotie)
+🥇 CONTESTANT_B_rabbit-1  : NAV 1.0998 (+9.98%, +22.47pp vs CSI 500, +15.26pp vs Taotie)
+🥈 CONTESTANT_B_rabbit-2  : NAV 1.0939 (+9.39%, +21.88pp vs CSI 500, +14.67pp vs Taotie)
+🥉 CONTESTANT_B_eagle-5-1 : NAV 1.0905 (+9.05%, +21.54pp vs CSI 500, +14.33pp vs Taotie)
+🎖️ CONTESTANT_B_whale-shark: NAV 1.0893 (+8.93%, +21.42pp vs CSI 500, +14.21pp vs Taotie)
+🎖️ CONTESTANT_A_rabbit-1  : NAV 1.0877 (+8.77%, +21.26pp vs CSI 500, +14.05pp vs Taotie)
 ```
 
 ### The Triumph of Agile Execution

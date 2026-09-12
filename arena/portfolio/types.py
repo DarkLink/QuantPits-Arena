@@ -116,4 +116,7 @@ class EngineCheckpoint:
     cost_model_state: Dict[str, Any]
     last_cycle_idx: int
     last_settle_date: str
+    greedy_allocation: bool = False
+
+
 

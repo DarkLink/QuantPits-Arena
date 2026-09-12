@@ -2,9 +2,9 @@
 
 > **Evaluation Window**: Anchored at 2026-07-03 inception NAV 1.0000; covers 41 trading days up to 2026-08-28 close (Months 1 & 2 Combined Baseline).  
 > **Tournament Phase**: **Retrospective Backtest Calibration (Fixed Historical Weights)**  
-> **Executable Universe Benchmark**: Taotie 800 (`1.0000` $\to$ `1.0039`, Cumulative +0.39%).  
+> **Executable Universe Benchmark**: Taotie 800 (`1.0000` $\to$ `0.9625`, Cumulative **-3.75%**; full 51d horizon NAV `0.9307`, **-6.93%**).  
 > **Market Index Benchmark**: CSI 800 Index (`SH000906`, Cumulative **-7.90%**).  
-> *(Under standardized CNY 500,000 capital and strict 100-share round-lot trading constraints across the 800 broad-market stock universe).*  
+> *(Under standardized CNY 1,600,000 capital and strict 100-share round-lot trading constraints across the 800 broad-market stock universe, utilizing greedy waterfall allocation to achieve ~99.9% capital utilization across 634 equities).*  
 > **Core Narrative**: Combining large-cap liquidity with mid-cap growth dispersion, the CSI 800 arena delivered outstanding multi-factor alpha. Agile execution handlers crushed the market benchmark by over 20 percentage points, with `CONTESTANT_B_rabbit-2` topping the podium at **+12.84%**.
 
 ---
@@ -22,17 +22,17 @@ This 41-day opening baseline covers the combined Month 1 and Month 2 evaluation 
 
 ## II. The Battlefield: Leaderboard Standings across the 800 Universe
 
-The executable full-universe reference benchmark (**Taotie 800**) ended the calibration baseline virtually flat at `1.0039` (**+0.39%**, outperforming the market index by +8.29pp).
+The executable full-universe reference benchmark (**Taotie 800**) ended the calibration baseline at `0.9625` (**-3.75%**, outperforming the market index by +4.15pp). Under greedy waterfall allocation, Taotie 800 holds an average of 634 constituent equities with near-zero idle cash, accurately capturing equal-weighted market friction across large and mid caps.
 
 Among the active execution paths, aggressive turnover handlers unlocked substantial active returns:
 
 ```text
 [CSI 800 Cumulative NAV Top 5 Standings as of August 28, 2026 (41 Trading Days)]
-🥇 CONTESTANT_B_rabbit-2   : NAV 1.1284 (+12.84%, +20.74pp vs CSI 800, +12.45pp vs Taotie)
-🥈 CONTESTANT_B_rabbit-1   : NAV 1.0984 (+9.84%, +17.74pp vs CSI 800, +9.45pp vs Taotie)
-🥉 CONTESTANT_B_whale-shark : NAV 1.0830 (+8.30%, +16.20pp vs CSI 800, +7.91pp vs Taotie)
-🎖️ CONTESTANT_A_rabbit-2   : NAV 1.0821 (+8.21%, +16.11pp vs CSI 800, +7.82pp vs Taotie)
-🎖️ CONTESTANT_D_rabbit-2   : NAV 1.0805 (+8.05%, +15.95pp vs CSI 800, +7.66pp vs Taotie)
+🥇 CONTESTANT_B_rabbit-2   : NAV 1.1284 (+12.84%, +20.74pp vs CSI 800, +16.59pp vs Taotie)
+🥈 CONTESTANT_B_rabbit-1   : NAV 1.0984 (+9.84%, +17.74pp vs CSI 800, +13.59pp vs Taotie)
+🥉 CONTESTANT_B_whale-shark : NAV 1.0830 (+8.30%, +16.20pp vs CSI 800, +12.05pp vs Taotie)
+🎖️ CONTESTANT_A_rabbit-2   : NAV 1.0821 (+8.21%, +16.11pp vs CSI 800, +11.96pp vs Taotie)
+🎖️ CONTESTANT_D_rabbit-2   : NAV 1.0805 (+8.05%, +15.95pp vs CSI 800, +11.80pp vs Taotie)
 ```
 
 ### The Crowning of the Broad-Cap Rabbit King

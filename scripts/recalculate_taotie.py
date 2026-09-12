@@ -35,7 +35,11 @@ def recalculate_season_taotie(season_id: str):
     pred_path = REPO_ROOT / "artifacts" / "predictions" / f"{season_id}_contestants_oos.pkl"
     if not pred_path.exists():
         raw_univ = season_id.replace("season_", "").lower()
-        pred_path = REPO_ROOT / "artifacts" / "predictions" / f"{raw_univ}_contestants_oos.pkl"
+        candidate = REPO_ROOT / "artifacts" / "predictions" / f"{raw_univ}_contestants_oos.pkl"
+        if candidate.exists():
+            pred_path = candidate
+        else:
+            pred_path = REPO_ROOT / "artifacts" / "predictions" / "all_contestants_oos.pkl"
     
     raw_data = pd.read_pickle(pred_path)
     first_cid = next(iter(raw_data.keys()))

@@ -44,7 +44,8 @@ class TaotieBenchmark(Benchmark):
             animal_id=self.animal_id,
             topk=0,  # 0 表示动态匹配全部有效池
             initial_cash=initial_cash,
-            deal_price_mode=deal_price_mode
+            deal_price_mode=deal_price_mode,
+            greedy_allocation=True  # 启用贪心瀑布流再分配，消除全池大容量一手约束导致的死现金沉淀
         )
 
     def step(

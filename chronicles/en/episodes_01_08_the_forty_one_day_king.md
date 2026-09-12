@@ -2,8 +2,8 @@
 *(Evaluation Window: Anchored at 2026-07-03 inception NAV 1.0000; covers 41 trading days up to 2026-08-28 close)*
 
 > **Phase Classification**: **Retrospective Backtest Baseline (Fixed Historical Weights)**  
-> **Executable Universe Benchmark**: Taotie (`1.0000` $\to$ `1.0232`, Cumulative +2.32%)  
-> *(A capital-constrained, round-lot-constrained full-universe portfolio designed to approximate broad exposure with minimal active selection; not a theoretical fractional equal-weight index)*  
+> **Executable Universe Benchmark**: Taotie (`1.0000` $\to$ `0.9928`, Cumulative -0.72%)  
+> *(A capital-constrained, round-lot-constrained full-universe portfolio designed to approximate broad exposure with minimal active selection; utilizing greedy waterfall allocation across 500k capital to hold ~205 stocks with near-zero idle cash)*  
 > **Summary**: High selection intensity variants gained strong upside in this period. `CONTESTANT_B_eagle-5-1` finished the baseline at **+19.71%**, while delayed-signal Sloths also retained positive performance.
 
 ---
@@ -20,21 +20,21 @@ This 41-day baseline covers the opening 8 weeks of the tournament calendar (Epis
 
 ## II. The Battlefield: Leaderboard Standings & The Coronation
 
-Across the 41-day baseline stretch, the executable universe benchmark (**Taotie**) ground through choppy terrain under its finite-capital and round-lot constraints, inching up to `1.0232` (a modest **`+2.32%`**).
+Across the 41-day baseline stretch, the executable universe benchmark (**Taotie**) ground through choppy terrain under its finite-capital and round-lot constraints, ending at `0.9928` (**-0.72%**). Under greedy waterfall allocation, Taotie held ~205 constituent stocks with ~0.02% idle cash, accurately reflecting equal-weighted market drag.
 
 Yet among the 168 living execution paths battling inside the Zoo, strategies with elevated selection intensity unlocked remarkable upside leverage:
 
 ```text
 [Cumulative NAV Top 5 Standings as of August 28, 2026 (41 Trading Days)]
-🥇 CONTESTANT_B_eagle-5-1 : NAV 1.1971 (+19.71%, +17.39pp vs executable Taotie benchmark)
-🥈 CONTESTANT_A_eagle-11-2: NAV 1.1468 (+14.68%, +12.36pp vs executable Taotie benchmark)
-🥉 CONTESTANT_B_sloth-1   : NAV 1.1438 (+14.38%, +12.06pp vs executable Taotie benchmark)
-🎖️ CONTESTANT_A_rabbit-1  : NAV 1.1313 (+13.13%, +10.81pp vs executable Taotie benchmark)
-🎖️ CONTESTANT_D_rabbit-1  : NAV 1.1247 (+12.47%, +10.15pp vs executable Taotie benchmark)
+🥇 CONTESTANT_B_eagle-5-1 : NAV 1.1971 (+19.71%, +20.43pp vs executable Taotie benchmark)
+🥈 CONTESTANT_A_eagle-11-2: NAV 1.1468 (+14.68%, +15.40pp vs executable Taotie benchmark)
+🥉 CONTESTANT_B_sloth-1   : NAV 1.1438 (+14.38%, +15.10pp vs executable Taotie benchmark)
+🎖️ CONTESTANT_A_rabbit-1  : NAV 1.1313 (+13.13%, +13.85pp vs executable Taotie benchmark)
+🎖️ CONTESTANT_D_rabbit-1  : NAV 1.1247 (+12.47%, +13.19pp vs executable Taotie benchmark)
 ```
 
 ### The Crowning of the Eagle King
-Pioneered under the `CONTESTANT_B` banner, **`CONTESTANT_B_eagle-5-1`** soared to **NAV `1.1971` (+19.71%)**, generating a staggering **17.39 percentage points of excess return** over the executable universe benchmark (Taotie).
+Pioneered under the `CONTESTANT_B` banner, **`CONTESTANT_B_eagle-5-1`** soared to **NAV `1.1971` (+19.71%)**, generating a staggering **20.43 percentage points of excess return** over the executable universe benchmark (Taotie).
 
 * **Short-Window Caveat**: Over this 41-day run, the Eagle posted an annualized Sharpe ratio of `2.64` with a maximum drawdown of just `-2.41%`. Spectacular short-window metrics in trending regimes must never be confused with long-horizon structural invariance.
 
