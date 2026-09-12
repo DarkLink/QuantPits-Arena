@@ -56,8 +56,9 @@ The 500-stock universe possesses structural characteristics distinct from large-
 * `eagle-5-1` finished third overall at `+9.05%`. However, holding only 5 mid-cap stocks exposed the portfolio to sharp localized intraday volatility, suffering a maximum drawdown of `-4.12%` compared to just `-1.85%` for Rabbit-1.
 * In mid-cap space, concentration carries heightened idiosyncratic risk due to wider bid-ask spreads and liquidity variation.
 
-### 3. 🦥 The Sloths (Signal Decay under Mid-Cap Velocity)
-* Delayed-signal Sloths performed reasonably well (`sloth-1` at `+6.45%`), but decayed faster than in large-cap CSI 300. By `sloth-4` (4 weeks lag), returns dropped to `+1.82%`. Mid-cap alpha signals decay at an accelerated rate compared to mega-cap trends.
+### 3. 🦥 vs 🐌 The Sloths & Snails: Cash Shield vs. Sluggish Turnover
+* While `sloth-1` (+6.07%) delivered positive absolute returns, its performance was bolstered by holding 100% cash during the initial week when the CSI 500 benchmark fell steeply.
+* In contrast, **Snail-1 (蜗牛)** maintained full equity exposure from Day 1 (mean cash 2.11%), achieving **+3.52%** (+16.01pp over the -12.49% index). Snail's positive return confirms robust mid-cap selection alpha without timing assistance, while demonstrating that Sloth's additional margin was partly driven by the unearned cash shield during the early July slide. As signal latency lengthened to 4 weeks, Sloth returns collapsed to -3.35%, illustrating rapid factor half-life decay in mid caps.
 
 ---
 

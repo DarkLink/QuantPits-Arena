@@ -5,7 +5,7 @@
 > **Executable Universe Benchmark**: Taotie 1000 (`1.0000` $\to$ `1.0165`, Cumulative +1.65%).  
 > **Market Index Benchmark**: CSI 1000 Index (`SH000852`, Cumulative **-12.91%**).  
 > *(Under standardized CNY 500,000 capital and strict 100-share round-lot trading constraints across the 1,000 small-cap stock universe).*  
-> **Core Narrative**: Confronted with a brutal -12.91% collapse in the small-cap index, the tournament revealed a profound structural insight: delayed-signal Sloth containers dominated the field, capturing +13.43% led by `CONTESTANT_B_sloth-2`. Small-cap alpha demonstrated extended signal persistence, rewarding patient inertia over hyperactive turnover.
+> **Core Narrative**: Confronted with a brutal -12.91% collapse in the small-cap index, delayed-signal Sloth containers captured top honors (+13.43% led by `CONTESTANT_B_sloth-2`). However, a rigorous methodological autopsy reveals that Sloth's headline returns bundle two distinct phenomena: a massive **Cash Shield effect** (holding 100% risk-free cash during July's steep initial market drawdown) and genuine slow-decay selection alpha. Comparing Sloth against the full-exposure **Snail (蜗牛)** control group (+2.49% to +4.88%) cleanly separates unearned beta avoidance from true small-cap alpha.
 
 ---
 
@@ -40,27 +40,35 @@ In stark contrast to large-cap arenas where agile Rabbits or concentrated Eagles
 
 ---
 
-## III. Execution Zoo Autopsy: Why Delayed Signals Won in Small Caps
+## III. Execution Zoo Autopsy: Disentangling Signal Persistence from the "Cash Shield"
 
-Why did deliberately delaying trading signals by 1 to 3 weeks produce superior returns in small-cap equities?
+Why did deliberately delaying trading signals produce superior returns in small-cap equities? A naive interpretation attributes this solely to "longer signal half-life." The Zoo's multi-container design allows us to decompose the real drivers.
 
-### 1. 🦥 The Sloths (Informational Inefficiency & Extended Half-Life)
-* **Mechanistic Fact**: Sloth variants deliberately lag incoming model prediction signals by 1, 2, 3, or 4 weekly cycles before rebalancing, while also holding uninvested cash during delay periods.
-* **Economic Attribution**:
-  * **Slower Price Discovery**: Small-cap equities have sparse sell-side analyst coverage and lower institutional participation. Mispricings discovered by multi-factor models take multiple weeks to fully correct, resulting in a substantially longer alpha half-life compared to heavily arbitrated large caps.
-  * **Turnover Friction Immunity**: Rebalancing every week in small caps incurs significant transaction costs, wider bid-ask spreads, and market impact. By slowing down portfolio churn, Sloths avoided friction drag while allowing slow-moving structural alpha to mature.
-* **Controlled Pairwise Comparison**:
-  * Under `CONTESTANT_B`: Robot (0 delay) delivered `+10.98%`.
-  * `sloth-1` (1-week delay) delivered `+11.19%`.
-  * `sloth-2` (2-week delay) delivered `+13.43%` (**+2.45pp higher than real-time Robot!**).
-  * `sloth-3` (3-week delay) delivered `+11.84%`.
-  * Only at `sloth-4` (4-week delay) did decay begin to erode returns (`+8.52%`).
+### 1. 🦥 The Sloth "Cash Shield" Effect vs. Authentic Alpha
+* **The Structural Delay Confounder**: Sloth containers delay trading by 1, 2, 3, or 4 weekly cycles. Crucially, during their respective cold-start delay buffers, **Sloths hold 100% cash**:
+  * `sloth-1`: Held 100% cash in Week 1 (Mean cash ratio: 12.55%).
+  * `sloth-2`: Held 100% cash in Weeks 1–2 (Mean cash ratio: 23.74%).
+  * `sloth-3`: Held 100% cash in Weeks 1–3 (Mean cash ratio: 34.69%).
+  * `sloth-4`: Held 100% cash in Weeks 1–4 (Mean cash ratio: 45.54%).
+* **The Downside Timing Distortion**: During the first 4 weeks (July 2026), the CSI 1000 index experienced its steepest downward slide. By sitting in risk-free cash during the worst phase of the market drop, Sloths enjoyed a massive, unearned **beta-avoidance cushion** (Exposure-Length Bias).
 
-### 2. 🐇 The Rabbits (Friction Fatigue in Small Caps)
-* High-turnover Rabbit variants (`rabbit-1` at `+7.85%`, `rabbit-2` at `+6.92%`) underperformed Sloths. In small-cap space, hyperactive weekly turnover incurred cumulative commission drag and round-lot rounding penalties without corresponding signal improvement.
+### 2. 🐌 The Snail Control Group: Isolating Full-Exposure Alpha
+To test whether Sloth's returns were mere cash timing or real signal persistence, the Arena employs **Snail (蜗牛)** as the explicit exposure-matched control:
+* **Snail Mechanism**: Snails enter the market on Day 1 with **full equity exposure** (mean cash ratio < 3%), completely eschewing the cold-start cash buffer, while adopting slow-motion holding inertia.
+* **Empirical Results Under CONTESTANT_B**:
+  * `snail-1`: Ended at **+4.88%** (mean cash 2.40%).
+  * `snail-2`: Ended at **+2.49%** (mean cash 2.96%).
+  * `snail-3`: Ended at **+2.17%** (mean cash 3.69%).
+  * `snail-4`: Ended at **+1.49%** (mean cash 4.38%).
+* **The Decomposition Formula**:
+  $$\text{Sloth-2 Outperformance (+13.43%)} = \underbrace{\text{Snail-1 Full-Exposure Alpha (+4.88%)}}_{\text{True Stock Selection Alpha (+17.79pp vs Index)}} + \underbrace{\text{Cash Shield Beta Avoidance (+8.55pp)}}_{\text{Avoided July Drop}}$$
+* **Conclusion**: Snail's +4.88% proves that the underlying selection signal generated substantial structural alpha amidst an index collapse (-12.91%). However, the additional +8.5pp in Sloth-2 was fundamentally a cash-timing bonus, not pure stock-picking superiority.
 
-### 3. 🦅 The Eagles (Liquidity Shocks in Micro Holdings)
-* `eagle-5-1` finished at `+7.90%`, but suffered a maximum drawdown of `-5.84%`. Holding just 5 small-cap stocks exposed the portfolio to extreme idiosyncratic shocks. When market liquidity dried up in August, concentrated single-name pullbacks hit Eagle portfolios hard.
+### 3. 🐇 The Rabbits (Friction Fatigue in Small Caps)
+* High-turnover Rabbit variants (`rabbit-1` at `+2.15%`, `rabbit-2` at `-3.42%`) lagged behind. In small-cap space, hyperactive weekly turnover incurred cumulative round-lot rounding penalties and bid-ask friction without sufficient weekly signal renewal to compensate.
+
+### 4. 🦅 The Eagles (Microstructure Liquidity Shocks)
+* `eagle-5-1` finished at `+1.73%` with a steep `-17.62%` maximum drawdown. Holding just 5 small-cap stocks exposed the portfolio to severe idiosyncratic liquidity shocks when broad-market liquidity dried up in late July.
 
 ---
 

@@ -58,6 +58,10 @@ The 800-stock universe spans two distinct regimes: high-liquidity large caps and
 ### 3. 🦅 The Eagles (Concentration vs Diversification Balance)
 * Unlike in CSI 300 where `eagle-5-1` captured Rank 1 (+19.71%), in the 800 universe `eagle-5-1` placed 6th (+7.95%). The vast opportunity set in CSI 800 meant that selecting only 5 stocks missed valuable breadth advantages, allowing well-diversified Rabbits (TopK=22) to take the crown.
 
+### 4. 🦥 vs 🐌 The Sloths & Snails: Cash Shield Disentanglement
+* Sloth variants (`sloth-1` at `+5.27%`, `sloth-2` at `+4.36%`) recorded positive returns partly through their initial cold-start cash buffer during July's broad-market drawdown (-7.90%).
+* The exposure-matched control **Snail-1 (蜗牛)** held equities continuously (mean cash 2.56%), delivering **+2.37%** (+10.27pp over the falling index). This isolates genuine full-exposure alpha from the timing buffer, proving that model stock selection added positive value even when turnover was deliberately suppressed.
+
 ---
 
 ## IV. The Null Court: Monte Carlo Jurisdiction
