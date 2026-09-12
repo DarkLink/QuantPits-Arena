@@ -119,8 +119,12 @@ class PortfolioEngine:
             # 注意：对于全池纯被动动物 (passive_pool=True，如饕餮)，目标是全量覆盖池中所有标的，
             # 无后续标的可以顺延，因此不在候选阶段提前截断剔除，而是在撮合执行阶段真实体现资本粒度受阻与跳过！
             if not passive_pool and not self.allow_fractional_shares and price_lookup is not None:
-                p = price_lookup(inst, trade_date, self.deal_price_mode)
-                if p > 0 and (p * self.lot_size) > est_per_stock_cash:
+                try:
+                    p = price_lookup(inst, trade_date, self.deal_price_mode)
+                    if p <= 0 or (p * self.lot_size) > est_per_stock_cash:
+                        continue
+                except Exception:
+                    # 无法获取有效价格的标的，视为不可交易直接跳过
                     continue
 
             tradable_candidates.append(inst)
@@ -293,7 +297,13 @@ class PortfolioEngine:
 
                 for inst in order.buy_instruments:
                     self.buy_attempt_count += 1
-                    price = price_lookup(inst, cycle.trade_date, exec_field)
+                    try:
+                        price = price_lookup(inst, cycle.trade_date, exec_field)
+                    except Exception:
+                        # 无法获取有效真实价格，严禁使用模拟数据撮合，直接跳过
+                        continue
+                    if price <= 0:
+                        continue
                     if self.allow_fractional_shares:
                         shares = per_stock_cash / price
                     else:

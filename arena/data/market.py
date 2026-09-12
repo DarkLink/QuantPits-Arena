@@ -139,11 +139,16 @@ class MarketDataProvider:
                     "adj_close": adj_p,
                 }
             else:
-                # 基础股价 10 ~ 80 元
+                # 真实模式下，全新未知且无任何历史行情的标的严禁伪造价格
+                if self.use_real_qlib:
+                    raise KeyError(
+                        f"标的 {instrument} 在历史行情缓存中无任何有效价格记录 (date={date})，"
+                        f"真实模式下严禁使用伪随机价格兜底成交或估值。"
+                    )
+
+                # 仅在纯 Mock 测试模式下允许使用确定性哈希生成演示价格
                 base_real = (abs(hash(instrument)) % 7000 + 1000) / 100.0
-                # 真实复权因子 factor: 0.1 ~ 3.0 (例如茅台 ~0.14, 浦发 ~1.5)
                 raw_factor = (abs(hash(f"factor_{instrument}")) % 250 + 50) / 100.0
-                # 每日微幅波动
                 day_drift = ((abs(hash(f"drift_{instrument}_{date}")) % 40) - 20) / 1000.0
 
                 real_o = base_real
@@ -163,4 +168,5 @@ class MarketDataProvider:
 
         data = self._cache[key]
         return data[f"real_{field}"] if return_real else data[f"adj_{field}"]
+
 
