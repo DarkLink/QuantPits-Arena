@@ -617,7 +617,7 @@ class ArenaDataAdapter {
     if (subjectId === "BENCHMARK_taotie" || subjectId === "taotie") {
       const curve = this.getBenchmarkTaotieCurve();
       const dd = this.getTaotieDrawdown();
-      const minDd = dd && dd.length ? Math.min(...dd) * 100 : 0;
+      const minDd = dd && dd.length ? Math.min(...dd) : 0;
       const lastVal = curve && curve.length ? curve[curve.length - 1] : 1.0;
       return {
         id: "BENCHMARK_taotie",
@@ -636,7 +636,7 @@ class ArenaDataAdapter {
     if (subjectId === "BENCHMARK_ghost_taotie" || subjectId === "ghost_taotie") {
       const curve = this.getBenchmarkGhostTaotieCurve();
       const dd = this.getGhostTaotieDrawdown();
-      const minDd = dd && dd.length ? Math.min(...dd) * 100 : 0;
+      const minDd = dd && dd.length ? Math.min(...dd) : 0;
       const lastVal = curve && curve.length ? curve[curve.length - 1] : 1.0;
       return {
         id: "BENCHMARK_ghost_taotie",
