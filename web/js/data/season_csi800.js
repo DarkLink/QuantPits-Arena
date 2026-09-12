@@ -11,26 +11,26 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
     "status": "ACTIVE",
     "total_paths": 170,
     "total_contestants": 6,
-    "csi300_return_pct": -7.9,
+    "csi300_return_pct": -8.7,
     "market_benchmark_name": "CSI 800",
     "market_benchmark_code": "SH000906",
-    "market_benchmark_return_pct": -7.9,
+    "market_benchmark_return_pct": -8.7,
     "universe_name": "CSI 800 Universe (~800 Stocks)",
     "universe_code": "csi800",
     "testbed_desc": "800-stock broad-cap testbed",
-    "timeliness_proof": "🔬 <strong style=\"color: var(--text-secondary);\">CSI 800 Testbed Proof:</strong> 800 broad-cap equities with 11,000 empirical random monkeys verified over 2026-07-03 ~ 2026-09-04. Unfalsifiable empirical null resolution.",
-    "taotie_return_pct": 0.39,
-    "ghost_taotie_return_pct": -4.78,
+    "timeliness_proof": "🔬 <strong style=\"color: var(--text-secondary);\">CSI 800 Testbed Proof:</strong> 800 broad-cap equities with 11,000 empirical random monkeys verified over 2026-07-03 ~ 2026-09-11. Unfalsifiable empirical null resolution.",
+    "taotie_return_pct": 0.2,
+    "ghost_taotie_return_pct": -6.61,
     "active_benchmarks": [
       "CSI 800",
       "Taotie (csi800) (1.6M)",
       "Ghost Taotie (csi800) (100M)",
       "1,000 Monkeys"
     ],
-    "trading_days": 46,
+    "trading_days": 51,
     "preview": false,
-    "window_label": "Evaluation Window: 2026-07-03 ~ 2026-09-04",
-    "period_label": "Evaluation Window: 2026-07-03 ~ 2026-09-04 (46 trading days)"
+    "window_label": "Evaluation Window: 2026-07-03 ~ 2026-09-11",
+    "period_label": "Evaluation Window: 2026-07-03 ~ 2026-09-11 (51 trading days)"
   },
   "metadata": {
     "season_id": "season_csi800",
@@ -39,26 +39,26 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
     "status": "ACTIVE",
     "total_paths": 170,
     "total_contestants": 6,
-    "csi300_return_pct": -7.9,
+    "csi300_return_pct": -8.7,
     "market_benchmark_name": "CSI 800",
     "market_benchmark_code": "SH000906",
-    "market_benchmark_return_pct": -7.9,
+    "market_benchmark_return_pct": -8.7,
     "universe_name": "CSI 800 Universe (~800 Stocks)",
     "universe_code": "csi800",
     "testbed_desc": "800-stock broad-cap testbed",
-    "timeliness_proof": "🔬 <strong style=\"color: var(--text-secondary);\">CSI 800 Testbed Proof:</strong> 800 broad-cap equities with 11,000 empirical random monkeys verified over 2026-07-03 ~ 2026-09-04. Unfalsifiable empirical null resolution.",
-    "taotie_return_pct": 0.39,
-    "ghost_taotie_return_pct": -4.78,
+    "timeliness_proof": "🔬 <strong style=\"color: var(--text-secondary);\">CSI 800 Testbed Proof:</strong> 800 broad-cap equities with 11,000 empirical random monkeys verified over 2026-07-03 ~ 2026-09-11. Unfalsifiable empirical null resolution.",
+    "taotie_return_pct": 0.2,
+    "ghost_taotie_return_pct": -6.61,
     "active_benchmarks": [
       "CSI 800",
       "Taotie (csi800) (1.6M)",
       "Ghost Taotie (csi800) (100M)",
       "1,000 Monkeys"
     ],
-    "trading_days": 46,
+    "trading_days": 51,
     "preview": false,
-    "window_label": "Evaluation Window: 2026-07-03 ~ 2026-09-04",
-    "period_label": "Evaluation Window: 2026-07-03 ~ 2026-09-04 (46 trading days)"
+    "window_label": "Evaluation Window: 2026-07-03 ~ 2026-09-11",
+    "period_label": "Evaluation Window: 2026-07-03 ~ 2026-09-11 (51 trading days)"
   },
   "contestants": [
     {
@@ -195,11 +195,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "robot",
       "animal_category": "Baseline",
       "display_name": "CONTESTANT_A × robot",
-      "total_return_pct": -0.33,
+      "total_return_pct": -0.66,
       "max_drawdown_pct": 10.37,
-      "final_nav": 0.9967,
-      "sharpe_ratio": 0.1,
-      "excess_over_csi300_pct": 7.57,
+      "final_nav": 0.9934,
+      "sharpe_ratio": 0.05,
+      "excess_over_csi300_pct": 8.04,
       "excess_over_monkey_pct": 7.01,
       "percentile_rank": 98.4,
       "monkey_percentile": 98.4,
@@ -210,8 +210,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 2.9,
-      "final_cash_ratio": 2.09,
+      "mean_cash_ratio": 2.85,
+      "final_cash_ratio": 2.44,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -222,11 +222,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "sloth-1",
       "animal_category": "Sloth (Lagged)",
       "display_name": "CONTESTANT_A × sloth-1",
-      "total_return_pct": 0.96,
-      "max_drawdown_pct": 9.57,
-      "final_nav": 1.0096,
-      "sharpe_ratio": 0.33,
-      "excess_over_csi300_pct": 8.86,
+      "total_return_pct": -0.06,
+      "max_drawdown_pct": 10.48,
+      "final_nav": 0.9994,
+      "sharpe_ratio": 0.13,
+      "excess_over_csi300_pct": 8.64,
       "excess_over_monkey_pct": 9.56,
       "percentile_rank": 99.8,
       "monkey_percentile": 99.8,
@@ -237,10 +237,10 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 13.39,
-      "final_cash_ratio": 1.76,
+      "mean_cash_ratio": 12.23,
+      "final_cash_ratio": 1.79,
       "target_holdings_mean": 22.0,
-      "actual_holdings_mean": 19.56,
+      "actual_holdings_mean": 19.8,
       "badges": [
         "Alpha Outlier (>99%)"
       ]
@@ -251,11 +251,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "sloth-2",
       "animal_category": "Sloth (Lagged)",
       "display_name": "CONTESTANT_A × sloth-2",
-      "total_return_pct": 6.15,
-      "max_drawdown_pct": 7.34,
-      "final_nav": 1.0615,
-      "sharpe_ratio": 1.48,
-      "excess_over_csi300_pct": 14.05,
+      "total_return_pct": 5.7,
+      "max_drawdown_pct": 7.74,
+      "final_nav": 1.057,
+      "sharpe_ratio": 1.25,
+      "excess_over_csi300_pct": 14.4,
       "excess_over_monkey_pct": 15.01,
       "percentile_rank": 99.9,
       "monkey_percentile": 99.9,
@@ -266,10 +266,10 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 23.96,
-      "final_cash_ratio": 1.67,
+      "mean_cash_ratio": 21.66,
+      "final_cash_ratio": 0.95,
       "target_holdings_mean": 22.0,
-      "actual_holdings_mean": 17.11,
+      "actual_holdings_mean": 17.6,
       "badges": [
         "Alpha Outlier (>99%)"
       ]
@@ -280,11 +280,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "sloth-3",
       "animal_category": "Sloth (Lagged)",
       "display_name": "CONTESTANT_A × sloth-3",
-      "total_return_pct": 0.41,
-      "max_drawdown_pct": 8.45,
-      "final_nav": 1.0041,
-      "sharpe_ratio": 0.21,
-      "excess_over_csi300_pct": 8.31,
+      "total_return_pct": -0.02,
+      "max_drawdown_pct": 8.84,
+      "final_nav": 0.9998,
+      "sharpe_ratio": 0.1,
+      "excess_over_csi300_pct": 8.68,
       "excess_over_monkey_pct": 8.27,
       "percentile_rank": 99.5,
       "monkey_percentile": 99.5,
@@ -295,10 +295,10 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 35.42,
-      "final_cash_ratio": 3.66,
+      "mean_cash_ratio": 31.96,
+      "final_cash_ratio": 0.84,
       "target_holdings_mean": 22.0,
-      "actual_holdings_mean": 14.67,
+      "actual_holdings_mean": 15.4,
       "badges": [
         "Alpha Outlier (>99%)"
       ]
@@ -309,11 +309,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "sloth-4",
       "animal_category": "Sloth (Lagged)",
       "display_name": "CONTESTANT_A × sloth-4",
-      "total_return_pct": -3.08,
+      "total_return_pct": -2.64,
       "max_drawdown_pct": 8.36,
-      "final_nav": 0.9692,
-      "sharpe_ratio": -0.91,
-      "excess_over_csi300_pct": 4.82,
+      "final_nav": 0.9736,
+      "sharpe_ratio": -0.66,
+      "excess_over_csi300_pct": 6.06,
       "excess_over_monkey_pct": 3.77,
       "percentile_rank": 87.6,
       "monkey_percentile": 87.6,
@@ -324,10 +324,10 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 46.23,
-      "final_cash_ratio": 3.38,
+      "mean_cash_ratio": 41.73,
+      "final_cash_ratio": 1.2,
       "target_holdings_mean": 22.0,
-      "actual_holdings_mean": 12.22,
+      "actual_holdings_mean": 13.2,
       "badges": []
     },
     {
@@ -336,11 +336,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "snail-1",
       "animal_category": "Snail (Stale)",
       "display_name": "CONTESTANT_A × snail-1",
-      "total_return_pct": -2.01,
-      "max_drawdown_pct": 9.61,
-      "final_nav": 0.9799,
-      "sharpe_ratio": -0.22,
-      "excess_over_csi300_pct": 5.89,
+      "total_return_pct": -2.97,
+      "max_drawdown_pct": 10.5,
+      "final_nav": 0.9703,
+      "sharpe_ratio": -0.36,
+      "excess_over_csi300_pct": 5.73,
       "excess_over_monkey_pct": 6.46,
       "percentile_rank": 97.8,
       "monkey_percentile": 97.8,
@@ -351,8 +351,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 3.09,
-      "final_cash_ratio": 1.56,
+      "mean_cash_ratio": 2.92,
+      "final_cash_ratio": 1.44,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -363,11 +363,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "snail-2",
       "animal_category": "Snail (Stale)",
       "display_name": "CONTESTANT_A × snail-2",
-      "total_return_pct": -2.86,
+      "total_return_pct": -3.11,
       "max_drawdown_pct": 8.25,
-      "final_nav": 0.9714,
+      "final_nav": 0.9689,
       "sharpe_ratio": -0.44,
-      "excess_over_csi300_pct": 5.04,
+      "excess_over_csi300_pct": 5.59,
       "excess_over_monkey_pct": 5.43,
       "percentile_rank": 95.9,
       "monkey_percentile": 95.9,
@@ -378,8 +378,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 3.22,
-      "final_cash_ratio": 1.38,
+      "mean_cash_ratio": 3.06,
+      "final_cash_ratio": 1.68,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -390,11 +390,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "snail-3",
       "animal_category": "Snail (Stale)",
       "display_name": "CONTESTANT_A × snail-3",
-      "total_return_pct": -6.25,
-      "max_drawdown_pct": 8.25,
-      "final_nav": 0.9375,
-      "sharpe_ratio": -1.22,
-      "excess_over_csi300_pct": 1.65,
+      "total_return_pct": -6.48,
+      "max_drawdown_pct": 8.28,
+      "final_nav": 0.9352,
+      "sharpe_ratio": -1.16,
+      "excess_over_csi300_pct": 2.22,
       "excess_over_monkey_pct": 1.25,
       "percentile_rank": 63.7,
       "monkey_percentile": 63.7,
@@ -405,8 +405,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 3.67,
-      "final_cash_ratio": 3.41,
+      "mean_cash_ratio": 3.43,
+      "final_cash_ratio": 1.37,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -417,11 +417,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "snail-4",
       "animal_category": "Snail (Stale)",
       "display_name": "CONTESTANT_A × snail-4",
-      "total_return_pct": -5.5,
+      "total_return_pct": -4.88,
       "max_drawdown_pct": 8.25,
-      "final_nav": 0.945,
-      "sharpe_ratio": -1.04,
-      "excess_over_csi300_pct": 2.4,
+      "final_nav": 0.9512,
+      "sharpe_ratio": -0.82,
+      "excess_over_csi300_pct": 3.82,
       "excess_over_monkey_pct": 1.05,
       "percentile_rank": 61.6,
       "monkey_percentile": 61.6,
@@ -432,8 +432,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 3.2,
-      "final_cash_ratio": 3.1,
+      "mean_cash_ratio": 2.99,
+      "final_cash_ratio": 1.16,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -444,11 +444,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "rabbit-1",
       "animal_category": "Rabbit (High Turnover)",
       "display_name": "CONTESTANT_A × rabbit-1",
-      "total_return_pct": 5.86,
+      "total_return_pct": 6.48,
       "max_drawdown_pct": 9.66,
-      "final_nav": 1.0586,
-      "sharpe_ratio": 1.08,
-      "excess_over_csi300_pct": 13.76,
+      "final_nav": 1.0648,
+      "sharpe_ratio": 1.11,
+      "excess_over_csi300_pct": 15.18,
       "excess_over_monkey_pct": 10.73,
       "percentile_rank": 99.6,
       "monkey_percentile": 99.6,
@@ -459,8 +459,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 6.66,
-      "final_cash_ratio": 3.42,
+      "mean_cash_ratio": 6.2,
+      "final_cash_ratio": 2.07,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": [
@@ -473,11 +473,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "rabbit-2",
       "animal_category": "Rabbit (High Turnover)",
       "display_name": "CONTESTANT_A × rabbit-2",
-      "total_return_pct": 5.45,
+      "total_return_pct": 5.41,
       "max_drawdown_pct": 11.44,
-      "final_nav": 1.0545,
-      "sharpe_ratio": 0.99,
-      "excess_over_csi300_pct": 13.35,
+      "final_nav": 1.0541,
+      "sharpe_ratio": 0.93,
+      "excess_over_csi300_pct": 14.11,
       "excess_over_monkey_pct": 9.83,
       "percentile_rank": 99.8,
       "monkey_percentile": 99.8,
@@ -488,8 +488,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 7.95,
-      "final_cash_ratio": 4.22,
+      "mean_cash_ratio": 7.59,
+      "final_cash_ratio": 4.41,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": [
@@ -502,11 +502,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "turtle",
       "animal_category": "Turtle (Low Turnover)",
       "display_name": "CONTESTANT_A × turtle",
-      "total_return_pct": -1.23,
+      "total_return_pct": -1.75,
       "max_drawdown_pct": 9.66,
-      "final_nav": 0.9877,
-      "sharpe_ratio": -0.14,
-      "excess_over_csi300_pct": 6.67,
+      "final_nav": 0.9825,
+      "sharpe_ratio": -0.23,
+      "excess_over_csi300_pct": 6.95,
       "excess_over_monkey_pct": 3.49,
       "percentile_rank": 86.4,
       "monkey_percentile": 86.4,
@@ -514,13 +514,13 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "empirical_p_value": 0.1359,
       "p_value": 0.1359,
       "is_statistically_significant": false,
-      "unaffordable_buy_ratio": 3.23,
+      "unaffordable_buy_ratio": 3.12,
       "unaffordable_buy_count": 1,
       "unaffordable_event_days": 1,
-      "mean_cash_ratio": 1.68,
-      "final_cash_ratio": 0.04,
+      "mean_cash_ratio": 1.64,
+      "final_cash_ratio": 1.29,
       "target_holdings_mean": 22.0,
-      "actual_holdings_mean": 21.89,
+      "actual_holdings_mean": 21.9,
       "badges": []
     },
     {
@@ -529,11 +529,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "koala",
       "animal_category": "Koala (Inverted)",
       "display_name": "CONTESTANT_A × koala",
-      "total_return_pct": -26.63,
+      "total_return_pct": -28.33,
       "max_drawdown_pct": 32.41,
-      "final_nav": 0.7337,
-      "sharpe_ratio": -3.74,
-      "excess_over_csi300_pct": -18.73,
+      "final_nav": 0.7167,
+      "sharpe_ratio": -3.76,
+      "excess_over_csi300_pct": -19.63,
       "excess_over_monkey_pct": -25.71,
       "percentile_rank": 0.0,
       "monkey_percentile": 0.0,
@@ -544,8 +544,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 2.36,
-      "final_cash_ratio": 0.4,
+      "mean_cash_ratio": 2.19,
+      "final_cash_ratio": 0.71,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -556,11 +556,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "meerkat-10",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_A × meerkat-10",
-      "total_return_pct": -0.45,
+      "total_return_pct": 0.29,
       "max_drawdown_pct": 6.21,
-      "final_nav": 0.9955,
-      "sharpe_ratio": -0.08,
-      "excess_over_csi300_pct": 7.45,
+      "final_nav": 1.0029,
+      "sharpe_ratio": 0.17,
+      "excess_over_csi300_pct": 8.99,
       "excess_over_monkey_pct": 1.71,
       "percentile_rank": 68.8,
       "monkey_percentile": 68.8,
@@ -571,8 +571,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 1.49,
-      "final_cash_ratio": 0.57,
+      "mean_cash_ratio": 1.44,
+      "final_cash_ratio": 1.02,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -583,11 +583,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "meerkat-20",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_A × meerkat-20",
-      "total_return_pct": 3.6,
+      "total_return_pct": 1.87,
       "max_drawdown_pct": 3.42,
-      "final_nav": 1.036,
-      "sharpe_ratio": 1.42,
-      "excess_over_csi300_pct": 11.5,
+      "final_nav": 1.0187,
+      "sharpe_ratio": 0.72,
+      "excess_over_csi300_pct": 10.57,
       "excess_over_monkey_pct": 5.36,
       "percentile_rank": 95.4,
       "monkey_percentile": 95.4,
@@ -598,8 +598,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 1.55,
-      "final_cash_ratio": 0.95,
+      "mean_cash_ratio": 1.58,
+      "final_cash_ratio": 1.84,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -610,11 +610,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "meerkat-30",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_A × meerkat-30",
-      "total_return_pct": -0.44,
-      "max_drawdown_pct": 3.12,
-      "final_nav": 0.9956,
-      "sharpe_ratio": -0.12,
-      "excess_over_csi300_pct": 7.46,
+      "total_return_pct": -1.21,
+      "max_drawdown_pct": 3.31,
+      "final_nav": 0.9879,
+      "sharpe_ratio": -0.38,
+      "excess_over_csi300_pct": 7.49,
       "excess_over_monkey_pct": 1.61,
       "percentile_rank": 67.6,
       "monkey_percentile": 67.6,
@@ -622,13 +622,13 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "empirical_p_value": 0.3237,
       "p_value": 0.3237,
       "is_statistically_significant": false,
-      "unaffordable_buy_ratio": 2.13,
+      "unaffordable_buy_ratio": 2.0,
       "unaffordable_buy_count": 1,
       "unaffordable_event_days": 1,
-      "mean_cash_ratio": 2.41,
-      "final_cash_ratio": 0.41,
+      "mean_cash_ratio": 2.2,
+      "final_cash_ratio": 0.29,
       "target_holdings_mean": 22.0,
-      "actual_holdings_mean": 21.89,
+      "actual_holdings_mean": 21.9,
       "badges": []
     },
     {
@@ -637,11 +637,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "meerkat-40",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_A × meerkat-40",
-      "total_return_pct": 5.94,
+      "total_return_pct": 5.25,
       "max_drawdown_pct": 3.37,
-      "final_nav": 1.0594,
-      "sharpe_ratio": 1.99,
-      "excess_over_csi300_pct": 13.84,
+      "final_nav": 1.0525,
+      "sharpe_ratio": 1.64,
+      "excess_over_csi300_pct": 13.95,
       "excess_over_monkey_pct": 7.12,
       "percentile_rank": 98.8,
       "monkey_percentile": 98.8,
@@ -652,8 +652,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 1.55,
-      "final_cash_ratio": 0.66,
+      "mean_cash_ratio": 1.51,
+      "final_cash_ratio": 1.12,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -664,11 +664,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "meerkat-50",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_A × meerkat-50",
-      "total_return_pct": -2.6,
-      "max_drawdown_pct": 5.46,
-      "final_nav": 0.974,
-      "sharpe_ratio": -0.81,
-      "excess_over_csi300_pct": 5.3,
+      "total_return_pct": -4.18,
+      "max_drawdown_pct": 5.52,
+      "final_nav": 0.9582,
+      "sharpe_ratio": -1.27,
+      "excess_over_csi300_pct": 4.52,
       "excess_over_monkey_pct": -0.68,
       "percentile_rank": 43.0,
       "monkey_percentile": 43.0,
@@ -676,13 +676,13 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "empirical_p_value": 0.5704,
       "p_value": 0.5704,
       "is_statistically_significant": false,
-      "unaffordable_buy_ratio": 2.13,
+      "unaffordable_buy_ratio": 2.0,
       "unaffordable_buy_count": 1,
       "unaffordable_event_days": 1,
-      "mean_cash_ratio": 1.87,
-      "final_cash_ratio": 0.38,
+      "mean_cash_ratio": 1.71,
+      "final_cash_ratio": 0.34,
       "target_holdings_mean": 22.0,
-      "actual_holdings_mean": 21.89,
+      "actual_holdings_mean": 21.9,
       "badges": []
     },
     {
@@ -691,11 +691,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "meerkat-60",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_A × meerkat-60",
-      "total_return_pct": -3.51,
-      "max_drawdown_pct": 6.64,
-      "final_nav": 0.9649,
-      "sharpe_ratio": -1.01,
-      "excess_over_csi300_pct": 4.39,
+      "total_return_pct": -6.88,
+      "max_drawdown_pct": 6.88,
+      "final_nav": 0.9312,
+      "sharpe_ratio": -1.93,
+      "excess_over_csi300_pct": 1.82,
       "excess_over_monkey_pct": -1.84,
       "percentile_rank": 29.9,
       "monkey_percentile": 29.9,
@@ -706,8 +706,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 2.37,
-      "final_cash_ratio": 2.77,
+      "mean_cash_ratio": 2.19,
+      "final_cash_ratio": 0.53,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -718,11 +718,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "meerkat-70",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_A × meerkat-70",
-      "total_return_pct": -9.73,
-      "max_drawdown_pct": 11.77,
-      "final_nav": 0.9027,
-      "sharpe_ratio": -2.42,
-      "excess_over_csi300_pct": -1.83,
+      "total_return_pct": -11.85,
+      "max_drawdown_pct": 11.85,
+      "final_nav": 0.8815,
+      "sharpe_ratio": -2.76,
+      "excess_over_csi300_pct": -3.15,
       "excess_over_monkey_pct": -7.64,
       "percentile_rank": 1.6,
       "monkey_percentile": 1.6,
@@ -730,13 +730,13 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "empirical_p_value": 0.984,
       "p_value": 0.984,
       "is_statistically_significant": false,
-      "unaffordable_buy_ratio": 2.13,
+      "unaffordable_buy_ratio": 2.0,
       "unaffordable_buy_count": 1,
       "unaffordable_event_days": 1,
-      "mean_cash_ratio": 2.14,
-      "final_cash_ratio": 0.73,
+      "mean_cash_ratio": 2.01,
+      "final_cash_ratio": 0.85,
       "target_holdings_mean": 22.0,
-      "actual_holdings_mean": 21.89,
+      "actual_holdings_mean": 21.9,
       "badges": []
     },
     {
@@ -745,11 +745,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "meerkat-80",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_A × meerkat-80",
-      "total_return_pct": -6.32,
+      "total_return_pct": -9.34,
       "max_drawdown_pct": 10.65,
-      "final_nav": 0.9368,
-      "sharpe_ratio": -1.22,
-      "excess_over_csi300_pct": 1.58,
+      "final_nav": 0.9066,
+      "sharpe_ratio": -1.74,
+      "excess_over_csi300_pct": -0.64,
       "excess_over_monkey_pct": -2.96,
       "percentile_rank": 19.6,
       "monkey_percentile": 19.6,
@@ -760,8 +760,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 2.42,
-      "final_cash_ratio": 1.23,
+      "mean_cash_ratio": 2.41,
+      "final_cash_ratio": 2.37,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -772,11 +772,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "meerkat-90",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_A × meerkat-90",
-      "total_return_pct": -9.5,
-      "max_drawdown_pct": 9.5,
-      "final_nav": 0.905,
-      "sharpe_ratio": -2.0,
-      "excess_over_csi300_pct": -1.6,
+      "total_return_pct": -11.77,
+      "max_drawdown_pct": 11.77,
+      "final_nav": 0.8823,
+      "sharpe_ratio": -2.32,
+      "excess_over_csi300_pct": -3.07,
       "excess_over_monkey_pct": -5.07,
       "percentile_rank": 8.1,
       "monkey_percentile": 8.1,
@@ -787,8 +787,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 2.66,
-      "final_cash_ratio": 2.09,
+      "mean_cash_ratio": 2.48,
+      "final_cash_ratio": 0.85,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -799,11 +799,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "eagle-5-1",
       "animal_category": "Eagle (Concentration)",
       "display_name": "CONTESTANT_A × eagle-5-1",
-      "total_return_pct": -10.82,
+      "total_return_pct": -12.93,
       "max_drawdown_pct": 23.11,
-      "final_nav": 0.8918,
-      "sharpe_ratio": -0.98,
-      "excess_over_csi300_pct": -2.92,
+      "final_nav": 0.8707,
+      "sharpe_ratio": -1.16,
+      "excess_over_csi300_pct": -4.23,
       "excess_over_monkey_pct": -1.91,
       "percentile_rank": 40.3,
       "monkey_percentile": 40.3,
@@ -814,8 +814,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 1.74,
-      "final_cash_ratio": 2.64,
+      "mean_cash_ratio": 1.78,
+      "final_cash_ratio": 2.25,
       "target_holdings_mean": 5.0,
       "actual_holdings_mean": 5.0,
       "badges": []
@@ -826,11 +826,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "eagle-11-2",
       "animal_category": "Eagle (Concentration)",
       "display_name": "CONTESTANT_A × eagle-11-2",
-      "total_return_pct": -0.86,
+      "total_return_pct": -2.82,
       "max_drawdown_pct": 12.81,
-      "final_nav": 0.9914,
-      "sharpe_ratio": 0.07,
-      "excess_over_csi300_pct": 7.04,
+      "final_nav": 0.9718,
+      "sharpe_ratio": -0.2,
+      "excess_over_csi300_pct": 5.88,
       "excess_over_monkey_pct": 6.87,
       "percentile_rank": 90.5,
       "monkey_percentile": 90.5,
@@ -841,8 +841,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 2.3,
-      "final_cash_ratio": 0.72,
+      "mean_cash_ratio": 2.17,
+      "final_cash_ratio": 1.03,
       "target_holdings_mean": 11.0,
       "actual_holdings_mean": 11.0,
       "badges": []
@@ -853,11 +853,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "eagle-44-6",
       "animal_category": "Eagle (Concentration)",
       "display_name": "CONTESTANT_A × eagle-44-6",
-      "total_return_pct": 1.44,
-      "max_drawdown_pct": 6.2,
-      "final_nav": 1.0144,
-      "sharpe_ratio": 0.45,
-      "excess_over_csi300_pct": 9.34,
+      "total_return_pct": 0.78,
+      "max_drawdown_pct": 6.81,
+      "final_nav": 1.0078,
+      "sharpe_ratio": 0.28,
+      "excess_over_csi300_pct": 9.48,
       "excess_over_monkey_pct": 5.71,
       "percentile_rank": 99.5,
       "monkey_percentile": 99.5,
@@ -868,8 +868,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 3.26,
-      "final_cash_ratio": 0.7,
+      "mean_cash_ratio": 3.13,
+      "final_cash_ratio": 1.98,
       "target_holdings_mean": 44.0,
       "actual_holdings_mean": 44.0,
       "badges": [
@@ -882,11 +882,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "eagle-66-9",
       "animal_category": "Eagle (Concentration)",
       "display_name": "CONTESTANT_A × eagle-66-9",
-      "total_return_pct": 2.44,
+      "total_return_pct": 1.81,
       "max_drawdown_pct": 5.4,
-      "final_nav": 1.0244,
-      "sharpe_ratio": 0.77,
-      "excess_over_csi300_pct": 10.34,
+      "final_nav": 1.0181,
+      "sharpe_ratio": 0.56,
+      "excess_over_csi300_pct": 10.51,
       "excess_over_monkey_pct": 4.56,
       "percentile_rank": 99.4,
       "monkey_percentile": 99.4,
@@ -897,8 +897,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 3.59,
-      "final_cash_ratio": 1.44,
+      "mean_cash_ratio": 3.33,
+      "final_cash_ratio": 1.03,
       "target_holdings_mean": 66.0,
       "actual_holdings_mean": 66.0,
       "badges": [
@@ -911,11 +911,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "eagle-88-12",
       "animal_category": "Eagle (Concentration)",
       "display_name": "CONTESTANT_A × eagle-88-12",
-      "total_return_pct": 4.57,
+      "total_return_pct": 3.54,
       "max_drawdown_pct": 4.12,
-      "final_nav": 1.0457,
-      "sharpe_ratio": 1.57,
-      "excess_over_csi300_pct": 12.47,
+      "final_nav": 1.0354,
+      "sharpe_ratio": 1.15,
+      "excess_over_csi300_pct": 12.24,
       "excess_over_monkey_pct": 4.81,
       "percentile_rank": 99.9,
       "monkey_percentile": 99.9,
@@ -926,8 +926,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 4.17,
-      "final_cash_ratio": 2.52,
+      "mean_cash_ratio": 3.98,
+      "final_cash_ratio": 2.33,
       "target_holdings_mean": 88.0,
       "actual_holdings_mean": 88.0,
       "badges": [
@@ -940,11 +940,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "whale-shark",
       "animal_category": "Whale Shark (50% Pool)",
       "display_name": "CONTESTANT_A × whale-shark",
-      "total_return_pct": 6.31,
+      "total_return_pct": 5.67,
       "max_drawdown_pct": 2.56,
-      "final_nav": 1.0631,
-      "sharpe_ratio": 2.61,
-      "excess_over_csi300_pct": 14.21,
+      "final_nav": 1.0567,
+      "sharpe_ratio": 2.17,
+      "excess_over_csi300_pct": 14.37,
       "excess_over_monkey_pct": 4.5,
       "percentile_rank": 99.9,
       "monkey_percentile": 99.9,
@@ -955,8 +955,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 3.98,
-      "final_cash_ratio": 2.87,
+      "mean_cash_ratio": 3.77,
+      "final_cash_ratio": 1.87,
       "target_holdings_mean": 123.0,
       "actual_holdings_mean": 123.0,
       "badges": [
@@ -970,11 +970,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "robot",
       "animal_category": "Baseline",
       "display_name": "CONTESTANT_B × robot",
-      "total_return_pct": 3.04,
+      "total_return_pct": 3.61,
       "max_drawdown_pct": 7.21,
-      "final_nav": 1.0304,
-      "sharpe_ratio": 0.82,
-      "excess_over_csi300_pct": 10.94,
+      "final_nav": 1.0361,
+      "sharpe_ratio": 0.9,
+      "excess_over_csi300_pct": 12.31,
       "excess_over_monkey_pct": 6.36,
       "percentile_rank": 97.8,
       "monkey_percentile": 97.8,
@@ -985,8 +985,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 1.83,
-      "final_cash_ratio": 0.34,
+      "mean_cash_ratio": 1.7,
+      "final_cash_ratio": 0.54,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -997,11 +997,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "sloth-1",
       "animal_category": "Sloth (Lagged)",
       "display_name": "CONTESTANT_B × sloth-1",
-      "total_return_pct": 5.27,
+      "total_return_pct": 5.9,
       "max_drawdown_pct": 6.28,
-      "final_nav": 1.0527,
-      "sharpe_ratio": 1.4,
-      "excess_over_csi300_pct": 13.17,
+      "final_nav": 1.059,
+      "sharpe_ratio": 1.46,
+      "excess_over_csi300_pct": 14.6,
       "excess_over_monkey_pct": 9.83,
       "percentile_rank": 99.8,
       "monkey_percentile": 99.8,
@@ -1012,10 +1012,10 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 13.08,
-      "final_cash_ratio": 3.02,
+      "mean_cash_ratio": 11.79,
+      "final_cash_ratio": 0.2,
       "target_holdings_mean": 22.0,
-      "actual_holdings_mean": 19.56,
+      "actual_holdings_mean": 19.8,
       "badges": [
         "Alpha Outlier (>99%)"
       ]
@@ -1026,11 +1026,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "sloth-2",
       "animal_category": "Sloth (Lagged)",
       "display_name": "CONTESTANT_B × sloth-2",
-      "total_return_pct": 4.36,
+      "total_return_pct": 4.8,
       "max_drawdown_pct": 7.25,
-      "final_nav": 1.0436,
-      "sharpe_ratio": 1.27,
-      "excess_over_csi300_pct": 12.26,
+      "final_nav": 1.048,
+      "sharpe_ratio": 1.3,
+      "excess_over_csi300_pct": 13.5,
       "excess_over_monkey_pct": 9.04,
       "percentile_rank": 99.7,
       "monkey_percentile": 99.7,
@@ -1041,10 +1041,10 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 23.77,
-      "final_cash_ratio": 2.02,
+      "mean_cash_ratio": 21.59,
+      "final_cash_ratio": 1.94,
       "target_holdings_mean": 22.0,
-      "actual_holdings_mean": 17.11,
+      "actual_holdings_mean": 17.6,
       "badges": [
         "Alpha Outlier (>99%)"
       ]
@@ -1055,11 +1055,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "sloth-3",
       "animal_category": "Sloth (Lagged)",
       "display_name": "CONTESTANT_B × sloth-3",
-      "total_return_pct": 0.57,
-      "max_drawdown_pct": 7.4,
-      "final_nav": 1.0057,
-      "sharpe_ratio": 0.27,
-      "excess_over_csi300_pct": 8.47,
+      "total_return_pct": 0.25,
+      "max_drawdown_pct": 7.7,
+      "final_nav": 1.0025,
+      "sharpe_ratio": 0.16,
+      "excess_over_csi300_pct": 8.95,
       "excess_over_monkey_pct": 5.12,
       "percentile_rank": 94.9,
       "monkey_percentile": 94.9,
@@ -1070,10 +1070,10 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 34.66,
-      "final_cash_ratio": 0.48,
+      "mean_cash_ratio": 31.38,
+      "final_cash_ratio": 1.83,
       "target_holdings_mean": 22.0,
-      "actual_holdings_mean": 14.67,
+      "actual_holdings_mean": 15.4,
       "badges": []
     },
     {
@@ -1082,11 +1082,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "sloth-4",
       "animal_category": "Sloth (Lagged)",
       "display_name": "CONTESTANT_B × sloth-4",
-      "total_return_pct": -3.03,
+      "total_return_pct": -1.82,
       "max_drawdown_pct": 7.34,
-      "final_nav": 0.9697,
-      "sharpe_ratio": -1.19,
-      "excess_over_csi300_pct": 4.87,
+      "final_nav": 0.9818,
+      "sharpe_ratio": -0.62,
+      "excess_over_csi300_pct": 6.88,
       "excess_over_monkey_pct": 2.14,
       "percentile_rank": 74.6,
       "monkey_percentile": 74.6,
@@ -1097,10 +1097,10 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 45.97,
-      "final_cash_ratio": 4.49,
+      "mean_cash_ratio": 41.41,
+      "final_cash_ratio": 0.34,
       "target_holdings_mean": 22.0,
-      "actual_holdings_mean": 12.22,
+      "actual_holdings_mean": 13.2,
       "badges": []
     },
     {
@@ -1109,11 +1109,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "snail-1",
       "animal_category": "Snail (Stale)",
       "display_name": "CONTESTANT_B × snail-1",
-      "total_return_pct": 2.37,
+      "total_return_pct": 2.96,
       "max_drawdown_pct": 6.29,
-      "final_nav": 1.0237,
-      "sharpe_ratio": 0.69,
-      "excess_over_csi300_pct": 10.27,
+      "final_nav": 1.0296,
+      "sharpe_ratio": 0.78,
+      "excess_over_csi300_pct": 11.66,
       "excess_over_monkey_pct": 6.77,
       "percentile_rank": 98.4,
       "monkey_percentile": 98.4,
@@ -1124,8 +1124,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 2.56,
-      "final_cash_ratio": 3.05,
+      "mean_cash_ratio": 2.32,
+      "final_cash_ratio": 0.16,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -1136,11 +1136,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "snail-2",
       "animal_category": "Snail (Stale)",
       "display_name": "CONTESTANT_B × snail-2",
-      "total_return_pct": -1.92,
+      "total_return_pct": -1.54,
       "max_drawdown_pct": 7.01,
-      "final_nav": 0.9808,
-      "sharpe_ratio": -0.37,
-      "excess_over_csi300_pct": 5.98,
+      "final_nav": 0.9846,
+      "sharpe_ratio": -0.26,
+      "excess_over_csi300_pct": 7.16,
       "excess_over_monkey_pct": 2.42,
       "percentile_rank": 77.3,
       "monkey_percentile": 77.3,
@@ -1151,8 +1151,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 2.96,
-      "final_cash_ratio": 2.11,
+      "mean_cash_ratio": 3.0,
+      "final_cash_ratio": 3.4,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -1163,11 +1163,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "snail-3",
       "animal_category": "Snail (Stale)",
       "display_name": "CONTESTANT_B × snail-3",
-      "total_return_pct": -3.32,
-      "max_drawdown_pct": 7.02,
-      "final_nav": 0.9668,
-      "sharpe_ratio": -0.77,
-      "excess_over_csi300_pct": 4.58,
+      "total_return_pct": -3.63,
+      "max_drawdown_pct": 7.31,
+      "final_nav": 0.9637,
+      "sharpe_ratio": -0.79,
+      "excess_over_csi300_pct": 5.07,
       "excess_over_monkey_pct": 0.96,
       "percentile_rank": 61.0,
       "monkey_percentile": 61.0,
@@ -1178,8 +1178,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 3.17,
-      "final_cash_ratio": 0.36,
+      "mean_cash_ratio": 2.91,
+      "final_cash_ratio": 0.6,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -1190,11 +1190,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "snail-4",
       "animal_category": "Snail (Stale)",
       "display_name": "CONTESTANT_B × snail-4",
-      "total_return_pct": -2.77,
+      "total_return_pct": -1.87,
       "max_drawdown_pct": 7.07,
-      "final_nav": 0.9723,
-      "sharpe_ratio": -0.64,
-      "excess_over_csi300_pct": 5.13,
+      "final_nav": 0.9813,
+      "sharpe_ratio": -0.37,
+      "excess_over_csi300_pct": 6.83,
       "excess_over_monkey_pct": 2.27,
       "percentile_rank": 75.5,
       "monkey_percentile": 75.5,
@@ -1205,8 +1205,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 3.89,
-      "final_cash_ratio": 5.2,
+      "mean_cash_ratio": 3.57,
+      "final_cash_ratio": 0.68,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -1217,11 +1217,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "rabbit-1",
       "animal_category": "Rabbit (High Turnover)",
       "display_name": "CONTESTANT_B × rabbit-1",
-      "total_return_pct": 9.84,
+      "total_return_pct": 8.79,
       "max_drawdown_pct": 10.97,
-      "final_nav": 1.0984,
-      "sharpe_ratio": 1.7,
-      "excess_over_csi300_pct": 17.74,
+      "final_nav": 1.0879,
+      "sharpe_ratio": 1.46,
+      "excess_over_csi300_pct": 17.49,
       "excess_over_monkey_pct": 10.5,
       "percentile_rank": 99.5,
       "monkey_percentile": 99.5,
@@ -1232,8 +1232,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 4.34,
-      "final_cash_ratio": 1.2,
+      "mean_cash_ratio": 4.36,
+      "final_cash_ratio": 4.52,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": [
@@ -1246,11 +1246,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "rabbit-2",
       "animal_category": "Rabbit (High Turnover)",
       "display_name": "CONTESTANT_B × rabbit-2",
-      "total_return_pct": 12.84,
+      "total_return_pct": 11.46,
       "max_drawdown_pct": 9.79,
-      "final_nav": 1.1284,
-      "sharpe_ratio": 2.07,
-      "excess_over_csi300_pct": 20.74,
+      "final_nav": 1.1146,
+      "sharpe_ratio": 1.77,
+      "excess_over_csi300_pct": 20.16,
       "excess_over_monkey_pct": 14.06,
       "percentile_rank": 99.9,
       "monkey_percentile": 99.9,
@@ -1261,13 +1261,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 5.48,
-      "final_cash_ratio": 1.88,
+      "mean_cash_ratio": 5.41,
+      "final_cash_ratio": 4.8,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": [
-        "Alpha Outlier (>99%)",
-        "High Sharpe (≥2.0)"
+        "Alpha Outlier (>99%)"
       ]
     },
     {
@@ -1276,11 +1275,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "turtle",
       "animal_category": "Turtle (Low Turnover)",
       "display_name": "CONTESTANT_B × turtle",
-      "total_return_pct": -0.35,
+      "total_return_pct": 0.23,
       "max_drawdown_pct": 7.43,
-      "final_nav": 0.9965,
-      "sharpe_ratio": 0.03,
-      "excess_over_csi300_pct": 7.55,
+      "final_nav": 1.0023,
+      "sharpe_ratio": 0.16,
+      "excess_over_csi300_pct": 8.93,
       "excess_over_monkey_pct": 2.76,
       "percentile_rank": 80.2,
       "monkey_percentile": 80.2,
@@ -1291,8 +1290,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 1.17,
-      "final_cash_ratio": 0.06,
+      "mean_cash_ratio": 1.12,
+      "final_cash_ratio": 0.67,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -1303,11 +1302,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "koala",
       "animal_category": "Koala (Inverted)",
       "display_name": "CONTESTANT_B × koala",
-      "total_return_pct": -22.05,
+      "total_return_pct": -24.66,
       "max_drawdown_pct": 25.75,
-      "final_nav": 0.7795,
-      "sharpe_ratio": -3.11,
-      "excess_over_csi300_pct": -14.15,
+      "final_nav": 0.7534,
+      "sharpe_ratio": -3.31,
+      "excess_over_csi300_pct": -15.96,
       "excess_over_monkey_pct": -20.2,
       "percentile_rank": 0.0,
       "monkey_percentile": 0.0,
@@ -1315,13 +1314,13 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "empirical_p_value": 1.0,
       "p_value": 1.0,
       "is_statistically_significant": false,
-      "unaffordable_buy_ratio": 4.17,
+      "unaffordable_buy_ratio": 3.92,
       "unaffordable_buy_count": 2,
       "unaffordable_event_days": 2,
-      "mean_cash_ratio": 4.42,
-      "final_cash_ratio": 0.81,
+      "mean_cash_ratio": 4.06,
+      "final_cash_ratio": 0.9,
       "target_holdings_mean": 22.0,
-      "actual_holdings_mean": 21.78,
+      "actual_holdings_mean": 21.8,
       "badges": []
     },
     {
@@ -1330,11 +1329,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "meerkat-10",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_B × meerkat-10",
-      "total_return_pct": 5.92,
+      "total_return_pct": 4.91,
       "max_drawdown_pct": 2.27,
-      "final_nav": 1.0592,
-      "sharpe_ratio": 2.46,
-      "excess_over_csi300_pct": 13.82,
+      "final_nav": 1.0491,
+      "sharpe_ratio": 1.9,
+      "excess_over_csi300_pct": 13.61,
       "excess_over_monkey_pct": 7.33,
       "percentile_rank": 99.0,
       "monkey_percentile": 99.0,
@@ -1345,13 +1344,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 0.88,
-      "final_cash_ratio": 0.11,
+      "mean_cash_ratio": 0.82,
+      "final_cash_ratio": 0.2,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": [
-        "Alpha Outlier (>99%)",
-        "High Sharpe (≥2.0)"
+        "Alpha Outlier (>99%)"
       ]
     },
     {
@@ -1360,11 +1358,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "meerkat-20",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_B × meerkat-20",
-      "total_return_pct": 5.32,
+      "total_return_pct": 4.43,
       "max_drawdown_pct": 3.64,
-      "final_nav": 1.0532,
-      "sharpe_ratio": 1.96,
-      "excess_over_csi300_pct": 13.22,
+      "final_nav": 1.0443,
+      "sharpe_ratio": 1.5,
+      "excess_over_csi300_pct": 13.13,
       "excess_over_monkey_pct": 7.1,
       "percentile_rank": 98.6,
       "monkey_percentile": 98.6,
@@ -1375,8 +1373,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 0.95,
-      "final_cash_ratio": 0.31,
+      "mean_cash_ratio": 0.9,
+      "final_cash_ratio": 0.43,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -1387,11 +1385,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "meerkat-30",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_B × meerkat-30",
-      "total_return_pct": 1.41,
-      "max_drawdown_pct": 3.81,
-      "final_nav": 1.0141,
-      "sharpe_ratio": 0.57,
-      "excess_over_csi300_pct": 9.31,
+      "total_return_pct": -1.02,
+      "max_drawdown_pct": 4.76,
+      "final_nav": 0.9898,
+      "sharpe_ratio": -0.25,
+      "excess_over_csi300_pct": 7.68,
       "excess_over_monkey_pct": 4.88,
       "percentile_rank": 94.0,
       "monkey_percentile": 94.0,
@@ -1402,8 +1400,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 1.3,
-      "final_cash_ratio": 1.2,
+      "mean_cash_ratio": 1.28,
+      "final_cash_ratio": 1.15,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -1414,11 +1412,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "meerkat-40",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_B × meerkat-40",
-      "total_return_pct": -1.3,
-      "max_drawdown_pct": 4.26,
-      "final_nav": 0.987,
-      "sharpe_ratio": -0.41,
-      "excess_over_csi300_pct": 6.6,
+      "total_return_pct": -2.65,
+      "max_drawdown_pct": 5.58,
+      "final_nav": 0.9735,
+      "sharpe_ratio": -0.84,
+      "excess_over_csi300_pct": 6.05,
       "excess_over_monkey_pct": 2.06,
       "percentile_rank": 74.0,
       "monkey_percentile": 74.0,
@@ -1429,8 +1427,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 1.67,
-      "final_cash_ratio": 1.4,
+      "mean_cash_ratio": 1.61,
+      "final_cash_ratio": 1.1,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -1441,11 +1439,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "meerkat-50",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_B × meerkat-50",
-      "total_return_pct": 4.86,
-      "max_drawdown_pct": 3.43,
-      "final_nav": 1.0486,
-      "sharpe_ratio": 1.53,
-      "excess_over_csi300_pct": 12.76,
+      "total_return_pct": 1.66,
+      "max_drawdown_pct": 3.93,
+      "final_nav": 1.0166,
+      "sharpe_ratio": 0.53,
+      "excess_over_csi300_pct": 10.36,
       "excess_over_monkey_pct": 6.64,
       "percentile_rank": 98.2,
       "monkey_percentile": 98.2,
@@ -1456,8 +1454,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 1.96,
-      "final_cash_ratio": 0.28,
+      "mean_cash_ratio": 1.88,
+      "final_cash_ratio": 1.17,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -1468,11 +1466,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "meerkat-60",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_B × meerkat-60",
-      "total_return_pct": 1.83,
+      "total_return_pct": -1.29,
       "max_drawdown_pct": 5.4,
-      "final_nav": 1.0183,
-      "sharpe_ratio": 0.56,
-      "excess_over_csi300_pct": 9.73,
+      "final_nav": 0.9871,
+      "sharpe_ratio": -0.19,
+      "excess_over_csi300_pct": 7.41,
       "excess_over_monkey_pct": 4.31,
       "percentile_rank": 91.1,
       "monkey_percentile": 91.1,
@@ -1483,8 +1481,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 1.52,
-      "final_cash_ratio": 0.75,
+      "mean_cash_ratio": 1.5,
+      "final_cash_ratio": 1.41,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -1495,11 +1493,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "meerkat-70",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_B × meerkat-70",
-      "total_return_pct": -4.56,
+      "total_return_pct": -8.4,
       "max_drawdown_pct": 9.57,
-      "final_nav": 0.9544,
-      "sharpe_ratio": -1.23,
-      "excess_over_csi300_pct": 3.34,
+      "final_nav": 0.916,
+      "sharpe_ratio": -2.18,
+      "excess_over_csi300_pct": 0.3,
       "excess_over_monkey_pct": -3.8,
       "percentile_rank": 13.7,
       "monkey_percentile": 13.7,
@@ -1510,8 +1508,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 2.01,
-      "final_cash_ratio": 0.39,
+      "mean_cash_ratio": 2.16,
+      "final_cash_ratio": 3.55,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -1522,11 +1520,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "meerkat-80",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_B × meerkat-80",
-      "total_return_pct": -7.86,
-      "max_drawdown_pct": 10.19,
-      "final_nav": 0.9214,
-      "sharpe_ratio": -1.85,
-      "excess_over_csi300_pct": 0.04,
+      "total_return_pct": -11.02,
+      "max_drawdown_pct": 11.02,
+      "final_nav": 0.8898,
+      "sharpe_ratio": -2.46,
+      "excess_over_csi300_pct": -2.32,
       "excess_over_monkey_pct": -3.05,
       "percentile_rank": 19.1,
       "monkey_percentile": 19.1,
@@ -1537,8 +1535,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 2.81,
-      "final_cash_ratio": 1.85,
+      "mean_cash_ratio": 2.59,
+      "final_cash_ratio": 0.58,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -1549,11 +1547,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "meerkat-90",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_B × meerkat-90",
-      "total_return_pct": -18.02,
-      "max_drawdown_pct": 20.23,
-      "final_nav": 0.8198,
-      "sharpe_ratio": -3.25,
-      "excess_over_csi300_pct": -10.12,
+      "total_return_pct": -20.44,
+      "max_drawdown_pct": 20.44,
+      "final_nav": 0.7956,
+      "sharpe_ratio": -3.55,
+      "excess_over_csi300_pct": -11.74,
       "excess_over_monkey_pct": -14.7,
       "percentile_rank": 0.0,
       "monkey_percentile": 0.0,
@@ -1564,8 +1562,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 2.59,
-      "final_cash_ratio": 0.44,
+      "mean_cash_ratio": 2.47,
+      "final_cash_ratio": 1.46,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -1576,11 +1574,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "eagle-5-1",
       "animal_category": "Eagle (Concentration)",
       "display_name": "CONTESTANT_B × eagle-5-1",
-      "total_return_pct": 4.27,
+      "total_return_pct": 3.54,
       "max_drawdown_pct": 10.41,
-      "final_nav": 1.0427,
-      "sharpe_ratio": 0.79,
-      "excess_over_csi300_pct": 12.17,
+      "final_nav": 1.0354,
+      "sharpe_ratio": 0.65,
+      "excess_over_csi300_pct": 12.24,
       "excess_over_monkey_pct": 9.72,
       "percentile_rank": 90.5,
       "monkey_percentile": 90.5,
@@ -1591,8 +1589,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 0.69,
-      "final_cash_ratio": 0.08,
+      "mean_cash_ratio": 0.82,
+      "final_cash_ratio": 1.99,
       "target_holdings_mean": 5.0,
       "actual_holdings_mean": 5.0,
       "badges": []
@@ -1603,11 +1601,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "eagle-11-2",
       "animal_category": "Eagle (Concentration)",
       "display_name": "CONTESTANT_B × eagle-11-2",
-      "total_return_pct": 4.44,
+      "total_return_pct": 4.26,
       "max_drawdown_pct": 8.13,
-      "final_nav": 1.0444,
-      "sharpe_ratio": 0.99,
-      "excess_over_csi300_pct": 12.34,
+      "final_nav": 1.0426,
+      "sharpe_ratio": 0.9,
+      "excess_over_csi300_pct": 12.96,
       "excess_over_monkey_pct": 7.83,
       "percentile_rank": 93.7,
       "monkey_percentile": 93.7,
@@ -1618,8 +1616,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 1.47,
-      "final_cash_ratio": 0.27,
+      "mean_cash_ratio": 1.36,
+      "final_cash_ratio": 0.43,
       "target_holdings_mean": 11.0,
       "actual_holdings_mean": 11.0,
       "badges": []
@@ -1630,11 +1628,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "eagle-44-6",
       "animal_category": "Eagle (Concentration)",
       "display_name": "CONTESTANT_B × eagle-44-6",
-      "total_return_pct": 6.05,
+      "total_return_pct": 5.78,
       "max_drawdown_pct": 4.75,
-      "final_nav": 1.0605,
-      "sharpe_ratio": 1.72,
-      "excess_over_csi300_pct": 13.95,
+      "final_nav": 1.0578,
+      "sharpe_ratio": 1.55,
+      "excess_over_csi300_pct": 14.48,
       "excess_over_monkey_pct": 7.42,
       "percentile_rank": 99.8,
       "monkey_percentile": 99.8,
@@ -1645,8 +1643,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 2.47,
-      "final_cash_ratio": 0.58,
+      "mean_cash_ratio": 2.33,
+      "final_cash_ratio": 1.13,
       "target_holdings_mean": 44.0,
       "actual_holdings_mean": 44.0,
       "badges": [
@@ -1659,11 +1657,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "eagle-66-9",
       "animal_category": "Eagle (Concentration)",
       "display_name": "CONTESTANT_B × eagle-66-9",
-      "total_return_pct": 7.03,
+      "total_return_pct": 6.32,
       "max_drawdown_pct": 4.18,
-      "final_nav": 1.0703,
-      "sharpe_ratio": 2.27,
-      "excess_over_csi300_pct": 14.93,
+      "final_nav": 1.0632,
+      "sharpe_ratio": 1.91,
+      "excess_over_csi300_pct": 15.02,
       "excess_over_monkey_pct": 6.8,
       "percentile_rank": 99.9,
       "monkey_percentile": 99.9,
@@ -1674,13 +1672,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 3.57,
-      "final_cash_ratio": 1.81,
+      "mean_cash_ratio": 3.39,
+      "final_cash_ratio": 1.77,
       "target_holdings_mean": 66.0,
       "actual_holdings_mean": 66.0,
       "badges": [
-        "Alpha Outlier (>99%)",
-        "High Sharpe (≥2.0)"
+        "Alpha Outlier (>99%)"
       ]
     },
     {
@@ -1689,11 +1686,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "eagle-88-12",
       "animal_category": "Eagle (Concentration)",
       "display_name": "CONTESTANT_B × eagle-88-12",
-      "total_return_pct": 6.88,
+      "total_return_pct": 6.23,
       "max_drawdown_pct": 3.4,
-      "final_nav": 1.0688,
-      "sharpe_ratio": 2.76,
-      "excess_over_csi300_pct": 14.78,
+      "final_nav": 1.0623,
+      "sharpe_ratio": 2.32,
+      "excess_over_csi300_pct": 14.93,
       "excess_over_monkey_pct": 5.69,
       "percentile_rank": 99.9,
       "monkey_percentile": 99.9,
@@ -1704,8 +1701,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 3.59,
-      "final_cash_ratio": 1.77,
+      "mean_cash_ratio": 3.33,
+      "final_cash_ratio": 1.03,
       "target_holdings_mean": 88.0,
       "actual_holdings_mean": 88.0,
       "badges": [
@@ -1719,11 +1716,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "whale-shark",
       "animal_category": "Whale Shark (50% Pool)",
       "display_name": "CONTESTANT_B × whale-shark",
-      "total_return_pct": 8.3,
+      "total_return_pct": 7.45,
       "max_drawdown_pct": 1.88,
-      "final_nav": 1.083,
-      "sharpe_ratio": 3.9,
-      "excess_over_csi300_pct": 16.2,
+      "final_nav": 1.0745,
+      "sharpe_ratio": 3.17,
+      "excess_over_csi300_pct": 16.15,
       "excess_over_monkey_pct": 5.88,
       "percentile_rank": 99.9,
       "monkey_percentile": 99.9,
@@ -1731,13 +1728,13 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "empirical_p_value": 0.001,
       "p_value": 0.001,
       "is_statistically_significant": true,
-      "unaffordable_buy_ratio": 2.26,
+      "unaffordable_buy_ratio": 2.13,
       "unaffordable_buy_count": 6,
       "unaffordable_event_days": 1,
-      "mean_cash_ratio": 4.28,
-      "final_cash_ratio": 1.72,
+      "mean_cash_ratio": 4.07,
+      "final_cash_ratio": 2.13,
       "target_holdings_mean": 123.0,
-      "actual_holdings_mean": 122.33,
+      "actual_holdings_mean": 122.4,
       "badges": [
         "Alpha Outlier (>99%)",
         "High Sharpe (≥2.0)"
@@ -1749,11 +1746,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "robot",
       "animal_category": "Baseline",
       "display_name": "CONTESTANT_C × robot",
-      "total_return_pct": -4.39,
+      "total_return_pct": -6.03,
       "max_drawdown_pct": 12.49,
-      "final_nav": 0.9561,
-      "sharpe_ratio": -0.76,
-      "excess_over_csi300_pct": 3.51,
+      "final_nav": 0.9397,
+      "sharpe_ratio": -1.04,
+      "excess_over_csi300_pct": 2.67,
       "excess_over_monkey_pct": 1.39,
       "percentile_rank": 65.0,
       "monkey_percentile": 65.0,
@@ -1764,8 +1761,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 2.38,
-      "final_cash_ratio": 1.6,
+      "mean_cash_ratio": 2.24,
+      "final_cash_ratio": 1.03,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -1776,11 +1773,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "sloth-1",
       "animal_category": "Sloth (Lagged)",
       "display_name": "CONTESTANT_C × sloth-1",
-      "total_return_pct": 0.85,
+      "total_return_pct": -1.58,
       "max_drawdown_pct": 7.38,
-      "final_nav": 1.0085,
-      "sharpe_ratio": 0.31,
-      "excess_over_csi300_pct": 8.75,
+      "final_nav": 0.9842,
+      "sharpe_ratio": -0.22,
+      "excess_over_csi300_pct": 7.12,
       "excess_over_monkey_pct": 6.55,
       "percentile_rank": 98.1,
       "monkey_percentile": 98.1,
@@ -1791,10 +1788,10 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 13.11,
-      "final_cash_ratio": 2.21,
+      "mean_cash_ratio": 11.98,
+      "final_cash_ratio": 1.82,
       "target_holdings_mean": 22.0,
-      "actual_holdings_mean": 19.56,
+      "actual_holdings_mean": 19.8,
       "badges": []
     },
     {
@@ -1803,11 +1800,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "sloth-2",
       "animal_category": "Sloth (Lagged)",
       "display_name": "CONTESTANT_C × sloth-2",
-      "total_return_pct": 6.76,
-      "max_drawdown_pct": 5.34,
-      "final_nav": 1.0676,
-      "sharpe_ratio": 1.81,
-      "excess_over_csi300_pct": 14.66,
+      "total_return_pct": 4.33,
+      "max_drawdown_pct": 7.49,
+      "final_nav": 1.0433,
+      "sharpe_ratio": 1.13,
+      "excess_over_csi300_pct": 13.03,
       "excess_over_monkey_pct": 13.24,
       "percentile_rank": 99.9,
       "monkey_percentile": 99.9,
@@ -1818,10 +1815,10 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 23.98,
-      "final_cash_ratio": 1.08,
+      "mean_cash_ratio": 21.84,
+      "final_cash_ratio": 2.58,
       "target_holdings_mean": 22.0,
-      "actual_holdings_mean": 17.11,
+      "actual_holdings_mean": 17.6,
       "badges": [
         "Alpha Outlier (>99%)"
       ]
@@ -1832,11 +1829,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "sloth-3",
       "animal_category": "Sloth (Lagged)",
       "display_name": "CONTESTANT_C × sloth-3",
-      "total_return_pct": -0.86,
-      "max_drawdown_pct": 9.63,
-      "final_nav": 0.9914,
-      "sharpe_ratio": -0.11,
-      "excess_over_csi300_pct": 7.04,
+      "total_return_pct": -2.19,
+      "max_drawdown_pct": 10.83,
+      "final_nav": 0.9781,
+      "sharpe_ratio": -0.41,
+      "excess_over_csi300_pct": 6.51,
       "excess_over_monkey_pct": 6.06,
       "percentile_rank": 97.2,
       "monkey_percentile": 97.2,
@@ -1847,10 +1844,10 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 34.9,
-      "final_cash_ratio": 0.37,
+      "mean_cash_ratio": 31.53,
+      "final_cash_ratio": 1.18,
       "target_holdings_mean": 22.0,
-      "actual_holdings_mean": 14.67,
+      "actual_holdings_mean": 15.4,
       "badges": []
     },
     {
@@ -1859,11 +1856,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "sloth-4",
       "animal_category": "Sloth (Lagged)",
       "display_name": "CONTESTANT_C × sloth-4",
-      "total_return_pct": -0.98,
-      "max_drawdown_pct": 9.85,
-      "final_nav": 0.9902,
-      "sharpe_ratio": -0.15,
-      "excess_over_csi300_pct": 6.92,
+      "total_return_pct": -1.75,
+      "max_drawdown_pct": 10.56,
+      "final_nav": 0.9825,
+      "sharpe_ratio": -0.33,
+      "excess_over_csi300_pct": 6.95,
       "excess_over_monkey_pct": 6.71,
       "percentile_rank": 98.3,
       "monkey_percentile": 98.3,
@@ -1871,13 +1868,13 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "empirical_p_value": 0.017,
       "p_value": 0.017,
       "is_statistically_significant": true,
-      "unaffordable_buy_ratio": 2.94,
+      "unaffordable_buy_ratio": 2.63,
       "unaffordable_buy_count": 1,
       "unaffordable_event_days": 1,
-      "mean_cash_ratio": 46.35,
-      "final_cash_ratio": 4.53,
+      "mean_cash_ratio": 41.76,
+      "final_cash_ratio": 0.46,
       "target_holdings_mean": 22.0,
-      "actual_holdings_mean": 12.11,
+      "actual_holdings_mean": 13.1,
       "badges": []
     },
     {
@@ -1886,11 +1883,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "snail-1",
       "animal_category": "Snail (Stale)",
       "display_name": "CONTESTANT_C × snail-1",
-      "total_return_pct": -3.16,
+      "total_return_pct": -5.54,
       "max_drawdown_pct": 11.32,
-      "final_nav": 0.9684,
-      "sharpe_ratio": -0.54,
-      "excess_over_csi300_pct": 4.74,
+      "final_nav": 0.9446,
+      "sharpe_ratio": -1.0,
+      "excess_over_csi300_pct": 3.16,
       "excess_over_monkey_pct": 2.34,
       "percentile_rank": 76.7,
       "monkey_percentile": 76.7,
@@ -1901,8 +1898,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 2.53,
-      "final_cash_ratio": 1.56,
+      "mean_cash_ratio": 2.38,
+      "final_cash_ratio": 1.03,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -1913,11 +1910,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "snail-2",
       "animal_category": "Snail (Stale)",
       "display_name": "CONTESTANT_C × snail-2",
-      "total_return_pct": -4.0,
+      "total_return_pct": -6.09,
       "max_drawdown_pct": 11.32,
-      "final_nav": 0.96,
-      "sharpe_ratio": -0.73,
-      "excess_over_csi300_pct": 3.9,
+      "final_nav": 0.9391,
+      "sharpe_ratio": -1.12,
+      "excess_over_csi300_pct": 2.61,
       "excess_over_monkey_pct": 1.92,
       "percentile_rank": 71.9,
       "monkey_percentile": 71.9,
@@ -1928,8 +1925,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 3.16,
-      "final_cash_ratio": 1.44,
+      "mean_cash_ratio": 3.02,
+      "final_cash_ratio": 1.85,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -1940,11 +1937,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "snail-3",
       "animal_category": "Snail (Stale)",
       "display_name": "CONTESTANT_C × snail-3",
-      "total_return_pct": -11.74,
-      "max_drawdown_pct": 11.74,
-      "final_nav": 0.8826,
-      "sharpe_ratio": -2.25,
-      "excess_over_csi300_pct": -3.84,
+      "total_return_pct": -12.85,
+      "max_drawdown_pct": 12.85,
+      "final_nav": 0.8715,
+      "sharpe_ratio": -2.34,
+      "excess_over_csi300_pct": -4.15,
       "excess_over_monkey_pct": -5.46,
       "percentile_rank": 6.3,
       "monkey_percentile": 6.3,
@@ -1955,8 +1952,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 3.61,
-      "final_cash_ratio": 0.59,
+      "mean_cash_ratio": 3.34,
+      "final_cash_ratio": 0.87,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -1967,11 +1964,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "snail-4",
       "animal_category": "Snail (Stale)",
       "display_name": "CONTESTANT_C × snail-4",
-      "total_return_pct": -10.31,
+      "total_return_pct": -11.15,
       "max_drawdown_pct": 11.44,
-      "final_nav": 0.8969,
-      "sharpe_ratio": -1.81,
-      "excess_over_csi300_pct": -2.41,
+      "final_nav": 0.8885,
+      "sharpe_ratio": -1.86,
+      "excess_over_csi300_pct": -2.45,
       "excess_over_monkey_pct": -3.52,
       "percentile_rank": 15.6,
       "monkey_percentile": 15.6,
@@ -1979,13 +1976,13 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "empirical_p_value": 0.8442,
       "p_value": 0.8442,
       "is_statistically_significant": false,
-      "unaffordable_buy_ratio": 2.63,
+      "unaffordable_buy_ratio": 2.38,
       "unaffordable_buy_count": 1,
       "unaffordable_event_days": 1,
-      "mean_cash_ratio": 4.66,
-      "final_cash_ratio": 5.32,
+      "mean_cash_ratio": 4.29,
+      "final_cash_ratio": 1.02,
       "target_holdings_mean": 22.0,
-      "actual_holdings_mean": 21.89,
+      "actual_holdings_mean": 21.9,
       "badges": []
     },
     {
@@ -1994,11 +1991,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "rabbit-1",
       "animal_category": "Rabbit (High Turnover)",
       "display_name": "CONTESTANT_C × rabbit-1",
-      "total_return_pct": -5.86,
+      "total_return_pct": -6.86,
       "max_drawdown_pct": 12.51,
-      "final_nav": 0.9414,
-      "sharpe_ratio": -1.08,
-      "excess_over_csi300_pct": 2.04,
+      "final_nav": 0.9314,
+      "sharpe_ratio": -1.22,
+      "excess_over_csi300_pct": 1.84,
       "excess_over_monkey_pct": -1.07,
       "percentile_rank": 36.5,
       "monkey_percentile": 36.5,
@@ -2009,8 +2006,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 5.32,
-      "final_cash_ratio": 2.12,
+      "mean_cash_ratio": 5.25,
+      "final_cash_ratio": 4.68,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -2021,10 +2018,10 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "rabbit-2",
       "animal_category": "Rabbit (High Turnover)",
       "display_name": "CONTESTANT_C × rabbit-2",
-      "total_return_pct": 2.89,
+      "total_return_pct": 2.09,
       "max_drawdown_pct": 10.73,
-      "final_nav": 1.0289,
-      "sharpe_ratio": 0.7,
+      "final_nav": 1.0209,
+      "sharpe_ratio": 0.52,
       "excess_over_csi300_pct": 10.79,
       "excess_over_monkey_pct": 7.02,
       "percentile_rank": 97.6,
@@ -2036,8 +2033,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 8.38,
-      "final_cash_ratio": 5.64,
+      "mean_cash_ratio": 8.13,
+      "final_cash_ratio": 5.88,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -2048,11 +2045,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "turtle",
       "animal_category": "Turtle (Low Turnover)",
       "display_name": "CONTESTANT_C × turtle",
-      "total_return_pct": -4.15,
+      "total_return_pct": -5.74,
       "max_drawdown_pct": 12.03,
-      "final_nav": 0.9585,
-      "sharpe_ratio": -0.73,
-      "excess_over_csi300_pct": 3.75,
+      "final_nav": 0.9426,
+      "sharpe_ratio": -1.01,
+      "excess_over_csi300_pct": 2.96,
       "excess_over_monkey_pct": -0.88,
       "percentile_rank": 39.9,
       "monkey_percentile": 39.9,
@@ -2063,7 +2060,7 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 1.16,
+      "mean_cash_ratio": 1.08,
       "final_cash_ratio": 0.32,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
@@ -2075,11 +2072,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "koala",
       "animal_category": "Koala (Inverted)",
       "display_name": "CONTESTANT_C × koala",
-      "total_return_pct": -19.81,
+      "total_return_pct": -22.1,
       "max_drawdown_pct": 23.27,
-      "final_nav": 0.8019,
-      "sharpe_ratio": -3.42,
-      "excess_over_csi300_pct": -11.91,
+      "final_nav": 0.779,
+      "sharpe_ratio": -3.54,
+      "excess_over_csi300_pct": -13.4,
       "excess_over_monkey_pct": -18.11,
       "percentile_rank": 0.0,
       "monkey_percentile": 0.0,
@@ -2090,8 +2087,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 2.65,
-      "final_cash_ratio": 1.11,
+      "mean_cash_ratio": 2.43,
+      "final_cash_ratio": 0.47,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -2102,11 +2099,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "meerkat-10",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_C × meerkat-10",
-      "total_return_pct": -2.4,
+      "total_return_pct": -2.24,
       "max_drawdown_pct": 5.6,
-      "final_nav": 0.976,
-      "sharpe_ratio": -0.92,
-      "excess_over_csi300_pct": 5.5,
+      "final_nav": 0.9776,
+      "sharpe_ratio": -0.79,
+      "excess_over_csi300_pct": 6.46,
       "excess_over_monkey_pct": -0.17,
       "percentile_rank": 48.0,
       "monkey_percentile": 48.0,
@@ -2114,13 +2111,13 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "empirical_p_value": 0.5205,
       "p_value": 0.5205,
       "is_statistically_significant": false,
-      "unaffordable_buy_ratio": 0.0,
-      "unaffordable_buy_count": 0,
-      "unaffordable_event_days": 0,
-      "mean_cash_ratio": 1.74,
-      "final_cash_ratio": 0.46,
+      "unaffordable_buy_ratio": 2.04,
+      "unaffordable_buy_count": 1,
+      "unaffordable_event_days": 1,
+      "mean_cash_ratio": 2.26,
+      "final_cash_ratio": 6.95,
       "target_holdings_mean": 22.0,
-      "actual_holdings_mean": 22.0,
+      "actual_holdings_mean": 21.9,
       "badges": []
     },
     {
@@ -2129,11 +2126,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "meerkat-20",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_C × meerkat-20",
-      "total_return_pct": 2.65,
+      "total_return_pct": 1.68,
       "max_drawdown_pct": 3.71,
-      "final_nav": 1.0265,
-      "sharpe_ratio": 1.01,
-      "excess_over_csi300_pct": 10.55,
+      "final_nav": 1.0168,
+      "sharpe_ratio": 0.63,
+      "excess_over_csi300_pct": 10.38,
       "excess_over_monkey_pct": 4.9,
       "percentile_rank": 94.0,
       "monkey_percentile": 94.0,
@@ -2144,8 +2141,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 1.71,
-      "final_cash_ratio": 0.24,
+      "mean_cash_ratio": 1.56,
+      "final_cash_ratio": 0.22,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -2156,11 +2153,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "meerkat-30",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_C × meerkat-30",
-      "total_return_pct": 2.1,
+      "total_return_pct": 0.94,
       "max_drawdown_pct": 3.58,
-      "final_nav": 1.021,
-      "sharpe_ratio": 0.85,
-      "excess_over_csi300_pct": 10.0,
+      "final_nav": 1.0094,
+      "sharpe_ratio": 0.39,
+      "excess_over_csi300_pct": 9.64,
       "excess_over_monkey_pct": 3.31,
       "percentile_rank": 85.5,
       "monkey_percentile": 85.5,
@@ -2171,8 +2168,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 1.63,
-      "final_cash_ratio": 0.94,
+      "mean_cash_ratio": 1.61,
+      "final_cash_ratio": 1.43,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -2183,11 +2180,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "meerkat-40",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_C × meerkat-40",
-      "total_return_pct": 1.71,
-      "max_drawdown_pct": 4.05,
-      "final_nav": 1.0171,
-      "sharpe_ratio": 0.67,
-      "excess_over_csi300_pct": 9.61,
+      "total_return_pct": -0.66,
+      "max_drawdown_pct": 4.39,
+      "final_nav": 0.9934,
+      "sharpe_ratio": -0.13,
+      "excess_over_csi300_pct": 8.04,
       "excess_over_monkey_pct": 4.58,
       "percentile_rank": 92.6,
       "monkey_percentile": 92.6,
@@ -2198,8 +2195,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 1.27,
-      "final_cash_ratio": 1.12,
+      "mean_cash_ratio": 1.19,
+      "final_cash_ratio": 0.46,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -2210,11 +2207,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "meerkat-50",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_C × meerkat-50",
-      "total_return_pct": -4.07,
+      "total_return_pct": -6.24,
       "max_drawdown_pct": 7.36,
-      "final_nav": 0.9593,
-      "sharpe_ratio": -1.13,
-      "excess_over_csi300_pct": 3.83,
+      "final_nav": 0.9376,
+      "sharpe_ratio": -1.66,
+      "excess_over_csi300_pct": 2.46,
       "excess_over_monkey_pct": -1.83,
       "percentile_rank": 30.2,
       "monkey_percentile": 30.2,
@@ -2225,8 +2222,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 2.15,
-      "final_cash_ratio": 0.4,
+      "mean_cash_ratio": 1.98,
+      "final_cash_ratio": 0.45,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -2237,11 +2234,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "meerkat-60",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_C × meerkat-60",
-      "total_return_pct": -0.7,
+      "total_return_pct": -1.97,
       "max_drawdown_pct": 5.56,
-      "final_nav": 0.993,
-      "sharpe_ratio": -0.12,
-      "excess_over_csi300_pct": 7.2,
+      "final_nav": 0.9803,
+      "sharpe_ratio": -0.46,
+      "excess_over_csi300_pct": 6.73,
       "excess_over_monkey_pct": 0.11,
       "percentile_rank": 51.4,
       "monkey_percentile": 51.4,
@@ -2252,8 +2249,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 1.75,
-      "final_cash_ratio": 1.75,
+      "mean_cash_ratio": 1.62,
+      "final_cash_ratio": 0.47,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -2264,11 +2261,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "meerkat-70",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_C × meerkat-70",
-      "total_return_pct": -6.4,
-      "max_drawdown_pct": 9.06,
-      "final_nav": 0.936,
-      "sharpe_ratio": -1.54,
-      "excess_over_csi300_pct": 1.5,
+      "total_return_pct": -10.74,
+      "max_drawdown_pct": 10.74,
+      "final_nav": 0.8926,
+      "sharpe_ratio": -2.5,
+      "excess_over_csi300_pct": -2.04,
       "excess_over_monkey_pct": -5.68,
       "percentile_rank": 5.6,
       "monkey_percentile": 5.6,
@@ -2279,8 +2276,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 1.29,
-      "final_cash_ratio": 0.42,
+      "mean_cash_ratio": 1.24,
+      "final_cash_ratio": 0.78,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -2291,11 +2288,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "meerkat-80",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_C × meerkat-80",
-      "total_return_pct": -7.45,
-      "max_drawdown_pct": 9.86,
-      "final_nav": 0.9255,
-      "sharpe_ratio": -1.92,
-      "excess_over_csi300_pct": 0.45,
+      "total_return_pct": -12.36,
+      "max_drawdown_pct": 12.36,
+      "final_nav": 0.8764,
+      "sharpe_ratio": -3.01,
+      "excess_over_csi300_pct": -3.66,
       "excess_over_monkey_pct": -5.55,
       "percentile_rank": 6.0,
       "monkey_percentile": 6.0,
@@ -2306,8 +2303,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 1.84,
-      "final_cash_ratio": 0.69,
+      "mean_cash_ratio": 1.77,
+      "final_cash_ratio": 1.17,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -2318,11 +2315,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "meerkat-90",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_C × meerkat-90",
-      "total_return_pct": -6.86,
-      "max_drawdown_pct": 10.11,
-      "final_nav": 0.9314,
-      "sharpe_ratio": -1.62,
-      "excess_over_csi300_pct": 1.04,
+      "total_return_pct": -11.44,
+      "max_drawdown_pct": 11.44,
+      "final_nav": 0.8856,
+      "sharpe_ratio": -2.62,
+      "excess_over_csi300_pct": -2.74,
       "excess_over_monkey_pct": -4.25,
       "percentile_rank": 11.8,
       "monkey_percentile": 11.8,
@@ -2333,8 +2330,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 2.53,
-      "final_cash_ratio": 2.65,
+      "mean_cash_ratio": 2.42,
+      "final_cash_ratio": 1.47,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -2345,11 +2342,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "eagle-5-1",
       "animal_category": "Eagle (Concentration)",
       "display_name": "CONTESTANT_C × eagle-5-1",
-      "total_return_pct": -12.43,
+      "total_return_pct": -12.23,
       "max_drawdown_pct": 17.6,
-      "final_nav": 0.8757,
-      "sharpe_ratio": -1.64,
-      "excess_over_csi300_pct": -4.53,
+      "final_nav": 0.8777,
+      "sharpe_ratio": -1.51,
+      "excess_over_csi300_pct": -3.53,
       "excess_over_monkey_pct": -3.63,
       "percentile_rank": 32.1,
       "monkey_percentile": 32.1,
@@ -2360,8 +2357,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 2.63,
-      "final_cash_ratio": 0.38,
+      "mean_cash_ratio": 2.46,
+      "final_cash_ratio": 0.92,
       "target_holdings_mean": 5.0,
       "actual_holdings_mean": 5.0,
       "badges": []
@@ -2372,11 +2369,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "eagle-11-2",
       "animal_category": "Eagle (Concentration)",
       "display_name": "CONTESTANT_C × eagle-11-2",
-      "total_return_pct": -6.93,
+      "total_return_pct": -7.68,
       "max_drawdown_pct": 15.02,
-      "final_nav": 0.9307,
-      "sharpe_ratio": -0.88,
-      "excess_over_csi300_pct": 0.97,
+      "final_nav": 0.9232,
+      "sharpe_ratio": -0.95,
+      "excess_over_csi300_pct": 1.02,
       "excess_over_monkey_pct": 0.88,
       "percentile_rank": 56.1,
       "monkey_percentile": 56.1,
@@ -2387,8 +2384,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 3.25,
-      "final_cash_ratio": 0.54,
+      "mean_cash_ratio": 3.03,
+      "final_cash_ratio": 1.06,
       "target_holdings_mean": 11.0,
       "actual_holdings_mean": 11.0,
       "badges": []
@@ -2399,11 +2396,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "eagle-44-6",
       "animal_category": "Eagle (Concentration)",
       "display_name": "CONTESTANT_C × eagle-44-6",
-      "total_return_pct": -3.07,
+      "total_return_pct": -3.99,
       "max_drawdown_pct": 7.82,
-      "final_nav": 0.9693,
-      "sharpe_ratio": -0.64,
-      "excess_over_csi300_pct": 4.83,
+      "final_nav": 0.9601,
+      "sharpe_ratio": -0.82,
+      "excess_over_csi300_pct": 4.71,
       "excess_over_monkey_pct": 0.95,
       "percentile_rank": 65.3,
       "monkey_percentile": 65.3,
@@ -2414,8 +2411,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 3.23,
-      "final_cash_ratio": 1.5,
+      "mean_cash_ratio": 3.04,
+      "final_cash_ratio": 1.37,
       "target_holdings_mean": 44.0,
       "actual_holdings_mean": 44.0,
       "badges": []
@@ -2426,11 +2423,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "eagle-66-9",
       "animal_category": "Eagle (Concentration)",
       "display_name": "CONTESTANT_C × eagle-66-9",
-      "total_return_pct": -0.83,
+      "total_return_pct": -2.15,
       "max_drawdown_pct": 5.23,
-      "final_nav": 0.9917,
-      "sharpe_ratio": -0.14,
-      "excess_over_csi300_pct": 7.07,
+      "final_nav": 0.9785,
+      "sharpe_ratio": -0.49,
+      "excess_over_csi300_pct": 6.55,
       "excess_over_monkey_pct": 1.86,
       "percentile_rank": 83.8,
       "monkey_percentile": 83.8,
@@ -2441,8 +2438,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 3.78,
-      "final_cash_ratio": 1.48,
+      "mean_cash_ratio": 3.62,
+      "final_cash_ratio": 2.24,
       "target_holdings_mean": 66.0,
       "actual_holdings_mean": 66.0,
       "badges": []
@@ -2453,11 +2450,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "eagle-88-12",
       "animal_category": "Eagle (Concentration)",
       "display_name": "CONTESTANT_C × eagle-88-12",
-      "total_return_pct": 2.39,
-      "max_drawdown_pct": 3.44,
-      "final_nav": 1.0239,
-      "sharpe_ratio": 0.86,
-      "excess_over_csi300_pct": 10.29,
+      "total_return_pct": 1.08,
+      "max_drawdown_pct": 3.48,
+      "final_nav": 1.0108,
+      "sharpe_ratio": 0.41,
+      "excess_over_csi300_pct": 9.78,
       "excess_over_monkey_pct": 3.12,
       "percentile_rank": 98.3,
       "monkey_percentile": 98.3,
@@ -2468,8 +2465,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 4.05,
-      "final_cash_ratio": 1.81,
+      "mean_cash_ratio": 3.87,
+      "final_cash_ratio": 2.28,
       "target_holdings_mean": 88.0,
       "actual_holdings_mean": 88.0,
       "badges": []
@@ -2480,11 +2477,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "whale-shark",
       "animal_category": "Whale Shark (50% Pool)",
       "display_name": "CONTESTANT_C × whale-shark",
-      "total_return_pct": 4.85,
+      "total_return_pct": 3.71,
       "max_drawdown_pct": 2.49,
-      "final_nav": 1.0485,
-      "sharpe_ratio": 1.93,
-      "excess_over_csi300_pct": 12.75,
+      "final_nav": 1.0371,
+      "sharpe_ratio": 1.38,
+      "excess_over_csi300_pct": 12.41,
       "excess_over_monkey_pct": 3.72,
       "percentile_rank": 99.9,
       "monkey_percentile": 99.9,
@@ -2495,8 +2492,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 4.2,
-      "final_cash_ratio": 2.69,
+      "mean_cash_ratio": 3.94,
+      "final_cash_ratio": 1.56,
       "target_holdings_mean": 123.0,
       "actual_holdings_mean": 123.0,
       "badges": [
@@ -2509,11 +2506,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "robot",
       "animal_category": "Baseline",
       "display_name": "CONTESTANT_D × robot",
-      "total_return_pct": 2.25,
+      "total_return_pct": 1.72,
       "max_drawdown_pct": 6.98,
-      "final_nav": 1.0225,
-      "sharpe_ratio": 0.68,
-      "excess_over_csi300_pct": 10.15,
+      "final_nav": 1.0172,
+      "sharpe_ratio": 0.52,
+      "excess_over_csi300_pct": 10.42,
       "excess_over_monkey_pct": 5.37,
       "percentile_rank": 95.4,
       "monkey_percentile": 95.4,
@@ -2524,8 +2521,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 2.35,
-      "final_cash_ratio": 0.19,
+      "mean_cash_ratio": 2.21,
+      "final_cash_ratio": 0.89,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -2536,11 +2533,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "sloth-1",
       "animal_category": "Sloth (Lagged)",
       "display_name": "CONTESTANT_D × sloth-1",
-      "total_return_pct": 3.43,
-      "max_drawdown_pct": 4.11,
-      "final_nav": 1.0343,
-      "sharpe_ratio": 1.09,
-      "excess_over_csi300_pct": 11.33,
+      "total_return_pct": 2.82,
+      "max_drawdown_pct": 4.68,
+      "final_nav": 1.0282,
+      "sharpe_ratio": 0.86,
+      "excess_over_csi300_pct": 11.52,
       "excess_over_monkey_pct": 7.67,
       "percentile_rank": 99.3,
       "monkey_percentile": 99.3,
@@ -2551,10 +2548,10 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 12.85,
-      "final_cash_ratio": 2.31,
+      "mean_cash_ratio": 11.6,
+      "final_cash_ratio": 0.35,
       "target_holdings_mean": 22.0,
-      "actual_holdings_mean": 19.56,
+      "actual_holdings_mean": 19.8,
       "badges": [
         "Alpha Outlier (>99%)"
       ]
@@ -2565,11 +2562,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "sloth-2",
       "animal_category": "Sloth (Lagged)",
       "display_name": "CONTESTANT_D × sloth-2",
-      "total_return_pct": 2.9,
-      "max_drawdown_pct": 6.16,
-      "final_nav": 1.029,
-      "sharpe_ratio": 1.07,
-      "excess_over_csi300_pct": 10.8,
+      "total_return_pct": 1.26,
+      "max_drawdown_pct": 7.57,
+      "final_nav": 1.0126,
+      "sharpe_ratio": 0.47,
+      "excess_over_csi300_pct": 9.96,
       "excess_over_monkey_pct": 8.11,
       "percentile_rank": 99.5,
       "monkey_percentile": 99.5,
@@ -2580,10 +2577,10 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 23.99,
-      "final_cash_ratio": 0.79,
+      "mean_cash_ratio": 21.88,
+      "final_cash_ratio": 2.91,
       "target_holdings_mean": 22.0,
-      "actual_holdings_mean": 17.11,
+      "actual_holdings_mean": 17.6,
       "badges": [
         "Alpha Outlier (>99%)"
       ]
@@ -2594,11 +2591,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "sloth-3",
       "animal_category": "Sloth (Lagged)",
       "display_name": "CONTESTANT_D × sloth-3",
-      "total_return_pct": 1.02,
-      "max_drawdown_pct": 7.99,
-      "final_nav": 1.0102,
-      "sharpe_ratio": 0.44,
-      "excess_over_csi300_pct": 8.92,
+      "total_return_pct": -1.07,
+      "max_drawdown_pct": 9.9,
+      "final_nav": 0.9893,
+      "sharpe_ratio": -0.28,
+      "excess_over_csi300_pct": 7.63,
       "excess_over_monkey_pct": 7.23,
       "percentile_rank": 99.0,
       "monkey_percentile": 99.0,
@@ -2606,13 +2603,13 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "empirical_p_value": 0.01,
       "p_value": 0.01,
       "is_statistically_significant": true,
-      "unaffordable_buy_ratio": 0.0,
-      "unaffordable_buy_count": 0,
-      "unaffordable_event_days": 0,
-      "mean_cash_ratio": 35.15,
-      "final_cash_ratio": 0.45,
+      "unaffordable_buy_ratio": 2.5,
+      "unaffordable_buy_count": 1,
+      "unaffordable_event_days": 1,
+      "mean_cash_ratio": 32.08,
+      "final_cash_ratio": 4.5,
       "target_holdings_mean": 22.0,
-      "actual_holdings_mean": 14.67,
+      "actual_holdings_mean": 15.3,
       "badges": [
         "Alpha Outlier (>99%)"
       ]
@@ -2623,11 +2620,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "sloth-4",
       "animal_category": "Sloth (Lagged)",
       "display_name": "CONTESTANT_D × sloth-4",
-      "total_return_pct": -3.33,
-      "max_drawdown_pct": 7.12,
-      "final_nav": 0.9667,
-      "sharpe_ratio": -1.49,
-      "excess_over_csi300_pct": 4.57,
+      "total_return_pct": -4.86,
+      "max_drawdown_pct": 8.58,
+      "final_nav": 0.9514,
+      "sharpe_ratio": -1.96,
+      "excess_over_csi300_pct": 3.84,
       "excess_over_monkey_pct": 2.33,
       "percentile_rank": 76.4,
       "monkey_percentile": 76.4,
@@ -2638,10 +2635,10 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 46.32,
-      "final_cash_ratio": 3.33,
+      "mean_cash_ratio": 41.74,
+      "final_cash_ratio": 0.55,
       "target_holdings_mean": 22.0,
-      "actual_holdings_mean": 12.22,
+      "actual_holdings_mean": 13.2,
       "badges": []
     },
     {
@@ -2650,11 +2647,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "snail-1",
       "animal_category": "Snail (Stale)",
       "display_name": "CONTESTANT_D × snail-1",
-      "total_return_pct": 1.93,
+      "total_return_pct": 1.53,
       "max_drawdown_pct": 3.92,
-      "final_nav": 1.0193,
-      "sharpe_ratio": 0.68,
-      "excess_over_csi300_pct": 9.83,
+      "final_nav": 1.0153,
+      "sharpe_ratio": 0.53,
+      "excess_over_csi300_pct": 10.23,
       "excess_over_monkey_pct": 5.39,
       "percentile_rank": 95.7,
       "monkey_percentile": 95.7,
@@ -2665,8 +2662,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 2.17,
-      "final_cash_ratio": 3.09,
+      "mean_cash_ratio": 1.99,
+      "final_cash_ratio": 0.3,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -2677,11 +2674,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "snail-2",
       "animal_category": "Snail (Stale)",
       "display_name": "CONTESTANT_D × snail-2",
-      "total_return_pct": -1.15,
-      "max_drawdown_pct": 5.32,
-      "final_nav": 0.9885,
-      "sharpe_ratio": -0.27,
-      "excess_over_csi300_pct": 6.75,
+      "total_return_pct": -2.44,
+      "max_drawdown_pct": 6.52,
+      "final_nav": 0.9756,
+      "sharpe_ratio": -0.61,
+      "excess_over_csi300_pct": 6.26,
       "excess_over_monkey_pct": 3.67,
       "percentile_rank": 87.1,
       "monkey_percentile": 87.1,
@@ -2692,8 +2689,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 2.36,
-      "final_cash_ratio": 0.83,
+      "mean_cash_ratio": 2.33,
+      "final_cash_ratio": 2.07,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -2704,11 +2701,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "snail-3",
       "animal_category": "Snail (Stale)",
       "display_name": "CONTESTANT_D × snail-3",
-      "total_return_pct": -3.16,
-      "max_drawdown_pct": 7.55,
-      "final_nav": 0.9684,
-      "sharpe_ratio": -0.84,
-      "excess_over_csi300_pct": 4.74,
+      "total_return_pct": -4.94,
+      "max_drawdown_pct": 9.24,
+      "final_nav": 0.9506,
+      "sharpe_ratio": -1.28,
+      "excess_over_csi300_pct": 3.76,
       "excess_over_monkey_pct": 2.68,
       "percentile_rank": 80.3,
       "monkey_percentile": 80.3,
@@ -2716,13 +2713,13 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "empirical_p_value": 0.1968,
       "p_value": 0.1968,
       "is_statistically_significant": false,
-      "unaffordable_buy_ratio": 0.0,
-      "unaffordable_buy_count": 0,
-      "unaffordable_event_days": 0,
-      "mean_cash_ratio": 1.85,
-      "final_cash_ratio": 0.28,
+      "unaffordable_buy_ratio": 2.33,
+      "unaffordable_buy_count": 1,
+      "unaffordable_event_days": 1,
+      "mean_cash_ratio": 2.16,
+      "final_cash_ratio": 5.05,
       "target_holdings_mean": 22.0,
-      "actual_holdings_mean": 22.0,
+      "actual_holdings_mean": 21.9,
       "badges": []
     },
     {
@@ -2731,11 +2728,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "snail-4",
       "animal_category": "Snail (Stale)",
       "display_name": "CONTESTANT_D × snail-4",
-      "total_return_pct": -1.6,
-      "max_drawdown_pct": 5.08,
-      "final_nav": 0.984,
-      "sharpe_ratio": -0.42,
-      "excess_over_csi300_pct": 6.3,
+      "total_return_pct": -2.69,
+      "max_drawdown_pct": 6.07,
+      "final_nav": 0.9731,
+      "sharpe_ratio": -0.71,
+      "excess_over_csi300_pct": 6.01,
       "excess_over_monkey_pct": 2.76,
       "percentile_rank": 80.7,
       "monkey_percentile": 80.7,
@@ -2743,13 +2740,13 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "empirical_p_value": 0.1928,
       "p_value": 0.1928,
       "is_statistically_significant": false,
-      "unaffordable_buy_ratio": 2.56,
+      "unaffordable_buy_ratio": 2.33,
       "unaffordable_buy_count": 1,
       "unaffordable_event_days": 1,
-      "mean_cash_ratio": 2.2,
-      "final_cash_ratio": 7.23,
+      "mean_cash_ratio": 2.01,
+      "final_cash_ratio": 0.3,
       "target_holdings_mean": 22.0,
-      "actual_holdings_mean": 21.89,
+      "actual_holdings_mean": 21.9,
       "badges": []
     },
     {
@@ -2758,11 +2755,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "rabbit-1",
       "animal_category": "Rabbit (High Turnover)",
       "display_name": "CONTESTANT_D × rabbit-1",
-      "total_return_pct": 12.37,
+      "total_return_pct": 11.89,
       "max_drawdown_pct": 10.42,
-      "final_nav": 1.1237,
-      "sharpe_ratio": 1.85,
-      "excess_over_csi300_pct": 20.27,
+      "final_nav": 1.1189,
+      "sharpe_ratio": 1.7,
+      "excess_over_csi300_pct": 20.59,
       "excess_over_monkey_pct": 14.73,
       "percentile_rank": 99.9,
       "monkey_percentile": 99.9,
@@ -2773,8 +2770,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 6.07,
-      "final_cash_ratio": 1.79,
+      "mean_cash_ratio": 5.95,
+      "final_cash_ratio": 4.97,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": [
@@ -2787,11 +2784,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "rabbit-2",
       "animal_category": "Rabbit (High Turnover)",
       "display_name": "CONTESTANT_D × rabbit-2",
-      "total_return_pct": 6.73,
+      "total_return_pct": 7.63,
       "max_drawdown_pct": 11.88,
-      "final_nav": 1.0673,
-      "sharpe_ratio": 1.16,
-      "excess_over_csi300_pct": 14.63,
+      "final_nav": 1.0763,
+      "sharpe_ratio": 1.23,
+      "excess_over_csi300_pct": 16.33,
       "excess_over_monkey_pct": 9.38,
       "percentile_rank": 99.6,
       "monkey_percentile": 99.6,
@@ -2799,13 +2796,13 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "empirical_p_value": 0.004,
       "p_value": 0.004,
       "is_statistically_significant": true,
-      "unaffordable_buy_ratio": 0.57,
+      "unaffordable_buy_ratio": 0.52,
       "unaffordable_buy_count": 1,
       "unaffordable_event_days": 1,
-      "mean_cash_ratio": 8.82,
-      "final_cash_ratio": 2.57,
+      "mean_cash_ratio": 8.58,
+      "final_cash_ratio": 6.42,
       "target_holdings_mean": 22.0,
-      "actual_holdings_mean": 21.89,
+      "actual_holdings_mean": 21.9,
       "badges": [
         "Alpha Outlier (>99%)"
       ]
@@ -2816,11 +2813,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "turtle",
       "animal_category": "Turtle (Low Turnover)",
       "display_name": "CONTESTANT_D × turtle",
-      "total_return_pct": -4.06,
-      "max_drawdown_pct": 6.58,
-      "final_nav": 0.9594,
-      "sharpe_ratio": -1.11,
-      "excess_over_csi300_pct": 3.84,
+      "total_return_pct": -6.0,
+      "max_drawdown_pct": 7.78,
+      "final_nav": 0.94,
+      "sharpe_ratio": -1.6,
+      "excess_over_csi300_pct": 2.7,
       "excess_over_monkey_pct": -0.09,
       "percentile_rank": 48.5,
       "monkey_percentile": 48.5,
@@ -2831,8 +2828,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 1.42,
-      "final_cash_ratio": 0.1,
+      "mean_cash_ratio": 1.34,
+      "final_cash_ratio": 0.67,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -2843,11 +2840,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "koala",
       "animal_category": "Koala (Inverted)",
       "display_name": "CONTESTANT_D × koala",
-      "total_return_pct": -15.48,
+      "total_return_pct": -17.39,
       "max_drawdown_pct": 18.84,
-      "final_nav": 0.8452,
-      "sharpe_ratio": -2.24,
-      "excess_over_csi300_pct": -7.58,
+      "final_nav": 0.8261,
+      "sharpe_ratio": -2.4,
+      "excess_over_csi300_pct": -8.69,
       "excess_over_monkey_pct": -12.47,
       "percentile_rank": 0.0,
       "monkey_percentile": 0.0,
@@ -2855,13 +2852,13 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "empirical_p_value": 1.0,
       "p_value": 1.0,
       "is_statistically_significant": false,
-      "unaffordable_buy_ratio": 2.13,
+      "unaffordable_buy_ratio": 2.0,
       "unaffordable_buy_count": 1,
       "unaffordable_event_days": 1,
-      "mean_cash_ratio": 3.36,
-      "final_cash_ratio": 0.32,
+      "mean_cash_ratio": 3.07,
+      "final_cash_ratio": 0.39,
       "target_holdings_mean": 22.0,
-      "actual_holdings_mean": 21.89,
+      "actual_holdings_mean": 21.9,
       "badges": []
     },
     {
@@ -2870,11 +2867,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "meerkat-10",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_D × meerkat-10",
-      "total_return_pct": 9.33,
+      "total_return_pct": 9.41,
       "max_drawdown_pct": 1.74,
-      "final_nav": 1.0933,
-      "sharpe_ratio": 3.58,
-      "excess_over_csi300_pct": 17.23,
+      "final_nav": 1.0941,
+      "sharpe_ratio": 3.3,
+      "excess_over_csi300_pct": 18.11,
       "excess_over_monkey_pct": 11.21,
       "percentile_rank": 99.9,
       "monkey_percentile": 99.9,
@@ -2885,8 +2882,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 1.22,
-      "final_cash_ratio": 1.02,
+      "mean_cash_ratio": 1.12,
+      "final_cash_ratio": 0.23,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": [
@@ -2900,11 +2897,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "meerkat-20",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_D × meerkat-20",
-      "total_return_pct": 0.18,
+      "total_return_pct": -1.95,
       "max_drawdown_pct": 5.45,
-      "final_nav": 1.0018,
-      "sharpe_ratio": 0.14,
-      "excess_over_csi300_pct": 8.08,
+      "final_nav": 0.9805,
+      "sharpe_ratio": -0.51,
+      "excess_over_csi300_pct": 6.75,
       "excess_over_monkey_pct": 0.76,
       "percentile_rank": 58.2,
       "monkey_percentile": 58.2,
@@ -2915,8 +2912,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 1.54,
-      "final_cash_ratio": 2.16,
+      "mean_cash_ratio": 1.5,
+      "final_cash_ratio": 1.19,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -2927,11 +2924,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "meerkat-30",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_D × meerkat-30",
-      "total_return_pct": 1.43,
-      "max_drawdown_pct": 4.3,
-      "final_nav": 1.0143,
-      "sharpe_ratio": 0.56,
-      "excess_over_csi300_pct": 9.33,
+      "total_return_pct": -1.45,
+      "max_drawdown_pct": 4.98,
+      "final_nav": 0.9855,
+      "sharpe_ratio": -0.35,
+      "excess_over_csi300_pct": 7.25,
       "excess_over_monkey_pct": 3.54,
       "percentile_rank": 86.4,
       "monkey_percentile": 86.4,
@@ -2942,8 +2939,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 1.18,
-      "final_cash_ratio": 0.23,
+      "mean_cash_ratio": 1.23,
+      "final_cash_ratio": 1.7,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -2954,11 +2951,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "meerkat-40",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_D × meerkat-40",
-      "total_return_pct": 0.08,
+      "total_return_pct": -2.54,
       "max_drawdown_pct": 6.82,
-      "final_nav": 1.0008,
-      "sharpe_ratio": 0.11,
-      "excess_over_csi300_pct": 7.98,
+      "final_nav": 0.9746,
+      "sharpe_ratio": -0.64,
+      "excess_over_csi300_pct": 6.16,
       "excess_over_monkey_pct": 1.0,
       "percentile_rank": 61.4,
       "monkey_percentile": 61.4,
@@ -2969,8 +2966,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 1.87,
-      "final_cash_ratio": 0.77,
+      "mean_cash_ratio": 1.73,
+      "final_cash_ratio": 0.46,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -2981,11 +2978,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "meerkat-50",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_D × meerkat-50",
-      "total_return_pct": -8.11,
-      "max_drawdown_pct": 9.43,
-      "final_nav": 0.9189,
-      "sharpe_ratio": -2.23,
-      "excess_over_csi300_pct": -0.21,
+      "total_return_pct": -10.8,
+      "max_drawdown_pct": 10.8,
+      "final_nav": 0.892,
+      "sharpe_ratio": -2.8,
+      "excess_over_csi300_pct": -2.1,
       "excess_over_monkey_pct": -4.97,
       "percentile_rank": 8.6,
       "monkey_percentile": 8.6,
@@ -2996,8 +2993,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 1.66,
-      "final_cash_ratio": 3.15,
+      "mean_cash_ratio": 1.53,
+      "final_cash_ratio": 0.42,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -3008,11 +3005,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "meerkat-60",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_D × meerkat-60",
-      "total_return_pct": -3.53,
+      "total_return_pct": -6.14,
       "max_drawdown_pct": 7.29,
-      "final_nav": 0.9647,
-      "sharpe_ratio": -0.84,
-      "excess_over_csi300_pct": 4.37,
+      "final_nav": 0.9386,
+      "sharpe_ratio": -1.44,
+      "excess_over_csi300_pct": 2.56,
       "excess_over_monkey_pct": -0.4,
       "percentile_rank": 45.4,
       "monkey_percentile": 45.4,
@@ -3023,8 +3020,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 2.36,
-      "final_cash_ratio": 1.16,
+      "mean_cash_ratio": 2.22,
+      "final_cash_ratio": 0.96,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -3035,11 +3032,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "meerkat-70",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_D × meerkat-70",
-      "total_return_pct": 0.29,
-      "max_drawdown_pct": 3.41,
-      "final_nav": 1.0029,
-      "sharpe_ratio": 0.18,
-      "excess_over_csi300_pct": 8.19,
+      "total_return_pct": -3.74,
+      "max_drawdown_pct": 6.16,
+      "final_nav": 0.9626,
+      "sharpe_ratio": -0.96,
+      "excess_over_csi300_pct": 4.96,
       "excess_over_monkey_pct": 3.95,
       "percentile_rank": 88.7,
       "monkey_percentile": 88.7,
@@ -3050,8 +3047,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 2.43,
-      "final_cash_ratio": 2.9,
+      "mean_cash_ratio": 2.38,
+      "final_cash_ratio": 1.98,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -3062,11 +3059,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "meerkat-80",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_D × meerkat-80",
-      "total_return_pct": -4.37,
+      "total_return_pct": -8.22,
       "max_drawdown_pct": 8.57,
-      "final_nav": 0.9563,
-      "sharpe_ratio": -0.89,
-      "excess_over_csi300_pct": 3.53,
+      "final_nav": 0.9178,
+      "sharpe_ratio": -1.68,
+      "excess_over_csi300_pct": 0.48,
       "excess_over_monkey_pct": -2.3,
       "percentile_rank": 25.4,
       "monkey_percentile": 25.4,
@@ -3077,8 +3074,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 2.43,
-      "final_cash_ratio": 2.7,
+      "mean_cash_ratio": 2.29,
+      "final_cash_ratio": 1.02,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -3089,11 +3086,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "meerkat-90",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_D × meerkat-90",
-      "total_return_pct": -9.99,
-      "max_drawdown_pct": 11.29,
-      "final_nav": 0.9001,
-      "sharpe_ratio": -2.2,
-      "excess_over_csi300_pct": -2.09,
+      "total_return_pct": -13.08,
+      "max_drawdown_pct": 13.08,
+      "final_nav": 0.8692,
+      "sharpe_ratio": -2.78,
+      "excess_over_csi300_pct": -4.38,
       "excess_over_monkey_pct": -7.47,
       "percentile_rank": 1.8,
       "monkey_percentile": 1.8,
@@ -3104,8 +3101,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 1.92,
-      "final_cash_ratio": 1.78,
+      "mean_cash_ratio": 1.91,
+      "final_cash_ratio": 1.83,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -3116,11 +3113,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "eagle-5-1",
       "animal_category": "Eagle (Concentration)",
       "display_name": "CONTESTANT_D × eagle-5-1",
-      "total_return_pct": -5.42,
+      "total_return_pct": -7.95,
       "max_drawdown_pct": 15.99,
-      "final_nav": 0.9458,
-      "sharpe_ratio": -0.52,
-      "excess_over_csi300_pct": 2.48,
+      "final_nav": 0.9205,
+      "sharpe_ratio": -0.82,
+      "excess_over_csi300_pct": 0.75,
       "excess_over_monkey_pct": 1.92,
       "percentile_rank": 59.2,
       "monkey_percentile": 59.2,
@@ -3132,7 +3129,7 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
       "mean_cash_ratio": 0.71,
-      "final_cash_ratio": 0.12,
+      "final_cash_ratio": 0.75,
       "target_holdings_mean": 5.0,
       "actual_holdings_mean": 5.0,
       "badges": []
@@ -3143,11 +3140,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "eagle-11-2",
       "animal_category": "Eagle (Concentration)",
       "display_name": "CONTESTANT_D × eagle-11-2",
-      "total_return_pct": -1.57,
+      "total_return_pct": -2.48,
       "max_drawdown_pct": 14.11,
-      "final_nav": 0.9843,
-      "sharpe_ratio": -0.07,
-      "excess_over_csi300_pct": 6.33,
+      "final_nav": 0.9752,
+      "sharpe_ratio": -0.2,
+      "excess_over_csi300_pct": 6.22,
       "excess_over_monkey_pct": 3.98,
       "percentile_rank": 77.7,
       "monkey_percentile": 77.7,
@@ -3158,8 +3155,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 1.24,
-      "final_cash_ratio": 0.31,
+      "mean_cash_ratio": 1.13,
+      "final_cash_ratio": 0.13,
       "target_holdings_mean": 11.0,
       "actual_holdings_mean": 11.0,
       "badges": []
@@ -3170,11 +3167,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "eagle-44-6",
       "animal_category": "Eagle (Concentration)",
       "display_name": "CONTESTANT_D × eagle-44-6",
-      "total_return_pct": 5.3,
+      "total_return_pct": 5.19,
       "max_drawdown_pct": 4.13,
-      "final_nav": 1.053,
-      "sharpe_ratio": 1.61,
-      "excess_over_csi300_pct": 13.2,
+      "final_nav": 1.0519,
+      "sharpe_ratio": 1.49,
+      "excess_over_csi300_pct": 13.89,
       "excess_over_monkey_pct": 6.79,
       "percentile_rank": 99.8,
       "monkey_percentile": 99.8,
@@ -3185,8 +3182,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 2.81,
-      "final_cash_ratio": 0.68,
+      "mean_cash_ratio": 2.79,
+      "final_cash_ratio": 2.63,
       "target_holdings_mean": 44.0,
       "actual_holdings_mean": 44.0,
       "badges": [
@@ -3199,11 +3196,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "eagle-66-9",
       "animal_category": "Eagle (Concentration)",
       "display_name": "CONTESTANT_D × eagle-66-9",
-      "total_return_pct": 4.04,
+      "total_return_pct": 3.54,
       "max_drawdown_pct": 4.5,
-      "final_nav": 1.0404,
-      "sharpe_ratio": 1.45,
-      "excess_over_csi300_pct": 11.94,
+      "final_nav": 1.0354,
+      "sharpe_ratio": 1.21,
+      "excess_over_csi300_pct": 12.24,
       "excess_over_monkey_pct": 5.01,
       "percentile_rank": 99.7,
       "monkey_percentile": 99.7,
@@ -3214,8 +3211,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 3.72,
-      "final_cash_ratio": 1.29,
+      "mean_cash_ratio": 3.51,
+      "final_cash_ratio": 1.59,
       "target_holdings_mean": 66.0,
       "actual_holdings_mean": 66.0,
       "badges": [
@@ -3228,11 +3225,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "eagle-88-12",
       "animal_category": "Eagle (Concentration)",
       "display_name": "CONTESTANT_D × eagle-88-12",
-      "total_return_pct": 6.4,
+      "total_return_pct": 5.84,
       "max_drawdown_pct": 2.65,
-      "final_nav": 1.064,
-      "sharpe_ratio": 2.7,
-      "excess_over_csi300_pct": 14.3,
+      "final_nav": 1.0584,
+      "sharpe_ratio": 2.28,
+      "excess_over_csi300_pct": 14.54,
       "excess_over_monkey_pct": 5.97,
       "percentile_rank": 99.9,
       "monkey_percentile": 99.9,
@@ -3243,8 +3240,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 3.74,
-      "final_cash_ratio": 1.49,
+      "mean_cash_ratio": 3.52,
+      "final_cash_ratio": 1.59,
       "target_holdings_mean": 88.0,
       "actual_holdings_mean": 88.0,
       "badges": [
@@ -3258,11 +3255,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "whale-shark",
       "animal_category": "Whale Shark (50% Pool)",
       "display_name": "CONTESTANT_D × whale-shark",
-      "total_return_pct": 5.86,
+      "total_return_pct": 5.24,
       "max_drawdown_pct": 2.5,
-      "final_nav": 1.0586,
-      "sharpe_ratio": 2.5,
-      "excess_over_csi300_pct": 13.76,
+      "final_nav": 1.0524,
+      "sharpe_ratio": 2.04,
+      "excess_over_csi300_pct": 13.94,
       "excess_over_monkey_pct": 4.18,
       "percentile_rank": 99.9,
       "monkey_percentile": 99.9,
@@ -3273,8 +3270,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 3.99,
-      "final_cash_ratio": 1.68,
+      "mean_cash_ratio": 3.81,
+      "final_cash_ratio": 2.24,
       "target_holdings_mean": 123.0,
       "actual_holdings_mean": 123.0,
       "badges": [
@@ -3288,11 +3285,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "robot",
       "animal_category": "Baseline",
       "display_name": "CONTESTANT_E × robot",
-      "total_return_pct": -6.23,
-      "max_drawdown_pct": 8.57,
-      "final_nav": 0.9377,
-      "sharpe_ratio": -1.08,
-      "excess_over_csi300_pct": 1.67,
+      "total_return_pct": -11.13,
+      "max_drawdown_pct": 11.13,
+      "final_nav": 0.8887,
+      "sharpe_ratio": -1.96,
+      "excess_over_csi300_pct": -2.43,
       "excess_over_monkey_pct": -3.63,
       "percentile_rank": 14.7,
       "monkey_percentile": 14.7,
@@ -3303,8 +3300,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 2.69,
-      "final_cash_ratio": 0.67,
+      "mean_cash_ratio": 2.51,
+      "final_cash_ratio": 0.84,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -3315,11 +3312,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "sloth-1",
       "animal_category": "Sloth (Lagged)",
       "display_name": "CONTESTANT_E × sloth-1",
-      "total_return_pct": -1.79,
-      "max_drawdown_pct": 6.5,
-      "final_nav": 0.9821,
-      "sharpe_ratio": -0.25,
-      "excess_over_csi300_pct": 6.11,
+      "total_return_pct": -7.11,
+      "max_drawdown_pct": 8.93,
+      "final_nav": 0.9289,
+      "sharpe_ratio": -1.3,
+      "excess_over_csi300_pct": 1.59,
       "excess_over_monkey_pct": 0.57,
       "percentile_rank": 56.6,
       "monkey_percentile": 56.6,
@@ -3330,10 +3327,10 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 13.78,
-      "final_cash_ratio": 1.17,
+      "mean_cash_ratio": 12.46,
+      "final_cash_ratio": 0.55,
       "target_holdings_mean": 22.0,
-      "actual_holdings_mean": 19.56,
+      "actual_holdings_mean": 19.8,
       "badges": []
     },
     {
@@ -3342,11 +3339,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "sloth-2",
       "animal_category": "Sloth (Lagged)",
       "display_name": "CONTESTANT_E × sloth-2",
-      "total_return_pct": 5.93,
-      "max_drawdown_pct": 5.93,
-      "final_nav": 1.0593,
-      "sharpe_ratio": 1.59,
-      "excess_over_csi300_pct": 13.83,
+      "total_return_pct": 0.14,
+      "max_drawdown_pct": 7.42,
+      "final_nav": 1.0014,
+      "sharpe_ratio": 0.14,
+      "excess_over_csi300_pct": 8.84,
       "excess_over_monkey_pct": 7.23,
       "percentile_rank": 99.0,
       "monkey_percentile": 99.0,
@@ -3357,10 +3354,10 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 24.72,
-      "final_cash_ratio": 2.43,
+      "mean_cash_ratio": 22.37,
+      "final_cash_ratio": 1.28,
       "target_holdings_mean": 22.0,
-      "actual_holdings_mean": 17.11,
+      "actual_holdings_mean": 17.6,
       "badges": [
         "Alpha Outlier (>99%)"
       ]
@@ -3371,11 +3368,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "sloth-3",
       "animal_category": "Sloth (Lagged)",
       "display_name": "CONTESTANT_E × sloth-3",
-      "total_return_pct": 0.8,
-      "max_drawdown_pct": 6.75,
-      "final_nav": 1.008,
-      "sharpe_ratio": 0.33,
-      "excess_over_csi300_pct": 8.7,
+      "total_return_pct": -3.6,
+      "max_drawdown_pct": 8.01,
+      "final_nav": 0.964,
+      "sharpe_ratio": -0.9,
+      "excess_over_csi300_pct": 5.1,
       "excess_over_monkey_pct": 2.36,
       "percentile_rank": 76.9,
       "monkey_percentile": 76.9,
@@ -3386,10 +3383,10 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 35.21,
-      "final_cash_ratio": 2.22,
+      "mean_cash_ratio": 32.02,
+      "final_cash_ratio": 3.41,
       "target_holdings_mean": 22.0,
-      "actual_holdings_mean": 14.67,
+      "actual_holdings_mean": 15.4,
       "badges": []
     },
     {
@@ -3398,11 +3395,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "sloth-4",
       "animal_category": "Sloth (Lagged)",
       "display_name": "CONTESTANT_E × sloth-4",
-      "total_return_pct": -0.59,
-      "max_drawdown_pct": 7.98,
-      "final_nav": 0.9941,
-      "sharpe_ratio": -0.12,
-      "excess_over_csi300_pct": 7.31,
+      "total_return_pct": -5.09,
+      "max_drawdown_pct": 9.21,
+      "final_nav": 0.9491,
+      "sharpe_ratio": -1.54,
+      "excess_over_csi300_pct": 3.61,
       "excess_over_monkey_pct": 1.35,
       "percentile_rank": 64.8,
       "monkey_percentile": 64.8,
@@ -3413,10 +3410,10 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 46.41,
-      "final_cash_ratio": 1.07,
+      "mean_cash_ratio": 41.93,
+      "final_cash_ratio": 1.72,
       "target_holdings_mean": 22.0,
-      "actual_holdings_mean": 12.22,
+      "actual_holdings_mean": 13.2,
       "badges": []
     },
     {
@@ -3425,11 +3422,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "snail-1",
       "animal_category": "Snail (Stale)",
       "display_name": "CONTESTANT_E × snail-1",
-      "total_return_pct": -3.51,
-      "max_drawdown_pct": 8.29,
-      "final_nav": 0.9649,
-      "sharpe_ratio": -0.57,
-      "excess_over_csi300_pct": 4.39,
+      "total_return_pct": -8.68,
+      "max_drawdown_pct": 8.77,
+      "final_nav": 0.9132,
+      "sharpe_ratio": -1.54,
+      "excess_over_csi300_pct": 0.02,
       "excess_over_monkey_pct": -1.37,
       "percentile_rank": 35.1,
       "monkey_percentile": 35.1,
@@ -3440,8 +3437,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 3.98,
-      "final_cash_ratio": 1.37,
+      "mean_cash_ratio": 3.65,
+      "final_cash_ratio": 0.75,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -3452,11 +3449,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "snail-2",
       "animal_category": "Snail (Stale)",
       "display_name": "CONTESTANT_E × snail-2",
-      "total_return_pct": -2.07,
+      "total_return_pct": -7.61,
       "max_drawdown_pct": 8.52,
-      "final_nav": 0.9793,
-      "sharpe_ratio": -0.32,
-      "excess_over_csi300_pct": 5.83,
+      "final_nav": 0.9239,
+      "sharpe_ratio": -1.43,
+      "excess_over_csi300_pct": 1.09,
       "excess_over_monkey_pct": -1.0,
       "percentile_rank": 39.7,
       "monkey_percentile": 39.7,
@@ -3467,8 +3464,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 5.02,
-      "final_cash_ratio": 1.43,
+      "mean_cash_ratio": 4.58,
+      "final_cash_ratio": 0.57,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -3479,11 +3476,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "snail-3",
       "animal_category": "Snail (Stale)",
       "display_name": "CONTESTANT_E × snail-3",
-      "total_return_pct": -7.96,
-      "max_drawdown_pct": 10.94,
-      "final_nav": 0.9204,
-      "sharpe_ratio": -1.79,
-      "excess_over_csi300_pct": -0.06,
+      "total_return_pct": -12.01,
+      "max_drawdown_pct": 12.01,
+      "final_nav": 0.8799,
+      "sharpe_ratio": -2.64,
+      "excess_over_csi300_pct": -3.31,
       "excess_over_monkey_pct": -6.41,
       "percentile_rank": 3.6,
       "monkey_percentile": 3.6,
@@ -3494,8 +3491,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 5.93,
-      "final_cash_ratio": 2.04,
+      "mean_cash_ratio": 5.59,
+      "final_cash_ratio": 2.57,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -3506,11 +3503,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "snail-4",
       "animal_category": "Snail (Stale)",
       "display_name": "CONTESTANT_E × snail-4",
-      "total_return_pct": -7.37,
-      "max_drawdown_pct": 10.14,
-      "final_nav": 0.9263,
-      "sharpe_ratio": -1.72,
-      "excess_over_csi300_pct": 0.53,
+      "total_return_pct": -11.34,
+      "max_drawdown_pct": 11.34,
+      "final_nav": 0.8866,
+      "sharpe_ratio": -2.58,
+      "excess_over_csi300_pct": -2.64,
       "excess_over_monkey_pct": -5.49,
       "percentile_rank": 6.2,
       "monkey_percentile": 6.2,
@@ -3521,8 +3518,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 7.51,
-      "final_cash_ratio": 3.84,
+      "mean_cash_ratio": 7.13,
+      "final_cash_ratio": 3.83,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -3533,11 +3530,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "rabbit-1",
       "animal_category": "Rabbit (High Turnover)",
       "display_name": "CONTESTANT_E × rabbit-1",
-      "total_return_pct": -4.34,
-      "max_drawdown_pct": 8.04,
-      "final_nav": 0.9566,
-      "sharpe_ratio": -0.84,
-      "excess_over_csi300_pct": 3.56,
+      "total_return_pct": -8.6,
+      "max_drawdown_pct": 11.02,
+      "final_nav": 0.914,
+      "sharpe_ratio": -1.67,
+      "excess_over_csi300_pct": 0.1,
       "excess_over_monkey_pct": -0.11,
       "percentile_rank": 48.9,
       "monkey_percentile": 48.9,
@@ -3548,8 +3545,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 5.47,
-      "final_cash_ratio": 3.59,
+      "mean_cash_ratio": 5.13,
+      "final_cash_ratio": 2.08,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -3560,11 +3557,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "rabbit-2",
       "animal_category": "Rabbit (High Turnover)",
       "display_name": "CONTESTANT_E × rabbit-2",
-      "total_return_pct": -5.04,
-      "max_drawdown_pct": 7.05,
-      "final_nav": 0.9496,
-      "sharpe_ratio": -1.06,
-      "excess_over_csi300_pct": 2.86,
+      "total_return_pct": -7.4,
+      "max_drawdown_pct": 9.36,
+      "final_nav": 0.926,
+      "sharpe_ratio": -1.52,
+      "excess_over_csi300_pct": 1.3,
       "excess_over_monkey_pct": -0.2,
       "percentile_rank": 47.8,
       "monkey_percentile": 47.8,
@@ -3575,8 +3572,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 9.24,
-      "final_cash_ratio": 8.05,
+      "mean_cash_ratio": 9.13,
+      "final_cash_ratio": 8.3,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -3587,11 +3584,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "turtle",
       "animal_category": "Turtle (Low Turnover)",
       "display_name": "CONTESTANT_E × turtle",
-      "total_return_pct": -5.21,
-      "max_drawdown_pct": 8.35,
-      "final_nav": 0.9479,
-      "sharpe_ratio": -1.12,
-      "excess_over_csi300_pct": 2.69,
+      "total_return_pct": -9.13,
+      "max_drawdown_pct": 9.13,
+      "final_nav": 0.9087,
+      "sharpe_ratio": -1.94,
+      "excess_over_csi300_pct": -0.43,
       "excess_over_monkey_pct": -3.73,
       "percentile_rank": 14.2,
       "monkey_percentile": 14.2,
@@ -3602,8 +3599,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 1.68,
-      "final_cash_ratio": 0.4,
+      "mean_cash_ratio": 1.55,
+      "final_cash_ratio": 0.41,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -3614,11 +3611,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "koala",
       "animal_category": "Koala (Inverted)",
       "display_name": "CONTESTANT_E × koala",
-      "total_return_pct": -5.71,
-      "max_drawdown_pct": 7.01,
-      "final_nav": 0.9429,
-      "sharpe_ratio": -1.87,
-      "excess_over_csi300_pct": 2.19,
+      "total_return_pct": -8.0,
+      "max_drawdown_pct": 8.0,
+      "final_nav": 0.92,
+      "sharpe_ratio": -2.45,
+      "excess_over_csi300_pct": 0.7,
       "excess_over_monkey_pct": -2.54,
       "percentile_rank": 23.6,
       "monkey_percentile": 23.6,
@@ -3629,8 +3626,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 1.26,
-      "final_cash_ratio": 0.38,
+      "mean_cash_ratio": 1.2,
+      "final_cash_ratio": 0.7,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -3641,11 +3638,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "meerkat-10",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_E × meerkat-10",
-      "total_return_pct": -3.06,
-      "max_drawdown_pct": 6.71,
-      "final_nav": 0.9694,
-      "sharpe_ratio": -0.59,
-      "excess_over_csi300_pct": 4.84,
+      "total_return_pct": -5.59,
+      "max_drawdown_pct": 8.52,
+      "final_nav": 0.9441,
+      "sharpe_ratio": -1.11,
+      "excess_over_csi300_pct": 3.11,
       "excess_over_monkey_pct": -0.7,
       "percentile_rank": 42.5,
       "monkey_percentile": 42.5,
@@ -3656,8 +3653,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 2.41,
-      "final_cash_ratio": 0.85,
+      "mean_cash_ratio": 2.21,
+      "final_cash_ratio": 0.35,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -3668,11 +3665,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "meerkat-20",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_E × meerkat-20",
-      "total_return_pct": -3.63,
+      "total_return_pct": -7.18,
       "max_drawdown_pct": 7.93,
-      "final_nav": 0.9637,
-      "sharpe_ratio": -0.87,
-      "excess_over_csi300_pct": 4.27,
+      "final_nav": 0.9282,
+      "sharpe_ratio": -1.71,
+      "excess_over_csi300_pct": 1.52,
       "excess_over_monkey_pct": -0.61,
       "percentile_rank": 43.5,
       "monkey_percentile": 43.5,
@@ -3683,8 +3680,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 1.45,
-      "final_cash_ratio": 0.79,
+      "mean_cash_ratio": 1.35,
+      "final_cash_ratio": 0.45,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -3695,11 +3692,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "meerkat-30",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_E × meerkat-30",
-      "total_return_pct": -4.58,
+      "total_return_pct": -6.55,
       "max_drawdown_pct": 9.44,
-      "final_nav": 0.9542,
-      "sharpe_ratio": -0.71,
-      "excess_over_csi300_pct": 3.32,
+      "final_nav": 0.9345,
+      "sharpe_ratio": -1.02,
+      "excess_over_csi300_pct": 2.15,
       "excess_over_monkey_pct": -1.0,
       "percentile_rank": 39.7,
       "monkey_percentile": 39.7,
@@ -3710,8 +3707,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 2.18,
-      "final_cash_ratio": 0.37,
+      "mean_cash_ratio": 2.02,
+      "final_cash_ratio": 0.63,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -3722,11 +3719,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "meerkat-40",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_E × meerkat-40",
-      "total_return_pct": -6.07,
+      "total_return_pct": -7.35,
       "max_drawdown_pct": 11.64,
-      "final_nav": 0.9393,
-      "sharpe_ratio": -1.35,
-      "excess_over_csi300_pct": 1.83,
+      "final_nav": 0.9265,
+      "sharpe_ratio": -1.55,
+      "excess_over_csi300_pct": 1.35,
       "excess_over_monkey_pct": -2.96,
       "percentile_rank": 19.6,
       "monkey_percentile": 19.6,
@@ -3737,8 +3734,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 2.15,
-      "final_cash_ratio": 1.12,
+      "mean_cash_ratio": 1.99,
+      "final_cash_ratio": 0.59,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -3749,11 +3746,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "meerkat-50",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_E × meerkat-50",
-      "total_return_pct": 5.55,
-      "max_drawdown_pct": 3.04,
-      "final_nav": 1.0555,
-      "sharpe_ratio": 1.81,
-      "excess_over_csi300_pct": 13.45,
+      "total_return_pct": 3.48,
+      "max_drawdown_pct": 3.68,
+      "final_nav": 1.0348,
+      "sharpe_ratio": 1.08,
+      "excess_over_csi300_pct": 12.18,
       "excess_over_monkey_pct": 7.37,
       "percentile_rank": 99.1,
       "monkey_percentile": 99.1,
@@ -3764,8 +3761,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 1.6,
-      "final_cash_ratio": 0.7,
+      "mean_cash_ratio": 1.52,
+      "final_cash_ratio": 0.77,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": [
@@ -3778,11 +3775,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "meerkat-60",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_E × meerkat-60",
-      "total_return_pct": 2.32,
+      "total_return_pct": -1.0,
       "max_drawdown_pct": 3.6,
-      "final_nav": 1.0232,
-      "sharpe_ratio": 0.82,
-      "excess_over_csi300_pct": 10.22,
+      "final_nav": 0.99,
+      "sharpe_ratio": -0.2,
+      "excess_over_csi300_pct": 7.7,
       "excess_over_monkey_pct": 2.95,
       "percentile_rank": 82.6,
       "monkey_percentile": 82.6,
@@ -3793,8 +3790,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 2.41,
-      "final_cash_ratio": 3.86,
+      "mean_cash_ratio": 2.23,
+      "final_cash_ratio": 0.61,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -3805,11 +3802,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "meerkat-70",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_E × meerkat-70",
-      "total_return_pct": -1.55,
+      "total_return_pct": -3.27,
       "max_drawdown_pct": 4.98,
-      "final_nav": 0.9845,
-      "sharpe_ratio": -0.49,
-      "excess_over_csi300_pct": 6.35,
+      "final_nav": 0.9673,
+      "sharpe_ratio": -1.05,
+      "excess_over_csi300_pct": 5.43,
       "excess_over_monkey_pct": 2.24,
       "percentile_rank": 75.5,
       "monkey_percentile": 75.5,
@@ -3820,8 +3817,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 1.63,
-      "final_cash_ratio": 0.63,
+      "mean_cash_ratio": 1.66,
+      "final_cash_ratio": 1.9,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -3832,11 +3829,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "meerkat-80",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_E × meerkat-80",
-      "total_return_pct": -1.18,
+      "total_return_pct": -3.31,
       "max_drawdown_pct": 4.88,
-      "final_nav": 0.9882,
-      "sharpe_ratio": -0.32,
-      "excess_over_csi300_pct": 6.72,
+      "final_nav": 0.9669,
+      "sharpe_ratio": -0.98,
+      "excess_over_csi300_pct": 5.39,
       "excess_over_monkey_pct": 1.59,
       "percentile_rank": 67.3,
       "monkey_percentile": 67.3,
@@ -3847,8 +3844,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 1.87,
-      "final_cash_ratio": 0.49,
+      "mean_cash_ratio": 1.94,
+      "final_cash_ratio": 2.65,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -3859,11 +3856,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "meerkat-90",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_E × meerkat-90",
-      "total_return_pct": 0.77,
+      "total_return_pct": -0.84,
       "max_drawdown_pct": 5.36,
-      "final_nav": 1.0077,
-      "sharpe_ratio": 0.37,
-      "excess_over_csi300_pct": 8.67,
+      "final_nav": 0.9916,
+      "sharpe_ratio": -0.23,
+      "excess_over_csi300_pct": 7.86,
       "excess_over_monkey_pct": 3.06,
       "percentile_rank": 83.1,
       "monkey_percentile": 83.1,
@@ -3874,8 +3871,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 1.74,
-      "final_cash_ratio": 0.96,
+      "mean_cash_ratio": 1.62,
+      "final_cash_ratio": 0.46,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -3886,11 +3883,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "eagle-5-1",
       "animal_category": "Eagle (Concentration)",
       "display_name": "CONTESTANT_E × eagle-5-1",
-      "total_return_pct": -0.25,
-      "max_drawdown_pct": 7.95,
-      "final_nav": 0.9975,
-      "sharpe_ratio": 0.09,
-      "excess_over_csi300_pct": 7.65,
+      "total_return_pct": -5.44,
+      "max_drawdown_pct": 10.8,
+      "final_nav": 0.9456,
+      "sharpe_ratio": -0.89,
+      "excess_over_csi300_pct": 3.26,
       "excess_over_monkey_pct": 2.78,
       "percentile_rank": 63.6,
       "monkey_percentile": 63.6,
@@ -3901,8 +3898,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 1.09,
-      "final_cash_ratio": 0.16,
+      "mean_cash_ratio": 1.0,
+      "final_cash_ratio": 0.22,
       "target_holdings_mean": 5.0,
       "actual_holdings_mean": 5.0,
       "badges": []
@@ -3913,11 +3910,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "eagle-11-2",
       "animal_category": "Eagle (Concentration)",
       "display_name": "CONTESTANT_E × eagle-11-2",
-      "total_return_pct": -5.1,
-      "max_drawdown_pct": 9.33,
-      "final_nav": 0.949,
-      "sharpe_ratio": -0.74,
-      "excess_over_csi300_pct": 2.8,
+      "total_return_pct": -10.36,
+      "max_drawdown_pct": 11.11,
+      "final_nav": 0.8964,
+      "sharpe_ratio": -1.6,
+      "excess_over_csi300_pct": -1.66,
       "excess_over_monkey_pct": -2.35,
       "percentile_rank": 33.1,
       "monkey_percentile": 33.1,
@@ -3928,8 +3925,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 3.36,
-      "final_cash_ratio": 5.33,
+      "mean_cash_ratio": 3.05,
+      "final_cash_ratio": 0.27,
       "target_holdings_mean": 11.0,
       "actual_holdings_mean": 11.0,
       "badges": []
@@ -3940,11 +3937,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "eagle-44-6",
       "animal_category": "Eagle (Concentration)",
       "display_name": "CONTESTANT_E × eagle-44-6",
-      "total_return_pct": -6.16,
-      "max_drawdown_pct": 9.24,
-      "final_nav": 0.9384,
-      "sharpe_ratio": -1.36,
-      "excess_over_csi300_pct": 1.74,
+      "total_return_pct": -10.52,
+      "max_drawdown_pct": 10.52,
+      "final_nav": 0.8948,
+      "sharpe_ratio": -2.27,
+      "excess_over_csi300_pct": -1.82,
       "excess_over_monkey_pct": -3.87,
       "percentile_rank": 3.7,
       "monkey_percentile": 3.7,
@@ -3955,8 +3952,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 4.12,
-      "final_cash_ratio": 2.15,
+      "mean_cash_ratio": 3.85,
+      "final_cash_ratio": 1.41,
       "target_holdings_mean": 44.0,
       "actual_holdings_mean": 44.0,
       "badges": []
@@ -3967,11 +3964,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "eagle-66-9",
       "animal_category": "Eagle (Concentration)",
       "display_name": "CONTESTANT_E × eagle-66-9",
-      "total_return_pct": -5.17,
-      "max_drawdown_pct": 6.53,
-      "final_nav": 0.9483,
-      "sharpe_ratio": -1.35,
-      "excess_over_csi300_pct": 2.73,
+      "total_return_pct": -8.69,
+      "max_drawdown_pct": 8.69,
+      "final_nav": 0.9131,
+      "sharpe_ratio": -2.19,
+      "excess_over_csi300_pct": 0.01,
       "excess_over_monkey_pct": -3.46,
       "percentile_rank": 2.9,
       "monkey_percentile": 2.9,
@@ -3982,8 +3979,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 4.22,
-      "final_cash_ratio": 2.96,
+      "mean_cash_ratio": 4.0,
+      "final_cash_ratio": 2.07,
       "target_holdings_mean": 66.0,
       "actual_holdings_mean": 66.0,
       "badges": []
@@ -3994,11 +3991,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "eagle-88-12",
       "animal_category": "Eagle (Concentration)",
       "display_name": "CONTESTANT_E × eagle-88-12",
-      "total_return_pct": -1.28,
-      "max_drawdown_pct": 5.54,
-      "final_nav": 0.9872,
-      "sharpe_ratio": -0.3,
-      "excess_over_csi300_pct": 6.62,
+      "total_return_pct": -4.37,
+      "max_drawdown_pct": 6.65,
+      "final_nav": 0.9563,
+      "sharpe_ratio": -1.17,
+      "excess_over_csi300_pct": 4.33,
       "excess_over_monkey_pct": -1.76,
       "percentile_rank": 10.4,
       "monkey_percentile": 10.4,
@@ -4009,8 +4006,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 4.25,
-      "final_cash_ratio": 2.48,
+      "mean_cash_ratio": 4.08,
+      "final_cash_ratio": 2.58,
       "target_holdings_mean": 88.0,
       "actual_holdings_mean": 88.0,
       "badges": []
@@ -4021,11 +4018,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "whale-shark",
       "animal_category": "Whale Shark (50% Pool)",
       "display_name": "CONTESTANT_E × whale-shark",
-      "total_return_pct": 1.04,
-      "max_drawdown_pct": 4.4,
-      "final_nav": 1.0104,
-      "sharpe_ratio": 0.41,
-      "excess_over_csi300_pct": 8.94,
+      "total_return_pct": -1.72,
+      "max_drawdown_pct": 4.69,
+      "final_nav": 0.9828,
+      "sharpe_ratio": -0.42,
+      "excess_over_csi300_pct": 6.98,
       "excess_over_monkey_pct": -0.52,
       "percentile_rank": 28.8,
       "monkey_percentile": 28.8,
@@ -4036,8 +4033,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 4.9,
-      "final_cash_ratio": 2.03,
+      "mean_cash_ratio": 4.68,
+      "final_cash_ratio": 2.71,
       "target_holdings_mean": 123.0,
       "actual_holdings_mean": 123.0,
       "badges": []
@@ -4048,11 +4045,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "robot",
       "animal_category": "Baseline",
       "display_name": "CONTESTANT_F × robot",
-      "total_return_pct": -8.86,
-      "max_drawdown_pct": 10.86,
-      "final_nav": 0.9114,
-      "sharpe_ratio": -2.17,
-      "excess_over_csi300_pct": -0.96,
+      "total_return_pct": -12.23,
+      "max_drawdown_pct": 12.23,
+      "final_nav": 0.8777,
+      "sharpe_ratio": -2.86,
+      "excess_over_csi300_pct": -3.53,
       "excess_over_monkey_pct": -6.15,
       "percentile_rank": 4.3,
       "monkey_percentile": 4.3,
@@ -4063,8 +4060,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 1.74,
-      "final_cash_ratio": 1.01,
+      "mean_cash_ratio": 1.62,
+      "final_cash_ratio": 0.53,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -4075,11 +4072,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "sloth-1",
       "animal_category": "Sloth (Lagged)",
       "display_name": "CONTESTANT_F × sloth-1",
-      "total_return_pct": -5.03,
-      "max_drawdown_pct": 7.66,
-      "final_nav": 0.9497,
-      "sharpe_ratio": -1.31,
-      "excess_over_csi300_pct": 2.87,
+      "total_return_pct": -8.65,
+      "max_drawdown_pct": 8.65,
+      "final_nav": 0.9135,
+      "sharpe_ratio": -2.15,
+      "excess_over_csi300_pct": 0.05,
       "excess_over_monkey_pct": -1.77,
       "percentile_rank": 30.7,
       "monkey_percentile": 30.7,
@@ -4090,10 +4087,10 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 12.72,
-      "final_cash_ratio": 0.53,
+      "mean_cash_ratio": 11.55,
+      "final_cash_ratio": 1.05,
       "target_holdings_mean": 22.0,
-      "actual_holdings_mean": 19.56,
+      "actual_holdings_mean": 19.8,
       "badges": []
     },
     {
@@ -4102,11 +4099,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "sloth-2",
       "animal_category": "Sloth (Lagged)",
       "display_name": "CONTESTANT_F × sloth-2",
-      "total_return_pct": 5.27,
-      "max_drawdown_pct": 4.2,
-      "final_nav": 1.0527,
-      "sharpe_ratio": 1.79,
-      "excess_over_csi300_pct": 13.17,
+      "total_return_pct": 2.31,
+      "max_drawdown_pct": 5.28,
+      "final_nav": 1.0231,
+      "sharpe_ratio": 0.77,
+      "excess_over_csi300_pct": 11.01,
       "excess_over_monkey_pct": 7.64,
       "percentile_rank": 99.3,
       "monkey_percentile": 99.3,
@@ -4117,10 +4114,10 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 23.72,
-      "final_cash_ratio": 0.55,
+      "mean_cash_ratio": 21.48,
+      "final_cash_ratio": 1.34,
       "target_holdings_mean": 22.0,
-      "actual_holdings_mean": 17.11,
+      "actual_holdings_mean": 17.6,
       "badges": [
         "Alpha Outlier (>99%)"
       ]
@@ -4131,11 +4128,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "sloth-3",
       "animal_category": "Sloth (Lagged)",
       "display_name": "CONTESTANT_F × sloth-3",
-      "total_return_pct": 2.23,
-      "max_drawdown_pct": 6.72,
-      "final_nav": 1.0223,
-      "sharpe_ratio": 0.83,
-      "excess_over_csi300_pct": 10.13,
+      "total_return_pct": -0.22,
+      "max_drawdown_pct": 7.11,
+      "final_nav": 0.9978,
+      "sharpe_ratio": 0.02,
+      "excess_over_csi300_pct": 8.48,
       "excess_over_monkey_pct": 4.74,
       "percentile_rank": 93.5,
       "monkey_percentile": 93.5,
@@ -4146,10 +4143,10 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 34.69,
-      "final_cash_ratio": 1.98,
+      "mean_cash_ratio": 31.25,
+      "final_cash_ratio": 0.33,
       "target_holdings_mean": 22.0,
-      "actual_holdings_mean": 14.67,
+      "actual_holdings_mean": 15.4,
       "badges": []
     },
     {
@@ -4158,11 +4155,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "sloth-4",
       "animal_category": "Sloth (Lagged)",
       "display_name": "CONTESTANT_F × sloth-4",
-      "total_return_pct": 1.04,
-      "max_drawdown_pct": 6.42,
-      "final_nav": 1.0104,
-      "sharpe_ratio": 0.49,
-      "excess_over_csi300_pct": 8.94,
+      "total_return_pct": -1.29,
+      "max_drawdown_pct": 6.52,
+      "final_nav": 0.9871,
+      "sharpe_ratio": -0.39,
+      "excess_over_csi300_pct": 7.41,
       "excess_over_monkey_pct": 3.23,
       "percentile_rank": 84.7,
       "monkey_percentile": 84.7,
@@ -4173,10 +4170,10 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 45.88,
-      "final_cash_ratio": 0.38,
+      "mean_cash_ratio": 41.52,
+      "final_cash_ratio": 2.35,
       "target_holdings_mean": 22.0,
-      "actual_holdings_mean": 12.22,
+      "actual_holdings_mean": 13.2,
       "badges": []
     },
     {
@@ -4185,11 +4182,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "snail-1",
       "animal_category": "Snail (Stale)",
       "display_name": "CONTESTANT_F × snail-1",
-      "total_return_pct": -8.42,
-      "max_drawdown_pct": 11.01,
-      "final_nav": 0.9158,
-      "sharpe_ratio": -2.1,
-      "excess_over_csi300_pct": -0.52,
+      "total_return_pct": -11.86,
+      "max_drawdown_pct": 11.86,
+      "final_nav": 0.8814,
+      "sharpe_ratio": -2.81,
+      "excess_over_csi300_pct": -3.16,
       "excess_over_monkey_pct": -5.25,
       "percentile_rank": 7.3,
       "monkey_percentile": 7.3,
@@ -4200,8 +4197,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 2.52,
-      "final_cash_ratio": 1.11,
+      "mean_cash_ratio": 2.36,
+      "final_cash_ratio": 0.99,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -4212,11 +4209,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "snail-2",
       "animal_category": "Snail (Stale)",
       "display_name": "CONTESTANT_F × snail-2",
-      "total_return_pct": -5.25,
+      "total_return_pct": -7.98,
       "max_drawdown_pct": 10.61,
-      "final_nav": 0.9475,
-      "sharpe_ratio": -1.31,
-      "excess_over_csi300_pct": 2.65,
+      "final_nav": 0.9202,
+      "sharpe_ratio": -1.91,
+      "excess_over_csi300_pct": 0.72,
       "excess_over_monkey_pct": -3.14,
       "percentile_rank": 18.3,
       "monkey_percentile": 18.3,
@@ -4227,8 +4224,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 3.14,
-      "final_cash_ratio": 0.31,
+      "mean_cash_ratio": 2.96,
+      "final_cash_ratio": 1.37,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -4239,11 +4236,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "snail-3",
       "animal_category": "Snail (Stale)",
       "display_name": "CONTESTANT_F × snail-3",
-      "total_return_pct": -8.2,
+      "total_return_pct": -10.49,
       "max_drawdown_pct": 10.61,
-      "final_nav": 0.918,
-      "sharpe_ratio": -2.07,
-      "excess_over_csi300_pct": -0.3,
+      "final_nav": 0.8951,
+      "sharpe_ratio": -2.48,
+      "excess_over_csi300_pct": -1.79,
       "excess_over_monkey_pct": -6.24,
       "percentile_rank": 3.8,
       "monkey_percentile": 3.8,
@@ -4254,8 +4251,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 4.08,
-      "final_cash_ratio": 2.65,
+      "mean_cash_ratio": 3.73,
+      "final_cash_ratio": 0.52,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -4266,11 +4263,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "snail-4",
       "animal_category": "Snail (Stale)",
       "display_name": "CONTESTANT_F × snail-4",
-      "total_return_pct": -7.62,
+      "total_return_pct": -9.91,
       "max_drawdown_pct": 10.61,
-      "final_nav": 0.9238,
-      "sharpe_ratio": -1.92,
-      "excess_over_csi300_pct": 0.28,
+      "final_nav": 0.9009,
+      "sharpe_ratio": -2.35,
+      "excess_over_csi300_pct": -1.21,
       "excess_over_monkey_pct": -5.74,
       "percentile_rank": 5.5,
       "monkey_percentile": 5.5,
@@ -4281,8 +4278,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 4.73,
-      "final_cash_ratio": 0.52,
+      "mean_cash_ratio": 4.48,
+      "final_cash_ratio": 2.29,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -4293,11 +4290,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "rabbit-1",
       "animal_category": "Rabbit (High Turnover)",
       "display_name": "CONTESTANT_F × rabbit-1",
-      "total_return_pct": -8.39,
-      "max_drawdown_pct": 8.39,
-      "final_nav": 0.9161,
-      "sharpe_ratio": -2.17,
-      "excess_over_csi300_pct": -0.49,
+      "total_return_pct": -11.28,
+      "max_drawdown_pct": 11.28,
+      "final_nav": 0.8872,
+      "sharpe_ratio": -2.76,
+      "excess_over_csi300_pct": -2.58,
       "excess_over_monkey_pct": -4.59,
       "percentile_rank": 8.9,
       "monkey_percentile": 8.9,
@@ -4308,8 +4305,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 4.95,
-      "final_cash_ratio": 4.55,
+      "mean_cash_ratio": 4.82,
+      "final_cash_ratio": 3.74,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -4320,11 +4317,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "rabbit-2",
       "animal_category": "Rabbit (High Turnover)",
       "display_name": "CONTESTANT_F × rabbit-2",
-      "total_return_pct": -9.14,
-      "max_drawdown_pct": 9.35,
-      "final_nav": 0.9086,
-      "sharpe_ratio": -2.44,
-      "excess_over_csi300_pct": -1.24,
+      "total_return_pct": -10.89,
+      "max_drawdown_pct": 10.89,
+      "final_nav": 0.8911,
+      "sharpe_ratio": -2.77,
+      "excess_over_csi300_pct": -2.19,
       "excess_over_monkey_pct": -4.96,
       "percentile_rank": 6.6,
       "monkey_percentile": 6.6,
@@ -4332,13 +4329,13 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "empirical_p_value": 0.9341,
       "p_value": 0.9341,
       "is_statistically_significant": false,
-      "unaffordable_buy_ratio": 0.52,
+      "unaffordable_buy_ratio": 0.47,
       "unaffordable_buy_count": 1,
       "unaffordable_event_days": 1,
-      "mean_cash_ratio": 8.78,
-      "final_cash_ratio": 9.85,
+      "mean_cash_ratio": 8.64,
+      "final_cash_ratio": 7.47,
       "target_holdings_mean": 22.0,
-      "actual_holdings_mean": 21.89,
+      "actual_holdings_mean": 21.9,
       "badges": []
     },
     {
@@ -4347,11 +4344,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "turtle",
       "animal_category": "Turtle (Low Turnover)",
       "display_name": "CONTESTANT_F × turtle",
-      "total_return_pct": -4.93,
+      "total_return_pct": -8.4,
       "max_drawdown_pct": 9.58,
-      "final_nav": 0.9507,
-      "sharpe_ratio": -1.27,
-      "excess_over_csi300_pct": 2.97,
+      "final_nav": 0.916,
+      "sharpe_ratio": -2.06,
+      "excess_over_csi300_pct": 0.3,
       "excess_over_monkey_pct": -2.39,
       "percentile_rank": 24.4,
       "monkey_percentile": 24.4,
@@ -4362,8 +4359,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 1.01,
-      "final_cash_ratio": 0.13,
+      "mean_cash_ratio": 0.92,
+      "final_cash_ratio": 0.1,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -4374,11 +4371,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "koala",
       "animal_category": "Koala (Inverted)",
       "display_name": "CONTESTANT_F × koala",
-      "total_return_pct": -0.75,
+      "total_return_pct": -1.14,
       "max_drawdown_pct": 4.01,
-      "final_nav": 0.9925,
-      "sharpe_ratio": -0.19,
-      "excess_over_csi300_pct": 7.15,
+      "final_nav": 0.9886,
+      "sharpe_ratio": -0.29,
+      "excess_over_csi300_pct": 7.56,
       "excess_over_monkey_pct": 2.11,
       "percentile_rank": 74.6,
       "monkey_percentile": 74.6,
@@ -4389,8 +4386,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 1.56,
-      "final_cash_ratio": 2.46,
+      "mean_cash_ratio": 1.43,
+      "final_cash_ratio": 0.25,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -4401,11 +4398,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "meerkat-10",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_F × meerkat-10",
-      "total_return_pct": -2.83,
-      "max_drawdown_pct": 4.67,
-      "final_nav": 0.9717,
-      "sharpe_ratio": -0.61,
-      "excess_over_csi300_pct": 5.07,
+      "total_return_pct": -5.35,
+      "max_drawdown_pct": 6.62,
+      "final_nav": 0.9465,
+      "sharpe_ratio": -1.17,
+      "excess_over_csi300_pct": 3.35,
       "excess_over_monkey_pct": 1.06,
       "percentile_rank": 61.6,
       "monkey_percentile": 61.6,
@@ -4416,8 +4413,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 1.75,
-      "final_cash_ratio": 0.26,
+      "mean_cash_ratio": 1.67,
+      "final_cash_ratio": 1.03,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -4428,11 +4425,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "meerkat-20",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_F × meerkat-20",
-      "total_return_pct": -8.05,
+      "total_return_pct": -9.26,
       "max_drawdown_pct": 11.73,
-      "final_nav": 0.9195,
-      "sharpe_ratio": -2.02,
-      "excess_over_csi300_pct": -0.15,
+      "final_nav": 0.9074,
+      "sharpe_ratio": -2.19,
+      "excess_over_csi300_pct": -0.56,
       "excess_over_monkey_pct": -4.96,
       "percentile_rank": 8.6,
       "monkey_percentile": 8.6,
@@ -4443,8 +4440,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 2.03,
-      "final_cash_ratio": 3.16,
+      "mean_cash_ratio": 1.91,
+      "final_cash_ratio": 0.9,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -4455,11 +4452,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "meerkat-30",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_F × meerkat-30",
-      "total_return_pct": 0.28,
+      "total_return_pct": -3.1,
       "max_drawdown_pct": 7.55,
-      "final_nav": 1.0028,
-      "sharpe_ratio": 0.18,
-      "excess_over_csi300_pct": 8.18,
+      "final_nav": 0.969,
+      "sharpe_ratio": -0.61,
+      "excess_over_csi300_pct": 5.6,
       "excess_over_monkey_pct": 0.8,
       "percentile_rank": 58.5,
       "monkey_percentile": 58.5,
@@ -4470,8 +4467,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 1.25,
-      "final_cash_ratio": 0.46,
+      "mean_cash_ratio": 1.23,
+      "final_cash_ratio": 1.0,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -4482,11 +4479,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "meerkat-40",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_F × meerkat-40",
-      "total_return_pct": -6.11,
+      "total_return_pct": -8.62,
       "max_drawdown_pct": 9.37,
-      "final_nav": 0.9389,
-      "sharpe_ratio": -1.58,
-      "excess_over_csi300_pct": 1.79,
+      "final_nav": 0.9138,
+      "sharpe_ratio": -2.15,
+      "excess_over_csi300_pct": 0.08,
       "excess_over_monkey_pct": -4.4,
       "percentile_rank": 10.8,
       "monkey_percentile": 10.8,
@@ -4497,8 +4494,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 1.79,
-      "final_cash_ratio": 0.5,
+      "mean_cash_ratio": 1.69,
+      "final_cash_ratio": 0.78,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -4509,11 +4506,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "meerkat-50",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_F × meerkat-50",
-      "total_return_pct": -5.15,
-      "max_drawdown_pct": 6.51,
-      "final_nav": 0.9485,
-      "sharpe_ratio": -1.45,
-      "excess_over_csi300_pct": 2.75,
+      "total_return_pct": -7.35,
+      "max_drawdown_pct": 7.35,
+      "final_nav": 0.9265,
+      "sharpe_ratio": -1.93,
+      "excess_over_csi300_pct": 1.35,
       "excess_over_monkey_pct": -1.95,
       "percentile_rank": 28.4,
       "monkey_percentile": 28.4,
@@ -4524,8 +4521,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 2.2,
-      "final_cash_ratio": 0.82,
+      "mean_cash_ratio": 2.08,
+      "final_cash_ratio": 1.01,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -4536,11 +4533,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "meerkat-60",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_F × meerkat-60",
-      "total_return_pct": -5.76,
-      "max_drawdown_pct": 6.72,
-      "final_nav": 0.9424,
-      "sharpe_ratio": -1.65,
-      "excess_over_csi300_pct": 2.14,
+      "total_return_pct": -8.18,
+      "max_drawdown_pct": 8.27,
+      "final_nav": 0.9182,
+      "sharpe_ratio": -2.25,
+      "excess_over_csi300_pct": 0.52,
       "excess_over_monkey_pct": -2.79,
       "percentile_rank": 20.9,
       "monkey_percentile": 20.9,
@@ -4551,8 +4548,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 2.09,
-      "final_cash_ratio": 2.99,
+      "mean_cash_ratio": 1.95,
+      "final_cash_ratio": 0.66,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -4563,11 +4560,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "meerkat-70",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_F × meerkat-70",
-      "total_return_pct": -2.03,
+      "total_return_pct": -3.72,
       "max_drawdown_pct": 5.25,
-      "final_nav": 0.9797,
-      "sharpe_ratio": -0.55,
-      "excess_over_csi300_pct": 5.87,
+      "final_nav": 0.9628,
+      "sharpe_ratio": -0.99,
+      "excess_over_csi300_pct": 4.98,
       "excess_over_monkey_pct": 0.85,
       "percentile_rank": 59.0,
       "monkey_percentile": 59.0,
@@ -4578,8 +4575,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 1.59,
-      "final_cash_ratio": 0.15,
+      "mean_cash_ratio": 1.48,
+      "final_cash_ratio": 0.47,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -4590,11 +4587,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "meerkat-80",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_F × meerkat-80",
-      "total_return_pct": 3.29,
+      "total_return_pct": 0.53,
       "max_drawdown_pct": 4.83,
-      "final_nav": 1.0329,
-      "sharpe_ratio": 1.17,
-      "excess_over_csi300_pct": 11.19,
+      "final_nav": 1.0053,
+      "sharpe_ratio": 0.24,
+      "excess_over_csi300_pct": 9.23,
       "excess_over_monkey_pct": 5.76,
       "percentile_rank": 96.7,
       "monkey_percentile": 96.7,
@@ -4605,8 +4602,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 1.21,
-      "final_cash_ratio": 0.8,
+      "mean_cash_ratio": 1.17,
+      "final_cash_ratio": 0.85,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -4617,11 +4614,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "meerkat-90",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_F × meerkat-90",
-      "total_return_pct": -3.73,
+      "total_return_pct": -5.12,
       "max_drawdown_pct": 5.39,
-      "final_nav": 0.9627,
-      "sharpe_ratio": -1.13,
-      "excess_over_csi300_pct": 4.17,
+      "final_nav": 0.9488,
+      "sharpe_ratio": -1.47,
+      "excess_over_csi300_pct": 3.58,
       "excess_over_monkey_pct": -1.86,
       "percentile_rank": 29.4,
       "monkey_percentile": 29.4,
@@ -4632,8 +4629,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 1.44,
-      "final_cash_ratio": 0.1,
+      "mean_cash_ratio": 1.41,
+      "final_cash_ratio": 1.17,
       "target_holdings_mean": 22.0,
       "actual_holdings_mean": 22.0,
       "badges": []
@@ -4644,11 +4641,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "eagle-5-1",
       "animal_category": "Eagle (Concentration)",
       "display_name": "CONTESTANT_F × eagle-5-1",
-      "total_return_pct": -13.7,
-      "max_drawdown_pct": 15.09,
-      "final_nav": 0.863,
-      "sharpe_ratio": -2.9,
-      "excess_over_csi300_pct": -5.8,
+      "total_return_pct": -17.12,
+      "max_drawdown_pct": 17.12,
+      "final_nav": 0.8288,
+      "sharpe_ratio": -3.39,
+      "excess_over_csi300_pct": -8.42,
       "excess_over_monkey_pct": -9.85,
       "percentile_rank": 11.0,
       "monkey_percentile": 11.0,
@@ -4659,8 +4656,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 0.46,
-      "final_cash_ratio": 0.17,
+      "mean_cash_ratio": 0.44,
+      "final_cash_ratio": 0.21,
       "target_holdings_mean": 5.0,
       "actual_holdings_mean": 5.0,
       "badges": []
@@ -4671,11 +4668,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "eagle-11-2",
       "animal_category": "Eagle (Concentration)",
       "display_name": "CONTESTANT_F × eagle-11-2",
-      "total_return_pct": -14.27,
-      "max_drawdown_pct": 14.67,
-      "final_nav": 0.8573,
-      "sharpe_ratio": -3.05,
-      "excess_over_csi300_pct": -6.37,
+      "total_return_pct": -15.89,
+      "max_drawdown_pct": 15.89,
+      "final_nav": 0.8411,
+      "sharpe_ratio": -3.22,
+      "excess_over_csi300_pct": -7.19,
       "excess_over_monkey_pct": -10.34,
       "percentile_rank": 1.1,
       "monkey_percentile": 1.1,
@@ -4686,8 +4683,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 1.21,
-      "final_cash_ratio": 0.16,
+      "mean_cash_ratio": 1.13,
+      "final_cash_ratio": 0.46,
       "target_holdings_mean": 11.0,
       "actual_holdings_mean": 11.0,
       "badges": []
@@ -4698,11 +4695,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "eagle-44-6",
       "animal_category": "Eagle (Concentration)",
       "display_name": "CONTESTANT_F × eagle-44-6",
-      "total_return_pct": -5.96,
-      "max_drawdown_pct": 7.08,
-      "final_nav": 0.9404,
-      "sharpe_ratio": -1.61,
-      "excess_over_csi300_pct": 1.94,
+      "total_return_pct": -8.74,
+      "max_drawdown_pct": 8.74,
+      "final_nav": 0.9126,
+      "sharpe_ratio": -2.26,
+      "excess_over_csi300_pct": -0.04,
       "excess_over_monkey_pct": -3.43,
       "percentile_rank": 5.7,
       "monkey_percentile": 5.7,
@@ -4713,7 +4710,7 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 2.82,
+      "mean_cash_ratio": 2.73,
       "final_cash_ratio": 1.97,
       "target_holdings_mean": 44.0,
       "actual_holdings_mean": 44.0,
@@ -4725,11 +4722,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "eagle-66-9",
       "animal_category": "Eagle (Concentration)",
       "display_name": "CONTESTANT_F × eagle-66-9",
-      "total_return_pct": -3.06,
-      "max_drawdown_pct": 5.18,
-      "final_nav": 0.9694,
-      "sharpe_ratio": -0.87,
-      "excess_over_csi300_pct": 4.84,
+      "total_return_pct": -5.94,
+      "max_drawdown_pct": 7.44,
+      "final_nav": 0.9406,
+      "sharpe_ratio": -1.65,
+      "excess_over_csi300_pct": 2.76,
       "excess_over_monkey_pct": -1.33,
       "percentile_rank": 23.3,
       "monkey_percentile": 23.3,
@@ -4740,8 +4737,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 3.74,
-      "final_cash_ratio": 2.96,
+      "mean_cash_ratio": 3.71,
+      "final_cash_ratio": 3.57,
       "target_holdings_mean": 66.0,
       "actual_holdings_mean": 66.0,
       "badges": []
@@ -4752,11 +4749,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "eagle-88-12",
       "animal_category": "Eagle (Concentration)",
       "display_name": "CONTESTANT_F × eagle-88-12",
-      "total_return_pct": -3.42,
-      "max_drawdown_pct": 5.39,
-      "final_nav": 0.9658,
-      "sharpe_ratio": -1.03,
-      "excess_over_csi300_pct": 4.48,
+      "total_return_pct": -6.17,
+      "max_drawdown_pct": 6.66,
+      "final_nav": 0.9383,
+      "sharpe_ratio": -1.79,
+      "excess_over_csi300_pct": 2.53,
       "excess_over_monkey_pct": -2.33,
       "percentile_rank": 4.5,
       "monkey_percentile": 4.5,
@@ -4767,8 +4764,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 3.58,
-      "final_cash_ratio": 2.0,
+      "mean_cash_ratio": 3.53,
+      "final_cash_ratio": 3.16,
       "target_holdings_mean": 88.0,
       "actual_holdings_mean": 88.0,
       "badges": []
@@ -4779,11 +4776,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "whale-shark",
       "animal_category": "Whale Shark (50% Pool)",
       "display_name": "CONTESTANT_F × whale-shark",
-      "total_return_pct": 1.59,
-      "max_drawdown_pct": 3.91,
-      "final_nav": 1.0159,
-      "sharpe_ratio": 0.62,
-      "excess_over_csi300_pct": 9.49,
+      "total_return_pct": -1.3,
+      "max_drawdown_pct": 4.74,
+      "final_nav": 0.987,
+      "sharpe_ratio": -0.32,
+      "excess_over_csi300_pct": 7.4,
       "excess_over_monkey_pct": 0.49,
       "percentile_rank": 66.5,
       "monkey_percentile": 66.5,
@@ -4794,8 +4791,8 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.0,
       "unaffordable_buy_count": 0,
       "unaffordable_event_days": 0,
-      "mean_cash_ratio": 4.09,
-      "final_cash_ratio": 3.4,
+      "mean_cash_ratio": 4.01,
+      "final_cash_ratio": 3.32,
       "target_holdings_mean": 123.0,
       "actual_holdings_mean": 123.0,
       "badges": []
@@ -4806,11 +4803,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "taotie",
       "animal_category": "Taotie (100% Passive)",
       "display_name": "BENCHMARK × taotie",
-      "total_return_pct": 0.39,
+      "total_return_pct": 0.2,
       "max_drawdown_pct": 0.57,
-      "final_nav": 1.0039,
-      "sharpe_ratio": 0.98,
-      "excess_over_csi300_pct": 8.29,
+      "final_nav": 1.002,
+      "sharpe_ratio": 0.45,
+      "excess_over_csi300_pct": 8.9,
       "excess_over_monkey_pct": 0.0,
       "percentile_rank": 0.0,
       "monkey_percentile": 0.0,
@@ -4818,13 +4815,13 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "empirical_p_value": 1.0,
       "p_value": 1.0,
       "is_statistically_significant": false,
-      "unaffordable_buy_ratio": 97.67,
-      "unaffordable_buy_count": 5960,
-      "unaffordable_event_days": 9,
-      "mean_cash_ratio": 85.86,
-      "final_cash_ratio": 85.11,
-      "target_holdings_mean": 799.67,
-      "actual_holdings_mean": 137.44,
+      "unaffordable_buy_ratio": 97.9,
+      "unaffordable_buy_count": 6618,
+      "unaffordable_event_days": 10,
+      "mean_cash_ratio": 85.79,
+      "final_cash_ratio": 85.27,
+      "target_holdings_mean": 799.7,
+      "actual_holdings_mean": 137.9,
       "badges": [
         "Capital Friction (>20%)"
       ]
@@ -4835,11 +4832,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "animal_id": "ghost_taotie",
       "animal_category": "Ghost Taotie (Theoretical 100M)",
       "display_name": "BENCHMARK × ghost_taotie",
-      "total_return_pct": -4.78,
+      "total_return_pct": -6.61,
       "max_drawdown_pct": 7.68,
-      "final_nav": 0.9522,
-      "sharpe_ratio": -1.28,
-      "excess_over_csi300_pct": 3.12,
+      "final_nav": 0.9339,
+      "sharpe_ratio": -1.7,
+      "excess_over_csi300_pct": 2.09,
       "excess_over_monkey_pct": -1.9,
       "percentile_rank": 29.0,
       "monkey_percentile": 29.0,
@@ -4850,10 +4847,10 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "unaffordable_buy_ratio": 0.25,
       "unaffordable_buy_count": 2,
       "unaffordable_event_days": 1,
-      "mean_cash_ratio": 0.37,
+      "mean_cash_ratio": 0.34,
       "final_cash_ratio": 0.0,
-      "target_holdings_mean": 799.67,
-      "actual_holdings_mean": 799.44,
+      "target_holdings_mean": 799.7,
+      "actual_holdings_mean": 799.5,
       "badges": []
     }
   ],
@@ -4904,7 +4901,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "2026-09-01",
       "2026-09-02",
       "2026-09-03",
-      "2026-09-04"
+      "2026-09-04",
+      "2026-09-07",
+      "2026-09-08",
+      "2026-09-09",
+      "2026-09-10",
+      "2026-09-11"
     ],
     "curves": {
       "CONTESTANT_A_robot": [
@@ -4953,7 +4955,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0334,
         1.0123,
         1.0131,
-        0.9967
+        0.9967,
+        1.0192,
+        1.0135,
+        1.0227,
+        1.0094,
+        0.9934
       ],
       "CONTESTANT_A_sloth-1": [
         1.0,
@@ -5001,7 +5008,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0548,
         1.0304,
         1.0316,
-        1.0096
+        1.0096,
+        1.0303,
+        1.0242,
+        1.0311,
+        1.0171,
+        0.9994
       ],
       "CONTESTANT_A_sloth-2": [
         1.0,
@@ -5049,7 +5061,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.1079,
         1.0804,
         1.0838,
-        1.0615
+        1.0615,
+        1.0872,
+        1.0809,
+        1.0918,
+        1.0737,
+        1.057
       ],
       "CONTESTANT_A_sloth-3": [
         1.0,
@@ -5097,7 +5114,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0405,
         1.0166,
         1.0211,
-        1.0041
+        1.0041,
+        1.0216,
+        1.0134,
+        1.026,
+        1.0127,
+        0.9998
       ],
       "CONTESTANT_A_sloth-4": [
         1.0,
@@ -5145,7 +5167,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9921,
         0.9689,
         0.9804,
-        0.9692
+        0.9692,
+        0.9889,
+        0.9821,
+        0.9977,
+        0.984,
+        0.9736
       ],
       "CONTESTANT_A_snail-1": [
         1.0,
@@ -5193,7 +5220,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.024,
         1.0004,
         1.0018,
-        0.9799
+        0.9799,
+        1.0,
+        0.9942,
+        1.001,
+        0.9875,
+        0.9703
       ],
       "CONTESTANT_A_snail-2": [
         1.0,
@@ -5241,7 +5273,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0135,
         0.9883,
         0.992,
-        0.9714
+        0.9714,
+        0.9941,
+        0.9886,
+        0.9994,
+        0.9834,
+        0.9689
       ],
       "CONTESTANT_A_snail-3": [
         1.0,
@@ -5289,7 +5326,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.972,
         0.9506,
         0.9544,
-        0.9375
+        0.9375,
+        0.9545,
+        0.947,
+        0.959,
+        0.9471,
+        0.9352
       ],
       "CONTESTANT_A_snail-4": [
         1.0,
@@ -5337,7 +5379,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9666,
         0.9453,
         0.9577,
-        0.945
+        0.945,
+        0.9669,
+        0.9613,
+        0.9758,
+        0.9621,
+        0.9512
       ],
       "CONTESTANT_A_rabbit-1": [
         1.0,
@@ -5385,7 +5432,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.079,
         1.0648,
         1.0624,
-        1.0586
+        1.0586,
+        1.06,
+        1.066,
+        1.0712,
+        1.0726,
+        1.0648
       ],
       "CONTESTANT_A_rabbit-2": [
         1.0,
@@ -5433,7 +5485,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0658,
         1.0563,
         1.0561,
-        1.0545
+        1.0545,
+        1.0528,
+        1.055,
+        1.0607,
+        1.0624,
+        1.0541
       ],
       "CONTESTANT_A_turtle": [
         1.0,
@@ -5481,7 +5538,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0089,
         0.9899,
         0.9977,
-        0.9877
+        0.9877,
+        0.9879,
+        0.9871,
+        1.0035,
+        0.9895,
+        0.9825
       ],
       "CONTESTANT_A_koala": [
         1.0,
@@ -5529,7 +5591,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.7336,
         0.7329,
         0.739,
-        0.7337
+        0.7337,
+        0.7342,
+        0.7471,
+        0.75,
+        0.7326,
+        0.7167
       ],
       "CONTESTANT_A_meerkat-10": [
         1.0,
@@ -5577,7 +5644,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0037,
         0.9943,
         0.9969,
-        0.9955
+        0.9955,
+        0.9943,
+        1.0043,
+        1.0077,
+        1.0104,
+        1.0029
       ],
       "CONTESTANT_A_meerkat-20": [
         1.0,
@@ -5625,7 +5697,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0426,
         1.035,
         1.0355,
-        1.036
+        1.036,
+        1.0342,
+        1.0335,
+        1.0352,
+        1.0303,
+        1.0187
       ],
       "CONTESTANT_A_meerkat-30": [
         1.0,
@@ -5673,7 +5750,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0055,
         0.9931,
         0.9921,
-        0.9956
+        0.9956,
+        0.9937,
+        1.0077,
+        1.0098,
+        1.0054,
+        0.9879
       ],
       "CONTESTANT_A_meerkat-40": [
         1.0,
@@ -5721,7 +5803,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0567,
         1.0458,
         1.0521,
-        1.0594
+        1.0594,
+        1.0571,
+        1.0637,
+        1.0706,
+        1.0663,
+        1.0525
       ],
       "CONTESTANT_A_meerkat-50": [
         1.0,
@@ -5769,7 +5856,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9784,
         0.9647,
         0.9673,
-        0.974
+        0.974,
+        0.9715,
+        0.9745,
+        0.9739,
+        0.9714,
+        0.9582
       ],
       "CONTESTANT_A_meerkat-60": [
         1.0,
@@ -5817,7 +5909,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9662,
         0.9549,
         0.9577,
-        0.9649
+        0.9649,
+        0.9575,
+        0.9607,
+        0.9542,
+        0.9463,
+        0.9312
       ],
       "CONTESTANT_A_meerkat-70": [
         1.0,
@@ -5865,7 +5962,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9049,
         0.8875,
         0.8907,
-        0.9027
+        0.9027,
+        0.9012,
+        0.9099,
+        0.9092,
+        0.9008,
+        0.8815
       ],
       "CONTESTANT_A_meerkat-80": [
         1.0,
@@ -5913,7 +6015,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9587,
         0.939,
         0.9417,
-        0.9368
+        0.9368,
+        0.9372,
+        0.9402,
+        0.9426,
+        0.9326,
+        0.9066
       ],
       "CONTESTANT_A_meerkat-90": [
         1.0,
@@ -5961,7 +6068,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9356,
         0.9168,
         0.9164,
-        0.905
+        0.905,
+        0.907,
+        0.9167,
+        0.9167,
+        0.9078,
+        0.8823
       ],
       "CONTESTANT_A_eagle-5-1": [
         1.0,
@@ -6009,7 +6121,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9311,
         0.912,
         0.9211,
-        0.8918
+        0.8918,
+        0.9092,
+        0.8923,
+        0.8971,
+        0.882,
+        0.8707
       ],
       "CONTESTANT_A_eagle-11-2": [
         1.0,
@@ -6057,7 +6174,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0284,
         1.0033,
         1.0115,
-        0.9914
+        0.9914,
+        1.0041,
+        0.996,
+        1.0029,
+        0.9887,
+        0.9718
       ],
       "CONTESTANT_A_eagle-44-6": [
         1.0,
@@ -6105,7 +6227,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0368,
         1.023,
         1.0226,
-        1.0144
+        1.0144,
+        1.0199,
+        1.0189,
+        1.0256,
+        1.0195,
+        1.0078
       ],
       "CONTESTANT_A_eagle-66-9": [
         1.0,
@@ -6153,7 +6280,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.038,
         1.028,
         1.0275,
-        1.0244
+        1.0244,
+        1.0215,
+        1.0257,
+        1.0295,
+        1.027,
+        1.0181
       ],
       "CONTESTANT_A_eagle-88-12": [
         1.0,
@@ -6201,7 +6333,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0539,
         1.0434,
         1.0454,
-        1.0457
+        1.0457,
+        1.0411,
+        1.0464,
+        1.0489,
+        1.0476,
+        1.0354
       ],
       "CONTESTANT_A_whale-shark": [
         1.0,
@@ -6249,7 +6386,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0668,
         1.0575,
         1.0595,
-        1.0631
+        1.0631,
+        1.056,
+        1.0627,
+        1.0666,
+        1.0679,
+        1.0567
       ],
       "CONTESTANT_B_robot": [
         1.0,
@@ -6297,7 +6439,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0493,
         1.0383,
         1.04,
-        1.0304
+        1.0304,
+        1.0338,
+        1.0342,
+        1.0416,
+        1.044,
+        1.0361
       ],
       "CONTESTANT_B_sloth-1": [
         1.0,
@@ -6345,7 +6492,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0789,
         1.0654,
         1.0685,
-        1.0527
+        1.0527,
+        1.0579,
+        1.0596,
+        1.07,
+        1.0693,
+        1.059
       ],
       "CONTESTANT_B_sloth-2": [
         1.0,
@@ -6393,7 +6545,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0637,
         1.0485,
         1.0523,
-        1.0436
+        1.0436,
+        1.0522,
+        1.053,
+        1.0622,
+        1.0575,
+        1.048
       ],
       "CONTESTANT_B_sloth-3": [
         1.0,
@@ -6441,7 +6598,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0232,
         1.0101,
         1.0159,
-        1.0057
+        1.0057,
+        1.0074,
+        1.0064,
+        1.0158,
+        1.0123,
+        1.0025
       ],
       "CONTESTANT_B_sloth-4": [
         1.0,
@@ -6489,7 +6651,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.994,
         0.9778,
         0.9851,
-        0.9697
+        0.9697,
+        0.9747,
+        0.9756,
+        0.9886,
+        0.9857,
+        0.9818
       ],
       "CONTESTANT_B_snail-1": [
         1.0,
@@ -6537,7 +6704,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0488,
         1.0357,
         1.039,
-        1.0237
+        1.0237,
+        1.0282,
+        1.03,
+        1.0402,
+        1.0396,
+        1.0296
       ],
       "CONTESTANT_B_snail-2": [
         1.0,
@@ -6585,7 +6757,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.999,
         0.9848,
         0.9887,
-        0.9808
+        0.9808,
+        0.9882,
+        0.9891,
+        0.9982,
+        0.9939,
+        0.9846
       ],
       "CONTESTANT_B_snail-3": [
         1.0,
@@ -6633,7 +6810,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9831,
         0.9707,
         0.976,
-        0.9668
+        0.9668,
+        0.9679,
+        0.9673,
+        0.9771,
+        0.9737,
+        0.9637
       ],
       "CONTESTANT_B_snail-4": [
         1.0,
@@ -6681,7 +6863,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9959,
         0.98,
         0.9871,
-        0.9723
+        0.9723,
+        0.9756,
+        0.9763,
+        0.9891,
+        0.9861,
+        0.9813
       ],
       "CONTESTANT_B_rabbit-1": [
         1.0,
@@ -6729,7 +6916,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.1039,
         1.101,
         1.0981,
-        1.0984
+        1.0984,
+        1.0864,
+        1.0878,
+        1.0894,
+        1.0978,
+        1.0879
       ],
       "CONTESTANT_B_rabbit-2": [
         1.0,
@@ -6777,7 +6969,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.1343,
         1.1306,
         1.1281,
-        1.1284
+        1.1284,
+        1.1162,
+        1.1179,
+        1.1198,
+        1.1259,
+        1.1146
       ],
       "CONTESTANT_B_turtle": [
         1.0,
@@ -6825,7 +7022,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0095,
         0.9976,
         1.0075,
-        0.9965
+        0.9965,
+        0.9981,
+        1.0017,
+        1.0144,
+        1.0118,
+        1.0023
       ],
       "CONTESTANT_B_koala": [
         1.0,
@@ -6873,7 +7075,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.784,
         0.7757,
         0.7822,
-        0.7795
+        0.7795,
+        0.7832,
+        0.7909,
+        0.7922,
+        0.7712,
+        0.7534
       ],
       "CONTESTANT_B_meerkat-10": [
         1.0,
@@ -6921,7 +7128,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0636,
         1.0513,
         1.0543,
-        1.0592
+        1.0592,
+        1.0506,
+        1.0555,
+        1.0578,
+        1.059,
+        1.0491
       ],
       "CONTESTANT_B_meerkat-20": [
         1.0,
@@ -6969,7 +7181,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0583,
         1.0471,
         1.0498,
-        1.0532
+        1.0532,
+        1.0476,
+        1.0553,
+        1.0636,
+        1.06,
+        1.0443
       ],
       "CONTESTANT_B_meerkat-30": [
         1.0,
@@ -7017,7 +7234,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0294,
         1.0114,
         1.0107,
-        1.0141
+        1.0141,
+        1.0045,
+        1.0154,
+        1.0157,
+        1.0088,
+        0.9898
       ],
       "CONTESTANT_B_meerkat-40": [
         1.0,
@@ -7065,7 +7287,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.002,
         0.9872,
         0.9886,
-        0.987
+        0.987,
+        0.9879,
+        0.9941,
+        0.9949,
+        0.9898,
+        0.9735
       ],
       "CONTESTANT_B_meerkat-50": [
         1.0,
@@ -7113,7 +7340,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0533,
         1.0384,
         1.042,
-        1.0486
+        1.0486,
+        1.0386,
+        1.052,
+        1.054,
+        1.0385,
+        1.0166
       ],
       "CONTESTANT_B_meerkat-60": [
         1.0,
@@ -7161,7 +7393,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0382,
         1.0245,
         1.0272,
-        1.0183
+        1.0183,
+        1.0123,
+        1.0127,
+        1.0121,
+        1.0035,
+        0.9871
       ],
       "CONTESTANT_B_meerkat-70": [
         1.0,
@@ -7209,7 +7446,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9642,
         0.9485,
         0.9554,
-        0.9544
+        0.9544,
+        0.9426,
+        0.9424,
+        0.9439,
+        0.9336,
+        0.916
       ],
       "CONTESTANT_B_meerkat-80": [
         1.0,
@@ -7257,7 +7499,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9497,
         0.9303,
         0.9261,
-        0.9214
+        0.9214,
+        0.9124,
+        0.9182,
+        0.9197,
+        0.9115,
+        0.8898
       ],
       "CONTESTANT_B_meerkat-90": [
         1.0,
@@ -7305,7 +7552,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.8404,
         0.8223,
         0.8236,
-        0.8198
+        0.8198,
+        0.8175,
+        0.8178,
+        0.8183,
+        0.8097,
+        0.7956
       ],
       "CONTESTANT_B_eagle-5-1": [
         1.0,
@@ -7353,7 +7605,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0705,
         1.0575,
         1.0616,
-        1.0427
+        1.0427,
+        1.043,
+        1.0439,
+        1.0469,
+        1.0494,
+        1.0354
       ],
       "CONTESTANT_B_eagle-11-2": [
         1.0,
@@ -7401,7 +7658,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0681,
         1.0557,
         1.0555,
-        1.0444
+        1.0444,
+        1.045,
+        1.0429,
+        1.0528,
+        1.055,
+        1.0426
       ],
       "CONTESTANT_B_eagle-44-6": [
         1.0,
@@ -7449,7 +7711,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.073,
         1.0651,
         1.0661,
-        1.0605
+        1.0605,
+        1.0573,
+        1.0592,
+        1.0623,
+        1.0672,
+        1.0578
       ],
       "CONTESTANT_B_eagle-66-9": [
         1.0,
@@ -7497,7 +7764,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0755,
         1.0699,
         1.0708,
-        1.0703
+        1.0703,
+        1.0612,
+        1.0658,
+        1.0672,
+        1.0734,
+        1.0632
       ],
       "CONTESTANT_B_eagle-88-12": [
         1.0,
@@ -7545,7 +7817,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0737,
         1.0686,
         1.0692,
-        1.0688
+        1.0688,
+        1.0604,
+        1.0645,
+        1.067,
+        1.0713,
+        1.0623
       ],
       "CONTESTANT_B_whale-shark": [
         1.0,
@@ -7593,7 +7870,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0863,
         1.0795,
         1.0804,
-        1.083
+        1.083,
+        1.0732,
+        1.0789,
+        1.0817,
+        1.0853,
+        1.0745
       ],
       "CONTESTANT_C_robot": [
         1.0,
@@ -7641,7 +7923,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9864,
         0.9666,
         0.9681,
-        0.9561
+        0.9561,
+        0.9547,
+        0.9541,
+        0.9558,
+        0.9494,
+        0.9397
       ],
       "CONTESTANT_C_sloth-1": [
         1.0,
@@ -7689,7 +7976,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0404,
         1.0201,
         1.023,
-        1.0085
+        1.0085,
+        1.0052,
+        1.0035,
+        1.0046,
+        0.9968,
+        0.9842
       ],
       "CONTESTANT_C_sloth-2": [
         1.0,
@@ -7737,7 +8029,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.1034,
         1.0767,
         1.0778,
-        1.0676
+        1.0676,
+        1.0683,
+        1.0661,
+        1.0686,
+        1.0576,
+        1.0433
       ],
       "CONTESTANT_C_sloth-3": [
         1.0,
@@ -7785,7 +8082,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0265,
         1.003,
         1.0033,
-        0.9914
+        0.9914,
+        0.9915,
+        0.9949,
+        1.0,
+        0.9901,
+        0.9781
       ],
       "CONTESTANT_C_sloth-4": [
         1.0,
@@ -7833,7 +8135,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0251,
         1.0069,
         1.0084,
-        0.9902
+        0.9902,
+        0.9919,
+        0.9961,
+        1.0017,
+        0.9936,
+        0.9825
       ],
       "CONTESTANT_C_snail-1": [
         1.0,
@@ -7881,7 +8188,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9991,
         0.9794,
         0.9825,
-        0.9684
+        0.9684,
+        0.9651,
+        0.9638,
+        0.965,
+        0.9572,
+        0.9446
       ],
       "CONTESTANT_C_snail-2": [
         1.0,
@@ -7929,7 +8241,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9916,
         0.9684,
         0.9692,
-        0.96
+        0.96,
+        0.9609,
+        0.9592,
+        0.9612,
+        0.952,
+        0.9391
       ],
       "CONTESTANT_C_snail-3": [
         1.0,
@@ -7977,7 +8294,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9137,
         0.8932,
         0.8935,
-        0.8826
+        0.8826,
+        0.8827,
+        0.8861,
+        0.8903,
+        0.8824,
+        0.8715
       ],
       "CONTESTANT_C_snail-4": [
         1.0,
@@ -8025,7 +8347,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9261,
         0.91,
         0.9114,
-        0.8969
+        0.8969,
+        0.8962,
+        0.901,
+        0.9051,
+        0.8987,
+        0.8885
       ],
       "CONTESTANT_C_rabbit-1": [
         1.0,
@@ -8073,7 +8400,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9623,
         0.9452,
         0.9455,
-        0.9414
+        0.9414,
+        0.9351,
+        0.9347,
+        0.9367,
+        0.9377,
+        0.9314
       ],
       "CONTESTANT_C_rabbit-2": [
         1.0,
@@ -8121,7 +8453,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.039,
         1.0288,
         1.0279,
-        1.0289
+        1.0289,
+        1.0176,
+        1.0195,
+        1.0211,
+        1.0273,
+        1.0209
       ],
       "CONTESTANT_C_turtle": [
         1.0,
@@ -8169,7 +8506,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9773,
         0.9567,
         0.96,
-        0.9585
+        0.9585,
+        0.9578,
+        0.9617,
+        0.9618,
+        0.9593,
+        0.9426
       ],
       "CONTESTANT_C_koala": [
         1.0,
@@ -8217,7 +8559,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.8099,
         0.7951,
         0.805,
-        0.8019
+        0.8019,
+        0.8027,
+        0.8196,
+        0.8205,
+        0.8036,
+        0.779
       ],
       "CONTESTANT_C_meerkat-10": [
         1.0,
@@ -8265,7 +8612,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.986,
         0.973,
         0.9757,
-        0.976
+        0.976,
+        0.9757,
+        0.9804,
+        0.9843,
+        0.9848,
+        0.9776
       ],
       "CONTESTANT_C_meerkat-20": [
         1.0,
@@ -8313,7 +8665,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0337,
         1.0206,
         1.0221,
-        1.0265
+        1.0265,
+        1.0211,
+        1.0243,
+        1.0266,
+        1.0282,
+        1.0168
       ],
       "CONTESTANT_C_meerkat-30": [
         1.0,
@@ -8361,7 +8718,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0225,
         1.0139,
         1.018,
-        1.021
+        1.021,
+        1.0129,
+        1.0237,
+        1.027,
+        1.0223,
+        1.0094
       ],
       "CONTESTANT_C_meerkat-40": [
         1.0,
@@ -8409,7 +8771,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0281,
         1.0107,
         1.0149,
-        1.0171
+        1.0171,
+        1.015,
+        1.0244,
+        1.0225,
+        1.0125,
+        0.9934
       ],
       "CONTESTANT_C_meerkat-50": [
         1.0,
@@ -8457,7 +8824,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9714,
         0.9575,
         0.9569,
-        0.9593
+        0.9593,
+        0.957,
+        0.9619,
+        0.9617,
+        0.9547,
+        0.9376
       ],
       "CONTESTANT_C_meerkat-60": [
         1.0,
@@ -8505,7 +8877,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9914,
         0.9801,
         0.9923,
-        0.993
+        0.993,
+        0.989,
+        0.9992,
+        1.0006,
+        0.9972,
+        0.9803
       ],
       "CONTESTANT_C_meerkat-70": [
         1.0,
@@ -8553,7 +8930,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9485,
         0.9363,
         0.9353,
-        0.936
+        0.936,
+        0.9346,
+        0.9342,
+        0.9244,
+        0.9117,
+        0.8926
       ],
       "CONTESTANT_C_meerkat-80": [
         1.0,
@@ -8601,7 +8983,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9373,
         0.9203,
         0.9262,
-        0.9255
+        0.9255,
+        0.9229,
+        0.9213,
+        0.9156,
+        0.9014,
+        0.8764
       ],
       "CONTESTANT_C_meerkat-90": [
         1.0,
@@ -8649,7 +9036,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9451,
         0.931,
         0.932,
-        0.9314
+        0.9314,
+        0.9194,
+        0.9189,
+        0.9163,
+        0.9039,
+        0.8856
       ],
       "CONTESTANT_C_eagle-5-1": [
         1.0,
@@ -8697,7 +9089,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9114,
         0.8848,
         0.8939,
-        0.8757
+        0.8757,
+        0.8864,
+        0.884,
+        0.8916,
+        0.8848,
+        0.8777
       ],
       "CONTESTANT_C_eagle-11-2": [
         1.0,
@@ -8745,7 +9142,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9609,
         0.939,
         0.9429,
-        0.9307
+        0.9307,
+        0.9329,
+        0.9271,
+        0.9303,
+        0.9284,
+        0.9232
       ],
       "CONTESTANT_C_eagle-44-6": [
         1.0,
@@ -8793,7 +9195,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9923,
         0.9763,
         0.9753,
-        0.9693
+        0.9693,
+        0.9673,
+        0.968,
+        0.9759,
+        0.9705,
+        0.9601
       ],
       "CONTESTANT_C_eagle-66-9": [
         1.0,
@@ -8841,7 +9248,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0102,
         0.9941,
         0.9958,
-        0.9917
+        0.9917,
+        0.9838,
+        0.987,
+        0.991,
+        0.9877,
+        0.9785
       ],
       "CONTESTANT_C_eagle-88-12": [
         1.0,
@@ -8889,7 +9301,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0379,
         1.0243,
         1.0248,
-        1.0239
+        1.0239,
+        1.0154,
+        1.0191,
+        1.0224,
+        1.0216,
+        1.0108
       ],
       "CONTESTANT_C_whale-shark": [
         1.0,
@@ -8937,7 +9354,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0569,
         1.0452,
         1.0445,
-        1.0485
+        1.0485,
+        1.0394,
+        1.0447,
+        1.0491,
+        1.049,
+        1.0371
       ],
       "CONTESTANT_D_robot": [
         1.0,
@@ -8985,7 +9407,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0339,
         1.0222,
         1.0255,
-        1.0225
+        1.0225,
+        1.0216,
+        1.0271,
+        1.0311,
+        1.0294,
+        1.0172
       ],
       "CONTESTANT_D_sloth-1": [
         1.0,
@@ -9033,7 +9460,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0508,
         1.0346,
         1.0395,
-        1.0343
+        1.0343,
+        1.0317,
+        1.0383,
+        1.0404,
+        1.0399,
+        1.0282
       ],
       "CONTESTANT_D_sloth-2": [
         1.0,
@@ -9081,7 +9513,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0474,
         1.0281,
         1.0339,
-        1.029
+        1.029,
+        1.0268,
+        1.0303,
+        1.0329,
+        1.0298,
+        1.0126
       ],
       "CONTESTANT_D_sloth-3": [
         1.0,
@@ -9129,7 +9566,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0366,
         1.0138,
         1.0198,
-        1.0102
+        1.0102,
+        1.0094,
+        1.0126,
+        1.0142,
+        1.008,
+        0.9893
       ],
       "CONTESTANT_D_sloth-4": [
         1.0,
@@ -9177,7 +9619,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.992,
         0.9725,
         0.9793,
-        0.9667
+        0.9667,
+        0.9694,
+        0.9693,
+        0.9752,
+        0.9691,
+        0.9514
       ],
       "CONTESTANT_D_snail-1": [
         1.0,
@@ -9225,7 +9672,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0318,
         1.0174,
         1.0231,
-        1.0193
+        1.0193,
+        1.0167,
+        1.0246,
+        1.0268,
+        1.0273,
+        1.0153
       ],
       "CONTESTANT_D_snail-2": [
         1.0,
@@ -9273,7 +9725,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.006,
         0.9882,
         0.993,
-        0.9885
+        0.9885,
+        0.9866,
+        0.9913,
+        0.9945,
+        0.9922,
+        0.9756
       ],
       "CONTESTANT_D_snail-3": [
         1.0,
@@ -9321,7 +9778,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9932,
         0.9717,
         0.9767,
-        0.9684
+        0.9684,
+        0.9681,
+        0.9717,
+        0.9734,
+        0.9685,
+        0.9506
       ],
       "CONTESTANT_D_snail-4": [
         1.0,
@@ -9369,7 +9831,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0009,
         0.9833,
         0.9913,
-        0.984
+        0.984,
+        0.9841,
+        0.9873,
+        0.9938,
+        0.9888,
+        0.9731
       ],
       "CONTESTANT_D_rabbit-1": [
         1.0,
@@ -9417,7 +9884,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.1338,
         1.1247,
         1.125,
-        1.1237
+        1.1237,
+        1.1209,
+        1.1241,
+        1.1266,
+        1.128,
+        1.1189
       ],
       "CONTESTANT_D_rabbit-2": [
         1.0,
@@ -9465,7 +9937,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0678,
         1.0617,
         1.0617,
-        1.0673
+        1.0673,
+        1.069,
+        1.0717,
+        1.0765,
+        1.0786,
+        1.0763
       ],
       "CONTESTANT_D_turtle": [
         1.0,
@@ -9513,7 +9990,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9696,
         0.9522,
         0.9594,
-        0.9594
+        0.9594,
+        0.9563,
+        0.9584,
+        0.9579,
+        0.9529,
+        0.94
       ],
       "CONTESTANT_D_koala": [
         1.0,
@@ -9561,7 +10043,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.8568,
         0.8477,
         0.8545,
-        0.8452
+        0.8452,
+        0.8519,
+        0.8597,
+        0.8594,
+        0.8386,
+        0.8261
       ],
       "CONTESTANT_D_meerkat-10": [
         1.0,
@@ -9609,7 +10096,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.104,
         1.0898,
         1.0917,
-        1.0933
+        1.0933,
+        1.0851,
+        1.0946,
+        1.1002,
+        1.1044,
+        1.0941
       ],
       "CONTESTANT_D_meerkat-20": [
         1.0,
@@ -9657,7 +10149,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9958,
         0.9895,
         0.9915,
-        1.0018
+        1.0018,
+        0.9912,
+        0.9923,
+        0.993,
+        0.991,
+        0.9805
       ],
       "CONTESTANT_D_meerkat-30": [
         1.0,
@@ -9705,7 +10202,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0197,
         1.0024,
         1.0082,
-        1.0143
+        1.0143,
+        1.0023,
+        1.0065,
+        1.0112,
+        1.0094,
+        0.9855
       ],
       "CONTESTANT_D_meerkat-40": [
         1.0,
@@ -9753,7 +10255,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0013,
         0.9935,
         1.002,
-        1.0008
+        1.0008,
+        0.9931,
+        1.0006,
+        1.0021,
+        0.9947,
+        0.9746
       ],
       "CONTESTANT_D_meerkat-50": [
         1.0,
@@ -9801,7 +10308,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9337,
         0.9158,
         0.9192,
-        0.9189
+        0.9189,
+        0.9154,
+        0.9211,
+        0.9213,
+        0.9101,
+        0.892
       ],
       "CONTESTANT_D_meerkat-60": [
         1.0,
@@ -9849,7 +10361,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9811,
         0.9668,
         0.9674,
-        0.9647
+        0.9647,
+        0.9601,
+        0.9637,
+        0.9614,
+        0.956,
+        0.9386
       ],
       "CONTESTANT_D_meerkat-70": [
         1.0,
@@ -9897,7 +10414,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0213,
         1.0023,
         1.0053,
-        1.0029
+        1.0029,
+        0.9988,
+        0.9991,
+        0.9958,
+        0.9827,
+        0.9626
       ],
       "CONTESTANT_D_meerkat-80": [
         1.0,
@@ -9945,7 +10467,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.973,
         0.954,
         0.9595,
-        0.9563
+        0.9563,
+        0.9495,
+        0.9492,
+        0.9474,
+        0.9351,
+        0.9178
       ],
       "CONTESTANT_D_meerkat-90": [
         1.0,
@@ -9993,7 +10520,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9221,
         0.9039,
         0.9048,
-        0.9001
+        0.9001,
+        0.8971,
+        0.8984,
+        0.891,
+        0.8856,
+        0.8692
       ],
       "CONTESTANT_D_eagle-5-1": [
         1.0,
@@ -10041,7 +10573,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9702,
         0.9479,
         0.9574,
-        0.9458
+        0.9458,
+        0.9458,
+        0.951,
+        0.9497,
+        0.942,
+        0.9205
       ],
       "CONTESTANT_D_eagle-11-2": [
         1.0,
@@ -10089,7 +10626,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0086,
         0.9897,
         0.9928,
-        0.9843
+        0.9843,
+        0.9895,
+        0.9976,
+        0.9988,
+        0.9924,
+        0.9752
       ],
       "CONTESTANT_D_eagle-44-6": [
         1.0,
@@ -10137,7 +10679,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.064,
         1.0567,
         1.0583,
-        1.053
+        1.053,
+        1.0523,
+        1.0551,
+        1.0596,
+        1.0605,
+        1.0519
       ],
       "CONTESTANT_D_eagle-66-9": [
         1.0,
@@ -10185,7 +10732,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0503,
         1.0419,
         1.0428,
-        1.0404
+        1.0404,
+        1.0357,
+        1.0392,
+        1.0425,
+        1.0446,
+        1.0354
       ],
       "CONTESTANT_D_eagle-88-12": [
         1.0,
@@ -10233,7 +10785,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0728,
         1.0643,
         1.0639,
-        1.064
+        1.064,
+        1.0553,
+        1.0606,
+        1.0641,
+        1.0677,
+        1.0584
       ],
       "CONTESTANT_D_whale-shark": [
         1.0,
@@ -10281,7 +10838,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0661,
         1.0578,
         1.0576,
-        1.0586
+        1.0586,
+        1.0498,
+        1.0574,
+        1.0602,
+        1.064,
+        1.0524
       ],
       "CONTESTANT_E_robot": [
         1.0,
@@ -10329,7 +10891,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.955,
         0.9363,
         0.9385,
-        0.9377
+        0.9377,
+        0.9309,
+        0.927,
+        0.9189,
+        0.9075,
+        0.8887
       ],
       "CONTESTANT_E_sloth-1": [
         1.0,
@@ -10377,7 +10944,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0001,
         0.9813,
         0.9835,
-        0.9821
+        0.9821,
+        0.9757,
+        0.972,
+        0.9608,
+        0.9492,
+        0.9289
       ],
       "CONTESTANT_E_sloth-2": [
         1.0,
@@ -10425,7 +10997,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0766,
         1.0607,
         1.0628,
-        1.0593
+        1.0593,
+        1.0535,
+        1.0487,
+        1.0359,
+        1.0215,
+        1.0014
       ],
       "CONTESTANT_E_sloth-3": [
         1.0,
@@ -10473,7 +11050,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0188,
         1.0027,
         1.0046,
-        1.008
+        1.008,
+        1.0028,
+        0.9997,
+        0.9889,
+        0.9762,
+        0.964
       ],
       "CONTESTANT_E_sloth-4": [
         1.0,
@@ -10521,7 +11103,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0033,
         0.9861,
         0.9877,
-        0.9941
+        0.9941,
+        0.9866,
+        0.9829,
+        0.9747,
+        0.9618,
+        0.9491
       ],
       "CONTESTANT_E_snail-1": [
         1.0,
@@ -10569,7 +11156,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9824,
         0.964,
         0.966,
-        0.9649
+        0.9649,
+        0.9589,
+        0.9552,
+        0.9445,
+        0.9327,
+        0.9132
       ],
       "CONTESTANT_E_snail-2": [
         1.0,
@@ -10617,7 +11209,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9947,
         0.9799,
         0.9815,
-        0.9793
+        0.9793,
+        0.9733,
+        0.9689,
+        0.9569,
+        0.9432,
+        0.9239
       ],
       "CONTESTANT_E_snail-3": [
         1.0,
@@ -10665,7 +11262,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9309,
         0.9157,
         0.9174,
-        0.9204
+        0.9204,
+        0.9153,
+        0.9134,
+        0.9028,
+        0.8909,
+        0.8799
       ],
       "CONTESTANT_E_snail-4": [
         1.0,
@@ -10713,7 +11315,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9349,
         0.919,
         0.9198,
-        0.9263
+        0.9263,
+        0.9196,
+        0.9175,
+        0.9095,
+        0.8978,
+        0.8866
       ],
       "CONTESTANT_E_rabbit-1": [
         1.0,
@@ -10761,7 +11368,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9799,
         0.9653,
         0.9663,
-        0.9566
+        0.9566,
+        0.9567,
+        0.9529,
+        0.9516,
+        0.9391,
+        0.914
       ],
       "CONTESTANT_E_rabbit-2": [
         1.0,
@@ -10809,7 +11421,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9734,
         0.954,
         0.9629,
-        0.9496
+        0.9496,
+        0.9503,
+        0.9467,
+        0.951,
+        0.9414,
+        0.926
       ],
       "CONTESTANT_E_turtle": [
         1.0,
@@ -10857,7 +11474,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9537,
         0.9364,
         0.9406,
-        0.9479
+        0.9479,
+        0.9402,
+        0.9437,
+        0.9304,
+        0.9218,
+        0.9087
       ],
       "CONTESTANT_E_koala": [
         1.0,
@@ -10905,7 +11527,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9546,
         0.9381,
         0.9433,
-        0.9429
+        0.9429,
+        0.9349,
+        0.9404,
+        0.942,
+        0.9356,
+        0.92
       ],
       "CONTESTANT_E_meerkat-10": [
         1.0,
@@ -10953,7 +11580,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9782,
         0.9669,
         0.9671,
-        0.9694
+        0.9694,
+        0.9766,
+        0.975,
+        0.9716,
+        0.9625,
+        0.9441
       ],
       "CONTESTANT_E_meerkat-20": [
         1.0,
@@ -11001,7 +11633,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9784,
         0.9607,
         0.962,
-        0.9637
+        0.9637,
+        0.9585,
+        0.9607,
+        0.9565,
+        0.9481,
+        0.9282
       ],
       "CONTESTANT_E_meerkat-30": [
         1.0,
@@ -11049,7 +11686,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9701,
         0.9577,
         0.9627,
-        0.9542
+        0.9542,
+        0.9683,
+        0.9651,
+        0.9632,
+        0.9457,
+        0.9345
       ],
       "CONTESTANT_E_meerkat-40": [
         1.0,
@@ -11097,7 +11739,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9524,
         0.9418,
         0.9424,
-        0.9393
+        0.9393,
+        0.9376,
+        0.9445,
+        0.951,
+        0.9377,
+        0.9265
       ],
       "CONTESTANT_E_meerkat-50": [
         1.0,
@@ -11145,7 +11792,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0573,
         1.0416,
         1.0511,
-        1.0555
+        1.0555,
+        1.0508,
+        1.0606,
+        1.0604,
+        1.053,
+        1.0348
       ],
       "CONTESTANT_E_meerkat-60": [
         1.0,
@@ -11193,7 +11845,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0265,
         1.0134,
         1.0149,
-        1.0232
+        1.0232,
+        1.0102,
+        1.0234,
+        1.021,
+        1.0098,
+        0.99
       ],
       "CONTESTANT_E_meerkat-70": [
         1.0,
@@ -11241,7 +11898,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9966,
         0.9763,
         0.9824,
-        0.9845
+        0.9845,
+        0.9829,
+        0.9805,
+        0.9797,
+        0.9783,
+        0.9673
       ],
       "CONTESTANT_E_meerkat-80": [
         1.0,
@@ -11289,7 +11951,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9883,
         0.9762,
         0.9815,
-        0.9882
+        0.9882,
+        0.9813,
+        0.9839,
+        0.9869,
+        0.9791,
+        0.9669
       ],
       "CONTESTANT_E_meerkat-90": [
         1.0,
@@ -11337,7 +12004,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0124,
         1.0058,
         1.005,
-        1.0077
+        1.0077,
+        0.9996,
+        1.006,
+        1.0087,
+        1.0065,
+        0.9916
       ],
       "CONTESTANT_E_eagle-5-1": [
         1.0,
@@ -11385,7 +12057,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0011,
         0.9779,
         0.9854,
-        0.9975
+        0.9975,
+        0.9772,
+        0.9823,
+        0.9633,
+        0.9564,
+        0.9456
       ],
       "CONTESTANT_E_eagle-11-2": [
         1.0,
@@ -11433,7 +12110,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9624,
         0.9453,
         0.9474,
-        0.949
+        0.949,
+        0.9452,
+        0.9382,
+        0.9264,
+        0.9148,
+        0.8964
       ],
       "CONTESTANT_E_eagle-44-6": [
         1.0,
@@ -11481,7 +12163,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9554,
         0.9409,
         0.9407,
-        0.9384
+        0.9384,
+        0.9326,
+        0.9319,
+        0.9266,
+        0.9143,
+        0.8948
       ],
       "CONTESTANT_E_eagle-66-9": [
         1.0,
@@ -11529,7 +12216,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.963,
         0.9481,
         0.9487,
-        0.9483
+        0.9483,
+        0.9446,
+        0.9455,
+        0.9411,
+        0.9317,
+        0.9131
       ],
       "CONTESTANT_E_eagle-88-12": [
         1.0,
@@ -11577,7 +12269,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9966,
         0.9821,
         0.9831,
-        0.9872
+        0.9872,
+        0.9848,
+        0.9856,
+        0.9816,
+        0.9716,
+        0.9563
       ],
       "CONTESTANT_E_whale-shark": [
         1.0,
@@ -11625,7 +12322,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0187,
         1.0038,
         1.0043,
-        1.0104
+        1.0104,
+        1.0057,
+        1.0092,
+        1.0064,
+        0.9982,
+        0.9828
       ],
       "CONTESTANT_F_robot": [
         1.0,
@@ -11673,7 +12375,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.923,
         0.9071,
         0.913,
-        0.9114
+        0.9114,
+        0.9066,
+        0.9075,
+        0.907,
+        0.8971,
+        0.8777
       ],
       "CONTESTANT_F_sloth-1": [
         1.0,
@@ -11721,7 +12428,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9605,
         0.9439,
         0.9467,
-        0.9497
+        0.9497,
+        0.9463,
+        0.9463,
+        0.9469,
+        0.936,
+        0.9135
       ],
       "CONTESTANT_F_sloth-2": [
         1.0,
@@ -11769,7 +12481,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0704,
         1.0524,
         1.0524,
-        1.0527
+        1.0527,
+        1.055,
+        1.0561,
+        1.0525,
+        1.044,
+        1.0231
       ],
       "CONTESTANT_F_sloth-3": [
         1.0,
@@ -11817,7 +12534,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0401,
         1.0219,
         1.0216,
-        1.0223
+        1.0223,
+        1.0293,
+        1.0332,
+        1.0302,
+        1.0197,
+        0.9978
       ],
       "CONTESTANT_F_sloth-4": [
         1.0,
@@ -11865,7 +12587,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0284,
         1.0105,
         1.0098,
-        1.0104
+        1.0104,
+        1.0171,
+        1.0221,
+        1.0177,
+        1.0061,
+        0.9871
       ],
       "CONTESTANT_F_snail-1": [
         1.0,
@@ -11913,7 +12640,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9261,
         0.9106,
         0.9132,
-        0.9158
+        0.9158,
+        0.9126,
+        0.9127,
+        0.9135,
+        0.9028,
+        0.8814
       ],
       "CONTESTANT_F_snail-2": [
         1.0,
@@ -11961,7 +12693,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9624,
         0.9449,
         0.9457,
-        0.9475
+        0.9475,
+        0.9491,
+        0.9507,
+        0.9475,
+        0.9397,
+        0.9202
       ],
       "CONTESTANT_F_snail-3": [
         1.0,
@@ -12009,7 +12746,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9322,
         0.9145,
         0.915,
-        0.918
+        0.918,
+        0.9234,
+        0.9282,
+        0.9253,
+        0.9146,
+        0.8951
       ],
       "CONTESTANT_F_snail-4": [
         1.0,
@@ -12057,7 +12799,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9384,
         0.9204,
         0.9207,
-        0.9238
+        0.9238,
+        0.9282,
+        0.9343,
+        0.9299,
+        0.9183,
+        0.9009
       ],
       "CONTESTANT_F_rabbit-1": [
         1.0,
@@ -12105,7 +12852,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9385,
         0.9216,
         0.9252,
-        0.9161
+        0.9161,
+        0.9098,
+        0.912,
+        0.9158,
+        0.9067,
+        0.8872
       ],
       "CONTESTANT_F_rabbit-2": [
         1.0,
@@ -12153,7 +12905,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9286,
         0.913,
         0.9152,
-        0.9086
+        0.9086,
+        0.9083,
+        0.9074,
+        0.9103,
+        0.9029,
+        0.8911
       ],
       "CONTESTANT_F_turtle": [
         1.0,
@@ -12201,7 +12958,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9597,
         0.9446,
         0.9509,
-        0.9507
+        0.9507,
+        0.9442,
+        0.9482,
+        0.9476,
+        0.9389,
+        0.916
       ],
       "CONTESTANT_F_koala": [
         1.0,
@@ -12249,7 +13011,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0048,
         0.9913,
         0.9939,
-        0.9925
+        0.9925,
+        0.992,
+        1.0049,
+        1.0116,
+        0.9996,
+        0.9886
       ],
       "CONTESTANT_F_meerkat-10": [
         1.0,
@@ -12297,7 +13064,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9887,
         0.9803,
         0.9772,
-        0.9717
+        0.9717,
+        0.9705,
+        0.9734,
+        0.9714,
+        0.9599,
+        0.9465
       ],
       "CONTESTANT_F_meerkat-20": [
         1.0,
@@ -12345,7 +13117,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9251,
         0.9134,
         0.9215,
-        0.9195
+        0.9195,
+        0.9221,
+        0.9227,
+        0.929,
+        0.9228,
+        0.9074
       ],
       "CONTESTANT_F_meerkat-30": [
         1.0,
@@ -12393,7 +13170,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0123,
         0.9926,
         0.996,
-        1.0028
+        1.0028,
+        0.9995,
+        0.9993,
+        0.9932,
+        0.984,
+        0.969
       ],
       "CONTESTANT_F_meerkat-40": [
         1.0,
@@ -12441,7 +13223,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9474,
         0.9373,
         0.9435,
-        0.9389
+        0.9389,
+        0.9383,
+        0.94,
+        0.9363,
+        0.9253,
+        0.9138
       ],
       "CONTESTANT_F_meerkat-50": [
         1.0,
@@ -12489,7 +13276,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9602,
         0.9434,
         0.9456,
-        0.9485
+        0.9485,
+        0.9488,
+        0.9576,
+        0.9581,
+        0.9428,
+        0.9265
       ],
       "CONTESTANT_F_meerkat-60": [
         1.0,
@@ -12537,7 +13329,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9574,
         0.9432,
         0.9426,
-        0.9424
+        0.9424,
+        0.943,
+        0.9451,
+        0.94,
+        0.9275,
+        0.9182
       ],
       "CONTESTANT_F_meerkat-70": [
         1.0,
@@ -12585,7 +13382,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9916,
         0.9776,
         0.9754,
-        0.9797
+        0.9797,
+        0.9768,
+        0.9867,
+        0.9862,
+        0.9799,
+        0.9628
       ],
       "CONTESTANT_F_meerkat-80": [
         1.0,
@@ -12633,7 +13435,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0405,
         1.0271,
         1.0346,
-        1.0329
+        1.0329,
+        1.0241,
+        1.0318,
+        1.0346,
+        1.0288,
+        1.0053
       ],
       "CONTESTANT_F_meerkat-90": [
         1.0,
@@ -12681,7 +13488,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9732,
         0.9551,
         0.9603,
-        0.9627
+        0.9627,
+        0.9546,
+        0.9607,
+        0.9622,
+        0.9633,
+        0.9488
       ],
       "CONTESTANT_F_eagle-5-1": [
         1.0,
@@ -12729,7 +13541,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.8683,
         0.8491,
         0.8622,
-        0.863
+        0.863,
+        0.8501,
+        0.8557,
+        0.8626,
+        0.8534,
+        0.8288
       ],
       "CONTESTANT_F_eagle-11-2": [
         1.0,
@@ -12777,7 +13594,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.8721,
         0.8533,
         0.8561,
-        0.8573
+        0.8573,
+        0.8543,
+        0.8612,
+        0.8614,
+        0.8568,
+        0.8411
       ],
       "CONTESTANT_F_eagle-44-6": [
         1.0,
@@ -12825,7 +13647,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9617,
         0.9416,
         0.941,
-        0.9404
+        0.9404,
+        0.9393,
+        0.9423,
+        0.9398,
+        0.9299,
+        0.9126
       ],
       "CONTESTANT_F_eagle-66-9": [
         1.0,
@@ -12873,7 +13700,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9876,
         0.9696,
         0.9699,
-        0.9694
+        0.9694,
+        0.9668,
+        0.9693,
+        0.9686,
+        0.9579,
+        0.9406
       ],
       "CONTESTANT_F_eagle-88-12": [
         1.0,
@@ -12921,7 +13753,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9834,
         0.968,
         0.9678,
-        0.9658
+        0.9658,
+        0.9628,
+        0.9643,
+        0.9644,
+        0.9545,
+        0.9383
       ],
       "CONTESTANT_F_whale-shark": [
         1.0,
@@ -12969,7 +13806,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0252,
         1.0117,
         1.0153,
-        1.0159
+        1.0159,
+        1.0076,
+        1.0126,
+        1.0138,
+        1.0045,
+        0.987
       ],
       "BENCHMARK_taotie": [
         1.0,
@@ -13017,7 +13859,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.0052,
         1.003,
         1.0032,
-        1.0039
+        1.0039,
+        1.0028,
+        1.0048,
+        1.0053,
+        1.0048,
+        1.002
       ],
       "BENCHMARK_ghost_taotie": [
         1.0,
@@ -13065,7 +13912,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.9644,
         0.9508,
         0.9536,
-        0.9522
+        0.9522,
+        0.9531,
+        0.9559,
+        0.9565,
+        0.9491,
+        0.9339
       ],
       "BENCHMARK_csi800": [
         1.0,
@@ -13113,7 +13965,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.937,
         0.9235,
         0.925,
-        0.921
+        0.921,
+        0.9284,
+        0.9264,
+        0.9284,
+        0.9232,
+        0.913
       ],
       "BENCHMARK_market": [
         1.0,
@@ -13161,7 +14018,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.937,
         0.9235,
         0.925,
-        0.921
+        0.921,
+        0.9284,
+        0.9264,
+        0.9284,
+        0.9232,
+        0.913
       ],
       "BENCHMARK_csi300": [
         1.0,
@@ -13209,7 +14071,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.937,
         0.9235,
         0.925,
-        0.921
+        0.921,
+        0.9284,
+        0.9264,
+        0.9284,
+        0.9232,
+        0.913
       ]
     },
     "drawdowns": {
@@ -13259,7 +14126,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -5.29,
         -7.22,
         -7.15,
-        -8.65
+        -8.65,
+        -6.59,
+        -7.11,
+        -6.27,
+        -7.49,
+        -8.95
       ],
       "CONTESTANT_A_sloth-1": [
         0.0,
@@ -13307,7 +14179,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -5.53,
         -7.71,
         -7.6,
-        -9.57
+        -9.57,
+        -7.72,
+        -8.27,
+        -7.65,
+        -8.9,
+        -10.49
       ],
       "CONTESTANT_A_sloth-2": [
         0.0,
@@ -13355,7 +14232,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -3.3,
         -5.7,
         -5.4,
-        -7.35
+        -7.35,
+        -5.11,
+        -5.66,
+        -4.7,
+        -6.28,
+        -7.74
       ],
       "CONTESTANT_A_sloth-3": [
         0.0,
@@ -13403,7 +14285,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -5.13,
         -7.31,
         -6.9,
-        -8.45
+        -8.45,
+        -6.86,
+        -7.6,
+        -6.46,
+        -7.67,
+        -8.84
       ],
       "CONTESTANT_A_sloth-4": [
         0.0,
@@ -13451,7 +14338,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -6.18,
         -8.37,
         -7.28,
-        -8.34
+        -8.34,
+        -6.48,
+        -7.12,
+        -5.65,
+        -6.94,
+        -7.93
       ],
       "CONTESTANT_A_snail-1": [
         0.0,
@@ -13499,7 +14391,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -5.54,
         -7.72,
         -7.59,
-        -9.61
+        -9.61,
+        -7.76,
+        -8.29,
+        -7.67,
+        -8.91,
+        -10.5
       ],
       "CONTESTANT_A_snail-2": [
         0.0,
@@ -13547,7 +14444,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -3.17,
         -5.58,
         -5.23,
-        -7.19
+        -7.19,
+        -5.03,
+        -5.55,
+        -4.52,
+        -6.05,
+        -7.43
       ],
       "CONTESTANT_A_snail-3": [
         0.0,
@@ -13595,7 +14497,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -4.67,
         -6.77,
         -6.39,
-        -8.05
+        -8.05,
+        -6.38,
+        -7.12,
+        -5.94,
+        -7.11,
+        -8.28
       ],
       "CONTESTANT_A_snail-4": [
         0.0,
@@ -13643,7 +14550,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -5.22,
         -7.31,
         -6.09,
-        -7.33
+        -7.33,
+        -5.19,
+        -5.74,
+        -4.31,
+        -5.66,
+        -6.73
       ],
       "CONTESTANT_A_rabbit-1": [
         0.0,
@@ -13691,7 +14603,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -5.05,
         -6.3,
         -6.51,
-        -6.85
+        -6.85,
+        -6.72,
+        -6.2,
+        -5.74,
+        -5.61,
+        -6.3
       ],
       "CONTESTANT_A_rabbit-2": [
         0.0,
@@ -13739,7 +14656,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -4.69,
         -5.54,
         -5.55,
-        -5.7
+        -5.7,
+        -5.85,
+        -5.65,
+        -5.14,
+        -4.99,
+        -5.73
       ],
       "CONTESTANT_A_turtle": [
         0.0,
@@ -13787,7 +14709,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -1.5,
         -3.36,
         -2.6,
-        -3.57
+        -3.57,
+        -3.55,
+        -3.63,
+        -2.03,
+        -3.4,
+        -4.08
       ],
       "CONTESTANT_A_koala": [
         0.0,
@@ -13835,7 +14762,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -26.64,
         -26.71,
         -26.1,
-        -26.63
+        -26.63,
+        -26.58,
+        -25.29,
+        -25.0,
+        -26.74,
+        -28.33
       ],
       "CONTESTANT_A_meerkat-10": [
         0.0,
@@ -13883,7 +14815,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -0.02,
         -0.96,
         -0.7,
-        -0.84
+        -0.84,
+        -0.96,
+        0.0,
+        0.0,
+        0.0,
+        -0.74
       ],
       "CONTESTANT_A_meerkat-20": [
         0.0,
@@ -13931,7 +14868,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.0,
         -0.73,
         -0.68,
-        -0.63
+        -0.63,
+        -0.81,
+        -0.87,
+        -0.71,
+        -1.18,
+        -2.29
       ],
       "CONTESTANT_A_meerkat-30": [
         0.0,
@@ -13979,7 +14921,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -1.59,
         -2.8,
         -2.9,
-        -2.55
+        -2.55,
+        -2.74,
+        -1.37,
+        -1.16,
+        -1.6,
+        -3.31
       ],
       "CONTESTANT_A_meerkat-40": [
         0.0,
@@ -14027,7 +14974,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -1.41,
         -2.43,
         -1.84,
-        -1.16
+        -1.16,
+        -1.37,
+        -0.76,
+        -0.11,
+        -0.51,
+        -1.8
       ],
       "CONTESTANT_A_meerkat-50": [
         0.0,
@@ -14075,7 +15027,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -3.54,
         -4.89,
         -4.63,
-        -3.97
+        -3.97,
+        -4.22,
+        -3.92,
+        -3.98,
+        -4.23,
+        -5.53
       ],
       "CONTESTANT_A_meerkat-60": [
         0.0,
@@ -14123,7 +15080,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -3.38,
         -4.51,
         -4.23,
-        -3.51
+        -3.51,
+        -4.25,
+        -3.93,
+        -4.58,
+        -5.37,
+        -6.88
       ],
       "CONTESTANT_A_meerkat-70": [
         0.0,
@@ -14171,7 +15133,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -9.51,
         -11.25,
         -10.93,
-        -9.73
+        -9.73,
+        -9.88,
+        -9.01,
+        -9.08,
+        -9.92,
+        -11.85
       ],
       "CONTESTANT_A_meerkat-80": [
         0.0,
@@ -14219,7 +15186,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -4.13,
         -6.1,
         -5.83,
-        -6.32
+        -6.32,
+        -6.28,
+        -5.98,
+        -5.74,
+        -6.74,
+        -9.34
       ],
       "CONTESTANT_A_meerkat-90": [
         0.0,
@@ -14267,7 +15239,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -6.44,
         -8.32,
         -8.36,
-        -9.5
+        -9.5,
+        -9.3,
+        -8.33,
+        -8.33,
+        -9.22,
+        -11.77
       ],
       "CONTESTANT_A_eagle-5-1": [
         0.0,
@@ -14315,7 +15292,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -6.89,
         -8.8,
         -7.89,
-        -10.82
+        -10.82,
+        -9.08,
+        -10.77,
+        -10.29,
+        -11.8,
+        -12.93
       ],
       "CONTESTANT_A_eagle-11-2": [
         0.0,
@@ -14363,7 +15345,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -5.21,
         -7.52,
         -6.77,
-        -8.62
+        -8.62,
+        -7.45,
+        -8.19,
+        -7.56,
+        -8.87,
+        -10.42
       ],
       "CONTESTANT_A_eagle-44-6": [
         0.0,
@@ -14411,7 +15398,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -4.13,
         -5.41,
         -5.45,
-        -6.2
+        -6.2,
+        -5.7,
+        -5.79,
+        -5.17,
+        -5.73,
+        -6.81
       ],
       "CONTESTANT_A_eagle-66-9": [
         0.0,
@@ -14459,7 +15451,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -1.62,
         -2.57,
         -2.62,
-        -2.91
+        -2.91,
+        -3.18,
+        -2.79,
+        -2.43,
+        -2.66,
+        -3.51
       ],
       "CONTESTANT_A_eagle-88-12": [
         0.0,
@@ -14507,7 +15504,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -0.3,
         -1.3,
         -1.11,
-        -1.08
+        -1.08,
+        -1.51,
+        -1.01,
+        -0.78,
+        -0.9,
+        -2.05
       ],
       "CONTESTANT_A_whale-shark": [
         0.0,
@@ -14555,7 +15557,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.0,
         -0.87,
         -0.68,
-        -0.35
+        -0.35,
+        -1.01,
+        -0.38,
+        -0.02,
+        0.0,
+        -1.05
       ],
       "CONTESTANT_B_robot": [
         0.0,
@@ -14603,7 +15610,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -2.18,
         -3.21,
         -3.05,
-        -3.94
+        -3.94,
+        -3.63,
+        -3.59,
+        -2.9,
+        -2.68,
+        -3.41
       ],
       "CONTESTANT_B_sloth-1": [
         0.0,
@@ -14651,7 +15663,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -3.94,
         -5.15,
         -4.87,
-        -6.28
+        -6.28,
+        -5.81,
+        -5.66,
+        -4.74,
+        -4.8,
+        -5.72
       ],
       "CONTESTANT_B_sloth-2": [
         0.0,
@@ -14699,7 +15716,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -5.46,
         -6.81,
         -6.47,
-        -7.24
+        -7.24,
+        -6.48,
+        -6.41,
+        -5.59,
+        -6.01,
+        -6.85
       ],
       "CONTESTANT_B_sloth-3": [
         0.0,
@@ -14747,7 +15769,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -5.79,
         -7.0,
         -6.46,
-        -7.4
+        -7.4,
+        -7.25,
+        -7.34,
+        -6.47,
+        -6.79,
+        -7.7
       ],
       "CONTESTANT_B_sloth-4": [
         0.0,
@@ -14795,7 +15822,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -5.02,
         -6.56,
         -5.87,
-        -7.34
+        -7.34,
+        -6.86,
+        -6.77,
+        -5.53,
+        -5.81,
+        -6.18
       ],
       "CONTESTANT_B_snail-1": [
         0.0,
@@ -14843,7 +15875,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -3.99,
         -5.19,
         -4.89,
-        -6.29
+        -6.29,
+        -5.88,
+        -5.71,
+        -4.78,
+        -4.83,
+        -5.75
       ],
       "CONTESTANT_B_snail-2": [
         0.0,
@@ -14891,7 +15928,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -5.29,
         -6.64,
         -6.27,
-        -7.02
+        -7.02,
+        -6.31,
+        -6.23,
+        -5.37,
+        -5.77,
+        -6.66
       ],
       "CONTESTANT_B_snail-3": [
         0.0,
@@ -14939,7 +15981,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -5.44,
         -6.64,
         -6.13,
-        -7.01
+        -7.01,
+        -6.91,
+        -6.96,
+        -6.02,
+        -6.35,
+        -7.31
       ],
       "CONTESTANT_B_snail-4": [
         0.0,
@@ -14987,7 +16034,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -4.82,
         -6.34,
         -5.66,
-        -7.07
+        -7.07,
+        -6.76,
+        -6.69,
+        -5.47,
+        -5.75,
+        -6.21
       ],
       "CONTESTANT_B_rabbit-1": [
         0.0,
@@ -15035,7 +16087,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.0,
         -0.26,
         -0.53,
-        -0.5
+        -0.5,
+        -1.59,
+        -1.46,
+        -1.31,
+        -0.55,
+        -1.45
       ],
       "CONTESTANT_B_rabbit-2": [
         0.0,
@@ -15083,7 +16140,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.0,
         -0.33,
         -0.55,
-        -0.52
+        -0.52,
+        -1.6,
+        -1.45,
+        -1.28,
+        -0.74,
+        -1.74
       ],
       "CONTESTANT_B_turtle": [
         0.0,
@@ -15131,7 +16193,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -4.11,
         -5.24,
         -4.3,
-        -5.35
+        -5.35,
+        -5.2,
+        -4.85,
+        -3.65,
+        -3.89,
+        -4.8
       ],
       "CONTESTANT_B_koala": [
         0.0,
@@ -15179,7 +16246,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -21.6,
         -22.43,
         -21.78,
-        -22.05
+        -22.05,
+        -21.68,
+        -20.91,
+        -20.78,
+        -22.88,
+        -24.66
       ],
       "CONTESTANT_B_meerkat-10": [
         0.0,
@@ -15227,7 +16299,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.0,
         -1.16,
         -0.87,
-        -0.41
+        -0.41,
+        -1.22,
+        -0.76,
+        -0.55,
+        -0.43,
+        -1.36
       ],
       "CONTESTANT_B_meerkat-20": [
         0.0,
@@ -15275,7 +16352,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -1.43,
         -2.48,
         -2.23,
-        -1.91
+        -1.91,
+        -2.43,
+        -1.71,
+        -0.94,
+        -1.28,
+        -2.74
       ],
       "CONTESTANT_B_meerkat-30": [
         0.0,
@@ -15323,7 +16405,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -0.95,
         -2.68,
         -2.75,
-        -2.42
+        -2.42,
+        -3.35,
+        -2.3,
+        -2.27,
+        -2.93,
+        -4.76
       ],
       "CONTESTANT_B_meerkat-40": [
         0.0,
@@ -15371,7 +16458,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -2.81,
         -4.25,
         -4.11,
-        -4.27
+        -4.27,
+        -4.18,
+        -3.58,
+        -3.5,
+        -4.0,
+        -5.58
       ],
       "CONTESTANT_B_meerkat-50": [
         0.0,
@@ -15419,7 +16511,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -0.45,
         -1.86,
         -1.52,
-        -0.9
+        -0.9,
+        -1.84,
+        -0.58,
+        -0.39,
+        -1.85,
+        -3.92
       ],
       "CONTESTANT_B_meerkat-60": [
         0.0,
@@ -15467,7 +16564,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.0,
         -1.32,
         -1.06,
-        -1.92
+        -1.92,
+        -2.49,
+        -2.46,
+        -2.51,
+        -3.34,
+        -4.92
       ],
       "CONTESTANT_B_meerkat-70": [
         0.0,
@@ -15515,7 +16617,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -4.0,
         -5.57,
         -4.88,
-        -4.98
+        -4.98,
+        -6.15,
+        -6.17,
+        -6.02,
+        -7.05,
+        -8.8
       ],
       "CONTESTANT_B_meerkat-80": [
         0.0,
@@ -15563,7 +16670,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -5.03,
         -6.97,
         -7.39,
-        -7.86
+        -7.86,
+        -8.76,
+        -8.18,
+        -8.03,
+        -8.85,
+        -11.02
       ],
       "CONTESTANT_B_meerkat-90": [
         0.0,
@@ -15611,7 +16723,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -15.96,
         -17.77,
         -17.64,
-        -18.02
+        -18.02,
+        -18.25,
+        -18.22,
+        -18.17,
+        -19.03,
+        -20.44
       ],
       "CONTESTANT_B_eagle-5-1": [
         0.0,
@@ -15659,7 +16776,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -6.25,
         -7.39,
         -7.03,
-        -8.69
+        -8.69,
+        -8.66,
+        -8.58,
+        -8.32,
+        -8.1,
+        -9.33
       ],
       "CONTESTANT_B_eagle-11-2": [
         0.0,
@@ -15707,7 +16829,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -1.55,
         -2.69,
         -2.71,
-        -3.73
+        -3.73,
+        -3.68,
+        -3.87,
+        -2.96,
+        -2.76,
+        -3.9
       ],
       "CONTESTANT_B_eagle-44-6": [
         0.0,
@@ -15755,7 +16882,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -0.96,
         -1.69,
         -1.6,
-        -2.11
+        -2.11,
+        -2.41,
+        -2.23,
+        -1.95,
+        -1.5,
+        -2.36
       ],
       "CONTESTANT_B_eagle-66-9": [
         0.0,
@@ -15803,7 +16935,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.0,
         -0.52,
         -0.44,
-        -0.48
+        -0.48,
+        -1.33,
+        -0.9,
+        -0.77,
+        -0.2,
+        -1.14
       ],
       "CONTESTANT_B_eagle-88-12": [
         0.0,
@@ -15851,7 +16988,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.0,
         -0.47,
         -0.42,
-        -0.46
+        -0.46,
+        -1.24,
+        -0.86,
+        -0.62,
+        -0.22,
+        -1.06
       ],
       "CONTESTANT_B_whale-shark": [
         0.0,
@@ -15899,7 +17041,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.0,
         -0.63,
         -0.54,
-        -0.3
+        -0.3,
+        -1.21,
+        -0.68,
+        -0.42,
+        -0.09,
+        -1.09
       ],
       "CONTESTANT_C_robot": [
         0.0,
@@ -15947,7 +17094,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -2.86,
         -4.81,
         -4.66,
-        -5.84
+        -5.84,
+        -5.98,
+        -6.04,
+        -5.87,
+        -6.5,
+        -7.46
       ],
       "CONTESTANT_C_sloth-1": [
         0.0,
@@ -15995,7 +17147,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -1.71,
         -3.63,
         -3.35,
-        -4.72
+        -4.72,
+        -5.04,
+        -5.2,
+        -5.09,
+        -5.83,
+        -7.02
       ],
       "CONTESTANT_C_sloth-2": [
         0.0,
@@ -16043,7 +17200,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -2.16,
         -4.53,
         -4.43,
-        -5.34
+        -5.34,
+        -5.28,
+        -5.47,
+        -5.25,
+        -6.22,
+        -7.49
       ],
       "CONTESTANT_C_sloth-3": [
         0.0,
@@ -16091,7 +17253,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -6.43,
         -8.57,
         -8.54,
-        -9.63
+        -9.63,
+        -9.62,
+        -9.31,
+        -8.84,
+        -9.74,
+        -10.84
       ],
       "CONTESTANT_C_sloth-4": [
         0.0,
@@ -16139,7 +17306,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -6.67,
         -8.33,
         -8.19,
-        -9.85
+        -9.85,
+        -9.7,
+        -9.31,
+        -8.8,
+        -9.54,
+        -10.55
       ],
       "CONTESTANT_C_snail-1": [
         0.0,
@@ -16187,7 +17359,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -1.49,
         -3.43,
         -3.13,
-        -4.52
+        -4.52,
+        -4.84,
+        -4.97,
+        -4.85,
+        -5.62,
+        -6.86
       ],
       "CONTESTANT_C_snail-2": [
         0.0,
@@ -16235,7 +17412,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -2.13,
         -4.42,
         -4.34,
-        -5.25
+        -5.25,
+        -5.16,
+        -5.33,
+        -5.13,
+        -6.04,
+        -7.31
       ],
       "CONTESTANT_C_snail-3": [
         0.0,
@@ -16283,7 +17465,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -8.63,
         -10.68,
         -10.65,
-        -11.74
+        -11.74,
+        -11.73,
+        -11.39,
+        -10.97,
+        -11.76,
+        -12.85
       ],
       "CONTESTANT_C_snail-4": [
         0.0,
@@ -16331,7 +17518,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -7.39,
         -9.0,
         -8.86,
-        -10.31
+        -10.31,
+        -10.38,
+        -9.9,
+        -9.49,
+        -10.13,
+        -11.15
       ],
       "CONTESTANT_C_rabbit-1": [
         0.0,
@@ -16379,7 +17571,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -3.96,
         -5.67,
         -5.64,
-        -6.05
+        -6.05,
+        -6.68,
+        -6.72,
+        -6.52,
+        -6.42,
+        -7.05
       ],
       "CONTESTANT_C_rabbit-2": [
         0.0,
@@ -16427,7 +17624,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -1.71,
         -2.68,
         -2.76,
-        -2.67
+        -2.67,
+        -3.74,
+        -3.56,
+        -3.41,
+        -2.82,
+        -3.42
       ],
       "CONTESTANT_C_turtle": [
         0.0,
@@ -16475,7 +17677,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -4.24,
         -6.26,
         -5.94,
-        -6.08
+        -6.08,
+        -6.15,
+        -5.77,
+        -5.76,
+        -6.01,
+        -7.64
       ],
       "CONTESTANT_C_koala": [
         0.0,
@@ -16523,7 +17730,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -19.01,
         -20.49,
         -19.5,
-        -19.81
+        -19.81,
+        -19.73,
+        -18.04,
+        -17.95,
+        -19.64,
+        -22.1
       ],
       "CONTESTANT_C_meerkat-10": [
         0.0,
@@ -16571,7 +17783,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -1.85,
         -3.15,
         -2.88,
-        -2.85
+        -2.85,
+        -2.88,
+        -2.41,
+        -2.02,
+        -1.97,
+        -2.69
       ],
       "CONTESTANT_C_meerkat-20": [
         0.0,
@@ -16619,7 +17836,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.0,
         -1.27,
         -1.12,
-        -0.7
+        -0.7,
+        -1.22,
+        -0.91,
+        -0.69,
+        -0.53,
+        -1.63
       ],
       "CONTESTANT_C_meerkat-30": [
         0.0,
@@ -16667,7 +17889,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -1.06,
         -1.9,
         -1.5,
-        -1.21
+        -1.21,
+        -1.99,
+        -0.95,
+        -0.63,
+        -1.08,
+        -2.33
       ],
       "CONTESTANT_C_meerkat-40": [
         0.0,
@@ -16715,7 +17942,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -1.04,
         -2.71,
         -2.31,
-        -2.1
+        -2.1,
+        -2.3,
+        -1.4,
+        -1.58,
+        -2.54,
+        -4.38
       ],
       "CONTESTANT_C_meerkat-50": [
         0.0,
@@ -16763,7 +17995,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -2.86,
         -4.25,
         -4.31,
-        -4.07
+        -4.07,
+        -4.3,
+        -3.81,
+        -3.83,
+        -4.53,
+        -6.24
       ],
       "CONTESTANT_C_meerkat-60": [
         0.0,
@@ -16811,7 +18048,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -2.56,
         -3.67,
         -2.47,
-        -2.4
+        -2.4,
+        -2.79,
+        -1.79,
+        -1.65,
+        -1.99,
+        -3.65
       ],
       "CONTESTANT_C_meerkat-70": [
         0.0,
@@ -16859,7 +18101,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -5.15,
         -6.37,
         -6.47,
-        -6.4
+        -6.4,
+        -6.54,
+        -6.58,
+        -7.56,
+        -8.83,
+        -10.74
       ],
       "CONTESTANT_C_meerkat-80": [
         0.0,
@@ -16907,7 +18154,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -6.27,
         -7.97,
         -7.38,
-        -7.45
+        -7.45,
+        -7.71,
+        -7.87,
+        -8.44,
+        -9.86,
+        -12.36
       ],
       "CONTESTANT_C_meerkat-90": [
         0.0,
@@ -16955,7 +18207,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -5.49,
         -6.9,
         -6.8,
-        -6.86
+        -6.86,
+        -8.06,
+        -8.11,
+        -8.37,
+        -9.61,
+        -11.44
       ],
       "CONTESTANT_C_eagle-5-1": [
         0.0,
@@ -17003,7 +18260,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -8.86,
         -11.52,
         -10.61,
-        -12.43
+        -12.43,
+        -11.36,
+        -11.6,
+        -10.84,
+        -11.52,
+        -12.23
       ],
       "CONTESTANT_C_eagle-11-2": [
         0.0,
@@ -17051,7 +18313,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -6.24,
         -8.37,
         -7.99,
-        -9.18
+        -9.18,
+        -8.97,
+        -9.53,
+        -9.22,
+        -9.41,
+        -9.91
       ],
       "CONTESTANT_C_eagle-44-6": [
         0.0,
@@ -17099,7 +18366,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -3.3,
         -4.86,
         -4.96,
-        -5.54
+        -5.54,
+        -5.74,
+        -5.67,
+        -4.9,
+        -5.43,
+        -6.44
       ],
       "CONTESTANT_C_eagle-66-9": [
         0.0,
@@ -17147,7 +18419,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -2.01,
         -3.57,
         -3.4,
-        -3.8
+        -3.8,
+        -4.57,
+        -4.26,
+        -3.87,
+        -4.19,
+        -5.08
       ],
       "CONTESTANT_C_eagle-88-12": [
         0.0,
@@ -17195,7 +18472,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -0.89,
         -2.19,
         -2.14,
-        -2.22
+        -2.22,
+        -3.04,
+        -2.68,
+        -2.37,
+        -2.44,
+        -3.48
       ],
       "CONTESTANT_C_whale-shark": [
         0.0,
@@ -17243,7 +18525,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.0,
         -1.11,
         -1.17,
-        -0.79
+        -0.79,
+        -1.66,
+        -1.15,
+        -0.74,
+        -0.75,
+        -1.87
       ],
       "CONTESTANT_D_robot": [
         0.0,
@@ -17291,7 +18578,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -1.31,
         -2.42,
         -2.11,
-        -2.4
+        -2.4,
+        -2.48,
+        -1.96,
+        -1.58,
+        -1.74,
+        -2.9
       ],
       "CONTESTANT_D_sloth-1": [
         0.0,
@@ -17339,7 +18631,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -2.59,
         -4.09,
         -3.63,
-        -4.12
+        -4.12,
+        -4.36,
+        -3.75,
+        -3.55,
+        -3.6,
+        -4.68
       ],
       "CONTESTANT_D_sloth-2": [
         0.0,
@@ -17387,7 +18684,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -4.39,
         -6.15,
         -5.62,
-        -6.07
+        -6.07,
+        -6.27,
+        -5.95,
+        -5.71,
+        -6.0,
+        -7.57
       ],
       "CONTESTANT_D_sloth-3": [
         0.0,
@@ -17435,7 +18737,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -5.59,
         -7.67,
         -7.12,
-        -8.0
+        -8.0,
+        -8.07,
+        -7.78,
+        -7.63,
+        -8.2,
+        -9.9
       ],
       "CONTESTANT_D_sloth-4": [
         0.0,
@@ -17483,7 +18790,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -4.68,
         -6.55,
         -5.9,
-        -7.11
+        -7.11,
+        -6.85,
+        -6.86,
+        -6.29,
+        -6.88,
+        -8.58
       ],
       "CONTESTANT_D_snail-1": [
         0.0,
@@ -17531,7 +18843,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -1.81,
         -3.18,
         -2.64,
-        -3.0
+        -3.0,
+        -3.25,
+        -2.49,
+        -2.28,
+        -2.24,
+        -3.38
       ],
       "CONTESTANT_D_snail-2": [
         0.0,
@@ -17579,7 +18896,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -3.61,
         -5.32,
         -4.86,
-        -5.29
+        -5.29,
+        -5.47,
+        -5.02,
+        -4.71,
+        -4.93,
+        -6.52
       ],
       "CONTESTANT_D_snail-3": [
         0.0,
@@ -17627,7 +18949,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -5.18,
         -7.24,
         -6.76,
-        -7.55
+        -7.55,
+        -7.58,
+        -7.24,
+        -7.07,
+        -7.54,
+        -9.25
       ],
       "CONTESTANT_D_snail-4": [
         0.0,
@@ -17675,7 +19002,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -3.38,
         -5.08,
         -4.31,
-        -5.01
+        -5.01,
+        -5.0,
+        -4.69,
+        -4.06,
+        -4.55,
+        -6.06
       ],
       "CONTESTANT_D_rabbit-1": [
         0.0,
@@ -17723,7 +19055,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.0,
         -0.8,
         -0.78,
-        -0.89
+        -0.89,
+        -1.14,
+        -0.86,
+        -0.64,
+        -0.51,
+        -1.31
       ],
       "CONTESTANT_D_rabbit-2": [
         0.0,
@@ -17771,7 +19108,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -1.9,
         -2.46,
         -2.46,
-        -1.95
+        -1.95,
+        -1.79,
+        -1.54,
+        -1.1,
+        -0.91,
+        -1.12
       ],
       "CONTESTANT_D_turtle": [
         0.0,
@@ -17819,7 +19161,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -4.89,
         -6.59,
         -5.89,
-        -5.89
+        -5.89,
+        -6.19,
+        -5.98,
+        -6.03,
+        -6.52,
+        -7.79
       ],
       "CONTESTANT_D_koala": [
         0.0,
@@ -17867,7 +19214,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -14.32,
         -15.23,
         -14.55,
-        -15.48
+        -15.48,
+        -14.81,
+        -14.03,
+        -14.06,
+        -16.14,
+        -17.39
       ],
       "CONTESTANT_D_meerkat-10": [
         0.0,
@@ -17915,7 +19267,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.0,
         -1.29,
         -1.11,
-        -0.97
+        -0.97,
+        -1.71,
+        -0.85,
+        -0.34,
+        0.0,
+        -0.93
       ],
       "CONTESTANT_D_meerkat-20": [
         0.0,
@@ -17963,7 +19320,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -0.68,
         -1.31,
         -1.11,
-        -0.08
+        -0.08,
+        -1.14,
+        -1.03,
+        -0.96,
+        -1.16,
+        -2.2
       ],
       "CONTESTANT_D_meerkat-30": [
         0.0,
@@ -18011,7 +19373,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -1.69,
         -3.36,
         -2.8,
-        -2.21
+        -2.21,
+        -3.36,
+        -2.96,
+        -2.51,
+        -2.68,
+        -4.98
       ],
       "CONTESTANT_D_meerkat-40": [
         0.0,
@@ -18059,7 +19426,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.0,
         -0.78,
         0.0,
-        -0.12
+        -0.12,
+        -0.89,
+        -0.14,
+        0.0,
+        -0.74,
+        -2.74
       ],
       "CONTESTANT_D_meerkat-50": [
         0.0,
@@ -18107,7 +19479,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -6.63,
         -8.42,
         -8.08,
-        -8.11
+        -8.11,
+        -8.46,
+        -7.89,
+        -7.87,
+        -8.99,
+        -10.8
       ],
       "CONTESTANT_D_meerkat-60": [
         0.0,
@@ -18155,7 +19532,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -3.02,
         -4.44,
         -4.38,
-        -4.65
+        -4.65,
+        -5.1,
+        -4.74,
+        -4.97,
+        -5.51,
+        -7.23
       ],
       "CONTESTANT_D_meerkat-70": [
         0.0,
@@ -18203,7 +19585,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -0.43,
         -2.28,
         -1.99,
-        -2.22
+        -2.22,
+        -2.62,
+        -2.59,
+        -2.92,
+        -4.19,
+        -6.15
       ],
       "CONTESTANT_D_meerkat-80": [
         0.0,
@@ -18251,7 +19638,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -2.7,
         -4.6,
         -4.05,
-        -4.37
+        -4.37,
+        -5.05,
+        -5.08,
+        -5.26,
+        -6.49,
+        -8.22
       ],
       "CONTESTANT_D_meerkat-90": [
         0.0,
@@ -18299,7 +19691,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -7.79,
         -9.61,
         -9.52,
-        -9.99
+        -9.99,
+        -10.29,
+        -10.16,
+        -10.9,
+        -11.44,
+        -13.08
       ],
       "CONTESTANT_D_eagle-5-1": [
         0.0,
@@ -18347,7 +19744,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -6.05,
         -8.21,
         -7.29,
-        -8.41
+        -8.41,
+        -8.41,
+        -7.91,
+        -8.04,
+        -8.78,
+        -10.86
       ],
       "CONTESTANT_D_eagle-11-2": [
         0.0,
@@ -18395,7 +19797,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -4.52,
         -6.31,
         -6.01,
-        -6.82
+        -6.82,
+        -6.32,
+        -5.56,
+        -5.44,
+        -6.05,
+        -7.68
       ],
       "CONTESTANT_D_eagle-44-6": [
         0.0,
@@ -18443,7 +19850,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -0.33,
         -1.01,
         -0.86,
-        -1.36
+        -1.36,
+        -1.42,
+        -1.16,
+        -0.74,
+        -0.66,
+        -1.46
       ],
       "CONTESTANT_D_eagle-66-9": [
         0.0,
@@ -18491,7 +19903,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.0,
         -0.8,
         -0.71,
-        -0.94
+        -0.94,
+        -1.39,
+        -1.06,
+        -0.74,
+        -0.54,
+        -1.42
       ],
       "CONTESTANT_D_eagle-88-12": [
         0.0,
@@ -18539,7 +19956,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.0,
         -0.79,
         -0.83,
-        -0.82
+        -0.82,
+        -1.63,
+        -1.14,
+        -0.81,
+        -0.48,
+        -1.34
       ],
       "CONTESTANT_D_whale-shark": [
         0.0,
@@ -18587,7 +20009,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.0,
         -0.78,
         -0.8,
-        -0.7
+        -0.7,
+        -1.53,
+        -0.82,
+        -0.55,
+        -0.2,
+        -1.29
       ],
       "CONTESTANT_E_robot": [
         0.0,
@@ -18635,7 +20062,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -4.5,
         -6.37,
         -6.15,
-        -6.23
+        -6.23,
+        -6.91,
+        -7.3,
+        -8.11,
+        -9.25,
+        -11.13
       ],
       "CONTESTANT_E_sloth-1": [
         0.0,
@@ -18683,7 +20115,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -1.95,
         -3.79,
         -3.58,
-        -3.72
+        -3.72,
+        -4.34,
+        -4.71,
+        -5.8,
+        -6.94,
+        -8.93
       ],
       "CONTESTANT_E_sloth-2": [
         0.0,
@@ -18731,7 +20168,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -0.46,
         -1.93,
         -1.74,
-        -2.06
+        -2.06,
+        -2.6,
+        -3.04,
+        -4.23,
+        -5.56,
+        -7.41
       ],
       "CONTESTANT_E_sloth-3": [
         0.0,
@@ -18779,7 +20221,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -2.78,
         -4.31,
         -4.13,
-        -3.81
+        -3.81,
+        -4.3,
+        -4.6,
+        -5.63,
+        -6.84,
+        -8.01
       ],
       "CONTESTANT_E_sloth-4": [
         0.0,
@@ -18827,7 +20274,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -4.03,
         -5.67,
         -5.52,
-        -4.91
+        -4.91,
+        -5.62,
+        -5.98,
+        -6.76,
+        -8.0,
+        -9.21
       ],
       "CONTESTANT_E_snail-1": [
         0.0,
@@ -18875,7 +20327,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -1.86,
         -3.7,
         -3.5,
-        -3.61
+        -3.61,
+        -4.21,
+        -4.58,
+        -5.64,
+        -6.82,
+        -8.77
       ],
       "CONTESTANT_E_snail-2": [
         0.0,
@@ -18923,7 +20380,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -0.53,
         -2.01,
         -1.85,
-        -2.07
+        -2.07,
+        -2.67,
+        -3.11,
+        -4.31,
+        -5.68,
+        -7.61
       ],
       "CONTESTANT_E_snail-3": [
         0.0,
@@ -18971,7 +20433,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -6.91,
         -8.43,
         -8.26,
-        -7.96
+        -7.96,
+        -8.47,
+        -8.66,
+        -9.72,
+        -10.91,
+        -12.01
       ],
       "CONTESTANT_E_snail-4": [
         0.0,
@@ -19019,7 +20486,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -6.51,
         -8.1,
         -8.02,
-        -7.37
+        -7.37,
+        -8.04,
+        -8.25,
+        -9.05,
+        -10.22,
+        -11.34
       ],
       "CONTESTANT_E_rabbit-1": [
         0.0,
@@ -19067,7 +20539,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -4.6,
         -6.03,
         -5.93,
-        -6.87
+        -6.87,
+        -6.86,
+        -7.23,
+        -7.36,
+        -8.58,
+        -11.02
       ],
       "CONTESTANT_E_rabbit-2": [
         0.0,
@@ -19115,7 +20592,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -4.72,
         -6.62,
         -5.75,
-        -7.05
+        -7.05,
+        -6.98,
+        -7.33,
+        -6.91,
+        -7.85,
+        -9.36
       ],
       "CONTESTANT_E_turtle": [
         0.0,
@@ -19163,7 +20645,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -4.63,
         -6.36,
         -5.94,
-        -5.21
+        -5.21,
+        -5.98,
+        -5.63,
+        -6.96,
+        -7.82,
+        -9.13
       ],
       "CONTESTANT_E_koala": [
         0.0,
@@ -19211,7 +20698,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -4.54,
         -6.19,
         -5.67,
-        -5.71
+        -5.71,
+        -6.51,
+        -5.96,
+        -5.8,
+        -6.44,
+        -8.0
       ],
       "CONTESTANT_E_meerkat-10": [
         0.0,
@@ -19259,7 +20751,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -5.22,
         -6.32,
         -6.3,
-        -6.07
+        -6.07,
+        -5.38,
+        -5.53,
+        -5.86,
+        -6.74,
+        -8.53
       ],
       "CONTESTANT_E_meerkat-20": [
         0.0,
@@ -19307,7 +20804,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -2.96,
         -4.71,
         -4.58,
-        -4.41
+        -4.41,
+        -4.93,
+        -4.71,
+        -5.13,
+        -5.96,
+        -7.93
       ],
       "CONTESTANT_E_meerkat-30": [
         0.0,
@@ -19355,7 +20857,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -2.99,
         -4.23,
         -3.73,
-        -4.58
+        -4.58,
+        -3.17,
+        -3.49,
+        -3.68,
+        -5.43,
+        -6.55
       ],
       "CONTESTANT_E_meerkat-40": [
         0.0,
@@ -19403,7 +20910,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -4.76,
         -5.82,
         -5.76,
-        -6.07
+        -6.07,
+        -6.24,
+        -5.55,
+        -4.9,
+        -6.23,
+        -7.35
       ],
       "CONTESTANT_E_meerkat-50": [
         0.0,
@@ -19451,7 +20963,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -1.58,
         -3.04,
         -2.16,
-        -1.75
+        -1.75,
+        -2.19,
+        -1.28,
+        -1.29,
+        -1.98,
+        -3.68
       ],
       "CONTESTANT_E_meerkat-60": [
         0.0,
@@ -19499,7 +21016,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.0,
         -1.28,
         -1.13,
-        -0.32
+        -0.32,
+        -1.59,
+        -0.3,
+        -0.54,
+        -1.63,
+        -3.56
       ],
       "CONTESTANT_E_meerkat-70": [
         0.0,
@@ -19547,7 +21069,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -0.76,
         -2.78,
         -2.17,
-        -1.96
+        -1.96,
+        -2.12,
+        -2.36,
+        -2.44,
+        -2.58,
+        -3.67
       ],
       "CONTESTANT_E_meerkat-80": [
         0.0,
@@ -19595,7 +21122,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -2.37,
         -3.57,
         -3.04,
-        -2.38
+        -2.38,
+        -3.06,
+        -2.81,
+        -2.51,
+        -3.28,
+        -4.48
       ],
       "CONTESTANT_E_meerkat-90": [
         0.0,
@@ -19643,7 +21175,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -0.65,
         -1.3,
         -1.37,
-        -1.11
+        -1.11,
+        -1.9,
+        -1.28,
+        -1.01,
+        -1.23,
+        -2.69
       ],
       "CONTESTANT_E_eagle-5-1": [
         0.0,
@@ -19691,7 +21228,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -5.57,
         -7.75,
         -7.05,
-        -5.91
+        -5.91,
+        -7.82,
+        -7.34,
+        -9.13,
+        -9.78,
+        -10.8
       ],
       "CONTESTANT_E_eagle-11-2": [
         0.0,
@@ -19739,7 +21281,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -4.56,
         -6.26,
         -6.05,
-        -5.89
+        -5.89,
+        -6.27,
+        -6.96,
+        -8.13,
+        -9.28,
+        -11.11
       ],
       "CONTESTANT_E_eagle-44-6": [
         0.0,
@@ -19787,7 +21334,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -4.46,
         -5.91,
         -5.93,
-        -6.16
+        -6.16,
+        -6.74,
+        -6.81,
+        -7.34,
+        -8.57,
+        -10.52
       ],
       "CONTESTANT_E_eagle-66-9": [
         0.0,
@@ -19835,7 +21387,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -3.7,
         -5.19,
         -5.13,
-        -5.17
+        -5.17,
+        -5.54,
+        -5.45,
+        -5.89,
+        -6.83,
+        -8.69
       ],
       "CONTESTANT_E_eagle-88-12": [
         0.0,
@@ -19883,7 +21440,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -2.71,
         -4.13,
         -4.03,
-        -3.63
+        -3.63,
+        -3.87,
+        -3.79,
+        -4.18,
+        -5.15,
+        -6.65
       ],
       "CONTESTANT_E_whale-shark": [
         0.0,
@@ -19931,7 +21493,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -1.21,
         -2.66,
         -2.61,
-        -2.02
+        -2.02,
+        -2.47,
+        -2.13,
+        -2.4,
+        -3.2,
+        -4.69
       ],
       "CONTESTANT_F_robot": [
         0.0,
@@ -19979,7 +21546,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -7.7,
         -9.29,
         -8.7,
-        -8.86
+        -8.86,
+        -9.34,
+        -9.25,
+        -9.3,
+        -10.29,
+        -12.23
       ],
       "CONTESTANT_F_sloth-1": [
         0.0,
@@ -20027,7 +21599,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -3.95,
         -5.61,
         -5.33,
-        -5.03
+        -5.03,
+        -5.37,
+        -5.37,
+        -5.31,
+        -6.4,
+        -8.65
       ],
       "CONTESTANT_F_sloth-2": [
         0.0,
@@ -20075,7 +21652,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -0.9,
         -2.56,
         -2.56,
-        -2.54
+        -2.54,
+        -2.32,
+        -2.22,
+        -2.56,
+        -3.34,
+        -5.28
       ],
       "CONTESTANT_F_sloth-3": [
         0.0,
@@ -20123,7 +21705,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -3.17,
         -4.87,
         -4.9,
-        -4.83
+        -4.83,
+        -4.18,
+        -3.82,
+        -4.1,
+        -5.07,
+        -7.11
       ],
       "CONTESTANT_F_sloth-4": [
         0.0,
@@ -20171,7 +21758,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -2.6,
         -4.3,
         -4.37,
-        -4.31
+        -4.31,
+        -3.67,
+        -3.2,
+        -3.62,
+        -4.72,
+        -6.52
       ],
       "CONTESTANT_F_snail-1": [
         0.0,
@@ -20219,7 +21811,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -7.39,
         -8.94,
         -8.68,
-        -8.42
+        -8.42,
+        -8.74,
+        -8.73,
+        -8.65,
+        -9.72,
+        -11.86
       ],
       "CONTESTANT_F_snail-2": [
         0.0,
@@ -20267,7 +21864,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -3.76,
         -5.51,
         -5.43,
-        -5.25
+        -5.25,
+        -5.09,
+        -4.93,
+        -5.25,
+        -6.03,
+        -7.98
       ],
       "CONTESTANT_F_snail-3": [
         0.0,
@@ -20315,7 +21917,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -6.78,
         -8.55,
         -8.5,
-        -8.2
+        -8.2,
+        -7.66,
+        -7.18,
+        -7.47,
+        -8.54,
+        -10.49
       ],
       "CONTESTANT_F_snail-4": [
         0.0,
@@ -20363,7 +21970,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -6.16,
         -7.96,
         -7.93,
-        -7.62
+        -7.62,
+        -7.18,
+        -6.57,
+        -7.01,
+        -8.17,
+        -9.91
       ],
       "CONTESTANT_F_rabbit-1": [
         0.0,
@@ -20411,7 +22023,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -6.15,
         -7.84,
         -7.48,
-        -8.39
+        -8.39,
+        -9.02,
+        -8.8,
+        -8.42,
+        -9.33,
+        -11.28
       ],
       "CONTESTANT_F_rabbit-2": [
         0.0,
@@ -20459,7 +22076,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -7.14,
         -8.7,
         -8.48,
-        -9.14
+        -9.14,
+        -9.17,
+        -9.26,
+        -8.97,
+        -9.71,
+        -10.89
       ],
       "CONTESTANT_F_turtle": [
         0.0,
@@ -20507,7 +22129,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -4.03,
         -5.54,
         -4.91,
-        -4.93
+        -4.93,
+        -5.58,
+        -5.18,
+        -5.24,
+        -6.11,
+        -8.4
       ],
       "CONTESTANT_F_koala": [
         0.0,
@@ -20555,7 +22182,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -1.72,
         -3.04,
         -2.79,
-        -2.92
+        -2.92,
+        -2.97,
+        -1.71,
+        -1.06,
+        -2.23,
+        -3.31
       ],
       "CONTESTANT_F_meerkat-10": [
         0.0,
@@ -20603,7 +22235,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -2.46,
         -3.29,
         -3.59,
-        -4.13
+        -4.13,
+        -4.25,
+        -3.97,
+        -4.16,
+        -5.3,
+        -6.62
       ],
       "CONTESTANT_F_meerkat-20": [
         0.0,
@@ -20651,7 +22288,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -7.49,
         -8.66,
         -7.85,
-        -8.05
+        -8.05,
+        -7.79,
+        -7.73,
+        -7.1,
+        -7.72,
+        -9.26
       ],
       "CONTESTANT_F_meerkat-30": [
         0.0,
@@ -20699,7 +22341,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.0,
         -1.95,
         -1.61,
-        -0.94
+        -0.94,
+        -1.26,
+        -1.28,
+        -1.89,
+        -2.8,
+        -4.28
       ],
       "CONTESTANT_F_meerkat-40": [
         0.0,
@@ -20747,7 +22394,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -5.26,
         -6.27,
         -5.65,
-        -6.11
+        -6.11,
+        -6.17,
+        -6.0,
+        -6.37,
+        -7.47,
+        -8.62
       ],
       "CONTESTANT_F_meerkat-50": [
         0.0,
@@ -20795,7 +22447,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -3.98,
         -5.66,
         -5.44,
-        -5.15
+        -5.15,
+        -5.12,
+        -4.24,
+        -4.19,
+        -5.72,
+        -7.35
       ],
       "CONTESTANT_F_meerkat-60": [
         0.0,
@@ -20843,7 +22500,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -4.35,
         -5.76,
         -5.82,
-        -5.84
+        -5.84,
+        -5.78,
+        -5.57,
+        -6.08,
+        -7.33,
+        -8.26
       ],
       "CONTESTANT_F_meerkat-70": [
         0.0,
@@ -20891,7 +22553,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -0.84,
         -2.24,
         -2.46,
-        -2.03
+        -2.03,
+        -2.32,
+        -1.33,
+        -1.38,
+        -2.01,
+        -3.72
       ],
       "CONTESTANT_F_meerkat-80": [
         0.0,
@@ -20939,7 +22606,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.0,
         -1.29,
         -0.57,
-        -0.73
+        -0.73,
+        -1.58,
+        -0.84,
+        -0.57,
+        -1.12,
+        -3.38
       ],
       "CONTESTANT_F_meerkat-90": [
         0.0,
@@ -20987,7 +22659,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -2.71,
         -4.52,
         -4.0,
-        -3.76
+        -3.76,
+        -4.57,
+        -3.96,
+        -3.81,
+        -3.7,
+        -5.15
       ],
       "CONTESTANT_F_eagle-5-1": [
         0.0,
@@ -21035,7 +22712,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -13.17,
         -15.09,
         -13.78,
-        -13.7
+        -13.7,
+        -14.99,
+        -14.43,
+        -13.74,
+        -14.66,
+        -17.12
       ],
       "CONTESTANT_F_eagle-11-2": [
         0.0,
@@ -21083,7 +22765,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -12.79,
         -14.67,
         -14.39,
-        -14.27
+        -14.27,
+        -14.57,
+        -13.88,
+        -13.86,
+        -14.32,
+        -15.89
       ],
       "CONTESTANT_F_eagle-44-6": [
         0.0,
@@ -21131,7 +22818,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -3.83,
         -5.84,
         -5.9,
-        -5.96
+        -5.96,
+        -6.07,
+        -5.77,
+        -6.02,
+        -7.01,
+        -8.74
       ],
       "CONTESTANT_F_eagle-66-9": [
         0.0,
@@ -21179,7 +22871,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -2.82,
         -4.6,
         -4.57,
-        -4.61
+        -4.61,
+        -4.87,
+        -4.62,
+        -4.69,
+        -5.75,
+        -7.45
       ],
       "CONTESTANT_F_eagle-88-12": [
         0.0,
@@ -21227,7 +22924,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -2.17,
         -3.7,
         -3.72,
-        -3.92
+        -3.92,
+        -4.22,
+        -4.07,
+        -4.06,
+        -5.04,
+        -6.66
       ],
       "CONTESTANT_F_whale-shark": [
         0.0,
@@ -21275,7 +22977,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -1.05,
         -2.35,
         -2.01,
-        -1.95
+        -1.95,
+        -2.75,
+        -2.27,
+        -2.15,
+        -3.05,
+        -4.74
       ],
       "BENCHMARK_taotie": [
         0.0,
@@ -21323,7 +23030,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -0.11,
         -0.33,
         -0.31,
-        -0.24
+        -0.24,
+        -0.35,
+        -0.15,
+        -0.1,
+        -0.15,
+        -0.43
       ],
       "BENCHMARK_ghost_taotie": [
         0.0,
@@ -21371,7 +23083,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -3.56,
         -4.92,
         -4.64,
-        -4.78
+        -4.78,
+        -4.69,
+        -4.41,
+        -4.35,
+        -5.09,
+        -6.61
       ],
       "BENCHMARK_csi800": [
         0.0,
@@ -21419,7 +23136,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -6.49,
         -7.83,
         -7.68,
-        -8.08
+        -8.08,
+        -7.35,
+        -7.54,
+        -7.35,
+        -7.86,
+        -8.88
       ],
       "BENCHMARK_market": [
         0.0,
@@ -21467,7 +23189,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -6.49,
         -7.83,
         -7.68,
-        -8.08
+        -8.08,
+        -7.35,
+        -7.54,
+        -7.35,
+        -7.86,
+        -8.88
       ],
       "BENCHMARK_csi300": [
         0.0,
@@ -21515,7 +23242,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -6.49,
         -7.83,
         -7.68,
-        -8.08
+        -8.08,
+        -7.35,
+        -7.54,
+        -7.35,
+        -7.86,
+        -8.88
       ]
     },
     "excess_csi300": {
@@ -21565,7 +23297,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         9.64,
         8.88,
         8.81,
-        7.57
+        7.57,
+        9.08,
+        8.71,
+        9.43,
+        8.62,
+        8.04
       ],
       "CONTESTANT_A_sloth-1": [
         0.0,
@@ -21613,7 +23350,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         11.78,
         10.69,
         10.66,
-        8.86
+        8.86,
+        10.19,
+        9.78,
+        10.27,
+        9.39,
+        8.64
       ],
       "CONTESTANT_A_sloth-2": [
         0.0,
@@ -21661,7 +23403,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         17.09,
         15.69,
         15.88,
-        14.05
+        14.05,
+        15.88,
+        15.45,
+        16.34,
+        15.05,
+        14.4
       ],
       "CONTESTANT_A_sloth-3": [
         0.0,
@@ -21709,7 +23456,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         10.35,
         9.31,
         9.61,
-        8.31
+        8.31,
+        9.32,
+        8.7,
+        9.76,
+        8.95,
+        8.68
       ],
       "CONTESTANT_A_sloth-4": [
         0.0,
@@ -21757,7 +23509,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         5.51,
         4.54,
         5.54,
-        4.82
+        4.82,
+        6.05,
+        5.57,
+        6.93,
+        6.08,
+        6.06
       ],
       "CONTESTANT_A_snail-1": [
         0.0,
@@ -21805,7 +23562,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         8.7,
         7.69,
         7.68,
-        5.89
+        5.89,
+        7.16,
+        6.78,
+        7.26,
+        6.43,
+        5.73
       ],
       "CONTESTANT_A_snail-2": [
         0.0,
@@ -21853,7 +23615,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         7.65,
         6.48,
         6.7,
-        5.04
+        5.04,
+        6.57,
+        6.22,
+        7.1,
+        6.02,
+        5.59
       ],
       "CONTESTANT_A_snail-3": [
         0.0,
@@ -21901,7 +23668,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         3.5,
         2.71,
         2.94,
-        1.65
+        1.65,
+        2.61,
+        2.06,
+        3.06,
+        2.39,
+        2.22
       ],
       "CONTESTANT_A_snail-4": [
         0.0,
@@ -21949,7 +23721,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         2.96,
         2.18,
         3.27,
-        2.4
+        2.4,
+        3.85,
+        3.49,
+        4.74,
+        3.89,
+        3.82
       ],
       "CONTESTANT_A_rabbit-1": [
         0.0,
@@ -21997,7 +23774,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         14.2,
         14.13,
         13.74,
-        13.76
+        13.76,
+        13.16,
+        13.96,
+        14.28,
+        14.94,
+        15.18
       ],
       "CONTESTANT_A_rabbit-2": [
         0.0,
@@ -22045,7 +23827,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         12.88,
         13.28,
         13.11,
-        13.35
+        13.35,
+        12.44,
+        12.86,
+        13.23,
+        13.92,
+        14.11
       ],
       "CONTESTANT_A_turtle": [
         0.0,
@@ -22093,7 +23880,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         7.19,
         6.64,
         7.27,
-        6.67
+        6.67,
+        5.95,
+        6.07,
+        7.51,
+        6.63,
+        6.95
       ],
       "CONTESTANT_A_koala": [
         0.0,
@@ -22141,7 +23933,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -20.34,
         -19.06,
         -18.6,
-        -18.73
+        -18.73,
+        -19.42,
+        -17.93,
+        -17.84,
+        -19.06,
+        -19.63
       ],
       "CONTESTANT_A_meerkat-10": [
         0.0,
@@ -22189,7 +23986,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         6.67,
         7.08,
         7.19,
-        7.45
+        7.45,
+        6.59,
+        7.79,
+        7.93,
+        8.72,
+        8.99
       ],
       "CONTESTANT_A_meerkat-20": [
         0.0,
@@ -22237,7 +24039,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         10.56,
         11.15,
         11.05,
-        11.5
+        11.5,
+        10.58,
+        10.71,
+        10.68,
+        10.71,
+        10.57
       ],
       "CONTESTANT_A_meerkat-30": [
         0.0,
@@ -22285,7 +24092,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         6.85,
         6.96,
         6.71,
-        7.46
+        7.46,
+        6.53,
+        8.13,
+        8.14,
+        8.22,
+        7.49
       ],
       "CONTESTANT_A_meerkat-40": [
         0.0,
@@ -22333,7 +24145,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         11.97,
         12.23,
         12.71,
-        13.84
+        13.84,
+        12.87,
+        13.73,
+        14.22,
+        14.31,
+        13.95
       ],
       "CONTESTANT_A_meerkat-50": [
         0.0,
@@ -22381,7 +24198,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         4.14,
         4.12,
         4.23,
-        5.3
+        5.3,
+        4.31,
+        4.81,
+        4.55,
+        4.82,
+        4.52
       ],
       "CONTESTANT_A_meerkat-60": [
         0.0,
@@ -22429,7 +24251,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         2.92,
         3.14,
         3.27,
-        4.39
+        4.39,
+        2.91,
+        3.43,
+        2.58,
+        2.31,
+        1.82
       ],
       "CONTESTANT_A_meerkat-70": [
         0.0,
@@ -22477,7 +24304,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -3.21,
         -3.6,
         -3.43,
-        -1.83
+        -1.83,
+        -2.72,
+        -1.65,
+        -1.92,
+        -2.24,
+        -3.15
       ],
       "CONTESTANT_A_meerkat-80": [
         0.0,
@@ -22525,7 +24357,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         2.17,
         1.55,
         1.67,
-        1.58
+        1.58,
+        0.88,
+        1.38,
+        1.42,
+        0.94,
+        -0.64
       ],
       "CONTESTANT_A_meerkat-90": [
         0.0,
@@ -22573,7 +24410,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -0.14,
         -0.67,
         -0.86,
-        -1.6
+        -1.6,
+        -2.14,
+        -0.97,
+        -1.17,
+        -1.54,
+        -3.07
       ],
       "CONTESTANT_A_eagle-5-1": [
         0.0,
@@ -22621,7 +24463,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -0.59,
         -1.15,
         -0.39,
-        -2.92
+        -2.92,
+        -1.92,
+        -3.41,
+        -3.13,
+        -4.12,
+        -4.23
       ],
       "CONTESTANT_A_eagle-11-2": [
         0.0,
@@ -22669,7 +24516,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         9.14,
         7.98,
         8.65,
-        7.04
+        7.04,
+        7.57,
+        6.96,
+        7.45,
+        6.55,
+        5.88
       ],
       "CONTESTANT_A_eagle-44-6": [
         0.0,
@@ -22717,7 +24569,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         9.98,
         9.95,
         9.76,
-        9.34
+        9.34,
+        9.15,
+        9.25,
+        9.72,
+        9.63,
+        9.48
       ],
       "CONTESTANT_A_eagle-66-9": [
         0.0,
@@ -22765,7 +24622,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         10.1,
         10.45,
         10.25,
-        10.34
+        10.34,
+        9.31,
+        9.93,
+        10.11,
+        10.38,
+        10.51
       ],
       "CONTESTANT_A_eagle-88-12": [
         0.0,
@@ -22813,7 +24675,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         11.69,
         11.99,
         12.04,
-        12.47
+        12.47,
+        11.27,
+        12.0,
+        12.05,
+        12.44,
+        12.24
       ],
       "CONTESTANT_A_whale-shark": [
         0.0,
@@ -22861,7 +24728,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         12.98,
         13.4,
         13.45,
-        14.21
+        14.21,
+        12.76,
+        13.63,
+        13.82,
+        14.47,
+        14.37
       ],
       "CONTESTANT_B_robot": [
         0.0,
@@ -22909,7 +24781,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         11.23,
         11.48,
         11.5,
-        10.94
+        10.94,
+        10.54,
+        10.78,
+        11.32,
+        12.08,
+        12.31
       ],
       "CONTESTANT_B_sloth-1": [
         0.0,
@@ -22957,7 +24834,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         14.19,
         14.19,
         14.35,
-        13.17
+        13.17,
+        12.95,
+        13.32,
+        14.16,
+        14.61,
+        14.6
       ],
       "CONTESTANT_B_sloth-2": [
         0.0,
@@ -23005,7 +24887,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         12.67,
         12.5,
         12.73,
-        12.26
+        12.26,
+        12.38,
+        12.66,
+        13.38,
+        13.43,
+        13.5
       ],
       "CONTESTANT_B_sloth-3": [
         0.0,
@@ -23053,7 +24940,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         8.62,
         8.66,
         9.09,
-        8.47
+        8.47,
+        7.9,
+        8.0,
+        8.74,
+        8.91,
+        8.95
       ],
       "CONTESTANT_B_sloth-4": [
         0.0,
@@ -23101,7 +24993,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         5.7,
         5.43,
         6.01,
-        4.87
+        4.87,
+        4.63,
+        4.92,
+        6.02,
+        6.25,
+        6.88
       ],
       "CONTESTANT_B_snail-1": [
         0.0,
@@ -23149,7 +25046,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         11.18,
         11.22,
         11.4,
-        10.27
+        10.27,
+        9.98,
+        10.36,
+        11.18,
+        11.64,
+        11.66
       ],
       "CONTESTANT_B_snail-2": [
         0.0,
@@ -23197,7 +25099,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         6.2,
         6.13,
         6.37,
-        5.98
+        5.98,
+        5.98,
+        6.27,
+        6.98,
+        7.07,
+        7.16
       ],
       "CONTESTANT_B_snail-3": [
         0.0,
@@ -23245,7 +25152,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         4.61,
         4.72,
         5.1,
-        4.58
+        4.58,
+        3.95,
+        4.09,
+        4.87,
+        5.05,
+        5.07
       ],
       "CONTESTANT_B_snail-4": [
         0.0,
@@ -23293,7 +25205,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         5.89,
         5.65,
         6.21,
-        5.13
+        5.13,
+        4.72,
+        4.99,
+        6.07,
+        6.29,
+        6.83
       ],
       "CONTESTANT_B_rabbit-1": [
         0.0,
@@ -23341,7 +25258,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         16.69,
         17.75,
         17.31,
-        17.74
+        17.74,
+        15.8,
+        16.14,
+        16.1,
+        17.46,
+        17.49
       ],
       "CONTESTANT_B_rabbit-2": [
         0.0,
@@ -23389,7 +25311,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         19.73,
         20.71,
         20.31,
-        20.74
+        20.74,
+        18.78,
+        19.15,
+        19.14,
+        20.27,
+        20.16
       ],
       "CONTESTANT_B_turtle": [
         0.0,
@@ -23437,7 +25364,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         7.25,
         7.41,
         8.25,
-        7.55
+        7.55,
+        6.97,
+        7.53,
+        8.6,
+        8.86,
+        8.93
       ],
       "CONTESTANT_B_koala": [
         0.0,
@@ -23485,7 +25417,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -15.3,
         -14.78,
         -14.28,
-        -14.15
+        -14.15,
+        -14.52,
+        -13.55,
+        -13.62,
+        -15.2,
+        -15.96
       ],
       "CONTESTANT_B_meerkat-10": [
         0.0,
@@ -23533,7 +25470,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         12.66,
         12.78,
         12.93,
-        13.82
+        13.82,
+        12.22,
+        12.91,
+        12.94,
+        13.58,
+        13.61
       ],
       "CONTESTANT_B_meerkat-20": [
         0.0,
@@ -23581,7 +25523,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         12.13,
         12.36,
         12.48,
-        13.22
+        13.22,
+        11.92,
+        12.89,
+        13.52,
+        13.68,
+        13.13
       ],
       "CONTESTANT_B_meerkat-30": [
         0.0,
@@ -23629,7 +25576,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         9.24,
         8.79,
         8.57,
-        9.31
+        9.31,
+        7.61,
+        8.9,
+        8.73,
+        8.56,
+        7.68
       ],
       "CONTESTANT_B_meerkat-40": [
         0.0,
@@ -23677,7 +25629,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         6.5,
         6.37,
         6.36,
-        6.6
+        6.6,
+        5.95,
+        6.77,
+        6.65,
+        6.66,
+        6.05
       ],
       "CONTESTANT_B_meerkat-50": [
         0.0,
@@ -23725,7 +25682,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         11.63,
         11.49,
         11.7,
-        12.76
+        12.76,
+        11.02,
+        12.56,
+        12.56,
+        11.53,
+        10.36
       ],
       "CONTESTANT_B_meerkat-60": [
         0.0,
@@ -23773,7 +25735,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         10.12,
         10.1,
         10.22,
-        9.73
+        9.73,
+        8.39,
+        8.63,
+        8.37,
+        8.03,
+        7.41
       ],
       "CONTESTANT_B_meerkat-70": [
         0.0,
@@ -23821,7 +25788,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         2.72,
         2.5,
         3.04,
-        3.34
+        3.34,
+        1.42,
+        1.6,
+        1.55,
+        1.04,
+        0.3
       ],
       "CONTESTANT_B_meerkat-80": [
         0.0,
@@ -23869,7 +25841,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.27,
         0.68,
         0.11,
-        0.04
+        0.04,
+        -1.6,
+        -0.82,
+        -0.87,
+        -1.17,
+        -2.32
       ],
       "CONTESTANT_B_meerkat-90": [
         0.0,
@@ -23917,7 +25894,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -9.66,
         -10.12,
         -10.14,
-        -10.12
+        -10.12,
+        -11.09,
+        -10.86,
+        -11.01,
+        -11.35,
+        -11.74
       ],
       "CONTESTANT_B_eagle-5-1": [
         0.0,
@@ -23965,7 +25947,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         13.35,
         13.4,
         13.66,
-        12.17
+        12.17,
+        11.46,
+        11.75,
+        11.85,
+        12.62,
+        12.24
       ],
       "CONTESTANT_B_eagle-11-2": [
         0.0,
@@ -24013,7 +26000,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         13.11,
         13.22,
         13.05,
-        12.34
+        12.34,
+        11.66,
+        11.65,
+        12.44,
+        13.18,
+        12.96
       ],
       "CONTESTANT_B_eagle-44-6": [
         0.0,
@@ -24061,7 +26053,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         13.6,
         14.16,
         14.11,
-        13.95
+        13.95,
+        12.89,
+        13.28,
+        13.39,
+        14.4,
+        14.48
       ],
       "CONTESTANT_B_eagle-66-9": [
         0.0,
@@ -24109,7 +26106,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         13.85,
         14.64,
         14.58,
-        14.93
+        14.93,
+        13.28,
+        13.94,
+        13.88,
+        15.02,
+        15.02
       ],
       "CONTESTANT_B_eagle-88-12": [
         0.0,
@@ -24157,7 +26159,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         13.67,
         14.51,
         14.42,
-        14.78
+        14.78,
+        13.2,
+        13.81,
+        13.86,
+        14.81,
+        14.93
       ],
       "CONTESTANT_B_whale-shark": [
         0.0,
@@ -24205,7 +26212,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         14.93,
         15.6,
         15.54,
-        16.2
+        16.2,
+        14.48,
+        15.25,
+        15.33,
+        16.21,
+        16.15
       ],
       "CONTESTANT_C_robot": [
         0.0,
@@ -24253,7 +26265,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         4.94,
         4.31,
         4.31,
-        3.51
+        3.51,
+        2.63,
+        2.77,
+        2.74,
+        2.62,
+        2.67
       ],
       "CONTESTANT_C_sloth-1": [
         0.0,
@@ -24301,7 +26318,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         10.34,
         9.66,
         9.8,
-        8.75
+        8.75,
+        7.68,
+        7.71,
+        7.62,
+        7.36,
+        7.12
       ],
       "CONTESTANT_C_sloth-2": [
         0.0,
@@ -24349,7 +26371,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         16.64,
         15.32,
         15.28,
-        14.66
+        14.66,
+        13.99,
+        13.97,
+        14.02,
+        13.44,
+        13.03
       ],
       "CONTESTANT_C_sloth-3": [
         0.0,
@@ -24397,7 +26424,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         8.95,
         7.95,
         7.83,
-        7.04
+        7.04,
+        6.31,
+        6.85,
+        7.16,
+        6.69,
+        6.51
       ],
       "CONTESTANT_C_sloth-4": [
         0.0,
@@ -24445,7 +26477,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         8.81,
         8.34,
         8.34,
-        6.92
+        6.92,
+        6.35,
+        6.97,
+        7.33,
+        7.04,
+        6.95
       ],
       "CONTESTANT_C_snail-1": [
         0.0,
@@ -24493,7 +26530,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         6.21,
         5.59,
         5.75,
-        4.74
+        4.74,
+        3.67,
+        3.74,
+        3.66,
+        3.4,
+        3.16
       ],
       "CONTESTANT_C_snail-2": [
         0.0,
@@ -24541,7 +26583,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         5.46,
         4.49,
         4.42,
-        3.9
+        3.9,
+        3.25,
+        3.28,
+        3.28,
+        2.88,
+        2.61
       ],
       "CONTESTANT_C_snail-3": [
         0.0,
@@ -24589,7 +26636,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -2.33,
         -3.03,
         -3.15,
-        -3.84
+        -3.84,
+        -4.57,
+        -4.03,
+        -3.81,
+        -4.08,
+        -4.15
       ],
       "CONTESTANT_C_snail-4": [
         0.0,
@@ -24637,7 +26689,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -1.09,
         -1.35,
         -1.36,
-        -2.41
+        -2.41,
+        -3.22,
+        -2.54,
+        -2.33,
+        -2.45,
+        -2.45
       ],
       "CONTESTANT_C_rabbit-1": [
         0.0,
@@ -24685,7 +26742,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         2.53,
         2.17,
         2.05,
-        2.04
+        2.04,
+        0.67,
+        0.83,
+        0.83,
+        1.45,
+        1.84
       ],
       "CONTESTANT_C_rabbit-2": [
         0.0,
@@ -24733,6 +26795,11 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         10.2,
         10.53,
         10.29,
+        10.79,
+        8.92,
+        9.31,
+        9.27,
+        10.41,
         10.79
       ],
       "CONTESTANT_C_turtle": [
@@ -24781,7 +26848,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         4.03,
         3.32,
         3.5,
-        3.75
+        3.75,
+        2.94,
+        3.53,
+        3.34,
+        3.61,
+        2.96
       ],
       "CONTESTANT_C_koala": [
         0.0,
@@ -24829,7 +26901,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -12.71,
         -12.84,
         -12.0,
-        -11.91
+        -11.91,
+        -12.57,
+        -10.68,
+        -10.79,
+        -11.96,
+        -13.4
       ],
       "CONTESTANT_C_meerkat-10": [
         0.0,
@@ -24877,7 +26954,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         4.9,
         4.95,
         5.07,
-        5.5
+        5.5,
+        4.73,
+        5.4,
+        5.59,
+        6.16,
+        6.46
       ],
       "CONTESTANT_C_meerkat-20": [
         0.0,
@@ -24925,7 +27007,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         9.67,
         9.71,
         9.71,
-        10.55
+        10.55,
+        9.27,
+        9.79,
+        9.82,
+        10.5,
+        10.38
       ],
       "CONTESTANT_C_meerkat-30": [
         0.0,
@@ -24973,7 +27060,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         8.55,
         9.04,
         9.3,
-        10.0
+        10.0,
+        8.45,
+        9.73,
+        9.86,
+        9.91,
+        9.64
       ],
       "CONTESTANT_C_meerkat-40": [
         0.0,
@@ -25021,7 +27113,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         9.11,
         8.72,
         8.99,
-        9.61
+        9.61,
+        8.66,
+        9.8,
+        9.41,
+        8.93,
+        8.04
       ],
       "CONTESTANT_C_meerkat-50": [
         0.0,
@@ -25069,7 +27166,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         3.44,
         3.4,
         3.19,
-        3.83
+        3.83,
+        2.86,
+        3.55,
+        3.33,
+        3.15,
+        2.46
       ],
       "CONTESTANT_C_meerkat-60": [
         0.0,
@@ -25117,7 +27219,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         5.44,
         5.66,
         6.73,
-        7.2
+        7.2,
+        6.06,
+        7.28,
+        7.22,
+        7.4,
+        6.73
       ],
       "CONTESTANT_C_meerkat-70": [
         0.0,
@@ -25165,7 +27272,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.15,
         1.28,
         1.03,
-        1.5
+        1.5,
+        0.62,
+        0.78,
+        -0.4,
+        -1.15,
+        -2.04
       ],
       "CONTESTANT_C_meerkat-80": [
         0.0,
@@ -25213,7 +27325,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.03,
         -0.32,
         0.12,
-        0.45
+        0.45,
+        -0.55,
+        -0.51,
+        -1.28,
+        -2.18,
+        -3.66
       ],
       "CONTESTANT_C_meerkat-90": [
         0.0,
@@ -25261,7 +27378,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.81,
         0.75,
         0.7,
-        1.04
+        1.04,
+        -0.9,
+        -0.75,
+        -1.21,
+        -1.93,
+        -2.74
       ],
       "CONTESTANT_C_eagle-5-1": [
         0.0,
@@ -25309,7 +27431,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -2.56,
         -3.87,
         -3.11,
-        -4.53
+        -4.53,
+        -4.2,
+        -4.24,
+        -3.68,
+        -3.84,
+        -3.53
       ],
       "CONTESTANT_C_eagle-11-2": [
         0.0,
@@ -25357,7 +27484,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         2.39,
         1.55,
         1.79,
-        0.97
+        0.97,
+        0.45,
+        0.07,
+        0.19,
+        0.52,
+        1.02
       ],
       "CONTESTANT_C_eagle-44-6": [
         0.0,
@@ -25405,7 +27537,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         5.53,
         5.28,
         5.03,
-        4.83
+        4.83,
+        3.89,
+        4.16,
+        4.75,
+        4.73,
+        4.71
       ],
       "CONTESTANT_C_eagle-66-9": [
         0.0,
@@ -25453,7 +27590,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         7.32,
         7.06,
         7.08,
-        7.07
+        7.07,
+        5.54,
+        6.06,
+        6.26,
+        6.45,
+        6.55
       ],
       "CONTESTANT_C_eagle-88-12": [
         0.0,
@@ -25501,7 +27643,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         10.09,
         10.08,
         9.98,
-        10.29
+        10.29,
+        8.7,
+        9.27,
+        9.4,
+        9.84,
+        9.78
       ],
       "CONTESTANT_C_whale-shark": [
         0.0,
@@ -25549,7 +27696,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         11.99,
         12.17,
         11.95,
-        12.75
+        12.75,
+        11.1,
+        11.83,
+        12.07,
+        12.58,
+        12.41
       ],
       "CONTESTANT_D_robot": [
         0.0,
@@ -25597,7 +27749,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         9.69,
         9.87,
         10.05,
-        10.15
+        10.15,
+        9.32,
+        10.07,
+        10.27,
+        10.62,
+        10.42
       ],
       "CONTESTANT_D_sloth-1": [
         0.0,
@@ -25645,7 +27802,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         11.38,
         11.11,
         11.45,
-        11.33
+        11.33,
+        10.33,
+        11.19,
+        11.2,
+        11.67,
+        11.52
       ],
       "CONTESTANT_D_sloth-2": [
         0.0,
@@ -25693,7 +27855,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         11.04,
         10.46,
         10.89,
-        10.8
+        10.8,
+        9.84,
+        10.39,
+        10.45,
+        10.66,
+        9.96
       ],
       "CONTESTANT_D_sloth-3": [
         0.0,
@@ -25741,7 +27908,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         9.96,
         9.03,
         9.48,
-        8.92
+        8.92,
+        8.1,
+        8.62,
+        8.58,
+        8.48,
+        7.63
       ],
       "CONTESTANT_D_sloth-4": [
         0.0,
@@ -25789,7 +27961,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         5.5,
         4.9,
         5.43,
-        4.57
+        4.57,
+        4.1,
+        4.29,
+        4.68,
+        4.59,
+        3.84
       ],
       "CONTESTANT_D_snail-1": [
         0.0,
@@ -25837,7 +28014,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         9.48,
         9.39,
         9.81,
-        9.83
+        9.83,
+        8.83,
+        9.82,
+        9.84,
+        10.41,
+        10.23
       ],
       "CONTESTANT_D_snail-2": [
         0.0,
@@ -25885,7 +28067,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         6.9,
         6.47,
         6.8,
-        6.75
+        6.75,
+        5.82,
+        6.49,
+        6.61,
+        6.9,
+        6.26
       ],
       "CONTESTANT_D_snail-3": [
         0.0,
@@ -25933,7 +28120,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         5.62,
         4.82,
         5.17,
-        4.74
+        4.74,
+        3.97,
+        4.53,
+        4.5,
+        4.53,
+        3.76
       ],
       "CONTESTANT_D_snail-4": [
         0.0,
@@ -25981,7 +28173,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         6.39,
         5.98,
         6.63,
-        6.3
+        6.3,
+        5.57,
+        6.09,
+        6.54,
+        6.56,
+        6.01
       ],
       "CONTESTANT_D_rabbit-1": [
         0.0,
@@ -26029,7 +28226,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         19.68,
         20.12,
         20.0,
-        20.27
+        20.27,
+        19.25,
+        19.77,
+        19.82,
+        20.48,
+        20.59
       ],
       "CONTESTANT_D_rabbit-2": [
         0.0,
@@ -26077,7 +28279,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         13.08,
         13.82,
         13.67,
-        14.63
+        14.63,
+        14.06,
+        14.53,
+        14.81,
+        15.54,
+        16.33
       ],
       "CONTESTANT_D_turtle": [
         0.0,
@@ -26125,7 +28332,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         3.26,
         2.87,
         3.44,
-        3.84
+        3.84,
+        2.79,
+        3.2,
+        2.95,
+        2.97,
+        2.7
       ],
       "CONTESTANT_D_koala": [
         0.0,
@@ -26173,7 +28385,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -8.02,
         -7.58,
         -7.05,
-        -7.58
+        -7.58,
+        -7.65,
+        -6.67,
+        -6.9,
+        -8.46,
+        -8.69
       ],
       "CONTESTANT_D_meerkat-10": [
         0.0,
@@ -26221,7 +28438,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         16.7,
         16.63,
         16.67,
-        17.23
+        17.23,
+        15.67,
+        16.82,
+        17.18,
+        18.12,
+        18.11
       ],
       "CONTESTANT_D_meerkat-20": [
         0.0,
@@ -26269,7 +28491,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         5.88,
         6.6,
         6.65,
-        8.08
+        8.08,
+        6.28,
+        6.59,
+        6.46,
+        6.78,
+        6.75
       ],
       "CONTESTANT_D_meerkat-30": [
         0.0,
@@ -26317,7 +28544,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         8.27,
         7.89,
         8.32,
-        9.33
+        9.33,
+        7.39,
+        8.01,
+        8.28,
+        8.62,
+        7.25
       ],
       "CONTESTANT_D_meerkat-40": [
         0.0,
@@ -26365,7 +28597,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         6.43,
         7.0,
         7.7,
-        7.98
+        7.98,
+        6.47,
+        7.42,
+        7.37,
+        7.15,
+        6.16
       ],
       "CONTESTANT_D_meerkat-50": [
         0.0,
@@ -26413,7 +28650,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -0.33,
         -0.77,
         -0.58,
-        -0.21
+        -0.21,
+        -1.3,
+        -0.53,
+        -0.71,
+        -1.31,
+        -2.1
       ],
       "CONTESTANT_D_meerkat-60": [
         0.0,
@@ -26461,7 +28703,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         4.41,
         4.33,
         4.24,
-        4.37
+        4.37,
+        3.17,
+        3.73,
+        3.3,
+        3.28,
+        2.56
       ],
       "CONTESTANT_D_meerkat-70": [
         0.0,
@@ -26509,7 +28756,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         8.43,
         7.88,
         8.03,
-        8.19
+        8.19,
+        7.04,
+        7.27,
+        6.74,
+        5.95,
+        4.96
       ],
       "CONTESTANT_D_meerkat-80": [
         0.0,
@@ -26557,7 +28809,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         3.6,
         3.05,
         3.45,
-        3.53
+        3.53,
+        2.11,
+        2.28,
+        1.9,
+        1.19,
+        0.48
       ],
       "CONTESTANT_D_meerkat-90": [
         0.0,
@@ -26605,7 +28862,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -1.49,
         -1.96,
         -2.02,
-        -2.09
+        -2.09,
+        -3.13,
+        -2.8,
+        -3.74,
+        -3.76,
+        -4.38
       ],
       "CONTESTANT_D_eagle-5-1": [
         0.0,
@@ -26653,7 +28915,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         3.32,
         2.44,
         3.24,
-        2.48
+        2.48,
+        1.74,
+        2.46,
+        2.13,
+        1.88,
+        0.75
       ],
       "CONTESTANT_D_eagle-11-2": [
         0.0,
@@ -26701,7 +28968,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         7.16,
         6.62,
         6.78,
-        6.33
+        6.33,
+        6.11,
+        7.12,
+        7.04,
+        6.92,
+        6.22
       ],
       "CONTESTANT_D_eagle-44-6": [
         0.0,
@@ -26749,7 +29021,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         12.7,
         13.32,
         13.33,
-        13.2
+        13.2,
+        12.39,
+        12.87,
+        13.12,
+        13.73,
+        13.89
       ],
       "CONTESTANT_D_eagle-66-9": [
         0.0,
@@ -26797,7 +29074,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         11.33,
         11.84,
         11.78,
-        11.94
+        11.94,
+        10.73,
+        11.28,
+        11.41,
+        12.14,
+        12.24
       ],
       "CONTESTANT_D_eagle-88-12": [
         0.0,
@@ -26845,7 +29127,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         13.58,
         14.08,
         13.89,
-        14.3
+        14.3,
+        12.69,
+        13.42,
+        13.57,
+        14.45,
+        14.54
       ],
       "CONTESTANT_D_whale-shark": [
         0.0,
@@ -26893,7 +29180,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         12.91,
         13.43,
         13.26,
-        13.76
+        13.76,
+        12.14,
+        13.1,
+        13.18,
+        14.08,
+        13.94
       ],
       "CONTESTANT_E_robot": [
         0.0,
@@ -26941,7 +29233,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.8,
         1.28,
         1.35,
-        1.67
+        1.67,
+        0.25,
+        0.06,
+        -0.95,
+        -1.57,
+        -2.43
       ],
       "CONTESTANT_E_sloth-1": [
         0.0,
@@ -26989,7 +29286,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         6.31,
         5.78,
         5.85,
-        6.11
+        6.11,
+        4.73,
+        4.56,
+        3.24,
+        2.6,
+        1.59
       ],
       "CONTESTANT_E_sloth-2": [
         0.0,
@@ -27037,7 +29339,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         13.96,
         13.72,
         13.78,
-        13.83
+        13.83,
+        12.51,
+        12.23,
+        10.75,
+        9.83,
+        8.84
       ],
       "CONTESTANT_E_sloth-3": [
         0.0,
@@ -27085,7 +29392,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         8.18,
         7.92,
         7.96,
-        8.7
+        8.7,
+        7.44,
+        7.33,
+        6.05,
+        5.3,
+        5.1
       ],
       "CONTESTANT_E_sloth-4": [
         0.0,
@@ -27133,7 +29445,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         6.63,
         6.26,
         6.27,
-        7.31
+        7.31,
+        5.82,
+        5.65,
+        4.63,
+        3.86,
+        3.61
       ],
       "CONTESTANT_E_snail-1": [
         0.0,
@@ -27181,7 +29498,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         4.54,
         4.05,
         4.1,
-        4.39
+        4.39,
+        3.05,
+        2.88,
+        1.61,
+        0.95,
+        0.02
       ],
       "CONTESTANT_E_snail-2": [
         0.0,
@@ -27229,7 +29551,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         5.77,
         5.64,
         5.65,
-        5.83
+        5.83,
+        4.49,
+        4.25,
+        2.85,
+        2.0,
+        1.09
       ],
       "CONTESTANT_E_snail-3": [
         0.0,
@@ -27277,7 +29604,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -0.61,
         -0.78,
         -0.76,
-        -0.06
+        -0.06,
+        -1.31,
+        -1.3,
+        -2.56,
+        -3.23,
+        -3.31
       ],
       "CONTESTANT_E_snail-4": [
         0.0,
@@ -27325,7 +29657,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -0.21,
         -0.45,
         -0.52,
-        0.53
+        0.53,
+        -0.88,
+        -0.89,
+        -1.89,
+        -2.54,
+        -2.64
       ],
       "CONTESTANT_E_rabbit-1": [
         0.0,
@@ -27373,7 +29710,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         4.29,
         4.18,
         4.13,
-        3.56
+        3.56,
+        2.83,
+        2.65,
+        2.32,
+        1.59,
+        0.1
       ],
       "CONTESTANT_E_rabbit-2": [
         0.0,
@@ -27421,7 +29763,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         3.64,
         3.05,
         3.79,
-        2.86
+        2.86,
+        2.19,
+        2.03,
+        2.26,
+        1.82,
+        1.3
       ],
       "CONTESTANT_E_turtle": [
         0.0,
@@ -27469,7 +29816,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.67,
         1.29,
         1.56,
-        2.69
+        2.69,
+        1.18,
+        1.73,
+        0.2,
+        -0.14,
+        -0.43
       ],
       "CONTESTANT_E_koala": [
         0.0,
@@ -27517,7 +29869,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.76,
         1.46,
         1.83,
-        2.19
+        2.19,
+        0.65,
+        1.4,
+        1.36,
+        1.24,
+        0.7
       ],
       "CONTESTANT_E_meerkat-10": [
         0.0,
@@ -27565,7 +29922,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         4.12,
         4.34,
         4.21,
-        4.84
+        4.84,
+        4.82,
+        4.86,
+        4.32,
+        3.93,
+        3.11
       ],
       "CONTESTANT_E_meerkat-20": [
         0.0,
@@ -27613,7 +29975,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         4.14,
         3.72,
         3.7,
-        4.27
+        4.27,
+        3.01,
+        3.43,
+        2.81,
+        2.49,
+        1.52
       ],
       "CONTESTANT_E_meerkat-30": [
         0.0,
@@ -27661,7 +30028,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         3.31,
         3.42,
         3.77,
-        3.32
+        3.32,
+        3.99,
+        3.87,
+        3.48,
+        2.25,
+        2.15
       ],
       "CONTESTANT_E_meerkat-40": [
         0.0,
@@ -27709,7 +30081,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.54,
         1.83,
         1.74,
-        1.83
+        1.83,
+        0.92,
+        1.81,
+        2.26,
+        1.45,
+        1.35
       ],
       "CONTESTANT_E_meerkat-50": [
         0.0,
@@ -27757,7 +30134,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         12.03,
         11.81,
         12.61,
-        13.45
+        13.45,
+        12.24,
+        13.42,
+        13.2,
+        12.98,
+        12.18
       ],
       "CONTESTANT_E_meerkat-60": [
         0.0,
@@ -27805,7 +30187,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         8.95,
         8.99,
         8.99,
-        10.22
+        10.22,
+        8.18,
+        9.7,
+        9.26,
+        8.66,
+        7.7
       ],
       "CONTESTANT_E_meerkat-70": [
         0.0,
@@ -27853,7 +30240,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         5.96,
         5.28,
         5.74,
-        6.35
+        6.35,
+        5.45,
+        5.41,
+        5.13,
+        5.51,
+        5.43
       ],
       "CONTESTANT_E_meerkat-80": [
         0.0,
@@ -27901,7 +30293,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         5.13,
         5.27,
         5.65,
-        6.72
+        6.72,
+        5.29,
+        5.75,
+        5.85,
+        5.59,
+        5.39
       ],
       "CONTESTANT_E_meerkat-90": [
         0.0,
@@ -27949,7 +30346,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         7.54,
         8.23,
         8.0,
-        8.67
+        8.67,
+        7.12,
+        7.96,
+        8.03,
+        8.33,
+        7.86
       ],
       "CONTESTANT_E_eagle-5-1": [
         0.0,
@@ -27997,7 +30399,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         6.41,
         5.44,
         6.04,
-        7.65
+        7.65,
+        4.88,
+        5.59,
+        3.49,
+        3.32,
+        3.26
       ],
       "CONTESTANT_E_eagle-11-2": [
         0.0,
@@ -28045,7 +30452,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         2.54,
         2.18,
         2.24,
-        2.8
+        2.8,
+        1.68,
+        1.18,
+        -0.2,
+        -0.84,
+        -1.66
       ],
       "CONTESTANT_E_eagle-44-6": [
         0.0,
@@ -28093,7 +30505,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.84,
         1.74,
         1.57,
-        1.74
+        1.74,
+        0.42,
+        0.55,
+        -0.18,
+        -0.89,
+        -1.82
       ],
       "CONTESTANT_E_eagle-66-9": [
         0.0,
@@ -28141,7 +30558,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         2.6,
         2.46,
         2.37,
-        2.73
+        2.73,
+        1.62,
+        1.91,
+        1.27,
+        0.85,
+        0.01
       ],
       "CONTESTANT_E_eagle-88-12": [
         0.0,
@@ -28189,7 +30611,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         5.96,
         5.86,
         5.81,
-        6.62
+        6.62,
+        5.64,
+        5.92,
+        5.32,
+        4.84,
+        4.33
       ],
       "CONTESTANT_E_whale-shark": [
         0.0,
@@ -28237,7 +30664,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         8.17,
         8.03,
         7.93,
-        8.94
+        8.94,
+        7.73,
+        8.28,
+        7.8,
+        7.5,
+        6.98
       ],
       "CONTESTANT_F_robot": [
         0.0,
@@ -28285,7 +30717,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -1.4,
         -1.64,
         -1.2,
-        -0.96
+        -0.96,
+        -2.18,
+        -1.89,
+        -2.14,
+        -2.61,
+        -3.53
       ],
       "CONTESTANT_F_sloth-1": [
         0.0,
@@ -28333,7 +30770,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         2.35,
         2.04,
         2.17,
-        2.87
+        2.87,
+        1.79,
+        1.99,
+        1.85,
+        1.28,
+        0.05
       ],
       "CONTESTANT_F_sloth-2": [
         0.0,
@@ -28381,7 +30823,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         13.34,
         12.89,
         12.74,
-        13.17
+        13.17,
+        12.66,
+        12.97,
+        12.41,
+        12.08,
+        11.01
       ],
       "CONTESTANT_F_sloth-3": [
         0.0,
@@ -28429,7 +30876,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         10.31,
         9.84,
         9.66,
-        10.13
+        10.13,
+        10.09,
+        10.68,
+        10.18,
+        9.65,
+        8.48
       ],
       "CONTESTANT_F_sloth-4": [
         0.0,
@@ -28477,7 +30929,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         9.14,
         8.7,
         8.48,
-        8.94
+        8.94,
+        8.87,
+        9.57,
+        8.93,
+        8.29,
+        7.41
       ],
       "CONTESTANT_F_snail-1": [
         0.0,
@@ -28525,7 +30982,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -1.09,
         -1.29,
         -1.18,
-        -0.52
+        -0.52,
+        -1.58,
+        -1.37,
+        -1.49,
+        -2.04,
+        -3.16
       ],
       "CONTESTANT_F_snail-2": [
         0.0,
@@ -28573,7 +31035,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         2.54,
         2.14,
         2.07,
-        2.65
+        2.65,
+        2.07,
+        2.43,
+        1.91,
+        1.65,
+        0.72
       ],
       "CONTESTANT_F_snail-3": [
         0.0,
@@ -28621,7 +31088,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -0.48,
         -0.9,
         -1.0,
-        -0.3
+        -0.3,
+        -0.5,
+        0.18,
+        -0.31,
+        -0.86,
+        -1.79
       ],
       "CONTESTANT_F_snail-4": [
         0.0,
@@ -28669,7 +31141,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.14,
         -0.31,
         -0.43,
-        0.28
+        0.28,
+        -0.02,
+        0.79,
+        0.15,
+        -0.49,
+        -1.21
       ],
       "CONTESTANT_F_rabbit-1": [
         0.0,
@@ -28717,7 +31194,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.15,
         -0.19,
         0.02,
-        -0.49
+        -0.49,
+        -1.86,
+        -1.44,
+        -1.26,
+        -1.65,
+        -2.58
       ],
       "CONTESTANT_F_rabbit-2": [
         0.0,
@@ -28765,7 +31247,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -0.84,
         -1.05,
         -0.98,
-        -1.24
+        -1.24,
+        -2.01,
+        -1.9,
+        -1.81,
+        -2.03,
+        -2.19
       ],
       "CONTESTANT_F_turtle": [
         0.0,
@@ -28813,7 +31300,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         2.27,
         2.11,
         2.59,
-        2.97
+        2.97,
+        1.58,
+        2.18,
+        1.92,
+        1.57,
+        0.3
       ],
       "CONTESTANT_F_koala": [
         0.0,
@@ -28861,7 +31353,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         6.78,
         6.78,
         6.89,
-        7.15
+        7.15,
+        6.36,
+        7.85,
+        8.32,
+        7.64,
+        7.56
       ],
       "CONTESTANT_F_meerkat-10": [
         0.0,
@@ -28909,7 +31406,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         5.17,
         5.68,
         5.22,
-        5.07
+        5.07,
+        4.21,
+        4.7,
+        4.3,
+        3.67,
+        3.35
       ],
       "CONTESTANT_F_meerkat-20": [
         0.0,
@@ -28957,7 +31459,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -1.19,
         -1.01,
         -0.35,
-        -0.15
+        -0.15,
+        -0.63,
+        -0.37,
+        0.06,
+        -0.04,
+        -0.56
       ],
       "CONTESTANT_F_meerkat-30": [
         0.0,
@@ -29005,7 +31512,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         7.53,
         6.91,
         7.1,
-        8.18
+        8.18,
+        7.11,
+        7.29,
+        6.48,
+        6.08,
+        5.6
       ],
       "CONTESTANT_F_meerkat-40": [
         0.0,
@@ -29053,7 +31565,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         1.04,
         1.38,
         1.85,
-        1.79
+        1.79,
+        0.99,
+        1.36,
+        0.79,
+        0.21,
+        0.08
       ],
       "CONTESTANT_F_meerkat-50": [
         0.0,
@@ -29101,7 +31618,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         2.32,
         1.99,
         2.06,
-        2.75
+        2.75,
+        2.04,
+        3.12,
+        2.97,
+        1.96,
+        1.35
       ],
       "CONTESTANT_F_meerkat-60": [
         0.0,
@@ -29149,7 +31671,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         2.04,
         1.97,
         1.76,
-        2.14
+        2.14,
+        1.46,
+        1.87,
+        1.16,
+        0.43,
+        0.52
       ],
       "CONTESTANT_F_meerkat-70": [
         0.0,
@@ -29197,7 +31724,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         5.46,
         5.41,
         5.04,
-        5.87
+        5.87,
+        4.84,
+        6.03,
+        5.78,
+        5.67,
+        4.98
       ],
       "CONTESTANT_F_meerkat-80": [
         0.0,
@@ -29245,7 +31777,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         10.35,
         10.36,
         10.96,
-        11.19
+        11.19,
+        9.57,
+        10.54,
+        10.62,
+        10.56,
+        9.23
       ],
       "CONTESTANT_F_meerkat-90": [
         0.0,
@@ -29293,7 +31830,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         3.62,
         3.16,
         3.53,
-        4.17
+        4.17,
+        2.62,
+        3.43,
+        3.38,
+        4.01,
+        3.58
       ],
       "CONTESTANT_F_eagle-5-1": [
         0.0,
@@ -29341,7 +31883,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -6.87,
         -7.44,
         -6.28,
-        -5.8
+        -5.8,
+        -7.83,
+        -7.07,
+        -6.58,
+        -6.98,
+        -8.42
       ],
       "CONTESTANT_F_eagle-11-2": [
         0.0,
@@ -29389,7 +31936,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         -6.49,
         -7.02,
         -6.89,
-        -6.37
+        -6.37,
+        -7.41,
+        -6.52,
+        -6.7,
+        -6.64,
+        -7.19
       ],
       "CONTESTANT_F_eagle-44-6": [
         0.0,
@@ -29437,7 +31989,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         2.47,
         1.81,
         1.6,
-        1.94
+        1.94,
+        1.09,
+        1.59,
+        1.14,
+        0.67,
+        -0.04
       ],
       "CONTESTANT_F_eagle-66-9": [
         0.0,
@@ -29485,7 +32042,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         5.06,
         4.61,
         4.49,
-        4.84
+        4.84,
+        3.84,
+        4.29,
+        4.02,
+        3.47,
+        2.76
       ],
       "CONTESTANT_F_eagle-88-12": [
         0.0,
@@ -29533,7 +32095,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         4.64,
         4.45,
         4.28,
-        4.48
+        4.48,
+        3.44,
+        3.79,
+        3.6,
+        3.13,
+        2.53
       ],
       "CONTESTANT_F_whale-shark": [
         0.0,
@@ -29581,7 +32148,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         8.82,
         8.82,
         9.03,
-        9.49
+        9.49,
+        7.92,
+        8.62,
+        8.54,
+        8.13,
+        7.4
       ],
       "BENCHMARK_taotie": [
         0.0,
@@ -29629,7 +32201,12 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         6.82,
         7.95,
         7.82,
-        8.29
+        8.29,
+        7.44,
+        7.84,
+        7.69,
+        8.16,
+        8.9
       ],
       "BENCHMARK_ghost_taotie": [
         0.0,
@@ -29677,9 +32254,19 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         2.74,
         2.73,
         2.86,
-        3.12
+        3.12,
+        2.47,
+        2.95,
+        2.81,
+        2.59,
+        2.09
       ],
       "BENCHMARK_csi800": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
         0.0,
         0.0,
         0.0,
@@ -29773,9 +32360,19 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
         0.0,
         0.0,
         0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
         0.0
       ],
       "BENCHMARK_csi300": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
         0.0,
         0.0,
         0.0,
@@ -29943,7 +32540,7 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
       "tag": "🏆 CSI 800 Baseline Standing",
       "badge": "M1–M2 Complete",
       "title": "CSI 800 Retrospective Baseline: Broad-Market Cross-Section & Allocation Dynamics",
-      "window_label": "2026-07-03 ~ 2026-09-04 (46 Trading Days, Cycles 1–8)",
+      "window_label": "2026-07-03 ~ 2026-09-11 (51 Trading Days, Cycles 1–9)",
       "nature_label": "Retrospective backtest baseline evaluating alpha robustness across 800 broad-cap equities.",
       "leader_summary": "CONTESTANT_B_rabbit-2 finished the baseline at NAV 1.1284 (+12.84%), outperforming the CSI 800 benchmark by +20.74pp and Taotie 800 by +12.45pp."
     },
@@ -30014,184 +32611,184 @@ window.ARENA_SEASONS_DATA["season_csi800"] = {
     ],
     "data": {
       "CONTESTANT_A": {
-        "robot": -0.0033451453330614,
-        "sloth-1": 0.0095733648248752,
-        "sloth-2": 0.0615221351599273,
-        "sloth-3": 0.0040906002307854,
-        "sloth-4": -0.0307943493204823,
-        "snail-1": -0.0201037788707422,
-        "snail-2": -0.0285736805024334,
-        "snail-3": -0.0625035068815097,
-        "snail-4": -0.0549936754957276,
-        "rabbit-1": 0.0586330498910261,
-        "rabbit-2": 0.0544761755651639,
-        "turtle": -0.0123080386104805,
-        "koala": -0.266262120054057,
-        "meerkat-10": -0.0044747689708035,
-        "meerkat-20": 0.0359776825156354,
-        "meerkat-30": -0.0043573691566127,
-        "meerkat-40": 0.0593819138258233,
-        "meerkat-50": -0.025954199938005,
-        "meerkat-60": -0.0351134357275854,
-        "meerkat-70": -0.0972521872517561,
-        "meerkat-80": -0.0632426066768805,
-        "meerkat-90": -0.09495163111219,
-        "eagle-5-1": -0.1081678725066271,
-        "eagle-11-2": -0.0085540140364733,
-        "eagle-44-6": 0.0143727808679292,
-        "eagle-66-9": 0.0244453892730165,
-        "eagle-88-12": 0.0457299821587917,
-        "whale-shark": 0.0630882917853863
+        "robot": -0.0065768895477757,
+        "sloth-1": -0.0005627321287903,
+        "sloth-2": 0.057041753569476,
+        "sloth-3": -0.0001525295849503,
+        "sloth-4": -0.0263609518025843,
+        "snail-1": -0.029740848554182,
+        "snail-2": -0.0311384452203937,
+        "snail-3": -0.0647667046319299,
+        "snail-4": -0.0488084410599899,
+        "rabbit-1": 0.0647955192432554,
+        "rabbit-2": 0.0540548387788235,
+        "turtle": -0.0175018733395738,
+        "koala": -0.2833248542137702,
+        "meerkat-10": 0.0028854789574792,
+        "meerkat-20": 0.0187369490829754,
+        "meerkat-30": -0.0121001563070335,
+        "meerkat-40": 0.0525040392912516,
+        "meerkat-50": -0.0417621137858088,
+        "meerkat-60": -0.0688117545477915,
+        "meerkat-70": -0.1184698088883852,
+        "meerkat-80": -0.093409024652629,
+        "meerkat-90": -0.1177130837834488,
+        "eagle-5-1": -0.1293389282713816,
+        "eagle-11-2": -0.0281813174286552,
+        "eagle-44-6": 0.0078371845197262,
+        "eagle-66-9": 0.0181343873845698,
+        "eagle-88-12": 0.0353551707091814,
+        "whale-shark": 0.0567276009772907
       },
       "CONTESTANT_B": {
-        "robot": 0.030380362753849,
-        "sloth-1": 0.0526582075252808,
-        "sloth-2": 0.0435544231592632,
-        "sloth-3": 0.0057070288994893,
-        "sloth-4": -0.0302721373347143,
-        "snail-1": 0.0236597952650816,
-        "snail-2": -0.0192304588319812,
-        "snail-3": -0.0332366499608554,
-        "snail-4": -0.0276811230754454,
-        "rabbit-1": 0.0983998441814884,
-        "rabbit-2": 0.1284374102461636,
-        "turtle": -0.0035034829816025,
-        "koala": -0.2204593642094987,
-        "meerkat-10": 0.0592357797911049,
-        "meerkat-20": 0.0531908234722586,
-        "meerkat-30": 0.0141247829047679,
-        "meerkat-40": -0.0129885707055509,
-        "meerkat-50": 0.0485940384874588,
-        "meerkat-60": 0.0183344793769499,
-        "meerkat-70": -0.0456068388346097,
-        "meerkat-80": -0.0786013033173789,
-        "meerkat-90": -0.1802364814077821,
-        "eagle-5-1": 0.0426975896156642,
-        "eagle-11-2": 0.0444090097917635,
-        "eagle-44-6": 0.0605239093292822,
-        "eagle-66-9": 0.0702860113980969,
-        "eagle-88-12": 0.0687864790039181,
-        "whale-shark": 0.083037184150281
+        "robot": 0.0360690910376466,
+        "sloth-1": 0.0589586025200283,
+        "sloth-2": 0.0479509788119809,
+        "sloth-3": 0.0025217275797608,
+        "sloth-4": -0.0181960186942772,
+        "snail-1": 0.0295861901141925,
+        "snail-2": -0.0154061490872909,
+        "snail-3": -0.0363187032794674,
+        "snail-4": -0.0187421387592489,
+        "rabbit-1": 0.0878742755673416,
+        "rabbit-2": 0.1145509943558558,
+        "turtle": 0.002325513137785,
+        "koala": -0.2466053661651752,
+        "meerkat-10": 0.049060091558617,
+        "meerkat-20": 0.0443307106966635,
+        "meerkat-30": -0.0101770871768989,
+        "meerkat-40": -0.0265411743612062,
+        "meerkat-50": 0.0165606137978098,
+        "meerkat-60": -0.0129469863812156,
+        "meerkat-70": -0.0839931591394543,
+        "meerkat-80": -0.1101764249247908,
+        "meerkat-90": -0.2044458956275804,
+        "eagle-5-1": 0.0353862871072736,
+        "eagle-11-2": 0.0426272719218554,
+        "eagle-44-6": 0.0577594147609055,
+        "eagle-66-9": 0.0631548905745134,
+        "eagle-88-12": 0.0622665269412949,
+        "whale-shark": 0.0744842158747129
       },
       "CONTESTANT_C": {
-        "robot": -0.043859770793256,
-        "sloth-1": 0.0085191522123571,
-        "sloth-2": 0.0675514275693889,
-        "sloth-3": -0.0086337652105473,
-        "sloth-4": -0.0098286872172103,
-        "snail-1": -0.031608429980921,
-        "snail-2": -0.0400389743164267,
-        "snail-3": -0.1173552710614566,
-        "snail-4": -0.1031085104403898,
-        "rabbit-1": -0.0585751634503318,
-        "rabbit-2": 0.0288577173264377,
-        "turtle": -0.0415415784925826,
-        "koala": -0.1981001539525413,
-        "meerkat-10": -0.0240324630894637,
-        "meerkat-20": 0.0264781686691959,
-        "meerkat-30": 0.0210213933200651,
-        "meerkat-40": 0.0171113752220666,
-        "meerkat-50": -0.0407300035967808,
-        "meerkat-60": -0.0069632013353766,
-        "meerkat-70": -0.0640077918623487,
-        "meerkat-80": -0.0744568379130429,
-        "meerkat-90": -0.0685611650301554,
-        "eagle-5-1": -0.1242833546803843,
-        "eagle-11-2": -0.0692905396733772,
-        "eagle-44-6": -0.0307330182625199,
-        "eagle-66-9": -0.0082908188626649,
-        "eagle-88-12": 0.023901297139742,
-        "whale-shark": 0.0485039391337631
+        "robot": -0.0603227297448487,
+        "sloth-1": -0.0158450200063672,
+        "sloth-2": 0.0433379711175487,
+        "sloth-3": -0.0218584834099581,
+        "sloth-4": -0.0175313245249663,
+        "snail-1": -0.0553583023782691,
+        "snail-2": -0.0609045942151545,
+        "snail-3": -0.1285170596507114,
+        "snail-4": -0.1115169131801177,
+        "rabbit-1": -0.0685594691445065,
+        "rabbit-2": 0.0209280979164321,
+        "turtle": -0.057405554229144,
+        "koala": -0.2209830666321955,
+        "meerkat-10": -0.0224182777296254,
+        "meerkat-20": 0.016823716007039,
+        "meerkat-30": 0.0093964569150959,
+        "meerkat-40": -0.0066446871929395,
+        "meerkat-50": -0.0624013905712939,
+        "meerkat-60": -0.0197123822626074,
+        "meerkat-70": -0.1073803991359445,
+        "meerkat-80": -0.1235697090564009,
+        "meerkat-90": -0.114446397392553,
+        "eagle-5-1": -0.1222627909089189,
+        "eagle-11-2": -0.0767678646031463,
+        "eagle-44-6": -0.0398994522343525,
+        "eagle-66-9": -0.0215488088620041,
+        "eagle-88-12": 0.0107551196446928,
+        "whale-shark": 0.0370908380953005
       },
       "CONTESTANT_D": {
-        "robot": 0.0225026509824568,
-        "sloth-1": 0.0343113310427114,
-        "sloth-2": 0.0289643623514912,
-        "sloth-3": 0.0101740599164843,
-        "sloth-4": -0.0333333924728878,
-        "snail-1": 0.0192587935998054,
-        "snail-2": -0.0114663223101207,
-        "snail-3": -0.031647104664371,
-        "snail-4": -0.0159818865941476,
-        "rabbit-1": 0.1237237974614953,
-        "rabbit-2": 0.0673382726136442,
-        "turtle": -0.0405607457958666,
-        "koala": -0.1548494558353244,
-        "meerkat-10": 0.0933150820198758,
-        "meerkat-20": 0.0018162493424482,
-        "meerkat-30": 0.0142926470283066,
-        "meerkat-40": 0.0008077968506572,
-        "meerkat-50": -0.081118798500134,
-        "meerkat-60": -0.0352887545738032,
-        "meerkat-70": 0.0028996369526801,
-        "meerkat-80": -0.0436728654810593,
-        "meerkat-90": -0.0998658187456168,
-        "eagle-5-1": -0.0542198155470393,
-        "eagle-11-2": -0.0156978408012326,
-        "eagle-44-6": 0.0529907317214559,
-        "eagle-66-9": 0.040364215937465,
-        "eagle-88-12": 0.0640338263968141,
-        "whale-shark": 0.0585953712472218
+        "robot": 0.0172220385022217,
+        "sloth-1": 0.0281854957854899,
+        "sloth-2": 0.0126238072649718,
+        "sloth-3": -0.0106921300847879,
+        "sloth-4": -0.0485776403230491,
+        "snail-1": 0.015255999729562,
+        "snail-2": -0.0243728366661618,
+        "snail-3": -0.0493686484449945,
+        "snail-4": -0.0269412456099813,
+        "rabbit-1": 0.1188704158204647,
+        "rabbit-2": 0.0762867397392579,
+        "turtle": -0.0599997512238396,
+        "koala": -0.1739119641012884,
+        "meerkat-10": 0.0940691887504869,
+        "meerkat-20": -0.0195150233788888,
+        "meerkat-30": -0.0144716499061063,
+        "meerkat-40": -0.0254274417573855,
+        "meerkat-50": -0.1079928466010806,
+        "meerkat-60": -0.0614290804617757,
+        "meerkat-70": -0.0374491430563896,
+        "meerkat-80": -0.0822292352787347,
+        "meerkat-90": -0.1308229749571862,
+        "eagle-5-1": -0.0795327626951402,
+        "eagle-11-2": -0.0248047376158101,
+        "eagle-44-6": 0.0518631409851988,
+        "eagle-66-9": 0.0353992295498415,
+        "eagle-88-12": 0.0584192052697774,
+        "whale-shark": 0.0524160073984274
       },
       "CONTESTANT_E": {
-        "robot": -0.062306392602529,
-        "sloth-1": -0.0178966183147106,
-        "sloth-2": 0.0593422078693228,
-        "sloth-3": 0.007995139325674,
-        "sloth-4": -0.0059352636469387,
-        "snail-1": -0.0351414111302971,
-        "snail-2": -0.0206569101526591,
-        "snail-3": -0.0796155934062942,
-        "snail-4": -0.0736604218188817,
-        "rabbit-1": -0.0433565600435492,
-        "rabbit-2": -0.0504042792421166,
-        "turtle": -0.0521418654176306,
-        "koala": -0.057120207772315,
-        "meerkat-10": -0.0306302031385224,
-        "meerkat-20": -0.0362864143264003,
-        "meerkat-30": -0.0457658767577585,
-        "meerkat-40": -0.0606637074302264,
-        "meerkat-50": 0.0554625751419788,
-        "meerkat-60": 0.0231598858916,
-        "meerkat-70": -0.015467573477949,
-        "meerkat-80": -0.0118291841776393,
-        "meerkat-90": 0.0076728727281207,
-        "eagle-5-1": -0.0024732639209313,
-        "eagle-11-2": -0.0510274878555003,
-        "eagle-44-6": -0.061638010951272,
-        "eagle-66-9": -0.0516605038662451,
-        "eagle-88-12": -0.0127939130046744,
-        "whale-shark": 0.0104184012117563
+        "robot": -0.1112727800757059,
+        "sloth-1": -0.0711220379262289,
+        "sloth-2": 0.0013589354056569,
+        "sloth-3": -0.0360464741772951,
+        "sloth-4": -0.0508631703465095,
+        "snail-1": -0.0868008301988294,
+        "snail-2": -0.0761276326471078,
+        "snail-3": -0.1200892041581653,
+        "snail-4": -0.1134119811689947,
+        "rabbit-1": -0.0860241800889916,
+        "rabbit-2": -0.0740115669927961,
+        "turtle": -0.0913030393641974,
+        "koala": -0.0799753014538821,
+        "meerkat-10": -0.0558967682852483,
+        "meerkat-20": -0.0717518700073677,
+        "meerkat-30": -0.0655219940503529,
+        "meerkat-40": -0.0734834130329592,
+        "meerkat-50": 0.0348149821549823,
+        "meerkat-60": -0.0099931727578608,
+        "meerkat-70": -0.0327139526159681,
+        "meerkat-80": -0.0331310582892575,
+        "meerkat-90": -0.0083622138039586,
+        "eagle-5-1": -0.0543848076598882,
+        "eagle-11-2": -0.1036252077779659,
+        "eagle-44-6": -0.105236338858097,
+        "eagle-66-9": -0.0868822913909375,
+        "eagle-88-12": -0.0437463243598617,
+        "whale-shark": -0.0171649565930009
       },
       "CONTESTANT_F": {
-        "robot": -0.0886180426696411,
-        "sloth-1": -0.0502988626806996,
-        "sloth-2": 0.0526654592063855,
-        "sloth-3": 0.0223016435496721,
-        "sloth-4": 0.0104214241913398,
-        "snail-1": -0.0842251660271519,
-        "snail-2": -0.0524862568716857,
-        "snail-3": -0.0820129816307903,
-        "snail-4": -0.0762340631529948,
-        "rabbit-1": -0.0838918007314738,
-        "rabbit-2": -0.0913676216575202,
-        "turtle": -0.049263225751335,
-        "koala": -0.0074654908882418,
-        "meerkat-10": -0.0282760117678987,
-        "meerkat-20": -0.0805026461850011,
-        "meerkat-30": 0.0027574205049725,
-        "meerkat-40": -0.0610527548777076,
-        "meerkat-50": -0.0514726900695722,
-        "meerkat-60": -0.0575804995560808,
-        "meerkat-70": -0.0203381222784408,
-        "meerkat-80": 0.0328650746482523,
-        "meerkat-90": -0.0373149110998757,
-        "eagle-5-1": -0.1369856069015922,
-        "eagle-11-2": -0.1426721172343253,
-        "eagle-44-6": -0.0595663980551668,
-        "eagle-66-9": -0.0306380675348469,
-        "eagle-88-12": -0.0342357801849669,
-        "whale-shark": 0.0158682292632728
+        "robot": -0.1223381877078653,
+        "sloth-1": -0.0864822056652495,
+        "sloth-2": 0.0230687455787985,
+        "sloth-3": -0.00219811850413,
+        "sloth-4": -0.0129497042874074,
+        "snail-1": -0.1185894371987983,
+        "snail-2": -0.0797657975675959,
+        "snail-3": -0.1048737713865718,
+        "snail-4": -0.0990690806956062,
+        "rabbit-1": -0.1127531036377434,
+        "rabbit-2": -0.1089126923329699,
+        "turtle": -0.0840299071876168,
+        "koala": -0.0114249124314629,
+        "meerkat-10": -0.0535222163012847,
+        "meerkat-20": -0.092600993730373,
+        "meerkat-30": -0.0310195589513777,
+        "meerkat-40": -0.086171183340428,
+        "meerkat-50": -0.0734851887898727,
+        "meerkat-60": -0.0818069687071965,
+        "meerkat-70": -0.0371925354223049,
+        "meerkat-80": 0.0053227983165697,
+        "meerkat-90": -0.0511542113478571,
+        "eagle-5-1": -0.1712204223989988,
+        "eagle-11-2": -0.158861931145496,
+        "eagle-44-6": -0.087419479583551,
+        "eagle-66-9": -0.0593862678444887,
+        "eagle-88-12": -0.0617363742139305,
+        "whale-shark": -0.0130073537165553
       }
     }
   }

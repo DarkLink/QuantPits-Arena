@@ -26,7 +26,7 @@ RUNS_DIR = REPO_ROOT / "runs"
 # 默认时间锚定与交易日范围
 DEFAULT_ANCHOR_DATE = "2026-07-03"        # 周五收盘截断日
 DEFAULT_FIRST_TRADE_DATE = "2026-07-06"   # 周一首周开盘建仓日
-DEFAULT_END_DATE = "2026-09-04"           # 截止周五收盘结算日
+DEFAULT_END_DATE = "2026-09-11"           # 截止周五收盘结算日
 
 # 默认市场与基准
 DEFAULT_MARKET = "csirun300"

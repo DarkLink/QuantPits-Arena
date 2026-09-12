@@ -21,7 +21,7 @@ from typing import Dict, Any, List, Optional
 import pandas as pd
 import numpy as np
 
-from arena.config import REPO_ROOT
+from arena.config import REPO_ROOT, DEFAULT_END_DATE
 from arena.contestants import ContestantRegistry
 
 
@@ -200,7 +200,7 @@ def patch_graph_temporal_adapter():
 def run_batch_inference(
     market: str = "csi500",
     oos_start: str = "2026-06-29",
-    oos_end: str = "2026-08-28",
+    oos_end: str = DEFAULT_END_DATE,
     fit_start: str = "2026-04-01",
     fit_end: str = "2026-07-03",
     output_file: Optional[Path] = None,

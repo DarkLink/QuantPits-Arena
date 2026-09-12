@@ -11,7 +11,7 @@ description: "Season 1 baseline tournament: 6 contestant models x 29 zoo paramet
 calendar:
   anchor_date: "2026-07-03"        # Friday close initial decision cutoff (T=0)
   first_trade_date: "2026-07-06"   # Monday market open entry
-  end_date: "2026-09-04"           # Data cutoff Friday settlement
+  end_date: "2026-09-11"           # Data cutoff Friday settlement
   cycle_freq: "weekly"
 
 # Account and Match Execution Parameters
@@ -37,7 +37,7 @@ universe:
   testbed_desc: "246-stock high-liquidity testbed"
 
 banner:
-  proof_text: "🔐 <strong style=\"color: var(--text-secondary);\">Proof of Timeliness:</strong> Next cycle (through 2026-09-04) cryptographically committed on 2026-09-05 (<code style=\"font-size: 10px; color: var(--brand-cyan);\">SHA-256: 8fca6717...</code>). Public reveal embargoed until 2026-09-11."
+  proof_text: "🔬 <strong style=\"color: var(--text-secondary);\">Season 1 Baseline Proof:</strong> 246 high-liquidity equities with 11,000 empirical random monkeys verified over 2026-07-03 ~ 2026-09-11. Unfalsifiable empirical null resolution."
 
 # Enabled Benchmarks (First-Class Citizens)
 benchmarks:
@@ -58,21 +58,21 @@ dispatches:
   executive:
     tag: "🏆 Official Released Standings"
     badge: "Active"
-    title: "Tournament Standings & Retrospective Baseline"
-    window_label: "2026-07-03 ~ 2026-09-04 · 46 Trading Days"
+    title: "Tournament Standings & Week 10 Prospective Update"
+    window_label: "2026-07-03 ~ 2026-09-11 · 51 Trading Days"
     nature_label: "Empirical tournament log tracking quantitative alpha models through execution frictions, market regime shifts, and monkey null courts."
-    leader_summary: "CONTESTANT_B_eagle-5-1 holds cumulative crown at +17.07% (NAV 1.1707). High-turnover Rabbits gained +2.41% on the week, compressing the lead gap to 1.89pp."
+    leader_summary: "CONTESTANT_B_eagle-5-1 becomes the first strategy to breach the 1.20 NAV milestone (+20.71%), widening its lead over runner-up CONTESTANT_D_rabbit-1 (+15.20%) to 5.51pp amid continued market contraction."
   climate:
     tag: "🌪️ Market Climate Report"
     status_badge: "Released"
-    title: "The September 02 Breadth Shock (Black Wednesday)"
-    summary: "Intraday breadth contraction and rotation across Chinese equities. 99.4% of tournament paths recorded pullbacks while agile Rabbits rebounded."
+    title: "The Second-Wave Retraction & Apex Counter-Strike"
+    summary: "CSI 300 dropped another -0.84% (-6.86% cumulative). High-concentration Eagles launched a massive counter-strike (CONTESTANT_A_eagle-5-1 +4.38%), while inverse Koalas suffered deep pullbacks."
     bullets:
-      - "Taotie universe benchmark experienced mild -0.55% fluctuation on 09-02 while active paths dropped mean -1.26% (-0.71pp active exposure shock)."
-      - "Over 99% of active execution paths incurred synchronized active drawdowns, demonstrating shared systematic factor exposure."
-      - "High-refresh agile Rabbits (DropN=11/22) exploited cross-sectional dispersion, surging to top weekly performance (+2.41%)."
-      - "Signal half-life under pressure: Sloth signal decay penalty widened across the 1 to 4 week latency ladder."
-    decrypt_label: "Prospective Cycle 1 Released"
+      - "Taotie universe benchmark fell -0.94% on the week (+1.70% cumulative) as broader equity indices drifted lower."
+      - "Apex selection intensity rebounded forcefully: CONTESTANT_A_eagle-5-1 surged +4.38% on the week to claim #1 weekly performance."
+      - "CONTESTANT_B_eagle-5-1 crossed the historic 1.20 NAV mark (NAV 1.2071, +20.71%), re-establishing a 5.51pp cushion over agile Rabbits."
+      - "Inverse alpha penalty deepened: lowest-ranked stock pools took heavy losses, plunging Koala containers by mean -4.41% on the week."
+    decrypt_label: "Prospective Cycle 2 Released"
   episodes:
     - id: "ep08"
       tab_label: "📜 Ep 01–08: The 41-Day King"
@@ -90,4 +90,12 @@ dispatches:
       read_time: "8 min read"
       summary: "First prospective tracking cycle. Synchronized breadth shock on 09-02 challenged high concentration while agile Rabbits closed the tournament lead to 1.89pp."
       file: "chronicles/en/episode_09_the_september_02_breadth_shock_and_rabbit_rampage.md"
+    - id: "ep10"
+      tab_label: "🦅 Ep 10: The Apex Strike"
+      badge: "Released"
+      title: "Episode 10: The Apex Strike & The 1.20 Milestone"
+      date: "2026-09-11"
+      read_time: "7 min read"
+      summary: "Second prospective tracking cycle. CONTESTANT_B_eagle-5-1 breaks 1.20 NAV (+20.71%), widening lead to 5.51pp over Rabbits, while CONTESTANT_A_eagle-5-1 claims weekly #1 (+4.38%)."
+      file: "chronicles/en/episode_10_the_apex_strike_and_the_120_milestone.md"
 

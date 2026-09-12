@@ -33,9 +33,6 @@ window.ArenaApp = {
 
     // 5. Bind Navigation Events
     this.bindNavEvents();
-
-    // 6. Initialize Proof of Timeliness notice from commitments.json
-    this.initTimelinessNotice();
   },
 
   currentSeasonId: "season_01",
@@ -219,7 +216,6 @@ window.ArenaApp = {
 
     this.updateSeasonButtonUI();
     this.updatePreviewBanner();
-    this.updateTimelinessNotice();
 
     // Synchronize URL query parameter
     if (updateHistory) {
@@ -234,14 +230,6 @@ window.ArenaApp = {
 
     // Re-render the active view with the new season data
     this.handleRouting();
-  },
-
-  async initTimelinessNotice() {
-    this.updateTimelinessNotice();
-  },
-
-  updateTimelinessNotice() {
-    // Static footer proof notice directs visitors to commitments/README.md and Git manifests
   },
 
   initPreviewBanner() {

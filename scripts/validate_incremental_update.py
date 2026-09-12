@@ -24,27 +24,40 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 ARENA_DATA_JS = REPO_ROOT / "web" / "js" / "data" / "arena_data.js"
 
 
-def load_canonical_arena_data() -> dict:
+def load_canonical_data(season_id: str = None) -> tuple:
+    """
+    Loads canonical data either from multi-season web/js/data/<season_id>.js or legacy arena_data.js.
+    Returns (data_dict, source_name).
+    """
+    if season_id:
+        target_js = REPO_ROOT / "web" / "js" / "data" / f"{season_id}.js"
+        if target_js.exists():
+            with open(target_js, "r", encoding="utf-8") as f:
+                content = f.read()
+            match = re.search(r'window\.ARENA_SEASONS_DATA\["[^"]+"\]\s*=\s*(\{.*\})\s*;?\s*$', content, re.DOTALL)
+            if match:
+                return json.loads(match.group(1)), target_js.name
+
+    # Fallback to arena_data.js
     if not ARENA_DATA_JS.exists():
         raise FileNotFoundError(f"Canonical data file not found: {ARENA_DATA_JS}")
 
     with open(ARENA_DATA_JS, "r", encoding="utf-8") as f:
         content = f.read()
 
-    # Extract JSON between "window.ARENA_DATA = " and trailing ";"
     match = re.search(r"window\.ARENA_DATA\s*=\s*(\{.*\})\s*;?\s*$", content, re.DOTALL)
     if not match:
         raise ValueError("Could not parse JSON payload from arena_data.js")
 
-    return json.loads(match.group(1))
+    return json.loads(match.group(1)), "arena_data.js"
 
 
-def validate_dataframe_against_canonical(new_df_nav: pd.DataFrame) -> bool:
+def validate_dataframe_against_canonical(new_df_nav: pd.DataFrame, season_id: str = None) -> bool:
     """
     Validates that new_df_nav contains all historical dates and NAV values
-    identical to the canonical arena_data.js up to the canonical cutoff date.
+    identical to the canonical baseline up to the canonical cutoff date.
     """
-    canonical_data = load_canonical_arena_data()
+    canonical_data, source_name = load_canonical_data(season_id)
     canon_timeline = canonical_data.get("nav_timeline", {})
     canon_dates = canon_timeline.get("dates", [])
     canon_curves = canon_timeline.get("curves", {})
@@ -75,8 +88,8 @@ def validate_dataframe_against_canonical(new_df_nav: pd.DataFrame) -> bool:
 
     for curve_id, canon_series in canon_curves.items():
         if curve_id not in new_df_nav.columns:
-            # Special case: benchmark CSI 300 might be added at export time, not in raw CSV
-            if curve_id in ("BENCHMARK_csi300",):
+            # Special case: benchmark curves might be added at export time, not in raw CSV
+            if curve_id.startswith("BENCHMARK_"):
                 continue
             print(f"[FAIL] daily_nav_curves.csv - MISSING_CURVE_COLUMN ({curve_id[:16]}...)")
             mismatch_count += 1
@@ -99,36 +112,56 @@ def validate_dataframe_against_canonical(new_df_nav: pd.DataFrame) -> bool:
     return True
 
 
-def validate_run_dir(run_dir: Path) -> bool:
+def validate_run_dir(run_dir: Path, season_id: str = None) -> bool:
     nav_csv = run_dir / "public" / "daily_nav_curves.csv"
     if not nav_csv.exists():
         print(f"[FAIL] {nav_csv.name} - FILE_NOT_FOUND")
         return False
 
+    if not season_id:
+        # Auto-infer from run_dir name (e.g. season_01_run -> season_01)
+        name = run_dir.name
+        if name.endswith("_run"):
+            inferred = name[:-4]
+            if (REPO_ROOT / "web" / "js" / "data" / f"{inferred}.js").exists():
+                season_id = inferred
+
     df_nav = pd.read_csv(nav_csv)
-    return validate_dataframe_against_canonical(df_nav)
+    return validate_dataframe_against_canonical(df_nav, season_id)
 
 
 def main():
     import argparse
     parser = argparse.ArgumentParser(description="Validate incremental update historical immutability")
     parser.add_argument("--run-dir", type=str, default=None, help="Path to run directory with public/daily_nav_curves.csv")
+    parser.add_argument("--season", type=str, default=None, help="Season identifier (e.g. season_01, season_csi500)")
     args = parser.parse_args()
 
+    season_id = args.season
     if args.run_dir:
         target_dir = Path(args.run_dir)
-    elif (REPO_ROOT / "runs" / "preview_tournament_0904").exists():
-        target_dir = REPO_ROOT / "runs" / "preview_tournament_0904"
+    elif season_id:
+        target_dir = REPO_ROOT / "runs" / f"{season_id}_run"
+    elif (REPO_ROOT / "runs" / "season_01_run").exists():
+        target_dir = REPO_ROOT / "runs" / "season_01_run"
+        season_id = "season_01"
     else:
         target_dir = REPO_ROOT / "runs" / "tournament_real_1000_monkeys"
 
+    if not season_id and target_dir.name.endswith("_run"):
+        inferred = target_dir.name[:-4]
+        if (REPO_ROOT / "web" / "js" / "data" / f"{inferred}.js").exists():
+            season_id = inferred
+
+    _, source_name = load_canonical_data(season_id)
+
     print("=" * 70)
     print(f" 🛡️ QuantPits-Arena 历史数据不变性审计: {target_dir.name}")
-    print(f"    对照基准: web/js/data/arena_data.js (全网公开基线)")
+    print(f"    对照基准: web/js/data/{source_name}")
     print("=" * 70)
 
     try:
-        ok = validate_run_dir(target_dir)
+        ok = validate_run_dir(target_dir, season_id)
         if ok:
             print(" [PASS] 历史数据验证通过：前序 41 个交易日数据 100% 严格一致，零回溯修改。")
             print("=" * 70)

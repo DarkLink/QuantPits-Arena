@@ -148,6 +148,9 @@ python cli.py run --season season_csi500 --monkeys --monkey-count 1000
 python cli.py export-web --season season_csi500
 ```
 
+> 💡 **周频增量滚动推进 (Weekly Roll-Forward)**：  
+> 若赛季已建立且只需随每周最新行情数据滚动推进 1 个周期，**严禁重跑全量 pipeline**，请直接查阅专属增量 SOP：[SEASON_ROLLFORWARD_SOP.md](./SEASON_ROLLFORWARD_SOP.md)。
+
 ---
 
 ### 第三步：新模型接入协议 (Plugging In a New Model)
