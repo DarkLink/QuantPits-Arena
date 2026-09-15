@@ -38,6 +38,9 @@ window.PathDetailView = {
     const pVal = path.empirical_p_value !== undefined ? path.empirical_p_value : (path.p_value !== undefined ? path.p_value : 1.0);
     const pRank = path.percentile_rank !== undefined ? path.percentile_rank : (path.monkey_percentile !== undefined ? path.monkey_percentile : (path.monkey_percentile_rank !== undefined ? path.monkey_percentile_rank : 50.0));
     const retColor = path.total_return_pct >= 0 ? "var(--accent-positive)" : "var(--accent-negative)";
+    const taotieRet = window.arenaAdapter.getTaotieReturn();
+    const taotieExcess = path.total_return_pct - taotieRet;
+    const seasonMeta = window.arenaAdapter?.getCurrentSeasonMeta() || {};
 
     this.activeMetric = "nav";
 
@@ -88,7 +91,7 @@ window.PathDetailView = {
                 ${path.total_return_pct >= 0 ? '+' : ''}${path.total_return_pct.toFixed(2)}%
               </div>
               <div style="font-size:0.75rem; color:var(--text-tertiary);">
-                Excess vs Executable Taotie: <b>${(path.total_return_pct - 2.32) >= 0 ? '+' : ''}${(path.total_return_pct - 2.32).toFixed(2)}%</b>
+                Excess vs Executable ${window.arenaAdapter.getTaotieShortName()}: <b>${taotieExcess >= 0 ? '+' : ''}${taotieExcess.toFixed(2)}%</b>
               </div>
             </div>
             <div style="text-align:right; border-left:1px solid var(--border-subtle); padding-left:1.25rem;">
@@ -107,12 +110,12 @@ window.PathDetailView = {
         <div class="kpi-grid" style="margin-top:1.5rem; grid-template-columns:repeat(4, 1fr);">
           <div class="kpi-card">
             <div class="kpi-label">Final NAV</div>
-            <div class="kpi-value">${path.final_nav.toFixed(4)}</div>
-            <div class="kpi-subtext">Base 1.0000 on ${window.arenaAdapter?.getCurrentSeasonMeta()?.anchor_date || '2026-07-03'}</div>
+            <div class="kpi-value">${(path.final_nav !== undefined ? path.final_nav : 1.0).toFixed(4)}</div>
+            <div class="kpi-subtext">Base 1.0000 on ${seasonMeta?.anchor_date || '2026-07-03'}</div>
           </div>
           <div class="kpi-card">
             <div class="kpi-label">Max Drawdown</div>
-            <div class="kpi-value" style="color:var(--accent-negative);">${path.max_drawdown_pct.toFixed(2)}%</div>
+            <div class="kpi-value" style="color:var(--accent-negative);">${(path.max_drawdown_pct !== undefined ? path.max_drawdown_pct : 0.0).toFixed(2)}%</div>
             <div class="kpi-subtext">Peak-to-trough drop</div>
           </div>
           <div class="kpi-card">
@@ -122,7 +125,7 @@ window.PathDetailView = {
           </div>
           <div class="kpi-card">
             <div class="kpi-label">Holdings Breadth</div>
-            <div class="kpi-value" style="color:var(--accent-cyan);">${path.actual_holdings_mean.toFixed(1)} / ${path.target_holdings_mean.toFixed(0)}</div>
+            <div class="kpi-value" style="color:var(--accent-cyan);">${(path.actual_holdings_mean !== undefined ? path.actual_holdings_mean : 0).toFixed(1)} / ${(path.target_holdings_mean !== undefined ? path.target_holdings_mean : 22).toFixed(0)}</div>
             <div class="kpi-subtext">Mean actual vs target stocks</div>
           </div>
         </div>
@@ -179,7 +182,7 @@ window.PathDetailView = {
           <!-- Finite Capital Diagnostics & Metadata -->
           <div style="margin-top:1.5rem; padding-top:1rem; border-top:1px solid var(--border-subtle);">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
-              <h4 style="font-size:0.95rem; margin:0;">Finite Capital Execution Diagnostics (CNY 500k Constraint)</h4>
+              <h4 style="font-size:0.95rem; margin:0;">Finite Capital Execution Diagnostics (${seasonMeta?.initial_cash ? 'CNY ' + (seasonMeta.initial_cash >= 1000000 ? (seasonMeta.initial_cash / 1000000).toFixed(0) + 'M' : (seasonMeta.initial_cash / 1000).toFixed(0) + 'k') : 'CNY 500k'} Constraint)</h4>
               <span class="badge badge-neutral" style="font-size:0.75rem;">100-Share Lot Enforced</span>
             </div>
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; font-size:0.85rem;">
