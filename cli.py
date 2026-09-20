@@ -217,17 +217,7 @@ def cmd_step(args):
     print(f"    已恢复至周期: Cycle {runner.last_completed_cycle_idx}")
 
     next_idx = runner.last_completed_cycle_idx + 1
-    if next_idx >= len(runner.cycles):
-        print(f"[INFO] 全部周期已执行完毕 (总周期数={len(runner.cycles)})，无需继续推进。")
-        print("=" * 70 + "\n")
-        return
-
-    target_cycle = runner.cycles[next_idx]
-    print(f"    🎯 本次推进目标周期: Cycle {next_idx}")
-    print(f"       决策日: {target_cycle.decision_date} (周五收盘)")
-    print(f"       执行日: {target_cycle.trade_date} (周一开盘)")
-    print(f"       结算日: {target_cycle.settle_date} (周五收盘)")
-    print("=" * 70)
+    needs_step = next_idx < len(runner.cycles)
 
     active_contestants = None
     if args.contestants:
@@ -240,16 +230,30 @@ def cmd_step(args):
         active_contestants, None, None
     )
 
-    # 仅执行目标这 1 个周期
-    runner.step_cycle(
-        cycle=target_cycle,
-        active_contestants=active_contestants,
-        price_lookup_fn=price_lookup_fn,
-        tradability_filter_fn=tradability_filter_fn
-    )
+    if not needs_step:
+        print(f"[INFO] 全部周期已执行完毕 (总周期数={len(runner.cycles)}，已结算至 Cycle {runner.last_completed_cycle_idx})。")
+        if not getattr(args, "monkeys", False):
+            print("=" * 70 + "\n")
+            return
+        print("       检测到 --monkeys 选项，直接为已完成周期启动参数化猴群零假设评估...")
+    else:
+        target_cycle = runner.cycles[next_idx]
+        print(f"    🎯 本次推进目标周期: Cycle {next_idx}")
+        print(f"       决策日: {target_cycle.decision_date} (周五收盘)")
+        print(f"       执行日: {target_cycle.trade_date} (周一开盘)")
+        print(f"       结算日: {target_cycle.settle_date} (周五收盘)")
+        print("=" * 70)
 
-    # 持久化最新状态
-    runner.save_checkpoint_to_disk(cp_dir, cycle_idx=next_idx)
+        # 仅执行目标这 1 个周期
+        runner.step_cycle(
+            cycle=target_cycle,
+            active_contestants=active_contestants,
+            price_lookup_fn=price_lookup_fn,
+            tradability_filter_fn=tradability_filter_fn
+        )
+
+        # 持久化最新状态
+        runner.save_checkpoint_to_disk(cp_dir, cycle_idx=next_idx)
 
     # 导出最新累积路径
     results = {
@@ -265,11 +269,12 @@ def cmd_step(args):
     # 可选：运行参数化猴子群落
     if getattr(args, "monkeys", False):
         m_count = getattr(args, "monkey_count", 1000)
+        eval_cycles = runner.last_completed_cycle_idx + 1
         print("\n" + "=" * 70)
-        print(f" 🐒 启动参数化猴子群落零假设评估 (11 组策略规格 × {m_count} 只随机猴子)...")
+        print(f" 🐒 启动参数化猴子群落零假设评估 (11 组策略规格 × {m_count} 只随机猴子，覆盖 {eval_cycles} 个周期)...")
         print("=" * 70)
         monkey_results = runner.run_parametric_monkeys(
-            max_cycles=next_idx + 1,
+            max_cycles=eval_cycles,
             colony_size=m_count,
             price_lookup_fn=price_lookup_fn,
             tradability_filter_fn=tradability_filter_fn
@@ -654,7 +659,7 @@ def cmd_rollforward(args):
             end_date=actual_end,
             initial_cash=500_000.0,
             mock=getattr(args, "mock", False),
-            monkeys=getattr(args, "monkeys", False),
+            monkeys=getattr(args, "monkeys", True),
             monkey_count=getattr(args, "monkey_count", 1000),
             contestants=None,
             output=getattr(args, "output", None)
@@ -740,7 +745,8 @@ def main():
     p_step.add_argument("--end-date", type=str, default=DEFAULT_END_DATE, help="回测结束日期")
     p_step.add_argument("--initial-cash", type=float, default=500_000.0, help="初始资金规模 (默认 500,000 元)")
     p_step.add_argument("--mock", action="store_true", help="使用 Mock 适配器运行")
-    p_step.add_argument("--monkeys", action="store_true", help="同时运行参数化猴子群落零假设评估")
+    p_step.add_argument("--monkeys", dest="monkeys", action="store_true", default=True, help="同时运行参数化猴子群落零假设评估 (默认开启)")
+    p_step.add_argument("--no-monkeys", dest="monkeys", action="store_false", help="跳过参数化猴子群落零假设评估")
     p_step.add_argument("--monkey-count", type=int, default=1000, help="每组策略规格的猴子数量 (默认 1000 只)")
     p_step.add_argument("--contestants", type=str, default=None, help="逗号分隔的参赛选手 ID")
     p_step.add_argument("--output", type=str, default=None, help="指定输出根目录")
@@ -780,7 +786,8 @@ def main():
     p_rf.add_argument("--end-date", type=str, default=None, help="可选：指定新截止日期并先原子执行 bump-date")
     p_rf.add_argument("--seasons", nargs="+", default=None, help="指定待推进赛季列表 (默认所有活跃赛季)")
     p_rf.add_argument("--mock", action="store_true", help="使用 Mock 模式快速推进")
-    p_rf.add_argument("--monkeys", action="store_true", help="增量推进同时运行猴群零假设评估")
+    p_rf.add_argument("--monkeys", dest="monkeys", action="store_true", default=True, help="增量推进同时运行猴群零假设评估 (默认开启)")
+    p_rf.add_argument("--no-monkeys", dest="monkeys", action="store_false", help="跳过猴群零假设评估")
     p_rf.add_argument("--monkey-count", type=int, default=1000, help="每组策略规格猴子数量")
     p_rf.add_argument("--no-sync-chronicles", action="store_true", help="跳过自动同步 Chronicles 文档")
     p_rf.add_argument("--no-audit", action="store_true", help="跳过末尾本地零泄密隐私审计")

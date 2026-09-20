@@ -34,8 +34,8 @@ python cli.py rollforward --end-date 2026-09-18
 ```
 
 > [!TIP]
-> - `rollforward` 默认会自动将变更的交易日数和截止日同步到全局与 4 个活跃赛季配置，依次执行增量 `step` 与 `export-web`，自动同步 `chronicles/en/` 到 `web/chronicles/en/`，并在末尾强制执行 `audit_privacy.py`。
-> - 若本周需要同时刷新全量猴群零假设评估，只需追加 `--monkeys` 参数。
+> - `rollforward` 默认会自动将变更的交易日数和截止日同步到全局与 4 个活跃赛季配置，依次执行增量 `step`（**默认全自动包含 11,000 只猴群零假设重估**）与 `export-web`，自动同步 `chronicles/en/` 到 `web/chronicles/en/`，并在末尾强制执行 `audit_privacy.py`。
+> - 若仅需极速调试周频撮合或跳过猴群评估，可追加 `--no-monkeys` 参数。
 
 ---
 

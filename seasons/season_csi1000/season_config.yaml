@@ -11,7 +11,7 @@ description: "CSI 1000 small-cap universe testbed: evaluating the 6 Alpha candid
 calendar:
   anchor_date: "2026-07-03"        # Retrospective calibration anchor (Friday close)
   first_trade_date: "2026-07-06"   # Monday market open entry
-  end_date: "2026-09-11"           # Tournament evaluation horizon
+  end_date: "2026-09-18"           # Tournament evaluation horizon
   cycle_freq: "weekly"
 
 # Account and Match Execution Parameters
@@ -36,7 +36,7 @@ universe:
   testbed_desc: "1000-stock small-cap testbed"
 
 banner:
-  proof_text: "🔬 <strong style=\"color: var(--text-secondary);\">CSI 1000 Testbed Proof:</strong> 1,000 small-cap equities with 11,000 empirical random monkeys verified over 2026-07-03 ~ 2026-09-11. Unfalsifiable empirical null resolution."
+  proof_text: "🔬 <strong style=\"color: var(--text-secondary);\">CSI 1000 Testbed Proof:</strong> 1,000 small-cap equities with 11,000 empirical random monkeys verified over 2026-07-03 ~ 2026-09-18. Unfalsifiable empirical null resolution."
 
 # Enabled Benchmarks
 benchmarks:
@@ -62,7 +62,7 @@ dispatches:
     tag: "🏆 CSI 1000 Baseline Standing"
     badge: "M1–M2 Complete"
     title: "CSI 1000 Retrospective Baseline: Small-Cap Frictions & The Sloth Anomaly"
-    window_label: "2026-07-03 ~ 2026-09-11 (51 Trading Days, Cycles 1–9)"
+    window_label: "2026-07-03 ~ 2026-09-18 (51 Trading Days, Cycles 1–9)"
     nature_label: "Retrospective backtest baseline evaluating alpha robustness across 1,000 small-cap equities."
     leader_summary: "CONTESTANT_B_sloth-2 finished the baseline at NAV 1.1343 (+13.43%), outperforming the CSI 1000 benchmark by +26.34pp and Taotie 1000 by +21.83pp."
   climate:

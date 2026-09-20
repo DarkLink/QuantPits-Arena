@@ -48,7 +48,8 @@ def test_cli_parser_subcommands():
     p_rf = subparsers.add_parser("rollforward")
     p_rf.add_argument("--end-date", type=str, default=None)
     p_rf.add_argument("--seasons", nargs="+", default=None)
-    p_rf.add_argument("--monkeys", action="store_true")
+    p_rf.add_argument("--monkeys", dest="monkeys", action="store_true", default=True)
+    p_rf.add_argument("--no-monkeys", dest="monkeys", action="store_false")
 
     args = parser.parse_args(["step", "--season", "season_01"])
     assert args.run_id is None
@@ -58,9 +59,14 @@ def test_cli_parser_subcommands():
     assert args.end_date == "2026-09-18"
     assert args.seasons is None
 
-    args = parser.parse_args(["rollforward", "--end-date", "2026-09-18", "--monkeys"])
+    # rollforward 默认带猴子
+    args = parser.parse_args(["rollforward", "--end-date", "2026-09-18"])
     assert args.end_date == "2026-09-18"
     assert args.monkeys is True
+
+    # rollforward 显式指定 --no-monkeys
+    args_no_m = parser.parse_args(["rollforward", "--no-monkeys"])
+    assert args_no_m.monkeys is False
 
 
 def test_bump_date_dry_run_with_current_date():
