@@ -773,7 +773,7 @@ class DualTierExporter:
         return out_file
 
     def _sync_seasons_index(self, season_cfg: Any, web_payload: Dict[str, Any]) -> None:
-        """保持 web/js/data/seasons_index.js 自动注册"""
+        """保持 web/js/data/seasons_index.js 自动注册与日期指标同步更新"""
         import re
         from arena.config import REPO_ROOT
         index_file = REPO_ROOT / "web" / "js" / "data" / "seasons_index.js"
@@ -782,11 +782,51 @@ class DualTierExporter:
 
         content = index_file.read_text(encoding="utf-8")
         season_id = web_payload["meta"]["season_id"]
+        meta = web_payload["meta"]
+
+        # 若已存在该赛季条目，则增量更新其 end_date 和 trading_days
         if f'id: "{season_id}"' in content or f'id: \'{season_id}\'' in content or f'"id": "{season_id}"' in content:
+            new_end = meta.get("window_label", "").split("~")[-1].strip() if "~" in meta.get("window_label", "") else ""
+            if not new_end:
+                dates = web_payload.get("nav_timeline", {}).get("dates", [])
+                if dates:
+                    new_end = dates[-1]
+            td_count = meta.get("trading_days", len(web_payload.get("nav_timeline", {}).get("dates", [])))
+
+            if new_end and td_count:
+                # 定位该赛季在数组中的块进行针对性替换
+                pattern = rf'({{\s*id:\s*["\']{re.escape(season_id)}["\'].*?\}})'
+                match = re.search(pattern, content, flags=re.DOTALL)
+                if match:
+                    block = match.group(1)
+                    # 更新 end_date
+                    updated_block = re.sub(
+                        r'(end_date:\s*["\'])[\d\-]+(["\'])',
+                        rf'\g<1>{new_end}\g<2>',
+                        block
+                    )
+                    # 更新 trading_days
+                    updated_block = re.sub(
+                        r'(trading_days:\s*)\d+',
+                        rf'\g<1>{td_count}',
+                        updated_block
+                    )
+                    # 更新 period (YYYY.MM - YYYY.MM)
+                    try:
+                        cal_end_ym = new_end[:7].replace("-", ".")
+                        updated_block = re.sub(
+                            r'(period:\s*["\'][\d\.]+\s*-\s*)[\d\.]+(["\'])',
+                            rf'\g<1>{cal_end_ym}\g<2>',
+                            updated_block
+                        )
+                    except Exception:
+                        pass
+                    if updated_block != block:
+                        content = content[:match.start()] + updated_block + content[match.end():]
+                        index_file.write_text(content, encoding="utf-8")
             return
 
         # 组装新赛季条目
-        meta = web_payload["meta"]
         new_entry = {
             "id": season_id,
             "title": meta.get("season_title", season_id),
@@ -852,6 +892,33 @@ class DualTierExporter:
             indent = "  "
             lines.insert(insert_idx + 1, f"{indent}{target_script}")
             html_file.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def sync_chronicles() -> int:
+    """
+    自动同步并对齐 chronicles/en/*.md 到 web/chronicles/en/*.md
+    返回同步或更新的文件数量。
+    """
+    import shutil
+    from arena.config import REPO_ROOT
+
+    src_dir = REPO_ROOT / "chronicles" / "en"
+    dst_dir = REPO_ROOT / "web" / "chronicles" / "en"
+
+    if not src_dir.exists():
+        return 0
+
+    dst_dir.mkdir(parents=True, exist_ok=True)
+    synced_count = 0
+
+    for src_file in src_dir.glob("*.md"):
+        dst_file = dst_dir / src_file.name
+        if not dst_file.exists() or src_file.read_bytes() != dst_file.read_bytes():
+            shutil.copy2(src_file, dst_file)
+            synced_count += 1
+
+    return synced_count
+
 
 
 

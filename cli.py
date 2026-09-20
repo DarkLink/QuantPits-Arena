@@ -15,7 +15,7 @@ from arena.calendar import TradingCalendar
 from arena.contestants import ContestantRegistry
 from arena.animals import get_all_animals
 from arena.runner import WeeklyCycleRunner
-from arena.reports import DualTierExporter
+from arena.reports import DualTierExporter, sync_chronicles
 from arena.seasons import SeasonManager
 from arena.benchmarks import BenchmarkCategory
 
@@ -286,6 +286,9 @@ def cmd_step(args):
     print(f"    🟢 收益率衰减矩阵:   {artifacts['public_matrix']}")
     print(f"    🔴 本地私有交易明细: {artifacts['private_trades']}")
     print(f"    💾 最新运行状态快照: {latest_path}")
+    print("=" * 70 + "\n")
+
+
 def cmd_cycle_step(args):
     """
     周五一键闭环原子执行流 (Friday Loop: Settle Last Week + Commit Next Week)
@@ -491,6 +494,203 @@ def cmd_pipeline(args):
     print("=" * 70 + "\n")
 
 
+def cmd_bump_date(args):
+    """一键更新全局配置、活跃赛季 YAML 及前端索引中的截止交易日 (Horizon Bump)"""
+    import re
+
+    target_date = args.end_date
+    calendar = TradingCalendar()
+    if not calendar.is_trading_day(target_date):
+        print(f"[WARN] 目标日期 {target_date} 不是有效交易日，自动查找之前的最近有效交易日...")
+        actual_end_date = calendar.get_latest_trading_day_on_or_before(target_date)
+        print(f"       调整为交易日: {actual_end_date}")
+    else:
+        actual_end_date = target_date
+
+    print("\n" + "=" * 70)
+    print(f" 📅 推进赛季结算截止日期 (Horizon Bump): -> {actual_end_date}")
+    print("=" * 70)
+
+    # 1. 更新 arena/config.py 中的 DEFAULT_END_DATE
+    config_py = REPO_ROOT / "arena" / "config.py"
+    if config_py.exists():
+        py_text = config_py.read_text(encoding="utf-8")
+        updated_py = re.sub(
+            r'(DEFAULT_END_DATE\s*=\s*["\'])[\d\-]+(["\'])',
+            rf'\g<1>{actual_end_date}\g<2>',
+            py_text
+        )
+        if updated_py != py_text:
+            config_py.write_text(updated_py, encoding="utf-8")
+            print(f"[✔] 已更新全局默认配置: arena/config.py (DEFAULT_END_DATE = \"{actual_end_date}\")")
+        else:
+            print(f"[i] arena/config.py 中的 DEFAULT_END_DATE 已是 \"{actual_end_date}\"")
+
+    # 2. 识别目标赛季并更新 season_config.yaml
+    if args.seasons:
+        if args.seasons == ["all"]:
+            seasons_to_update = SeasonManager.list_seasons()
+        else:
+            seasons_to_update = args.seasons
+    else:
+        # 默认更新所有 ACTIVE / PREVIEW / DEMO 赛季 (排除 DRAFT)
+        seasons_to_update = []
+        for sid in SeasonManager.list_seasons():
+            cfg = SeasonManager.get_season_config(sid)
+            if cfg.status in ["ACTIVE", "PREVIEW", "DEMO"]:
+                seasons_to_update.append(sid)
+
+    updated_seasons_info = {}
+    for sid in seasons_to_update:
+        yaml_path = REPO_ROOT / "seasons" / sid / "season_config.yaml"
+        if not yaml_path.exists():
+            yaml_path = REPO_ROOT / "seasons" / sid / "season.yaml"
+        if not yaml_path.exists():
+            continue
+
+        cfg = SeasonManager.get_season_config(sid)
+        tds = calendar.get_trading_days(cfg.anchor_date, actual_end_date)
+        trading_days_count = len(tds)
+        updated_seasons_info[sid] = {
+            "end_date": actual_end_date,
+            "trading_days": trading_days_count,
+            "anchor_date": cfg.anchor_date
+        }
+
+        yaml_text = yaml_path.read_text(encoding="utf-8")
+        # 精准替换 calendar 块内的 end_date
+        updated_yaml = re.sub(
+            r'(\bend_date:\s*["\'])[\d\-]+(["\'])',
+            rf'\g<1>{actual_end_date}\g<2>',
+            yaml_text
+        )
+        # 精准替换 banner proof_text 中的日期范围 (YYYY-MM-DD ~ YYYY-MM-DD)
+        updated_yaml = re.sub(
+            r'(\b\d{4}-\d{2}-\d{2}\s*~\s*)\d{4}-\d{2}-\d{2}',
+            rf'\g<1>{actual_end_date}',
+            updated_yaml
+        )
+        if updated_yaml != yaml_text:
+            yaml_path.write_text(updated_yaml, encoding="utf-8")
+            print(f"[✔] 已更新赛季配置: {yaml_path.relative_to(REPO_ROOT)} (end_date: {actual_end_date}, 交易日数: {trading_days_count})")
+        else:
+            print(f"[i] 赛季配置已是最新: {yaml_path.relative_to(REPO_ROOT)}")
+
+    # 3. 更新 web/js/data/seasons_index.js
+    index_file = REPO_ROOT / "web" / "js" / "data" / "seasons_index.js"
+    if index_file.exists():
+        content = index_file.read_text(encoding="utf-8")
+        orig_content = content
+        for sid, info in updated_seasons_info.items():
+            pattern = rf'({{\s*id:\s*["\']{re.escape(sid)}["\'].*?\}})'
+            match = re.search(pattern, content, flags=re.DOTALL)
+            if match:
+                block = match.group(1)
+                new_block = re.sub(
+                    r'(end_date:\s*["\'])[\d\-]+(["\'])',
+                    rf'\g<1>{info["end_date"]}\g<2>',
+                    block
+                )
+                new_block = re.sub(
+                    r'(trading_days:\s*)\d+',
+                    rf'\g<1>{info["trading_days"]}',
+                    new_block
+                )
+                cal_end_ym = info["end_date"][:7].replace("-", ".")
+                new_block = re.sub(
+                    r'(period:\s*["\'][\d\.]+\s*-\s*)[\d\.]+(["\'])',
+                    rf'\g<1>{cal_end_ym}\g<2>',
+                    new_block
+                )
+                if new_block != block:
+                    content = content[:match.start()] + new_block + content[match.end():]
+        if content != orig_content:
+            index_file.write_text(content, encoding="utf-8")
+            print(f"[✔] 已同步前端索引: web/js/data/seasons_index.js")
+        else:
+            print(f"[i] 前端索引已是最新: web/js/data/seasons_index.js")
+
+    print("=" * 70 + "\n")
+    return actual_end_date
+
+
+def cmd_rollforward(args):
+    """一键执行全部赛季批量增量推进、Web 导出、Chronicles 同步与安全审计 (Batch Roll-Forward)"""
+    print("\n" + "=" * 70)
+    print(" 🚀 QuantPits-Arena 批量全自动周频滚动推进 (The Grand Roll-Forward)")
+    print("=" * 70)
+
+    # 1. 若指定了 --end-date，则首先原子执行 bump-date
+    if args.end_date:
+        print(f"\n[Step 1/5] 执行全局截止日期原子推进: -> {args.end_date}...")
+        bump_args = argparse.Namespace(
+            end_date=args.end_date,
+            seasons=args.seasons if args.seasons != ["all"] else None
+        )
+        actual_end = cmd_bump_date(bump_args)
+    else:
+        actual_end = DEFAULT_END_DATE
+        print(f"\n[Step 1/5] 使用当前全局默认截止日期: {actual_end}")
+
+    # 2. 确定待推进赛季列表
+    if args.seasons and args.seasons != ["all"]:
+        target_seasons = args.seasons
+    else:
+        target_seasons = []
+        for sid in SeasonManager.list_seasons():
+            cfg = SeasonManager.get_season_config(sid)
+            if cfg.status in ["ACTIVE", "PREVIEW", "DEMO"]:
+                target_seasons.append(sid)
+
+    print(f"\n[Step 2/5] 待推进目标赛季列表: {target_seasons}")
+
+    # 3. 逐个赛季执行增量推进 step
+    for idx, sid in enumerate(target_seasons, 1):
+        print(f"\n--- [Step 3/5] ({idx}/{len(target_seasons)}) 增量推进赛季: {sid} ---")
+        step_args = argparse.Namespace(
+            season=sid,
+            run_id=None,
+            anchor_date=DEFAULT_ANCHOR_DATE,
+            end_date=actual_end,
+            initial_cash=500_000.0,
+            mock=getattr(args, "mock", False),
+            monkeys=getattr(args, "monkeys", False),
+            monkey_count=getattr(args, "monkey_count", 1000),
+            contestants=None,
+            output=getattr(args, "output", None)
+        )
+        cmd_step(step_args)
+
+    # 4. 逐个赛季导出通用前端 Payload export-web
+    for idx, sid in enumerate(target_seasons, 1):
+        print(f"\n--- [Step 4/5] ({idx}/{len(target_seasons)}) 导出 Web Payload: {sid} ---")
+        exp_args = argparse.Namespace(
+            season=sid,
+            run_id=None,
+            output=getattr(args, "output", None)
+        )
+        cmd_export_web(exp_args)
+
+    # 5. 可选同步 Chronicles
+    if not getattr(args, "no_sync_chronicles", False):
+        print(f"\n[Step 5/5] 检查并同步 Chronicles 文档...")
+        n_synced = sync_chronicles()
+        if n_synced > 0:
+            print(f"[✔] 成功自动同步 {n_synced} 篇 Chronicles 到 web/chronicles/en/")
+        else:
+            print(f"[i] Chronicles 与 web/chronicles/en/ 保持一致，无需拷贝")
+
+    # 6. 安全隐私合规审计
+    if not getattr(args, "no_audit", False):
+        print(f"\n[Final] 强制执行本地零泄密隐私审计...")
+        cmd_audit(args)
+
+    print("\n" + "=" * 70)
+    print(" 🎉 全部赛季增量推进与导出圆满完成！")
+    print("=" * 70 + "\n")
+
+
+
 def main():
     parser = argparse.ArgumentParser(description="QuantPits-Arena CLI")
     subparsers = parser.add_subparsers(dest="subcommand", help="子命令")
@@ -535,7 +735,7 @@ def main():
     # step
     p_step = subparsers.add_parser("step", help="从上周快照增量滚动推进 1 个周期")
     p_step.add_argument("--season", type=str, default="season_01", help="指定赛季 ID (默认 season_01)")
-    p_step.add_argument("--run-id", type=str, required=True, help="指定待推进的运行 ID")
+    p_step.add_argument("--run-id", type=str, default=None, help="指定待推进的运行 ID (默认: {season}_run)")
     p_step.add_argument("--anchor-date", type=str, default=DEFAULT_ANCHOR_DATE, help="初始锚定日期")
     p_step.add_argument("--end-date", type=str, default=DEFAULT_END_DATE, help="回测结束日期")
     p_step.add_argument("--initial-cash", type=float, default=500_000.0, help="初始资金规模 (默认 500,000 元)")
@@ -570,6 +770,22 @@ def main():
     p_exp.add_argument("--run-id", type=str, default=None, help="指定运行 ID")
     p_exp.add_argument("--output", type=str, default=None, help="指定输出根目录")
 
+    # bump-date
+    p_bump = subparsers.add_parser("bump-date", help="一键原子推进全局及各赛季配置与前端索引的截止日期")
+    p_bump.add_argument("--end-date", type=str, required=True, help="新的截止交易日 (YYYY-MM-DD，如 2026-09-18)")
+    p_bump.add_argument("--seasons", nargs="+", default=None, help="指定待更新赛季 ID (默认所有活跃赛季，支持 all)")
+
+    # rollforward (一键全赛季批量增量推进)
+    p_rf = subparsers.add_parser("rollforward", help="一键批量周频滚动推进全量赛季 (Bump -> Step -> Export -> Sync -> Audit)")
+    p_rf.add_argument("--end-date", type=str, default=None, help="可选：指定新截止日期并先原子执行 bump-date")
+    p_rf.add_argument("--seasons", nargs="+", default=None, help="指定待推进赛季列表 (默认所有活跃赛季)")
+    p_rf.add_argument("--mock", action="store_true", help="使用 Mock 模式快速推进")
+    p_rf.add_argument("--monkeys", action="store_true", help="增量推进同时运行猴群零假设评估")
+    p_rf.add_argument("--monkey-count", type=int, default=1000, help="每组策略规格猴子数量")
+    p_rf.add_argument("--no-sync-chronicles", action="store_true", help="跳过自动同步 Chronicles 文档")
+    p_rf.add_argument("--no-audit", action="store_true", help="跳过末尾本地零泄密隐私审计")
+    p_rf.add_argument("--output", type=str, default=None, help="指定输出根目录")
+
     args = parser.parse_args()
     if not args.subcommand:
         parser.print_help()
@@ -597,6 +813,10 @@ def main():
         cmd_pipeline(args)
     elif args.subcommand == "export-web":
         cmd_export_web(args)
+    elif args.subcommand == "bump-date":
+        cmd_bump_date(args)
+    elif args.subcommand == "rollforward":
+        cmd_rollforward(args)
 
 
 if __name__ == "__main__":
