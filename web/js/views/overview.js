@@ -66,17 +66,17 @@ window.OverviewView = {
           <div class="kpi-subtext">6 Model Candidates × 28 Zoo Handlers</div>
         </div>
         <div class="kpi-card positive">
-          <div class="kpi-label">Upper Tail vs Null (p &lt; 0.05)</div>
+          <div class="kpi-label arena-glossary-term" data-tooltip-term="empirical_p_value">Upper Tail vs Null (p &lt; 0.05)</div>
           <div class="kpi-value positive">${kpis.statSignificantCount}</div>
           <div class="kpi-subtext">${kpis.statSignificantPct} exceed 95th %ile of matched nulls</div>
         </div>
         <div class="kpi-card positive">
-          <div class="kpi-label">Peak OOS Return</div>
+          <div class="kpi-label arena-glossary-term" data-tooltip-term="total_return_pct">Peak OOS Return</div>
           <div class="kpi-value positive">${kpis.topReturn >= 0 ? '+' : ''}${kpis.topReturn.toFixed(2)}%</div>
           <div class="kpi-subtext">Top performer across ${window.arenaAdapter.getTradingDays()} trading days</div>
         </div>
         <div class="kpi-card">
-          <div class="kpi-label">Median OOS Return</div>
+          <div class="kpi-label arena-glossary-term" data-tooltip-term="total_return_pct">Median OOS Return</div>
           <div class="kpi-value" style="color:#38bdf8;">${kpis.medianReturn >= 0 ? '+' : ''}${kpis.medianReturn.toFixed(2)}%</div>
           <div class="kpi-subtext">Cross-path median performance</div>
         </div>
@@ -88,23 +88,26 @@ window.OverviewView = {
           <span style="font-size: 11px; font-weight: 700; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em;">
             Benchmark Reference Standards:
           </span>
+          <button class="chart-spec-pill" onclick="window.ArenaSpecDrawer && window.ArenaSpecDrawer.open('Benchmarks')">
+            <span>📖 What are these?</span>
+          </button>
         </div>
         <div style="display: flex; align-items: center; gap: 24px; flex-wrap: wrap;">
-          <div style="display: flex; align-items: center; gap: 8px;" title="Executable baseline: CNY 500k capital, 100-share trading lot friction">
+          <div style="display: flex; align-items: center; gap: 8px;">
             <span class="bm-line-badge" style="border-top-color: #c084fc; width: 14px;"></span>
-            <span style="font-size: 12px; color: var(--text-secondary);">${window.arenaAdapter.getTaotieDisplayName()}:</span>
+            <span class="arena-glossary-term" data-tooltip-term="taotie" style="font-size: 12px;">${window.arenaAdapter.getTaotieDisplayName()}:</span>
             <b style="font-size: 13px; font-family: monospace; color: #c084fc;">${kpis.taotieReturn >= 0 ? '+' : ''}${kpis.taotieReturn.toFixed(2)}%</b>
           </div>
           ${window.arenaAdapter.hasGhostTaotie() ? `
-          <div style="display: flex; align-items: center; gap: 8px;" title="Theoretical equal-weight baseline: CNY 100M institutional capital, zero lot friction">
+          <div style="display: flex; align-items: center; gap: 8px;">
             <span class="bm-line-badge" style="border-top-color: #00f0ff; width: 14px;"></span>
-            <span style="font-size: 12px; color: var(--text-secondary);">Ghost Taotie (Theoretical Equal-Weight 100M):</span>
+            <span class="arena-glossary-term" data-tooltip-term="ghost_taotie" style="font-size: 12px;">Ghost Taotie (100M):</span>
             <b style="font-size: 13px; font-family: monospace; color: #00f0ff;">${window.arenaAdapter.getGhostTaotieReturn() >= 0 ? '+' : ''}${window.arenaAdapter.getGhostTaotieReturn().toFixed(2)}%</b>
           </div>
           ` : ''}
-          <div style="display: flex; align-items: center; gap: 8px;" title="External broad market equity anchor (${window.arenaAdapter.getMarketBenchmarkCode()})">
+          <div style="display: flex; align-items: center; gap: 8px;">
             <span class="bm-line-badge" style="border-top-color: #f59e0b; width: 14px;"></span>
-            <span style="font-size: 12px; color: var(--text-secondary);">${window.arenaAdapter.getMarketBenchmarkName()} (Market Benchmark):</span>
+            <span class="arena-glossary-term" data-tooltip-term="market" style="font-size: 12px;">${window.arenaAdapter.getMarketBenchmarkName()} (Market Benchmark):</span>
             <b style="font-size: 13px; font-family: monospace; color: #f59e0b;">${kpis.csi300Return >= 0 ? '+' : ''}${kpis.csi300Return.toFixed(2)}%</b>
           </div>
         </div>
@@ -122,6 +125,9 @@ window.OverviewView = {
               <h3 style="margin: 0; font-size: 1.15rem; font-weight: 700; color: var(--text-primary);">
                 Arena Horizon &amp; Benchmark Zoo Trajectories
               </h3>
+              <button class="chart-spec-pill" onclick="window.ArenaSpecDrawer && window.ArenaSpecDrawer.open('Zoo Animals')">
+                <span>🦁 Zoo Specs</span>
+              </button>
             </div>
             <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">
               Multi-line trajectory panorama comparing model strategies against ${window.arenaAdapter.getTaotieShortName()}, ${window.arenaAdapter.hasGhostTaotie() ? 'Ghost Taotie (100M), ' : ''}and ${window.arenaAdapter.getMarketBenchmarkName()}
@@ -195,7 +201,12 @@ window.OverviewView = {
         <div class="card">
           <div class="card-header">
             <div>
-              <h3 class="card-title">🎯 Return vs. Monkey Percentile Significance</h3>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <h3 class="card-title">🎯 Return vs. Monkey Percentile Significance</h3>
+                <button class="chart-spec-pill" onclick="window.ArenaSpecDrawer && window.ArenaSpecDrawer.open('Metrics')">
+                  <span>📐 Null Court Specs</span>
+                </button>
+              </div>
               <div class="card-subtitle">
                 X-axis: 1,000-Monkey Null Percentile | Y-axis: OOS Total Return (%) | Bubble Size: Sharpe Ratio
               </div>

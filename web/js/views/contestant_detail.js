@@ -77,10 +77,13 @@ window.ContestantDetailView = {
         <div class="view-header">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px;">
             <div>
-              <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 6px;">
+              <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 6px; flex-wrap: wrap;">
                 <h1 class="view-title">${contestant.anonymous_name || contestant.display_name || contestant.contestant_id}</h1>
                 <span class="badge ${contestant.status === 'RETIRED' ? 'badge-danger' : 'badge-primary'}">${contestant.status || 'BENCHMARKED'}</span>
                 <span class="badge badge-neutral">${contestant.family || 'Alpha Family'}</span>
+                <button class="chart-spec-pill" onclick="window.ArenaSpecDrawer && window.ArenaSpecDrawer.open('Contestants')">
+                  <span>🧬 Field Guide Model Specs</span>
+                </button>
               </div>
               <p class="view-subtitle">Detailed model architecture profile, historical lineage, and 28-animal execution stress tests</p>
             </div>

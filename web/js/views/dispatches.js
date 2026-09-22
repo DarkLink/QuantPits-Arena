@@ -194,7 +194,67 @@ window.DispatchesView = {
     }
   },
 
+  decorateArticle(html) {
+    if (!html) return "";
+    const terms = [
+      { pattern: /\b(Ghost\s+Taotie)\b/gi, term: "ghost_taotie" },
+      { pattern: /\b(Taotie)\b/gi, term: "taotie" },
+      { pattern: /\b(Null\s+Court)\b/gi, term: "null_court" },
+      { pattern: /\b(Matched\s+Monkeys|matched\s+null\s+colony|random\s+monkeys)\b/gi, term: "monkeys" },
+      { pattern: /\b(CONTESTANT_[A-F])\b/g, term: "$1" },
+      { pattern: /\b(eagle-5-1|eagle-11-2|eagle-44-6|eagle-66-9|eagle-88-12)\b/gi, term: "$1" },
+      { pattern: /\b(rabbit-1|rabbit-2)\b/gi, term: "$1" },
+      { pattern: /\b(sloth-[1-4])\b/gi, term: "$1" },
+      { pattern: /\b(snail-[1-4])\b/gi, term: "$1" },
+      { pattern: /\b(meerkat-\d+)\b/gi, term: "$1" },
+      { pattern: /\b(whale-shark)\b/gi, term: "whale-shark" },
+      { pattern: /\b(koala)\b/gi, term: "koala" },
+      { pattern: /\b(Sharpe\s+ratio)\b/gi, term: "sharpe_ratio" },
+      { pattern: /\b(maximum\s+drawdown|Max\s+Drawdown)\b/gi, term: "max_drawdown_pct" },
+      { pattern: /\b(p-value|empirical\s+percentile)\b/gi, term: "empirical_p_value" }
+    ];
+
+    const temp = document.createElement("div");
+    temp.innerHTML = html;
+
+    const walkTextNodes = (node) => {
+      const tag = node.parentElement ? node.parentElement.tagName.toLowerCase() : "";
+      if (["code", "pre", "a", "button", "script", "style", "h1", "h2", "h3"].includes(tag)) return;
+      if (node.parentElement && node.parentElement.classList.contains("arena-glossary-term")) return;
+
+      if (node.nodeType === Node.TEXT_NODE) {
+        let text = node.nodeValue;
+        if (!text || text.trim().length < 3) return;
+
+        let replaced = false;
+        let newHtml = text;
+
+        for (const t of terms) {
+          if (t.pattern.test(newHtml)) {
+            newHtml = newHtml.replace(t.pattern, (match) => {
+              const termKey = t.term === "$1" ? match : t.term;
+              return `<span class="arena-glossary-term" data-tooltip-term="${termKey}">${match}</span>`;
+            });
+            replaced = true;
+          }
+        }
+
+        if (replaced) {
+          const span = document.createElement("span");
+          span.innerHTML = newHtml;
+          node.parentNode.replaceChild(span, node);
+        }
+      } else if (node.nodeType === Node.ELEMENT_NODE) {
+        Array.from(node.childNodes).forEach(walkTextNodes);
+      }
+    };
+
+    walkTextNodes(temp);
+    return temp.innerHTML;
+  },
+
   wrapArticle(activeEp, innerHtml) {
+    const decoratedHtml = this.decorateArticle(innerHtml);
     return `
       <article class="prose" style="max-width: 820px; margin: 0 auto; color: var(--text-secondary); line-height: 1.75; font-size: 0.95rem;">
         <div style="border-bottom: 1px solid var(--border-subtle); padding-bottom: 1.25rem; margin-bottom: 1.5rem;">
@@ -215,7 +275,7 @@ window.DispatchesView = {
             </p>
           ` : ''}
         </div>
-        ${innerHtml}
+        ${decoratedHtml}
         <div style="margin-top: 2.5rem; padding-top: 1.25rem; border-top: 1px solid var(--border-subtle); text-align: center; font-size: 0.85rem; color: var(--text-tertiary);">
           🏛️ <em>QuantPits Arena Official Tournament Log</em>
         </div>

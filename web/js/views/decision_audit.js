@@ -113,6 +113,9 @@ window.DecisionAuditView = {
             </div>
             <p class="view-subtitle">Interactive counterfactual evaluation across historical model selection forks, physical/theoretical benchmarks, and 28 execution containers</p>
           </div>
+          <button class="chart-spec-pill" style="align-self: center;" onclick="if(window.ArenaSpecDrawer) window.ArenaSpecDrawer.toggle();">
+            📖 Field Guide Specs
+          </button>
         </div>
       </div>
 
@@ -238,13 +241,13 @@ window.DecisionAuditView = {
               </div>
             </div>
             <div class="kpi-card" style="padding: 10px;">
-              <div class="kpi-title">Max DD</div>
+              <div class="kpi-title" data-tooltip-term="mdd">Max DD</div>
               <div class="kpi-value" style="font-size: 16px; color: var(--accent-rose);">
                 ${profA.maxDrawdownPct ? profA.maxDrawdownPct.toFixed(2) : '0'}%
               </div>
             </div>
             <div class="kpi-card" style="padding: 10px;">
-              <div class="kpi-title">Null Court</div>
+              <div class="kpi-title" data-tooltip-term="null_court">Null Court</div>
               <div class="kpi-value" style="font-size: 13px; color: var(--accent-emerald);">
                 ${profA.nullCourt || 'Pass'}
               </div>
@@ -274,13 +277,13 @@ window.DecisionAuditView = {
               </div>
             </div>
             <div class="kpi-card" style="padding: 10px;">
-              <div class="kpi-title">Max DD</div>
+              <div class="kpi-title" data-tooltip-term="mdd">Max DD</div>
               <div class="kpi-value" style="font-size: 16px; color: var(--accent-rose);">
                 ${profB.maxDrawdownPct ? profB.maxDrawdownPct.toFixed(2) : '0'}%
               </div>
             </div>
             <div class="kpi-card" style="padding: 10px;">
-              <div class="kpi-title">Null Court</div>
+              <div class="kpi-title" data-tooltip-term="null_court">Null Court</div>
               <div class="kpi-value" style="font-size: 13px; color: var(--accent-emerald);">
                 ${profB.nullCourt || 'Pass'}
               </div>
@@ -336,8 +339,13 @@ window.DecisionAuditView = {
               Upper panel: Out-of-sample NAV trajectories. Lower panel: Relative spread (A − B). Positive values indicate Slot A outperformance.
             </div>
           </div>
-          <div style="font-size: 12px; font-family: monospace; color: var(--accent-cyan);">
-            Active Execution Container: <strong>${currentAnimal.name}</strong>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="font-size: 12px; font-family: monospace; color: var(--accent-cyan);">
+              Active Execution Container: <strong>${currentAnimal.name}</strong>
+            </div>
+            <button class="chart-spec-pill" onclick="if(window.ArenaSpecDrawer) window.ArenaSpecDrawer.openCategory('animals');">
+              🐾 Handler Specs
+            </button>
           </div>
         </div>
         <div id="chart-archaeology-trajectory" style="height: 480px; width: 100%;"></div>
@@ -364,7 +372,7 @@ window.DecisionAuditView = {
           <table class="table" style="font-size: 12px;">
             <thead>
               <tr>
-                <th>Execution Handler</th>
+                <th data-tooltip-term="execution_handler">Execution Handler</th>
                 <th>Category</th>
                 <th style="text-align: right;">${profA.shortName} (A)</th>
                 <th style="text-align: right;">${profB.shortName} (B)</th>

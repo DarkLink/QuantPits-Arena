@@ -50,12 +50,15 @@ window.PathDetailView = {
         <button class="btn btn-secondary" onclick="window.appRouter.navigate('leaderboard')">
           ← Back to Leaderboard
         </button>
-        <div style="display:flex; gap:0.75rem;">
+        <div style="display:flex; gap:0.75rem; align-items:center;">
           <button class="btn btn-secondary" onclick="window.appRouter.navigate('contestants', { contestantId: '${path.contestant_id}' })">
             Model Profile (${contestant?.display_name || path.contestant_id})
           </button>
           <button class="btn btn-secondary" onclick="navigator.clipboard.writeText(window.location.href); alert('Path URL copied to clipboard!')">
             Share Path
+          </button>
+          <button class="chart-spec-pill" onclick="if(window.ArenaSpecDrawer) window.ArenaSpecDrawer.toggle();">
+            📖 Field Guide
           </button>
         </div>
       </div>
@@ -91,16 +94,16 @@ window.PathDetailView = {
                 ${path.total_return_pct >= 0 ? '+' : ''}${path.total_return_pct.toFixed(2)}%
               </div>
               <div style="font-size:0.75rem; color:var(--text-tertiary);">
-                Excess vs Executable ${window.arenaAdapter.getTaotieShortName()}: <b>${taotieExcess >= 0 ? '+' : ''}${taotieExcess.toFixed(2)}%</b>
+                Excess vs Executable <span data-tooltip-term="taotie">${window.arenaAdapter.getTaotieShortName()}</span>: <b>${taotieExcess >= 0 ? '+' : ''}${taotieExcess.toFixed(2)}%</b>
               </div>
             </div>
             <div style="text-align:right; border-left:1px solid var(--border-subtle); padding-left:1.25rem;">
-              <div style="font-size:0.75rem; color:var(--text-tertiary); text-transform:uppercase;">Monkey Percentile</div>
+              <div style="font-size:0.75rem; color:var(--text-tertiary); text-transform:uppercase;" data-tooltip-term="monkey_percentile">Monkey Percentile</div>
               <div style="font-size:2.2rem; font-weight:800; color:${isSig ? 'var(--accent-positive)' : 'var(--accent-warning)'};">
                 ${window.formatPercentile ? window.formatPercentile(pRank) : pRank.toFixed(1) + '%'}
               </div>
               <div style="font-size:0.75rem; color:var(--text-tertiary);">
-                Empirical p-value: <b>${window.formatPValue ? window.formatPValue(pVal) : pVal.toFixed(4)}</b>
+                Empirical p-value: <b data-tooltip-term="p_value">${window.formatPValue ? window.formatPValue(pVal) : pVal.toFixed(4)}</b>
               </div>
             </div>
           </div>
@@ -114,12 +117,12 @@ window.PathDetailView = {
             <div class="kpi-subtext">Base 1.0000 on ${seasonMeta?.anchor_date || '2026-07-03'}</div>
           </div>
           <div class="kpi-card">
-            <div class="kpi-label">Max Drawdown</div>
+            <div class="kpi-label" data-tooltip-term="mdd">Max Drawdown</div>
             <div class="kpi-value" style="color:var(--accent-negative);">${(path.max_drawdown_pct !== undefined ? path.max_drawdown_pct : 0.0).toFixed(2)}%</div>
             <div class="kpi-subtext">Peak-to-trough drop</div>
           </div>
           <div class="kpi-card">
-            <div class="kpi-label">Sharpe Ratio</div>
+            <div class="kpi-label" data-tooltip-term="sharpe">Sharpe Ratio</div>
             <div class="kpi-value" style="color:var(--accent-positive);">${path.sharpe_ratio || '-'}</div>
             <div class="kpi-subtext">Annualized risk-adjusted return</div>
           </div>
@@ -163,6 +166,9 @@ window.PathDetailView = {
                 <button type="button" class="benchmark-pill csi300 is-active" data-benchmark="csi300" title="Toggle ${window.arenaAdapter.getMarketBenchmarkName()}">
                   <span class="bm-line-badge"></span> ${window.arenaAdapter.getMarketBenchmarkName()}
                 </button>
+                <button class="chart-spec-pill" onclick="if(window.ArenaSpecDrawer) window.ArenaSpecDrawer.openCategory('benchmarks');">
+                  ⚖️ Benchmark Specs
+                </button>
               </div>
             </div>
           </div>
@@ -171,11 +177,14 @@ window.PathDetailView = {
 
         <!-- 2. Monkey Null Distribution Analysis -->
         <div class="card">
-          <div class="card-header">
+          <div class="card-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
             <div>
               <h3 class="card-title">Null Distribution & Statistical Significance</h3>
               <div class="card-subtitle">Benchmarked against 1,000 random monkeys with identical portfolio parameters (${specId})</div>
             </div>
+            <button class="chart-spec-pill" onclick="if(window.ArenaSpecDrawer) window.ArenaSpecDrawer.openTerm('metric_monkey_percentile');">
+              🐒 Monkey Specs
+            </button>
           </div>
           <div id="chart-path-monkey-dist" class="chart-container" style="height:260px;"></div>
 

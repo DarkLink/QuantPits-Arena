@@ -102,10 +102,13 @@ window.AnimalsView = {
         <div class="view-header">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px;">
             <div>
-              <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 6px;">
+              <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 6px; flex-wrap: wrap;">
                 <h1 class="view-title">The Zoo | Execution Handlers</h1>
                 <span class="badge badge-primary">28 Containers</span>
                 <span class="badge badge-neutral">Execution Stress Suite</span>
+                <button class="chart-spec-pill" onclick="window.ArenaSpecDrawer && window.ArenaSpecDrawer.open('Zoo Animals')">
+                  <span>🦁 Field Guide Zoo Specs</span>
+                </button>
               </div>
               <p class="view-subtitle">Explore operational execution containers testing latency, exit inertia, turnover constraints, portfolio capacity, and polarity sanity across all contestant models.</p>
             </div>

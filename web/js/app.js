@@ -25,6 +25,10 @@ window.ArenaApp = {
       this.onFilterChange(filters);
     });
 
+    // 2.5 Initialize Global Tooltip & Picture-in-Picture Spec Drawer
+    if (window.ArenaTooltip) window.ArenaTooltip.init();
+    if (window.ArenaSpecDrawer) window.ArenaSpecDrawer.init();
+
     // 3. Listen for Route Changes
     window.addEventListener("hashchange", () => this.handleRouting());
 
@@ -226,6 +230,11 @@ window.ArenaApp = {
       } catch (e) {
         // Fallback for older browsers
       }
+    }
+
+    // Notify Spec Drawer to refresh dynamic definitions
+    if (window.ArenaSpecDrawer) {
+      window.ArenaSpecDrawer.onSeasonChange();
     }
 
     // Re-render the active view with the new season data
@@ -538,6 +547,10 @@ window.appRouter = window.ArenaApp;
 window.appFilter = window.ArenaFilters;
 
 // Start app when DOM is ready
-document.addEventListener("DOMContentLoaded", () => {
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", () => {
+    window.ArenaApp.init();
+  });
+} else {
   window.ArenaApp.init();
-});
+}

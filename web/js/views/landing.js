@@ -34,6 +34,9 @@ window.LandingView = {
           <button class="btn btn-secondary" onclick="window.appRouter.navigate('decision-audit')">
             <span>⚖️ Decision Archaeology</span>
           </button>
+          <button class="btn btn-secondary" onclick="if(window.ArenaSpecDrawer) window.ArenaSpecDrawer.toggle();">
+            <span>📖 Field Guide Specs</span>
+          </button>
         </div>
       </section>
 
@@ -72,16 +75,22 @@ window.LandingView = {
           <p style="font-size:0.88rem; color:var(--text-secondary);">
             Production ensemble snapshots and neural architectures. Each model artifact represents a milestone in the quantitative evolutionary lineage.
           </p>
-          <a href="#contestants" style="font-size:0.84rem; font-weight:600; margin-top:auto; color:var(--accent-cyan);">Explore Profiles →</a>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:auto;">
+            <a href="#contestants" style="font-size:0.84rem; font-weight:600; color:var(--accent-cyan);">Explore Profiles →</a>
+            <button class="chart-spec-pill" onclick="if(window.ArenaSpecDrawer) window.ArenaSpecDrawer.openCategory('contestants');">Specs</button>
+          </div>
         </div>
 
         <div class="concept-card">
           <div class="concept-icon">🐾</div>
           <h3>The Animal Zoo</h3>
           <p style="font-size:0.88rem; color:var(--text-secondary);">
-            28 execution handlers stress-testing each model across multiple real-world axes: signal lag (Sloth/Snail), high/low turnover (Rabbit/Turtle), portfolio breadth (Eagle/WhaleShark), and polarity sanity (Koala).
+            28 execution handlers stress-testing each model across multiple real-world axes: signal lag (<span data-tooltip-term="sloth-22-3">Sloth</span>/<span data-tooltip-term="snail-22-3">Snail</span>), turnover (<span data-tooltip-term="rabbit-22-3">Rabbit</span>/<span data-tooltip-term="turtle-22-3">Turtle</span>), breadth (<span data-tooltip-term="eagle-6">Eagle</span>/<span data-tooltip-term="whale_shark">WhaleShark</span>), and polarity (<span data-tooltip-term="koala">Koala</span>).
           </p>
-          <a href="#leaderboard" style="font-size:0.84rem; font-weight:600; margin-top:auto; color:var(--accent-cyan);">Inspect Zoo Handlers →</a>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:auto;">
+            <a href="#animals" style="font-size:0.84rem; font-weight:600; color:var(--accent-cyan);">Inspect Zoo Handlers →</a>
+            <button class="chart-spec-pill" onclick="if(window.ArenaSpecDrawer) window.ArenaSpecDrawer.openCategory('animals');">Specs</button>
+          </div>
         </div>
 
         <div class="concept-card">
@@ -90,7 +99,10 @@ window.LandingView = {
           <p style="font-size:0.88rem; color:var(--text-secondary);">
             A high-resolution null model suite: 11 distinct portfolio execution policies, each benchmarked by 1,000 deterministic pseudo-random monkeys (11,000 monkeys total) under identical 100-share trading lot constraints.
           </p>
-          <a href="#methodology" style="font-size:0.84rem; font-weight:600; margin-top:auto; color:var(--accent-cyan);">Read Null Methodology →</a>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:auto;">
+            <a href="#methodology" style="font-size:0.84rem; font-weight:600; color:var(--accent-cyan);">Read Null Methodology →</a>
+            <button class="chart-spec-pill" onclick="if(window.ArenaSpecDrawer) window.ArenaSpecDrawer.openTerm('metric_monkey_percentile');">Specs</button>
+          </div>
         </div>
 
         <div class="concept-card">
@@ -102,10 +114,13 @@ window.LandingView = {
           <p style="font-size:0.88rem; color:var(--text-secondary);">
             ${(() => {
               const mBmName = (window.arenaAdapter && window.arenaAdapter.getMarketBenchmarkName) ? window.arenaAdapter.getMarketBenchmarkName() : "Market Benchmark";
-              return hasGhost ? `Triple reference standards: Executable Taotie (CNY 500k), Theoretical Ghost Taotie (CNY 100M unconstrained), and ${mBmName} (external broad market anchor).` : `Dual reference standards: Taotie (executable universe benchmark under capital &amp; lot frictions) and ${mBmName} (external broad market anchor).`;
+              return hasGhost ? `Triple reference standards: <span data-tooltip-term="taotie">Executable Taotie</span> (CNY 500k), <span data-tooltip-term="ghost_taotie">Theoretical Ghost Taotie</span> (CNY 100M unconstrained), and <span data-tooltip-term="market_benchmark">${mBmName}</span> (external broad market anchor).` : `Dual reference standards: <span data-tooltip-term="taotie">Taotie</span> (executable universe benchmark under capital &amp; lot frictions) and <span data-tooltip-term="market_benchmark">${mBmName}</span> (external broad market anchor).`;
             })()}
           </p>
-          <a href="#overview" style="font-size:0.84rem; font-weight:600; margin-top:auto; color:var(--accent-cyan);">Compare Benchmarks &rarr;</a>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:auto;">
+            <a href="#overview" style="font-size:0.84rem; font-weight:600; color:var(--accent-cyan);">Compare Benchmarks &rarr;</a>
+            <button class="chart-spec-pill" onclick="if(window.ArenaSpecDrawer) window.ArenaSpecDrawer.openCategory('benchmarks');">Specs</button>
+          </div>
         </div>
       </div>
 

@@ -66,16 +66,30 @@ window.LeaderboardView = {
               <thead>
                 <tr>
                   <th onclick="window.LeaderboardView.handleSort('path_id')">Path ID</th>
-                  <th onclick="window.LeaderboardView.handleSort('contestant_id')">Model</th>
-                  <th onclick="window.LeaderboardView.handleSort('animal_id')">Execution Handler</th>
-                  <th class="numeric" onclick="window.LeaderboardView.handleSort('total_return_pct')">
-                    ${this.getReturnColumnHeader()}
+                  <th onclick="window.LeaderboardView.handleSort('contestant_id')">
+                    <span class="arena-glossary-term" data-tooltip-term="CONTESTANT_A">Model</span>
                   </th>
-                  <th class="numeric" onclick="window.LeaderboardView.handleSort('excess_over_monkey_pct')">Excess vs Monkey</th>
-                  <th class="numeric" onclick="window.LeaderboardView.handleSort('percentile_rank')">Monkey Pct (%)</th>
-                  <th class="numeric" onclick="window.LeaderboardView.handleSort('empirical_p_value')">p-value</th>
-                  <th class="numeric" onclick="window.LeaderboardView.handleSort('max_drawdown_pct')">MDD (%)</th>
-                  <th class="numeric" onclick="window.LeaderboardView.handleSort('sharpe_ratio')">Sharpe</th>
+                  <th onclick="window.LeaderboardView.handleSort('animal_id')">
+                    <span class="arena-glossary-term" data-tooltip-term="robot">Execution Handler</span>
+                  </th>
+                  <th class="numeric" onclick="window.LeaderboardView.handleSort('total_return_pct')">
+                    <span class="arena-glossary-term" data-tooltip-term="total_return_pct">${this.getReturnColumnHeader()}</span>
+                  </th>
+                  <th class="numeric" onclick="window.LeaderboardView.handleSort('excess_over_monkey_pct')">
+                    <span class="arena-glossary-term" data-tooltip-term="monkeys">Excess vs Monkey</span>
+                  </th>
+                  <th class="numeric" onclick="window.LeaderboardView.handleSort('percentile_rank')">
+                    <span class="arena-glossary-term" data-tooltip-term="monkey_percentile">Monkey %ile</span>
+                  </th>
+                  <th class="numeric" onclick="window.LeaderboardView.handleSort('empirical_p_value')">
+                    <span class="arena-glossary-term" data-tooltip-term="empirical_p_value">p-value</span>
+                  </th>
+                  <th class="numeric" onclick="window.LeaderboardView.handleSort('max_drawdown_pct')">
+                    <span class="arena-glossary-term" data-tooltip-term="max_drawdown_pct">MDD (%)</span>
+                  </th>
+                  <th class="numeric" onclick="window.LeaderboardView.handleSort('sharpe_ratio')">
+                    <span class="arena-glossary-term" data-tooltip-term="sharpe_ratio">Sharpe</span>
+                  </th>
                   <th>Tags</th>
                 </tr>
               </thead>
@@ -95,7 +109,12 @@ window.LeaderboardView = {
         <div class="card">
           <div class="card-header" style="flex-wrap:wrap; gap:10px;">
             <div>
-              <h3 class="card-title">🗺️ Cross-Sectional Performance Matrix (6 Models × 28 Handlers)</h3>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <h3 class="card-title">🗺️ Cross-Sectional Performance Matrix (6 Models × 28 Handlers)</h3>
+                <button class="chart-spec-pill" onclick="window.ArenaSpecDrawer && window.ArenaSpecDrawer.open('Zoo Animals')">
+                  <span>🦁 Zoo Specs</span>
+                </button>
+              </div>
               <div class="card-subtitle">Examine structural sensitivity across models and execution variations</div>
             </div>
             <div style="display:flex; align-items:center; gap:0.5rem;">
@@ -112,11 +131,11 @@ window.LeaderboardView = {
           <div style="display:flex; justify-content:space-between; align-items:center; margin-top:12px; padding:10px 16px; background:var(--bg-surface-elevated); border-radius:var(--radius-sm); font-size:0.8rem; border:1px solid var(--border-subtle); flex-wrap:wrap; gap:10px;">
             <span style="color:var(--text-muted); font-weight:600;">Benchmark Reference Standards:</span>
             <div style="display:flex; gap:20px; flex-wrap:wrap;">
-              <span title="A capital-constrained, round-lot-constrained full-universe portfolio designed to approximate broad exposure with minimal active selection">Taotie (Executable Universe Benchmark): <b style="color:var(--accent-positive);">${taotieRet >= 0 ? '+' : ''}${taotieRet.toFixed(2)}%</b></span>
+              <span><span class="arena-glossary-term" data-tooltip-term="taotie">Taotie (Executable Universe Benchmark)</span>: <b style="color:var(--accent-positive);">${taotieRet >= 0 ? '+' : ''}${taotieRet.toFixed(2)}%</b></span>
               ${hasGhost ? `
-              <span title="Theoretical unconstrained equal-weight universe benchmark under CNY 100M capital">Ghost Taotie (Theoretical Equal-Weight): <b style="color:#00f0ff;">${ghostRet >= 0 ? '+' : ''}${ghostRet.toFixed(2)}%</b></span>
+              <span><span class="arena-glossary-term" data-tooltip-term="ghost_taotie">Ghost Taotie (Theoretical Equal-Weight)</span>: <b style="color:#00f0ff;">${ghostRet >= 0 ? '+' : ''}${ghostRet.toFixed(2)}%</b></span>
               ` : ''}
-              <span title="External broad market index context (${window.arenaAdapter.getMarketBenchmarkCode()})">${window.arenaAdapter.getMarketBenchmarkName()} (External Market Anchor): <b style="color:var(--accent-negative);">${csiRet >= 0 ? '+' : ''}${csiRet.toFixed(2)}%</b></span>
+              <span><span class="arena-glossary-term" data-tooltip-term="market">${window.arenaAdapter.getMarketBenchmarkName()} (External Market Anchor)</span>: <b style="color:var(--accent-negative);">${csiRet >= 0 ? '+' : ''}${csiRet.toFixed(2)}%</b></span>
             </div>
           </div>
         </div>
