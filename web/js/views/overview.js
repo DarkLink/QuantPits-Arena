@@ -88,7 +88,7 @@ window.OverviewView = {
           <span style="font-size: 11px; font-weight: 700; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em;">
             Benchmark Reference Standards:
           </span>
-          <button class="chart-spec-pill" onclick="if(window.ArenaSpecDrawer) window.ArenaSpecDrawer.open('Benchmarks')">
+          <button class="chart-spec-pill" onclick="if(window.ArenaSpecDrawer) window.ArenaSpecDrawer.toggle('Benchmarks')">
             <span>📖 Standards Guide</span>
           </button>
         </div>
@@ -125,7 +125,7 @@ window.OverviewView = {
               <h3 style="margin: 0; font-size: 1.15rem; font-weight: 700; color: var(--text-primary);">
                 Arena Horizon &amp; Benchmark Zoo Trajectories
               </h3>
-              <button class="chart-spec-pill" onclick="if(window.ArenaSpecDrawer) window.ArenaSpecDrawer.open('Zoo Animals')">
+              <button class="chart-spec-pill" onclick="if(window.ArenaSpecDrawer) window.ArenaSpecDrawer.toggle('Zoo Animals')">
                 <span>🦁 Zoo Specs</span>
               </button>
             </div>
@@ -203,7 +203,7 @@ window.OverviewView = {
             <div>
               <div style="display: flex; align-items: center; gap: 8px;">
                 <h3 class="card-title">🎯 Return vs. Monkey Percentile Significance</h3>
-                <button class="chart-spec-pill" onclick="window.ArenaSpecDrawer && window.ArenaSpecDrawer.open('Metrics')">
+                <button class="chart-spec-pill" onclick="window.ArenaSpecDrawer && window.ArenaSpecDrawer.toggle('Metrics')">
                   <span>📐 Null Court Specs</span>
                 </button>
               </div>

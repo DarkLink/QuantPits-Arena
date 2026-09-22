@@ -18,6 +18,9 @@
 
   <!-- Apache ECharts CDN -->
   <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+
+  <!-- KaTeX Math Formula Stylesheet -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 </head>
 <body>
   <!-- Ambient Ecosystem Grid & Glows (Aligned with QuantPits.com) -->
@@ -173,47 +176,49 @@
   </footer>
 
   <!-- Data Payload (Offline, Self-contained) -->
-  <script src="js/data/arena_data.js?v=5.4"></script>
+  <script src="js/data/arena_data.js?v=6.1"></script>
   <!-- Optional Local Preview Data Payload (Embargoed unreleased data, gitignored) -->
-  <script src="js/data/arena_data_preview.js?v=6.0" onerror="/* No preview data payload present; running official baseline */"></script>
+  <script src="js/data/arena_data_preview.js?v=6.1" onerror="/* No preview data payload present; running official baseline */"></script>
   <!-- Multi-Season Data Registry & Providers -->
-  <script src="js/data/seasons_index.js?v=6.0"></script>
-  <script src="js/data/season_01.js?v=6.0"></script>
-  <script src="js/data/season_csi1000.js?v=6.0"></script>
-  <script src="js/data/season_csi500.js?v=6.0"></script>
-  <script src="js/data/season_csi800.js?v=6.0"></script>
+  <script src="js/data/seasons_index.js?v=6.1"></script>
+  <script src="js/data/season_01.js?v=6.1"></script>
+  <script src="js/data/season_csi1000.js?v=6.1"></script>
+  <script src="js/data/season_csi500.js?v=6.1"></script>
+  <script src="js/data/season_csi800.js?v=6.1"></script>
 
   <!-- Data Adapter -->
-  <script src="js/adapter.js?v=6.0"></script>
+  <script src="js/adapter.js?v=6.1"></script>
 
   <!-- ECharts Suite -->
-  <script src="js/components/charts.js?v=6.0"></script>
+  <script src="js/components/charts.js?v=6.1"></script>
 
   <!-- Global Filters -->
-  <script src="js/components/filters.js?v=6.0"></script>
+  <script src="js/components/filters.js?v=6.1"></script>
 
   <!-- Glossary & Specification System (Season-Aware) -->
-  <script src="js/components/glossary_service.js?v=6.0"></script>
-  <script src="js/components/tooltip_manager.js?v=6.0"></script>
-  <script src="js/components/spec_drawer.js?v=6.0"></script>
+  <script src="js/components/glossary_service.js?v=6.1"></script>
+  <script src="js/components/tooltip_manager.js?v=6.1"></script>
+  <script src="js/components/spec_drawer.js?v=6.1"></script>
 
-  <!-- Markdown Parser for Dispatches & Chronicles -->
+  <!-- Markdown & Math Parsers for Dispatches & Chronicles -->
   <script src="js/lib/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
 
   <!-- Application Views -->
-  <script src="js/views/landing.js?v=6.0"></script>
-  <script src="js/views/dispatches.js?v=6.0"></script>
-  <script src="js/views/overview.js?v=6.0"></script>
-  <script src="js/views/leaderboard_view.js?v=6.0"></script>
-  <script src="js/views/animals_view.js?v=6.0"></script>
-  <script src="js/views/path_detail.js?v=6.0"></script>
-  <script src="js/views/contestant_detail.js?v=6.0"></script>
-  <script src="js/views/decision_audit.js?v=6.0"></script>
-  <script src="js/views/methodology.js?v=6.0"></script>
-  <script src="js/views/disclaimer.js?v=6.0"></script>
-  <script src="js/views/discussion.js?v=6.0"></script>
+  <script src="js/views/landing.js?v=6.1"></script>
+  <script src="js/views/dispatches.js?v=6.1"></script>
+  <script src="js/views/overview.js?v=6.1"></script>
+  <script src="js/views/leaderboard_view.js?v=6.1"></script>
+  <script src="js/views/animals_view.js?v=6.1"></script>
+  <script src="js/views/path_detail.js?v=6.1"></script>
+  <script src="js/views/contestant_detail.js?v=6.1"></script>
+  <script src="js/views/decision_audit.js?v=6.1"></script>
+  <script src="js/views/methodology.js?v=6.1"></script>
+  <script src="js/views/disclaimer.js?v=6.1"></script>
+  <script src="js/views/discussion.js?v=6.1"></script>
 
   <!-- Main Controller & Router -->
-  <script src="js/app.js?v=6.0"></script>
+  <script src="js/app.js?v=6.1"></script>
 </body>
 </html>

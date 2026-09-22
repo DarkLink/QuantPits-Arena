@@ -113,6 +113,14 @@ window.ArenaSpecDrawer = {
         this.close();
       }
     });
+
+    // Close on clicking outside the drawer
+    document.addEventListener("click", (e) => {
+      if (!this.isOpen) return;
+      if (this.drawerEl && this.drawerEl.contains(e.target)) return;
+      if (e.target.closest(".chart-spec-pill, .arena-drawer-fab, .tooltip-drawer-link, .arena-tooltip-popover")) return;
+      this.close();
+    });
   },
 
   open(category = null) {
@@ -124,15 +132,34 @@ window.ArenaSpecDrawer = {
     }
     if (!this.drawerEl) return;
 
+    // Toggle behavior: if drawer is already open and user clicks the same category, close it!
+    if (this.isOpen) {
+      let targetCat = category;
+      if (category) {
+        if (category.toLowerCase().includes("zoo")) targetCat = "Zoo Animals";
+        else if (category.toLowerCase().includes("bench")) targetCat = "Benchmarks";
+        else if (category.toLowerCase().includes("model")) targetCat = "Contestants";
+        else if (category.toLowerCase().includes("metric")) targetCat = "Metrics";
+      }
+      const isSameCategory = !category || (this.activeCategory === targetCat);
+      if (isSameCategory) {
+        this.close();
+        return;
+      }
+    }
+
     if (category) {
-      this.activeCategory = category;
+      let targetCat = category;
+      if (category.toLowerCase().includes("zoo")) targetCat = "Zoo Animals";
+      else if (category.toLowerCase().includes("bench")) targetCat = "Benchmarks";
+      else if (category.toLowerCase().includes("model")) targetCat = "Contestants";
+      else if (category.toLowerCase().includes("metric")) targetCat = "Metrics";
+      this.activeCategory = targetCat;
+
       const tabs = this.drawerEl.querySelectorAll(".drawer-tab");
       tabs.forEach(t => {
         const cat = t.getAttribute("data-cat");
-        if (cat === category || 
-           (category.toLowerCase().includes("zoo") && cat === "Zoo Animals") ||
-           (category.toLowerCase().includes("bench") && cat === "Benchmarks") ||
-           (category.toLowerCase().includes("model") && cat === "Contestants")) {
+        if (cat === targetCat) {
           t.classList.add("active");
         } else {
           t.classList.remove("active");
@@ -157,9 +184,26 @@ window.ArenaSpecDrawer = {
     this.fabEl?.classList.remove("active");
   },
 
-  toggle() {
-    if (this.isOpen) this.close();
-    else this.open();
+  toggle(category = null) {
+    if (this.isOpen) {
+      if (!category) {
+        this.close();
+        return;
+      }
+      let targetCat = category;
+      if (category.toLowerCase().includes("zoo")) targetCat = "Zoo Animals";
+      else if (category.toLowerCase().includes("bench")) targetCat = "Benchmarks";
+      else if (category.toLowerCase().includes("model")) targetCat = "Contestants";
+      else if (category.toLowerCase().includes("metric")) targetCat = "Metrics";
+
+      if (this.activeCategory === targetCat) {
+        this.close();
+        return;
+      }
+      this.open(category);
+    } else {
+      this.open(category);
+    }
   },
 
   updateSeasonIndicator() {

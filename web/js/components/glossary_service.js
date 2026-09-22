@@ -316,7 +316,45 @@ window.ArenaGlossaryService = {
       details: "Stress-tests strategy signals across execution delay, turnover intensity, concentration, and polarity."
     };
 
+    // Composite Path matching (e.g. CONTESTANT_D_eagle-5-1 or CONTESTANT_B_rabbit-1)
     if (lower.startsWith("contestant_")) {
+      const parts = cleanKey.split("_");
+      if (parts.length >= 3) {
+        const modelId = parts.slice(0, 2).join("_").toUpperCase();
+        const animalId = parts.slice(2).join("_").toLowerCase();
+        const modelData = dict.contestants[modelId] || this.lookup(modelId);
+        let animalData = dict.animals[animalId] || this.lookup(animalId);
+        
+        if (!animalData) {
+          const prefix = animalId.split("-")[0];
+          animalData = dict.animals[prefix] || this.lookup(prefix) || {
+            id: animalId,
+            term: animalId,
+            name: animalId,
+            category: "Zoo Animals",
+            tagline: "Execution Policy",
+            tooltip: `Execution policy container (${animalId}) with specialized holding and turnover parameters.`,
+            details: `Simulated trading container parameterizing portfolio frictions and bandwidth.`
+          };
+        }
+
+        if (modelData && animalData) {
+          return {
+            id: cleanKey,
+            term: cleanKey,
+            isComposite: true,
+            modelId: modelId,
+            animalId: animalId,
+            model: modelData,
+            animal: animalData,
+            category: "Composite Path",
+            tagline: `${modelData.name} × ${animalData.name}`,
+            name: `${modelData.name} × ${animalData.name}`,
+            tooltip: `Tournament path coupling <strong>${modelData.name}</strong> with the <strong>${animalData.name}</strong> execution container.`,
+            details: `<strong>🧬 Model Candidate (${modelId}):</strong> ${modelData.tooltip}<br/><br/><strong>🐾 Execution Policy (${animalId}):</strong> ${animalData.tooltip}`
+          };
+        }
+      }
       const base = cleanKey.toUpperCase().split("_").slice(0, 2).join("_");
       if (dict.contestants[base]) return dict.contestants[base];
     }

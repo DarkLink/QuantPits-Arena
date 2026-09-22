@@ -154,6 +154,10 @@ window.DispatchesView = {
       </div>
     `;
 
+    // Post process math and triggers on initial render
+    const initialBody = document.getElementById("dispatch-article-body");
+    if (initialBody) this.postProcessArticle(initialBody);
+
     // Trigger async direct file loading if available
     setTimeout(() => {
       this.loadArticle(this.currentEpisode);
@@ -248,8 +252,21 @@ window.DispatchesView = {
     return temp.innerHTML;
   },
 
+  renderMathFallback(html) {
+    if (!html) return "";
+    return html
+      .replace(/\${1,2}\s*(?:\\{1,2})to\s*\${1,2}/gi, ' &rarr; ')
+      .replace(/\${1,2}\s*(?:\\{1,2})approx\s*\${1,2}/gi, ' &asymp; ')
+      .replace(/\${1,2}\s*(?:\\{1,2})times\s*\${1,2}/gi, ' &times; ')
+      .replace(/\${1,2}\s*(?:\\{1,2})pm\s*\${1,2}/gi, ' &plusmn; ')
+      .replace(/\${1,2}\s*(?:\\{1,2})ge(?:q)?\s*\${1,2}/gi, ' &ge; ')
+      .replace(/\${1,2}\s*(?:\\{1,2})le(?:q)?\s*\${1,2}/gi, ' &le; ')
+      .replace(/\${1,2}\s*(?:\\{1,2})neq\s*\${1,2}/gi, ' &ne; ');
+  },
+
   wrapArticle(activeEp, innerHtml) {
-    const decoratedHtml = this.decorateArticle(innerHtml);
+    const mathCleaned = this.renderMathFallback(innerHtml);
+    const decoratedHtml = this.decorateArticle(mathCleaned);
     return `
       <article class="prose" style="max-width: 820px; margin: 0 auto; color: var(--text-secondary); line-height: 1.75; font-size: 0.95rem;">
         <div style="border-bottom: 1px solid var(--border-subtle); padding-bottom: 1.25rem; margin-bottom: 1.5rem;">
@@ -293,6 +310,7 @@ window.DispatchesView = {
         if (res.ok) {
           const md = await res.text();
           bodyEl.innerHTML = this.wrapArticle(activeEp, window.marked.parse(md));
+          this.postProcessArticle(bodyEl);
           return;
         }
       } catch (err) {
@@ -302,6 +320,41 @@ window.DispatchesView = {
 
     // Fallback to synchronous renderer
     bodyEl.innerHTML = this.renderArticleContent();
+    this.postProcessArticle(bodyEl);
+  },
+
+  postProcessArticle(container) {
+    if (!container) return;
+
+    // 1. Fallback regex replacement for math arrows and basic symbols
+    const walkTextForMath = (node) => {
+      if (node.nodeType === Node.TEXT_NODE) {
+        let val = node.nodeValue;
+        if (val && /\${1,2}\s*(?:\\{1,2})(?:to|approx|times|pm|ge|le|neq)/i.test(val)) {
+          const span = document.createElement("span");
+          span.innerHTML = this.renderMathFallback(val);
+          node.parentNode.replaceChild(span, node);
+        }
+      } else if (node.nodeType === Node.ELEMENT_NODE && node.tagName.toLowerCase() !== "script") {
+        Array.from(node.childNodes).forEach(walkTextForMath);
+      }
+    };
+    walkTextForMath(container);
+
+    // 2. Invoke KaTeX auto-renderer if available
+    if (window.renderMathInElement) {
+      try {
+        window.renderMathInElement(container, {
+          delimiters: [
+            { left: "$$", right: "$$", display: true },
+            { left: "$", right: "$", display: false }
+          ],
+          throwOnError: false
+        });
+      } catch (e) {
+        console.warn("[Dispatches] KaTeX auto-render warning:", e);
+      }
+    }
   },
 
   renderArticleContent() {
@@ -314,18 +367,18 @@ window.DispatchesView = {
         return this.wrapArticle(activeEp, activeEp.content_html);
       }
       if (activeEp.content_type === "ep08_baseline" || activeEp.id === "ep08") {
-        return this.decorateArticle(this.renderEp08En());
+        return this.decorateArticle(this.renderMathFallback(this.renderEp08En()));
       }
       if (activeEp.content_type === "ep09_released" || activeEp.id === "ep09") {
-        return this.decorateArticle(this.renderEp09En());
+        return this.decorateArticle(this.renderMathFallback(this.renderEp09En()));
       }
     }
 
     if (this.currentEpisode === "ep09") {
-      return this.decorateArticle(this.renderEp09En());
+      return this.decorateArticle(this.renderMathFallback(this.renderEp09En()));
     }
     if (this.currentEpisode === "ep08") {
-      return this.decorateArticle(this.renderEp08En());
+      return this.decorateArticle(this.renderMathFallback(this.renderEp08En()));
     }
 
     return `

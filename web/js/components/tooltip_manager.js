@@ -57,6 +57,23 @@ window.ArenaTooltip = {
       }
     });
 
+    // Click to immediately show/toggle tooltip (ideal for mobile and click-to-pin)
+    document.addEventListener("click", (e) => {
+      const target = e.target.closest(".arena-glossary-term, [data-tooltip-term]");
+      if (target) {
+        clearTimeout(this.hideTimer);
+        clearTimeout(this.showTimer);
+        if (this.currentAnchor === target && this.container.style.display !== "none") {
+          this.hide();
+        } else {
+          this.currentAnchor = target;
+          this.render(target);
+        }
+      } else if (!e.target.closest(".arena-tooltip-popover, .chart-spec-pill, .arena-drawer-fab")) {
+        this.hide();
+      }
+    });
+
     // Close tooltip on global scroll or Escape key
     window.addEventListener("scroll", () => this.hide(), { passive: true });
     window.addEventListener("keydown", (e) => {
@@ -107,6 +124,45 @@ window.ArenaTooltip = {
       if (!fallbackTitle) return;
       this.container.innerHTML = `
         <div class="tooltip-body">${fallbackTitle}</div>
+      `;
+      this.container.style.display = "block";
+      this.position(el);
+      requestAnimationFrame(() => this.container.classList.add("visible"));
+      return;
+    }
+
+    if (termData.isComposite) {
+      this.container.innerHTML = `
+        <div class="tooltip-header">
+          <div class="tooltip-title-wrap">
+            <span class="tooltip-category-badge" style="color: var(--brand-cyan); border-color: rgba(56, 189, 248, 0.3); background: rgba(56, 189, 248, 0.1);">
+              🧬 Model × 🐾 Handler
+            </span>
+            <strong class="tooltip-title">${termData.name}</strong>
+          </div>
+          <span class="tooltip-tagline">${termData.tagline}</span>
+        </div>
+        <div class="tooltip-body" style="font-size: 0.82rem; line-height: 1.5; margin-bottom: 6px;">
+          <div style="margin-bottom: 6px; padding: 6px 8px; background: rgba(56, 189, 248, 0.06); border-left: 3px solid var(--brand-cyan); border-radius: 3px;">
+            <div style="font-weight: 700; color: var(--brand-cyan); font-size: 0.78rem; text-transform: uppercase;">🧬 Model: ${termData.model.name}</div>
+            <div style="color: var(--text-secondary); margin-top: 2px;">${termData.model.tooltip}</div>
+          </div>
+          <div style="padding: 6px 8px; background: rgba(168, 85, 247, 0.06); border-left: 3px solid var(--accent-purple); border-radius: 3px;">
+            <div style="font-weight: 700; color: var(--accent-purple); font-size: 0.78rem; text-transform: uppercase;">🐾 Execution: ${termData.animal.name}</div>
+            <div style="color: var(--text-secondary); margin-top: 2px;">${termData.animal.tooltip}</div>
+          </div>
+        </div>
+        <div class="tooltip-footer" style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <button type="button" class="tooltip-drawer-link" onclick="window.ArenaSpecDrawer && window.ArenaSpecDrawer.openTerm('${termData.modelId}')">
+            <span>🧬 Model Spec</span>
+          </button>
+          <button type="button" class="tooltip-drawer-link" onclick="window.ArenaSpecDrawer && window.ArenaSpecDrawer.openTerm('${termData.animalId}')">
+            <span>🐾 Zoo Spec</span>
+          </button>
+          <button type="button" class="tooltip-drawer-link" style="margin-left: auto;" onclick="window.appRouter && window.appRouter.navigate('path-detail', { pathId: '${termData.id}' })">
+            <span>📊 Path Detail &rarr;</span>
+          </button>
+        </div>
       `;
     } else {
       const categoryColors = {
