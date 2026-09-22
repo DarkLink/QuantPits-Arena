@@ -196,60 +196,55 @@ window.DispatchesView = {
 
   decorateArticle(html) {
     if (!html) return "";
-    const terms = [
-      { pattern: /\b(Ghost\s+Taotie)\b/gi, term: "ghost_taotie" },
-      { pattern: /\b(Taotie)\b/gi, term: "taotie" },
-      { pattern: /\b(Null\s+Court)\b/gi, term: "null_court" },
-      { pattern: /\b(Matched\s+Monkeys|matched\s+null\s+colony|random\s+monkeys)\b/gi, term: "monkeys" },
-      { pattern: /\b(CONTESTANT_[A-F])\b/g, term: "$1" },
-      { pattern: /\b(eagle-5-1|eagle-11-2|eagle-44-6|eagle-66-9|eagle-88-12)\b/gi, term: "$1" },
-      { pattern: /\b(rabbit-1|rabbit-2)\b/gi, term: "$1" },
-      { pattern: /\b(sloth-[1-4])\b/gi, term: "$1" },
-      { pattern: /\b(snail-[1-4])\b/gi, term: "$1" },
-      { pattern: /\b(meerkat-\d+)\b/gi, term: "$1" },
-      { pattern: /\b(whale-shark)\b/gi, term: "whale-shark" },
-      { pattern: /\b(koala)\b/gi, term: "koala" },
-      { pattern: /\b(Sharpe\s+ratio)\b/gi, term: "sharpe_ratio" },
-      { pattern: /\b(maximum\s+drawdown|Max\s+Drawdown)\b/gi, term: "max_drawdown_pct" },
-      { pattern: /\b(p-value|empirical\s+percentile)\b/gi, term: "empirical_p_value" }
-    ];
+
+    // Comprehensive term regex: matches longest candidates first
+    const regex = /\b(Ghost\s+Taotie|Taotie|Null\s+Court|Matched\s+Monkeys|random\s+monkeys|matched\s+null\s+colony|CSI\s*300|CSI300|CONTESTANT_[A-F]_[a-z0-9-]+|CONTESTANT_[A-F]|eagle-[0-9-]+|rabbit-[0-9-]+|sloth-[0-9-]+|snail-[0-9-]+|meerkat-[0-9-]+|turtle-[0-9-]+|whale-shark|whale\s+shark|koala|robot|Sharpe\s+ratio|Sharpe|maximum\s+drawdown|Max\s+Drawdown|MDD|empirical\s+p-value|p-value|empirical\s+percentile)\b/gi;
 
     const temp = document.createElement("div");
     temp.innerHTML = html;
 
-    const walkTextNodes = (node) => {
-      const tag = node.parentElement ? node.parentElement.tagName.toLowerCase() : "";
-      if (["code", "pre", "a", "button", "script", "style", "h1", "h2", "h3"].includes(tag)) return;
-      if (node.parentElement && node.parentElement.classList.contains("arena-glossary-term")) return;
-
-      if (node.nodeType === Node.TEXT_NODE) {
-        let text = node.nodeValue;
+    const walk = (node) => {
+      // Never process inside pre blocks, buttons, scripts, or existing glossary terms
+      if (node.nodeType === Node.ELEMENT_NODE) {
+        const tag = node.tagName.toLowerCase();
+        if (tag === "pre" || tag === "button" || tag === "script" || tag === "style") return;
+        if (node.classList.contains("arena-glossary-term")) return;
+        Array.from(node.childNodes).forEach(walk);
+      } else if (node.nodeType === Node.TEXT_NODE) {
+        const text = node.nodeValue;
         if (!text || text.trim().length < 3) return;
 
-        let replaced = false;
-        let newHtml = text;
+        if (regex.test(text)) {
+          regex.lastIndex = 0; // Reset regex state
+          const newHtml = text.replace(regex, (match) => {
+            let termKey = match;
+            const lower = match.toLowerCase();
+            if (lower.includes("taotie")) {
+              termKey = lower.includes("ghost") ? "ghost_taotie" : "taotie";
+            } else if (lower.includes("null court")) {
+              termKey = "null_court";
+            } else if (lower.includes("monkey") || lower.includes("colony")) {
+              termKey = "monkeys";
+            } else if (lower.includes("csi")) {
+              termKey = "market";
+            } else if (lower.includes("sharpe")) {
+              termKey = "sharpe_ratio";
+            } else if (lower.includes("drawdown") || lower === "mdd") {
+              termKey = "max_drawdown_pct";
+            } else if (lower.includes("p-value") || lower.includes("percentile")) {
+              termKey = "empirical_p_value";
+            }
+            return `<span class="arena-glossary-term" data-tooltip-term="${termKey}">${match}</span>`;
+          });
 
-        for (const t of terms) {
-          if (t.pattern.test(newHtml)) {
-            newHtml = newHtml.replace(t.pattern, (match) => {
-              const termKey = t.term === "$1" ? match : t.term;
-              return `<span class="arena-glossary-term" data-tooltip-term="${termKey}">${match}</span>`;
-            });
-            replaced = true;
-          }
-        }
-
-        if (replaced) {
           const span = document.createElement("span");
           span.innerHTML = newHtml;
           node.parentNode.replaceChild(span, node);
         }
-      } else if (node.nodeType === Node.ELEMENT_NODE) {
-        Array.from(node.childNodes).forEach(walkTextNodes);
       }
     };
 
-    walkTextNodes(temp);
+    walk(temp);
     return temp.innerHTML;
   },
 
@@ -319,18 +314,18 @@ window.DispatchesView = {
         return this.wrapArticle(activeEp, activeEp.content_html);
       }
       if (activeEp.content_type === "ep08_baseline" || activeEp.id === "ep08") {
-        return this.renderEp08En();
+        return this.decorateArticle(this.renderEp08En());
       }
       if (activeEp.content_type === "ep09_released" || activeEp.id === "ep09") {
-        return this.renderEp09En();
+        return this.decorateArticle(this.renderEp09En());
       }
     }
 
     if (this.currentEpisode === "ep09") {
-      return this.renderEp09En();
+      return this.decorateArticle(this.renderEp09En());
     }
     if (this.currentEpisode === "ep08") {
-      return this.renderEp08En();
+      return this.decorateArticle(this.renderEp08En());
     }
 
     return `

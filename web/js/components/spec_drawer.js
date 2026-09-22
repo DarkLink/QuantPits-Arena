@@ -23,8 +23,12 @@ window.ArenaSpecDrawer = {
   },
 
   createFab() {
-    if (document.getElementById("arena-spec-drawer-fab")) return;
-    const fab = document.createElement("button");
+    let fab = document.getElementById("arena-spec-drawer-fab");
+    if (fab) {
+      this.fabEl = fab;
+      return;
+    }
+    fab = document.createElement("button");
     fab.id = "arena-spec-drawer-fab";
     fab.className = "arena-drawer-fab";
     fab.setAttribute("aria-label", "Toggle Arena Field Guide & Spec Drawer");
@@ -39,8 +43,12 @@ window.ArenaSpecDrawer = {
   },
 
   createDrawer() {
-    if (document.getElementById("arena-spec-drawer")) return;
-    const drawer = document.createElement("aside");
+    let drawer = document.getElementById("arena-spec-drawer");
+    if (drawer) {
+      this.drawerEl = drawer;
+      return;
+    }
+    drawer = document.createElement("aside");
     drawer.id = "arena-spec-drawer";
     drawer.className = "arena-spec-drawer";
     drawer.setAttribute("aria-label", "Arena Tournament Specification Panel");
@@ -108,12 +116,27 @@ window.ArenaSpecDrawer = {
   },
 
   open(category = null) {
+    if (!this.drawerEl) {
+      this.init();
+    }
+    if (!this.drawerEl) {
+      this.drawerEl = document.getElementById("arena-spec-drawer");
+    }
+    if (!this.drawerEl) return;
+
     if (category) {
       this.activeCategory = category;
       const tabs = this.drawerEl.querySelectorAll(".drawer-tab");
       tabs.forEach(t => {
-        if (t.getAttribute("data-cat") === category) t.classList.add("active");
-        else t.classList.remove("active");
+        const cat = t.getAttribute("data-cat");
+        if (cat === category || 
+           (category.toLowerCase().includes("zoo") && cat === "Zoo Animals") ||
+           (category.toLowerCase().includes("bench") && cat === "Benchmarks") ||
+           (category.toLowerCase().includes("model") && cat === "Contestants")) {
+          t.classList.add("active");
+        } else {
+          t.classList.remove("active");
+        }
       });
     }
 
@@ -124,9 +147,13 @@ window.ArenaSpecDrawer = {
     this.renderContent();
   },
 
+  openCategory(category) {
+    this.open(category);
+  },
+
   close() {
     this.isOpen = false;
-    this.drawerEl.classList.remove("open");
+    this.drawerEl?.classList.remove("open");
     this.fabEl?.classList.remove("active");
   },
 

@@ -88,8 +88,8 @@ window.OverviewView = {
           <span style="font-size: 11px; font-weight: 700; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em;">
             Benchmark Reference Standards:
           </span>
-          <button class="chart-spec-pill" onclick="window.ArenaSpecDrawer && window.ArenaSpecDrawer.open('Benchmarks')">
-            <span>📖 What are these?</span>
+          <button class="chart-spec-pill" onclick="if(window.ArenaSpecDrawer) window.ArenaSpecDrawer.open('Benchmarks')">
+            <span>📖 Standards Guide</span>
           </button>
         </div>
         <div style="display: flex; align-items: center; gap: 24px; flex-wrap: wrap;">
@@ -125,7 +125,7 @@ window.OverviewView = {
               <h3 style="margin: 0; font-size: 1.15rem; font-weight: 700; color: var(--text-primary);">
                 Arena Horizon &amp; Benchmark Zoo Trajectories
               </h3>
-              <button class="chart-spec-pill" onclick="window.ArenaSpecDrawer && window.ArenaSpecDrawer.open('Zoo Animals')">
+              <button class="chart-spec-pill" onclick="if(window.ArenaSpecDrawer) window.ArenaSpecDrawer.open('Zoo Animals')">
                 <span>🦁 Zoo Specs</span>
               </button>
             </div>

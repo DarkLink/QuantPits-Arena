@@ -19,13 +19,16 @@ window.ArenaTooltip = {
   init() {
     if (this.container) return;
 
-    // Create persistent popover container in body
-    this.container = document.createElement("div");
-    this.container.id = "arena-tooltip-popover";
-    this.container.className = "arena-tooltip-popover";
-    this.container.setAttribute("role", "tooltip");
-    this.container.style.display = "none";
-    document.body.appendChild(this.container);
+    let popover = document.getElementById("arena-tooltip-popover");
+    if (!popover) {
+      popover = document.createElement("div");
+      popover.id = "arena-tooltip-popover";
+      popover.className = "arena-tooltip-popover";
+      popover.setAttribute("role", "tooltip");
+      popover.style.display = "none";
+      document.body.appendChild(popover);
+    }
+    this.container = popover;
 
     // Keep tooltip visible when mouse moves over the tooltip itself
     this.container.addEventListener("mouseenter", () => {
