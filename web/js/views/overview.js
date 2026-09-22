@@ -23,12 +23,28 @@ window.OverviewView = {
     const bottom5 = sorted.slice(-5).reverse();
 
     const seasonMeta = window.arenaAdapter.getCurrentSeasonMeta();
-    const banner = seasonMeta.dispatches_banner || {
-      tag: "🎙️ Tournament Dispatches",
-      title: "Tournament Dispatches & Market Climate active.",
-      link: "#dispatches",
-      link_text: "Read Dispatches &rarr;"
-    };
+    const dispatchesData = window.arenaAdapter ? window.arenaAdapter.getDispatchesData() : null;
+    const banner = { ...(seasonMeta.dispatches_banner || {}) };
+
+    if (!banner.tag) banner.tag = "🎙️ Tournament Dispatches";
+    if (!banner.title) banner.title = "Tournament Dispatches & Market Climate active.";
+    if (!banner.link) banner.link = "#dispatches";
+    if (!banner.link_text) banner.link_text = "Read Dispatches &rarr;";
+
+    // Automatically synchronize banner with latest dispatch episode if available
+    if (dispatchesData?.episodes && dispatchesData.episodes.length > 0) {
+      const episodes = dispatchesData.episodes;
+      const latestEp = episodes.slice().reverse().find(e => e.badge === "Released") || episodes[episodes.length - 1];
+      if (latestEp) {
+        let titleText = `${latestEp.title} Released.`;
+        const match = latestEp.title.match(/^(Episode\s+\d+|Ep\s+\d+):\s*(.+)$/i);
+        if (match) {
+          titleText = `${match[1]} Released ("${match[2]}"). Evaluation active.`;
+        }
+        banner.title = titleText;
+        banner.link = `#dispatches?episode=${latestEp.id}`;
+      }
+    }
 
     el.innerHTML = `
       <!-- Tournament Dispatches & Climate Alert Banner -->

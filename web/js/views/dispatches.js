@@ -37,31 +37,21 @@ window.DispatchesView = {
       decrypt_label: "Standard Weekly Cycle"
     };
 
-    const episodes = dispatches?.episodes || [
-      {
-        id: "ep08",
-        tab_label: "📜 Ep 01–08: The Forty-One Day King",
-        badge: "Released",
-        title: "Episodes 01–08: The 41-Day Baseline & The Eagle King",
-        content_type: "ep08_baseline"
-      },
-      {
-        id: "ep09",
-        tab_label: "🔒 Ep 09: Sep 02 Breadth Shock",
-        badge: "Embargoed",
-        title: "Episode 09: The September 02 Breadth Shock",
-        content_type: "ep09_embargoed"
-      }
-    ];
+    const episodes = dispatches?.episodes || [];
 
-    // Ensure valid current episode
+    // Determine latest released episode (or fallback to the last entry in chronological list)
+    const latestEpisode = episodes.length > 0 
+      ? (episodes.slice().reverse().find(e => e.badge === "Released") || episodes[episodes.length - 1])
+      : null;
+    const latestEpId = latestEpisode?.id || null;
+
+    // Ensure valid current episode:
+    // If params.episode is provided and valid, honor it; otherwise default to the latest episode!
     if (params.episode && episodes.some(e => e.id === params.episode)) {
       this.currentEpisode = params.episode;
-    } else if (!this.currentEpisode || !episodes.some(e => e.id === this.currentEpisode)) {
-      this.currentEpisode = episodes[0]?.id || "ep08";
+    } else {
+      this.currentEpisode = latestEpId;
     }
-
-    const firstEpId = episodes[0]?.id || "ep08";
 
     el.innerHTML = `
       <div class="doc-page-container">
@@ -98,9 +88,11 @@ window.DispatchesView = {
               <strong>Status:</strong> ${exec.leader_summary}
             </p>
             <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-              <button class="btn btn-sm btn-primary" onclick="window.DispatchesView.selectEpisode('${firstEpId}')" style="font-size: 0.8rem; padding: 4px 10px;">
+              ${latestEpId ? `
+              <button class="btn btn-sm btn-primary" onclick="window.DispatchesView.selectEpisode('${latestEpId}', true)" style="font-size: 0.8rem; padding: 4px 10px;">
                 <span>📖 Read Latest Dispatch &rarr;</span>
               </button>
+              ` : ''}
               <a href="#leaderboard" class="btn btn-sm btn-secondary" style="font-size: 0.8rem; padding: 4px 10px; text-decoration: none;">
                 <span>🏆 View Leaderboard</span>
               </a>
@@ -168,7 +160,7 @@ window.DispatchesView = {
     }, 0);
   },
 
-  selectEpisode(epId) {
+  selectEpisode(epId, shouldScroll = false) {
     this.currentEpisode = epId;
     this.loadArticle(epId);
     
@@ -183,6 +175,22 @@ window.DispatchesView = {
           btn.className = "btn btn-sm btn-secondary";
         }
       });
+    }
+
+    // Synchronize route hash with episode parameter without reloading page
+    try {
+      const hashParts = (window.location.hash || "#dispatches").split("?");
+      const baseHash = hashParts[0];
+      window.history.replaceState(null, "", `${baseHash}?episode=${epId}`);
+    } catch (e) {
+      // Fallback for older browsers
+    }
+
+    if (shouldScroll) {
+      const articleEl = document.getElementById("dispatch-article-body");
+      if (articleEl) {
+        articleEl.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
     }
   },
 

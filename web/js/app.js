@@ -419,8 +419,10 @@ window.ArenaApp = {
         break;
 
       case "dispatches":
+      case "chronicles":
+      case "episodes":
         this.showView("view-dispatches");
-        window.DispatchesView.render("view-dispatches");
+        window.DispatchesView.render("view-dispatches", params);
         break;
 
       case "overview":
@@ -473,12 +475,6 @@ window.ArenaApp = {
         window.DiscussionView.render("view-discussion");
         break;
 
-      case "dispatches":
-      case "chronicles":
-      case "episodes":
-        this.showView("view-dispatches");
-        window.DispatchesView.render("view-dispatches", params);
-        break;
 
       default:
         this.showView("view-overview");

@@ -15,8 +15,8 @@ window.ARENA_SEASONS_INDEX = [
     description: "6 Model Candidates × 29 Animal Handlers with empirical Monkey null distributions.",
     dispatches_banner: {
       tag: "🎙️ Season 1 Dispatches",
-      title: "Episode 10 Released (\"The Apex Strike & The 1.20 Milestone\"). Week 10 evaluation active.",
-      link: "#dispatches",
+      title: "Episode 11 Released (\"The Mid-September Turbulence & CONTESTANT_D's Triple-Crown Charge\"). Week 11 evaluation active.",
+      link: "#dispatches?episode=ep11",
       link_text: "Read S1 Dispatches &rarr;"
     },
     methodology: {
