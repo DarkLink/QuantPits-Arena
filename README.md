@@ -136,6 +136,25 @@ web/
 
 ---
 
+## ⚡ Routine Operations: Weekly Roll-Forward (One-Command Standard)
+
+For weekly tournament operations after new market data arrives, use the atomic end-to-end command (runs in ~2–3 minutes across all active seasons):
+
+```bash
+# 1. Activate environment
+conda activate qlib_cupy
+
+# 2. Update prediction features if needed
+python scripts/infer_all_contestants.py
+
+# 3. One-command atomic rollforward (bump date -> step cycles -> export web -> sync chronicles -> audit)
+python cli.py rollforward --end-date <YYYY-MM-DD>
+```
+
+For detailed specifications and anti-patterns, see the [Weekly Roll-Forward SOP (docs/SEASON_ROLLFORWARD_SOP.md)](docs/SEASON_ROLLFORWARD_SOP.md) and [AGENTS.md](AGENTS.md).
+
+---
+
 ## 🔧 Repository Verification
 
 To audit repository integrity and data formatting consistency:

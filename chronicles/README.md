@@ -13,30 +13,24 @@
 
 ---
 
-## 📜 Episode Dispatches
+## 📜 Episode Dispatches (Season 1: CSI 300 Arena)
 
 | Episode | Evaluation Window | Tournament Phase | Core Narrative & Empirical Boundary | Status |
 | :---: | :---: | :---: | :--- | :---: |
-| [**Episodes 01–08**](en/episodes_01_08_the_forty_one_day_king.md) | `2026-07-03 ~ 2026-08-28`<br/>(41 Trading Days, Weeks 1–8) | **Retrospective Backtest Baseline** | **The Forty-One Day Baseline**: Simulated retrospectively with knowledge of July–August market conditions to establish initial tournament standings. `CONTESTANT_B_eagle-5-1` finished at NAV `1.1971` (+19.71%, $p \approx 0.001$ vs matched 1,000 nulls; 168-path Bonferroni sensitivity $0.168 > 0.05$). Sets the baseline before prospective forward tracking. | **Released** |
-| **Episode 09** | `2026-08-31 ~ 2026-09-04`<br/>(Anchored 08-28 close, Day 42~46) | **Prospective Forward Test** | *Tactical logs, animal performance, and survivor standings remain sealed under institutional results embargo (SHA-256 committed Sep 05).* | **Embargoed**<br/>*(Unlocks Sep 11)* |
-| **Episode 10** | `2026-09-07 ~ 2026-09-11`<br/>(Live Round) | **Prospective Forward Test** | *Upcoming tournament cycle.* | **Pending** |
+| [**Episodes 01–08**](en/episodes_01_08_the_forty_one_day_king.md) | `2026-07-03 ~ 2026-08-28`<br/>(41 Trading Days, Weeks 1–8) | **Retrospective Backtest Baseline** | **The Forty-One Day Baseline**: Simulated retrospectively with knowledge of July–August market conditions. `CONTESTANT_B_eagle-5-1` topped the leaderboard at NAV `1.1971` (+19.71%, raw $p \approx 0.001$, Bonferroni $0.168 > 0.05$). | **Released** |
+| [**Episode 09**](en/episode_09_the_september_02_breadth_shock_and_rabbit_rampage.md) | `2026-08-31 ~ 2026-09-04`<br/>(Days 42~46, Cycle 1) | **Prospective Forward Tracking** | **The September 02 Breadth Shock & Rabbit Rampage**: 99.4% of paths suffered active exposure pullbacks on Wednesday; `CONTESTANT_D_rabbit-1` gained +2.41% on the week, compressing the crown margin to 1.89pp. | **Released** |
+| [**Episode 10**](en/episode_10_the_apex_strike_and_the_120_milestone.md) | `2026-09-07 ~ 2026-09-11`<br/>(Days 47~51, Cycle 2) | **Prospective Forward Tracking** | **The Apex Strike & The 1.20 Milestone**: High-conviction Eagles counter-attacked; `CONTESTANT_B_eagle-5-1` (+2.06%) became the first strategy to breach the 1.20 NAV milestone (NAV `1.2071`, +20.71%). | **Released** |
+| [**Episode 11**](en/episode_11_the_mid_september_turbulence_and_contestant_d_surge.md) | `2026-09-14 ~ 2026-09-18`<br/>(Days 52~56, Cycle 3) | **Prospective Forward Tracking** | **The Mid-September Turbulence & CONTESTANT_D's Charge**: Eagle King pulled back (-2.18%, lead compressed to 4.51pp); `CONTESTANT_D` family took 3 of the Top 5 seats, led by `eagle-5-1` (+1.77% on the week). | **Released** |
 
 ---
 
-## 🌪️ Weekly Market Climate Report (August 31 – September 04, 2026)
+## 🏛️ Broad-Market Testbeds: Monthly Season Baselines (Months 01–02)
 
-> **"The weather outside the cage is public knowledge. How the animals inside handled the storm remains sealed until embargo lift."**
+Beyond the flagship CSI 300 weekly arena, broader-market testbeds evaluate capital constraints, discrete lot indivisibility, and signal decay on a monthly cadence:
 
-While individual model performance remains cryptographically committed and embargoed, the external market climate over the first week of September 2026 is an established public fact:
+| Testbed | Evaluation Universe | Initial Capital | Inception Baseline (M1–M2) | Status |
+| :---: | :---: | :---: | :--- | :---: |
+| [**CSI 1000**](en/season_csi1000_m1_m2.md) | 1,000 Small Caps | CNY 2,000,000 | **Small-Cap Sloth Dominance & The Cash Shield**: Amid a -12.91% index collapse, `CONTESTANT_B_sloth-2` finished at NAV `1.1343` (+13.43%); Snail control (+2.49% to +4.88%) cleanly isolates genuine selection alpha from cash sheltering. | **Released** |
+| [**CSI 500**](en/season_csi500_m1_m2.md) | 500 Mid Caps | CNY 1,000,000 | **Mid-Cap Dispersion & The Rabbit Surge**: Across a -12.49% index drawdown, agile Rabbit handlers generated nearly +10% absolute return led by `CONTESTANT_B_rabbit-1` (NAV `1.0998`, +9.98%, +22.47pp vs index). | **Released** |
+| [**CSI 800**](en/season_csi800_m1_m2.md) | 800 Broad Caps | CNY 1,600,000 | **Broad-Cap Rabbit Supremacy**: Combining large-cap liquidity with mid-cap dispersion, `CONTESTANT_B_rabbit-2` vaulted to NAV `1.1284` (+12.84%, +20.74pp vs index); scaled Whale-Shark achieved NAV `1.0830`. | **Released** |
 
-* **The Calm Before the Break**: July and August provided relatively smooth, trending conditions where broader market segments enjoyed persistent momentum.
-* **The September 02 Breadth Shock (Arena Designation: "Black Wednesday")**:
-  - On Wednesday, September 2, broader Chinese equity benchmarks experienced an abrupt intraday market breadth shock and turnover contraction.
-  - Growth-heavy and previously strong market segments suffered sharp localized drawdowns.
-  - Market breadth contracted rapidly, with over 80% of traded equities recording localized pullbacks within a 48-hour window.
-* **The Quantitative Questions on the Table**:
-  - For models whose parameters were frozen prior to July 2026, did long-duration signal persistence hold up through a sharp market rotation?
-  - Did high selection intensity (Eagles) protect capital or amplify the drawdown?
-  - How did high-turnover execution handlers (Rabbits) navigate the chop compared to multi-week inertia strategies (Sloths & Snails)?
-
-⏳ **Next Official Unlock**: Full prospective evaluation data, NAV trajectories, and Episode 09 dispatches unlock on **Friday, September 11, 2026**.

@@ -65,3 +65,61 @@ python3 scripts/audit_privacy.py
 本地扫描脚本 `scripts/audit_privacy.py` 必须遵守以下原则：
 1. **输出零泄密**：检测到疑似敏感内容时，**绝对不能在终端或日志中打印匹配到的敏感字符本身**！只能输出 `[FAIL] 文件名:行号 - 触发规则类别 (特征指纹或长度)`。
 2. **退出码严谨**：发现任何违规项退出码必须为 `1`；全检通过退出码为 `0`。
+
+---
+
+## 五、常规周频维护标准姿势 (Weekly Operations Standard Procedure)
+
+> **极重要提醒**：当用户要求“更新最新一周数据”、“执行本周滚动”、“策划本周任务并执行”时，**严禁自行手写临时外挂脚本折腾半天**！本仓库已具备高优化的**端到端原子级推进命令**，全流程仅需 **2~3 分钟**。详细规范可参阅 [docs/SEASON_ROLLFORWARD_SOP.md](docs/SEASON_ROLLFORWARD_SOP.md)。
+
+### 1. 运行环境指定
+必须在包含 Qlib 与 PyTorch 的环境执行，固定使用 Conda 环境：
+```bash
+conda activate qlib_cupy
+# 或直接使用该环境的 Python 解释器:
+# /home/tonny/anaconda3/envs/qlib_cupy/bin/python
+```
+
+### 2. 标准两步走执行管线 (The Standard 2-Step Pipeline)
+
+#### 第一步：特征推理与预测库增量延长 (Inference)
+若本周行情数据已更新入库，先确保权威预测库覆盖至目标截止日：
+```bash
+python scripts/infer_all_contestants.py
+# 如需指定单一股票池，可使用原生命令:
+# python cli.py infer --universe csirun300
+```
+
+#### 第二步：一键全自动原子级滚动推进 (The Grand Roll-Forward)
+**核心端到端命令（严禁拆分手动执行，2~3 分钟内全部自动完成）**：
+```bash
+python cli.py rollforward --end-date <YYYY-MM-DD>
+```
+
+> **该命令在底层自动执行原子闭环（无需人工干预）**：
+> 1. `bump-date`：原子更新 `arena/config.py`、各活跃赛季 `seasons/*/season_config.yaml` 及前端 `web/js/data/seasons_index.js`；
+> 2. `step`：全自动依次对 **4 大活跃赛季**（`season_01`, `season_csi500`, `season_csi800`, `season_csi1000`）执行增量周期结算、持仓撮合、盯市估值与 **44,000 只对标猴群（11 specs × 1000）零假设重估**；
+> 3. `export-web`：全自动重新编译 4 个前端数据文件（`web/js/data/*.js`）并同步 `arena_data.js`；
+> 4. `sync_chronicles`：自动同步英文战报文档至 `web/chronicles/en/`；
+> 5. `audit`：自动触发本地零泄密隐私审计 `scripts/audit_privacy.py`。
+
+### 3. 周度战报撰写规范 (Battle Report & Dispatches)
+增量推进完成后，依据最新生成的净值曲线数据撰写当周战报：
+1. **中文战报**：撰写至 `chronicles/zh/episode_<N>_<YYYYMMDD>_<slug>.md`。
+   - 必须严格遵守 [chronicles/zh/QUANTPITS_ARENA_EPISODE_RULES.md](chronicles/zh/QUANTPITS_ARENA_EPISODE_RULES.md)；
+   - 必须在正文最前部包含 `## ⚡ 战报速读 (TL;DR)`，提供 5~8 条密集 Level A 硬核数值事实（如大盘跌幅、冠军收益、回撤极值、显著性 p 值）；
+   - 恪守事实层（严谨）与归因层（保守克制），严禁事后诸葛亮式杜撰。
+2. **英文战报**：撰写至 `chronicles/en/episode_<N>_<slug>.md`，并拷贝同步至 `web/chronicles/en/`。
+3. **赛季挂载**：在 `seasons/season_01/season_config.yaml` 的 `dispatches.episodes` 下挂载新 Episode 条目。
+
+### 4. 自动化回归与隐私合规终验
+```bash
+PYTHONPATH=. pytest tests/test_rollforward_automation.py
+python scripts/audit_privacy.py
+```
+
+### 5. 三大违规禁令 (Anti-Patterns)
+- 🔴 **禁令 1：严禁编写临时 ad-hoc 外挂脚本**：绝不可在 `scratch/` 或根目录下编写任何拼装更新脚本；
+- 🔴 **禁令 2：严禁增量维护时全量重跑 `pipeline`**：增量维护必须基于快照 `latest_state.pkl` 进行，重跑全量会破坏历史不可变原则；
+- 🔴 **禁令 3：严禁后台挂死与盲目等待**：`cli.py rollforward` 是轻量级高速命令，通常 2~3 分钟即全部结束。命令应在前台直接执行或设置明确的超时与监控，切勿把轻量任务当做隔夜任务挂起。
+

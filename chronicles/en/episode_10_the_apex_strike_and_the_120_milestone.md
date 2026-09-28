@@ -3,7 +3,7 @@
 > **Evaluation Window**: Anchored at 2026-09-04 close; prospective evaluation cycle covers 2026-09-07 ~ 2026-09-11 (5 trading days, Days 47 ~ 51 of the tournament calendar).  
 > **Tournament Phase**: **Prospective Forward Tracking (Cycle 2, Week 10)**  
 > **Executable Universe Benchmark**: Taotie (`0.9906` $\to$ `0.9685`, weekly return -2.23%, cumulative -3.15%).  
-> *(Capital-constrained CNY 500,000, 100-share round-lot full-universe reference portfolio under greedy waterfall allocation).*  
+> *(Executable universe benchmark).*  
 > **Market Index Benchmark**: CSI 300 (`-6.07%` $\to$ `-6.86%`, weekly return -0.84%).  
 > **Core Narrative**: Facing a persistent downward drift in broad equities, high-selection intensity Eagles mounted a ferocious counter-strike. `CONTESTANT_A_eagle-5-1` led the entire tournament with **+4.38%** on the week, while reigning champion `CONTESTANT_B_eagle-5-1` (+2.06%) became the first strategy in tournament history to breach the **1.20 NAV milestone (+20.71%)**, expanding its tournament lead to **5.51 percentage points**.
 
@@ -12,6 +12,18 @@
 > ### 💡 Cycle Core Epiphany
 > **Episode 09 demonstrated**: Agile rotation (Rabbit) swiftly adapts when cross-sectional dispersion explodes and prior leaders suffer breadth pullbacks.  
 > **Episode 10 proves**: When market direction shifts back into a steady contraction regime, high-conviction concentration (Eagle) re-exerts devastating precision. The apex predator reclaimed the battlefield, while inverse-alpha containers (Koala) suffered massive single-week drawdowns.
+
+---
+
+## ⚡ TL;DR: The Apex Strike & The 1.20 Milestone
+
+* **The Arena Benchmark Anchor**: Second prospective forward week (5 trading days, Days 47~51 anchored at 09-04 close); executable universe benchmark **Taotie dropped -2.23%** (NAV `0.9906` $\to$ `0.9685`, cumulative -3.15%); CSI 300 fell -0.84% (cumulative -6.86%).
+* **Historic 1.20 Milestone Breach**: Reigning sovereign **`CONTESTANT_B_eagle-5-1` gained +2.06% on the week**, becoming the first path in tournament history to cross NAV 1.20, closing at **NAV `1.2071` (+20.71%)**.
+* **Championship Margin Re-expands**: The lead over Rank 2 (`CONTESTANT_D_rabbit-1` at NAV `1.1520`, +15.20%) widened from 1.89pp back to **5.51 percentage points**.
+* **Apex Strike of the Week**: Tournament weekly crown seized by **`CONTESTANT_A_eagle-5-1` at +4.38%** (NAV `1.0744` $\to$ `1.1215`), leaping into the overall Top 5.
+* **Intra-Zoo Dispersion Explosion**: The spread between the week's top gainer (+4.38%) and worst casualty (-5.01%) blew out to **9.39 percentage points**.
+* **Severe Inverse Selection**: Bottom-ranked Koala containers suffered relentless punishment (weekly mean **-4.41%**), confirming severe downside risk in low-scoring assets.
+* **Standard Baseline Robustness**: All 6 candidate models' default canonical `robot` containers maintained positive cumulative returns and **double-digit active spreads (+7.66pp to +18.19pp vs CSI 300)**.
 
 ---
 
@@ -42,7 +54,7 @@ During the 10th tournament week (2026-09-04 Friday close to 2026-09-11 Friday cl
 
 ## II. The Battlefield: Weekly Gainers & Casualties
 
-While broad indices drifted lower, apex concentration delivered stunning alpha divergence ($\text{Return} = \text{NAV}_{0911} / \text{NAV}_{0904} - 1$):
+While broad indices drifted lower, apex concentration delivered stunning cross-sectional divergence ($\text{Return} = \text{NAV}_{0911} / \text{NAV}_{0904} - 1$):
 
 ### 🏆 Top 5 Weekly Gainers (Week 10)
 1. **`CONTESTANT_A_eagle-5-1`**: **`+4.38%`** (NAV `1.0744` $\to$ `1.1215`) — **Rank 1 Overall for the Week**
@@ -87,7 +99,7 @@ While unable to match the explosive single-week velocity of the top-5 concentrat
 
 ---
 
-## IV. Contestant Baseline Integrity: Full Positive Alpha Retention
+## IV. Contestant Baseline Integrity: Full Positive Excess Return Retention
 
 All 6 candidate models' default canonical execution containers (`robot`, TopK=22, DropN=3) maintained positive cumulative performance against the market:
 
@@ -101,15 +113,16 @@ All 6 candidate models' default canonical execution containers (`robot`, TopK=22
 | **`CONTESTANT_E_robot`** | **-0.97%** | **1.0080** | **+0.80%** | **+7.66pp** |
 | *CSI 300 Index* | *-0.84%* | *0.9314* | *-6.86%* | *0.00pp* |
 
-Even in the most challenging regime, all 6 models retain positive absolute cumulative returns and strong double-digit active alpha spreads against the broad market index.
+Even in the most challenging regime, all 6 models retain positive absolute cumulative returns and strong double-digit active excess spreads against the broad market index.
 
 ---
 
 ## V. Outlook: Week 11 and Beyond
 
 Fifty-one trading days into the Summer 2026 tournament, the field has separated into distinct, mathematically verifiable behavioral regimes:
-* **Apex Concentrators (Eagle)**: Capable of generating extraordinary single-week alpha bursts (+4.38%), carrying CONTESTANT_B across the historic 1.20 milestone.
+* **Apex Concentrators (Eagle)**: Capable of generating extraordinary single-week performance bursts (+4.38%), carrying CONTESTANT_B across the historic 1.20 milestone.
 * **Agile Compounders (Rabbit)**: Delivering unyielding stability and commanding the upper podium.
-* **Passive Drift vs Execution Friction**: Demonstrating that passive equal-weight exposure (Taotie -3.15%) and market beta (CSI 300 -6.86%) are completely outclassed by dynamic alpha selection.
+* **Passive Drift vs Execution Friction**: Demonstrating that passive equal-weight exposure (Taotie -3.15%) and market beta (CSI 300 -6.86%) are completely outclassed by dynamic active selection.
 
 The tournament marches into Week 11.
+

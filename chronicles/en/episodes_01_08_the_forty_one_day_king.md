@@ -8,6 +8,18 @@
 
 ---
 
+## ⚡ TL;DR: The Forty-One Day Opening Gambit
+
+* **The Arena Baseline Anchor**: 41 trading days retrospectively evaluated across July–August 2026 under CNY 500,000 capital and 100-share discrete constraints; executable universe benchmark **Taotie dipped -0.72%** (NAV `0.9928`), holding ~205 stocks with 0.02% idle cash.
+* **Coronation of the Apex Predator**: **`CONTESTANT_B_eagle-5-1` seized Rank 1** at **NAV `1.1971` (+19.71%)**, generating **+20.43pp of excess return over Taotie** through maximum selection intensity (TopK=5, DropN=1).
+* **The Silver Sloth**: **`CONTESTANT_B_sloth-1` claimed Rank 2** at **NAV `1.1247` (+12.47%)**, proving that low-turnover inertia containers can outpace active turnover when macro momentum trends smoothly.
+* **The Null Court Verdict**: Across 1,000 matched monkey portfolios sharing identical parameters, **zero monkeys beat `CONTESTANT_B_eagle-5-1`** ($p \approx 0.001$ raw empirical significance).
+* **Bonferroni Reality Check**: Adjusting for 168 simultaneously evaluated execution paths expands significance to $168 \times 0.001 \approx 0.168 > 0.05$—leaving the crown statistically uncertified under strict multiple-testing scrutiny.
+* **The Underworld (Downside Extremes)**: Inverse-selection Koalas suffered catastrophic adverse selection, bottoming at **NAV `0.6521` (-34.79%)** under `CONTESTANT_E_koala-5-1` ($p \approx 0.001$ in the lower tail).
+
+---
+
+
 ## I. Nature of the Evaluation: Retrospective Backtest
 
 This 41-day baseline covers the opening 8 weeks of the tournament calendar (Episodes 01–08):

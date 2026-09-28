@@ -3,17 +3,29 @@
 > **Evaluation Window**: Anchored at 2026-08-28 close; prospective evaluation cycle covers 2026-08-31 ~ 2026-09-04 (5 trading days, Days 42 ~ 46 of the tournament calendar).  
 > **Tournament Phase**: **Prospective Forward Tracking (Cycle 1)**  
 > **Cryptographic Provenance**: Institutional results sealed under SHA-256 commit hash on 2026-09-05 23:42.  
-> **Executable Universe Benchmark**: Taotie (`0.9928` $\to` `0.9906`, weekly return -0.22%).  
-> *(Capital-constrained CNY 500,000, 100-share round-lot full-universe reference portfolio under greedy waterfall allocation).*  
+> **Executable Universe Benchmark**: Taotie (`0.9928` $\to$ `0.9906`, weekly return -0.22%).  
+> *(Executable universe benchmark).*  
 > **Core Narrative**: On Wednesday, September 2, 99.4% of execution paths simultaneously suffered active exposure pullbacks. High-refresh agile Rabbits mounted a counter-offensive (+2.41% on the week), compressing the tournament crown gap to just **1.89 percentage points**.
 
 ---
 
 > ### 💡 Cycle Core Epiphany
-> **Episodes 01–08 Retrospective Baseline demonstrated**: During persistent trending tailwinds, extreme concentration (Eagle) exponentially multiplies exposure to the model signal.  
+> **Episodes 01–08 Retrospective Baseline demonstrated**: During persistent trending tailwinds, extreme concentration (Eagle) dramatically amplifies exposure to the model signal.  
 > **Episode 09 Prospective Week 1 immediately proved**: Concentration is a strictly symmetric double-edged sword. It magnifies signal exposure while equally amplifying idiosyncratic volatility; meanwhile, distinct Zoo execution policies generated diametrically opposite survival trajectories under the very same market shock.
 
 ---
+
+## ⚡ TL;DR: The Wednesday Breadth Shock
+
+* **The Arena Benchmark Anchor**: First prospective forward week (5 trading days, Days 42~46 anchored at 08-28 close); executable universe benchmark **Taotie slipped -0.22%** (NAV `0.9928` $\to$ `0.9906`).
+* **Black Wednesday Liquidity Flash**: On September 2, **99.4% of all 168 living execution paths posted negative daily active returns vs Taotie** (daily path mean -0.73% vs Taotie +0.07%), marking a synchronized cross-sectional breadth contraction.
+* **The Rampage of the Rabbits**: Weekly crown captured by **`CONTESTANT_D_rabbit-1` (+2.41% on the week)**, advancing to **NAV `1.1278`** via relentless weekly portfolio refreshes (TopK=22, DropN=11).
+* **The Eagle King Bleeds**: Baseline champion **`CONTESTANT_B_eagle-5-1` stumbled -4.21%** on the week (NAV `1.1971` $\to$ `1.1467`), suffering concentrated factor mean-reversion.
+* **Championship Gap Compressed**: The margin between Rank 1 (`CONTESTANT_B_eagle-5-1`) and Rank 2 (`CONTESTANT_D_rabbit-1`) plummeted from **7.24pp to razor-thin 1.89 percentage points**.
+* **Sloth Sinks in the Chop**: Delayed-signal **`CONTESTANT_B_sloth-1` dropped -4.89%** (NAV `1.1247` $\to$ `1.0697`), demonstrating that unhedged inertia strategies take full unbuffered hits when cross-sectional dispersion reverses.
+
+---
+
 
 ## I. Five Turbulent Days: Market Trajectory & Synchronized Active Exposure Shock
 

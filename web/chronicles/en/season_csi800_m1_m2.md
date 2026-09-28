@@ -9,6 +9,18 @@
 
 ---
 
+## ⚡ Season Baseline TL;DR: Broad-Cap Dispersion & Rabbit Supremacy
+
+* **The Broad-Cap Landscape**: Retrospective baseline across Months 1 & 2 (41 trading days); the broad-market **CSI 800 index retreated -7.90%** as defensive mega-caps diverged sharply from cyclical mid-caps.
+* **Executable Benchmark Cushion**: Under CNY 1,600,000 capital and greedy waterfall allocation across 634 equities (~99.9% capital utilization), executable reference **Taotie 800 closed at NAV `0.9625` (-3.75%)**, beating the market index by **+4.15pp**.
+* **Rabbit Hegemony Across Broad Space**: Agile turnover handlers capitalized on cross-sector dispersion, with **`CONTESTANT_B_rabbit-2` seizing Rank 1 at NAV `1.1284` (+12.84%)**, delivering a massive **+20.74pp excess return over CSI 800** and **+16.59pp over Taotie 800**; `rabbit-1` took silver at **+9.84%**.
+* **Agility Premium in Liquid Universes**: Aggressive turnover (DropN=22) outpaced the canonical Robot (DropN=3, +5.18%) by **+7.66 percentage points**, demonstrating that high liquidity absorbs turnover frictions while rewarding signal freshness.
+* **The Whale-Shark Resilience**: Scaled-breadth container `whale-shark` secured 3rd overall at **+8.30%** with a maximum drawdown of just **-2.15%**, demonstrating institutional capacity-scaled robustness.
+* **Eagle Concentration Dilution**: Extreme concentration (`eagle-5-1`, +7.95%) placed only 6th, confirming that selecting only 5 names in an 800-stock universe misses valuable breadth advantages captured by broader Rabbits (TopK=22).
+
+---
+
+
 ## I. Nature of the Evaluation: Broad-Market Universe Calibration
 
 This 41-day opening baseline covers the combined Month 1 and Month 2 evaluation window (Weeks 1 to 8):

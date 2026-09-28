@@ -3,7 +3,7 @@
 > **Evaluation Window**: Anchored at 2026-09-11 close; prospective evaluation cycle covers 2026-09-14 ~ 2026-09-18 (5 trading days, Days 52 ~ 56 of the tournament calendar).  
 > **Tournament Phase**: **Prospective Forward Tracking (Cycle 3, Week 11)**  
 > **Executable Universe Benchmark**: Taotie (`1.0170` $\to$ `1.0110`, weekly return -0.60%, cumulative +1.10%).  
-> *(Capital-constrained CNY 500,000, 100-share round-lot full-universe reference portfolio under greedy waterfall allocation).*  
+> *(Executable universe benchmark).*  
 > **Market Index Benchmark**: CSI 300 (`-6.86%` $\to$ `-6.91%`, weekly return -0.05%).  
 > **Core Narrative**: Amid broad market consolidation and cross-sectional churn, high-conviction leader `CONTESTANT_B_eagle-5-1` experienced a mild mean-reversion pullback (-2.18%, NAV `1.1808`), compressing the championship margin to **4.51 percentage points**. Meanwhile, **`CONTESTANT_D` staged a tour-de-force matrix offensive**: `CONTESTANT_D_eagle-5-1` claimed #1 weekly performance across the entire tournament (**+1.77%**), propelling the `CONTESTANT_D` family to capture **3 out of the top 5 seats on the overall cumulative leaderboard**.
 
@@ -12,6 +12,17 @@
 > ### 💡 Cycle Core Epiphany
 > **Episodes 09–10 demonstrated**: Market regimes oscillate between synchronized breadth contractions and rapid alpha bursts, rewarding both agile turnover (Rabbit) and extreme conviction (Eagle) at distinct intervals.  
 > **Episode 11 proves**: Model alpha robustness is not merely an isolated single-variant triumph, but a structural property of model families. `CONTESTANT_D` showcased extraordinary parameter-invariant resilience—spanning agile Rabbits, balanced Eagles, and apex predators alike—proving that cohesive multi-animal portfolios can advance even against choppy market headwinds.
+
+---
+
+## ⚡ TL;DR: Mid-September Turbulence & The Dynasty Offensive
+
+* **The Arena Benchmark Anchor**: Third prospective forward week (5 trading days, Days 52~56 anchored at 09-11 close); executable universe benchmark **Taotie dipped -0.60%** (NAV `1.0170` $\to$ `1.0110`, cumulative +1.10%); CSI 300 held nearly flat at -0.05% (cumulative -6.91%).
+* **Tuesday Shakeout vs Friday Rebound**: Tuesday saw **98.8% of all 168 living execution paths in the red** (daily path mean -0.72%), followed by a sharp Friday reversal where **79.2% of paths closed green** (mean +0.50%).
+* **Weekly Tournament Crown**: **`CONTESTANT_D_eagle-5-1` swept Rank 1 for the week at +1.77%** (NAV `1.0988` $\to$ `1.1183`), vaulting directly into the overall cumulative Top 5.
+* **The Apex Predator Pulls Back**: Reigning champion **`CONTESTANT_B_eagle-5-1` yielded -2.18%** (NAV `1.2071` $\to$ `1.1808`), with its cumulative margin over Rank 2 shrinking to **4.51 percentage points**.
+* **CONTESTANT_D Family Hegemony**: The `CONTESTANT_D` family captured **3 of the Top 5 overall leaderboard seats**: `rabbit-1` at #2 (NAV `1.1357`), `eagle-11-2` at #3 (NAV `1.1308`), and `eagle-5-1` at #5 (NAV `1.1183`).
+* **Deep-Lag Defensive Cushion**: Cash-buffered containers weathered midweek turbulence comfortably, with `CONTESTANT_A_sloth-4` advancing **+0.98%** (38.19% average cash ratio) and `CONTESTANT_A_snail-4` rising **+0.91%**.
 
 ---
 

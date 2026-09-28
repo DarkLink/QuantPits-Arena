@@ -9,6 +9,18 @@
 
 ---
 
+## ⚡ Season Baseline TL;DR: Small-Cap Crucible & The Cash Shield
+
+* **The Small-Cap Environment**: Retrospective baseline across Months 1 & 2 (41 trading days); the small-cap market index **CSI 1000 plunged -12.91%** amid aggressive liquidity contraction.
+* **Executable Benchmark Cushion**: Under CNY 2,000,000 capital and greedy waterfall allocation across 870 equities (~99.9% capital utilization), executable reference **Taotie 1000 finished at NAV `0.9471` (-5.29%)**, cushioning **+7.62pp above the market index**.
+* **Sloths Sweep the Podium**: In stark contrast to large-cap arenas, delayed-signal Sloth containers swept the top ranks, crowned by **`CONTESTANT_B_sloth-2` at NAV `1.1343` (+13.43%)**, outperforming CSI 1000 by **+26.34pp** and Taotie by **+18.72pp**.
+* **Deconstructing the "Cash Shield"**: Sloth headline returns bundle genuine signal persistence with an unearned beta-avoidance cushion; `sloth-2` sat in 100% risk-free cash during July's sharpest index drops (mean cash ratio: **23.74%**).
+* **The Snail Control Truth**: Isolating selection skill from cash sheltering via full-exposure **Snails (mean cash < 3%)** reveals authentic small-cap alpha: `CONTESTANT_B_snail-1` delivered **+4.88%** and `snail-2` delivered **+2.49%**, cleanly confirming genuine slow-decay excess returns.
+* **Baseline Robots Retain Spread**: Canonical `robot` containers (TopK=22, DropN=3) held firm, led by `CONTESTANT_B_robot` at **NAV `1.1098` (+10.98%, +23.89pp vs CSI 1000)**.
+
+---
+
+
 ## I. Nature of the Evaluation: Small-Cap Alpha & Frictional Realities
 
 This 41-day opening baseline covers the combined Month 1 and Month 2 evaluation window (Weeks 1 to 8):

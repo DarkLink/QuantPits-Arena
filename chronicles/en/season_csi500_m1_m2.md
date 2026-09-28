@@ -9,6 +9,17 @@
 
 ---
 
+## ⚡ Season Baseline TL;DR: Mid-Cap Dispersion & The Agile Rabbit Surge
+
+* **The Mid-Cap Crucible**: Retrospective baseline across Months 1 & 2 (41 trading days); the mid-cap market benchmark **CSI 500 slumped -12.49%** under pervasive market pressure, with 72% of constituent assets losing value.
+* **Executable Benchmark Cushion**: Under CNY 1,000,000 capital and greedy waterfall allocation across 403 equities, executable reference **Taotie 500 closed at NAV `0.9472` (-5.28%)**, delivering **+7.21pp of active protection** over the raw market index.
+* **Triumph of Agile Rabbits**: High-turnover Rabbit handlers dominated the podium, led by **`CONTESTANT_B_rabbit-1` at NAV `1.0998` (+9.98%)**, outperforming CSI 500 by **+22.47pp** and Taotie by **+15.26pp**; `CONTESTANT_B_rabbit-2` took silver at **+9.39%**.
+* **Pairwise Agility Premium**: Aggressive weekly turnover (DropN=11) outperformed the standard Robot (DropN=3, +4.12%) by **+5.86 percentage points**, proving that high turnover acted as an essential risk-clearing mechanism rather than a frictional drag in declining mid-cap regimes.
+* **Concentration Volatility Penalty**: While `eagle-5-1` placed 3rd (+9.05%), extreme 5-stock mid-cap concentration triggered sharp idiosyncratic volatility with a maximum drawdown of **-4.12%** (vs just **-1.85%** for Rabbit-1).
+
+---
+
+
 ## I. Nature of the Evaluation: Retrospective Calibration Across Mid-Cap Dispersion
 
 This 41-day opening baseline covers the combined Month 1 and Month 2 evaluation window (Weeks 1 to 8):

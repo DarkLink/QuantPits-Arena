@@ -11,7 +11,7 @@ description: "Season 1 baseline tournament: 6 contestant models x 29 zoo paramet
 calendar:
   anchor_date: "2026-07-03"        # Friday close initial decision cutoff (T=0)
   first_trade_date: "2026-07-06"   # Monday market open entry
-  end_date: "2026-09-18"           # Data cutoff Friday settlement
+  end_date: "2026-09-24"           # Data cutoff Friday settlement
   cycle_freq: "weekly"
 
 # Account and Match Execution Parameters
@@ -37,7 +37,7 @@ universe:
   testbed_desc: "246-stock high-liquidity testbed"
 
 banner:
-  proof_text: "🔬 <strong style=\"color: var(--text-secondary);\">Season 1 Baseline Proof:</strong> 246 high-liquidity equities with 11,000 empirical random monkeys verified over 2026-07-03 ~ 2026-09-18. Unfalsifiable empirical null resolution."
+  proof_text: "🔬 <strong style=\"color: var(--text-secondary);\">Season 1 Baseline Proof:</strong> 246 high-liquidity equities with 11,000 empirical random monkeys verified over 2026-07-03 ~ 2026-09-24. Unfalsifiable empirical null resolution."
 
 # Enabled Benchmarks (First-Class Citizens)
 benchmarks:
@@ -58,21 +58,21 @@ dispatches:
   executive:
     tag: "🏆 Official Released Standings"
     badge: "Active"
-    title: "Tournament Standings & Week 11 Prospective Update"
-    window_label: "2026-07-03 ~ 2026-09-18 · 56 Trading Days"
+    title: "Tournament Standings & Week 12 Prospective Update"
+    window_label: "2026-07-03 ~ 2026-09-24 · 60 Trading Days"
     nature_label: "Empirical tournament log tracking quantitative alpha models through execution frictions, market regime shifts, and monkey null courts."
-    leader_summary: "CONTESTANT_B_eagle-5-1 retains tournament leadership at NAV 1.1808 (+18.08%), but the championship margin compresses to 4.51pp as CONTESTANT_D launches a multi-variant charge, claiming 3 of the top 5 overall spots."
+    leader_summary: "CONTESTANT_B_eagle-5-1 reasserts undisputed dominance at NAV 1.1952 (+19.52%), expanding its championship lead to 5.72pp over CONTESTANT_D_rabbit-1, as CONTESTANT_C launches a spectacular 4-seat weekly counteroffensive."
   climate:
     tag: "🌪️ Market Climate Report"
     status_badge: "Released"
-    title: "Mid-September Churn & The CONTESTANT_D Surge"
-    summary: "CSI 300 remained flat (-0.05%, -6.91% cumulative). CONTESTANT_D_eagle-5-1 topped the week with +1.77%, while CONTESTANT_D captured Ranks 2, 3, and 5 on the overall leaderboard."
+    title: "Pre-Holiday Liquidity Drain & The Apex Resurgence"
+    summary: "CSI 300 dropped -1.51% (-8.32% cumulative) amid pre-holiday liquidity drain. CONTESTANT_B_eagle-5-1 gained +1.23% to re-expand its championship cushion, while CONTESTANT_C claimed 4 of the top 5 weekly gainers."
     bullets:
-      - "Taotie universe benchmark eased -0.60% on the week (+1.10% cumulative, outperforming CSI 300 index by +8.01pp) across 246 high-liquidity assets."
-      - "CONTESTANT_D_eagle-5-1 claimed #1 weekly performance (+1.77%), driving the CONTESTANT_D family to dominate 3 out of top 5 seats on the overall leaderboard."
-      - "Apex leader CONTESTANT_B_eagle-5-1 absorbed mild mean-reversion (-2.18%, NAV 1.1808), tightening the tournament lead from 5.51pp to 4.51pp."
-      - "Defensive lag containers displayed capital shielding: CONTESTANT_A_sloth-4 gained +0.98% supported by high uninvested cash buffers."
-    decrypt_label: "Prospective Cycle 3 Released"
+      - "Taotie universe benchmark proved defensive, sliding just -0.50% (+0.60% cumulative, outperforming CSI 300 index by +8.92pp)."
+      - "Apex leader CONTESTANT_B_eagle-5-1 mounted an electric counteroffensive (+1.23%, NAV 1.1952), widening its lead over Rank #2 from 4.51pp to 5.72pp."
+      - "Underdog CONTESTANT_C executed a stunning sweep, capturing 4 of the top 5 weekly gainers led by eagle-5-1 (+1.57%)."
+      - "Last week's weekly winner CONTESTANT_D_eagle-5-1 suffered sharp mean reversion (-3.17%, NAV 1.0828), falling from cumulative #5 to #14."
+    decrypt_label: "Prospective Cycle 4 Released"
   episodes:
     - id: "ep08"
       tab_label: "📜 Ep 01–08: The 41-Day King"
@@ -106,5 +106,14 @@ dispatches:
       read_time: "7 min read"
       summary: "Third prospective tracking cycle. CONTESTANT_D_eagle-5-1 wins #1 weekly performance (+1.77%), catapulting the CONTESTANT_D family to occupy 3 of the top 5 spots on the overall leaderboard."
       file: "chronicles/en/episode_11_the_mid_september_turbulence_and_contestant_d_surge.md"
+    - id: "ep12"
+      tab_label: "👑 Ep 12: The Apex Resurgence"
+      badge: "Released"
+      title: "Episode 12: The Mid-Autumn Trial & The Apex Resurgence"
+      date: "2026-09-24"
+      read_time: "7 min read"
+      summary: "Fourth prospective tracking cycle. In a 4-day pre-holiday squeeze, CONTESTANT_B_eagle-5-1 surges +1.23% (NAV 1.1952) to extend lead to 5.72pp, while CONTESTANT_C captures 4 of the top 5 weekly gainers."
+      file: "chronicles/en/episode_12_the_mid_autumn_trial_and_apex_resurgence.md"
+
 
 

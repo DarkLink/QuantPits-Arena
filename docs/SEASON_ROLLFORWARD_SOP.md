@@ -23,19 +23,42 @@
 
 ---
 
-## 2. 极简一键全自动滚动推进 (Recommended: The Grand Roll-Forward)
+## 2. 极简一键全自动滚动推进 (Recommended: The Standard Workflow)
 
-当行情数据更新至最新一周收盘（例如从 `2026-09-11` 推进到 `2026-09-18`）时，**推荐使用最简一条命令完成全流程原子闭环**：
+当行情数据更新至最新一周收盘（例如从 `2026-09-18` 推进到 `2026-09-24`）时，**标准操作只需执行以下极简流程（核心推进命令 2~3 分钟内完成）**：
 
+### 步骤 1：激活环境与模型特征推理 (Inference)
+若本周行情数据已更新入库，先运行特征提取与权威预测库扩充：
 ```bash
-# 激活运行环境并一键原子完成：日期推进 -> 4赛季推进 -> Web导出 -> Chronicles同步 -> 隐私审计
 conda activate qlib_cupy
-python cli.py rollforward --end-date 2026-09-18
+python scripts/infer_all_contestants.py
+```
+
+### 步骤 2：一键全自动原子级滚动推进 (The Grand Roll-Forward)
+一条命令原子完成：日期推进 -> 4大赛季增量结算与4.4万只猴群评估 -> Web数据Payload导出 -> Chronicles文档同步 -> 隐私脱敏审计：
+```bash
+python cli.py rollforward --end-date <YYYY-MM-DD>
 ```
 
 > [!TIP]
-> - `rollforward` 默认会自动将变更的交易日数和截止日同步到全局与 4 个活跃赛季配置，依次执行增量 `step`（**默认全自动包含 11,000 只猴群零假设重估**）与 `export-web`，自动同步 `chronicles/en/` 到 `web/chronicles/en/`，并在末尾强制执行 `audit_privacy.py`。
+> - `rollforward` 默认会自动将变更的交易日数和截止日同步到全局与 4 个活跃赛季配置，依次执行增量 `step`（**默认全自动包含各赛季 11,000 只猴群零假设重估，4赛季共计 44,000 只**）与 `export-web`，自动同步 `chronicles/en/` 到 `web/chronicles/en/`，并在末尾强制执行 `audit_privacy.py`。
+> - 全流程耗时仅 **2~3 分钟**，严禁拆分成繁琐的外挂脚本或送入后台隔夜空转。
 > - 若仅需极速调试周频撮合或跳过猴群评估，可追加 `--no-monkeys` 参数。
+
+### 步骤 3：编写周度战报 (Battle Report)
+增量推进完成后，依据最新生成的净值曲线数据撰写当周战报：
+1. **中文战报**：撰写至 `chronicles/zh/episode_<N>_<YYYYMMDD>_<slug>.md`。
+   - 必须严格遵循 [chronicles/zh/QUANTPITS_ARENA_EPISODE_RULES.md](chronicles/zh/QUANTPITS_ARENA_EPISODE_RULES.md)；
+   - 必须在正文最前部包含 `## ⚡ 战报速读 (TL;DR)`，提供 5~8 条密集 Level A 硬核数值事实（如大盘跌幅、冠军收益、回撤极值、显著性 p 值）；
+   - 恪守事实层（严谨）与归因层（保守克制），严禁事后诸葛亮式杜撰。
+2. **英文战报**：撰写至 `chronicles/en/episode_<N>_<slug>.md`，并拷贝同步至 `web/chronicles/en/`。
+3. **赛季挂载**：在 `seasons/season_01/season_config.yaml` 的 `dispatches.episodes` 下挂载新 Episode 条目。
+
+### 步骤 4：回归测试与合规审计
+```bash
+PYTHONPATH=. pytest tests/test_rollforward_automation.py
+python scripts/audit_privacy.py
+```
 
 ---
 
