@@ -76,7 +76,7 @@ python3 scripts/audit_privacy.py
 - 收到更新通知后，以用户指定的目标截止日、决策截面与实际调仓安排为准。当前日历或执行流程若不支持通知中的假期例外，先落实并验证相应规则，再执行原生增量管线；不得自行猜测例外安排。
 - 当前“周一休市不补调仓”是已核验运行的实现规则，不能替代用户对未来假期的具体通知。对齐交易与结算口径时，继续遵守匿名化、归一化及真实账户状态零入库的要求。
 
-> **极重要提醒**：当用户要求“更新最新一周数据”、“执行本周滚动”、“策划本周任务并执行”时，**严禁自行手写临时外挂脚本折腾半天**！使用仓库原生的**端到端推进命令**。完整四池猴群重估可能超过早期的 2~3 分钟估计，必须设置明确超时并监控实际进度。详细规范可参阅 [docs/SEASON_ROLLFORWARD_SOP.md](docs/SEASON_ROLLFORWARD_SOP.md)。
+> **极重要提醒**：当用户要求“更新最新一周数据”、“执行本周滚动”、“策划本周任务并执行”时，**严禁自行手写临时外挂脚本折腾半天**！使用仓库原生的**端到端推进命令**。完整五池猴群重估可能超过早期的 2~3 分钟估计，必须设置明确超时并监控实际进度。详细规范可参阅 [docs/SEASON_ROLLFORWARD_SOP.md](docs/SEASON_ROLLFORWARD_SOP.md)。
 
 ### 1. 运行环境指定
 必须在包含 Qlib 与 PyTorch 的环境执行，固定使用 Conda 环境：
@@ -89,9 +89,9 @@ conda activate qlib_cupy
 ### 2. 标准两步走执行管线 (The Standard 2-Step Pipeline)
 
 #### 第一步：特征推理与预测库增量延长 (Inference)
-收到更新通知、核对执行安排且行情已更新入库后，先确保四池权威预测库覆盖至用户指定截止日：
+收到更新通知、核对执行安排且行情已更新入库后，先确保五池权威预测库覆盖至用户指定截止日：
 ```bash
-for universe in csirun300 csi500 csi800 csi1000; do
+for universe in csirun300 csi300 csi500 csi800 csi1000; do
     python cli.py infer-update --universe "$universe" --end-date <YYYY-MM-DD> || exit 1
 done
 ```
@@ -106,8 +106,8 @@ python cli.py rollforward --end-date <YYYY-MM-DD>
 
 > **该命令在底层自动执行原子闭环（无需人工干预）**：
 > 1. `bump-date`：原子更新 `arena/config.py`、各活跃赛季 `seasons/*/season_config.yaml` 及前端 `web/js/data/seasons_index.js`；
-> 2. `step`：全自动依次对 **4 大活跃赛季**（`season_01`, `season_csi500`, `season_csi800`, `season_csi1000`）执行增量周期结算、持仓撮合、盯市估值与 **44,000 只对标猴群（11 specs × 1000）零假设重估**；
-> 3. `export-web`：全自动重新编译 4 个前端数据文件（`web/js/data/*.js`）并同步 `arena_data.js`；
+> 2. `step`：全自动依次对 **5 大活跃赛季**（`season_01`, `season_csi300`, `season_csi500`, `season_csi800`, `season_csi1000`）执行增量周期结算、持仓撮合、盯市估值与 **55,000 只对标猴群（11 specs × 1000）零假设重估**；
+> 3. `export-web`：全自动重新编译 5 个前端数据文件（`web/js/data/*.js`）并同步 `arena_data.js`；
 > 4. `sync_chronicles`：自动同步英文战报文档至 `web/chronicles/en/`；
 > 5. `audit`：自动触发本地零泄密隐私审计 `scripts/audit_privacy.py`。
 
@@ -129,5 +129,5 @@ python scripts/audit_privacy.py
 ### 5. 三大违规禁令 (Anti-Patterns)
 - 🔴 **禁令 1：严禁编写临时 ad-hoc 外挂脚本**：绝不可在 `scratch/` 或根目录下编写任何拼装更新脚本；
 - 🔴 **禁令 2：严禁增量维护时全量重跑 `pipeline`**：增量维护必须基于快照 `latest_state.pkl` 进行，重跑全量会破坏历史不可变原则；
-- 🔴 **禁令 3：严禁后台挂死与盲目等待**：`cli.py rollforward` 应在前台执行或设置明确超时与监控。完整四池猴群重估可能更久，必须依据各池快照、NAV 末日和统计产物判定进度与完成，切勿盲目后台挂起。
+- 🔴 **禁令 3：严禁后台挂死与盲目等待**：`cli.py rollforward` 应在前台执行或设置明确超时与监控。完整五池猴群重估可能更久，必须依据各池快照、NAV 末日和统计产物判定进度与完成，切勿盲目后台挂起。
 

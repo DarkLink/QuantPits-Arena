@@ -307,7 +307,7 @@ window.ContestantDetailView = {
               </div>
               <div id="chart-fingerprint-breadth" style="height: 240px; width: 100%;"></div>
               <div style="font-size: 11px; color: var(--text-muted); margin-top: 8px;">
-                Portfolio size expands from 5 stocks to full universe (246 stocks). Evaluates concentration vs generalizability.
+                Portfolio targets expand from 5 stocks to the selected universe (${window.arenaAdapter.metadata.universe_size || "configured"} stocks). Whale Shark retains its fixed 123-stock target. Evaluates concentration and coverage under execution constraints.
               </div>
             </div>
 

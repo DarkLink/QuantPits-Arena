@@ -33,6 +33,7 @@ class HistoricalReplayAdapter(BaseInferenceAdapter):
         auth_store_path: Optional[Path] = None
     ):
         super().__init__(manifest)
+        self.require_authoritative_store = auth_store_path is not None
         self.auth_store_path = auth_store_path or (
             Path(__file__).resolve().parent.parent.parent.parent / "artifacts" / "predictions" / "all_contestants_oos.pkl"
         )
@@ -48,7 +49,7 @@ class HistoricalReplayAdapter(BaseInferenceAdapter):
                 HistoricalReplayAdapter._cached_stores[p_str] = pickle.load(f)
 
         # 2. 兜底载入历史原始快照
-        if HistoricalReplayAdapter._cached_raw_preds is None and self.snapshot_path.exists():
+        if not self.require_authoritative_store and HistoricalReplayAdapter._cached_raw_preds is None and self.snapshot_path.exists():
             with open(self.snapshot_path, "rb") as f:
                 HistoricalReplayAdapter._cached_raw_preds = pickle.load(f)
 
@@ -84,6 +85,9 @@ class HistoricalReplayAdapter(BaseInferenceAdapter):
                     res = res.reindex(instruments).fillna(0.5)
                 self._fused_cache[start_date] = res
                 return res
+
+        if self.require_authoritative_store:
+            raise ValueError("Authoritative prediction cache does not cover the requested contestant and date")
 
         # 兜底从 raw_preds.pkl 提取并融合
         if HistoricalReplayAdapter._cached_raw_preds is not None:

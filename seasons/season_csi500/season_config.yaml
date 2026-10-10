@@ -30,6 +30,7 @@ execution:
 universe:
   provider: "manifest_feature_universe"
   market: "csi500"
+  stock_count: 500
   name: "CSI 500 Universe (~500 Stocks)"
   market_benchmark_name: "CSI 500"
   market_benchmark_symbol: "SH000905"

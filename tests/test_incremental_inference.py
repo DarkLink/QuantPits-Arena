@@ -51,6 +51,18 @@ def install_inference(monkeypatch, days):
     return calls
 
 
+def test_full_csi300_extension_keeps_subset_cache_identical(cache_setup, monkeypatch):
+    subset, dates, _ = cache_setup
+    full = subset.with_name("csi300_contestants_oos.pkl")
+    full.write_bytes(subset.read_bytes())
+    baseline = subset.read_bytes()
+    fresh = {d: pd.Series([0.9, 0.1], index=["STOCK_01", "STOCK_02"]) for d in dates}
+    calls = install_inference(monkeypatch, fresh)
+    assert incremental.extend_predictions("csi300", dates[-1]) == full
+    assert calls[0]["market"] == "csi300"
+    assert subset.read_bytes() == baseline
+
+
 def test_extension_preserves_history_and_aliases(cache_setup, monkeypatch):
     path, dates, _ = cache_setup
     with path.open("rb") as stream:

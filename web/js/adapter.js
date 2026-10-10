@@ -355,13 +355,13 @@ class ArenaDataAdapter {
       },
       {
         id: "whale-shark",
-        name: "Whale Shark (50% Universe Breadth)",
+        name: "Whale Shark (123-Stock Breadth)",
         category: "Capacity & Breadth",
         badge: "Large Cap Breadth",
         spec: "P_123_17",
         topk: 123,
         n_drop: 17,
-        description: "Holds exactly half of the available universe (123 stocks). Evaluates overall cross-sectional monotonic ranking ability."
+        description: "Targets 123 holdings with DropN=17 across every pool. This is half of the 246-stock subset; its share of expanded pools is smaller. Actual holdings remain subject to execution constraints."
       },
       // 7. Percentile Decile Slices (Meerkat)
       ...[10, 20, 30, 40, 50, 60, 70, 80, 90].map(p => ({
@@ -1054,7 +1054,7 @@ class ArenaDataAdapter {
       { topk: 66, label: "Eagle-66/9", return: pathByAnimal.get("eagle-66-9")?.total_return_pct ?? 0 },
       { topk: 88, label: "Eagle-88/12", return: pathByAnimal.get("eagle-88-12")?.total_return_pct ?? 0 },
       { topk: 123, label: "WhaleShark", return: pathByAnimal.get("whale-shark")?.total_return_pct ?? 0 },
-      { topk: 246, label: "Taotie (Full Pool)", return: this.getPath("BENCHMARK_taotie")?.total_return_pct ?? 2.32 },
+      { topk: this.metadata.universe_size || null, label: "Taotie (Full Pool)", return: this.getPath("BENCHMARK_taotie")?.total_return_pct ?? null },
     ];
 
     // 4. Direction Sanity (Robot vs Koala)

@@ -1,8 +1,8 @@
 window.ARENA_SEASONS_INDEX = [
   {
     id: "season_01",
-    title: "Season 1: Graveyard Arena",
-    short_title: "Season 1",
+    title: "Season 1: csirun300 Subset",
+    short_title: "S1 · csirun300 (246)",
     status: "ACTIVE",
     badge_type: "active",
     period: "2026.07 - 2026.10",
@@ -12,7 +12,7 @@ window.ARENA_SEASONS_INDEX = [
     contestants_count: 6,
     animals_count: 28,
     benchmarks: ["CSI300", "Taotie", "11 × 1,000 Matched Monkeys"],
-    description: "6 Anonymous Contestants × 28 Animal Handlers with empirical Monkey null distributions.",
+    description: "246-stock csirun300 subset of CSI 300: 6 anonymous contestants × 28 handlers. Separate from the full CSI 300 season.",
     dispatches_banner: {
       tag: "🎙️ Season 1 Dispatches",
       title: "Episodes 13–14 available: The Three-Day Trial & The Two-Day Return. Updated through October 9.",
@@ -25,6 +25,39 @@ window.ARENA_SEASONS_INDEX = [
       capital_spec: "Standardized simulation budget with strict 100-share round-lot constraints",
       benchmarks_summary: "Tripartite Reference System: CSI 300 (Market Beta) + Taotie (Executable Universe) + Matched Monkeys (Statistical Null)",
       execution_flow: "Monday Open Rebalance; Holiday Mondays Skip Trading; Daily Valuation"
+    }
+  },
+  {
+    "id": "season_csi300",
+    "title": "CSI 300 Full-Universe Arena",
+    "short_title": "CSI 300 Full (300)",
+    "status": "ACTIVE",
+    "badge_type": "active",
+    "period": "2026.07 - 2026.10",
+    "anchor_date": "2026-07-03",
+    "end_date": "2026-10-09",
+    "trading_days": 65,
+    "contestants_count": 6,
+    "animals_count": 28,
+    "benchmarks": [
+      "CSI 300",
+      "Taotie (csi300)",
+      "Ghost Taotie (csi300)",
+      "11 Matched Specifications / 11,000 Monkeys"
+    ],
+    "description": "Retrospective full 300-stock CSI 300 evaluation, independent of the 246-stock csirun300 subset. Separate predictions, checkpoints and matched controls.",
+    "dispatches_banner": {
+      "tag": "🔬 CSI 300 Full-Universe Dispatches",
+      "title": "Independent M1–M2 and M3 reports; October 8–9 valuation appendix through October 9.",
+      "link": "#dispatches?episode=csi300_m3",
+      "link_text": "Read CSI 300 Full-Pool Dispatches &rarr;"
+    },
+    "methodology": {
+      "framework_name": "CSI 300 Full Universe (300 Stocks) Empirical Evaluation",
+      "anchor_spec": "Retrospective Common Anchor (2026-07-03)",
+      "capital_spec": "Standardized simulation budget with 100-share trading lots; normalized NAV",
+      "benchmarks_summary": "Market Index (CSI 300) + Taotie + Ghost Taotie + 11 matching groups of 1,000 monkeys",
+      "execution_flow": "Monday Open Rebalance; Holiday Mondays Skip Trading; Daily Valuation"
     }
   },
   {
@@ -122,5 +155,3 @@ window.ARENA_SEASONS_INDEX = [
     }
   }
 ];
-
-window.ARENA_SEASONS_DATA = window.ARENA_SEASONS_DATA || {};

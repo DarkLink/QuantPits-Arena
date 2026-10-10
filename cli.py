@@ -472,9 +472,10 @@ def cmd_pipeline(args):
     universe = cfg.universe_code
     pred_dir = REPO_ROOT / "artifacts" / "predictions"
     season_pred = pred_dir / f"{season_id}_contestants_oos.pkl"
-    univ_pred = pred_dir / f"{universe}_contestants_oos.pkl"
+    from arena.inference.cache import prediction_cache_path
+    univ_pred = prediction_cache_path(universe, REPO_ROOT)
 
-    if force_infer or (not season_pred.exists() and not univ_pred.exists() and universe not in ["csirun300", "csi300"]):
+    if force_infer or (not season_pred.exists() and not univ_pred.exists()):
         print(f"\n[Stage 1/4] 股票池 [{universe}] 预测库未就绪，自动启动全量候选模型批处理推理...")
         from arena.inference.batch_infer import run_batch_inference
         run_batch_inference(
@@ -596,23 +597,23 @@ def cmd_bump_date(args):
         content = index_file.read_text(encoding="utf-8")
         orig_content = content
         for sid, info in updated_seasons_info.items():
-            pattern = rf'({{\s*id:\s*["\']{re.escape(sid)}["\'].*?\}})'
+            pattern = rf'({{\s*["\']?id["\']?:\s*["\']{re.escape(sid)}["\'].*?\}})'
             match = re.search(pattern, content, flags=re.DOTALL)
             if match:
                 block = match.group(1)
                 new_block = re.sub(
-                    r'(end_date:\s*["\'])[\d\-]+(["\'])',
+                    r'(["\']?end_date["\']?:\s*["\'])[\d\-]+(["\'])',
                     rf'\g<1>{info["end_date"]}\g<2>',
                     block
                 )
                 new_block = re.sub(
-                    r'(trading_days:\s*)\d+',
+                    r'(["\']?trading_days["\']?:\s*)\d+',
                     rf'\g<1>{info["trading_days"]}',
                     new_block
                 )
                 cal_end_ym = info["end_date"][:7].replace("-", ".")
                 new_block = re.sub(
-                    r'(period:\s*["\'][\d\.]+\s*-\s*)[\d\.]+(["\'])',
+                    r'(["\']?period["\']?:\s*["\'][\d\.]+\s*-\s*)[\d\.]+(["\'])',
                     rf'\g<1>{cal_end_ym}\g<2>',
                     new_block
                 )

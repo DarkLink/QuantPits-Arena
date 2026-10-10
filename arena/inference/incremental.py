@@ -13,6 +13,7 @@ from arena.calendar import TradingCalendar
 from arena.config import REPO_ROOT
 from arena.contestants import ContestantRegistry
 from arena.inference.batch_infer import run_batch_inference
+from arena.inference.cache import prediction_cache_path
 
 
 def extend_predictions(market: str, end_date: str, output_file=None) -> Path:
@@ -24,9 +25,7 @@ def extend_predictions(market: str, end_date: str, output_file=None) -> Path:
     calendar = TradingCalendar()
     if not calendar.is_trading_day(end_date):
         raise ValueError("Prediction cutoff must be an available trading day")
-    pred_dir = REPO_ROOT / "artifacts" / "predictions"
-    filename = "all_contestants_oos.pkl" if market == "csirun300" else f"{market}_contestants_oos.pkl"
-    out_file = Path(output_file) if output_file else pred_dir / filename
+    out_file = Path(output_file) if output_file else prediction_cache_path(market, REPO_ROOT)
     if not out_file.exists():
         raise FileNotFoundError("Incremental inference requires an existing prediction cache")
     with out_file.open("rb") as stream:

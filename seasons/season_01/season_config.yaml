@@ -3,9 +3,9 @@
 # ==============================================================================
 
 season_id: season_01
-title: "QuantPits Graveyard Arena Season 1"
+title: "Season 1: csirun300 Subset Arena"
 status: ACTIVE
-description: "Season 1 tournament: 6 anonymous contestants x 28 execution variants x matched monkey control groups"
+description: "Season 1 csirun300 subset of CSI 300: 246 stocks, 6 anonymous contestants x 28 execution variants x matched monkey control groups"
 
 # Calendar and Horizon
 calendar:
@@ -30,11 +30,12 @@ execution:
 universe:
   provider: "manifest_feature_universe"
   market: "csirun300"
-  name: "Season 1 Constituent Universe (246 Stocks)"
+  stock_count: 246
+  name: "csirun300: CSI 300 Subset (246 Stocks)"
   market_benchmark_name: "CSI 300"
   market_benchmark_symbol: "SH000300"
   benchmark_index: "SH000300"
-  testbed_desc: "246-stock high-liquidity testbed"
+  testbed_desc: "246-stock csirun300 subset of CSI 300; distinct from the 300-stock full universe"
 
 banner:
   proof_text: "🔬 <strong style=\"color: var(--text-secondary);\">Season 1 Baseline Proof:</strong> 246 high-liquidity equities with 11,000 empirical random monkeys verified over 2026-07-03 ~ 2026-10-09. Unfalsifiable empirical null resolution."

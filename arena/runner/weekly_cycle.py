@@ -37,6 +37,8 @@ from arena.controls import (
 )
 from arena.benchmarks import GhostTaotieBenchmark
 from arena.data.market import MarketDataProvider
+from arena.inference.cache import prediction_cache_path
+from arena.seasons.manager import SeasonManager
 
 
 class WeeklyCycleRunner:
@@ -75,22 +77,24 @@ class WeeklyCycleRunner:
         self.run_dir = run_dir
 
         if auth_store_path is not None:
-            self.auth_store_path = auth_store_path
+            self.auth_store_path = Path(auth_store_path)
         elif season_id:
-            raw_univ = season_id.replace("season_", "").lower()
+            universe = SeasonManager.get_season_config(season_id).universe_code
             candidates = [
                 REPO_ROOT / "artifacts" / "predictions" / f"{season_id}_contestants_oos.pkl",
-                REPO_ROOT / "artifacts" / "predictions" / f"{raw_univ}_contestants_oos.pkl",
+                prediction_cache_path(universe, REPO_ROOT),
             ]
             for p in candidates:
                 if p.exists():
                     self.auth_store_path = p
                     break
             else:
-                fallback = REPO_ROOT / "artifacts" / "predictions" / "all_contestants_oos.pkl"
-                self.auth_store_path = fallback if fallback.exists() else candidates[1]
+                self.auth_store_path = candidates[1]
         else:
-            self.auth_store_path = REPO_ROOT / "artifacts" / "predictions" / "all_contestants_oos.pkl"
+            self.auth_store_path = prediction_cache_path("csirun300", REPO_ROOT)
+
+        if not mock_mode and season_id and not self.auth_store_path.is_file():
+            raise FileNotFoundError("Season prediction cache missing; run native inference for this universe")
 
         self.calendar = calendar or TradingCalendar()
         self.registry = registry or ContestantRegistry()

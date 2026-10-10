@@ -19,7 +19,7 @@ window.LandingView = {
         </div>
         <h1 class="hero-title">Where Quantitative Strategies Face the Execution Zoo</h1>
         <p class="hero-description">
-          An empirical laboratory for stress-testing quantitative alpha models. We revive historical model candidates at an identical prospective starting line, subject them to 28 distinct execution handlers, and rigorously benchmark their performance against 11,000 parametric random monkeys.
+          An empirical laboratory for stress-testing anonymous quantitative contestants. Every path starts at NAV 1.0000, faces 28 execution handlers, and is compared with 11,000 matched random controls. Retrospective reconstruction and subsequent tracking are identified in each season's dispatches.
         </p>
         <div class="hero-actions">
           <button class="btn btn-primary" onclick="window.appRouter.navigate('overview')">

@@ -7,13 +7,13 @@
 ## 🧭 Season 1 Overview: Summer 2026
 
 * **Tournament Baseline**: July 3, 2026 – August 28, 2026 (41 trading days post-training OOS).
-* **Contestants**: 6 historical alpha models revived under standardized initial capital (CNY 500,000) and strict 100-share trading lots.
+* **Contestants**: 6 anonymous contestants evaluated under a standardized simulation budget and strict 100-share trading lots.
 * **The Execution Zoo**: 28 distinct portfolio policies (Eagles, Rabbits, Sloths, Snails, Koalas, Meerkats) testing selection intensity, signal lag, turnover, and concentration.
 * **The Null Court**: 11,000 deterministic pseudo-random monkey portfolios across 11 matched parameter groups (1,000 monkeys per jurisdiction).
 
 ---
 
-## 📜 Episode Dispatches (Season 1: CSI 300 Arena)
+## 📜 Episode Dispatches (Season 1: csirun300 Subset)
 
 | Episode | Evaluation Window | Tournament Phase | Core Narrative & Empirical Boundary | Status |
 | :---: | :---: | :---: | :--- | :---: |
@@ -29,20 +29,24 @@
 
 ## 🏛️ Broad-Market Testbeds: Monthly Season Baselines (Months 01–02)
 
-Beyond the flagship CSI 300 weekly arena, broader-market testbeds evaluate capital constraints, discrete lot indivisibility, and signal decay on a monthly cadence:
+Alongside the original csirun300 subset arena, broader-market testbeds evaluate capital constraints, discrete lot indivisibility, and signal decay on a monthly cadence:
 
-| Testbed | Evaluation Universe | Initial Capital | Inception Baseline (M1–M2) | Status |
+| Testbed | Evaluation Universe | Budget Convention | Inception Baseline (M1–M2) | Status |
 | :---: | :---: | :---: | :--- | :---: |
-| [**CSI 1000**](en/season_csi1000_m1_m2.md) | 1,000 Small Caps | CNY 2,000,000 | **Small-Cap Sloth Dominance & The Cash Shield**: Amid a -12.91% index collapse, `CONTESTANT_B_sloth-2` finished at NAV `1.1343` (+13.43%); Snail control (+2.49% to +4.88%) cleanly isolates genuine selection alpha from cash sheltering. | **Released** |
-| [**CSI 500**](en/season_csi500_m1_m2.md) | 500 Mid Caps | CNY 1,000,000 | **Mid-Cap Dispersion & The Rabbit Surge**: Across a -12.49% index drawdown, agile Rabbit handlers generated nearly +10% absolute return led by `CONTESTANT_B_rabbit-1` (NAV `1.0998`, +9.98%, +22.47pp vs index). | **Released** |
-| [**CSI 800**](en/season_csi800_m1_m2.md) | 800 Broad Caps | CNY 1,600,000 | **Broad-Cap Rabbit Supremacy**: Combining large-cap liquidity with mid-cap dispersion, `CONTESTANT_B_rabbit-2` vaulted to NAV `1.1284` (+12.84%, +20.74pp vs index); scaled Whale-Shark achieved NAV `1.0830`. | **Released** |
+| [**CSI 300 Full Universe**](en/season_csi300_m1_m2.md) | 300 Large Caps | Standardized | **Eagle Lead, Rabbit Pursuit**: Retrospective baseline reconstructed October 10. B's eagle-5-1 leads at NAV 1.1945 (+19.45%); D's rabbit-1 follows at +16.57%. Independent of the csirun300 subset. | **Released** |
+| [**CSI 1000**](en/season_csi1000_m1_m2.md) | 1,000 Small Caps | Standardized | **Small-Cap Sloth Dominance & The Cash Shield**: Amid a -12.91% index collapse, `CONTESTANT_B_sloth-2` finished at NAV `1.1343` (+13.43%); Snail controls returned +2.49% to +4.88%; differing exposure histories limit selection attribution. | **Released** |
+| [**CSI 500**](en/season_csi500_m1_m2.md) | 500 Mid Caps | Standardized | **Mid-Cap Dispersion & The Rabbit Surge**: Across a -12.49% index drawdown, agile Rabbit handlers generated nearly +10% absolute return led by `CONTESTANT_B_rabbit-1` (NAV `1.0998`, +9.98%, +22.47pp vs index). | **Released** |
+| [**CSI 800**](en/season_csi800_m1_m2.md) | 800 Broad Caps | Standardized | **Broad-Cap Rabbit Supremacy**: Combining large-cap liquidity with mid-cap dispersion, `CONTESTANT_B_rabbit-2` vaulted to NAV `1.1284` (+12.84%, +20.74pp vs index); scaled Whale-Shark achieved NAV `1.0830`. | **Released** |
 
 September 28 is the last rebalance for Episodes 13–14; October 8–9 only values the same holdings. The next scheduled rebalance is October 12. Dispatch numbers do not count trades.
 
-Each testbed has an independent M3 report, anchored at August 28 and ending at September 30 (22 sessions). October 8–9 appears in a separate holdings-only appendix:
+The full CSI 300 season was reconstructed on 2026-10-10 using the common July 3 anchor and an independent 300-stock cache. It is distinct from the 246-stock csirun300 subset; its historical reports are retrospective.
+
+Each expanded testbed has an independent M3 report, anchored at August 28 and ending at September 30 (22 sessions). October 8–9 appears in a separate holdings-only appendix:
 
 | Testbed | Independent M3 report | September winner | September cumulative leader |
 | :--- | :--- | :--- | :--- |
+| CSI 300 Full Universe | [Rabbit Crown, Eagle Month](en/season_csi300_m3.md) | E eagle-11-2, +2.52% | D rabbit-1, +17.99% |
 | CSI 500 | [Two Survivors, Two Different Crowns](en/season_csi500_m3.md) | A meerkat-10, +0.42% | A sloth-2, +7.91% |
 | CSI 800 | [Rabbit Crown, Eagle Month](en/season_csi800_m3.md) | E eagle-5-1, +1.86% | B rabbit-2, +10.83% |
 | CSI 1000 | [Eagle Rally, Sloth Lead](en/season_csi1000_m3.md) | B eagle-5-1, +6.18% | A sloth-2, +14.74% |

@@ -1,0 +1,86 @@
+season_id: season_csi300
+title: "CSI 300 Full-Universe Arena"
+status: ACTIVE
+description: "Retrospective full CSI 300 reconstruction, independent of the csirun300 subset: 6 anonymous contestants and 28 execution handlers."
+
+calendar:
+  anchor_date: "2026-07-03"
+  first_trade_date: "2026-07-06"
+  end_date: "2026-10-09"
+  cycle_freq: "weekly"
+
+execution:
+  initial_cash: 500000.0
+  deal_price_mode: "open"
+  lot_size: 100
+  allow_fractional_shares: false
+  open_cost: 0.0005
+  close_cost: 0.0015
+  min_cost: 5.0
+  topk: 22
+  n_drop: 3
+
+universe:
+  provider: "manifest_feature_universe"
+  market: "csi300"
+  stock_count: 300
+  name: "CSI 300 Full Universe (300 Stocks)"
+  market_benchmark_name: "CSI 300"
+  market_benchmark_symbol: "SH000300"
+  testbed_desc: "Full 300-stock CSI 300 definition; separate from the 246-stock csirun300 subset. One constituent has no supplied market rows after September 14, leaving 299 scored names thereafter; missing quotes prevent trading and existing holdings use the last available price."
+
+banner:
+  proof_text: "🔬 <strong>CSI 300 Full Universe:</strong> Retrospective reconstruction of 300 constituents with 168 contestant paths and 11,000 matched random controls. All curves start at NAV 1.0000."
+
+benchmarks:
+  - id: "taotie"
+    type: "EXECUTABLE"
+    initial_cash: 600000.0
+    display_name: "Taotie 300 (Executable Full Universe)"
+  - id: "ghost_taotie"
+    type: "THEORETICAL"
+    initial_cash: 100000000.0
+    display_name: "Ghost Taotie 300 (Theoretical Equal Weight)"
+  - id: "csi300"
+    type: "INDEX"
+    symbol: "SH000300"
+    display_name: "CSI 300"
+  - id: "monkeys"
+    type: "STATISTICAL"
+    colony_size_per_spec: 1000
+
+dispatches:
+  executive:
+    tag: "🏆 CSI 300 Full-Universe Standings"
+    badge: "Retrospective Reconstruction"
+    title: "CSI 300 Full Universe: Independent Evaluation"
+    window_label: "2026-07-03 ~ 2026-10-09 · 65 NAV Observations (Including Anchor)"
+    nature_label: "Reconstructed after the evaluation window; no prospective precommitment is claimed."
+    leader_summary: "CONTESTANT_D_rabbit-1 leads at NAV 1.1886 (+18.86%), narrowly ahead of B's eagle-5-1 (+18.82%) by 0.05pp. October 8–9 adds valuation only, with no new trades."
+  climate:
+    tag: "🌪️ CSI 300 Full-Universe Climate"
+    status_badge: "Retrospective"
+    title: "Rabbit Crown, Eagle Month"
+    summary: "September: E's eagle-11-2 wins at +2.52%; D's rabbit-1 takes the cumulative crown at +17.99%. October 8–9: 114/168 paths gain, while the CSI 300 index returns -0.93%."
+    bullets:
+      - "300-stock definition, independent of season_01's 246-stock subset. One local quote gap after September 14 leaves 299 scored names; no price or score is fabricated."
+      - "Latest cumulative Taotie -5.39%, Ghost -5.87%, CSI 300 index -10.84%. D's leader has 3.76% maximum drawdown and raw cumulative matched p = 0.0010."
+      - "No new trades on October 8–9. Next scheduled rebalance October 12; actual updates and holiday exceptions follow maintainer notification."
+    decrypt_label: "Independent CSI 300 Full-Pool M1–M2 & M3"
+  episodes:
+    - id: "csi300_m1_m2"
+      tab_label: "📜 M1–M2: Eagle Lead"
+      badge: "Released"
+      title: "CSI 300 Full Universe M1–M2: Eagle Lead, Rabbit Pursuit"
+      date: "2026-08-28"
+      read_time: "5 min read"
+      summary: "Retrospective full-pool baseline: B's eagle-5-1 leads at +19.45%, followed by D's two Rabbits. 40 evaluated sessions and 41 NAV observations including the anchor."
+      file: "chronicles/en/season_csi300_m1_m2.md"
+    - id: "csi300_m3"
+      tab_label: "📜 M3: Rabbit Crown"
+      badge: "Released"
+      title: "CSI 300 Full Universe M3: Rabbit Crown, Eagle Month"
+      date: "2026-09-30"
+      read_time: "7 min read"
+      summary: "CSI 300 full pool only: E's eagle-11-2 wins September (+2.52%); D's rabbit-1 takes the cumulative crown (+17.99%). Separate October valuation appendix through October 9; reconstructed retrospectively."
+      file: "chronicles/en/season_csi300_m3.md"

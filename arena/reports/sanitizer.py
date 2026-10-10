@@ -539,11 +539,11 @@ class DualTierExporter:
                 elif animal_id.startswith("eagle"):
                     return "Eagle (Concentration)"
                 elif animal_id == "whale-shark":
-                    return "Whale Shark (50% Pool)"
+                    return "Whale Shark (Broad Selection)"
                 elif animal_id == "taotie":
                     return "Taotie (100% Passive)"
                 elif animal_id == "ghost_taotie":
-                    return "Ghost Taotie (Theoretical 100M)"
+                    return "Ghost Taotie (Theoretical Equal Weight)"
                 return "Custom"
 
             badges = []
@@ -696,6 +696,7 @@ class DualTierExporter:
             "market_benchmark_code": bench_symbol.upper(),
             "market_benchmark_return_pct": bench_ret,
             "universe_name": univ_name,
+            "universe_size": season_cfg.raw_dict.get("universe", {}).get("stock_count"),
             "universe_code": univ_code,
             "testbed_desc": testbed_desc,
             "timeliness_proof": timeliness_proof,
@@ -783,31 +784,28 @@ class DualTierExporter:
         content = index_file.read_text(encoding="utf-8")
         season_id = web_payload["meta"]["season_id"]
         meta = web_payload["meta"]
+        dates = web_payload.get("nav_timeline", {}).get("dates", [])
+        anchor = dates[0] if dates else season_cfg.anchor_date
+        new_end = dates[-1] if dates else season_cfg.end_date
+        td_count = len(dates) if dates else meta.get("trading_days", 0)
+        pattern = rf'({{\s*["\']?id["\']?:\s*["\']{re.escape(season_id)}["\'].*?\}})'
+        match = re.search(pattern, content, flags=re.DOTALL)
 
         # 若已存在该赛季条目，则增量更新其 end_date 和 trading_days
-        if f'id: "{season_id}"' in content or f'id: \'{season_id}\'' in content or f'"id": "{season_id}"' in content:
-            new_end = meta.get("window_label", "").split("~")[-1].strip() if "~" in meta.get("window_label", "") else ""
-            if not new_end:
-                dates = web_payload.get("nav_timeline", {}).get("dates", [])
-                if dates:
-                    new_end = dates[-1]
-            td_count = meta.get("trading_days", len(web_payload.get("nav_timeline", {}).get("dates", [])))
-
+        if match:
             if new_end and td_count:
                 # 定位该赛季在数组中的块进行针对性替换
-                pattern = rf'({{\s*id:\s*["\']{re.escape(season_id)}["\'].*?\}})'
-                match = re.search(pattern, content, flags=re.DOTALL)
                 if match:
                     block = match.group(1)
                     # 更新 end_date
                     updated_block = re.sub(
-                        r'(end_date:\s*["\'])[\d\-]+(["\'])',
+                        r'(["\']?end_date["\']?:\s*["\'])[\d\-]+(["\'])',
                         rf'\g<1>{new_end}\g<2>',
                         block
                     )
                     # 更新 trading_days
                     updated_block = re.sub(
-                        r'(trading_days:\s*)\d+',
+                        r'(["\']?trading_days["\']?:\s*)\d+',
                         rf'\g<1>{td_count}',
                         updated_block
                     )
@@ -815,7 +813,7 @@ class DualTierExporter:
                     try:
                         cal_end_ym = new_end[:7].replace("-", ".")
                         updated_block = re.sub(
-                            r'(period:\s*["\'][\d\.]+\s*-\s*)[\d\.]+(["\'])',
+                            r'(["\']?period["\']?:\s*["\'][\d\.]+\s*-\s*)[\d\.]+(["\'])',
                             rf'\g<1>{cal_end_ym}\g<2>',
                             updated_block
                         )
@@ -833,10 +831,10 @@ class DualTierExporter:
             "short_title": meta.get("universe_name", season_id),
             "status": meta.get("status", "ACTIVE"),
             "badge_type": "active" if meta.get("status") == "ACTIVE" else "warning",
-            "period": "2026.07 - 2026.08",
-            "anchor_date": "2026-07-03",
-            "end_date": "2026-08-28",
-            "trading_days": meta.get("trading_days", 41),
+            "period": f"{anchor[:7].replace('-', '.')} - {new_end[:7].replace('-', '.')}",
+            "anchor_date": anchor,
+            "end_date": new_end,
+            "trading_days": td_count,
             "contestants_count": meta.get("total_contestants", 6),
             "animals_count": 28,
             "benchmarks": meta.get("active_benchmarks", []),
@@ -849,10 +847,10 @@ class DualTierExporter:
             },
             "methodology": {
                 "framework_name": f"{meta.get('universe_name', 'Custom Universe')} Empirical Evaluation",
-                "anchor_spec": "Parallel Calibration Anchor (2026-07-03 Initiation)",
-                "capital_spec": "CNY 500,000 baseline capital with 100-share trading lots",
-                "benchmarks_summary": f"Market Index ({meta.get('market_benchmark_name', 'Index')}) + Taotie + Ghost Taotie (100M) + 1,000 Matched Monkeys",
-                "execution_flow": "Weekly Rebalance, Monday Open Execution, Daily Marked-to-Market"
+                "anchor_spec": f"Retrospective Common Anchor ({anchor})",
+                "capital_spec": "Standardized simulation budget with 100-share trading lots; normalized NAV",
+                "benchmarks_summary": f"Market Index ({meta.get('market_benchmark_name', 'Index')}) + Taotie + Ghost Taotie + 11 matching groups of 1,000 monkeys",
+                "execution_flow": "Monday Open Rebalance; Holiday Mondays Skip Trading; Daily Valuation"
             }
         }
 
@@ -872,12 +870,15 @@ class DualTierExporter:
     def _sync_index_html(self, season_id: str) -> None:
         """确保 web/index.html 中包含对应 season script 标签"""
         from arena.config import REPO_ROOT
+        import re
         html_file = REPO_ROOT / "web" / "index.html"
         if not html_file.exists():
             return
 
         content = html_file.read_text(encoding="utf-8")
-        target_script = f'<script src="js/data/{season_id}.js?v=5.1"></script>'
+        version = re.search(r'js/data/seasons_index\.js\?v=([^"\']+)', content)
+        suffix = f"?v={version.group(1)}" if version else ""
+        target_script = f'<script src="js/data/{season_id}.js{suffix}"></script>'
         if f'js/data/{season_id}.js' in content:
             return
 
