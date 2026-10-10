@@ -70,7 +70,13 @@ python3 scripts/audit_privacy.py
 
 ## 五、常规周频维护标准姿势 (Weekly Operations Standard Procedure)
 
-> **极重要提醒**：当用户要求“更新最新一周数据”、“执行本周滚动”、“策划本周任务并执行”时，**严禁自行手写临时外挂脚本折腾半天**！本仓库已具备高优化的**端到端原子级推进命令**，全流程仅需 **2~3 分钟**。详细规范可参阅 [docs/SEASON_ROLLFORWARD_SOP.md](docs/SEASON_ROLLFORWARD_SOP.md)。
+### 0. 更新授权与假期实盘对齐（用户指定）
+
+- **假期具体更新时间由用户随时通知，执行安排尽量与实盘一致。** 不因行情入库、名义周频日期、战报拆分或月末结算自行推进、补调仓或变更交易日。
+- 收到更新通知后，以用户指定的目标截止日、决策截面与实际调仓安排为准。当前日历或执行流程若不支持通知中的假期例外，先落实并验证相应规则，再执行原生增量管线；不得自行猜测例外安排。
+- 当前“周一休市不补调仓”是已核验运行的实现规则，不能替代用户对未来假期的具体通知。对齐交易与结算口径时，继续遵守匿名化、归一化及真实账户状态零入库的要求。
+
+> **极重要提醒**：当用户要求“更新最新一周数据”、“执行本周滚动”、“策划本周任务并执行”时，**严禁自行手写临时外挂脚本折腾半天**！使用仓库原生的**端到端推进命令**。完整四池猴群重估可能超过早期的 2~3 分钟估计，必须设置明确超时并监控实际进度。详细规范可参阅 [docs/SEASON_ROLLFORWARD_SOP.md](docs/SEASON_ROLLFORWARD_SOP.md)。
 
 ### 1. 运行环境指定
 必须在包含 Qlib 与 PyTorch 的环境执行，固定使用 Conda 环境：
@@ -83,15 +89,17 @@ conda activate qlib_cupy
 ### 2. 标准两步走执行管线 (The Standard 2-Step Pipeline)
 
 #### 第一步：特征推理与预测库增量延长 (Inference)
-若本周行情数据已更新入库，先确保权威预测库覆盖至目标截止日：
+收到更新通知、核对执行安排且行情已更新入库后，先确保四池权威预测库覆盖至用户指定截止日：
 ```bash
-python scripts/infer_all_contestants.py
-# 如需指定单一股票池，可使用原生命令:
-# python cli.py infer --universe csirun300
+for universe in csirun300 csi500 csi800 csi1000; do
+    python cli.py infer-update --universe "$universe" --end-date <YYYY-MM-DD> || exit 1
+done
 ```
 
+`infer-update` 仅追加缺失日期并保留预测历史。旧的 `scripts/infer_all_contestants.py` 使用固定历史截止日；常规增量补更不得依赖该脚本或使用强制全量重建缓存。
+
 #### 第二步：一键全自动原子级滚动推进 (The Grand Roll-Forward)
-**核心端到端命令（严禁拆分手动执行，2~3 分钟内全部自动完成）**：
+**核心端到端命令（严禁拼装临时更新脚本）**：
 ```bash
 python cli.py rollforward --end-date <YYYY-MM-DD>
 ```
@@ -114,12 +122,12 @@ python cli.py rollforward --end-date <YYYY-MM-DD>
 
 ### 4. 自动化回归与隐私合规终验
 ```bash
-PYTHONPATH=. pytest tests/test_rollforward_automation.py
+PYTHONPATH=. pytest tests/test_rollforward_automation.py tests/test_holiday_rebalance.py tests/test_incremental_inference.py
 python scripts/audit_privacy.py
 ```
 
 ### 5. 三大违规禁令 (Anti-Patterns)
 - 🔴 **禁令 1：严禁编写临时 ad-hoc 外挂脚本**：绝不可在 `scratch/` 或根目录下编写任何拼装更新脚本；
 - 🔴 **禁令 2：严禁增量维护时全量重跑 `pipeline`**：增量维护必须基于快照 `latest_state.pkl` 进行，重跑全量会破坏历史不可变原则；
-- 🔴 **禁令 3：严禁后台挂死与盲目等待**：`cli.py rollforward` 是轻量级高速命令，通常 2~3 分钟即全部结束。命令应在前台直接执行或设置明确的超时与监控，切勿把轻量任务当做隔夜任务挂起。
+- 🔴 **禁令 3：严禁后台挂死与盲目等待**：`cli.py rollforward` 应在前台执行或设置明确超时与监控。完整四池猴群重估可能更久，必须依据各池快照、NAV 末日和统计产物判定进度与完成，切勿盲目后台挂起。
 

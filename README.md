@@ -1,182 +1,135 @@
 # QuantPits Arena | Empirical Strategy Testbed & Benchmark Zoo
 
-> **An empirical research testbed, execution zoo, and parametric null benchmark for quantitative alpha models.**
-> Reviving historical model artifacts at an identical prospective starting line under standardized finite-capital execution constraints.
+> An empirical research testbed comparing anonymous quantitative contestants under shared execution rules, normalized NAV accounting and matched random-ranking controls.
 
-[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/)
+[![Python](https://img.shields.io/badge/python-3-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-emerald.svg)](LICENSE)
 [![Live Arena](https://img.shields.io/badge/Live%20Arena-arena.quantpits.com-success.svg)](https://arena.quantpits.com/)
-[![Status: Research Testbed](https://img.shields.io/badge/Status-Research%20Testbed-purple.svg)](#disclaimer)
 
----
+## Current Repository Snapshot
 
-## 🧭 Repository Scope & System Architecture
+The bundled data cover **2026-07-03 through 2026-10-09** across four parallel testbeds. Each contains **64 evaluated market sessions plus one initial NAV anchor**, for **65 NAV observations**. Every path starts at NAV **1.0000**.
 
-QuantPits Arena is an **empirical evaluation framework, benchmark zoo, and interactive visualization testbed**.
+Each testbed evaluates **6 anonymous contestants × 28 animal handlers = 168 contestant paths**, alongside two portfolio benchmarks. Its null court contains **11 matching specifications × 1,000 monkey paths**; the four testbeds together contain **44,000 configured control paths**.
 
-### 1. Interactive Research Testbed
-- **Live Platform**: Access the hosted arena directly at **[arena.quantpits.com](https://arena.quantpits.com/)**.
-- **100% Offline Ready**: The web research platform (`web/`) is completely self-contained and pre-packaged with complete tournament simulation data:
-  - Zero external package dependencies (native Python standard library server).
-  - Complete coverage of **168 contestant-animal execution paths**, **11,000 parametric monkey null simulations**, **cross-model trajectory curves**, **counterfactual decision audits**, and **behavioral fingerprints**.
+| Testbed | Cumulative leader at October 9 | Final NAV | Cumulative return | Latest dispatch |
+| :--- | :--- | ---: | ---: | :--- |
+| CSI 300 flagship | CONTESTANT_B_eagle-5-1 | 1.2240 | +22.40% | [Episode 14: The Same Holdings, a Wider Crown](chronicles/en/episode_14_the_two_day_return.md) |
+| CSI 500 | CONTESTANT_B_eagle-5-1 | 1.0885 | +8.85% | [M3: Two Survivors, Two Different Crowns](chronicles/en/season_csi500_m3.md) |
+| CSI 800 | CONTESTANT_B_rabbit-2 | 1.1172 | +11.72% | [M3: Rabbit Crown, Eagle Month](chronicles/en/season_csi800_m3.md) |
+| CSI 1000 | CONTESTANT_B_eagle-5-1 | 1.1349 | +13.49% | [M3: Eagle Rally, Sloth Lead](chronicles/en/season_csi1000_m3.md) |
+
+These are cumulative standings in the repository snapshot. A monthly or two-day winner can differ from the cumulative leader; the figures do not establish durable forecasting skill.
+
+The flagship's [Episode 13](chronicles/en/episode_13_the_three_day_trial.md) covers September 28–30, and [Episode 14](chronicles/en/episode_14_the_two_day_return.md) covers October 8–9. **September 28 had a rebalance; October 8–9 only valued the same holdings, with zero new trades.** Separate dispatches and settlements do not imply separate rebalances.
+
+CSI 500, CSI 800 and CSI 1000 each have an independent M3 report. Their September body uses August 28 close as the return anchor and September 30 as the cutoff; October 8–9 appears in a separate appendix. The full dispatch index is in [Chronicles](chronicles/README.md).
+
+## Explore the Dashboard
+
+From the repository root:
 
 ```bash
-# Clone the repository
-git clone https://github.com/QuantPits/QuantPits-Arena.git
-cd QuantPits-Arena
-
-# Launch local exploration server
 python3 -m http.server 8080 --directory web
-
-# Open in your browser
-# http://localhost:8080
 ```
 
-### 2. Operational Scope & Running Custom Tournaments
-- **Visual Exploration vs. Raw Execution**:
-  - **Offline Analytics (Out-of-the-Box)**: The web testbed comes with pre-compiled tournament datasets, allowing immediate visual exploration and cross-model comparison without any training or inference setup.
-  - **Running Custom Evaluations**: If you wish to run the evaluation pipeline from scratch or benchmark your own custom models through the Zoo:
-    1. **User-Provided Models**: Model weights are not bundled in this repository. Users must supply their own local model artifacts or checkpoints (conforming to the configuration manifests in `manifests/public/`).
-    2. **User-Provided Market Data**: Historical market quote feeds and feature matrices for your target stock universe and evaluation dates must be provided locally.
-    3. **Included Components**: This repository supplies the 28 animal execution policies, finite-capital transaction and portfolio accounting engine, parametric monkey null generators, and report export tooling.
-- **Not a Live Trading Engine**: The repository is an empirical evaluation testbed; it does not provide real-time order routing, brokerage gateway connectivity, or continuous live execution infrastructure.
-- **Declarative Manifests**: Strategy models are specified as reproducible configuration manifests (`manifests/public/`) documenting architectural parameters, feature groupings, and standardized inference adapters.
+Open `http://localhost:8080`. Use the season selector to switch among the four testbeds, then explore the overview, leaderboard, NAV curves, animal comparisons and dispatches.
 
----
+The bundled frontend datasets require no model inference or Python analytics stack to browse. The browser loads charting, math-rendering and font assets from external CDNs; completely offline browsing requires local copies of those assets. Interface and data assets use version **6.2** for cache refresh.
 
-## 📜 Tournament Chronicles & Market Climate
+## Evaluation Scope and Evidence
 
-### 🏆 Current Official Status (Released: Season 1, Episodes 01–08)
-- **Official Evaluation Baseline**: 2026-07-03 ~ 2026-08-28 (41 trading days, Weeks 1–8).
-- **Evaluation Nature**: Retrospective backtest baseline simulated with knowledge of July–August market conditions to establish initial tournament standings.
-- **Official Release**: Complete 168 execution paths, parameter distributions, and [Episodes 01–08 Dispatch](chronicles/en/episodes_01_08_the_forty_one_day_king.md).
-- **Current Standing**: High selection intensity dominated during the summer momentum regime, with `CONTESTANT_B_eagle-5-1` topping the baseline at NAV `1.1971` (+19.71%).
+- **Common starting point:** historical reputation contributes no weight to Arena rankings. Comparisons use normalized NAV and percentage returns under standardized simulation budgets.
+- **Execution constraints:** the portfolio engine applies round-lot constraints, transaction costs, tradability checks, affordability skips and daily marking to market.
+- **Matched controls:** random rankings use the corresponding portfolio specification. Cumulative null results must be matched to the same pool and cutoff date; they are not automatically monthly or two-day tests.
+- **Statistical limits:** upper-tail empirical probabilities use finite-sample plus-one correction. Winner selection, multiple comparisons and differences in entry exposure limit interpretation; a nominal p-value below 0.05 does not certify alpha.
+- **Exposure matters:** constrained Taotie can retain substantial cash. Sloth and Snail have different entry histories. Return differences alone do not isolate selection, cash shelter or signal decay.
 
----
+The July–August baseline was simulated retrospectively. Later dispatches continue the existing evaluation; a completed report alone does not establish a verifiable pre-market commitment.
 
-### 🌪️ Weekly Market Climate Report (August 31 – September 04, 2026)
-> *"The weather outside the cage is public knowledge. How the animals inside handled the storm remains sealed until embargo lift."*
+### The 28-Animal Zoo
 
-* **The Market Backdrop**: Following two months of steady trending conditions, the first week of September 2026 delivered sharp regime volatility across broader Chinese equity benchmarks.
-* **The September 02 Breadth Shock (Arena Designation: "Black Wednesday")**: Broader Chinese equity benchmarks experienced an abrupt intraday market breadth shock and turnover contraction. Growth-heavy and previously strong market segments suffered sharp localized drawdowns, pushing over 80% of traded equities into localized pullbacks within a 48-hour window.
-* **The Structural Questions on the Table**:
-  - For quantitative systems whose weights were frozen before July 2026, did prolonged signal persistence hold up when market leadership abruptly rotated?
-  - How did high-turnover execution handlers (Rabbits) fare against delayed, multi-week inertia strategies (Sloths & Snails) during severe intraday turbulence?
-  - Did extreme selection intensity (Eagles) protect capital or amplify the drawdown?
+| Family | Handlers | Execution rule |
+| :--- | :--- | :--- |
+| Baseline | Robot | TopK=22, DropN=3 |
+| Cold-start signal delay | Sloth 1–4 | Begin in cash, then use signals delayed by 1–4 evaluation cycles |
+| Warm-start signal delay | Snail 1–4 | Enter with the initial signal, then use delayed signals after the entry phase |
+| Turnover | Turtle, Rabbit 1–2 | DropN=1, 11 or 22 with TopK=22 |
+| Polarity | Koala | Invert the ranking |
+| Rank geometry | Meerkat 10–90 | Nine ranking bands with the canonical portfolio policy |
+| Concentration and breadth | Eagle suite | TopK/DropN: 5/1, 11/2, 44/6, 66/9, 88/12 |
+| Broad selection | Whale Shark | TopK=123, DropN=17 |
 
-⏳ **Broadcast Embargo**: Episode 09 evaluation data and empirical dispatches unlock on **Friday, September 11, 2026**.
+The independent **Taotie** and **Ghost Taotie** portfolios sit outside the 28 contestant handlers. Taotie is the executable universe reference; Ghost is the theoretical broad-exposure reference. Each testbed also has its corresponding external market index and matched monkey distributions. **The Rock** is a separate simplicity reference, not another contestant path.
 
----
+## Maintainer Operations and Holiday Alignment
 
-## 🏛️ Core Research Axioms
+**Holiday updates follow the maintainer's explicit notification.** The maintainer determines when to update and supplies any holiday execution arrangement needed to stay as close as possible to live trading. New market data, a report boundary or a nominal weekly date does not by itself authorize an advance, makeup trade or change to the execution schedule.
 
-QuantPits Arena is built on six foundational methodological principles:
+The current implementation rebalances at Monday open and skips rebalancing when Monday is closed. This matches the recorded September 28–October 9 run. Future holiday exceptions must follow the maintainer's supplied schedule and be supported by the calendar and execution workflow before advancing; they must not be inferred from this single holiday example. Alignment concerns decision cutoffs, execution dates and accounting conventions, while public outputs remain anonymous and normalized.
 
-1. **Historical Biography ≠ Arena Record**: Past in-sample backtests, former production roles, and historical accolades exist only as biography. They contribute **zero weight** to Arena standings. Every model enters the common Arena at the same anchor date (2026-07-03) with a normalized base NAV of 1.0000 and CNY 500,000 initial capital.
-2. **High-Resolution Parametric Monkey Null Benchmark**: Absolute return alone says very little about signal quality. For each of the 11 portfolio execution policies, an independent colony of **1,000 deterministic pseudo-random monkey portfolios** (11,000 total) is evaluated under identical capital and lot constraints.
-3. **Statistical Interpretation Nuance**: A nominal $p_{\text{upper}} < 0.05$ indicates the result is difficult to reproduce with the random-ranking null. **The Arena deliberately does NOT translate this into "Alpha confirmed."**
-4. **The 28-Animal Execution Zoo**: The same underlying model signal is deployed through 28 distinct portfolio behaviors to isolate signal decay, holding inertia, turnover friction, capacity scalability, and directional polarity.
-5. **Real Trading & Finite-Capital Constraints**: Fixed initial capital (CNY 500,000), 100-share trading-lot roundings, unaffordable order skipping (preserving real cash drag), and standard transaction costs.
-6. **External Simplicity Reference (The Rock)**: The Permanent Portfolio is displayed alongside the arena as a simplicity benchmark: *"Four buckets. No ranking. No ensemble. No retraining. No comment. Complexity is not free."*
-
----
-
-## 🦁 The 28-Animal Zoo Taxonomy
-
-| Family | Animals | Specification | Research Hypothesis Tested |
-| :--- | :--- | :--- | :--- |
-| **Baseline Control** | 🤖 **Robot** | TopK=22, DropN=3, Weekly | Canonical production baseline policy. |
-| **Cash Lag** | 🦥 **Sloth 1–4** | 1, 2, 3, 4 Weeks Delay | Delays execution while holding cash; measures signal timing decay. |
-| **Holding Inertia** | 🐌 **Snail 1–4** | 1, 2, 3, 4 Weeks Lag | Delays rebalances while holding stale positions; measures inertia friction. |
-| **Turnover Extremes** | 🐢 **Turtle**<br>🐇 **Rabbit 1–2** | DropN=1 (Low)<br>DropN=11 / 22 (High) | Tests whether aggressive deployment extracts alpha or ingests noise. |
-| **Polarity Inversion** | 🐨 **Koala** | Bottom-22 Worst Stocks | Directional sanity check: inverted ranking should underperform baseline. |
-| **Rank Geometry** | 🦡 **Meerkat 10%–90%** | 9 Decile Slices (P10–P90) | Tests cross-sectional monotonicity and signal depth across deciles. |
-| **Concentration** | 🦅 **Eagle Suite** | 5/1, 11/2, 44/6, 66/9, 88/12 | Evaluates concentration risk vs. diversification capacity. |
-| **Market Breadth** | 🐋 **Whale Shark**<br>🐉 **Taotie** | 50% Universe (123 stocks)<br>100% Full Universe (246) | Tests survival of signal under broad diversification up to the passive limit. |
-
-### Benchmark Suite & Reference Hierarchy
-QuantPits Arena maintains three distinct tiers of benchmarks answering different research questions:
-- **CSI 300 Index (SH000300) — External Market Anchor**: Reflects external mainland China broad equity market performance and macro context. Not a selection-skill benchmark.
-- **Taotie — Executable Universe Benchmark**: A capital-constrained (CNY 500,000) and round-lot-constrained full-universe portfolio designed to approximate broad exposure with minimal active selection. It is not a theoretical fractional equal-weight index.
-- **Matched Monkey Distributions — Statistical Selection Null**: 11 unique specifications × 1,000 deterministic pseudo-random ranking simulations (11,000 total). Primary statistical reference isolating model ranking signal from portfolio mechanics.
-- **The Rock (Permanent Portfolio)**: External 4-bucket simplicity anchor (Equity, Gold, Bonds, Cash) questioning whether model complexity was worth it.
-
----
-
-## 🖥️ Interactive Web Application Architecture
-
-The frontend application (`web/`) is an institutional, dependency-free single-page research dashboard:
-
-```
-web/
-├── index.html                  # Single-page application shell
-├── css/
-│   ├── variables.css           # Institutional color palettes & design tokens
-│   ├── main.css                # Typography & layout fundamentals
-│   ├── components.css          # Tables, cards, compact filter bars, buttons
-│   └── views.css               # Specific view layouts
-└── js/
-    ├── data/
-    │   └── arena_data.js       # Pre-compiled offline tournament payload (168 paths, 11k monkeys)
-    ├── adapter.js              # In-memory query engine & statistical aggregator
-    ├── components/
-    │   ├── charts.js           # Apache ECharts wrapper (trajectories, heatmaps, regret curves)
-    │   └── filters.js          # Single-row compact filter toolbar
-    ├── views/
-    │   ├── landing.js          # Platform Exhibition & tournament introduction (/#intro)
-    │   ├── overview.js         # KPI metrics, scatter distributions & standings (/#overview)
-    │   ├── leaderboard_view.js # Sortable leaderboard & Model × Animal heatmap matrix (/#leaderboard)
-    │   ├── animals_view.js     # 28 Animal containers, dual-scope telemetry & curves (/#animals)
-    │   ├── contestant_detail.js# Model biography, burial annualized returns & fingerprints (/#contestants)
-    │   ├── decision_audit.js   # Counterfactual decision archaeology & regret analysis (/#decision-audit)
-    │   ├── methodology.js      # Statistical axioms & experimental standards (/#methodology)
-    │   └── disclaimer.js       # Full 8-section legal and research disclosures (/#disclaimer)
-    └── app.js                  # Client-side hash router & lifecycle controller
-```
-
----
-
-## ⚡ Routine Operations: Weekly Roll-Forward (One-Command Standard)
-
-For weekly tournament operations after new market data arrives, use the atomic end-to-end command (runs in ~2–3 minutes across all active seasons):
+After an update and target cutoff have been authorized, use the prepared execution environment:
 
 ```bash
-# 1. Activate environment
 conda activate qlib_cupy
 
-# 2. Update prediction features if needed
-python scripts/infer_all_contestants.py
+# Replace the cutoff with the maintainer-specified date.
+TARGET_DATE=2026-10-09
 
-# 3. One-command atomic rollforward (bump date -> step cycles -> export web -> sync chronicles -> audit)
-python cli.py rollforward --end-date <YYYY-MM-DD>
+# Extend only missing prediction dates; preserve existing history.
+for universe in csirun300 csi500 csi800 csi1000; do
+    python cli.py infer-update --universe "$universe" --end-date "$TARGET_DATE" || exit 1
+done
+
+# Native roll-forward: configuration -> incremental settlement ->
+# matched controls -> frontend export -> English dispatch sync -> privacy audit.
+python cli.py rollforward --end-date "$TARGET_DATE"
 ```
 
-For detailed specifications and anti-patterns, see the [Weekly Roll-Forward SOP (docs/SEASON_ROLLFORWARD_SOP.md)](docs/SEASON_ROLLFORWARD_SOP.md) and [AGENTS.md](AGENTS.md).
+`rollforward` advances **one settlement segment per selected season per invocation**. When catching up across several segments, use their authorized settlement cutoffs in order. Verify actual NAV end dates and checkpoint progress rather than relying on the configured horizon. Preserve historical NAV and prediction prefixes; routine maintenance uses the existing checkpoints.
 
----
+Full four-pool monkey evaluation can take longer than the earlier two-to-three-minute estimate. Use an explicit timeout and monitor progress. The legacy `scripts/infer_all_contestants.py` has a fixed historical cutoff; `infer-update` is the current incremental entry point.
 
-## 🔧 Repository Verification
+See the [Roll-Forward SOP](docs/SEASON_ROLLFORWARD_SOP.md), [Holiday Execution Review](docs/HOLIDAY_REBALANCE_REVIEW.md) and [Agent Instructions](AGENTS.md) for operational details.
 
-To audit repository integrity and data formatting consistency:
+## Local Execution and Repository Layout
+
+The repository provides the execution engine, animal policies, null controls, export tooling and precompiled frontend data. Running a new tournament additionally requires local market data, private model assets and a configured execution environment. Production order routing and brokerage connectivity belong to the live system.
+
+```text
+arena/                  Calendar, execution, inference, controls and exporters
+cli.py                  Native inference and roll-forward commands
+seasons/                Declarative testbed configurations
+manifests/public/       Anonymous public contestant descriptions
+manifests/private/      Local private mappings, ignored by Git
+artifacts/              Local assets and prediction caches, ignored by Git
+runs/                   Local checkpoints and generated evaluation outputs
+chronicles/en/          Public English dispatch sources
+chronicles/zh/          Local Chinese chronicles
+web/                    Dashboard, four season datasets and English dispatch copies
+scripts/                Privacy audit and maintenance utilities
+tests/                  Calendar, execution, controls and automation regressions
+```
+
+Public files contain anonymous contestant identities and relative repository paths. Private assets and serialized state stay outside Git tracking.
+
+## Verification
+
+For changes to execution or maintenance automation:
 
 ```bash
+PYTHONPATH=. pytest
 python3 scripts/audit_privacy.py
 ```
 
----
+For documentation changes, verify dates, figures and links against the current repository exports, then run the privacy audit. The October 9 update passed **84 regression tests**, four-season frontend rendering checks, historical NAV checks and date-matched significance checks.
 
-## 🛡️ Disclaimer
+## Disclaimer
 
-> **For research, educational, and informational purposes only.**  
-> Nothing contained herein constitutes investment advice, a recommendation, endorsement, or solicitation to buy or sell any security or financial product.  
-> Results may include live, delayed, simulated, backtested, counterfactual, or shadow-trading performance and are not indicative of future performance. Data are published with an approximately one-week delay. Investing involves risk, including the possible loss of principal.  
-> 
-> *“QuantPits Arena is a research testbed. It studies models, portfolio policies, historical decisions, failures, and occasionally monkeys. **It does not tell you what to buy.**”*  
->
-> For full disclosures, visit the [Research & Legal Disclaimer](https://arena.quantpits.com/#disclaimer).
+For research, educational and informational purposes only. The Arena evaluates research candidates under declared simulation and execution assumptions; it does not provide investment recommendations. Historical and simulated results do not establish future performance. Interpret every result within its stated window, exposure and statistical limits.
 
----
+See the [Research & Legal Disclaimer](https://arena.quantpits.com/#disclaimer) for the full disclosure.
 
-## 📜 License
+## License
 
 MIT License. Copyright (c) QuantPits Research.
