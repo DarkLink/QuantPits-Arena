@@ -139,7 +139,7 @@ window.ArenaApp = {
             <div class="season-item-meta">
               <span>📅 ${s.period}</span>
               <span>•</span>
-              <span>🐾 ${s.animals_count || 29} Animals</span>
+              <span>🐾 ${s.animals_count || 28} Animals</span>
             </div>
           </div>
         `;

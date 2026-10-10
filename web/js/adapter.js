@@ -1087,11 +1087,17 @@ class ArenaDataAdapter {
   }
 
   getPeriodLabel() {
-    return this.metadata.period_label || `${this.metadata.anchor_date || '2026-07-03'} ~ ${this.metadata.end_date || '2026-08-28'} (${this.getTradingDays()} trading days)`;
+    const season = this.getCurrentSeasonMeta();
+    const dates = this.navTimeline?.dates || [];
+    return this.metadata.period_label || `${season.anchor_date || dates[0] || ''} ~ ${season.end_date || dates[dates.length - 1] || ''} (${this.getNAVObservations()} NAV observations including anchor)`;
+  }
+
+  getNAVObservations() {
+    return this.metadata.nav_observations ?? (this.navTimeline?.dates?.length || this.metadata.trading_days || 0);
   }
 
   getTradingDays() {
-    return this.metadata.trading_days || (this.navTimeline && this.navTimeline.dates ? this.navTimeline.dates.length : 41);
+    return this.metadata.valuation_sessions ?? Math.max(0, this.getNAVObservations() - 1);
   }
 
   getEmbargoDate() {

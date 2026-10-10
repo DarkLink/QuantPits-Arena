@@ -11,7 +11,7 @@ description: "CSI 1000 small-cap universe testbed: evaluating the 6 Alpha candid
 calendar:
   anchor_date: "2026-07-03"        # Retrospective calibration anchor (Friday close)
   first_trade_date: "2026-07-06"   # Monday market open entry
-  end_date: "2026-09-24"           # Tournament evaluation horizon
+  end_date: "2026-10-09"           # Tournament evaluation horizon
   cycle_freq: "weekly"
 
 # Account and Match Execution Parameters
@@ -36,7 +36,7 @@ universe:
   testbed_desc: "1000-stock small-cap testbed"
 
 banner:
-  proof_text: "🔬 <strong style=\"color: var(--text-secondary);\">CSI 1000 Testbed Proof:</strong> 1,000 small-cap equities with 11,000 empirical random monkeys verified over 2026-07-03 ~ 2026-09-24. Unfalsifiable empirical null resolution."
+  proof_text: "🔬 <strong style=\"color: var(--text-secondary);\">CSI 1000 Testbed Proof:</strong> 1,000 small-cap equities with 11,000 empirical random monkeys verified over 2026-07-03 ~ 2026-10-09. Unfalsifiable empirical null resolution."
 
 # Enabled Benchmarks
 benchmarks:
@@ -56,25 +56,26 @@ benchmarks:
     type: "STATISTICAL"
     colony_size_per_spec: 1000
 
-# Dispatches & Narrative Chronicles (Retrospective Baseline M1-M2)
+# Current Standings & Monthly Chronicles
 dispatches:
   executive:
-    tag: "🏆 CSI 1000 Baseline Standing"
-    badge: "M1–M2 Complete"
-    title: "CSI 1000 Retrospective Baseline: Small-Cap Frictions & The Sloth Anomaly"
-    window_label: "2026-07-03 ~ 2026-09-24 (51 Trading Days, Cycles 1–9)"
-    nature_label: "Retrospective backtest baseline evaluating alpha robustness across 1,000 small-cap equities."
-    leader_summary: "CONTESTANT_B_sloth-2 finished the baseline at NAV 1.1343 (+13.43%), outperforming the CSI 1000 benchmark by +26.34pp and Taotie 1000 by +21.83pp."
+    tag: "🏆 CSI 1000 Current Standings"
+    badge: "Through October 9"
+    title: "CSI 1000: Independent M3 Review & October Valuation"
+    window_label: "2026-07-03 ~ 2026-10-09 · 65 NAV Observations (Including Anchor)"
+    nature_label: "Continued tracking of anonymous contestants and existing execution rules across the CSI 1000 universe."
+    leader_summary: "CONTESTANT_B_eagle-5-1 takes the lead at NAV 1.1349 (+13.49% cumulative), despite -0.50% across October 8–9 without new trades. A's sloth-2 falls -2.38% to NAV 1.1201. Maximum drawdown for B's leader is 17.62%."
   climate:
     tag: "🌪️ Small-Cap Market Climate"
     status_badge: "Active"
-    title: "Small-Cap Liquidity Frictions & Signal Longevity"
-    summary: "Evaluating alpha capture and friction costs across 1,000 small-cap Chinese equities."
+    title: "The Crown Changes Hands Without a Rebalance"
+    summary: "CSI 1000 returned -5.27% across the September reporting window and -1.96% across October 8–9. The latest cumulative index return is -16.99%."
     bullets:
-      - "<strong>CSI 1000 Benchmark Contraction</strong>: The small-cap benchmark (SH000852) suffered a steep -12.91% drawdown across the 46 trading days."
-      - "<strong>Executable Taotie 1000 Buffer</strong>: Physical Taotie 1000 (2M capital, 870 active holdings) finished at -8.40%, outperforming the market index by +4.51pp under greedy waterfall execution."
-      - "<strong>The Sloth Phenomenon</strong>: Delaying model signals by 1 to 2 weekly cycles delivered the tournament's highest alpha, revealing prolonged small-cap factor half-life."
-    decrypt_label: "Monthly Cadence (M1–M2 Released; M3+ Monthly)"
+      - "Executable Taotie gained +0.20% across October 8–9 and stands at +0.59% cumulatively; Ghost Taotie stands at -8.78%."
+      - "CONTESTANT_B_eagle-5-1 leads at NAV 1.1349; cumulative matched upper-tail plus-one p = 0.0150 before multiple-comparison adjustment."
+      - "September winner B's Eagle returned +6.18%, while A's sloth-2 kept September's cumulative crown (+14.74%)."
+      - "October 8–9 contains no new trades. Next scheduled rebalance: October 12, using October 9 close."
+    decrypt_label: "Independent CSI 1000 M3 & October Appendix"
   episodes:
     - id: "csi1000_m1_m2"
       tab_label: "📜 M1–M2: Small-Cap Sloth Dominance"
@@ -84,3 +85,11 @@ dispatches:
       read_time: "7 min read"
       summary: "Combined Month 1 & Month 2 retrospective baseline across 1,000 small-cap equities. Subsequent dispatches update monthly (M3, M4, ...)."
       file: "chronicles/en/season_csi1000_m1_m2.md"
+    - id: "csi1000_m3"
+      tab_label: "📜 M3: Eagle Rally"
+      badge: "M3 + Oct Appendix"
+      title: "CSI 1000 Month 03: Eagle Rally, Sloth Lead"
+      date: "2026-09-30"
+      read_time: "6 min read"
+      summary: "CSI 1000 only: B's Eagle won September (+6.18%); A's sloth-2 retained the cumulative crown (+14.74%). Separate October holdings-only appendix records the lead change."
+      file: "chronicles/en/season_csi1000_m3.md"

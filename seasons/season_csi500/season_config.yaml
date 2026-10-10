@@ -11,7 +11,7 @@ description: "CSI 500 mid-cap universe benchmark: evaluating the 6 Alpha candida
 calendar:
   anchor_date: "2026-07-03"        # Retrospective calibration anchor (Friday close)
   first_trade_date: "2026-07-06"   # Monday market open entry
-  end_date: "2026-09-24"           # Tournament evaluation horizon
+  end_date: "2026-10-09"           # Tournament evaluation horizon
   cycle_freq: "weekly"
 
 # Account and Match Execution Parameters
@@ -36,7 +36,7 @@ universe:
   testbed_desc: "500-stock mid-cap testbed"
 
 banner:
-  proof_text: "🔬 <strong style=\"color: var(--text-secondary);\">CSI 500 Testbed Proof:</strong> 500 mid-cap equities with 11,000 empirical random monkeys verified over 2026-07-03 ~ 2026-09-24. Unfalsifiable empirical null resolution."
+  proof_text: "🔬 <strong style=\"color: var(--text-secondary);\">CSI 500 Testbed Proof:</strong> 500 mid-cap equities with 11,000 empirical random monkeys verified over 2026-07-03 ~ 2026-10-09. Unfalsifiable empirical null resolution."
 
 # Enabled Benchmarks
 benchmarks:
@@ -56,25 +56,25 @@ benchmarks:
     type: "STATISTICAL"
     colony_size_per_spec: 1000
 
-# Dispatches & Narrative Chronicles (Retrospective Baseline M1-M2)
+# Current Standings & Monthly Chronicles
 dispatches:
   executive:
-    tag: "🏆 CSI 500 Baseline Standing"
-    badge: "M1–M2 Complete"
-    title: "CSI 500 Retrospective Baseline: Mid-Cap Breadth & Allocation Dynamics"
-    window_label: "2026-07-03 ~ 2026-09-24 (51 Trading Days, Cycles 1–9)"
-    nature_label: "Retrospective backtest baseline evaluating alpha robustness across 500 mid-cap equities."
-    leader_summary: "CONTESTANT_B_rabbit-1 finished the baseline at NAV 1.0998 (+9.98%), outperforming the CSI 500 benchmark by +22.47pp and Taotie 500 by +18.73pp."
+    tag: "🏆 CSI 500 Current Standings"
+    badge: "Through October 9"
+    title: "CSI 500: Independent M3 Review & October Valuation"
+    window_label: "2026-07-03 ~ 2026-10-09 · 65 NAV Observations (Including Anchor)"
+    nature_label: "Continued tracking of anonymous contestants and existing execution rules across the CSI 500 universe."
+    leader_summary: "CONTESTANT_B_eagle-5-1 leads at NAV 1.0885 (+8.85% cumulative), after +1.27% across October 8–9 with no new trades. Maximum drawdown is 11.91%. B's rabbit-1 follows at NAV 1.0884."
   climate:
     tag: "🌪️ Mid-Cap Market Climate"
     status_badge: "Active"
-    title: "Mid-Cap Dispersion & Liquidity Calibration"
-    summary: "Tracking cross-sectional volatility, turnover efficiency, and holding capacity in liquid mid-cap equities."
+    title: "The Same Holdings, a Narrow Cumulative Lead"
+    summary: "CSI 500 returned -5.83% across the September reporting window and -2.48% across October 8–9. The latest cumulative index return is -17.09%."
     bullets:
-      - "<strong>CSI 500 Benchmark Drawdown</strong>: The CSI 500 index (SH000905) dropped -12.49% across the 46-day window, creating severe macro headwinds."
-      - "<strong>Executable Taotie 500 Buffer</strong>: Physical equal-weight benchmark Taotie 500 finished at -8.75% with 403 active holdings via greedy waterfall execution, outperforming the market index by +3.74pp."
-      - "<strong>Agile Rotation Alpha</strong>: High-turnover containers (Rabbit) outpaced extreme concentration (Eagle), capturing swift sector rotations."
-    decrypt_label: "Monthly Cadence (M1–M2 Released; M3+ Monthly)"
+      - "October 8–9 has no new trades; next scheduled rebalance October 12. Taotie gained +0.25% to +0.14% cumulative; Ghost stands at -9.88%."
+      - "September: only 2/168 paths gained; A's meerkat-10 won at +0.42%. A's sloth-2 held the September cumulative crown at +7.91%."
+      - "Taotie's mean cash through September was 72.63%; its index-relative resilience cannot be assigned entirely to selection."
+    decrypt_label: "Independent CSI 500 M3 & October Appendix"
   episodes:
     - id: "csi500_m1_m2"
       tab_label: "📜 M1–M2: Rabbit Surge"
@@ -84,4 +84,12 @@ dispatches:
       read_time: "7 min read"
       summary: "Combined Month 1 & Month 2 retrospective baseline across 500 mid-cap equities. Subsequent dispatches update monthly (M3, M4, ...)."
       file: "chronicles/en/season_csi500_m1_m2.md"
+    - id: "csi500_m3"
+      tab_label: "📜 M3: Two Survivors"
+      badge: "M3 + Oct Appendix"
+      title: "CSI 500 Month 03: Two Survivors, Two Different Crowns"
+      date: "2026-09-30"
+      read_time: "6 min read"
+      summary: "CSI 500 only: September winner A's meerkat-10 (+0.42%), cumulative crown A's sloth-2 (+7.91%). Separate October holdings-only appendix through October 9."
+      file: "chronicles/en/season_csi500_m3.md"
 

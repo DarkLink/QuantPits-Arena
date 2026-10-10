@@ -21,6 +21,9 @@
 | [**Episode 09**](en/episode_09_the_september_02_breadth_shock_and_rabbit_rampage.md) | `2026-08-31 ~ 2026-09-04`<br/>(Days 42~46, Cycle 1) | **Prospective Forward Tracking** | **The September 02 Breadth Shock & Rabbit Rampage**: 99.4% of paths suffered active exposure pullbacks on Wednesday; `CONTESTANT_D_rabbit-1` gained +2.41% on the week, compressing the crown margin to 1.89pp. | **Released** |
 | [**Episode 10**](en/episode_10_the_apex_strike_and_the_120_milestone.md) | `2026-09-07 ~ 2026-09-11`<br/>(Days 47~51, Cycle 2) | **Prospective Forward Tracking** | **The Apex Strike & The 1.20 Milestone**: High-conviction Eagles counter-attacked; `CONTESTANT_B_eagle-5-1` (+2.06%) became the first strategy to breach the 1.20 NAV milestone (NAV `1.2071`, +20.71%). | **Released** |
 | [**Episode 11**](en/episode_11_the_mid_september_turbulence_and_contestant_d_surge.md) | `2026-09-14 ~ 2026-09-18`<br/>(Days 52~56, Cycle 3) | **Prospective Forward Tracking** | **The Mid-September Turbulence & CONTESTANT_D's Charge**: Eagle King pulled back (-2.18%, lead compressed to 4.51pp); `CONTESTANT_D` family took 3 of the Top 5 seats, led by `eagle-5-1` (+1.77% on the week). | **Released** |
+| [**Episode 12**](en/episode_12_the_mid_autumn_trial_and_apex_resurgence.md) | `2026-09-21 ~ 2026-09-24`<br/>(4 sessions) | **Continued Forward Tracking** | **The Apex Resurgence**: B's cumulative leader reached NAV 1.1952 (+19.52%); C's concentrated variant won the period at +1.57%. | **Released** |
+| [**Episode 13**](en/episode_13_the_three_day_trial.md) | `2026-09-28 ~ 2026-09-30`<br/>(3 sessions; 63 NAV observations including anchor) | **Continued Forward Tracking** | **The Three-Day Trial**: C won at +2.24%; B retained the crown at NAV 1.2054, with a 6.12pp lead and cumulative matched upper-tail p = 0.0020. | **Released** |
+| [**Episode 14**](en/episode_14_the_two_day_return.md) | `2026-10-08 ~ 2026-10-09`<br/>(2 valuation sessions; 65 NAV observations including anchor) | **Continued Forward Tracking** | **The Same Holdings, a Wider Crown**: No new trades; E's meerkat-50 won at +2.02%; B reached NAV 1.2240 (+22.40%) and a 7.14pp cumulative lead. | **Released** |
 
 ---
 
@@ -33,4 +36,14 @@ Beyond the flagship CSI 300 weekly arena, broader-market testbeds evaluate capit
 | [**CSI 1000**](en/season_csi1000_m1_m2.md) | 1,000 Small Caps | CNY 2,000,000 | **Small-Cap Sloth Dominance & The Cash Shield**: Amid a -12.91% index collapse, `CONTESTANT_B_sloth-2` finished at NAV `1.1343` (+13.43%); Snail control (+2.49% to +4.88%) cleanly isolates genuine selection alpha from cash sheltering. | **Released** |
 | [**CSI 500**](en/season_csi500_m1_m2.md) | 500 Mid Caps | CNY 1,000,000 | **Mid-Cap Dispersion & The Rabbit Surge**: Across a -12.49% index drawdown, agile Rabbit handlers generated nearly +10% absolute return led by `CONTESTANT_B_rabbit-1` (NAV `1.0998`, +9.98%, +22.47pp vs index). | **Released** |
 | [**CSI 800**](en/season_csi800_m1_m2.md) | 800 Broad Caps | CNY 1,600,000 | **Broad-Cap Rabbit Supremacy**: Combining large-cap liquidity with mid-cap dispersion, `CONTESTANT_B_rabbit-2` vaulted to NAV `1.1284` (+12.84%, +20.74pp vs index); scaled Whale-Shark achieved NAV `1.0830`. | **Released** |
+
+September 28 is the last rebalance for Episodes 13–14; October 8–9 only values the same holdings. The next scheduled rebalance is October 12. Dispatch numbers do not count trades.
+
+Each testbed has an independent M3 report, anchored at August 28 and ending at September 30 (22 sessions). October 8–9 appears in a separate holdings-only appendix:
+
+| Testbed | Independent M3 report | September winner | September cumulative leader |
+| :--- | :--- | :--- | :--- |
+| CSI 500 | [Two Survivors, Two Different Crowns](en/season_csi500_m3.md) | A meerkat-10, +0.42% | A sloth-2, +7.91% |
+| CSI 800 | [Rabbit Crown, Eagle Month](en/season_csi800_m3.md) | E eagle-5-1, +1.86% | B rabbit-2, +10.83% |
+| CSI 1000 | [Eagle Rally, Sloth Lead](en/season_csi1000_m3.md) | B eagle-5-1, +6.18% | A sloth-2, +14.74% |
 

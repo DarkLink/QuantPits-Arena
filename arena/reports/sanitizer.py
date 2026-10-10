@@ -684,8 +684,6 @@ class DualTierExporter:
             f"Unfalsifiable empirical null resolution."
         )
 
-        taotie_cash = getattr(season_cfg, "get_benchmark_initial_cash", lambda b, d=500000.0: d)("taotie", 500000.0)
-
         meta_dict = {
             "season_id": season_id,
             "season_title": getattr(season_cfg, "title", season_id),
@@ -705,14 +703,16 @@ class DualTierExporter:
             "ghost_taotie_return_pct": ghost_tot_ret,
             "active_benchmarks": [
                 bench_name,
-                f"Taotie ({univ_code}) ({f'{taotie_cash / 1e6:.1f}'.rstrip('0').rstrip('.') + 'M' if taotie_cash >= 1e6 else f'{int(taotie_cash / 1e3)}k'})",
-                f"Ghost Taotie ({univ_code}) (100M)",
-                "1,000 Monkeys"
+                f"Taotie ({univ_code})",
+                f"Ghost Taotie ({univ_code})",
+                f"{len(null_records)} Matched Specifications / {sum(r['colony_size'] for r in null_records):,} Monkeys"
             ],
             "trading_days": len(nav_dates),
+            "nav_observations": len(nav_dates),
+            "valuation_sessions": max(0, len(nav_dates) - 1),
             "preview": False,
             "window_label": f"Evaluation Window: {nav_dates[0] if nav_dates else ''} ~ {nav_dates[-1] if nav_dates else ''}",
-            "period_label": f"Evaluation Window: {nav_dates[0] if nav_dates else ''} ~ {nav_dates[-1] if nav_dates else ''} ({len(nav_dates)} trading days)"
+            "period_label": f"Evaluation Window: {nav_dates[0] if nav_dates else ''} ~ {nav_dates[-1] if nav_dates else ''} ({len(nav_dates)} NAV observations including anchor)"
         }
 
         web_payload = {

@@ -59,10 +59,13 @@ class TaotieBenchmark(Benchmark):
         """
         单周增量推进饕餮基准。
         """
-        if universe is None:
-            raise ValueError("饕餮基准推进必须提供当前周期的 universe 列表")
         if price_lookup_fn is None:
             raise ValueError("饕餮基准推进必须提供 price_lookup_fn")
+        if not cycle.has_rebalance:
+            self.engine.execute_weekly_cycle(cycle, None, price_lookup_fn)
+            return
+        if universe is None:
+            raise ValueError("饕餮基准推进必须提供当前周期的 universe 列表")
 
         is_first = (cycle.cycle_idx == 0)
         # 饕餮使用 mock 均匀打分，所有池内标的同等优先级
@@ -99,6 +102,6 @@ class TaotieBenchmark(Benchmark):
         全量批量运行饕餮基准。
         """
         for cycle in cycles:
-            universe = universe_provider_fn(cycle.decision_date)
+            universe = universe_provider_fn(cycle.decision_date) if cycle.has_rebalance else None
             self.step(cycle, universe, price_lookup_fn, tradability_filter_fn)
         return self.to_portfolio_path()

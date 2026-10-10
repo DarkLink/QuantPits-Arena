@@ -265,6 +265,9 @@ class WeeklyCycleRunner:
                     )
                 engine = self.engines[key]
 
+                if not cycle.has_rebalance:
+                    continue
+
                 transformed_score = a.transform_signal(
                     current_score=current_raw,
                     history_scores=history,
@@ -288,6 +291,9 @@ class WeeklyCycleRunner:
                     passive_pool=passive_pool
                 )
                 orders[key] = order
+
+        if not cycle.has_rebalance:
+            return orders
 
         # 3. 生成独立基准 (Taotie & Ghost Taotie) 的目标订单
         first_raw = next(iter(self.signal_history.values()))[c_idx]
@@ -335,6 +341,17 @@ class WeeklyCycleRunner:
         """
         c_idx = cycle.cycle_idx
 
+        if not cycle.has_rebalance:
+            if any(order is not None for order in orders.values()):
+                raise ValueError("Valuation-only cycles cannot execute rebalance orders")
+            engines = list(self.engines.values()) + [
+                self.taotie_benchmark.engine, self.ghost_taotie_benchmark.engine
+            ]
+            for engine in engines:
+                engine.execute_weekly_cycle(cycle, None, price_lookup_fn)
+            self.last_completed_cycle_idx = c_idx
+            return
+
         # 执行各选手参赛动物组合与独立基准
         for key, order in orders.items():
             if key == ("BENCHMARK", "taotie"):
@@ -378,7 +395,7 @@ class WeeklyCycleRunner:
             tradability_filter_fn=tradability_filter_fn,
             price_lookup_fn=price_lookup_fn
         )
-        if self.run_dir is not None:
+        if self.run_dir is not None and cycle.has_rebalance:
             self.export_isolated_orders(cycle, orders, self.run_dir)
         self.execute_orders(
             cycle=cycle,
@@ -418,7 +435,7 @@ class WeeklyCycleRunner:
                 tradability_filter_fn=tradability_filter_fn,
                 price_lookup_fn=price_lookup_fn
             )
-            if self.run_dir is not None:
+            if self.run_dir is not None and cycle.has_rebalance:
                 self.export_isolated_orders(cycle, settled_orders, self.run_dir)
             self.execute_orders(
                 cycle=cycle,
@@ -432,13 +449,14 @@ class WeeklyCycleRunner:
         next_orders = None
         if next_cycle_idx < len(self.cycles):
             next_cycle = self.cycles[next_cycle_idx]
-            next_orders = self.commit_orders(
+            committed = self.commit_orders(
                 cycle=next_cycle,
                 active_contestants=active_contestants,
                 tradability_filter_fn=tradability_filter_fn,
                 price_lookup_fn=price_lookup_fn
             )
-            if self.run_dir is not None:
+            next_orders = committed if next_cycle.has_rebalance else None
+            if self.run_dir is not None and next_cycle.has_rebalance:
                 self.export_isolated_orders(next_cycle, next_orders, self.run_dir)
 
         return settled_orders, next_orders

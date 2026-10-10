@@ -73,7 +73,7 @@ window.LandingView = {
           <div class="concept-icon">🏺</div>
           <h3>The Models</h3>
           <p style="font-size:0.88rem; color:var(--text-secondary);">
-            Production ensemble snapshots and neural architectures. Each model artifact represents a milestone in the quantitative evolutionary lineage.
+            Six anonymous contestants evaluated from the same initial NAV. Compare their Arena results across execution policies without revealing private model identities.
           </p>
           <div style="display:flex; justify-content:space-between; align-items:center; margin-top:auto;">
             <a href="#contestants" style="font-size:0.84rem; font-weight:600; color:var(--accent-cyan);">Explore Profiles →</a>
@@ -114,7 +114,7 @@ window.LandingView = {
           <p style="font-size:0.88rem; color:var(--text-secondary);">
             ${(() => {
               const mBmName = (window.arenaAdapter && window.arenaAdapter.getMarketBenchmarkName) ? window.arenaAdapter.getMarketBenchmarkName() : "Market Benchmark";
-              return hasGhost ? `Triple reference standards: <span data-tooltip-term="taotie">Executable Taotie</span> (CNY 500k), <span data-tooltip-term="ghost_taotie">Theoretical Ghost Taotie</span> (CNY 100M unconstrained), and <span data-tooltip-term="market_benchmark">${mBmName}</span> (external broad market anchor).` : `Dual reference standards: <span data-tooltip-term="taotie">Taotie</span> (executable universe benchmark under capital &amp; lot frictions) and <span data-tooltip-term="market_benchmark">${mBmName}</span> (external broad market anchor).`;
+              return hasGhost ? `Triple reference standards: <span data-tooltip-term="taotie">Executable Taotie</span> (capital and round-lot constraints), <span data-tooltip-term="ghost_taotie">Theoretical Ghost Taotie</span> (broad exposure reference), and <span data-tooltip-term="market_benchmark">${mBmName}</span> (external market anchor).` : `Dual reference standards: <span data-tooltip-term="taotie">Taotie</span> (executable universe benchmark under capital &amp; lot frictions) and <span data-tooltip-term="market_benchmark">${mBmName}</span> (external broad market anchor).`;
             })()}
           </p>
           <div style="display:flex; justify-content:space-between; align-items:center; margin-top:auto;">

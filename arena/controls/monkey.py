@@ -124,6 +124,10 @@ class MonkeyColony:
         tradability_filter_fn: Optional[Callable[[str, str], bool]] = None,
     ):
         """单周推进一组猴子"""
+        if not cycle.has_rebalance:
+            for engine in engines:
+                engine.execute_weekly_cycle(cycle, None, price_lookup_fn)
+            return
         is_first = (cycle.cycle_idx == 0)
         c_idx = cycle.cycle_idx
 
@@ -166,6 +170,9 @@ class MonkeyColony:
                 deal_price_mode=deal_price_mode
             )
             for cycle in cycles:
+                if not cycle.has_rebalance:
+                    single_engine.execute_weekly_cycle(cycle, None, price_lookup_fn)
+                    continue
                 universe = universe_provider_fn(cycle.decision_date)
                 is_first = (cycle.cycle_idx == 0)
                 mock_score = pd.Series(1.0, index=universe)
@@ -185,7 +192,7 @@ class MonkeyColony:
 
         engines = self.init_group_engines(spec, initial_cash, deal_price_mode)
         for cycle in cycles:
-            universe = universe_provider_fn(cycle.decision_date)
+            universe = universe_provider_fn(cycle.decision_date) if cycle.has_rebalance else []
             self.step_group(spec, cycle, engines, universe, price_lookup_fn, tradability_filter_fn)
         return [engine.to_portfolio_path() for engine in engines]
 

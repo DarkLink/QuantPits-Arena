@@ -48,8 +48,9 @@ window.MethodologyView = {
                 Every eligible artifact enters the common Arena at the same anchor:
                 <br>• <b>Anchor Date:</b> ${seasonMeta.anchor_date || "2026-07-03"}
                 <br>• <b>Initial NAV:</b> 1.0000
-                <br>• <b>Capital Model:</b> ${seasonMeta.methodology?.capital_spec || "CNY 500,000"}
-                <br>• <b>Pipeline Schedule:</b> ${seasonMeta.methodology?.execution_flow || "Weekly Rebalance, Daily Marked-to-Market Valuation"}
+                <br>• <b>Capital Model:</b> ${seasonMeta.methodology?.capital_spec || "Standardized simulation budget with round-lot constraints"}
+                <br>• <b>Pipeline Schedule:</b> ${seasonMeta.methodology?.execution_flow || "Monday Open Rebalance; Holiday Mondays Skip Trading; Daily Valuation"}
+                <br>• <b>Holiday Rule:</b> If Monday is closed, retain existing holdings and mark them to market on any remaining trading days. No makeup rebalance occurs on reopening. Separate dispatches or settlements do not imply separate trades.
                 <br><br>
                 All Arena metrics are calculated from this common starting point. The frozen artifacts had no access to Arena-period market data during training. <b>Historical reputation is biography; Arena performance starts from zero.</b>
               </p>
@@ -299,24 +300,24 @@ window.MethodologyView = {
           </p>
           <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 12px;">
             <div style="background: rgba(255, 255, 255, 0.02); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
-              <strong style="color: var(--brand-cyan); display: block; margin-bottom: 4px; font-size: 13px;">Phase 1: Friday Close 15:30</strong>
+              <strong style="color: var(--brand-cyan); display: block; margin-bottom: 4px; font-size: 13px;">Phase 1: Decision Close</strong>
               <span style="font-size: 11px; color: var(--text-tertiary); text-transform: uppercase; margin-bottom: 6px; display: block;">Order Generation &amp; Hashing</span>
               <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5; margin: 0;">
-                Models infer rankings on data strictly &le; Friday 15:00. Target orders are generated, frozen into JSON, and their SHA-256 hash is immediately committed to the public ledger before the weekend.
+                Rankings use only data available at the prior settlement close. Orders are generated only for an upcoming trading Monday. Public pre-commitment requires a verifiable hash published before execution; a completed report alone does not establish it.
               </p>
             </div>
             <div style="background: rgba(255, 255, 255, 0.02); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
               <strong style="color: var(--accent-amber); display: block; margin-bottom: 4px; font-size: 13px;">Phase 2: Monday Open 09:30</strong>
               <span style="font-size: 11px; color: var(--text-tertiary); text-transform: uppercase; margin-bottom: 6px; display: block;">Execution Lock</span>
               <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5; margin: 0;">
-                Frozen orders execute at real Monday auction open prices. Since the hash was committed on Friday, the operator cannot retroactively alter portfolio composition over the weekend.
+                Frozen orders execute at Monday auction open prices only when Monday is a trading day. A holiday Monday skips the rebalance; reopening sessions only value existing holdings. A published pre-market hash is required to establish that an order was committed before execution.
               </p>
             </div>
             <div style="background: rgba(255, 255, 255, 0.02); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
-              <strong style="color: #4ade80; display: block; margin-bottom: 4px; font-size: 13px;">Phase 3: Friday Close 15:00</strong>
+              <strong style="color: #4ade80; display: block; margin-bottom: 4px; font-size: 13px;">Phase 3: Settlement Close</strong>
               <span style="font-size: 11px; color: var(--text-tertiary); text-transform: uppercase; margin-bottom: 6px; display: block;">Unified Cycle Step</span>
               <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5; margin: 0;">
-                Weekly NAV and fills are calculated and settled. Immediately thereafter, Phase 1 for the upcoming week executes in the same Friday CLI cycle step (<code>cli.py cycle-step</code>).
+                Daily NAV is recorded through the last trading session of the reporting window. Settlement remains valid in holiday weeks without trading, and separate reports do not create extra rebalances.
               </p>
             </div>
           </div>

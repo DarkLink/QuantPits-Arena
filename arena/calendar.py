@@ -16,13 +16,17 @@ class WeeklyCycle:
     """一个标准周频周期的结构化定义"""
     cycle_idx: int                  # 周期序号 (0: 初始建仓周, 1: 第一次调仓周...)
     decision_date: str              # 决策截断日 (周五收盘，产生下一周订单)
-    trade_date: str                 # 订单执行日 (周一开盘)
+    trade_date: Optional[str]       # 仅周一开盘执行；周一休市则本周只盯市
     settle_date: str                # 当周结算日 (周五收盘)
     trading_days: List[str]         # 当周内所有交易日列表 (用于 Daily Marked-to-Market 估值)
 
     @property
     def is_first_week(self) -> bool:
         return self.cycle_idx == 0
+
+    @property
+    def has_rebalance(self) -> bool:
+        return self.trade_date is not None
 
 
 class TradingCalendar:
@@ -84,9 +88,11 @@ class TradingCalendar:
         构建周频执行周期序列。
 
         规则：
+        - 只在日历周一交易；周一休市时不顺延到复市日。
+        - 无调仓的交易周仍记录日频盯市与决策截面，保持延迟信号的周序。
         - Cycle 0:
           - decision_date: 截至 anchor_date 的最新交易日 (如 2026-07-03 周五收盘)
-          - trade_date: 下一交易日 (2026-07-06 周一开盘)
+          - trade_date: 周一 (2026-07-06 周一开盘)
           - settle_date: 当周最后一个交易日 (2026-07-10 周五收盘)
           - trading_days: [07-06, 07-07, 07-08, 07-09, 07-10]
         - Cycle 1:
@@ -100,62 +106,24 @@ class TradingCalendar:
         actual_end = self.get_latest_trading_day_on_or_before(end_date)
 
         cycles = []
-        cycle_idx = 0
         current_decision = actual_anchor
+        weeks = {}
+        for day in self.get_trading_days(actual_anchor, actual_end):
+            if day <= actual_anchor:
+                continue
+            dt = datetime.date.fromisoformat(day)
+            monday = (dt - datetime.timedelta(days=dt.weekday())).isoformat()
+            weeks.setdefault(monday, []).append(day)
 
-        while True:
-            # 订单执行日：下周第一个交易日
-            try:
-                trade_date = self.get_next_trading_day(current_decision)
-            except (IndexError, ValueError):
-                break
-
-            if trade_date > actual_end:
-                break
-
-            # 寻找该周的结算日（本周五，或遇到节假日为当周最后交易日）
-            # 策略：沿着交易日走，只要下一个交易日还在同一周（周一至周五内），就纳入本周
-            week_days = [trade_date]
-            curr_d = trade_date
-            while True:
-                try:
-                    next_d = self.get_next_trading_day(curr_d)
-                except Exception:
-                    break
-
-                # 检查是否属于同一个日历周
-                dt_curr = datetime.datetime.strptime(curr_d, "%Y-%m-%d").date()
-                dt_next = datetime.datetime.strptime(next_d, "%Y-%m-%d").date()
-
-                # 如果下一个交易日已跨到下一周（例如当前是周五，下一交易日是下周一），跳出
-                if dt_next.weekday() <= dt_curr.weekday() or (dt_next - dt_curr).days > 4:
-                    break
-
-                if next_d > actual_end:
-                    week_days.append(next_d)
-                    curr_d = next_d
-                    break
-
-                week_days.append(next_d)
-                curr_d = next_d
-
+        for monday, week_days in weeks.items():
             settle_date = week_days[-1]
-
-            cycles.append(
-                WeeklyCycle(
-                    cycle_idx=cycle_idx,
-                    decision_date=current_decision,
-                    trade_date=trade_date,
-                    settle_date=settle_date,
-                    trading_days=week_days
-                )
-            )
-
-            # 下一周期的决策日即为当周结算日（周五收盘）
+            cycles.append(WeeklyCycle(
+                cycle_idx=len(cycles),
+                decision_date=current_decision,
+                trade_date=monday if monday in week_days else None,
+                settle_date=settle_date,
+                trading_days=week_days,
+            ))
             current_decision = settle_date
-            cycle_idx += 1
-
-            if current_decision >= actual_end:
-                break
 
         return cycles

@@ -236,6 +236,9 @@ class PortfolioEngine:
             price_lookup: 价格查询函数 (instrument, date, field='open'|'close') -> float
             tradability_filter: 可交易性检查函数 (instrument, date) -> bool (停牌标的无法成交)
         """
+        if not cycle.has_rebalance and order is not None:
+            raise ValueError("Valuation-only cycles cannot execute rebalance orders")
+
         # 如果是首次运行，记录 T0 起点 (Anchor 收盘状态: NAV=1.000000, 现金=100%, 仓位=0%)
         if len(self.daily_valuations) == 0:
             self.daily_valuations.append(
@@ -250,6 +253,7 @@ class PortfolioEngine:
             )
 
         prev_nav = self.daily_valuations[-1].nav
+        start_week_nav = prev_nav
         weekly_cost = 0.0
         turnover_value = 0.0
 
@@ -421,11 +425,6 @@ class PortfolioEngine:
 
         # --- Phase 3: 周五收盘结算 ---
         settle_nav = self.daily_valuations[-1].nav
-        start_week_nav = (
-            self.daily_valuations[-len(cycle.trading_days)].nav
-            if len(self.daily_valuations) >= len(cycle.trading_days)
-            else 1.0
-        )
         w_ret = (settle_nav / start_week_nav) - 1.0 if start_week_nav > 0 else 0.0
         turnover_rate = (
             turnover_value / (self.initial_cash * start_week_nav)

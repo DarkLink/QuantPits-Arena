@@ -5,26 +5,26 @@ window.ARENA_SEASONS_INDEX = [
     short_title: "Season 1",
     status: "ACTIVE",
     badge_type: "active",
-    period: "2026.07 - 2026.09",
+    period: "2026.07 - 2026.10",
     anchor_date: "2026-07-03",
-    end_date: "2026-09-24",
-    trading_days: 60,
+    end_date: "2026-10-09",
+    trading_days: 65,
     contestants_count: 6,
-    animals_count: 29,
-    benchmarks: ["CSI300", "Taotie (500k)", "1100 Monkeys"],
-    description: "6 Model Candidates × 29 Animal Handlers with empirical Monkey null distributions.",
+    animals_count: 28,
+    benchmarks: ["CSI300", "Taotie", "11 × 1,000 Matched Monkeys"],
+    description: "6 Anonymous Contestants × 28 Animal Handlers with empirical Monkey null distributions.",
     dispatches_banner: {
       tag: "🎙️ Season 1 Dispatches",
-      title: "Episode 11 Released (\"The Mid-September Turbulence & CONTESTANT_D's Triple-Crown Charge\"). Week 11 evaluation active.",
-      link: "#dispatches?episode=ep11",
+      title: "Episodes 13–14 available: The Three-Day Trial & The Two-Day Return. Updated through October 9.",
+      link: "#dispatches?episode=ep14",
       link_text: "Read S1 Dispatches &rarr;"
     },
     methodology: {
       framework_name: "Empirical Strategy Testbed & Historical Reconstruction",
       anchor_spec: "Single-Anchor Common Prospective Baseline (2026-07-03)",
-      capital_spec: "CNY 500,000 base capital with strict 100-share round-lot constraint",
+      capital_spec: "Standardized simulation budget with strict 100-share round-lot constraints",
       benchmarks_summary: "Tripartite Reference System: CSI 300 (Market Beta) + Taotie (Executable Universe) + Matched Monkeys (Statistical Null)",
-      execution_flow: "Weekly Rebalance, Daily Marked-to-Market Valuation"
+      execution_flow: "Monday Open Rebalance; Holiday Mondays Skip Trading; Daily Valuation"
     }
   },
   {
@@ -33,31 +33,31 @@ window.ARENA_SEASONS_INDEX = [
     short_title: "CSI 500 (Tech Preview)",
     status: "PREVIEW",
     badge_type: "preview",
-    period: "2026.07 - 2026.09",
+    period: "2026.07 - 2026.10",
     anchor_date: "2026-07-03",
-    end_date: "2026-09-24",
-    trading_days: 60,
+    end_date: "2026-10-09",
+    trading_days: 65,
     contestants_count: 6,
     animals_count: 28,
     benchmarks: [
       "CSI 500",
-      "Taotie 500 (1M)",
-      "Ghost Taotie 500 (100M)",
-      "1,000 Monkeys"
+      "Taotie 500",
+      "Ghost Taotie 500",
+      "11 × 1,000 Matched Monkeys"
     ],
     description: "CSI 500 mid-cap universe testbed (SH000905 benchmark) evaluating the 6 candidate models across 28 execution containers.",
     dispatches_banner: {
       tag: "🔬 CSI 500 Tech Preview",
-      title: "CSI 500 Mid-Cap Calibration Active: Evaluating Alpha Breadth in Liquid Mid-Caps.",
-      link: "#dispatches",
+      title: "CSI 500 M3: Two Survivors, Two Different Crowns. October valuation appendix included.",
+      link: "#dispatches?episode=csi500_m3",
       link_text: "Read CSI 500 Dispatches &rarr;"
     },
     methodology: {
       framework_name: "CSI 500 Mid-Cap Empirical Evaluation",
       anchor_spec: "Parallel Calibration Anchor (2026-07-03 Initiation)",
-      capital_spec: "CNY 500,000 baseline cash with 100-share trading lots over 500 constituent stocks",
-      benchmarks_summary: "CSI 500 Tripartite System: CSI 500 Index (SH000905 Beta) + Taotie 500 + Ghost Taotie 500 (100M) + 1,000 Matched Monkeys",
-      execution_flow: "Weekly Rebalance, Monday Open Execution, Daily Marked-to-Market"
+      capital_spec: "Standardized simulation budget with 100-share trading lots over the CSI 500 universe",
+      benchmarks_summary: "CSI 500 Index + Taotie 500 + Ghost Taotie 500 + 11 matching groups of 1,000 monkeys",
+      execution_flow: "Monday Open Rebalance; Holiday Mondays Skip Trading; Daily Valuation"
     }
   },
   {
@@ -66,31 +66,31 @@ window.ARENA_SEASONS_INDEX = [
     short_title: "CSI 800 (Tech Preview)",
     status: "PREVIEW",
     badge_type: "preview",
-    period: "2026.07 - 2026.09",
+    period: "2026.07 - 2026.10",
     anchor_date: "2026-07-03",
-    end_date: "2026-09-24",
-    trading_days: 60,
+    end_date: "2026-10-09",
+    trading_days: 65,
     contestants_count: 6,
     animals_count: 28,
     benchmarks: [
       "CSI 800",
-      "Taotie 800 (1.6M)",
-      "Ghost Taotie 800 (100M)",
-      "1,000 Monkeys"
+      "Taotie 800",
+      "Ghost Taotie 800",
+      "11 × 1,000 Matched Monkeys"
     ],
     description: "CSI 800 broad-cap universe benchmark: evaluating the 6 Alpha candidate models and 28 execution containers against CSI 800 (SH000906) benchmark.",
     dispatches_banner: {
       tag: "🔬 CSI 800 Tech Preview",
-      title: "CSI 800 Broad-Cap Calibration Active: Broad-market coverage and execution dynamics.",
-      link: "#dispatches",
+      title: "CSI 800 M3: Rabbit Crown, Eagle Month. October valuation appendix included.",
+      link: "#dispatches?episode=csi800_m3",
       link_text: "Read CSI 800 Dispatches &rarr;"
     },
     methodology: {
       framework_name: "CSI 800 Universe (~800 Stocks) Empirical Evaluation",
       anchor_spec: "Parallel Calibration Anchor (2026-07-03 Initiation)",
-      capital_spec: "CNY 500,000 baseline capital with 100-share trading lots",
-      benchmarks_summary: "Market Index (CSI 800) + Taotie + Ghost Taotie (100M) + 1,000 Matched Monkeys",
-      execution_flow: "Weekly Rebalance, Monday Open Execution, Daily Marked-to-Market"
+      capital_spec: "Standardized simulation budget with 100-share trading lots over the CSI 800 universe",
+      benchmarks_summary: "CSI 800 Index + Taotie + Ghost Taotie + 11 matching groups of 1,000 monkeys",
+      execution_flow: "Monday Open Rebalance; Holiday Mondays Skip Trading; Daily Valuation"
     }
   },
   {
@@ -99,26 +99,26 @@ window.ARENA_SEASONS_INDEX = [
     short_title: "CSI 1000 (Tech Preview)",
     status: "PREVIEW",
     badge_type: "preview",
-    period: "2026.07 - 2026.09",
+    period: "2026.07 - 2026.10",
     anchor_date: "2026-07-03",
-    end_date: "2026-09-24",
-    trading_days: 60,
+    end_date: "2026-10-09",
+    trading_days: 65,
     contestants_count: 6,
     animals_count: 28,
-    benchmarks: ["CSI 1000", "Taotie 1000 (2M)", "Ghost Taotie 1000 (100M)", "1000 Monkeys"],
+    benchmarks: ["CSI 1000", "Taotie 1000", "Ghost Taotie 1000", "11 × 1,000 Matched Monkeys"],
     description: "CSI 1000 small-cap universe testbed (SH000852 benchmark) evaluating the 6 candidate models across 28 execution containers.",
     dispatches_banner: {
       tag: "🔬 CSI 1000 Tech Preview",
-      title: "CSI 1000 Small-Cap Calibration Active: Comparing Alpha Breadth vs. Liquidity Constraints.",
-      link: "#dispatches",
+      title: "CSI 1000 M3: Eagle Rally, Sloth Lead. October valuation appendix included.",
+      link: "#dispatches?episode=csi1000_m3",
       link_text: "Read CSI 1000 Chronicles &rarr;"
     },
     methodology: {
       framework_name: "Small-Cap Breadth Empirical Evaluation & Liquidity Frictions",
       anchor_spec: "Parallel Calibration Anchor (2026-07-03 Initiation)",
-      capital_spec: "CNY 500,000 baseline cash with 100-share trading lots over 1,000 constituent stocks",
-      benchmarks_summary: "CSI 1000 Tripartite System: CSI 1000 Index (SH000852 Beta) + Taotie 1000 + Ghost Taotie 1000 (100M) + 1,000 Matched Monkeys",
-      execution_flow: "Weekly Rebalance, Monday Open Execution, Daily Marked-to-Market"
+      capital_spec: "Standardized simulation budget with 100-share trading lots over the CSI 1000 universe",
+      benchmarks_summary: "CSI 1000 Index + Taotie 1000 + Ghost Taotie 1000 + 11 matching groups of 1,000 monkeys",
+      execution_flow: "Monday Open Rebalance; Holiday Mondays Skip Trading; Daily Valuation"
     }
   }
 ];

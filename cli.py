@@ -239,9 +239,12 @@ def cmd_step(args):
     else:
         target_cycle = runner.cycles[next_idx]
         print(f"    🎯 本次推进目标周期: Cycle {next_idx}")
-        print(f"       决策日: {target_cycle.decision_date} (周五收盘)")
-        print(f"       执行日: {target_cycle.trade_date} (周一开盘)")
-        print(f"       结算日: {target_cycle.settle_date} (周五收盘)")
+        print(f"       决策截面: {target_cycle.decision_date} (收盘)")
+        if target_cycle.has_rebalance:
+            print(f"       执行日: {target_cycle.trade_date} (周一开盘)")
+        else:
+            print("       周一休市：本段仅盯市，不补调仓")
+        print(f"       结算日: {target_cycle.settle_date} (收盘)")
         print("=" * 70)
 
         # 仅执行目标这 1 个周期
@@ -443,6 +446,12 @@ def cmd_infer(args):
     from arena.inference.batch_infer import run_batch_inference
     out_file = run_batch_inference(market=universe, force=force)
     print(f"[✔] 推理完成，预测库已就绪: {out_file}")
+
+
+def cmd_infer_update(args):
+    """通过原生推理引擎补齐缺失日期，原子保留既有历史预测。"""
+    from arena.inference.incremental import extend_predictions
+    extend_predictions(market=args.universe, end_date=args.end_date)
 
 
 def cmd_pipeline(args):
@@ -770,6 +779,11 @@ def main():
     p_inf.add_argument("--universe", type=str, default="csi500", help="指定股票池代码 (默认 csi500)")
     p_inf.add_argument("--force", action="store_true", help="强制重新推理")
 
+    # infer-update (历史不可变的预测库增量扩充)
+    p_inc = subparsers.add_parser("infer-update", help="仅追加缺失预测日期并保留历史缓存")
+    p_inc.add_argument("--universe", type=str, required=True, help="目标股票池")
+    p_inc.add_argument("--end-date", type=str, required=True, help="目标截止交易日")
+
     # export-web
     p_exp = subparsers.add_parser("export-web", help="导出通用前端 Web Payload (web/js/data/<season_id>.js)")
     p_exp.add_argument("--season", type=str, default="season_01", help="指定赛季 ID")
@@ -810,6 +824,8 @@ def main():
         cmd_audit(args)
     elif args.subcommand == "infer":
         cmd_infer(args)
+    elif args.subcommand == "infer-update":
+        cmd_infer_update(args)
     elif args.subcommand == "run":
         cmd_run(args)
     elif args.subcommand == "step":

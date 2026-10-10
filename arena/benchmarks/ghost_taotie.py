@@ -55,10 +55,13 @@ class GhostTaotieBenchmark(Benchmark):
         tradability_filter_fn: Optional[Callable[[str, str], bool]] = None,
         **kwargs
     ) -> None:
-        if universe is None:
-            raise ValueError("幽灵饕餮推进必须提供当前周期的 universe 列表")
         if price_lookup_fn is None:
             raise ValueError("幽灵饕餮推进必须提供 price_lookup_fn")
+        if not cycle.has_rebalance:
+            self.engine.execute_weekly_cycle(cycle, None, price_lookup_fn)
+            return
+        if universe is None:
+            raise ValueError("幽灵饕餮推进必须提供当前周期的 universe 列表")
 
         is_first = (cycle.cycle_idx == 0)
         mock_score = pd.Series(1.0, index=universe)

@@ -11,7 +11,7 @@ description: "CSI 800 broad-cap universe benchmark: evaluating the 6 Alpha candi
 calendar:
   anchor_date: "2026-07-03"        # Retrospective calibration anchor (Friday close)
   first_trade_date: "2026-07-06"   # Monday market open entry
-  end_date: "2026-09-24"           # Tournament evaluation horizon
+  end_date: "2026-10-09"           # Tournament evaluation horizon
   cycle_freq: "weekly"
 
 # Account and Match Execution Parameters
@@ -37,7 +37,7 @@ universe:
   testbed_desc: "800-stock broad-cap testbed"
 
 banner:
-  proof_text: "🔬 <strong style=\"color: var(--text-secondary);\">CSI 800 Testbed Proof:</strong> 800 broad-cap equities with 11,000 empirical random monkeys verified over 2026-07-03 ~ 2026-09-24. Unfalsifiable empirical null resolution."
+  proof_text: "🔬 <strong style=\"color: var(--text-secondary);\">CSI 800 Testbed Proof:</strong> 800 broad-cap equities with 11,000 empirical random monkeys verified over 2026-07-03 ~ 2026-10-09. Unfalsifiable empirical null resolution."
 
 # Enabled Benchmarks
 benchmarks:
@@ -57,25 +57,26 @@ benchmarks:
     type: "STATISTICAL"
     colony_size_per_spec: 1000
 
-# Dispatches & Narrative Chronicles (Retrospective Baseline M1-M2)
+# Current Standings & Monthly Chronicles
 dispatches:
   executive:
-    tag: "🏆 CSI 800 Baseline Standing"
-    badge: "M1–M2 Complete"
-    title: "CSI 800 Retrospective Baseline: Broad-Market Cross-Section & Allocation Dynamics"
-    window_label: "2026-07-03 ~ 2026-09-24 (51 Trading Days, Cycles 1–9)"
-    nature_label: "Retrospective backtest baseline evaluating alpha robustness across 800 broad-cap equities."
-    leader_summary: "CONTESTANT_B_rabbit-2 finished the baseline at NAV 1.1284 (+12.84%), outperforming the CSI 800 benchmark by +20.74pp and Taotie 800 by +19.77pp."
+    tag: "🏆 CSI 800 Current Standings"
+    badge: "Through October 9"
+    title: "CSI 800: Independent M3 Review & October Valuation"
+    window_label: "2026-07-03 ~ 2026-10-09 · 65 NAV Observations (Including Anchor)"
+    nature_label: "Continued tracking of anonymous contestants and existing execution rules across the CSI 800 universe."
+    leader_summary: "CONTESTANT_B_rabbit-2 retains the lead at NAV 1.1172 (+11.72% cumulative), after +0.81% across October 8–9 with no new trades. Maximum drawdown remains 9.79%."
   climate:
     tag: "🌪️ Broad-Cap Market Climate"
     status_badge: "Active"
-    title: "Broad-Market Factor Dispersion & Liquidity Calibration"
-    summary: "Evaluating alpha transferability and portfolio capacity across 800 liquid Chinese equities."
+    title: "The Rabbit Holds the Cumulative Crown"
+    summary: "CSI 800 returned -5.56% across the September reporting window and -1.35% across October 8–9. The latest cumulative index return is -12.62%."
     bullets:
-      - "<strong>CSI 800 Benchmark Trajectory</strong>: The CSI 800 index (SH000906) declined -7.90% over the 46 trading days."
-      - "<strong>Executable Taotie 800 Stability</strong>: Physical Taotie 800 (1.6M capital, 634 active holdings) finished at -6.93%, outperforming the market index by +0.97pp under full greedy allocation."
-      - "<strong>Broad-Market Momentum</strong>: Agile turnover (Rabbit-2) captured +12.84% return, confirming active factor signal validity."
-    decrypt_label: "Monthly Cadence (M1–M2 Released; M3+ Monthly)"
+      - "Executable Taotie gained +0.14% across October 8–9 and stands at +0.18% cumulatively; Ghost Taotie stands at -8.43%."
+      - "CONTESTANT_B_rabbit-2 remains first at NAV 1.1172; the cumulative leader and the monthly winner are different comparisons."
+      - "September's path winner was CONTESTANT_E_eagle-5-1 (+1.86%); this period result does not establish universal handler superiority."
+      - "October 8–9 has no new trades. Next scheduled rebalance: October 12, using October 9 close."
+    decrypt_label: "Independent CSI 800 M3 & October Appendix"
   episodes:
     - id: "csi800_m1_m2"
       tab_label: "📜 M1–M2: Broad-Cap Supremacy"
@@ -85,3 +86,11 @@ dispatches:
       read_time: "7 min read"
       summary: "Combined Month 1 & Month 2 retrospective baseline across 800 equities. Subsequent dispatches update monthly (M3, M4, ...)."
       file: "chronicles/en/season_csi800_m1_m2.md"
+    - id: "csi800_m3"
+      tab_label: "📜 M3: Rabbit Crown"
+      badge: "M3 + Oct Appendix"
+      title: "CSI 800 Month 03: Rabbit Crown, Eagle Month"
+      date: "2026-09-30"
+      read_time: "6 min read"
+      summary: "CSI 800 only: E's concentrated Eagle won September (+1.86%); B's rabbit-2 kept the cumulative crown (+10.83%). Separate October holdings-only appendix."
+      file: "chronicles/en/season_csi800_m3.md"

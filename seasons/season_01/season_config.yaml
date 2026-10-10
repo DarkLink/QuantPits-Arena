@@ -5,13 +5,13 @@
 season_id: season_01
 title: "QuantPits Graveyard Arena Season 1"
 status: ACTIVE
-description: "Season 1 baseline tournament: 6 contestant models x 29 zoo parameter arrays x parameterized monkey control group"
+description: "Season 1 tournament: 6 anonymous contestants x 28 execution variants x matched monkey control groups"
 
 # Calendar and Horizon
 calendar:
   anchor_date: "2026-07-03"        # Friday close initial decision cutoff (T=0)
   first_trade_date: "2026-07-06"   # Monday market open entry
-  end_date: "2026-09-24"           # Data cutoff Friday settlement
+  end_date: "2026-10-09"           # Data cutoff Friday settlement
   cycle_freq: "weekly"
 
 # Account and Match Execution Parameters
@@ -37,7 +37,7 @@ universe:
   testbed_desc: "246-stock high-liquidity testbed"
 
 banner:
-  proof_text: "🔬 <strong style=\"color: var(--text-secondary);\">Season 1 Baseline Proof:</strong> 246 high-liquidity equities with 11,000 empirical random monkeys verified over 2026-07-03 ~ 2026-09-24. Unfalsifiable empirical null resolution."
+  proof_text: "🔬 <strong style=\"color: var(--text-secondary);\">Season 1 Baseline Proof:</strong> 246 high-liquidity equities with 11,000 empirical random monkeys verified over 2026-07-03 ~ 2026-10-09. Unfalsifiable empirical null resolution."
 
 # Enabled Benchmarks (First-Class Citizens)
 benchmarks:
@@ -58,21 +58,21 @@ dispatches:
   executive:
     tag: "🏆 Official Released Standings"
     badge: "Active"
-    title: "Tournament Standings & Week 12 Prospective Update"
-    window_label: "2026-07-03 ~ 2026-09-24 · 60 Trading Days"
+    title: "Tournament Standings & October Valuation Update"
+    window_label: "2026-07-03 ~ 2026-10-09 · 65 NAV Observations (Including Anchor)"
     nature_label: "Empirical tournament log tracking quantitative alpha models through execution frictions, market regime shifts, and monkey null courts."
-    leader_summary: "CONTESTANT_B_eagle-5-1 reasserts undisputed dominance at NAV 1.1952 (+19.52%), expanding its championship lead to 5.72pp over CONTESTANT_D_rabbit-1, as CONTESTANT_C launches a spectacular 4-seat weekly counteroffensive."
+    leader_summary: "CONTESTANT_B_eagle-5-1 leads at NAV 1.2240 (+22.40%), ahead of CONTESTANT_D_rabbit-1 by 7.14pp. CONTESTANT_E_meerkat-50 wins October 8–9 at +2.02%, with no new trades."
   climate:
     tag: "🌪️ Market Climate Report"
     status_badge: "Released"
-    title: "Pre-Holiday Liquidity Drain & The Apex Resurgence"
-    summary: "CSI 300 dropped -1.51% (-8.32% cumulative) amid pre-holiday liquidity drain. CONTESTANT_B_eagle-5-1 gained +1.23% to re-expand its championship cushion, while CONTESTANT_C claimed 4 of the top 5 weekly gainers."
+    title: "The Same Holdings, a Wider Crown"
+    summary: "October 8–9: no new trades, 112 of 168 paths positive. CSI 300 returned -0.93% (-10.84% cumulative), while executable Taotie gained +0.46%. Next scheduled rebalance: October 12."
     bullets:
-      - "Taotie universe benchmark proved defensive, sliding just -0.50% (+0.60% cumulative, outperforming CSI 300 index by +8.92pp)."
-      - "Apex leader CONTESTANT_B_eagle-5-1 mounted an electric counteroffensive (+1.23%, NAV 1.1952), widening its lead over Rank #2 from 4.51pp to 5.72pp."
-      - "Underdog CONTESTANT_C executed a stunning sweep, capturing 4 of the top 5 weekly gainers led by eagle-5-1 (+1.57%)."
-      - "Last week's weekly winner CONTESTANT_D_eagle-5-1 suffered sharp mean reversion (-3.17%, NAV 1.0828), falling from cumulative #5 to #14."
-    decrypt_label: "Prospective Cycle 4 Released"
+      - "Executable Taotie reached NAV 1.0136 (+1.36% cumulative); Ghost Taotie reached 0.9665 (-3.35%)."
+      - "CONTESTANT_B_eagle-5-1 gained +1.55%, widening the cumulative gap from 6.12pp to 7.14pp. Raw cumulative matched p = 0.0020."
+      - "CONTESTANT_E_meerkat-50 gained +2.02% to NAV 0.9639, winning the two-day valuation segment."
+      - "The same concentrated specification gave CONTESTANT_F +1.72%, CONTESTANT_A -1.05% and CONTESTANT_E -1.90%; no universal handler advantage is established."
+    decrypt_label: "Episodes 13–14 Available · Through October 9"
   episodes:
     - id: "ep08"
       tab_label: "📜 Ep 01–08: The 41-Day King"
@@ -114,6 +114,22 @@ dispatches:
       read_time: "7 min read"
       summary: "Fourth prospective tracking cycle. In a 4-day pre-holiday squeeze, CONTESTANT_B_eagle-5-1 surges +1.23% (NAV 1.1952) to extend lead to 5.72pp, while CONTESTANT_C captures 4 of the top 5 weekly gainers."
       file: "chronicles/en/episode_12_the_mid_autumn_trial_and_apex_resurgence.md"
+    - id: "ep13"
+      tab_label: "🦅 Ep 13: Three-Day Trial"
+      badge: "Released"
+      title: "Episode 13: The Three-Day Trial & The Crown Above 1.20"
+      date: "2026-09-30"
+      read_time: "5 min read"
+      summary: "September 28 rebalance, then three valuation sessions: CONTESTANT_C_eagle-5-1 wins at +2.24%; B reaches NAV 1.2054 and a 6.12pp cumulative lead. Holdings continue into Episode 14."
+      file: "chronicles/en/episode_13_the_three_day_trial.md"
+    - id: "ep14"
+      tab_label: "👑 Ep 14: Two-Day Return"
+      badge: "Released"
+      title: "Episode 14: The Two-Day Return — The Same Holdings, a Wider Crown"
+      date: "2026-10-09"
+      read_time: "5 min read"
+      summary: "October 8–9: no new trades. E's meerkat-50 wins at +2.02%; B's eagle-5-1 leads at NAV 1.2240 (+22.40%), with a 7.14pp margin. Next rebalance October 12."
+      file: "chronicles/en/episode_14_the_two_day_return.md"
 
 
 

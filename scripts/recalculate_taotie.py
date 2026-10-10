@@ -69,6 +69,9 @@ def recalculate_season_taotie(season_id: str):
     )
     
     for c_idx, cycle in enumerate(cycles):
+        if not cycle.has_rebalance:
+            taotie.step(cycle, price_lookup_fn=price_lookup)
+            continue
         d_date = cycle.decision_date
         if d_date in date_dict:
             universe = list(date_dict[d_date].index)

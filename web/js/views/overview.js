@@ -25,6 +25,8 @@ window.OverviewView = {
     const seasonMeta = window.arenaAdapter.getCurrentSeasonMeta();
     const dispatchesData = window.arenaAdapter ? window.arenaAdapter.getDispatchesData() : null;
     const banner = { ...(seasonMeta.dispatches_banner || {}) };
+    const episodes = dispatchesData?.episodes || [];
+    const latestEp = episodes.slice().reverse().find(e => e.badge === "Released") || episodes[episodes.length - 1];
 
     if (!banner.tag) banner.tag = "🎙️ Tournament Dispatches";
     if (!banner.title) banner.title = "Tournament Dispatches & Market Climate active.";
@@ -32,26 +34,27 @@ window.OverviewView = {
     if (!banner.link_text) banner.link_text = "Read Dispatches &rarr;";
 
     // Automatically synchronize banner with latest dispatch episode if available
-    if (dispatchesData?.episodes && dispatchesData.episodes.length > 0) {
-      const episodes = dispatchesData.episodes;
-      const latestEp = episodes.slice().reverse().find(e => e.badge === "Released") || episodes[episodes.length - 1];
-      if (latestEp) {
-        let titleText = `${latestEp.title} Released.`;
-        const match = latestEp.title.match(/^(Episode\s+\d+|Ep\s+\d+):\s*(.+)$/i);
-        if (match) {
-          titleText = `${match[1]} Released ("${match[2]}"). Evaluation active.`;
-        }
-        banner.title = titleText;
-        banner.link = `#dispatches?episode=${latestEp.id}`;
+    if (latestEp) {
+      let titleText = `${latestEp.title} Released.`;
+      const match = latestEp.title.match(/^(Episode\s+\d+|Ep\s+\d+):\s*(.+)$/i);
+      if (match) {
+        titleText = `${match[1]} Released ("${match[2]}"). Evaluation active.`;
       }
+      banner.title = titleText;
+      banner.link = `#dispatches?episode=${latestEp.id}`;
     }
 
     el.innerHTML = `
       <!-- Tournament Dispatches & Climate Alert Banner -->
       <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-subtle); border-left: 4px solid var(--brand-cyan); border-radius: 6px; padding: 10px 16px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-        <div style="font-size: 13px; color: var(--text-secondary); display: flex; align-items: center; gap: 8px;">
-          <span>${banner.tag.split(" ")[0] || "🎙️"}</span>
-          <span>${banner.title}</span>
+        <div style="font-size: 13px; color: var(--text-secondary); flex: 1 1 320px; min-width: 0;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span>${banner.tag.split(" ")[0] || "🎙️"}</span>
+            <span>${banner.title}</span>
+          </div>
+          ${latestEp?.summary ? `<p style="margin: 6px 0; line-height: 1.6;">${latestEp.summary}</p>` : ''}
+          <div class="kpi-subtext">Data through ${seasonMeta.end_date || ''} · ${window.arenaAdapter.getTradingDays()} market sessions · ${window.arenaAdapter.getNAVObservations()} NAV observations including anchor</div>
+          <div class="kpi-subtext" style="margin-top: 4px;">${seasonMeta.methodology?.execution_flow || 'Monday Open Rebalance; Holiday Mondays Skip Trading; Daily Valuation'}</div>
         </div>
         <a href="${banner.link}" class="btn btn-xs btn-primary" style="font-size: 11px; padding: 4px 10px; text-decoration: none;">
           ${banner.link_text}
@@ -73,7 +76,7 @@ window.OverviewView = {
         <div class="kpi-card positive">
           <div class="kpi-label arena-glossary-term" data-tooltip-term="total_return_pct">Peak OOS Return</div>
           <div class="kpi-value positive">${kpis.topReturn >= 0 ? '+' : ''}${kpis.topReturn.toFixed(2)}%</div>
-          <div class="kpi-subtext">Top performer across ${window.arenaAdapter.getTradingDays()} trading days</div>
+          <div class="kpi-subtext">Top performer across ${window.arenaAdapter.getTradingDays()} market sessions</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-label arena-glossary-term" data-tooltip-term="total_return_pct">Median OOS Return</div>
@@ -101,7 +104,7 @@ window.OverviewView = {
           ${window.arenaAdapter.hasGhostTaotie() ? `
           <div style="display: flex; align-items: center; gap: 8px;">
             <span class="bm-line-badge" style="border-top-color: #00f0ff; width: 14px;"></span>
-            <span class="arena-glossary-term" data-tooltip-term="ghost_taotie" style="font-size: 12px;">Ghost Taotie (100M):</span>
+            <span class="arena-glossary-term" data-tooltip-term="ghost_taotie" style="font-size: 12px;">Ghost Taotie:</span>
             <b style="font-size: 13px; font-family: monospace; color: #00f0ff;">${window.arenaAdapter.getGhostTaotieReturn() >= 0 ? '+' : ''}${window.arenaAdapter.getGhostTaotieReturn().toFixed(2)}%</b>
           </div>
           ` : ''}

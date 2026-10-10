@@ -27,12 +27,18 @@
 
 当行情数据更新至最新一周收盘（例如从 `2026-09-18` 推进到 `2026-09-24`）时，**标准操作只需执行以下极简流程（核心推进命令 2~3 分钟内完成）**：
 
-### 步骤 1：激活环境与模型特征推理 (Inference)
-若本周行情数据已更新入库，先运行特征提取与权威预测库扩充：
+### 步骤 1：激活环境与增量推理 (Inference)
+若本周行情数据已更新入库，使用原生增量命令补齐四个股票池的预测日期：
 ```bash
 conda activate qlib_cupy
-python scripts/infer_all_contestants.py
+for universe in csirun300 csi500 csi800 csi1000; do
+    python cli.py infer-update --universe "$universe" --end-date <YYYY-MM-DD> || exit 1
+done
 ```
+
+`infer-update` 复用原生批量推理引擎，仅推理缺失日期；检查选手资产完整性与预测完整性后原子追加，保留全部既有日期截面。重复执行会直接返回。`csirun300` 对应主赛季权威缓存。
+
+旧的 `scripts/infer_all_contestants.py` 使用固定历史截止日，不适用于周度扩充；`infer` 用于初次生成，已有缓存时会跳过，`--force` 会重新生成整个缓存。
 
 ### 步骤 2：一键全自动原子级滚动推进 (The Grand Roll-Forward)
 一条命令原子完成：日期推进 -> 4大赛季增量结算与4.4万只猴群评估 -> Web数据Payload导出 -> Chronicles文档同步 -> 隐私脱敏审计：
@@ -45,6 +51,21 @@ python cli.py rollforward --end-date <YYYY-MM-DD>
 > - 全流程耗时仅 **2~3 分钟**，严禁拆分成繁琐的外挂脚本或送入后台隔夜空转。
 > - 若仅需极速调试周频撮合或跳过猴群评估，可追加 `--no-monkeys` 参数。
 
+上述耗时为参考值，不包含预测补齐；四池完整猴群重估可能更久。必须使用明确超时并监控各赛季进度，以实际净值末日、快照周期与审计结果判断完成，不能根据配置日期或预计用时判断成功。
+
+**跨多个周期补更时**：`rollforward` 每次对每个赛季仅追加一个周期。必须按交易日历依次指定各周期结算日，不能直接跳到最后一天并把配置日期当作结算完成。节假日以当周最后交易日为结算日，例如本次补更：
+
+```bash
+python cli.py rollforward --end-date 2026-09-30
+python cli.py rollforward --end-date 2026-10-09
+```
+
+**交易日与报道窗口分别处理**：策略只在周一开盘调仓，周一休市则该周不补调仓。2026-09-28 调仓后，9 月 30 日为月末结算；10 月 8–9 日只延续原持仓盯市，下一计划调仓日为 10 月 12 日，决策截面为 10 月 9 日收盘。两次结算、两篇战报不代表两次交易。无调仓周仍保留决策截面与周期编号，供延迟策略下一周使用。
+
+最后核对四个赛季 NAV 曲线末日均等于目标日期，历史前缀保持一致；无调仓周还须核对交易笔数、换手及费用均未新增，持仓和现金与上次结算相同。
+
+若中间结算日的猴群重估触及监控超时，先核验四个赛季的快照周期和 NAV 末日。中间结算日需要月报时，必须在继续之前以同一日期的原生 `rollforward --seasons <id>` 补齐该池猴群重估，并验证显著性表的实际收益与同期净值一致，不能拿旧统计配新曲线。最终日期必须完成全部猴群重估、统一 Web 导出与审计。不要通过重跑 `pipeline` 恢复。
+
 ### 步骤 3：编写周度战报 (Battle Report)
 增量推进完成后，依据最新生成的净值曲线数据撰写当周战报：
 1. **中文战报**：撰写至 `chronicles/zh/episode_<N>_<YYYYMMDD>_<slug>.md`。
@@ -53,10 +74,11 @@ python cli.py rollforward --end-date <YYYY-MM-DD>
    - 恪守事实层（严谨）与归因层（保守克制），严禁事后诸葛亮式杜撰。
 2. **英文战报**：撰写至 `chronicles/en/episode_<N>_<slug>.md`，并拷贝同步至 `web/chronicles/en/`。
 3. **赛季挂载**：在 `seasons/season_01/season_config.yaml` 的 `dispatches.episodes` 下挂载新 Episode 条目。
+4. **扩展池月报**：CSI500、CSI800、CSI1000 分别撰写独立 M3 报告，分别挂载到所属赛季。九月正文固定以 8 月 28 日收盘为收益锚点、9 月 30 日为截止日；十月数据另列附录。单月收益、累计排名、累计猴群检验不得混用。
 
 ### 步骤 4：回归测试与合规审计
 ```bash
-PYTHONPATH=. pytest tests/test_rollforward_automation.py
+PYTHONPATH=. pytest tests/test_rollforward_automation.py tests/test_holiday_rebalance.py tests/test_incremental_inference.py
 python scripts/audit_privacy.py
 ```
 
@@ -94,8 +116,8 @@ python cli.py step --season season_csi1000
 1. **快照加载**：从 `runs/<season_id>_run/checkpoints/latest_state.pkl` 反序列化恢复上周已结算的 Portfolio 引擎及全量动物持仓；
 2. **周期目标识别**：比对当前已完成周期 `last_completed_cycle_idx` 与最新周期上限；
 3. **两阶段撮合执行**：
-   - **决策阶段 (Decision)**：基于最新周五截面特征生成调仓目标订单；
-   - **执行阶段 (Execution & Valuation)**：按周一开盘价成交，并记录本周 5 个交易日的 Daily MTM 估值；
+   - **决策阶段 (Decision)**：保留上次结算日截面；仅在周一有交易时生成调仓目标订单；
+   - **执行阶段 (Execution & Valuation)**：按周一开盘价成交；周一休市不顺延成交，仅盯市。记录截止日以内所有交易日的 Daily MTM 估值，节假日短周同样适用；
 4. **状态持久化与导出**：将最新状态更新为 `latest_state.pkl`，并增量写出 `daily_nav_curves.csv` 和指标汇总。
 
 ---
@@ -120,7 +142,7 @@ python3 scripts/audit_privacy.py
 
 ### 🔴 禁忌 1：严禁编写临时数据拼装脚本
 - 绝对不要在 `scripts/` 或根目录下编写任何类似 `update_predictions_*.py`、`patch_*.py` 等一次性脚本；
-- 如果数据层确实缺乏最新截面，唯一的正规扩充方式是使用标准命令 `python cli.py infer --universe <code] --oos-end <date>`，由原生引擎统一处理。
+- 如果数据层缺乏最新截面，使用标准命令 `python cli.py infer-update --universe <code> --end-date <date>`，由原生引擎统一处理。
 
 ### 🔴 禁忌 2：严禁临时篡改 `cli.py` 既有稳定命令逻辑
 - `cli.py` 的 `step`、`run`、`export-web`、`bump-date`、`rollforward` 等命令已全面支持配置化赛季解耦与参数传递；
