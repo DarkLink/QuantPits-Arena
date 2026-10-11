@@ -67,7 +67,7 @@ The full CSI 300 definition has 300 constituents, but one has no supplied local 
 | Concentration and breadth | Eagle suite | TopK/DropN: 5/1, 11/2, 44/6, 66/9, 88/12 |
 | Broad selection | Whale Shark | TopK=123, DropN=17 |
 
-The independent **Taotie** and **Ghost Taotie** portfolios sit outside the 28 contestant handlers. Taotie is the executable universe reference; Ghost is a separate capital-granularity scenario retaining costs and round lots. Each testbed also has its corresponding external market index and matched monkey distributions. **The Rock** is a separate simplicity reference, not another contestant path.
+The independent **Taotie** and **Ghost Taotie** portfolios sit outside the 28 contestant handlers. Taotie is the executable universe reference; Ghost is a separate capital-granularity scenario retaining costs and round lots. Each testbed also has its corresponding external market index and matched monkey distributions. Monkeys keep their cash and positions across weeks, draw random rankings only at scheduled weekly rebalances, and save actual daily NAV. Daily P05, median and P95 cover every valuation date, including days without a rebalance. **The Rock** is a separate simplicity reference, not another contestant path.
 
 ## Maintainer Operations and Holiday Alignment
 
@@ -93,7 +93,7 @@ done
 python cli.py rollforward --end-date "$TARGET_DATE"
 ```
 
-`rollforward` advances **one settlement segment per selected season per invocation**. When catching up across several segments, use their authorized settlement cutoffs in order. Verify actual NAV end dates and checkpoint progress rather than relying on the configured horizon. Preserve historical NAV and prediction prefixes; routine maintenance uses the existing checkpoints.
+`rollforward` advances all missing settlement segments through the authorized cutoff in staging. A same-week extension appends new valuation dates without repeating trades. Verify actual NAV end dates and checkpoint progress rather than relying on the configured horizon. Preserve historical NAV and prediction prefixes; routine maintenance uses the existing checkpoints.
 
 Full five-pool monkey evaluation can take longer than the earlier two-to-three-minute estimate. Use an explicit timeout and monitor progress. The legacy `scripts/infer_all_contestants.py` has a fixed historical cutoff; `infer-update` is the current incremental entry point.
 

@@ -13,7 +13,7 @@ extern "C" void evaluate(
  const double* opening, const double* marks, const uint8_t* buy_ok, const uint8_t* sell_ok,
  double initial, int lot, int fractional, double buy_fee, double sell_fee, double minimum,
  double* cash_state, int* held_ids, double* quantities,
- double* returns, double* weekly_nav, int threads) {
+ double* returns, double* weekly_nav, double* daily_nav, int threads) {
  omp_set_num_threads(threads);
  #pragma omp parallel for schedule(static)
  for(int m=0;m<count;++m){
@@ -90,6 +90,7 @@ extern "C" void evaluate(
     for(int d=starts[c];d<ends[c];++d){
      double value=cash; for(int i=0;i<U;++i) if(held[i]>0) value+=held[i]*marks[d*U+i];
      nav=value/initial;
+     daily_nav[(m*S+s)*D+d]=nav;
     }
     weekly_nav[(m*S+s)*C+c]=nav;
    }

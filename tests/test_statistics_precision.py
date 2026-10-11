@@ -42,7 +42,16 @@ def test_csv_web_adapter_preserves_small_p_and_na(tmp_path):
     assert pd.isna(frame.loc[1,'empirical_p_value'])
     cfg=SimpleNamespace(season_id='TEST',raw_dict={},title='TEST',description='TEST',status='DRAFT',
         anchor_date='2026-07-03',end_date='2026-07-06')
+    daily={'P_22_3':{
+        '2026-07-03':dict(p05=1.,median=1.,p95=1.),
+        '2026-07-06':dict(p05=.9999876543210988,median=1.,p95=1.0123456789012345)}}
+    (exporter.public_dir/'monkey_timeline.json').write_text(json.dumps(daily))
+    (exporter.public_dir/'monkey_settlement_timeline.json').write_text(json.dumps({'P_22_3':{'2026-07-06':daily['P_22_3']['2026-07-06']}}))
     file=exporter.export_web_payload(cfg,web_output_path=tmp_path/'payload.js',publish_auxiliary=False)
+    payload=json.loads(file.read_text().split('window.ARENA_SEASONS_DATA["TEST"] = ',1)[1].rstrip().rstrip(';'))
+    null=next(r for r in payload['monkey_null_distributions'] if r['strategy_spec']=='P_22_3')
+    assert null['daily_quantiles']==daily['P_22_3']
+    assert list(null['settlement_quantiles'])==['2026-07-06']
     program="global.window={};\n"+file.read_text()+"\nwindow.ARENA_DATA=window.ARENA_SEASONS_DATA.TEST;\n"+(REPO_ROOT/'web/js/adapter.js').read_text()+"\nconsole.log(JSON.stringify(window.arenaAdapter.paths.map(p=>[p.empirical_p_value,p.monkey_count,p.is_statistically_significant])));"
     output=subprocess.run(['node','-e',program],capture_output=True,text=True,check=True)
     data=json.loads(output.stdout)

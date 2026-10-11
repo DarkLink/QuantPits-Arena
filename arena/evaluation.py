@@ -166,7 +166,7 @@ def replay(root,sid,end_date):
     pd.DataFrame(changes).to_csv(exporter.public_dir/'legacy_comparison.csv',index=False)
     # Real-price equivalence precedes pilot; include distant global IDs as well as zero.
     inputs,_=pack_inputs(runner,runner.cycles,market_price:=runner.market_provider.get_real_price,runner.market_provider.is_tradable)
-    errors=[]
+    errors=[];daily_errors=[]
     pools=[list(next(iter(runner.signal_history.values()))[c.cycle_idx].index) for c in runner.cycles]
     for first in (0,19997):
         compact=evaluate_batch(inputs,runner.execution_policy,runner.initial_cash,first,3,threads=2)
@@ -180,9 +180,13 @@ def replay(root,sid,end_date):
                         runner.market_provider.is_tradable,market_price) if c.has_rebalance else None
                     engine.execute_weekly_cycle(c,order,market_price,runner.market_provider.is_tradable)
                 errors.append(abs(engine.to_portfolio_path().total_return-compact['returns'][m,j]))
+                reference=np.array([v.nav for v in engine.daily_valuations[1:]])
+                daily_errors.append(float(np.max(np.abs(reference-compact['daily_nav'][m,j]))))
     maximum=float(max(errors))
-    if maximum>1e-12: raise ValueError('Real-price compact/reference discrepancy')
-    save_json(exporter.public_dir/'reference_validation.json',dict(paths=len(errors),max_return_error=maximum,tolerance=1e-12))
+    max_daily=float(max(daily_errors))
+    if maximum>1e-12 or max_daily>1e-12: raise ValueError('Real-price compact/reference discrepancy')
+    save_json(exporter.public_dir/'reference_validation.json',dict(paths=len(errors),max_return_error=maximum,
+        max_daily_nav_error=max_daily,daily_nav_compared=True,tolerance=1e-12))
     print(f'[replay] {sid}: {len(results)} paths; {len(errors)} control comparisons; max error={maximum:.3g}',flush=True)
     return runner,results,exporter
 
@@ -253,8 +257,10 @@ def refresh(args):
                     exporter.export_monkey_reports(distributions,results,runner.registry)
                     manifest=json.loads((exporter.public_dir/'evaluation_manifest.json').read_text())
                     manifest.update(monkeys_per_random_spec=count,random_paths=count*10,
-                        deterministic_references=1,p_resolution=1/(count+1),family_size=840)
+                        deterministic_references=1,p_resolution=1/(count+1),family_size=840,
+                        monkey_nav_frequency='daily')
                     save_json(exporter.public_dir/'evaluation_manifest.json',manifest)
+                del distributions
             if phase=='pilot':
                 save_json(root/'pilot_complete.json',dict(count=count,seasons=sids,complete=True))
                 print('[pilot] all pools completed; proceeding with the predeclared formal budget',flush=True)

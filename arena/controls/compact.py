@@ -18,6 +18,7 @@ class CompactDistribution:
     returns: np.ndarray
     weekly_nav: np.ndarray
     deterministic: bool = False
+    daily_nav: np.ndarray | None = None
 
 
 def _kernel():
@@ -33,7 +34,7 @@ def _kernel():
     library = ctypes.CDLL(str(target))
     fn = library.evaluate
     pointer = np.ctypeslib.ndpointer(flags='C_CONTIGUOUS')
-    fn.argtypes = [ctypes.c_int]*8 + [pointer]*8 + [pointer]*4 + [ctypes.c_double, ctypes.c_int, ctypes.c_int] + [ctypes.c_double]*3 + [pointer]*5 + [ctypes.c_int]
+    fn.argtypes = [ctypes.c_int]*8 + [pointer]*8 + [pointer]*4 + [ctypes.c_double, ctypes.c_int, ctypes.c_int] + [ctypes.c_double]*3 + [pointer]*6 + [ctypes.c_int]
     fn.restype = None
     return fn
 
@@ -87,14 +88,15 @@ def evaluate_batch(inputs, policy, initial, first_id, count, base_seed=2026, thr
     else:
         cash,ids,qty = (state[k].copy() for k in ('cash','ids','qty'))
     returns,nav = np.zeros((count,S)),np.zeros((count,S,C))
+    daily_nav = np.zeros((count,S,len(inputs['marks'])))
     args = [inputs[k] for k in ('cycle_ids','universe','sizes','rebalance','starts','ends')]
     _kernel()(count,first_id,base_seed,U,C,len(inputs['marks']),S,H,
               *args,ks,drops,inputs['opening'],inputs['marks'],inputs['buy_ok'],inputs['sell_ok'],
               float(initial),policy.lot_size,int(policy.allow_fractional_shares),
-              policy.open_cost,policy.close_cost,policy.min_cost,cash,ids,qty,returns,nav,threads)
-    if not np.isfinite(returns).all():
+              policy.open_cost,policy.close_cost,policy.min_cost,cash,ids,qty,returns,nav,daily_nav,threads)
+    if not np.isfinite(daily_nav).all() or not (daily_nav>0).all() or not np.isfinite(returns).all():
         raise ValueError('Controls have an unpriced held position')
-    return dict(cash=cash,ids=ids,qty=qty,returns=returns,weekly_nav=nav)
+    return dict(cash=cash,ids=ids,qty=qty,returns=returns,weekly_nav=nav,daily_nav=daily_nav)
 
 
 def run_compact(runner, directory, count, batch_size=1000, threads=8, timeout=7200):
@@ -105,8 +107,9 @@ def run_compact(runner, directory, count, batch_size=1000, threads=8, timeout=72
     digest=hashlib.sha256((runner.execution_policy.signature+str(runner.initial_cash)+source).encode())
     for key,value in inputs.items(): digest.update(key.encode()+value.tobytes())
     signature=digest.hexdigest()
-    manifest={'version':'compact-v2','signature':signature,'count':count,'batch_size':batch_size,
+    manifest={'version':'compact-v3','signature':signature,'count':count,'batch_size':batch_size,
               'seed':2026,'cutoff':days[-1],'random_specs':10,'deterministic_references':1,
+              'nav_frequency':'daily','anchor_date':runner.anchor_date,'anchor_nav':1.,
               'policy_signature':runner.execution_policy.signature,'code_signature':source}
     manifest['days']=days
     manifest['decision_dates']=[c.decision_date for c in runner.cycles]
@@ -138,7 +141,10 @@ def run_compact(runner, directory, count, batch_size=1000, threads=8, timeout=72
         os.replace(temporary,prior_inputs)
         manifest['complete']=False
         atomic_write(old_path,json.dumps(manifest,indent=2).encode())
-    arrays,navs=[],[];
+    specs=[s for s in CANONICAL_STRATEGY_SPECS.values() if not s.passive_pool]
+    returns=np.empty((count,len(specs)))
+    nav=np.empty((count,len(specs),len(runner.cycles)))
+    daily_nav=np.empty((count,len(specs),len(days)))
     started=time.monotonic()
     for first in range(0,count,batch_size):
         size=min(batch_size,count-first)
@@ -161,8 +167,10 @@ def run_compact(runner, directory, count, batch_size=1000, threads=8, timeout=72
                 with np.load(path) as stored:
                     state={key:stored[key] for key in ('cash','ids','qty')}
                     old_nav=stored['weekly_nav']
+                    old_daily_nav=stored['daily_nav']
                 values=evaluate_batch(subset,runner.execution_policy,runner.initial_cash,first,size,threads=threads,state=state)
                 values['weekly_nav']=np.concatenate((old_nav[:,:,:first_cycle],values['weekly_nav']),axis=2)
+                values['daily_nav']=np.concatenate((old_daily_nav,values['daily_nav']),axis=2)
             else:
                 values=evaluate_batch(inputs,runner.execution_policy,runner.initial_cash,first,size,threads=threads)
             values['cutoff']=np.array(days[-1])
@@ -171,11 +179,11 @@ def run_compact(runner, directory, count, batch_size=1000, threads=8, timeout=72
             with temporary.open('rb') as stream: os.fsync(stream.fileno())
             os.replace(temporary,path)
         with np.load(path) as stored:
-            arrays.append(stored['returns']);navs.append(stored['weekly_nav'])
+            returns[first:first+size]=stored['returns']
+            nav[first:first+size]=stored['weekly_nav']
+            daily_nav[first:first+size]=stored['daily_nav']
         if first % (batch_size*10)==0 or first+size==count:
             print(f'[controls] {runner.season_id} {first+size}/{count} per random spec; elapsed={time.monotonic()-started:.1f}s',flush=True)
-    returns,nav=np.concatenate(arrays),np.concatenate(navs)
-    specs=[s for s in CANONICAL_STRATEGY_SPECS.values() if not s.passive_pool]
     manifest['complete']=True
     prior_inputs=directory/f'input_{signature}.npz'
     temporary=prior_inputs.with_suffix('.tmp.npz')
@@ -184,8 +192,9 @@ def run_compact(runner, directory, count, batch_size=1000, threads=8, timeout=72
     manifest['elapsed_seconds']=time.monotonic()-started
     manifest['batch_hashes']={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(directory.glob('batch_*.npz'))}
     atomic_write(old_path,json.dumps(manifest,indent=2).encode())
-    result={s.spec_id:CompactDistribution(returns[:,j],nav[:,j,:]) for j,s in enumerate(specs)}
+    result={s.spec_id:CompactDistribution(returns[:,j],nav[:,j,:],daily_nav=daily_nav[:,j,:]) for j,s in enumerate(specs)}
     passive=runner.taotie_benchmark.engine
     result['P_ALL_0']=CompactDistribution(np.array([passive.to_portfolio_path().total_return]),
-        np.array([[w.end_nav for w in passive.weekly_settlements]]),True)
+        np.array([[w.end_nav for w in passive.weekly_settlements]]),True,
+        np.array([[v.nav for v in passive.daily_valuations if v.date in days]]))
     return result

@@ -104,8 +104,21 @@ def test_compact_reference_all_specs_and_global_id_prefix():
                 engine.execute_weekly_cycle(c,order,provider.get_real_price,provider.is_tradable)
             assert result['returns'][m,s]==pytest.approx(engine.to_portfolio_path().total_return,abs=1e-12)
             assert result['weekly_nav'][m,s]==pytest.approx([w.end_nav for w in engine.weekly_settlements],abs=1e-12)
-    pieces=[evaluate_batch(inputs,policy,500000.,i,2,threads=1)['returns'] for i in [7,9]]
-    np.testing.assert_array_equal(result['returns'],np.concatenate(pieces))
+            assert result['daily_nav'][m,s]==pytest.approx([v.nav for v in engine.daily_valuations[1:]],abs=1e-12)
+    pieces=[evaluate_batch(inputs,policy,500000.,i,2,threads=1) for i in [7,9]]
+    for key in ('returns','weekly_nav','daily_nav','cash','ids','qty'):
+        np.testing.assert_array_equal(result[key],np.concatenate([piece[key] for piece in pieces]))
+
+
+def test_compact_rejects_invalid_intermediate_daily_mark():
+    names=[f'STOCK_{j:03d}' for j in range(150)]
+    current=cycle(days=['2026-07-06','2026-07-07'])
+    runner=SimpleNamespace(signal_history={'CONTESTANT_A':{0:pd.Series(1.,index=names)}},deal_price_mode='open')
+    def price(name,day,field):
+        return np.nan if day=='2026-07-06' and field=='close' else 10.
+    inputs,_=pack_inputs(runner,[current],price,None)
+    with pytest.raises(ValueError,match='unpriced held position'):
+        evaluate_batch(inputs,ExecutionPolicy(),100000000.,0,2,threads=1)
 
 
 def test_split_value_and_record_payment_survive_sale():
@@ -160,7 +173,7 @@ def test_compact_disk_append_same_week_and_new_week(tmp_path):
     def prices(i,d,f):return 10. if f=='open' else 10+int(d[-2:])*.01
     passive=PortfolioEngine('BENCHMARK','taotie')
     runner=SimpleNamespace(signal_history={'CONTESTANT_A':history},deal_price_mode='open',
-        execution_policy=ExecutionPolicy(),initial_cash=500000.,season_id='TEST',
+        execution_policy=ExecutionPolicy(),initial_cash=500000.,season_id='TEST',anchor_date='2026-07-03',
         registry=SimpleNamespace(list_contestants=lambda:[]),
         _setup_market_provider=lambda *args:(prices,None),cycles=[first],
         taotie_benchmark=SimpleNamespace(engine=passive))
@@ -171,9 +184,11 @@ def test_compact_disk_append_same_week_and_new_week(tmp_path):
     for spec in incremental:
         np.testing.assert_array_equal(incremental[spec].returns,full[spec].returns)
         np.testing.assert_array_equal(incremental[spec].weekly_nav,full[spec].weekly_nav)
+        np.testing.assert_array_equal(incremental[spec].daily_nav,full[spec].daily_nav)
     # Retry is idempotent; an altered historical price invalidates the generation.
     retry=run_compact(runner,tmp_path/'incremental',8,4,threads=1)
     np.testing.assert_array_equal(retry['P_22_3'].returns,full['P_22_3'].returns)
+    np.testing.assert_array_equal(retry['P_22_3'].daily_nav,full['P_22_3'].daily_nav)
     runner._setup_market_provider=lambda *args:(lambda i,d,f:11.,None)
     with pytest.raises(ValueError,match='Historical'):
         run_compact(runner,tmp_path/'incremental',8,4,threads=1)

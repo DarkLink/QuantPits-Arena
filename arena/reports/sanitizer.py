@@ -554,6 +554,8 @@ class DualTierExporter:
 
         timeline_file = self.public_dir / "monkey_timeline.json"
         null_timeline = json.loads(timeline_file.read_text()) if timeline_file.exists() else {}
+        settlement_file = self.public_dir / "monkey_settlement_timeline.json"
+        null_settlements = json.loads(settlement_file.read_text()) if settlement_file.exists() else {}
         hist_file = self.public_dir / "monkey_histograms.json"
         null_histograms = json.loads(hist_file.read_text()) if hist_file.exists() else {}
         null_records = []
@@ -570,7 +572,8 @@ class DualTierExporter:
                 null_records.append({
                     "strategy_spec": r.get("strategy_spec", ""),
                     "deterministic": bool(r.get("deterministic", False)),
-                    "settlement_quantiles": null_timeline.get(r.get("strategy_spec"), {}),
+                    "daily_quantiles": null_timeline.get(r.get("strategy_spec"), {}) if null_settlements else {},
+                    "settlement_quantiles": (null_settlements or null_timeline).get(r.get("strategy_spec"), {}),
                     "histogram": null_histograms.get(r.get("strategy_spec"), {}),
                     "description": r.get("description", ""),
                     "topk": r.get("topk", ""),

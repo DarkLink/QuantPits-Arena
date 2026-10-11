@@ -5,7 +5,7 @@
  * Includes:
  *   1. Return vs. Monkey Percentile Significance Scatter Plot
  *   2. Contestant × Animal Handler Heatmap Matrix
- *   3. Multi-Line Equity Curves with settlement-date pointwise monkey quantiles & Benchmarks (Taotie & CSI 300)
+ *   3. Multi-Line Equity Curves with daily pointwise monkey quantiles & Benchmarks (Taotie & CSI 300)
  *   4. Monkey Null Distribution Boxplot with Significance Marker
  *   5. Decision Archaeology Regret Curve & Area Spread
  *   6. Behavioral Fingerprint Analysis Group (Delay, Turnover, Capacity, Polarity, Meerkat)
@@ -337,7 +337,7 @@ window.ArenaCharts = {
   },
 
   /**
-   * 3. Multi-Line Equity Curves with settlement-date pointwise monkey quantiles & Benchmarks (Taotie & CSI 300)
+   * 3. Multi-Line Equity Curves with daily pointwise monkey quantiles & Benchmarks (Taotie & CSI 300)
    */
   renderEquityCurves(domId, dates, targetPath, taotieCurve = [], csi300Curve = [], monkeyDist = null, metricType = "nav") {
     const dom = document.getElementById(domId);
@@ -499,13 +499,17 @@ window.ArenaCharts = {
     } else {
       // Default: Cumulative NAV
       const targetCurve = window.arenaAdapter.getNavCurve(targetPath.path_id);
-      const snapshots = monkeyDist?.settlement_quantiles || {};
+      const dailySnapshots = monkeyDist?.daily_quantiles;
+      const hasDaily = dailySnapshots && Object.keys(dailySnapshots).length > 0;
+      const snapshots = hasDaily ? dailySnapshots : (monkeyDist?.settlement_quantiles || {});
       const sample = key => dates.map(d => snapshots[d]?.[key] ?? null);
       const targetLabel = `Path: ${targetPath.path_id}`;
       series = [
-        {name:"Weekly Monkey P05",type:"scatter",data:sample('p05'),symbolSize:5,color:"#c084fc"},
-        {name:"Weekly Monkey P95",type:"scatter",data:sample('p95'),symbolSize:5,color:"#c084fc"},
-        {name:"Weekly Monkey Median",type:"scatter",data:sample('median'),symbolSize:4,color:"#94a3b8"},
+        ...[['p05','Monkey P05','#c084fc'],['p95','Monkey P95','#c084fc'],['median','Monkey Median','#94a3b8']].map(([key,name,color]) => ({
+          name,type:hasDaily ? 'line' : 'scatter',data:sample(key),color,
+          smooth:false,showSymbol:false,symbolSize:4,connectNulls:false,
+          lineStyle:{width:key==='median' ? 1.5 : 1,type:'dashed'}
+        })),
         {
           name: marketBmName,
           type: "line",
@@ -529,7 +533,7 @@ window.ArenaCharts = {
       ];
 
       legendData = [
-        targetLabel
+        "Monkey P05", "Monkey P95", "Monkey Median", targetLabel
       ];
 
       if (window.arenaAdapter && window.arenaAdapter.hasGhostTaotie()) {

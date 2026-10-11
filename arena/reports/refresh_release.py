@@ -91,13 +91,20 @@ def read_controls(directory, count):
     manifest=json.loads((directory/'manifest.json').read_text())
     if not manifest.get('complete') or manifest['count']!=count:
         raise ValueError('Formal control coverage is incomplete')
-    arrays=[]
+    if manifest.get('nav_frequency')!='daily':
+        raise ValueError('Daily controls require a fresh evaluation of weekly-only caches')
+    data=np.empty((count,manifest['random_specs'],len(manifest['days'])))
+    first=0
     for name,sha in manifest['batch_hashes'].items():
         path=directory/name
         if digest(path)!=sha: raise ValueError('Control batch digest differs')
-        with np.load(path) as batch: arrays.append(batch['weekly_nav'])
-    data=np.concatenate(arrays)
-    if data.shape[0]!=count: raise ValueError('Control sample count differs')
+        with np.load(path) as batch:
+            values=batch['daily_nav'];size=len(values)
+            if values.shape[1:]!=data.shape[1:] or first+size>count:
+                raise ValueError('Daily control coverage differs')
+            data[first:first+size]=values;first+=size
+    if first!=count or not np.isfinite(data).all() or not (data>0).all():
+        raise ValueError('Daily control sample count or valuation differs')
     return data,manifest
 
 
@@ -111,24 +118,37 @@ def build_monitoring(root,sids,count):
         nav=pd.read_csv(exporter.public_dir/'daily_nav_curves.csv',index_col='datetime', float_precision="round_trip")
         control,manifest=read_controls(runner.run_dir/'monkey/compact',count)
         dates=[c.settle_date for c in runner.cycles]
-        dataset=dict(runner=runner,paths=paths,exporter=exporter,nav=nav,control=control,dates=dates,
+        daily_dates=[runner.anchor_date]+manifest['days']
+        if daily_dates!=nav.index.tolist():raise ValueError('Daily controls and contestants use different dates')
+        dataset=dict(runner=runner,paths=paths,exporter=exporter,nav=nav,dates=dates,daily_dates=daily_dates,
                      spec_index=spec_index,cfg=effective_config(sid))
         datasets[sid]=dataset
         snapshots={}
+        settlements={}
         histograms={}
         for spec,j in spec_index.items():
-            quantiles=np.quantile(control[:,j,:],[.05,.5,.95],axis=0)
-            snapshots[spec]={date:dict(p05=float(quantiles[0,c]),median=float(quantiles[1,c]),p95=float(quantiles[2,c])) for c,date in enumerate(dates)}
-            hist,edges=np.histogram((control[:,j,-1]-1)*100,bins=64)
+            # Each date's null sample is contiguous; retain only one pool's raw
+            # matrix at a time, never all five complete daily matrices.
+            values=np.ascontiguousarray(control[:,j,:].T)
+            quantiles=np.quantile(values,[.05,.5,.95],axis=1)
+            snapshots[spec]={runner.anchor_date:dict(p05=1.,median=1.,p95=1.)}
+            snapshots[spec].update({date:dict(p05=float(quantiles[0,c]),median=float(quantiles[1,c]),p95=float(quantiles[2,c])) for c,date in enumerate(manifest['days'])})
+            settlements[spec]={date:snapshots[spec][date] for date in dates}
+            hist,edges=np.histogram((values[-1]-1)*100,bins=64)
             histograms[spec]=dict(edges_pct=edges.tolist(),counts=hist.tolist())
+            matching=[name for name in public_paths(nav) if map_animal_to_spec_id(name.split('_',2)[2])==spec]
+            for c,date in enumerate(daily_dates):
+                null_values=np.zeros(count) if c==0 else values[c-1]-1
+                for name in matching:
+                    stats=empirical(float(nav.loc[date,name]-1),null_values)
+                    collected.append(dict(season_id=sid,path_id=name,cutoff=date,**stats))
+        reference=nav['BENCHMARK_taotie']
+        snapshots['P_ALL_0']={date:dict(p05=float(value),median=float(value),p95=float(value)) for date,value in reference.items()}
+        settlements['P_ALL_0']={date:snapshots['P_ALL_0'][date] for date in dates}
         save_json(exporter.public_dir/'monkey_timeline.json',snapshots)
+        save_json(exporter.public_dir/'monkey_settlement_timeline.json',settlements)
         save_json(exporter.public_dir/'monkey_histograms.json',histograms)
-        for c,date in enumerate(dates):
-            for name in public_paths(nav):
-                aid=name.split('_',2)[2]
-                j=spec_index[map_animal_to_spec_id(aid)]
-                stats=empirical(float(nav.loc[date,name]-1),control[:,j,c]-1)
-                collected.append(dict(season_id=sid,path_id=name,cutoff=date,**stats))
+        del control,values
         # Reconstruct meaningful execution diagnostics from full reference paths.
         diag=pd.read_csv(exporter.public_dir/'capital_constraint_diagnostics.csv', float_precision="round_trip")
         for row_i,row in diag.iterrows():
@@ -138,6 +158,7 @@ def build_monitoring(root,sids,count):
                 for field in ('stale_mark_count','rejected_order_count'):
                     diag.loc[row_i,field]=paths[key].diagnostics[field]
         diag.to_csv(exporter.public_dir/'capital_constraint_diagnostics.csv',index=False)
+        print(f'[monitoring] {sid}: {len(daily_dates)} NAV dates; actual daily null quantiles complete',flush=True)
     frame=pd.DataFrame(collected)
     for cutoff in sorted(frame.cutoff.unique()):
         indices=frame.index[frame.cutoff==cutoff]
@@ -223,8 +244,8 @@ def dispatch(data,start,end,title,language='en',append_october=False):
     mechanism=(f'TopK=5/DropN=1 在六模型间的区间收益跨度为 {spread:.4f} 个百分点；仅凭单个优胜路径不能认定集中度有普遍优势。Rabbit 的 DropN 控制每周可替换数量，并不是更高的交易频率。Sloth 的延迟及冷启动现金和 Snail 的暖启动旧信号会同时改变敞口与路径，因此这里只评价完整策略，不将差额归因于纯预测半衰期。Meerkat 分位带与反向 Koala 的表现应结合上表全模型分布阅读。\n\n模型级均值衡量跨动物的一致性，最优行只描述本窗口的实现收益。宽池与窄池的可选集合、费用、整手约束、现金暴露及模型信号截面共同影响结果；这些结果不识别单一宏观原因，也不揭示模型架构。' if zh else
         f'The TopK=5/DropN=1 segment spread across contestants is {spread:.4f} percentage points. A winning concentrated path does not establish a universal concentration advantage. Rabbit DropN changes weekly replacement capacity, not trading frequency. Sloth delay and cold-start cash, and Snail warm-start stale signals, jointly alter exposure and path dependence; these are whole-strategy comparisons, not an identified prediction half-life. Percentile Meerkats and inverted Koala should be read against the full contestant distribution above.\n\nContestant averages describe consistency across animals; the best row describes realized performance in this window. Pool membership, fees, lots, cash exposure and signal cross-sections all contribute to differences across environments. The results do not identify a single macro cause or disclose contestant architecture.')
     text+=('## 机制解释与边界\n\n' if zh else '## Mechanisms and interpretation\n\n')+mechanism+'\n\n'
-    method=(f'猴群只按 TopK/DropN 匹配，保留十随机规格和一确定性被动参考，不增加延迟、暖冷启动、反向或分位专用种类。上表 p 使用从开场锚点累计的收益，并非区间收益 p；上尾 k 包含相等，p=(k+1)/(N+1)。N={count:,} 的最小 p 为 {1/(count+1):.8g}，不能写成零。Bonferroni/Holm/BH/BY 另行保存，840 项阈值为 {0.05/840:.8g}，严格小于。当前正式数量下至多 4 个超越可通过 Bonferroni。过去截止与反复周度监测为描述性统计，未对所有历史窗口再次控制联合家族错误，也未计入隐含研究筛选。Monte Carlo 区间只衡量模拟尾概率误差，不增加真实市场样本。\n\n撮合采用当日有限正报价，缺价不卖出注销持仓；估值允许最近有效收盘价并记陈旧次数。成员身份与可负担筛选分离；周五冻结意图，周一撮合。Taotie 使用普通账户资本比例 1.0 与相同分配机制，Ghost 是较低资本粒度摩擦情景，不是无费用纯等权。换手口径为买卖双边成交总额除以周初资产。\n\n本版仍属日线研究：全日成交量只是事后可交易性代理；缺少完整可靠的企业行为、开盘方向限制及容量信息。没有把因子变化猜成分红，也没有混用复权单位与未调整股数来宣称修复总回报。严格执行模式在数据覆盖不足时拒绝运行。' if zh else
-        f'Matching uses TopK/DropN only: ten random specifications and one deterministic passive reference. Delay, warm/cold starts, inversion and percentile selection do not introduce extra species. The p values above test cumulative returns from inception, not segment returns. The upper tail includes ties: p=(k+1)/(N+1). At N={count:,}, minimum p is {1/(count+1):.8g}, never zero. Bonferroni/Holm/BH/BY are stored separately. The 840-item raw threshold is {0.05/840:.8g}, with strict inequality; at the formal count, up to four exceedances can pass Bonferroni. Earlier cutoffs and repeated weekly reviews are descriptive monitoring. Correction does not cover all historical windows jointly or hidden prior research selection. Monte Carlo intervals measure simulation tail uncertainty and add no market history.\n\nExecution requires finite positive same-day quotes; missing-price sells retain the position. Valuation may carry the last valid close with stale-mark counts. Pool membership is separate from affordability. Decision-close intent is frozen before Monday execution. Taotie uses a 1.0 standard-account capital ratio and the same allocation policy. Ghost is a capital-granularity scenario, not a costless equal-weight index. Turnover is gross buys plus gross sells divided by starting assets.\n\nThis remains daily-bar research: full-day volume is a retrospective tradability proxy. Complete verified corporate-action, opening direction-limit and capacity data are unavailable. Factor changes are not guessed into dividend payments, and adjusted prices are not mixed with unchanged nominal shares to claim a total-return repair. Strict execution fails its preflight without required coverage.')
+    method=(f'猴群只按 TopK/DropN 匹配，保留十随机规格和一确定性被动参考，不增加延迟、暖冷启动、反向或分位专用种类。上表 p 使用从开场锚点累计的收益，并非区间收益 p；上尾 k 包含相等，p=(k+1)/(N+1)。N={count:,} 的最小 p 为 {1/(count+1):.8g}，不能写成零。Bonferroni/Holm/BH/BY 另行保存，840 项阈值为 {0.05/840:.8g}，严格小于。当前正式数量下至多 4 个超越可通过 Bonferroni。猴群现金与持仓跨周延续，按每个交易日保存真实净值和分位数，周结值用于报告切段。过去截止与反复日度或周度监测为描述性统计，未对所有历史窗口再次控制联合家族错误，也未计入隐含研究筛选。Monte Carlo 区间只衡量模拟尾概率误差，不增加真实市场样本。\n\n撮合采用当日有限正报价，缺价不卖出注销持仓；估值允许最近有效收盘价并记陈旧次数。成员身份与可负担筛选分离；周五冻结意图，周一撮合。Taotie 使用普通账户资本比例 1.0 与相同分配机制，Ghost 是较低资本粒度摩擦情景，不是无费用纯等权。换手口径为买卖双边成交总额除以周初资产。\n\n本版仍属日线研究：全日成交量只是事后可交易性代理；缺少完整可靠的企业行为、开盘方向限制及容量信息。没有把因子变化猜成分红，也没有混用复权单位与未调整股数来宣称修复总回报。严格执行模式在数据覆盖不足时拒绝运行。' if zh else
+        f'Matching uses TopK/DropN only: ten random specifications and one deterministic passive reference. Delay, warm/cold starts, inversion and percentile selection do not introduce extra species. The p values above test cumulative returns from inception, not segment returns. The upper tail includes ties: p=(k+1)/(N+1). At N={count:,}, minimum p is {1/(count+1):.8g}, never zero. Bonferroni/Holm/BH/BY are stored separately. The 840-item raw threshold is {0.05/840:.8g}, with strict inequality; at the formal count, up to four exceedances can pass Bonferroni. The same monkeys retain cash and positions across weeks; actual daily NAV and pointwise quantiles are saved, while weekly settlements define reporting segments. Earlier cutoffs and repeated daily or weekly reviews are descriptive monitoring. Correction does not cover all historical windows jointly or hidden prior research selection. Monte Carlo intervals measure simulation tail uncertainty and add no market history.\n\nExecution requires finite positive same-day quotes; missing-price sells retain the position. Valuation may carry the last valid close with stale-mark counts. Pool membership is separate from affordability. Decision-close intent is frozen before Monday execution. Taotie uses a 1.0 standard-account capital ratio and the same allocation policy. Ghost is a capital-granularity scenario, not a costless equal-weight index. Turnover is gross buys plus gross sells divided by starting assets.\n\nThis remains daily-bar research: full-day volume is a retrospective tradability proxy. Complete verified corporate-action, opening direction-limit and capacity data are unavailable. Factor changes are not guessed into dividend payments, and adjusted prices are not mixed with unchanged nominal shares to claim a total-return repair. Strict execution fails its preflight without required coverage.')
     text+=('## 随机检验与执行口径\n\n' if zh else '## Random-control and execution contract\n\n')+method+'\n\n'
     if append_october:
         sub_oct,oct_metrics,_=section_data(data,'2026-09-30','2026-10-09')
@@ -402,7 +423,8 @@ def publish(root,sids,end_date,count):
         subprocess.run([sys.executable,str(REPO_ROOT/'scripts/audit_privacy.py')],cwd=REPO_ROOT,check=True)
         journal['phase']='complete';save_json(journal_path,journal)
         save_json(root/'complete.json',dict(evaluation_id=root.name,cutoff=end_date,seasons=sids,
-            random_paths=count*10*len(sids),deterministic_references=len(sids),bundle_sha256=digest(bundle_path),summaries=summaries))
+            random_paths=count*10*len(sids),deterministic_references=len(sids),monkey_nav_frequency='daily',
+            bundle_sha256=digest(bundle_path),summaries=summaries))
     except BaseException:
         recover_publication(root)
         raise

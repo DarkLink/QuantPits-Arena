@@ -14,12 +14,13 @@ function node(id){if(!nodes.has(id))nodes.set(id,{innerHTML:'',addEventListener(
 global.window={addEventListener(){}};
 global.document={documentElement:{getAttribute(){return'dark';}},getElementById:node,querySelectorAll(){return[];},querySelector(){return node('query');}};
 global.setTimeout=cb=>{cb();return 0;};
-global.echarts={getInstanceByDom(){return null;},init(){return {setOption(){},resize(){},getOption(){return{series:[]};},on(){}};},graphic:{LinearGradient:function(){}}};
+global.echarts={getInstanceByDom(){return null;},init(){return {setOption(option){global.lastChart=option;},resize(){},getOption(){return{series:[]};},on(){}};},graphic:{LinearGradient:function(){}}};
 for(const file of ['web/js/data/arena_release.js','web/js/adapter.js','web/js/components/charts.js','web/js/views/methodology.js','web/js/views/path_detail.js'])vm.runInThisContext(fs.readFileSync(file,'utf8'));
 const results=[];
 for(const [sid,data] of Object.entries(window.ARENA_SEASONS_DATA)){
  if(data.meta.evaluation_id!==window.ARENA_ACTIVE_EVALUATION)throw Error('mixed generations');
  if(data.nav_timeline.dates.at(-1)!==data.meta.cutoff)throw Error('cutoff differs');
+ if(data.meta.monkey_nav_frequency!=='daily')throw Error('monkey frequency differs');
  for(const values of Object.values(data.nav_timeline.curves))if(values[0]!==1)throw Error('anchor differs');
  const tested=data.paths.filter(p=>p.test_status==='random_control');
  if(tested.length!==168)throw Error('comparison coverage differs');
@@ -30,9 +31,27 @@ for(const [sid,data] of Object.entries(window.ARENA_SEASONS_DATA)){
  if(data.paths.filter(p=>p.test_status==='not_applicable').some(p=>p.empirical_p_value!==null))throw Error('reference has random p');
  window.arenaAdapter=new window.ArenaDataAdapter(data);
  window.MethodologyView.render('root');
+ const dates=data.nav_timeline.dates;
+ for(const dist of data.monkey_null_distributions){
+  const quantiles=dist.daily_quantiles;
+  if(Object.keys(quantiles).length!==dates.length)throw Error('daily monkey coverage differs');
+  for(const date of dates){
+   const q=quantiles[date];
+   if(!q||![q.p05,q.median,q.p95].every(Number.isFinite)||q.p05>q.median||q.median>q.p95)throw Error('invalid daily quantiles');
+  }
+  if(Object.values(quantiles[dates[0]]).some(v=>v!==1))throw Error('monkey anchor differs');
+ }
+ const dist=window.arenaAdapter.getMonkeyDistribution(tested[0].strategy_spec);
+ window.ArenaCharts.renderEquityCurves('root',dates,tested[0],window.arenaAdapter.getBenchmarkTaotieCurve(),window.arenaAdapter.getBenchmarkCsi300Curve(),dist,'nav');
+ const monkeys=lastChart.series.filter(s=>s.name.startsWith('Monkey '));
+ if(monkeys.length!==3||monkeys.some(s=>s.type!=='line'||s.data.length!==dates.length||!s.data.every(Number.isFinite)||s.smooth!==false))throw Error('daily monkey lines differ');
+ const day=dates.indexOf('2026-07-07');
+ if(day<0)throw Error('non-rebalance test day missing');
+ const tooltip=lastChart.tooltip.formatter(monkeys.map(s=>({axisValue:dates[day],seriesName:s.name,value:s.data[day],dataIndex:day,color:s.color})));
+ if(!tooltip.includes('Monkey Median')||tooltip.includes('null')||tooltip.includes('undefined'))throw Error('non-rebalance tooltip differs');
  window.PathDetailView.render('root',tested[0].path_id);
  window.PathDetailView.render('root',data.paths.find(p=>p.animal_id==='ghost_taotie').path_id);
- results.push({sid,paths:data.paths.length,tests:tested.length,count:tested[0].monkey_count});
+ results.push({sid,paths:data.paths.length,tests:tested.length,count:tested[0].monkey_count,daily:dates.length});
 }
 console.log(JSON.stringify(results));
 '''
@@ -41,3 +60,4 @@ console.log(JSON.stringify(results));
     results=json.loads(completed.stdout)
     assert len(results)==5
     assert all(result['paths']==170 and result['tests']==168 and result['count']>=16800 for result in results)
+    assert all(result['daily']==65 for result in results)

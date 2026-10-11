@@ -10,11 +10,11 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
     "season_subtitle": "CSI 1000 small-cap universe testbed: evaluating the 6 Alpha candidate models and 28 execution containers against CSI 1000 (SH000852) benchmark",
     "status": "DEMO",
     "total_paths": 170,
-    "evaluation_id": "refresh_20261011",
+    "evaluation_id": "daily_nav_20261011",
     "engine_version": "execution-v2",
     "profile": "daily_bar_research",
     "cutoff": "2026-10-09",
-    "source_signature": "5c74932c7cbda7a824a45218fbcbead51d87150eeb523baf256f99472f75bc0d",
+    "source_signature": "13ca8b61b03a4de6e605bf3cdcee061b2023e7440ce76dc976f30bd5a27605b6",
     "signal_source": "frozen_legacy_actual_raw_signals",
     "market_vintage": "current_market_snapshot",
     "retrospective_replay": true,
@@ -32,6 +32,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
     "deterministic_references": 1,
     "p_resolution": 9.99990000099999e-06,
     "family_size": 840,
+    "monkey_nav_frequency": "daily",
     "execution_source_hashes": {
       "arena/data/market.py": "6f4e23677329b0d59adf755302f8333bd250997b3fbc7bb1da3ebdbd791a3ab2",
       "arena/portfolio/engine.py": "f1cb46e85f0a9a393b252dae9468281bb04afc7992547789a8d0b6d5a07cfa6d",
@@ -40,8 +41,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "arena/portfolio/costs.py": "767ef3845e623c4690e0aec15580d7c96cfa0647a6e373e308e7e53f4afb0cf1",
       "arena/runner/weekly_cycle.py": "2eeba05756022da0413eae30060ec3f7b6078b80f65f3e4598e1218b55b3b94a",
       "arena/calendar.py": "b15cf8ee9c89579c2aafa992a326937f694b3f156ff938dcfb06f883258c73b2",
-      "arena/controls/compact.py": "2987c98ac78ad1554e690be8b2a6562aabe0459d9caad6bd8992e7673d441cbb",
-      "arena/controls/compact_kernel.cpp": "923846b679a2640a01431bb8a06069241e2276c1ade40ceba08c9c627d1ad7fd",
+      "arena/controls/compact.py": "a91f80ea357b701ba3f02a0ab96072889b295878f343a3de85882249d9b212d4",
+      "arena/controls/compact_kernel.cpp": "44158fb04c5c99dc8f281eb7a4461fa76dbaa3bdb9b8dec7d0b5a648c232dabc",
       "arena/benchmarks/index.py": "4efd76c2b733437f55f9853573382154d8af9929bce016a590c5467a6537ecd8",
       "arena/reports/statistics.py": "c939c5630de93b7b77e98d044038c497b39c48b5bddcc2a61d1a8d7d93a2fd38",
       "arena/contestants/adapters/historical.py": "8787fd47eebe09a8e38043ab80107e79ba1cb2f3d01aeed9c95726e6f61b4064",
@@ -89,11 +90,11 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
     "season_subtitle": "CSI 1000 small-cap universe testbed: evaluating the 6 Alpha candidate models and 28 execution containers against CSI 1000 (SH000852) benchmark",
     "status": "DEMO",
     "total_paths": 170,
-    "evaluation_id": "refresh_20261011",
+    "evaluation_id": "daily_nav_20261011",
     "engine_version": "execution-v2",
     "profile": "daily_bar_research",
     "cutoff": "2026-10-09",
-    "source_signature": "5c74932c7cbda7a824a45218fbcbead51d87150eeb523baf256f99472f75bc0d",
+    "source_signature": "13ca8b61b03a4de6e605bf3cdcee061b2023e7440ce76dc976f30bd5a27605b6",
     "signal_source": "frozen_legacy_actual_raw_signals",
     "market_vintage": "current_market_snapshot",
     "retrospective_replay": true,
@@ -111,6 +112,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
     "deterministic_references": 1,
     "p_resolution": 9.99990000099999e-06,
     "family_size": 840,
+    "monkey_nav_frequency": "daily",
     "execution_source_hashes": {
       "arena/data/market.py": "6f4e23677329b0d59adf755302f8333bd250997b3fbc7bb1da3ebdbd791a3ab2",
       "arena/portfolio/engine.py": "f1cb46e85f0a9a393b252dae9468281bb04afc7992547789a8d0b6d5a07cfa6d",
@@ -119,8 +121,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "arena/portfolio/costs.py": "767ef3845e623c4690e0aec15580d7c96cfa0647a6e373e308e7e53f4afb0cf1",
       "arena/runner/weekly_cycle.py": "2eeba05756022da0413eae30060ec3f7b6078b80f65f3e4598e1218b55b3b94a",
       "arena/calendar.py": "b15cf8ee9c89579c2aafa992a326937f694b3f156ff938dcfb06f883258c73b2",
-      "arena/controls/compact.py": "2987c98ac78ad1554e690be8b2a6562aabe0459d9caad6bd8992e7673d441cbb",
-      "arena/controls/compact_kernel.cpp": "923846b679a2640a01431bb8a06069241e2276c1ade40ceba08c9c627d1ad7fd",
+      "arena/controls/compact.py": "a91f80ea357b701ba3f02a0ab96072889b295878f343a3de85882249d9b212d4",
+      "arena/controls/compact_kernel.cpp": "44158fb04c5c99dc8f281eb7a4461fa76dbaa3bdb9b8dec7d0b5a648c232dabc",
       "arena/benchmarks/index.py": "4efd76c2b733437f55f9853573382154d8af9929bce016a590c5467a6537ecd8",
       "arena/reports/statistics.py": "c939c5630de93b7b77e98d044038c497b39c48b5bddcc2a61d1a8d7d93a2fd38",
       "arena/contestants/adapters/historical.py": "8787fd47eebe09a8e38043ab80107e79ba1cb2f3d01aeed9c95726e6f61b4064",
@@ -298,7 +300,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "strategy_spec": "P_22_3",
       "animal_category": "Baseline",
       "display_name": "CONTESTANT_A × robot",
-      "total_return_pct": 0.9918650960536012,
+      "total_return_pct": 0.9918650960536013,
       "max_drawdown_pct": 14.699621990302914,
       "final_nav": 1.0099,
       "sharpe_ratio": 0.28,
@@ -318,8 +320,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.08953243800895323,
       "by_q": 0.6545906957497228,
-      "mc_tail_lower_95": 0.0257586930638086,
-      "mc_tail_upper_95": 0.027768882428113,
+      "mc_tail_lower_95": 0.025758693063808666,
+      "mc_tail_upper_95": 0.027768882428113026,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 58,
@@ -362,8 +364,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.012323560974916567,
       "by_q": 0.09010017522228177,
-      "mc_tail_lower_95": 0.001937819820808,
-      "mc_tail_upper_95": 0.0025316432381856,
+      "mc_tail_lower_95": 0.0019378198208080393,
+      "mc_tail_upper_95": 0.00253164323818566,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 55,
@@ -409,7 +411,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "bh_q": 0.0016434618262513025,
       "by_q": 0.012015698937812581,
       "mc_tail_lower_95": 9.903428379688562e-05,
-      "mc_tail_upper_95": 0.0002721725611933,
+      "mc_tail_upper_95": 0.000272172561193328,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 52,
@@ -454,8 +456,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.01218265963035734,
       "by_q": 0.08907001552577186,
-      "mc_tail_lower_95": 0.0019004560492067,
-      "mc_tail_upper_95": 0.0024890152259606,
+      "mc_tail_lower_95": 0.0019004560492067721,
+      "mc_tail_upper_95": 0.0024890152259606853,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 49,
@@ -500,8 +502,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.19845143568108292,
       "by_q": 1.0,
-      "mc_tail_lower_95": 0.0709199950283035,
-      "mc_tail_upper_95": 0.0741448517588836,
+      "mc_tail_lower_95": 0.07091999502830358,
+      "mc_tail_upper_95": 0.07414485175888368,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 46,
@@ -529,7 +531,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "final_nav": 1.0222,
       "sharpe_ratio": 0.42,
       "excess_over_csi300_pct": 19.21422260989042,
-      "excess_over_monkey_pct": 10.039311495954871,
+      "excess_over_monkey_pct": 10.039311495954873,
       "percentile_rank": 98.4250157498425,
       "monkey_percentile": 98.4250157498425,
       "monkey_percentile_rank": 98.4250157498425,
@@ -544,8 +546,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.05917440825591745,
       "by_q": 0.43263668377874,
-      "mc_tail_lower_95": 0.0149776238742879,
-      "mc_tail_upper_95": 0.0165306479157388,
+      "mc_tail_lower_95": 0.014977623874287926,
+      "mc_tail_upper_95": 0.01653064791573883,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 55,
@@ -588,8 +590,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.17315413052766024,
       "by_q": 1.0,
-      "mc_tail_lower_95": 0.058308496446536,
-      "mc_tail_upper_95": 0.0612571012746585,
+      "mc_tail_lower_95": 0.058308496446536094,
+      "mc_tail_upper_95": 0.06125710127465853,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 52,
@@ -633,7 +635,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "bh_q": 0.6555145716148473,
       "by_q": 1.0,
       "mc_tail_lower_95": 0.3828312128403112,
-      "mc_tail_upper_95": 0.3888754092859215,
+      "mc_tail_upper_95": 0.38887540928592157,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 49,
@@ -705,7 +707,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "final_nav": 1.0316,
       "sharpe_ratio": 0.51,
       "excess_over_csi300_pct": 20.153762342866354,
-      "excess_over_monkey_pct": 11.22413018820478,
+      "excess_over_monkey_pct": 11.224130188204779,
       "percentile_rank": 99.030009699903,
       "monkey_percentile": 99.030009699903,
       "monkey_percentile_rank": 99.030009699903,
@@ -720,8 +722,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.041359992491445646,
       "by_q": 0.30239170141297095,
-      "mc_tail_lower_95": 0.0090921046518163,
-      "mc_tail_upper_95": 0.0103165858565703,
+      "mc_tail_lower_95": 0.009092104651816387,
+      "mc_tail_upper_95": 0.01031658585657039,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 154,
@@ -746,7 +748,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "strategy_spec": "P_22_22",
       "animal_category": "Rabbit (High Turnover)",
       "display_name": "CONTESTANT_A × rabbit-2",
-      "total_return_pct": -1.833993386075772,
+      "total_return_pct": -1.8339933860757718,
       "max_drawdown_pct": 20.166571560406098,
       "final_nav": 0.9817,
       "sharpe_ratio": 0.01,
@@ -766,8 +768,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.18708135066300347,
       "by_q": 1.0,
-      "mc_tail_lower_95": 0.0648248591721223,
-      "mc_tail_upper_95": 0.0679203499878354,
+      "mc_tail_lower_95": 0.06482485917212231,
+      "mc_tail_upper_95": 0.06792034998783546,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 210,
@@ -795,7 +797,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "final_nav": 0.9194,
       "sharpe_ratio": -0.85,
       "excess_over_csi300_pct": 8.932876422857351,
-      "excess_over_monkey_pct": -0.4531090420743455,
+      "excess_over_monkey_pct": -0.45310904207434555,
       "percentile_rank": 45.73454265457345,
       "monkey_percentile": 45.73454265457345,
       "monkey_percentile_rank": 45.73454265457345,
@@ -839,7 +841,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "final_nav": 0.7369,
       "sharpe_ratio": -2.72,
       "excess_over_csi300_pct": -9.322035652135675,
-      "excess_over_monkey_pct": -18.496946766071225,
+      "excess_over_monkey_pct": -18.496946766071222,
       "percentile_rank": 0.0,
       "monkey_percentile": 0.0,
       "monkey_percentile_rank": 0.0,
@@ -854,7 +856,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 1.0,
       "by_q": 1.0,
-      "mc_tail_lower_95": 0.999963111885842,
+      "mc_tail_lower_95": 0.9999631118858421,
       "mc_tail_upper_95": 1.0,
       "family_size": 840,
       "is_bonferroni_significant": false,
@@ -878,12 +880,12 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "strategy_spec": "P_22_3",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_A × meerkat-10",
-      "total_return_pct": 3.201294258910448,
+      "total_return_pct": 3.2012942589104476,
       "max_drawdown_pct": 7.094229211186054,
       "final_nav": 1.032,
       "sharpe_ratio": 0.71,
       "excess_over_csi300_pct": 20.19371035314367,
-      "excess_over_monkey_pct": 11.01879923920812,
+      "excess_over_monkey_pct": 11.018799239208121,
       "percentile_rank": 98.9930100698993,
       "monkey_percentile": 98.9930100698993,
       "monkey_percentile_rank": 98.9930100698993,
@@ -898,8 +900,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.042506107602240564,
       "by_q": 0.3107711927400081,
-      "mc_tail_lower_95": 0.0094507256654843,
-      "mc_tail_upper_95": 0.0106979375488076,
+      "mc_tail_lower_95": 0.009450725665484392,
+      "mc_tail_upper_95": 0.010697937548807622,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 58,
@@ -943,7 +945,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "bh_q": 0.36110750003611075,
       "by_q": 1.0,
       "mc_tail_lower_95": 0.1599498729494104,
-      "mc_tail_upper_95": 0.1645297356819213,
+      "mc_tail_upper_95": 0.16452973568192136,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 58,
@@ -966,12 +968,12 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "strategy_spec": "P_22_3",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_A × meerkat-30",
-      "total_return_pct": 7.910167449523064,
+      "total_return_pct": 7.9101674495230645,
       "max_drawdown_pct": 6.171541404928604,
       "final_nav": 1.0791,
       "sharpe_ratio": 1.56,
       "excess_over_csi300_pct": 24.902583543756286,
-      "excess_over_monkey_pct": 15.72767242982074,
+      "excess_over_monkey_pct": 15.727672429820739,
       "percentile_rank": 99.8820011799882,
       "monkey_percentile": 99.8820011799882,
       "monkey_percentile_rank": 99.8820011799882,
@@ -986,8 +988,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 0.8342516574834252,
       "bh_q": 0.007396940955963575,
       "by_q": 0.05408060848627421,
-      "mc_tail_lower_95": 0.0009677149859475,
-      "mc_tail_upper_95": 0.0014020514512543,
+      "mc_tail_lower_95": 0.0009677149859475432,
+      "mc_tail_upper_95": 0.0014020514512543961,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 58,
@@ -1120,7 +1122,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.7362196040960939,
       "by_q": 1.0,
-      "mc_tail_lower_95": 0.462644339398755,
+      "mc_tail_lower_95": 0.46264433939875504,
       "mc_tail_upper_95": 0.4688376480043058,
       "family_size": 840,
       "is_bonferroni_significant": false,
@@ -1188,11 +1190,11 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "strategy_spec": "P_22_3",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_A × meerkat-80",
-      "total_return_pct": -14.940343601722253,
+      "total_return_pct": -14.940343601722251,
       "max_drawdown_pct": 19.34051182316666,
       "final_nav": 0.8506,
       "sharpe_ratio": -2.11,
-      "excess_over_csi300_pct": 2.052072492510968,
+      "excess_over_csi300_pct": 2.0520724925109697,
       "excess_over_monkey_pct": -7.1228386214245765,
       "percentile_rank": 3.715962840371596,
       "monkey_percentile": 3.715962840371596,
@@ -1237,7 +1239,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "final_nav": 0.8227,
       "sharpe_ratio": -2.66,
       "excess_over_csi300_pct": -0.7420124485803861,
-      "excess_over_monkey_pct": -9.916923562515931,
+      "excess_over_monkey_pct": -9.916923562515933,
       "percentile_rank": 0.6139938600613993,
       "monkey_percentile": 0.6139938600613993,
       "monkey_percentile_rank": 0.6139938600613993,
@@ -1252,7 +1254,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 1.0,
       "by_q": 1.0,
-      "mc_tail_lower_95": 0.9933562253980984,
+      "mc_tail_lower_95": 0.9933562253980983,
       "mc_tail_upper_95": 0.9943347978507712,
       "family_size": 840,
       "is_bonferroni_significant": false,
@@ -1340,8 +1342,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.05694136607021027,
       "by_q": 0.4163104374429218,
-      "mc_tail_lower_95": 0.0139631829663814,
-      "mc_tail_upper_95": 0.0154651577484588,
+      "mc_tail_lower_95": 0.013963182966381413,
+      "mc_tail_upper_95": 0.015465157748458865,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 35,
@@ -1364,12 +1366,12 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "strategy_spec": "P_44_6",
       "animal_category": "Eagle (Concentration)",
       "display_name": "CONTESTANT_A × eagle-44-6",
-      "total_return_pct": 4.604524987386172,
+      "total_return_pct": 4.6045249873861716,
       "max_drawdown_pct": 11.982336730708242,
       "final_nav": 1.046,
       "sharpe_ratio": 0.75,
       "excess_over_csi300_pct": 21.59694108161939,
-      "excess_over_monkey_pct": 11.15031113893336,
+      "excess_over_monkey_pct": 11.150311138933361,
       "percentile_rank": 99.9690003099969,
       "monkey_percentile": 99.9690003099969,
       "monkey_percentile_rank": 99.9690003099969,
@@ -1384,8 +1386,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 0.2281577184228158,
       "bh_q": 0.0024799752002479976,
       "by_q": 0.01813162612203253,
-      "mc_tail_lower_95": 0.000202417605783,
-      "mc_tail_upper_95": 0.0004282411864474,
+      "mc_tail_lower_95": 0.0002024176057830521,
+      "mc_tail_upper_95": 0.00042824118644745957,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 116,
@@ -1410,7 +1412,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "strategy_spec": "P_66_9",
       "animal_category": "Eagle (Concentration)",
       "display_name": "CONTESTANT_A × eagle-66-9",
-      "total_return_pct": 2.80012745933842,
+      "total_return_pct": 2.8001274593384196,
       "max_drawdown_pct": 10.153852842963984,
       "final_nav": 1.028,
       "sharpe_ratio": 0.55,
@@ -1430,8 +1432,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 0.8471915280847191,
       "bh_q": 0.007466592000746659,
       "by_q": 0.054589842087839874,
-      "mc_tail_lower_95": 0.0009859120819101,
-      "mc_tail_upper_95": 0.0014238457652247,
+      "mc_tail_lower_95": 0.000985912081910104,
+      "mc_tail_upper_95": 0.0014238457652247865,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 174,
@@ -1456,7 +1458,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "strategy_spec": "P_88_12",
       "animal_category": "Eagle (Concentration)",
       "display_name": "CONTESTANT_A × eagle-88-12",
-      "total_return_pct": 3.280847144234333,
+      "total_return_pct": 3.2808471442343334,
       "max_drawdown_pct": 8.196974467070117,
       "final_nav": 1.0328,
       "sharpe_ratio": 0.67,
@@ -1476,8 +1478,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 0.21401785982140176,
       "bh_q": 0.0023650248934403858,
       "by_q": 0.01729119998170656,
-      "mc_tail_lower_95": 0.0001860657763881,
-      "mc_tail_upper_95": 0.0004046527315983,
+      "mc_tail_lower_95": 0.00018606577638819079,
+      "mc_tail_upper_95": 0.00040465273159839127,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 232,
@@ -1522,8 +1524,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 0.22109778902210978,
       "bh_q": 0.0024230526925499976,
       "by_q": 0.017715453562159575,
-      "mc_tail_lower_95": 0.0001942258824708,
-      "mc_tail_upper_95": 0.0004164620332185,
+      "mc_tail_lower_95": 0.0001942258824708005,
+      "mc_tail_upper_95": 0.00041646203321855853,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 327,
@@ -1568,8 +1570,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.02087404275657842,
       "by_q": 0.15261456601652837,
-      "mc_tail_lower_95": 0.0037514727386868,
-      "mc_tail_upper_95": 0.0045577054282293,
+      "mc_tail_lower_95": 0.003751472738686843,
+      "mc_tail_upper_95": 0.004557705428229397,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 58,
@@ -1614,8 +1616,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 0.5140748592514075,
       "bh_q": 0.0047621571028384204,
       "by_q": 0.0348171433788585,
-      "mc_tail_lower_95": 0.0005545562365121,
-      "mc_tail_upper_95": 0.0008954852873952,
+      "mc_tail_lower_95": 0.0005545562365121255,
+      "mc_tail_upper_95": 0.000895485287395229,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 55,
@@ -1660,8 +1662,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 0.34751652483475165,
       "bh_q": 0.003388201412103526,
       "by_q": 0.024771861115490363,
-      "mc_tail_lower_95": 0.0003453581233731,
-      "mc_tail_upper_95": 0.0006249519228199,
+      "mc_tail_lower_95": 0.00034535812337312225,
+      "mc_tail_upper_95": 0.0006249519228199002,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 52,
@@ -1706,8 +1708,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.01057132285819999,
       "by_q": 0.07728918969069166,
-      "mc_tail_lower_95": 0.0015839271238048,
-      "mc_tail_upper_95": 0.0021256214370712,
+      "mc_tail_lower_95": 0.001583927123804898,
+      "mc_tail_upper_95": 0.002125621437071226,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 49,
@@ -1732,7 +1734,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "strategy_spec": "P_22_3",
       "animal_category": "Sloth (Lagged)",
       "display_name": "CONTESTANT_B × sloth-4",
-      "total_return_pct": -2.406951017821945,
+      "total_return_pct": -2.4069510178219455,
       "max_drawdown_pct": 10.691760980016184,
       "final_nav": 0.9759,
       "sharpe_ratio": -0.33,
@@ -1753,7 +1755,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "bh_q": 0.2661381670206967,
       "by_q": 1.0,
       "mc_tail_lower_95": 0.1051699159404162,
-      "mc_tail_upper_95": 0.1090129069908958,
+      "mc_tail_upper_95": 0.10901290699089583,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 46,
@@ -1776,7 +1778,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "strategy_spec": "P_22_3",
       "animal_category": "Snail (Stale)",
       "display_name": "CONTESTANT_B × snail-1",
-      "total_return_pct": 4.587296893985871,
+      "total_return_pct": 4.5872968939858705,
       "max_drawdown_pct": 10.280243263777944,
       "final_nav": 1.0459,
       "sharpe_ratio": 0.75,
@@ -1796,8 +1798,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.024303127755239302,
       "by_q": 0.17768533572832712,
-      "mc_tail_lower_95": 0.004706192303563,
-      "mc_tail_upper_95": 0.0056028789438747,
+      "mc_tail_lower_95": 0.004706192303563005,
+      "mc_tail_upper_95": 0.005602878943874786,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 55,
@@ -1842,7 +1844,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.1847981520184798,
       "by_q": 1.0,
-      "mc_tail_lower_95": 0.0631533015753419,
+      "mc_tail_lower_95": 0.06315330157534198,
       "mc_tail_upper_95": 0.0662120071340286,
       "family_size": 840,
       "is_bonferroni_significant": false,
@@ -1886,7 +1888,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.26109738902610974,
       "by_q": 1.0,
-      "mc_tail_lower_95": 0.1025410493767797,
+      "mc_tail_lower_95": 0.10254104937677977,
       "mc_tail_upper_95": 0.1063419283592021,
       "family_size": 840,
       "is_bonferroni_significant": false,
@@ -1915,7 +1917,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "final_nav": 0.9225,
       "sharpe_ratio": -1.01,
       "excess_over_csi300_pct": 9.241948472216432,
-      "excess_over_monkey_pct": 0.0670373582808858,
+      "excess_over_monkey_pct": 0.06703735828088586,
       "percentile_rank": 50.64449355506445,
       "monkey_percentile": 50.64449355506445,
       "monkey_percentile_rank": 50.64449355506445,
@@ -1931,7 +1933,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "bh_q": 0.7565442593749244,
       "by_q": 1.0,
       "mc_tail_lower_95": 0.4904465074257919,
-      "mc_tail_upper_95": 0.4966538667332125,
+      "mc_tail_upper_95": 0.49665386673321255,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 46,
@@ -1959,7 +1961,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "final_nav": 1.0139,
       "sharpe_ratio": 0.33,
       "excess_over_csi300_pct": 18.380261411642163,
-      "excess_over_monkey_pct": 9.450629256980584,
+      "excess_over_monkey_pct": 9.450629256980585,
       "percentile_rank": 97.7470225297747,
       "monkey_percentile": 97.7470225297747,
       "monkey_percentile_rank": 97.7470225297747,
@@ -1974,8 +1976,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.07696508400769651,
       "by_q": 0.5627080978627641,
-      "mc_tail_lower_95": 0.0216092953987458,
-      "mc_tail_upper_95": 0.0234585425251049,
+      "mc_tail_lower_95": 0.02160929539874582,
+      "mc_tail_upper_95": 0.023458542525104927,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 147,
@@ -2018,8 +2020,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.37780187750821725,
       "by_q": 1.0,
-      "mc_tail_lower_95": 0.172599699615905,
-      "mc_tail_upper_95": 0.1773191689625432,
+      "mc_tail_lower_95": 0.17259969961590504,
+      "mc_tail_upper_95": 0.17731916896254324,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 182,
@@ -2042,7 +2044,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "strategy_spec": "P_22_1",
       "animal_category": "Turtle (Low Turnover)",
       "display_name": "CONTESTANT_B × turtle",
-      "total_return_pct": 1.601450012778982,
+      "total_return_pct": 1.6014500127789821,
       "max_drawdown_pct": 11.458081393513886,
       "final_nav": 1.016,
       "sharpe_ratio": 0.36,
@@ -2062,8 +2064,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.08355884183093652,
       "by_q": 0.610916463647333,
-      "mc_tail_lower_95": 0.0237075858180806,
-      "mc_tail_upper_95": 0.0256401187884185,
+      "mc_tail_lower_95": 0.023707585818080676,
+      "mc_tail_upper_95": 0.02564011878841853,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 34,
@@ -2106,7 +2108,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 1.0,
       "by_q": 1.0,
-      "mc_tail_lower_95": 0.999963111885842,
+      "mc_tail_lower_95": 0.9999631118858421,
       "mc_tail_upper_95": 1.0,
       "family_size": 840,
       "is_bonferroni_significant": false,
@@ -2130,7 +2132,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "strategy_spec": "P_22_3",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_B × meerkat-10",
-      "total_return_pct": 3.7927674520943135,
+      "total_return_pct": 3.7927674520943144,
       "max_drawdown_pct": 5.5752223053580625,
       "final_nav": 1.0379,
       "sharpe_ratio": 0.91,
@@ -2150,8 +2152,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.03478660865565257,
       "by_q": 0.2543322941836996,
-      "mc_tail_lower_95": 0.0070807012584345,
-      "mc_tail_upper_95": 0.0081681501975664,
+      "mc_tail_lower_95": 0.007080701258434576,
+      "mc_tail_upper_95": 0.008168150197566499,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 58,
@@ -2181,7 +2183,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "final_nav": 1.0314,
       "sharpe_ratio": 0.77,
       "excess_over_csi300_pct": 20.131727178532678,
-      "excess_over_monkey_pct": 10.956816064597133,
+      "excess_over_monkey_pct": 10.956816064597131,
       "percentile_rank": 98.9670103298967,
       "monkey_percentile": 98.9670103298967,
       "monkey_percentile_rank": 98.9670103298967,
@@ -2196,8 +2198,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.043169717556555784,
       "by_q": 0.31562298625040264,
-      "mc_tail_lower_95": 0.009702858076566,
-      "mc_tail_upper_95": 0.0109657861460416,
+      "mc_tail_lower_95": 0.009702858076566075,
+      "mc_tail_upper_95": 0.010965786146041672,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 58,
@@ -2240,8 +2242,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.07483875778526165,
       "by_q": 0.5471620746304321,
-      "mc_tail_lower_95": 0.0207470614928952,
-      "mc_tail_upper_95": 0.0225608316429661,
+      "mc_tail_lower_95": 0.02074706149289522,
+      "mc_tail_upper_95": 0.02256083164296618,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 58,
@@ -2264,7 +2266,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "strategy_spec": "P_22_3",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_B × meerkat-40",
-      "total_return_pct": 0.4245723720470939,
+      "total_return_pct": 0.42457237204709397,
       "max_drawdown_pct": 6.745151734300658,
       "final_nav": 1.0042,
       "sharpe_ratio": 0.18,
@@ -2284,8 +2286,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.10824437210173353,
       "by_q": 0.7913976254950196,
-      "mc_tail_lower_95": 0.0328951234645883,
-      "mc_tail_upper_95": 0.0351520094487881,
+      "mc_tail_lower_95": 0.03289512346458833,
+      "mc_tail_upper_95": 0.03515200944878816,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 58,
@@ -2308,12 +2310,12 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "strategy_spec": "P_22_3",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_B × meerkat-50",
-      "total_return_pct": -9.97832993118828,
+      "total_return_pct": -9.978329931188279,
       "max_drawdown_pct": 12.14001264888288,
       "final_nav": 0.9002,
       "sharpe_ratio": -1.51,
-      "excess_over_csi300_pct": 7.01408616304494,
-      "excess_over_monkey_pct": -2.160824950890605,
+      "excess_over_csi300_pct": 7.014086163044942,
+      "excess_over_monkey_pct": -2.1608249508906052,
       "percentile_rank": 29.88370116298837,
       "monkey_percentile": 29.88370116298837,
       "monkey_percentile_rank": 29.88370116298837,
@@ -2357,7 +2359,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "final_nav": 0.926,
       "sharpe_ratio": -1.26,
       "excess_over_csi300_pct": 9.596992428241581,
-      "excess_over_monkey_pct": 0.4220813143060331,
+      "excess_over_monkey_pct": 0.42208131430603313,
       "percentile_rank": 53.95846041539585,
       "monkey_percentile": 53.95846041539585,
       "monkey_percentile_rank": 53.95846041539585,
@@ -2372,7 +2374,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.7346180807641639,
       "by_q": 1.0,
-      "mc_tail_lower_95": 0.4573169402898294,
+      "mc_tail_lower_95": 0.45731694028982944,
       "mc_tail_upper_95": 0.4635053563073743,
       "family_size": 840,
       "is_bonferroni_significant": false,
@@ -2396,11 +2398,11 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "strategy_spec": "P_22_3",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_B × meerkat-70",
-      "total_return_pct": -9.979177880839783,
+      "total_return_pct": -9.979177880839785,
       "max_drawdown_pct": 12.949560777640434,
       "final_nav": 0.9002,
       "sharpe_ratio": -1.64,
-      "excess_over_csi300_pct": 7.0132382133934374,
+      "excess_over_csi300_pct": 7.013238213393436,
       "excess_over_monkey_pct": -2.161672900542111,
       "percentile_rank": 29.87670123298767,
       "monkey_percentile": 29.87670123298767,
@@ -2504,7 +2506,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 1.0,
       "by_q": 1.0,
-      "mc_tail_lower_95": 0.999963111885842,
+      "mc_tail_lower_95": 0.9999631118858421,
       "mc_tail_upper_95": 1.0,
       "family_size": 840,
       "is_bonferroni_significant": false,
@@ -2533,7 +2535,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "final_nav": 1.1349,
       "sharpe_ratio": 1.29,
       "excess_over_csi300_pct": 30.48140385997379,
-      "excess_over_monkey_pct": 22.8730217354596,
+      "excess_over_monkey_pct": 22.873021735459602,
       "percentile_rank": 98.4630153698463,
       "monkey_percentile": 98.4630153698463,
       "monkey_percentile_rank": 98.4630153698463,
@@ -2548,8 +2550,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.058419325309009354,
       "by_q": 0.4271161117653219,
-      "mc_tail_lower_95": 0.0146068573066236,
-      "mc_tail_upper_95": 0.0161414395664323,
+      "mc_tail_lower_95": 0.014606857306623608,
+      "mc_tail_upper_95": 0.016141439566432304,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 17,
@@ -2592,7 +2594,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.34485307320839836,
       "by_q": 1.0,
-      "mc_tail_lower_95": 0.1488555504710368,
+      "mc_tail_lower_95": 0.14885555047103682,
       "mc_tail_upper_95": 0.1533047077570759,
       "family_size": 840,
       "is_bonferroni_significant": false,
@@ -2636,8 +2638,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 0.14919850801491985,
       "bh_q": 0.0016799832001679982,
       "by_q": 0.012282714469763971,
-      "mc_tail_lower_95": 0.0001143961644169,
-      "mc_tail_upper_95": 0.0002966927049072,
+      "mc_tail_lower_95": 0.00011439616441690684,
+      "mc_tail_upper_95": 0.0002966927049072434,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 116,
@@ -2682,8 +2684,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 0.14919850801491985,
       "bh_q": 0.0016799832001679982,
       "by_q": 0.012282714469763971,
-      "mc_tail_lower_95": 0.0001143961644169,
-      "mc_tail_upper_95": 0.0002966927049072,
+      "mc_tail_lower_95": 0.00011439616441690684,
+      "mc_tail_upper_95": 0.0002966927049072434,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 175,
@@ -2820,8 +2822,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.08517987109285534,
       "by_q": 0.6227681533364263,
-      "mc_tail_lower_95": 0.0242766197887123,
-      "mc_tail_upper_95": 0.0262310488888286,
+      "mc_tail_lower_95": 0.02427661978871238,
+      "mc_tail_upper_95": 0.02623104888882862,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 58,
@@ -2844,7 +2846,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "strategy_spec": "P_22_3",
       "animal_category": "Sloth (Lagged)",
       "display_name": "CONTESTANT_C × sloth-1",
-      "total_return_pct": 3.2875508843706718,
+      "total_return_pct": 3.2875508843706713,
       "max_drawdown_pct": 10.780195582195784,
       "final_nav": 1.0329,
       "sharpe_ratio": 0.56,
@@ -2864,8 +2866,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.04161776564052541,
       "by_q": 0.30427633572824386,
-      "mc_tail_lower_95": 0.0091986986969852,
-      "mc_tail_upper_95": 0.010429983662684,
+      "mc_tail_lower_95": 0.00919869869698524,
+      "mc_tail_upper_95": 0.010429983662684043,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 55,
@@ -2910,8 +2912,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.009583002761521681,
       "by_q": 0.07006337127118886,
-      "mc_tail_lower_95": 0.0013710682030882,
-      "mc_tail_upper_95": 0.0018785424843212,
+      "mc_tail_lower_95": 0.0013710682030882426,
+      "mc_tail_upper_95": 0.0018785424843212083,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 52,
@@ -2941,7 +2943,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "final_nav": 1.0532,
       "sharpe_ratio": 0.85,
       "excess_over_csi300_pct": 22.307569177059772,
-      "excess_over_monkey_pct": 13.132658063124223,
+      "excess_over_monkey_pct": 13.132658063124225,
       "percentile_rank": 99.6450035499645,
       "monkey_percentile": 99.6450035499645,
       "monkey_percentile_rank": 99.6450035499645,
@@ -2956,8 +2958,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.018294295584651517,
       "by_q": 0.13375348579037455,
-      "mc_tail_lower_95": 0.0031813518641502,
-      "mc_tail_upper_95": 0.0039278998720622,
+      "mc_tail_lower_95": 0.003181351864150284,
+      "mc_tail_upper_95": 0.003927899872062209,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 49,
@@ -3002,8 +3004,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 0.34751652483475165,
       "bh_q": 0.003388201412103526,
       "by_q": 0.024771861115490363,
-      "mc_tail_lower_95": 0.0003453581233731,
-      "mc_tail_upper_95": 0.0006249519228199,
+      "mc_tail_lower_95": 0.00034535812337312225,
+      "mc_tail_upper_95": 0.0006249519228199002,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 46,
@@ -3028,7 +3030,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "strategy_spec": "P_22_3",
       "animal_category": "Snail (Stale)",
       "display_name": "CONTESTANT_C × snail-1",
-      "total_return_pct": -1.9291877529164057,
+      "total_return_pct": -1.9291877529164059,
       "max_drawdown_pct": 14.955432633459775,
       "final_nav": 0.9807,
       "sharpe_ratio": -0.08,
@@ -3048,8 +3050,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.23319519126790156,
       "by_q": 1.0,
-      "mc_tail_lower_95": 0.0878962011673444,
-      "mc_tail_upper_95": 0.0914476403632909,
+      "mc_tail_lower_95": 0.08789620116734445,
+      "mc_tail_upper_95": 0.09144764036329098,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 55,
@@ -3136,8 +3138,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 1.0,
       "by_q": 1.0,
-      "mc_tail_lower_95": 0.9572860587547204,
-      "mc_tail_upper_95": 0.959767256284074,
+      "mc_tail_lower_95": 0.9572860587547205,
+      "mc_tail_upper_95": 0.9597672562840739,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 51,
@@ -3224,8 +3226,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.6555145716148473,
       "by_q": 1.0,
-      "mc_tail_lower_95": 0.3847983186557711,
-      "mc_tail_upper_95": 0.3908481891724543,
+      "mc_tail_lower_95": 0.38479831865577113,
+      "mc_tail_upper_95": 0.39084818917245434,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 154,
@@ -3356,7 +3358,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 1.0,
       "by_q": 1.0,
-      "mc_tail_lower_95": 0.999963111885842,
+      "mc_tail_lower_95": 0.9999631118858421,
       "mc_tail_upper_95": 1.0,
       "family_size": 840,
       "is_bonferroni_significant": false,
@@ -3400,8 +3402,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.07016195398211993,
       "by_q": 0.5129689673783169,
-      "mc_tail_lower_95": 0.0192586802695575,
-      "mc_tail_upper_95": 0.0210093088660881,
+      "mc_tail_lower_95": 0.01925868026955757,
+      "mc_tail_upper_95": 0.021009308866088136,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 58,
@@ -3444,7 +3446,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.237929535598261,
       "by_q": 1.0,
-      "mc_tail_lower_95": 0.0913851686114671,
+      "mc_tail_lower_95": 0.09138516861146713,
       "mc_tail_upper_95": 0.0949984668900465,
       "family_size": 840,
       "is_bonferroni_significant": false,
@@ -3468,7 +3470,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "strategy_spec": "P_22_3",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_C × meerkat-30",
-      "total_return_pct": 0.9902808007419716,
+      "total_return_pct": 0.9902808007419717,
       "max_drawdown_pct": 5.865778313028214,
       "final_nav": 1.0099,
       "sharpe_ratio": 0.29,
@@ -3488,8 +3490,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.08953243800895323,
       "by_q": 0.6545906957497228,
-      "mc_tail_lower_95": 0.0257685110014374,
-      "mc_tail_upper_95": 0.0277790638749525,
+      "mc_tail_lower_95": 0.02576851100143744,
+      "mc_tail_upper_95": 0.02777906387495252,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 58,
@@ -3532,7 +3534,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.2778546127582202,
       "by_q": 1.0,
-      "mc_tail_lower_95": 0.1121456051988999,
+      "mc_tail_lower_95": 0.11214560519889998,
       "mc_tail_upper_95": 0.1160968072740914,
       "family_size": 840,
       "is_bonferroni_significant": false,
@@ -3644,11 +3646,11 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "strategy_spec": "P_22_3",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_C × meerkat-70",
-      "total_return_pct": -15.900593936703125,
+      "total_return_pct": -15.900593936703123,
       "max_drawdown_pct": 16.590394649185715,
       "final_nav": 0.841,
       "sharpe_ratio": -2.39,
-      "excess_over_csi300_pct": 1.0918221575300961,
+      "excess_over_csi300_pct": 1.091822157530098,
       "excess_over_monkey_pct": -8.083088956405449,
       "percentile_rank": 2.110978890211098,
       "monkey_percentile": 2.110978890211098,
@@ -3665,7 +3667,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "bh_q": 1.0,
       "by_q": 1.0,
       "mc_tail_lower_95": 0.9779800215565074,
-      "mc_tail_upper_95": 0.9797720519301863,
+      "mc_tail_upper_95": 0.9797720519301865,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 58,
@@ -3732,11 +3734,11 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "strategy_spec": "P_22_3",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_C × meerkat-90",
-      "total_return_pct": -20.446862205174263,
+      "total_return_pct": -20.446862205174266,
       "max_drawdown_pct": 22.89146033501196,
       "final_nav": 0.7955,
       "sharpe_ratio": -2.87,
-      "excess_over_csi300_pct": -3.454446110941042,
+      "excess_over_csi300_pct": -3.4544461109410456,
       "excess_over_monkey_pct": -12.629357224876593,
       "percentile_rank": 0.061999380006199936,
       "monkey_percentile": 0.061999380006199936,
@@ -3797,7 +3799,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "bh_q": 0.41703837240356206,
       "by_q": 1.0,
       "mc_tail_lower_95": 0.1997541301076557,
-      "mc_tail_upper_95": 0.2047431517107247,
+      "mc_tail_upper_95": 0.20474315171072477,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 17,
@@ -3820,11 +3822,11 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "strategy_spec": "P_11_2",
       "animal_category": "Eagle (Concentration)",
       "display_name": "CONTESTANT_C × eagle-11-2",
-      "total_return_pct": -7.917814526999789,
+      "total_return_pct": -7.9178145269997895,
       "max_drawdown_pct": 23.472450411968627,
       "final_nav": 0.9208,
       "sharpe_ratio": -0.67,
-      "excess_over_csi300_pct": 9.074601567233433,
+      "excess_over_csi300_pct": 9.074601567233431,
       "excess_over_monkey_pct": 0.7650531742739275,
       "percentile_rank": 55.05644943550565,
       "monkey_percentile": 55.05644943550565,
@@ -3841,7 +3843,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "bh_q": 0.7246177058382968,
       "by_q": 1.0,
       "mc_tail_lower_95": 0.4463434197852245,
-      "mc_tail_upper_95": 0.4525195137691402,
+      "mc_tail_upper_95": 0.45251951376914024,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 35,
@@ -3884,8 +3886,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.023027355933337216,
       "by_q": 0.16835789661141995,
-      "mc_tail_lower_95": 0.0043428223137595,
-      "mc_tail_upper_95": 0.0052062877505256,
+      "mc_tail_lower_95": 0.004342822313759521,
+      "mc_tail_upper_95": 0.005206287750525649,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 116,
@@ -3915,7 +3917,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "final_nav": 1.0117,
       "sharpe_ratio": 0.32,
       "excess_over_csi300_pct": 18.167074599354837,
-      "excess_over_monkey_pct": 6.295053705196708,
+      "excess_over_monkey_pct": 6.2950537051967075,
       "percentile_rank": 99.4010059899401,
       "monkey_percentile": 99.4010059899401,
       "monkey_percentile_rank": 99.4010059899401,
@@ -3930,8 +3932,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.027645877387379975,
       "by_q": 0.2021248892139731,
-      "mc_tail_lower_95": 0.0055115191252712,
-      "mc_tail_upper_95": 0.0064774721278931,
+      "mc_tail_lower_95": 0.0055115191252712884,
+      "mc_tail_upper_95": 0.006477472127893172,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 174,
@@ -3956,7 +3958,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "strategy_spec": "P_88_12",
       "animal_category": "Eagle (Concentration)",
       "display_name": "CONTESTANT_C × eagle-88-12",
-      "total_return_pct": 0.1121848009773662,
+      "total_return_pct": 0.11218480097736627,
       "max_drawdown_pct": 6.6693890580036275,
       "final_nav": 1.0011,
       "sharpe_ratio": 0.12,
@@ -3976,8 +3978,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.060853539936216366,
       "by_q": 0.4449131726056426,
-      "mc_tail_lower_95": 0.0157976192710663,
-      "mc_tail_upper_95": 0.0173905974458963,
+      "mc_tail_lower_95": 0.015797619271066366,
+      "mc_tail_upper_95": 0.017390597445896303,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 233,
@@ -4000,12 +4002,12 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "strategy_spec": "P_123_17",
       "animal_category": "Whale Shark (Broad Selection)",
       "display_name": "CONTESTANT_C × whale-shark",
-      "total_return_pct": -0.0920201869642811,
+      "total_return_pct": -0.09202018696428116,
       "max_drawdown_pct": 6.029966389759256,
       "final_nav": 0.9991,
       "sharpe_ratio": 0.07,
       "excess_over_csi300_pct": 16.90039590726894,
-      "excess_over_monkey_pct": 3.045108189158769,
+      "excess_over_monkey_pct": 3.0451081891587686,
       "percentile_rank": 97.1010289897101,
       "monkey_percentile": 97.1010289897101,
       "monkey_percentile_rank": 97.1010289897101,
@@ -4020,8 +4022,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.09512248627513725,
       "by_q": 0.6954607274969874,
-      "mc_tail_lower_95": 0.0279489709136131,
-      "mc_tail_upper_95": 0.0300384677770224,
+      "mc_tail_lower_95": 0.027948970913613116,
+      "mc_tail_upper_95": 0.030038467777022477,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 327,
@@ -4049,7 +4051,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "final_nav": 0.9066,
       "sharpe_ratio": -0.92,
       "excess_over_csi300_pct": 7.655178426548071,
-      "excess_over_monkey_pct": -1.519732687387476,
+      "excess_over_monkey_pct": -1.5197326873874761,
       "percentile_rank": 35.636643633563665,
       "monkey_percentile": 35.636643633563665,
       "monkey_percentile_rank": 35.636643633563665,
@@ -4152,8 +4154,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.021372567339415362,
       "by_q": 0.15625938526622804,
-      "mc_tail_lower_95": 0.0038943521709225,
-      "mc_tail_upper_95": 0.0047148088890228,
+      "mc_tail_lower_95": 0.0038943521709225255,
+      "mc_tail_upper_95": 0.00471480888902281,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 52,
@@ -4183,7 +4185,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "final_nav": 1.0481,
       "sharpe_ratio": 0.83,
       "excess_over_csi300_pct": 21.804262336557244,
-      "excess_over_monkey_pct": 12.6293512226217,
+      "excess_over_monkey_pct": 12.629351222621699,
       "percentile_rank": 99.5480045199548,
       "monkey_percentile": 99.5480045199548,
       "monkey_percentile_rank": 99.5480045199548,
@@ -4198,8 +4200,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.02233389430811574,
       "by_q": 0.16328785118627398,
-      "mc_tail_lower_95": 0.0041041329940005,
-      "mc_tail_upper_95": 0.0049450037373079,
+      "mc_tail_lower_95": 0.004104132994000508,
+      "mc_tail_upper_95": 0.004945003737307937,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 49,
@@ -4244,8 +4246,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.023433856570525203,
       "by_q": 0.17132990922312813,
-      "mc_tail_lower_95": 0.004476619710533,
-      "mc_tail_upper_95": 0.0053524758277691,
+      "mc_tail_lower_95": 0.004476619710533056,
+      "mc_tail_upper_95": 0.005352475827769154,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 46,
@@ -4270,11 +4272,11 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "strategy_spec": "P_22_3",
       "animal_category": "Snail (Stale)",
       "display_name": "CONTESTANT_D × snail-1",
-      "total_return_pct": -10.595442348332408,
+      "total_return_pct": -10.595442348332407,
       "max_drawdown_pct": 18.4192363177775,
       "final_nav": 0.894,
       "sharpe_ratio": -1.13,
-      "excess_over_csi300_pct": 6.396973745900812,
+      "excess_over_csi300_pct": 6.396973745900814,
       "excess_over_monkey_pct": -2.777937368034733,
       "percentile_rank": 24.680753192468075,
       "monkey_percentile": 24.680753192468075,
@@ -4422,7 +4424,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 1.0,
       "by_q": 1.0,
-      "mc_tail_lower_95": 0.9259359634231604,
+      "mc_tail_lower_95": 0.9259359634231603,
       "mc_tail_upper_95": 0.9291591850879276,
       "family_size": 840,
       "is_bonferroni_significant": false,
@@ -4466,8 +4468,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.18708135066300347,
       "by_q": 1.0,
-      "mc_tail_lower_95": 0.0646369180689138,
-      "mc_tail_upper_95": 0.0677283022799256,
+      "mc_tail_lower_95": 0.06463691806891388,
+      "mc_tail_upper_95": 0.06772830227992561,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 156,
@@ -4510,8 +4512,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.36214941280666346,
       "by_q": 1.0,
-      "mc_tail_lower_95": 0.1611032729697996,
-      "mc_tail_upper_95": 0.1656962681580452,
+      "mc_tail_lower_95": 0.16110327296979968,
+      "mc_tail_upper_95": 0.16569626815804525,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 238,
@@ -4598,7 +4600,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 1.0,
       "by_q": 1.0,
-      "mc_tail_lower_95": 0.999963111885842,
+      "mc_tail_lower_95": 0.9999631118858421,
       "mc_tail_upper_95": 1.0,
       "family_size": 840,
       "is_bonferroni_significant": false,
@@ -4622,12 +4624,12 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "strategy_spec": "P_22_3",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_D × meerkat-10",
-      "total_return_pct": 2.167706985424012,
+      "total_return_pct": 2.1677069854240116,
       "max_drawdown_pct": 8.818814111836392,
       "final_nav": 1.0217,
       "sharpe_ratio": 0.53,
       "excess_over_csi300_pct": 19.160123079657232,
-      "excess_over_monkey_pct": 9.985211965721684,
+      "excess_over_monkey_pct": 9.985211965721685,
       "percentile_rank": 98.3820161798382,
       "monkey_percentile": 98.3820161798382,
       "monkey_percentile_rank": 98.3820161798382,
@@ -4642,7 +4644,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.05987252902801369,
       "by_q": 0.43774079321757947,
-      "mc_tail_lower_95": 0.0153973152860451,
+      "mc_tail_lower_95": 0.015397315286045137,
       "mc_tail_upper_95": 0.0169709282502162,
       "family_size": 840,
       "is_bonferroni_significant": false,
@@ -4686,8 +4688,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.2109518336993286,
       "by_q": 1.0,
-      "mc_tail_lower_95": 0.0779295922935644,
-      "mc_tail_upper_95": 0.0812948387870459,
+      "mc_tail_lower_95": 0.07792959229356447,
+      "mc_tail_upper_95": 0.08129483878704594,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 58,
@@ -4774,8 +4776,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.23445497252344547,
       "by_q": 1.0,
-      "mc_tail_lower_95": 0.0897595272267859,
-      "mc_tail_upper_95": 0.0933442042509121,
+      "mc_tail_lower_95": 0.08975952722678594,
+      "mc_tail_upper_95": 0.09334420425091218,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 58,
@@ -4930,11 +4932,11 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "strategy_spec": "P_22_3",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_D × meerkat-80",
-      "total_return_pct": -15.290948671570805,
+      "total_return_pct": -15.290948671570803,
       "max_drawdown_pct": 16.468347967346585,
       "final_nav": 0.8471,
       "sharpe_ratio": -2.25,
-      "excess_over_csi300_pct": 1.7014674226624162,
+      "excess_over_csi300_pct": 1.701467422662418,
       "excess_over_monkey_pct": -7.473443691273129,
       "percentile_rank": 3.050969490305097,
       "monkey_percentile": 3.050969490305097,
@@ -4951,7 +4953,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "bh_q": 1.0,
       "by_q": 1.0,
       "mc_tail_lower_95": 0.968405328950412,
-      "mc_tail_upper_95": 0.9705473257363152,
+      "mc_tail_upper_95": 0.9705473257363151,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 58,
@@ -4995,7 +4997,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "bh_q": 0.5166513357287952,
       "by_q": 1.0,
       "mc_tail_lower_95": 0.2715462625698263,
-      "mc_tail_upper_95": 0.277086832881712,
+      "mc_tail_upper_95": 0.27708683288171204,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 58,
@@ -5038,7 +5040,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.4617769425142628,
       "by_q": 1.0,
-      "mc_tail_lower_95": 0.2298348089517883,
+      "mc_tail_lower_95": 0.22983480895178837,
       "mc_tail_upper_95": 0.2350807174745204,
       "family_size": 840,
       "is_bonferroni_significant": false,
@@ -5082,8 +5084,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.41297841385675915,
       "by_q": 1.0,
-      "mc_tail_lower_95": 0.1946780238763815,
-      "mc_tail_upper_95": 0.1996195543920907,
+      "mc_tail_lower_95": 0.19467802387638153,
+      "mc_tail_upper_95": 0.19961955439209073,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 35,
@@ -5126,8 +5128,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.10057108731238268,
       "by_q": 0.7352966084709479,
-      "mc_tail_lower_95": 0.0298164240521759,
-      "mc_tail_upper_95": 0.0319708987319431,
+      "mc_tail_lower_95": 0.029816424052175945,
+      "mc_tail_upper_95": 0.031970898731943115,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 116,
@@ -5170,8 +5172,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 0.2781572184278157,
       "bh_q": 0.0029284110828616487,
       "by_q": 0.02141023623169867,
-      "mc_tail_lower_95": 0.0002605271060817,
-      "mc_tail_upper_95": 0.0005099605611549,
+      "mc_tail_lower_95": 0.00026052710608173095,
+      "mc_tail_upper_95": 0.0005099605611549961,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 174,
@@ -5216,8 +5218,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 0.6407935920640794,
       "bh_q": 0.005860406512213948,
       "by_q": 0.04284667838289758,
-      "mc_tail_lower_95": 0.0007148021563209,
-      "mc_tail_upper_95": 0.0010951091858706,
+      "mc_tail_lower_95": 0.0007148021563209018,
+      "mc_tail_upper_95": 0.0010951091858706458,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 232,
@@ -5288,12 +5290,12 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "strategy_spec": "P_22_3",
       "animal_category": "Baseline",
       "display_name": "CONTESTANT_E × robot",
-      "total_return_pct": -9.746666985817695,
+      "total_return_pct": -9.746666985817697,
       "max_drawdown_pct": 9.79730325001843,
       "final_nav": 0.9025,
       "sharpe_ratio": -1.6,
-      "excess_over_csi300_pct": 7.245749108415525,
-      "excess_over_monkey_pct": -1.9291620055200245,
+      "excess_over_csi300_pct": 7.245749108415524,
+      "excess_over_monkey_pct": -1.9291620055200243,
       "percentile_rank": 31.86368136318637,
       "monkey_percentile": 31.86368136318637,
       "monkey_percentile_rank": 31.86368136318637,
@@ -5353,7 +5355,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "bh_q": 0.7140905335132695,
       "by_q": 1.0,
       "mc_tail_lower_95": 0.4355612657702595,
-      "mc_tail_upper_95": 0.4417222937282762,
+      "mc_tail_upper_95": 0.44172229372827626,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 55,
@@ -5396,7 +5398,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.3716148885022778,
       "by_q": 1.0,
-      "mc_tail_lower_95": 0.168869893767113,
+      "mc_tail_lower_95": 0.16886989376711303,
       "mc_tail_upper_95": 0.1735491929525873,
       "family_size": 840,
       "is_bonferroni_significant": false,
@@ -5440,8 +5442,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.07594350286005337,
       "by_q": 0.5552391008258059,
-      "mc_tail_lower_95": 0.021148737013647,
-      "mc_tail_upper_95": 0.0229791303674049,
+      "mc_tail_lower_95": 0.021148737013647015,
+      "mc_tail_upper_95": 0.02297913036740491,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 49,
@@ -5484,8 +5486,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.14288857111428885,
       "by_q": 1.0,
-      "mc_tail_lower_95": 0.0463082152859146,
-      "mc_tail_upper_95": 0.048958102242549,
+      "mc_tail_lower_95": 0.04630821528591463,
+      "mc_tail_upper_95": 0.048958102242549095,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 46,
@@ -5552,11 +5554,11 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "strategy_spec": "P_22_3",
       "animal_category": "Snail (Stale)",
       "display_name": "CONTESTANT_E × snail-2",
-      "total_return_pct": -10.630086072641545,
+      "total_return_pct": -10.630086072641543,
       "max_drawdown_pct": 10.712792673602568,
       "final_nav": 0.8937,
       "sharpe_ratio": -1.96,
-      "excess_over_csi300_pct": 6.362330021591676,
+      "excess_over_csi300_pct": 6.362330021591678,
       "excess_over_monkey_pct": -2.8125810923438688,
       "percentile_rank": 24.402755972440275,
       "monkey_percentile": 24.402755972440275,
@@ -5601,7 +5603,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "final_nav": 0.9119,
       "sharpe_ratio": -1.68,
       "excess_over_csi300_pct": 8.179162139306396,
-      "excess_over_monkey_pct": -0.9957489746291516,
+      "excess_over_monkey_pct": -0.9957489746291515,
       "percentile_rank": 40.44259557404426,
       "monkey_percentile": 40.44259557404426,
       "monkey_percentile_rank": 40.44259557404426,
@@ -5645,7 +5647,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "final_nav": 0.9185,
       "sharpe_ratio": -1.53,
       "excess_over_csi300_pct": 8.8466689750483,
-      "excess_over_monkey_pct": -0.3282421388872469,
+      "excess_over_monkey_pct": -0.32824213888724696,
       "percentile_rank": 46.77653223467765,
       "monkey_percentile": 46.77653223467765,
       "monkey_percentile_rank": 46.77653223467765,
@@ -5704,8 +5706,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.6722437745801468,
       "by_q": 1.0,
-      "mc_tail_lower_95": 0.3994983288921812,
-      "mc_tail_upper_95": 0.4055873249142377,
+      "mc_tail_lower_95": 0.39949832889218123,
+      "mc_tail_upper_95": 0.40558732491423777,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 154,
@@ -5733,7 +5735,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "final_nav": 0.9265,
       "sharpe_ratio": -1.12,
       "excess_over_csi300_pct": 9.640886104471713,
-      "excess_over_monkey_pct": 1.403766892719133,
+      "excess_over_monkey_pct": 1.4037668927191327,
       "percentile_rank": 62.470375296247035,
       "monkey_percentile": 62.470375296247035,
       "monkey_percentile_rank": 62.470375296247035,
@@ -5748,8 +5750,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.6513405940320762,
       "by_q": 1.0,
-      "mc_tail_lower_95": 0.3722876192756711,
-      "mc_tail_upper_95": 0.3782996155475288,
+      "mc_tail_lower_95": 0.37228761927567117,
+      "mc_tail_upper_95": 0.37829961554752883,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 260,
@@ -5909,7 +5911,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "final_nav": 0.9044,
       "sharpe_ratio": -1.56,
       "excess_over_csi300_pct": 7.4359995674600725,
-      "excess_over_monkey_pct": -1.7389115464754743,
+      "excess_over_monkey_pct": -1.7389115464754745,
       "percentile_rank": 33.62066379336207,
       "monkey_percentile": 33.62066379336207,
       "monkey_percentile_rank": 33.62066379336207,
@@ -6012,8 +6014,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.20170637003307387,
       "by_q": 1.0,
-      "mc_tail_lower_95": 0.0728105871852839,
-      "mc_tail_upper_95": 0.0760741473796184,
+      "mc_tail_lower_95": 0.07281058718528394,
+      "mc_tail_upper_95": 0.07607414737961841,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 58,
@@ -6056,7 +6058,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.7363350665558764,
       "by_q": 1.0,
-      "mc_tail_lower_95": 0.4658729358786135,
+      "mc_tail_lower_95": 0.46587293587861356,
       "mc_tail_upper_95": 0.4720688641523551,
       "family_size": 840,
       "is_bonferroni_significant": false,
@@ -6144,8 +6146,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.35458513339394904,
       "by_q": 1.0,
-      "mc_tail_lower_95": 0.1543525034146861,
-      "mc_tail_upper_95": 0.1588674328863176,
+      "mc_tail_lower_95": 0.15435250341468618,
+      "mc_tail_upper_95": 0.15886743288631766,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 58,
@@ -6189,7 +6191,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "bh_q": 0.18686975292409236,
       "by_q": 1.0,
       "mc_tail_lower_95": 0.0643105027115807,
-      "mc_tail_upper_95": 0.0673947370723975,
+      "mc_tail_upper_95": 0.06739473707239754,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 59,
@@ -6233,7 +6235,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "bh_q": 0.43334165198494,
       "by_q": 1.0,
       "mc_tail_lower_95": 0.2094900357242042,
-      "mc_tail_upper_95": 0.2145666777018446,
+      "mc_tail_upper_95": 0.21456667770184462,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 58,
@@ -6320,7 +6322,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.45431545684543156,
       "by_q": 1.0,
-      "mc_tail_lower_95": 0.2243469146129661,
+      "mc_tail_lower_95": 0.22434691461296616,
       "mc_tail_upper_95": 0.2295489319069299,
       "family_size": 840,
       "is_bonferroni_significant": false,
@@ -6408,7 +6410,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 1.0,
       "by_q": 1.0,
-      "mc_tail_lower_95": 0.904890582585794,
+      "mc_tail_lower_95": 0.9048905825857941,
       "mc_tail_upper_95": 0.9085057883492336,
       "family_size": 840,
       "is_bonferroni_significant": false,
@@ -6453,7 +6455,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "bh_q": 1.0,
       "by_q": 1.0,
       "mc_tail_lower_95": 0.9867407136952372,
-      "mc_tail_upper_95": 0.9881307998384616,
+      "mc_tail_upper_95": 0.9881307998384617,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 232,
@@ -6496,7 +6498,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 1.0,
       "by_q": 1.0,
-      "mc_tail_lower_95": 0.9121544654480812,
+      "mc_tail_lower_95": 0.9121544654480811,
       "mc_tail_upper_95": 0.9156414839390716,
       "family_size": 840,
       "is_bonferroni_significant": false,
@@ -6564,12 +6566,12 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "strategy_spec": "P_22_3",
       "animal_category": "Sloth (Lagged)",
       "display_name": "CONTESTANT_F × sloth-1",
-      "total_return_pct": -3.66786658247974,
+      "total_return_pct": -3.6678665824797396,
       "max_drawdown_pct": 9.558130054009006,
       "final_nav": 0.9633,
       "sharpe_ratio": -0.55,
       "excess_over_csi300_pct": 13.324549511753482,
-      "excess_over_monkey_pct": 4.149638397817935,
+      "excess_over_monkey_pct": 4.1496383978179345,
       "percentile_rank": 83.34316656833431,
       "monkey_percentile": 83.34316656833431,
       "monkey_percentile_rank": 83.34316656833431,
@@ -6584,8 +6586,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.3653634481931943,
       "by_q": 1.0,
-      "mc_tail_lower_95": 0.1642554462090808,
-      "mc_tail_upper_95": 0.1688839104633718,
+      "mc_tail_lower_95": 0.16425544620908086,
+      "mc_tail_upper_95": 0.16888391046337187,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 55,
@@ -6613,7 +6615,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "final_nav": 1.0199,
       "sharpe_ratio": 0.47,
       "excess_over_csi300_pct": 18.98512725221898,
-      "excess_over_monkey_pct": 9.810216138283431,
+      "excess_over_monkey_pct": 9.810216138283433,
       "percentile_rank": 98.25701742982571,
       "monkey_percentile": 98.25701742982571,
       "monkey_percentile_rank": 98.25701742982571,
@@ -6628,8 +6630,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.06338118436997449,
       "by_q": 0.4633933186320044,
-      "mc_tail_lower_95": 0.0166181402763517,
-      "mc_tail_upper_95": 0.0182500218310279,
+      "mc_tail_lower_95": 0.01661814027635179,
+      "mc_tail_upper_95": 0.018250021831027984,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 52,
@@ -6672,8 +6674,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.06520612759974095,
       "by_q": 0.47673586670778806,
-      "mc_tail_lower_95": 0.0174391499203888,
-      "mc_tail_upper_95": 0.0191089579872138,
+      "mc_tail_lower_95": 0.017439149920388888,
+      "mc_tail_upper_95": 0.019108957987213827,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 49,
@@ -6716,8 +6718,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.1958882371960594,
       "by_q": 1.0,
-      "mc_tail_lower_95": 0.0696135964619354,
-      "mc_tail_upper_95": 0.0728113279177357,
+      "mc_tail_lower_95": 0.06961359646193546,
+      "mc_tail_upper_95": 0.07281132791773573,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 46,
@@ -6849,7 +6851,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "bh_q": 1.0,
       "by_q": 1.0,
       "mc_tail_lower_95": 0.8970754648939266,
-      "mc_tail_upper_95": 0.9008213592663696,
+      "mc_tail_upper_95": 0.9008213592663697,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 49,
@@ -7048,11 +7050,11 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "strategy_spec": "P_22_3",
       "animal_category": "Koala (Inverted)",
       "display_name": "CONTESTANT_F × koala",
-      "total_return_pct": 6.896680973847436,
+      "total_return_pct": 6.8966809738474355,
       "max_drawdown_pct": 5.343509662635726,
       "final_nav": 1.069,
       "sharpe_ratio": 1.41,
-      "excess_over_csi300_pct": 23.88909706808066,
+      "excess_over_csi300_pct": 23.889097068080655,
       "excess_over_monkey_pct": 14.714185954145108,
       "percentile_rank": 99.820001799982,
       "monkey_percentile": 99.820001799982,
@@ -7068,8 +7070,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.010427481932077232,
       "by_q": 0.07623753808819017,
-      "mc_tail_lower_95": 0.0015375574000792,
-      "mc_tail_upper_95": 0.0020720038695317,
+      "mc_tail_lower_95": 0.0015375574000792923,
+      "mc_tail_upper_95": 0.002072003869531709,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 58,
@@ -7158,7 +7160,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.5533857325182207,
       "by_q": 1.0,
-      "mc_tail_lower_95": 0.2983174148287724,
+      "mc_tail_lower_95": 0.29831741482877244,
       "mc_tail_upper_95": 0.3040141219196797,
       "family_size": 840,
       "is_bonferroni_significant": false,
@@ -7246,7 +7248,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 1.0,
       "by_q": 1.0,
-      "mc_tail_lower_95": 0.9808194849848604,
+      "mc_tail_lower_95": 0.9808194849848605,
       "mc_tail_upper_95": 0.9824924116071604,
       "family_size": 840,
       "is_bonferroni_significant": false,
@@ -7291,7 +7293,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "bh_q": 0.5637014904149015,
       "by_q": 1.0,
       "mc_tail_lower_95": 0.3078322345865129,
-      "mc_tail_upper_95": 0.313578748427036,
+      "mc_tail_upper_95": 0.31357874842703604,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 58,
@@ -7314,7 +7316,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "strategy_spec": "P_22_3",
       "animal_category": "Meerkat (Percentile)",
       "display_name": "CONTESTANT_F × meerkat-60",
-      "total_return_pct": -0.4862572638764439,
+      "total_return_pct": -0.48625726387644397,
       "max_drawdown_pct": 11.731020204633724,
       "final_nav": 0.9951,
       "sharpe_ratio": 0.06,
@@ -7334,8 +7336,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.15081125784486835,
       "by_q": 1.0,
-      "mc_tail_lower_95": 0.0492693315769593,
-      "mc_tail_upper_95": 0.0519968077055672,
+      "mc_tail_lower_95": 0.04926933157695939,
+      "mc_tail_upper_95": 0.05199680770556722,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 58,
@@ -7379,7 +7381,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "bh_q": 0.6555145716148473,
       "by_q": 1.0,
       "mc_tail_lower_95": 0.3803449455750678,
-      "mc_tail_upper_95": 0.3863818210202848,
+      "mc_tail_upper_95": 0.38638182102028484,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 58,
@@ -7422,8 +7424,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.5430833108887454,
       "by_q": 1.0,
-      "mc_tail_lower_95": 0.2900504806200006,
-      "mc_tail_upper_95": 0.2957015373424211,
+      "mc_tail_lower_95": 0.29005048062000066,
+      "mc_tail_upper_95": 0.29570153734242116,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 58,
@@ -7466,8 +7468,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.4781896367082841,
       "by_q": 1.0,
-      "mc_tail_lower_95": 0.242117581243479,
-      "mc_tail_upper_95": 0.2474572289926034,
+      "mc_tail_lower_95": 0.24211758124347904,
+      "mc_tail_upper_95": 0.24745722899260342,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 58,
@@ -7510,7 +7512,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 0.47080937641327814,
       "by_q": 1.0,
-      "mc_tail_lower_95": 0.2361202596876234,
+      "mc_tail_lower_95": 0.23612025968762348,
       "mc_tail_upper_95": 0.2414149002048588,
       "family_size": 840,
       "is_bonferroni_significant": false,
@@ -7539,7 +7541,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "final_nav": 0.9123,
       "sharpe_ratio": -1.31,
       "excess_over_csi300_pct": 8.225664986310566,
-      "excess_over_monkey_pct": -0.083883406648938,
+      "excess_over_monkey_pct": -0.08388340664893801,
       "percentile_rank": 49.42850571494285,
       "monkey_percentile": 49.42850571494285,
       "monkey_percentile_rank": 49.42850571494285,
@@ -7578,12 +7580,12 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "strategy_spec": "P_44_6",
       "animal_category": "Eagle (Concentration)",
       "display_name": "CONTESTANT_F × eagle-44-6",
-      "total_return_pct": -9.655102505978295,
+      "total_return_pct": -9.655102505978297,
       "max_drawdown_pct": 12.208197349379645,
       "final_nav": 0.9034,
       "sharpe_ratio": -1.65,
-      "excess_over_csi300_pct": 7.337313588254926,
-      "excess_over_monkey_pct": -3.1093163544311078,
+      "excess_over_csi300_pct": 7.337313588254924,
+      "excess_over_monkey_pct": -3.1093163544311073,
       "percentile_rank": 13.369866301336987,
       "monkey_percentile": 13.369866301336987,
       "monkey_percentile_rank": 13.369866301336987,
@@ -7627,7 +7629,7 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "final_nav": 0.9208,
       "sharpe_ratio": -1.41,
       "excess_over_csi300_pct": 9.075064678055757,
-      "excess_over_monkey_pct": -2.7969562161023758,
+      "excess_over_monkey_pct": -2.7969562161023753,
       "percentile_rank": 10.68789312106879,
       "monkey_percentile": 10.68789312106879,
       "monkey_percentile_rank": 10.68789312106879,
@@ -7686,8 +7688,8 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
       "holm_p": 1.0,
       "bh_q": 1.0,
       "by_q": 1.0,
-      "mc_tail_lower_95": 0.9895906326536092,
-      "mc_tail_upper_95": 0.990820683507344,
+      "mc_tail_lower_95": 0.9895906326536091,
+      "mc_tail_upper_95": 0.9908206835073439,
       "family_size": 840,
       "is_bonferroni_significant": false,
       "buy_attempt_count": 232,
@@ -42690,6 +42692,333 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
     {
       "strategy_spec": "P_22_3",
       "deterministic": false,
+      "daily_quantiles": {
+        "2026-07-03": {
+          "p05": 1.0,
+          "median": 1.0,
+          "p95": 1.0
+        },
+        "2026-07-06": {
+          "p05": 0.9772146894467084,
+          "median": 0.9890601355163975,
+          "p95": 1.0008696925214513
+        },
+        "2026-07-07": {
+          "p05": 0.9520109493907779,
+          "median": 0.966529473909683,
+          "p95": 0.9814981194210107
+        },
+        "2026-07-08": {
+          "p05": 0.9337738324383503,
+          "median": 0.9530497323454116,
+          "p95": 0.9729240884930164
+        },
+        "2026-07-09": {
+          "p05": 0.9363451694684973,
+          "median": 0.9562847646009115,
+          "p95": 0.9786081271737165
+        },
+        "2026-07-10": {
+          "p05": 0.9403362167985122,
+          "median": 0.9621826938481062,
+          "p95": 0.9845170407777386
+        },
+        "2026-07-13": {
+          "p05": 0.9015580952194951,
+          "median": 0.9294570042493497,
+          "p95": 0.9578991922663341
+        },
+        "2026-07-14": {
+          "p05": 0.909653035749217,
+          "median": 0.9386419054707045,
+          "p95": 0.9678767198641125
+        },
+        "2026-07-15": {
+          "p05": 0.907563432586905,
+          "median": 0.9421310987834246,
+          "p95": 0.9763927597302322
+        },
+        "2026-07-16": {
+          "p05": 0.8959364577502337,
+          "median": 0.9355564819330557,
+          "p95": 0.9746418231639062
+        },
+        "2026-07-17": {
+          "p05": 0.8515477857998418,
+          "median": 0.895745869755854,
+          "p95": 0.9392526689667918
+        },
+        "2026-07-20": {
+          "p05": 0.8399495538507739,
+          "median": 0.8924513293016074,
+          "p95": 0.9430609482187698
+        },
+        "2026-07-21": {
+          "p05": 0.8618167960590442,
+          "median": 0.9091642750074298,
+          "p95": 0.9553993556988507
+        },
+        "2026-07-22": {
+          "p05": 0.8513435440373283,
+          "median": 0.9009549592954554,
+          "p95": 0.9497773254804444
+        },
+        "2026-07-23": {
+          "p05": 0.8604043870801131,
+          "median": 0.9113225740662305,
+          "p95": 0.9610424726462926
+        },
+        "2026-07-24": {
+          "p05": 0.834669786292229,
+          "median": 0.8837889031458426,
+          "p95": 0.9315191046290908
+        },
+        "2026-07-27": {
+          "p05": 0.858724883330141,
+          "median": 0.9080532379582075,
+          "p95": 0.9559182899913072
+        },
+        "2026-07-28": {
+          "p05": 0.8477477405435422,
+          "median": 0.9006589288705693,
+          "p95": 0.9520706540111941
+        },
+        "2026-07-29": {
+          "p05": 0.8608151374234098,
+          "median": 0.917023805641506,
+          "p95": 0.9704105601209679
+        },
+        "2026-07-30": {
+          "p05": 0.8468055251800497,
+          "median": 0.9090483501468078,
+          "p95": 0.9678714232108793
+        },
+        "2026-07-31": {
+          "p05": 0.8645669775454551,
+          "median": 0.925471431933395,
+          "p95": 0.9834570227776669
+        },
+        "2026-08-03": {
+          "p05": 0.8704577256508961,
+          "median": 0.9340933528121744,
+          "p95": 0.9938701432811539
+        },
+        "2026-08-04": {
+          "p05": 0.8850549670007521,
+          "median": 0.9449652389536827,
+          "p95": 1.002864469133145
+        },
+        "2026-08-05": {
+          "p05": 0.9014278417223175,
+          "median": 0.958968031896574,
+          "p95": 1.016001615604467
+        },
+        "2026-08-06": {
+          "p05": 0.9002338889667647,
+          "median": 0.956442218778393,
+          "p95": 1.0129088850189465
+        },
+        "2026-08-07": {
+          "p05": 0.9086949082347023,
+          "median": 0.9640274688109275,
+          "p95": 1.0219695235547386
+        },
+        "2026-08-10": {
+          "p05": 0.9150576811404776,
+          "median": 0.9722474356700517,
+          "p95": 1.0332941445134536
+        },
+        "2026-08-11": {
+          "p05": 0.9108503747095439,
+          "median": 0.9675650577646167,
+          "p95": 1.0284768494027354
+        },
+        "2026-08-12": {
+          "p05": 0.918035132565758,
+          "median": 0.9747255103181318,
+          "p95": 1.036696571474816
+        },
+        "2026-08-13": {
+          "p05": 0.9091457722545706,
+          "median": 0.9657478937700583,
+          "p95": 1.0275507380986273
+        },
+        "2026-08-14": {
+          "p05": 0.9086443427732473,
+          "median": 0.964359237605542,
+          "p95": 1.0266325768470486
+        },
+        "2026-08-17": {
+          "p05": 0.9235298936347546,
+          "median": 0.9795674260843015,
+          "p95": 1.0429381638593063
+        },
+        "2026-08-18": {
+          "p05": 0.9204831434651258,
+          "median": 0.9768249839194462,
+          "p95": 1.0408228408034519
+        },
+        "2026-08-19": {
+          "p05": 0.8821924149184348,
+          "median": 0.9382620649168281,
+          "p95": 1.000324547247576
+        },
+        "2026-08-20": {
+          "p05": 0.8902228831073078,
+          "median": 0.9481653594360013,
+          "p95": 1.0129035498064807
+        },
+        "2026-08-21": {
+          "p05": 0.8881429411669794,
+          "median": 0.9446197895309076,
+          "p95": 1.0069722489285597
+        },
+        "2026-08-24": {
+          "p05": 0.8783945597974808,
+          "median": 0.9356297704476216,
+          "p95": 0.9986522890088769
+        },
+        "2026-08-25": {
+          "p05": 0.8872265520777354,
+          "median": 0.9449212532386722,
+          "p95": 1.0078989483304333
+        },
+        "2026-08-26": {
+          "p05": 0.8899444919363516,
+          "median": 0.94830416828546,
+          "p95": 1.0117789976646265
+        },
+        "2026-08-27": {
+          "p05": 0.9028130125109581,
+          "median": 0.9611359834729205,
+          "p95": 1.0264530400911223
+        },
+        "2026-08-28": {
+          "p05": 0.9029178464253804,
+          "median": 0.9626905719873,
+          "p95": 1.029055603449102
+        },
+        "2026-08-31": {
+          "p05": 0.9064725571330274,
+          "median": 0.9662496140759861,
+          "p95": 1.0338715692605462
+        },
+        "2026-09-01": {
+          "p05": 0.9069890526580213,
+          "median": 0.9682602977065502,
+          "p95": 1.036944391743228
+        },
+        "2026-09-02": {
+          "p05": 0.8947628594963547,
+          "median": 0.955490006217603,
+          "p95": 1.0230376492920434
+        },
+        "2026-09-03": {
+          "p05": 0.8944935092401117,
+          "median": 0.9550376349907157,
+          "p95": 1.022574877953424
+        },
+        "2026-09-04": {
+          "p05": 0.8902545299586098,
+          "median": 0.9524050278478742,
+          "p95": 1.020726037122734
+        },
+        "2026-09-07": {
+          "p05": 0.8970747034004567,
+          "median": 0.9591219885041323,
+          "p95": 1.0285245857153882
+        },
+        "2026-09-08": {
+          "p05": 0.9026014866621632,
+          "median": 0.965888014130972,
+          "p95": 1.0354475380873955
+        },
+        "2026-09-09": {
+          "p05": 0.8988863494772001,
+          "median": 0.9622300013632898,
+          "p95": 1.0319905147254158
+        },
+        "2026-09-10": {
+          "p05": 0.8895936414704761,
+          "median": 0.952474601510094,
+          "p95": 1.021666679952449
+        },
+        "2026-09-11": {
+          "p05": 0.8712341254887345,
+          "median": 0.9329942895542422,
+          "p95": 1.0009454569933738
+        },
+        "2026-09-14": {
+          "p05": 0.8746106667908383,
+          "median": 0.9365621665427515,
+          "p95": 1.0050498068771596
+        },
+        "2026-09-15": {
+          "p05": 0.8682262598657787,
+          "median": 0.9294766186310834,
+          "p95": 0.9978418924357829
+        },
+        "2026-09-16": {
+          "p05": 0.8781515216126653,
+          "median": 0.9401400815978911,
+          "p95": 1.0100802051287479
+        },
+        "2026-09-17": {
+          "p05": 0.8756748961149049,
+          "median": 0.9376218349996861,
+          "p95": 1.0079064007919483
+        },
+        "2026-09-18": {
+          "p05": 0.8879773131435962,
+          "median": 0.9511056532229283,
+          "p95": 1.0229385239054514
+        },
+        "2026-09-21": {
+          "p05": 0.9000113877703935,
+          "median": 0.9643028173209085,
+          "p95": 1.037977674663719
+        },
+        "2026-09-22": {
+          "p05": 0.899718519308684,
+          "median": 0.9646180850425694,
+          "p95": 1.0398459658758261
+        },
+        "2026-09-23": {
+          "p05": 0.8944976418779798,
+          "median": 0.9593226254390317,
+          "p95": 1.0356586728813604
+        },
+        "2026-09-24": {
+          "p05": 0.878732269792976,
+          "median": 0.9425940418148835,
+          "p95": 1.0169159697635615
+        },
+        "2026-09-28": {
+          "p05": 0.8565114893999395,
+          "median": 0.9192996918081622,
+          "p95": 0.9913436872121814
+        },
+        "2026-09-29": {
+          "p05": 0.8599321359053598,
+          "median": 0.9232953760756355,
+          "p95": 0.9954758225355925
+        },
+        "2026-09-30": {
+          "p05": 0.8612367775881753,
+          "median": 0.9253595398805091,
+          "p95": 0.9984010661110445
+        },
+        "2026-10-08": {
+          "p05": 0.8498520702376965,
+          "median": 0.9137969137315707,
+          "p95": 0.9855802882562194
+        },
+        "2026-10-09": {
+          "p05": 0.8562695713650378,
+          "median": 0.9218249501970233,
+          "p95": 0.9954120004362849
+        }
+      },
       "settlement_quantiles": {
         "2026-07-10": {
           "p05": 0.9403362167985122,
@@ -42918,6 +43247,333 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
     {
       "strategy_spec": "P_22_11",
       "deterministic": false,
+      "daily_quantiles": {
+        "2026-07-03": {
+          "p05": 1.0,
+          "median": 1.0,
+          "p95": 1.0
+        },
+        "2026-07-06": {
+          "p05": 0.9772146894467084,
+          "median": 0.9890601355163975,
+          "p95": 1.0008696925214513
+        },
+        "2026-07-07": {
+          "p05": 0.9520109493907779,
+          "median": 0.966529473909683,
+          "p95": 0.9814981194210107
+        },
+        "2026-07-08": {
+          "p05": 0.9337738324383503,
+          "median": 0.9530497323454116,
+          "p95": 0.9729240884930164
+        },
+        "2026-07-09": {
+          "p05": 0.9363451694684973,
+          "median": 0.9562847646009115,
+          "p95": 0.9786081271737165
+        },
+        "2026-07-10": {
+          "p05": 0.9403362167985122,
+          "median": 0.9621826938481062,
+          "p95": 0.9845170407777386
+        },
+        "2026-07-13": {
+          "p05": 0.9026961960983961,
+          "median": 0.929098539564452,
+          "p95": 0.9559700527758114
+        },
+        "2026-07-14": {
+          "p05": 0.9103796373958738,
+          "median": 0.9381449414479032,
+          "p95": 0.9663640522031897
+        },
+        "2026-07-15": {
+          "p05": 0.9086260437765286,
+          "median": 0.9412409831636519,
+          "p95": 0.973986304929264
+        },
+        "2026-07-16": {
+          "p05": 0.8972664342779298,
+          "median": 0.9345688156941341,
+          "p95": 0.9716494580592179
+        },
+        "2026-07-17": {
+          "p05": 0.8539907728992656,
+          "median": 0.89552043491842,
+          "p95": 0.9370038853705316
+        },
+        "2026-07-20": {
+          "p05": 0.8432197081447466,
+          "median": 0.8895501930061551,
+          "p95": 0.9351256736993807
+        },
+        "2026-07-21": {
+          "p05": 0.8637922625678891,
+          "median": 0.9071732936382483,
+          "p95": 0.9502507766693876
+        },
+        "2026-07-22": {
+          "p05": 0.8539797418873372,
+          "median": 0.8986908502809243,
+          "p95": 0.9437280485109417
+        },
+        "2026-07-23": {
+          "p05": 0.8626667633820861,
+          "median": 0.9088633548036008,
+          "p95": 0.9551530631455342
+        },
+        "2026-07-24": {
+          "p05": 0.8376216017200906,
+          "median": 0.8821629817957357,
+          "p95": 0.9267165840340185
+        },
+        "2026-07-27": {
+          "p05": 0.8599855581803199,
+          "median": 0.9056759278507516,
+          "p95": 0.9513072248130073
+        },
+        "2026-07-28": {
+          "p05": 0.8498625727447523,
+          "median": 0.8971828156076685,
+          "p95": 0.9444300672192236
+        },
+        "2026-07-29": {
+          "p05": 0.8626898176082438,
+          "median": 0.9123289064618029,
+          "p95": 0.9616905289453697
+        },
+        "2026-07-30": {
+          "p05": 0.8492227019182969,
+          "median": 0.9028102139763479,
+          "p95": 0.9560859857064787
+        },
+        "2026-07-31": {
+          "p05": 0.8659307969947555,
+          "median": 0.9196057352122571,
+          "p95": 0.9728786875966499
+        },
+        "2026-08-03": {
+          "p05": 0.87123748291619,
+          "median": 0.9267273808036197,
+          "p95": 0.9818597428791835
+        },
+        "2026-08-04": {
+          "p05": 0.8845191960161847,
+          "median": 0.9398273559092627,
+          "p95": 0.9950125263070067
+        },
+        "2026-08-05": {
+          "p05": 0.8997164486143299,
+          "median": 0.9557203753838379,
+          "p95": 1.0128591455223135
+        },
+        "2026-08-06": {
+          "p05": 0.8978795015388173,
+          "median": 0.9543438257007979,
+          "p95": 1.0127481738964488
+        },
+        "2026-08-07": {
+          "p05": 0.9052806156312256,
+          "median": 0.9633575028629124,
+          "p95": 1.0246498208783632
+        },
+        "2026-08-10": {
+          "p05": 0.9111243995042012,
+          "median": 0.9704726899004468,
+          "p95": 1.0336692248169697
+        },
+        "2026-08-11": {
+          "p05": 0.9068304058750345,
+          "median": 0.9660517437978873,
+          "p95": 1.029235788389961
+        },
+        "2026-08-12": {
+          "p05": 0.9135846821404876,
+          "median": 0.9737457746141062,
+          "p95": 1.0380497634608765
+        },
+        "2026-08-13": {
+          "p05": 0.9048934049814806,
+          "median": 0.964736026907187,
+          "p95": 1.0289462582469036
+        },
+        "2026-08-14": {
+          "p05": 0.9037870538052254,
+          "median": 0.9642819023975515,
+          "p95": 1.0297356542393097
+        },
+        "2026-08-17": {
+          "p05": 0.9173996573192018,
+          "median": 0.9796076741525372,
+          "p95": 1.0473053405383652
+        },
+        "2026-08-18": {
+          "p05": 0.9143140429018413,
+          "median": 0.9771079901827584,
+          "p95": 1.045542669025246
+        },
+        "2026-08-19": {
+          "p05": 0.877919907112395,
+          "median": 0.9380436484149474,
+          "p95": 1.0033240843279458
+        },
+        "2026-08-20": {
+          "p05": 0.8863992772076236,
+          "median": 0.9474545913874833,
+          "p95": 1.014043829186091
+        },
+        "2026-08-21": {
+          "p05": 0.8836719062676105,
+          "median": 0.9444447887559734,
+          "p95": 1.0104645849961622
+        },
+        "2026-08-24": {
+          "p05": 0.8737905966579735,
+          "median": 0.9348569440591326,
+          "p95": 1.0009227046362272
+        },
+        "2026-08-25": {
+          "p05": 0.8823521389007056,
+          "median": 0.9437879527338051,
+          "p95": 1.010296153213448
+        },
+        "2026-08-26": {
+          "p05": 0.8849295491752542,
+          "median": 0.9471171441076283,
+          "p95": 1.0141783799330495
+        },
+        "2026-08-27": {
+          "p05": 0.8972334747936044,
+          "median": 0.9603955011555437,
+          "p95": 1.0290193019019884
+        },
+        "2026-08-28": {
+          "p05": 0.8975476295068454,
+          "median": 0.9612714899373902,
+          "p95": 1.0305349524502843
+        },
+        "2026-08-31": {
+          "p05": 0.9001960497422904,
+          "median": 0.9648104862212535,
+          "p95": 1.0353330712670963
+        },
+        "2026-09-01": {
+          "p05": 0.9009935835043026,
+          "median": 0.9660214141360419,
+          "p95": 1.036603597081458
+        },
+        "2026-09-02": {
+          "p05": 0.8892285667558844,
+          "median": 0.9537181164992317,
+          "p95": 1.0235020942425404
+        },
+        "2026-09-03": {
+          "p05": 0.8887553205832532,
+          "median": 0.9534222422878358,
+          "p95": 1.023523983921171
+        },
+        "2026-09-04": {
+          "p05": 0.8852026625943805,
+          "median": 0.9502825931531743,
+          "p95": 1.0203434250729693
+        },
+        "2026-09-07": {
+          "p05": 0.8910533344944316,
+          "median": 0.9566128866916291,
+          "p95": 1.0278460238130362
+        },
+        "2026-09-08": {
+          "p05": 0.8964841354136953,
+          "median": 0.9626802077483856,
+          "p95": 1.0350040620329237
+        },
+        "2026-09-09": {
+          "p05": 0.8928638831868907,
+          "median": 0.9593018979635701,
+          "p95": 1.0315882892133923
+        },
+        "2026-09-10": {
+          "p05": 0.8838233639918479,
+          "median": 0.9498859087232363,
+          "p95": 1.0217572398304124
+        },
+        "2026-09-11": {
+          "p05": 0.865771919221003,
+          "median": 0.9310300292978324,
+          "p95": 1.002304022306691
+        },
+        "2026-09-14": {
+          "p05": 0.8686469199094842,
+          "median": 0.9342065158821639,
+          "p95": 1.0057587383533009
+        },
+        "2026-09-15": {
+          "p05": 0.8621015000526004,
+          "median": 0.9276363921989765,
+          "p95": 0.9990833916458114
+        },
+        "2026-09-16": {
+          "p05": 0.8715619510912395,
+          "median": 0.9384366467519167,
+          "p95": 1.011379193193668
+        },
+        "2026-09-17": {
+          "p05": 0.86943176082363,
+          "median": 0.9361137562156658,
+          "p95": 1.0091266444096845
+        },
+        "2026-09-18": {
+          "p05": 0.8813147629601464,
+          "median": 0.9496824851465554,
+          "p95": 1.024407101126873
+        },
+        "2026-09-21": {
+          "p05": 0.8922810902409763,
+          "median": 0.9618161919207884,
+          "p95": 1.0379829509010805
+        },
+        "2026-09-22": {
+          "p05": 0.8921562421671402,
+          "median": 0.9621719129930129,
+          "p95": 1.0387276664768323
+        },
+        "2026-09-23": {
+          "p05": 0.8870520459851029,
+          "median": 0.9572115704739605,
+          "p95": 1.0345808114929356
+        },
+        "2026-09-24": {
+          "p05": 0.8720669437103487,
+          "median": 0.9407226596099821,
+          "p95": 1.0168024216185596
+        },
+        "2026-09-28": {
+          "p05": 0.8498749244611167,
+          "median": 0.9171540447779146,
+          "p95": 0.9916046055485034
+        },
+        "2026-09-29": {
+          "p05": 0.8533074944582721,
+          "median": 0.921037153145177,
+          "p95": 0.9959802966972453
+        },
+        "2026-09-30": {
+          "p05": 0.8547574806572024,
+          "median": 0.9228919816605072,
+          "p95": 0.99831924319289
+        },
+        "2026-10-08": {
+          "p05": 0.843663887162023,
+          "median": 0.9116829337325859,
+          "p95": 0.9868035341207941
+        },
+        "2026-10-09": {
+          "p05": 0.849784781043621,
+          "median": 0.9193721606042835,
+          "p95": 0.9962613635855336
+        }
+      },
       "settlement_quantiles": {
         "2026-07-10": {
           "p05": 0.9403362167985122,
@@ -43146,6 +43802,333 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
     {
       "strategy_spec": "P_22_22",
       "deterministic": false,
+      "daily_quantiles": {
+        "2026-07-03": {
+          "p05": 1.0,
+          "median": 1.0,
+          "p95": 1.0
+        },
+        "2026-07-06": {
+          "p05": 0.9772146894467084,
+          "median": 0.9890601355163975,
+          "p95": 1.0008696925214513
+        },
+        "2026-07-07": {
+          "p05": 0.9520109493907779,
+          "median": 0.966529473909683,
+          "p95": 0.9814981194210107
+        },
+        "2026-07-08": {
+          "p05": 0.9337738324383503,
+          "median": 0.9530497323454116,
+          "p95": 0.9729240884930164
+        },
+        "2026-07-09": {
+          "p05": 0.9363451694684973,
+          "median": 0.9562847646009115,
+          "p95": 0.9786081271737165
+        },
+        "2026-07-10": {
+          "p05": 0.9403362167985122,
+          "median": 0.9621826938481062,
+          "p95": 0.9845170407777386
+        },
+        "2026-07-13": {
+          "p05": 0.9045182197000076,
+          "median": 0.9289150630528817,
+          "p95": 0.9534903377043796
+        },
+        "2026-07-14": {
+          "p05": 0.9112644864703169,
+          "median": 0.9378509831861648,
+          "p95": 0.964601757995033
+        },
+        "2026-07-15": {
+          "p05": 0.9102878294417412,
+          "median": 0.9405782094406754,
+          "p95": 0.9711538912580475
+        },
+        "2026-07-16": {
+          "p05": 0.8996128792410653,
+          "median": 0.933764509838839,
+          "p95": 0.9680274759152752
+        },
+        "2026-07-17": {
+          "p05": 0.8582112586128288,
+          "median": 0.8959844402335296,
+          "p95": 0.9343530040487217
+        },
+        "2026-07-20": {
+          "p05": 0.8484161247810766,
+          "median": 0.8873696819207872,
+          "p95": 0.9265297117931688
+        },
+        "2026-07-21": {
+          "p05": 0.8675286839646791,
+          "median": 0.9057211315679417,
+          "p95": 0.94449621128066
+        },
+        "2026-07-22": {
+          "p05": 0.8580212610337101,
+          "median": 0.8970936051979683,
+          "p95": 0.9370338279519999
+        },
+        "2026-07-23": {
+          "p05": 0.8661636657711261,
+          "median": 0.9067933892635309,
+          "p95": 0.9482404255624906
+        },
+        "2026-07-24": {
+          "p05": 0.8416292928126358,
+          "median": 0.8810178823334671,
+          "p95": 0.9212544010122639
+        },
+        "2026-07-27": {
+          "p05": 0.8626252578375059,
+          "median": 0.9034360312502752,
+          "p95": 0.9450547315267079
+        },
+        "2026-07-28": {
+          "p05": 0.853179855246159,
+          "median": 0.8945876043388741,
+          "p95": 0.936711269300564
+        },
+        "2026-07-29": {
+          "p05": 0.8656063174729014,
+          "median": 0.9087541542633909,
+          "p95": 0.95274957576782
+        },
+        "2026-07-30": {
+          "p05": 0.8525296229688435,
+          "median": 0.8986351373519172,
+          "p95": 0.9458642490620179
+        },
+        "2026-07-31": {
+          "p05": 0.8688452905098423,
+          "median": 0.9153514342275343,
+          "p95": 0.962843672245978
+        },
+        "2026-08-03": {
+          "p05": 0.8731390815186248,
+          "median": 0.920905218553111,
+          "p95": 0.9698719318157412
+        },
+        "2026-08-04": {
+          "p05": 0.8854459795422687,
+          "median": 0.9345586004759556,
+          "p95": 0.9852120537809397
+        },
+        "2026-08-05": {
+          "p05": 0.8994393077460235,
+          "median": 0.9509516196020271,
+          "p95": 1.004796606801787
+        },
+        "2026-08-06": {
+          "p05": 0.8971042545681719,
+          "median": 0.9502594852720613,
+          "p95": 1.0064128125558018
+        },
+        "2026-08-07": {
+          "p05": 0.9038975193103964,
+          "median": 0.9597609379444176,
+          "p95": 1.020312420690737
+        },
+        "2026-08-10": {
+          "p05": 0.9083341201949983,
+          "median": 0.9660653063743623,
+          "p95": 1.0285380161925477
+        },
+        "2026-08-11": {
+          "p05": 0.9042600417919453,
+          "median": 0.961905132046438,
+          "p95": 1.0246579968334764
+        },
+        "2026-08-12": {
+          "p05": 0.9108549220280546,
+          "median": 0.9692246997437008,
+          "p95": 1.0326038967104216
+        },
+        "2026-08-13": {
+          "p05": 0.9025113419190096,
+          "median": 0.9606647861809001,
+          "p95": 1.0242853871380688
+        },
+        "2026-08-14": {
+          "p05": 0.9015293516542472,
+          "median": 0.9600738671830269,
+          "p95": 1.0241523442357197
+        },
+        "2026-08-17": {
+          "p05": 0.9136835371940789,
+          "median": 0.9738286977351094,
+          "p95": 1.0394026340380815
+        },
+        "2026-08-18": {
+          "p05": 0.9109631554391583,
+          "median": 0.9713476950233881,
+          "p95": 1.0375720073570682
+        },
+        "2026-08-19": {
+          "p05": 0.8755829898458635,
+          "median": 0.9341029812164534,
+          "p95": 0.998197186439954
+        },
+        "2026-08-20": {
+          "p05": 0.8838084298605817,
+          "median": 0.9430208769908407,
+          "p95": 1.0079725758255966
+        },
+        "2026-08-21": {
+          "p05": 0.8814533667150325,
+          "median": 0.9401336387461641,
+          "p95": 1.0046558741628346
+        },
+        "2026-08-24": {
+          "p05": 0.8712249077466323,
+          "median": 0.9300419310969577,
+          "p95": 0.9945853636378761
+        },
+        "2026-08-25": {
+          "p05": 0.8791102425032808,
+          "median": 0.9387684071896474,
+          "p95": 1.0042530160299328
+        },
+        "2026-08-26": {
+          "p05": 0.8818558473658065,
+          "median": 0.9419588432692725,
+          "p95": 1.008169225232906
+        },
+        "2026-08-27": {
+          "p05": 0.8935432282537306,
+          "median": 0.954560991771291,
+          "p95": 1.0218510368163423
+        },
+        "2026-08-28": {
+          "p05": 0.8940006053497483,
+          "median": 0.955542178265903,
+          "p95": 1.0234627882607144
+        },
+        "2026-08-31": {
+          "p05": 0.8953686698359878,
+          "median": 0.9582062128810844,
+          "p95": 1.0276279802501427
+        },
+        "2026-09-01": {
+          "p05": 0.8963344504805801,
+          "median": 0.9593239801601914,
+          "p95": 1.0286549315591753
+        },
+        "2026-09-02": {
+          "p05": 0.8850962801596328,
+          "median": 0.947592796894321,
+          "p95": 1.0165498266670048
+        },
+        "2026-09-03": {
+          "p05": 0.8846572409275673,
+          "median": 0.947277218563973,
+          "p95": 1.0166253143254245
+        },
+        "2026-09-04": {
+          "p05": 0.8811711809349756,
+          "median": 0.9441207419509805,
+          "p95": 1.0132604391489612
+        },
+        "2026-09-07": {
+          "p05": 0.8859494709957283,
+          "median": 0.94947151199723,
+          "p95": 1.0198410929970212
+        },
+        "2026-09-08": {
+          "p05": 0.8910233762516991,
+          "median": 0.9552909361375661,
+          "p95": 1.0261841190405947
+        },
+        "2026-09-09": {
+          "p05": 0.8875098055171451,
+          "median": 0.952103282991819,
+          "p95": 1.0230710845913942
+        },
+        "2026-09-10": {
+          "p05": 0.8786967442709852,
+          "median": 0.9432218479206098,
+          "p95": 1.013804637076823
+        },
+        "2026-09-11": {
+          "p05": 0.8614058054114212,
+          "median": 0.9251334524210375,
+          "p95": 0.9950641120315209
+        },
+        "2026-09-14": {
+          "p05": 0.8633202894706833,
+          "median": 0.9273369110561024,
+          "p95": 0.9978585805496496
+        },
+        "2026-09-15": {
+          "p05": 0.8572617092602879,
+          "median": 0.9210622534786831,
+          "p95": 0.9914194434408617
+        },
+        "2026-09-16": {
+          "p05": 0.8662048850617452,
+          "median": 0.9314291993023628,
+          "p95": 1.0036463986207296
+        },
+        "2026-09-17": {
+          "p05": 0.8642641250043174,
+          "median": 0.9293203090585118,
+          "p95": 1.0012488265156085
+        },
+        "2026-09-18": {
+          "p05": 0.8757366162617733,
+          "median": 0.9422768290446033,
+          "p95": 1.0164008266910536
+        },
+        "2026-09-21": {
+          "p05": 0.885382383077783,
+          "median": 0.9532762944641631,
+          "p95": 1.029224796027687
+        },
+        "2026-09-22": {
+          "p05": 0.8851919951875641,
+          "median": 0.9536373268611769,
+          "p95": 1.0297566894087349
+        },
+        "2026-09-23": {
+          "p05": 0.8803141679300907,
+          "median": 0.9487127968645536,
+          "p95": 1.0248726954062548
+        },
+        "2026-09-24": {
+          "p05": 0.8658881955736376,
+          "median": 0.9331165610842619,
+          "p95": 1.0079903768606102
+        },
+        "2026-09-28": {
+          "p05": 0.8439253931498604,
+          "median": 0.9098630986000423,
+          "p95": 0.9832010311583108
+        },
+        "2026-09-29": {
+          "p05": 0.8471387244593878,
+          "median": 0.9135644207280462,
+          "p95": 0.9872729157634494
+        },
+        "2026-09-30": {
+          "p05": 0.8483581005224922,
+          "median": 0.9153913890008467,
+          "p95": 0.9898072972343139
+        },
+        "2026-10-08": {
+          "p05": 0.8379056945534092,
+          "median": 0.904771239544822,
+          "p95": 0.9791954193144762
+        },
+        "2026-10-09": {
+          "p05": 0.843779536576374,
+          "median": 0.9124470311751935,
+          "p95": 0.9883983659656173
+        }
+      },
       "settlement_quantiles": {
         "2026-07-10": {
           "p05": 0.9403362167985122,
@@ -43374,6 +44357,333 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
     {
       "strategy_spec": "P_22_1",
       "deterministic": false,
+      "daily_quantiles": {
+        "2026-07-03": {
+          "p05": 1.0,
+          "median": 1.0,
+          "p95": 1.0
+        },
+        "2026-07-06": {
+          "p05": 0.9772146894467084,
+          "median": 0.9890601355163975,
+          "p95": 1.0008696925214513
+        },
+        "2026-07-07": {
+          "p05": 0.9520109493907779,
+          "median": 0.966529473909683,
+          "p95": 0.9814981194210107
+        },
+        "2026-07-08": {
+          "p05": 0.9337738324383503,
+          "median": 0.9530497323454116,
+          "p95": 0.9729240884930164
+        },
+        "2026-07-09": {
+          "p05": 0.9363451694684973,
+          "median": 0.9562847646009115,
+          "p95": 0.9786081271737165
+        },
+        "2026-07-10": {
+          "p05": 0.9403362167985122,
+          "median": 0.9621826938481062,
+          "p95": 0.9845170407777386
+        },
+        "2026-07-13": {
+          "p05": 0.9010515441068926,
+          "median": 0.9294503346541161,
+          "p95": 0.9585589432609749
+        },
+        "2026-07-14": {
+          "p05": 0.909063848625699,
+          "median": 0.9387259944266264,
+          "p95": 0.9686071602068426
+        },
+        "2026-07-15": {
+          "p05": 0.9067623000328725,
+          "median": 0.9423940829500058,
+          "p95": 0.9774713619368097
+        },
+        "2026-07-16": {
+          "p05": 0.8945711303271386,
+          "median": 0.9357851151748006,
+          "p95": 0.9759469932296448
+        },
+        "2026-07-17": {
+          "p05": 0.8494393586589012,
+          "median": 0.8958077793756374,
+          "p95": 0.9406729724852299
+        },
+        "2026-07-20": {
+          "p05": 0.8370434096873861,
+          "median": 0.8933129787540304,
+          "p95": 0.9459078754005836
+        },
+        "2026-07-21": {
+          "p05": 0.8597328579678648,
+          "median": 0.909669402844758,
+          "p95": 0.9576240849376058
+        },
+        "2026-07-22": {
+          "p05": 0.849142194878032,
+          "median": 0.9015437581400385,
+          "p95": 0.9525966923934606
+        },
+        "2026-07-23": {
+          "p05": 0.8579555795898627,
+          "median": 0.9120053968025588,
+          "p95": 0.9637727672541111
+        },
+        "2026-07-24": {
+          "p05": 0.8321390086636069,
+          "median": 0.884323594848507,
+          "p95": 0.9339818017572962
+        },
+        "2026-07-27": {
+          "p05": 0.8566661216237645,
+          "median": 0.9086133508103384,
+          "p95": 0.9583654813247947
+        },
+        "2026-07-28": {
+          "p05": 0.844962451444933,
+          "median": 0.9017556648797403,
+          "p95": 0.9554489270849257
+        },
+        "2026-07-29": {
+          "p05": 0.8577954674681246,
+          "median": 0.9184647424024107,
+          "p95": 0.9741078576142352
+        },
+        "2026-07-30": {
+          "p05": 0.8432267040662693,
+          "median": 0.9110838121817331,
+          "p95": 0.9724854107047319
+        },
+        "2026-07-31": {
+          "p05": 0.8613733443230023,
+          "median": 0.9273528390481184,
+          "p95": 0.9875172262961874
+        },
+        "2026-08-03": {
+          "p05": 0.8675877582204017,
+          "median": 0.9364342674611492,
+          "p95": 0.998016861652243
+        },
+        "2026-08-04": {
+          "p05": 0.8827078169355638,
+          "median": 0.9465526423462245,
+          "p95": 1.0052015063373412
+        },
+        "2026-08-05": {
+          "p05": 0.899978174248022,
+          "median": 0.9596514814488117,
+          "p95": 1.016623192112023
+        },
+        "2026-08-06": {
+          "p05": 0.8991022118129516,
+          "median": 0.956556859762262,
+          "p95": 1.0123964879517398
+        },
+        "2026-08-07": {
+          "p05": 0.9083522787379552,
+          "median": 0.9633967158290893,
+          "p95": 1.019958966962433
+        },
+        "2026-08-10": {
+          "p05": 0.9147082837537585,
+          "median": 0.9721143810042319,
+          "p95": 1.032683902615203
+        },
+        "2026-08-11": {
+          "p05": 0.9103362817307603,
+          "median": 0.9674052782071609,
+          "p95": 1.028123597005672
+        },
+        "2026-08-12": {
+          "p05": 0.9179489306936366,
+          "median": 0.9740940143573122,
+          "p95": 1.0354537166253217
+        },
+        "2026-08-13": {
+          "p05": 0.9088859156973826,
+          "median": 0.965319465312203,
+          "p95": 1.026468441802992
+        },
+        "2026-08-14": {
+          "p05": 0.908886376637653,
+          "median": 0.9631534231093968,
+          "p95": 1.0242214205237017
+        },
+        "2026-08-17": {
+          "p05": 0.924936029822563,
+          "median": 0.9776761347503014,
+          "p95": 1.0388795693771655
+        },
+        "2026-08-18": {
+          "p05": 0.9219723831580069,
+          "median": 0.9746887147374427,
+          "p95": 1.0364065922049899
+        },
+        "2026-08-19": {
+          "p05": 0.8819822648222191,
+          "median": 0.9373483200963435,
+          "p95": 0.999092830391945
+        },
+        "2026-08-20": {
+          "p05": 0.8897096802286809,
+          "median": 0.9475703605393573,
+          "p95": 1.0126218300018424
+        },
+        "2026-08-21": {
+          "p05": 0.8881320229627331,
+          "median": 0.9433781473765643,
+          "p95": 1.0048220689437566
+        },
+        "2026-08-24": {
+          "p05": 0.8780282225856787,
+          "median": 0.9348424642357243,
+          "p95": 0.9977242888708898
+        },
+        "2026-08-25": {
+          "p05": 0.8865424184816418,
+          "median": 0.9444646487559442,
+          "p95": 1.006679832538448
+        },
+        "2026-08-26": {
+          "p05": 0.8893985513220096,
+          "median": 0.9480627925008682,
+          "p95": 1.011115731355309
+        },
+        "2026-08-27": {
+          "p05": 0.9027977405226556,
+          "median": 0.9601600044581151,
+          "p95": 1.0247883160162408
+        },
+        "2026-08-28": {
+          "p05": 0.9027632782650267,
+          "median": 0.9619725157127419,
+          "p95": 1.0284154226839868
+        },
+        "2026-08-31": {
+          "p05": 0.906755709118624,
+          "median": 0.9653236713143762,
+          "p95": 1.0323436250022775
+        },
+        "2026-09-01": {
+          "p05": 0.9064970481237024,
+          "median": 0.9682755334173987,
+          "p95": 1.0378092014986926
+        },
+        "2026-09-02": {
+          "p05": 0.894436163700107,
+          "median": 0.9554187048060636,
+          "p95": 1.0238742243395733
+        },
+        "2026-09-03": {
+          "p05": 0.8941430163955992,
+          "median": 0.9547192223004461,
+          "p95": 1.0225048310160154
+        },
+        "2026-09-04": {
+          "p05": 0.8894577034867578,
+          "median": 0.9530590283110758,
+          "p95": 1.022562318539631
+        },
+        "2026-09-07": {
+          "p05": 0.8969468487361649,
+          "median": 0.9591688158272096,
+          "p95": 1.02937944424888
+        },
+        "2026-09-08": {
+          "p05": 0.9020327290614819,
+          "median": 0.9665074295965466,
+          "p95": 1.0368270660442553
+        },
+        "2026-09-09": {
+          "p05": 0.8985857042369888,
+          "median": 0.9625280492088308,
+          "p95": 1.033118522747879
+        },
+        "2026-09-10": {
+          "p05": 0.8893020748072199,
+          "median": 0.9527926449678606,
+          "p95": 1.0216954629980075
+        },
+        "2026-09-11": {
+          "p05": 0.8706128185398853,
+          "median": 0.932976609627587,
+          "p95": 1.0000131324654802
+        },
+        "2026-09-14": {
+          "p05": 0.8744905939145513,
+          "median": 0.9364345930466464,
+          "p95": 1.004104193421406
+        },
+        "2026-09-15": {
+          "p05": 0.8681674841727075,
+          "median": 0.9289162074425552,
+          "p95": 0.9960985521827775
+        },
+        "2026-09-16": {
+          "p05": 0.8787683313012261,
+          "median": 0.938980172939232,
+          "p95": 1.007428673838297
+        },
+        "2026-09-17": {
+          "p05": 0.8762283040506191,
+          "median": 0.9365987442531216,
+          "p95": 1.0056639349060716
+        },
+        "2026-09-18": {
+          "p05": 0.8890238803507727,
+          "median": 0.9496055991151899,
+          "p95": 1.0202078113788455
+        },
+        "2026-09-21": {
+          "p05": 0.9007317162193644,
+          "median": 0.963425875314804,
+          "p95": 1.0369795809718083
+        },
+        "2026-09-22": {
+          "p05": 0.9002776659089314,
+          "median": 0.9637901486616008,
+          "p95": 1.0402155886919398
+        },
+        "2026-09-23": {
+          "p05": 0.8952836181123534,
+          "median": 0.9580815500303941,
+          "p95": 1.0361431980058349
+        },
+        "2026-09-24": {
+          "p05": 0.8793395555823003,
+          "median": 0.9415365924251561,
+          "p95": 1.0170146480055438
+        },
+        "2026-09-28": {
+          "p05": 0.856304654833804,
+          "median": 0.9193687986431749,
+          "p95": 0.9920653018105369
+        },
+        "2026-09-29": {
+          "p05": 0.8599398057008211,
+          "median": 0.9235052326252449,
+          "p95": 0.9955237145196111
+        },
+        "2026-09-30": {
+          "p05": 0.8608147592413555,
+          "median": 0.9261702890418166,
+          "p95": 0.9998359188453023
+        },
+        "2026-10-08": {
+          "p05": 0.8492597296878002,
+          "median": 0.9149832547986356,
+          "p95": 0.9874140476762945
+        },
+        "2026-10-09": {
+          "p05": 0.8550362576332647,
+          "median": 0.9239356937069847,
+          "p95": 0.9993066210116087
+        }
+      },
       "settlement_quantiles": {
         "2026-07-10": {
           "p05": 0.9403362167985122,
@@ -43602,6 +44912,333 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
     {
       "strategy_spec": "P_5_1",
       "deterministic": false,
+      "daily_quantiles": {
+        "2026-07-03": {
+          "p05": 1.0,
+          "median": 1.0,
+          "p95": 1.0
+        },
+        "2026-07-06": {
+          "p05": 0.9602934315375106,
+          "median": 0.9878733854210606,
+          "p95": 1.0143483048654491
+        },
+        "2026-07-07": {
+          "p05": 0.9317826916395265,
+          "median": 0.9640679172243591,
+          "p95": 0.9982773420795067
+        },
+        "2026-07-08": {
+          "p05": 0.9058514927010362,
+          "median": 0.9500352159381751,
+          "p95": 0.994805525092357
+        },
+        "2026-07-09": {
+          "p05": 0.9104042985931308,
+          "median": 0.954037777742542,
+          "p95": 1.006557523122884
+        },
+        "2026-07-10": {
+          "p05": 0.9096990622786096,
+          "median": 0.9598865498518571,
+          "p95": 1.008965023477102
+        },
+        "2026-07-13": {
+          "p05": 0.8626014940352472,
+          "median": 0.9254220534596571,
+          "p95": 0.9872251383738986
+        },
+        "2026-07-14": {
+          "p05": 0.8709397921795373,
+          "median": 0.9350864346918453,
+          "p95": 0.9991195395571448
+        },
+        "2026-07-15": {
+          "p05": 0.8614650207374721,
+          "median": 0.9371862764888098,
+          "p95": 1.0117087322405338
+        },
+        "2026-07-16": {
+          "p05": 0.8421260223858945,
+          "median": 0.9294465515839385,
+          "p95": 1.0137034556128774
+        },
+        "2026-07-17": {
+          "p05": 0.7898768569355359,
+          "median": 0.8877441952141141,
+          "p95": 0.981249040894782
+        },
+        "2026-07-20": {
+          "p05": 0.7663480212063527,
+          "median": 0.8823607350397933,
+          "p95": 0.9900333797443871
+        },
+        "2026-07-21": {
+          "p05": 0.796393103485253,
+          "median": 0.9007008408481856,
+          "p95": 0.9991565657458155
+        },
+        "2026-07-22": {
+          "p05": 0.7836423047031912,
+          "median": 0.891795513405253,
+          "p95": 0.9955975999633667
+        },
+        "2026-07-23": {
+          "p05": 0.789177172680546,
+          "median": 0.9013400912430688,
+          "p95": 1.0073108310328056
+        },
+        "2026-07-24": {
+          "p05": 0.7664708563676448,
+          "median": 0.8744287357461593,
+          "p95": 0.9769212546593979
+        },
+        "2026-07-27": {
+          "p05": 0.7900918615851084,
+          "median": 0.89885591681126,
+          "p95": 1.0021976409223612
+        },
+        "2026-07-28": {
+          "p05": 0.7724537688954842,
+          "median": 0.8897959422849693,
+          "p95": 0.9995184863524117
+        },
+        "2026-07-29": {
+          "p05": 0.7801175519643682,
+          "median": 0.9055306748478187,
+          "p95": 1.0201937860024812
+        },
+        "2026-07-30": {
+          "p05": 0.7568352826896549,
+          "median": 0.8958814858810807,
+          "p95": 1.0214351766994714
+        },
+        "2026-07-31": {
+          "p05": 0.7769682575543545,
+          "median": 0.9130848779734955,
+          "p95": 1.0364513676702543
+        },
+        "2026-08-03": {
+          "p05": 0.7788399499612965,
+          "median": 0.9208046746044012,
+          "p95": 1.0479322934585715
+        },
+        "2026-08-04": {
+          "p05": 0.7984328419575403,
+          "median": 0.9331231758331049,
+          "p95": 1.0562563311346098
+        },
+        "2026-08-05": {
+          "p05": 0.8185705118068652,
+          "median": 0.9481776009137388,
+          "p95": 1.0707371245844868
+        },
+        "2026-08-06": {
+          "p05": 0.8193283785329966,
+          "median": 0.9461521952919734,
+          "p95": 1.0688181458921715
+        },
+        "2026-08-07": {
+          "p05": 0.8298670642651802,
+          "median": 0.9543677749518547,
+          "p95": 1.0800916045156104
+        },
+        "2026-08-10": {
+          "p05": 0.8341430311848355,
+          "median": 0.9619955832824931,
+          "p95": 1.091973019663673
+        },
+        "2026-08-11": {
+          "p05": 0.8303417090034116,
+          "median": 0.9573540888210224,
+          "p95": 1.0863653026245759
+        },
+        "2026-08-12": {
+          "p05": 0.8380258297416956,
+          "median": 0.9649266184627597,
+          "p95": 1.0957602152013162
+        },
+        "2026-08-13": {
+          "p05": 0.8295998759439164,
+          "median": 0.9559198277211625,
+          "p95": 1.0877666779162347
+        },
+        "2026-08-14": {
+          "p05": 0.8304824562178722,
+          "median": 0.9551878273795278,
+          "p95": 1.087842262639943
+        },
+        "2026-08-17": {
+          "p05": 0.8460034266053854,
+          "median": 0.9713822264151193,
+          "p95": 1.108492082216911
+        },
+        "2026-08-18": {
+          "p05": 0.8428326115799191,
+          "median": 0.9685292129611357,
+          "p95": 1.1074503017009678
+        },
+        "2026-08-19": {
+          "p05": 0.8042736439223814,
+          "median": 0.9283002040263284,
+          "p95": 1.0609227626406397
+        },
+        "2026-08-20": {
+          "p05": 0.8116389573127355,
+          "median": 0.9380512828947417,
+          "p95": 1.0757399522763336
+        },
+        "2026-08-21": {
+          "p05": 0.8111061653939395,
+          "median": 0.934966536243962,
+          "p95": 1.070131358273985
+        },
+        "2026-08-24": {
+          "p05": 0.8008045517892041,
+          "median": 0.9249180527322263,
+          "p95": 1.0619824791640189
+        },
+        "2026-08-25": {
+          "p05": 0.8078893182003822,
+          "median": 0.9339942123886138,
+          "p95": 1.0705212070185326
+        },
+        "2026-08-26": {
+          "p05": 0.8102595876810696,
+          "median": 0.9372242170841454,
+          "p95": 1.0744502072041457
+        },
+        "2026-08-27": {
+          "p05": 0.8233604321714181,
+          "median": 0.9509799365476308,
+          "p95": 1.092911145300916
+        },
+        "2026-08-28": {
+          "p05": 0.8218544098324824,
+          "median": 0.9514018904072379,
+          "p95": 1.0950797303628497
+        },
+        "2026-08-31": {
+          "p05": 0.8251740847813521,
+          "median": 0.9556133559392035,
+          "p95": 1.1020706498742896
+        },
+        "2026-09-01": {
+          "p05": 0.823005421988116,
+          "median": 0.9561183195569877,
+          "p95": 1.1028891842166868
+        },
+        "2026-09-02": {
+          "p05": 0.8118929652303496,
+          "median": 0.9435010031223461,
+          "p95": 1.089306307214762
+        },
+        "2026-09-03": {
+          "p05": 0.8118532114908901,
+          "median": 0.9432002594458821,
+          "p95": 1.0899189081677292
+        },
+        "2026-09-04": {
+          "p05": 0.8057689237999447,
+          "median": 0.9396568762064621,
+          "p95": 1.0869949699034802
+        },
+        "2026-09-07": {
+          "p05": 0.813433136320445,
+          "median": 0.947455558130555,
+          "p95": 1.096697167569423
+        },
+        "2026-09-08": {
+          "p05": 0.817323818797084,
+          "median": 0.9534367321398223,
+          "p95": 1.1042444423773792
+        },
+        "2026-09-09": {
+          "p05": 0.8136923328812298,
+          "median": 0.950065961457598,
+          "p95": 1.1018354930548735
+        },
+        "2026-09-10": {
+          "p05": 0.8053773522036218,
+          "median": 0.9403642119118442,
+          "p95": 1.0918676215051581
+        },
+        "2026-09-11": {
+          "p05": 0.7878875334320913,
+          "median": 0.9209605103320646,
+          "p95": 1.0709381820839372
+        },
+        "2026-09-14": {
+          "p05": 0.7911299103027002,
+          "median": 0.9243498734304966,
+          "p95": 1.0755141623099695
+        },
+        "2026-09-15": {
+          "p05": 0.785711671151182,
+          "median": 0.9178153636415927,
+          "p95": 1.0685950396261683
+        },
+        "2026-09-16": {
+          "p05": 0.7955912443596425,
+          "median": 0.9291463165764116,
+          "p95": 1.08458279810938
+        },
+        "2026-09-17": {
+          "p05": 0.7932827096086011,
+          "median": 0.9266035690486842,
+          "p95": 1.082531804738502
+        },
+        "2026-09-18": {
+          "p05": 0.8045516952483321,
+          "median": 0.9405991482070069,
+          "p95": 1.1002612118868684
+        },
+        "2026-09-21": {
+          "p05": 0.8146858069270841,
+          "median": 0.9533108178047494,
+          "p95": 1.1162389386447198
+        },
+        "2026-09-22": {
+          "p05": 0.8140145708622377,
+          "median": 0.9532598564592623,
+          "p95": 1.1177337039579147
+        },
+        "2026-09-23": {
+          "p05": 0.8088381176881299,
+          "median": 0.9483125363351295,
+          "p95": 1.1154505699042643
+        },
+        "2026-09-24": {
+          "p05": 0.7943495957989084,
+          "median": 0.9311062230785156,
+          "p95": 1.094592900364928
+        },
+        "2026-09-28": {
+          "p05": 0.7718861718837262,
+          "median": 0.9062247170405247,
+          "p95": 1.0653054258861832
+        },
+        "2026-09-29": {
+          "p05": 0.7746642922455498,
+          "median": 0.9101661275021928,
+          "p95": 1.0699019100920604
+        },
+        "2026-09-30": {
+          "p05": 0.7749266410719915,
+          "median": 0.9115301011607222,
+          "p95": 1.0731608535917454
+        },
+        "2026-10-08": {
+          "p05": 0.7625251881057943,
+          "median": 0.8988504929848891,
+          "p95": 1.0578219206885493
+        },
+        "2026-10-09": {
+          "p05": 0.7662633867911226,
+          "median": 0.9061596603028097,
+          "p95": 1.0685779468662207
+        }
+      },
       "settlement_quantiles": {
         "2026-07-10": {
           "p05": 0.9096990622786096,
@@ -43830,6 +45467,333 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
     {
       "strategy_spec": "P_11_2",
       "deterministic": false,
+      "daily_quantiles": {
+        "2026-07-03": {
+          "p05": 1.0,
+          "median": 1.0,
+          "p95": 1.0
+        },
+        "2026-07-06": {
+          "p05": 0.9706172819376213,
+          "median": 0.9882817905167536,
+          "p95": 1.005705729606363
+        },
+        "2026-07-07": {
+          "p05": 0.9440819240051666,
+          "median": 0.9651919723815525,
+          "p95": 0.9873027417271278
+        },
+        "2026-07-08": {
+          "p05": 0.9223890165506543,
+          "median": 0.9512315899085866,
+          "p95": 0.9803778140541616
+        },
+        "2026-07-09": {
+          "p05": 0.9260844946842052,
+          "median": 0.95532519662046,
+          "p95": 0.9889949428369932
+        },
+        "2026-07-10": {
+          "p05": 0.9280560874950153,
+          "median": 0.9607916283304371,
+          "p95": 0.9934196101121846
+        },
+        "2026-07-13": {
+          "p05": 0.8858347973837949,
+          "median": 0.9269508303012022,
+          "p95": 0.9681332923966722
+        },
+        "2026-07-14": {
+          "p05": 0.8941938185812959,
+          "median": 0.9366586937911203,
+          "p95": 0.9792076951170503
+        },
+        "2026-07-15": {
+          "p05": 0.8891076747524908,
+          "median": 0.9392758633121876,
+          "p95": 0.9888207835742505
+        },
+        "2026-07-16": {
+          "p05": 0.8745635454045178,
+          "median": 0.9318556631833036,
+          "p95": 0.9880058460544776
+        },
+        "2026-07-17": {
+          "p05": 0.8266493443706251,
+          "median": 0.8906288179635977,
+          "p95": 0.9533843456938513
+        },
+        "2026-07-20": {
+          "p05": 0.809761197615339,
+          "median": 0.8858685151187473,
+          "p95": 0.9579354974171582
+        },
+        "2026-07-21": {
+          "p05": 0.8350804555735909,
+          "median": 0.903645506570737,
+          "p95": 0.9698049169809733
+        },
+        "2026-07-22": {
+          "p05": 0.8236103948615241,
+          "median": 0.8950435073946665,
+          "p95": 0.9649708928820164
+        },
+        "2026-07-23": {
+          "p05": 0.8311721580932313,
+          "median": 0.9050372793762347,
+          "p95": 0.9760788465083581
+        },
+        "2026-07-24": {
+          "p05": 0.8067884993469351,
+          "median": 0.877937034268875,
+          "p95": 0.9464226629596821
+        },
+        "2026-07-27": {
+          "p05": 0.8306294082030757,
+          "median": 0.9022563086480456,
+          "p95": 0.9712152751582
+        },
+        "2026-07-28": {
+          "p05": 0.8166604734478586,
+          "median": 0.8937163365814693,
+          "p95": 0.9672979156715708
+        },
+        "2026-07-29": {
+          "p05": 0.827290240042286,
+          "median": 0.9094904703813187,
+          "p95": 0.9860797522533905
+        },
+        "2026-07-30": {
+          "p05": 0.809336871249546,
+          "median": 0.9002693760666236,
+          "p95": 0.9845031508769818
+        },
+        "2026-07-31": {
+          "p05": 0.8280619617100379,
+          "median": 0.9171562102063568,
+          "p95": 1.0001083688905426
+        },
+        "2026-08-03": {
+          "p05": 0.8326913936329666,
+          "median": 0.9250441094303603,
+          "p95": 1.0108813852973046
+        },
+        "2026-08-04": {
+          "p05": 0.8493675070465738,
+          "median": 0.9369702228315222,
+          "p95": 1.0203299449901908
+        },
+        "2026-08-05": {
+          "p05": 0.8675225215490211,
+          "median": 0.951870625697552,
+          "p95": 1.034623035963679
+        },
+        "2026-08-06": {
+          "p05": 0.8672096421368577,
+          "median": 0.9498266135151345,
+          "p95": 1.0323201782170743
+        },
+        "2026-08-07": {
+          "p05": 0.8768448935885461,
+          "median": 0.9583389363582582,
+          "p95": 1.0429737386667821
+        },
+        "2026-08-10": {
+          "p05": 0.8820549037421387,
+          "median": 0.9660187289692761,
+          "p95": 1.0540791669596044
+        },
+        "2026-08-11": {
+          "p05": 0.8780157983664875,
+          "median": 0.9615804384374502,
+          "p95": 1.049249707908434
+        },
+        "2026-08-12": {
+          "p05": 0.8853436592542878,
+          "median": 0.9688316573569518,
+          "p95": 1.0576123752388484
+        },
+        "2026-08-13": {
+          "p05": 0.8766512231048859,
+          "median": 0.9599829929541848,
+          "p95": 1.0486699657866092
+        },
+        "2026-08-14": {
+          "p05": 0.8766783372318759,
+          "median": 0.9591905065218307,
+          "p95": 1.0487890551511225
+        },
+        "2026-08-17": {
+          "p05": 0.8921116638530104,
+          "median": 0.9752782094341166,
+          "p95": 1.0673416315218232
+        },
+        "2026-08-18": {
+          "p05": 0.8889553194631291,
+          "median": 0.9723430928407967,
+          "p95": 1.0656575925755059
+        },
+        "2026-08-19": {
+          "p05": 0.8504133222537927,
+          "median": 0.9326337125217629,
+          "p95": 1.0217834918661381
+        },
+        "2026-08-20": {
+          "p05": 0.8580782270379562,
+          "median": 0.9424166084069323,
+          "p95": 1.035204288147509
+        },
+        "2026-08-21": {
+          "p05": 0.8566367775713071,
+          "median": 0.9392093051387713,
+          "p95": 1.0299057749947398
+        },
+        "2026-08-24": {
+          "p05": 0.8464658294688104,
+          "median": 0.9297515706013606,
+          "p95": 1.0214388449638696
+        },
+        "2026-08-25": {
+          "p05": 0.8548429078369814,
+          "median": 0.938880427356362,
+          "p95": 1.0306196352934032
+        },
+        "2026-08-26": {
+          "p05": 0.8571961315585793,
+          "median": 0.9421398669370853,
+          "p95": 1.0343491987649283
+        },
+        "2026-08-27": {
+          "p05": 0.8701355132935649,
+          "median": 0.9555266640590225,
+          "p95": 1.0509242037774813
+        },
+        "2026-08-28": {
+          "p05": 0.8695909780871178,
+          "median": 0.9563990442453973,
+          "p95": 1.053083002966629
+        },
+        "2026-08-31": {
+          "p05": 0.8728948437862161,
+          "median": 0.9605231324474091,
+          "p95": 1.0583385036982151
+        },
+        "2026-09-01": {
+          "p05": 0.8725538420185149,
+          "median": 0.9615796513421835,
+          "p95": 1.060432900045278
+        },
+        "2026-09-02": {
+          "p05": 0.8606700066168056,
+          "median": 0.9489442936375607,
+          "p95": 1.046538553380295
+        },
+        "2026-09-03": {
+          "p05": 0.8604571078629268,
+          "median": 0.9487012321000603,
+          "p95": 1.0467545161767815
+        },
+        "2026-09-04": {
+          "p05": 0.8555730471322461,
+          "median": 0.9453249238318239,
+          "p95": 1.0437153717310386
+        },
+        "2026-09-07": {
+          "p05": 0.8628653424722906,
+          "median": 0.9529728705717112,
+          "p95": 1.0528987693437233
+        },
+        "2026-09-08": {
+          "p05": 0.8676971959314576,
+          "median": 0.9591500048029447,
+          "p95": 1.0601994795666543
+        },
+        "2026-09-09": {
+          "p05": 0.8639838400360954,
+          "median": 0.9555069959364535,
+          "p95": 1.0575016960263797
+        },
+        "2026-09-10": {
+          "p05": 0.8549164700454502,
+          "median": 0.9458017917959034,
+          "p95": 1.047178223817024
+        },
+        "2026-09-11": {
+          "p05": 0.8370630795624734,
+          "median": 0.9262886654543026,
+          "p95": 1.0264903534334169
+        },
+        "2026-09-14": {
+          "p05": 0.8404094369193875,
+          "median": 0.9299036660907358,
+          "p95": 1.0304837778214442
+        },
+        "2026-09-15": {
+          "p05": 0.8344150220885909,
+          "median": 0.9232955650911578,
+          "p95": 1.0233985660349942
+        },
+        "2026-09-16": {
+          "p05": 0.844281676111861,
+          "median": 0.9345912794765703,
+          "p95": 1.0371019015588958
+        },
+        "2026-09-17": {
+          "p05": 0.8420464963088449,
+          "median": 0.9320582881203983,
+          "p95": 1.0349042240409125
+        },
+        "2026-09-18": {
+          "p05": 0.8541136568340175,
+          "median": 0.9458888328976107,
+          "p95": 1.0512415237492
+        },
+        "2026-09-21": {
+          "p05": 0.8656003883668755,
+          "median": 0.9588690514360376,
+          "p95": 1.0663113807725453
+        },
+        "2026-09-22": {
+          "p05": 0.8650419447598678,
+          "median": 0.9589584521901058,
+          "p95": 1.067907789785157
+        },
+        "2026-09-23": {
+          "p05": 0.859789710179766,
+          "median": 0.953985842341154,
+          "p95": 1.06459585610509
+        },
+        "2026-09-24": {
+          "p05": 0.84448728434374,
+          "median": 0.9367957411589583,
+          "p95": 1.0450641195044983
+        },
+        "2026-09-28": {
+          "p05": 0.822130122371313,
+          "median": 0.9126489418058882,
+          "p95": 1.0175590866944542
+        },
+        "2026-09-29": {
+          "p05": 0.8253289999057737,
+          "median": 0.9165762806608797,
+          "p95": 1.0220052886788047
+        },
+        "2026-09-30": {
+          "p05": 0.8260930378226087,
+          "median": 0.9181239271133679,
+          "p95": 1.0247720904419264
+        },
+        "2026-10-08": {
+          "p05": 0.8139388035484602,
+          "median": 0.9056784766030948,
+          "p95": 1.0110338137006107
+        },
+        "2026-10-09": {
+          "p05": 0.819308111127972,
+          "median": 0.9131713229872629,
+          "p95": 1.0209034446943392
+        }
+      },
       "settlement_quantiles": {
         "2026-07-10": {
           "p05": 0.9280560874950153,
@@ -44058,6 +46022,333 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
     {
       "strategy_spec": "P_44_6",
       "deterministic": false,
+      "daily_quantiles": {
+        "2026-07-03": {
+          "p05": 1.0,
+          "median": 1.0,
+          "p95": 1.0
+        },
+        "2026-07-06": {
+          "p05": 0.9826517384738858,
+          "median": 0.9903143622616175,
+          "p95": 0.9979204214851002
+        },
+        "2026-07-07": {
+          "p05": 0.9586696742920126,
+          "median": 0.9682901373331061,
+          "p95": 0.9779861692881148
+        },
+        "2026-07-08": {
+          "p05": 0.9426769466665486,
+          "median": 0.9556498728108321,
+          "p95": 0.9687399219544637
+        },
+        "2026-07-09": {
+          "p05": 0.944052645281797,
+          "median": 0.9574506182968721,
+          "p95": 0.9719314580807524
+        },
+        "2026-07-10": {
+          "p05": 0.9500336749818816,
+          "median": 0.9647355742270856,
+          "p95": 0.9795303940450822
+        },
+        "2026-07-13": {
+          "p05": 0.9147804360120148,
+          "median": 0.9337837529024339,
+          "p95": 0.9528207374993274
+        },
+        "2026-07-14": {
+          "p05": 0.9225400435396722,
+          "median": 0.9424919877118305,
+          "p95": 0.9624135997455757
+        },
+        "2026-07-15": {
+          "p05": 0.9240252797911267,
+          "median": 0.9477185166285427,
+          "p95": 0.9710503663509213
+        },
+        "2026-07-16": {
+          "p05": 0.9152438611197378,
+          "median": 0.942304061822534,
+          "p95": 0.9687921429731122
+        },
+        "2026-07-17": {
+          "p05": 0.8741257004078399,
+          "median": 0.904301824935179,
+          "p95": 0.9340699638838493
+        },
+        "2026-07-20": {
+          "p05": 0.8674728244370921,
+          "median": 0.902995919299669,
+          "p95": 0.9372381624155842
+        },
+        "2026-07-21": {
+          "p05": 0.8857224073118207,
+          "median": 0.917976023801667,
+          "p95": 0.9498487971239657
+        },
+        "2026-07-22": {
+          "p05": 0.8761887965885616,
+          "median": 0.9101354288701999,
+          "p95": 0.9439209398811488
+        },
+        "2026-07-23": {
+          "p05": 0.886524333622521,
+          "median": 0.9213988972651659,
+          "p95": 0.9557409680795012
+        },
+        "2026-07-24": {
+          "p05": 0.8598486904389155,
+          "median": 0.8934074353521653,
+          "p95": 0.9262920992102642
+        },
+        "2026-07-27": {
+          "p05": 0.8837592246918223,
+          "median": 0.9173723385965067,
+          "p95": 0.9503698240878923
+        },
+        "2026-07-28": {
+          "p05": 0.8756643270023343,
+          "median": 0.911863404646025,
+          "p95": 0.9470589305514988
+        },
+        "2026-07-29": {
+          "p05": 0.8910740157024034,
+          "median": 0.9291827829317949,
+          "p95": 0.9656444915156552
+        },
+        "2026-07-30": {
+          "p05": 0.8809492746053286,
+          "median": 0.9229607394310939,
+          "p95": 0.9630008012050914
+        },
+        "2026-07-31": {
+          "p05": 0.8977550904459678,
+          "median": 0.9388380197745643,
+          "p95": 0.9781951189119267
+        },
+        "2026-08-03": {
+          "p05": 0.9060048781957017,
+          "median": 0.9484485748209545,
+          "p95": 0.9888888713921536
+        },
+        "2026-08-04": {
+          "p05": 0.9177607925462539,
+          "median": 0.9579488592499696,
+          "p95": 0.9970639436105065
+        },
+        "2026-08-05": {
+          "p05": 0.9318383251290516,
+          "median": 0.9707492446087518,
+          "p95": 1.0095100555518002
+        },
+        "2026-08-06": {
+          "p05": 0.9293351772191565,
+          "median": 0.9676034231385959,
+          "p95": 1.0058479267034592
+        },
+        "2026-08-07": {
+          "p05": 0.9361267784138124,
+          "median": 0.9739598715272666,
+          "p95": 1.0131820185026494
+        },
+        "2026-08-10": {
+          "p05": 0.9434377175842049,
+          "median": 0.982656233664503,
+          "p95": 1.0242065449441642
+        },
+        "2026-08-11": {
+          "p05": 0.9389558770246799,
+          "median": 0.97802057873665,
+          "p95": 1.0197183716702667
+        },
+        "2026-08-12": {
+          "p05": 0.9455599216714371,
+          "median": 0.9847134270125424,
+          "p95": 1.027363827160745
+        },
+        "2026-08-13": {
+          "p05": 0.9364472215178005,
+          "median": 0.9756236175160691,
+          "p95": 1.0179264943458888
+        },
+        "2026-08-14": {
+          "p05": 0.9345860433275132,
+          "median": 0.9733142288744664,
+          "p95": 1.0157992855269053
+        },
+        "2026-08-17": {
+          "p05": 0.9488149440241707,
+          "median": 0.9876063906376142,
+          "p95": 1.0307219721607712
+        },
+        "2026-08-18": {
+          "p05": 0.945600436533074,
+          "median": 0.9845930110845393,
+          "p95": 1.0284022569924354
+        },
+        "2026-08-19": {
+          "p05": 0.9090058522760726,
+          "median": 0.9477387323321036,
+          "p95": 0.990669878706391
+        },
+        "2026-08-20": {
+          "p05": 0.9174322953517691,
+          "median": 0.9575848744706389,
+          "p95": 1.0021775652065426
+        },
+        "2026-08-21": {
+          "p05": 0.9146560041503157,
+          "median": 0.9536090827789765,
+          "p95": 0.9963169271129639
+        },
+        "2026-08-24": {
+          "p05": 0.9054950439136351,
+          "median": 0.9450685812099315,
+          "p95": 0.988446459168177
+        },
+        "2026-08-25": {
+          "p05": 0.9148979145428218,
+          "median": 0.9547829230657383,
+          "p95": 0.9980766303278849
+        },
+        "2026-08-26": {
+          "p05": 0.9180744016766993,
+          "median": 0.9583956412638046,
+          "p95": 1.0019911940011788
+        },
+        "2026-08-27": {
+          "p05": 0.9296417720046177,
+          "median": 0.9702701335431005,
+          "p95": 1.0151683203826527
+        },
+        "2026-08-28": {
+          "p05": 0.9307451231455672,
+          "median": 0.9722537486380063,
+          "p95": 1.0180819614580479
+        },
+        "2026-08-31": {
+          "p05": 0.9335254701768297,
+          "median": 0.9753041312626529,
+          "p95": 1.0216767423420263
+        },
+        "2026-09-01": {
+          "p05": 0.9357976731749187,
+          "median": 0.9784651092131318,
+          "p95": 1.0257512703963152
+        },
+        "2026-09-02": {
+          "p05": 0.9234062155047982,
+          "median": 0.9655828564323669,
+          "p95": 1.0120272758131803
+        },
+        "2026-09-03": {
+          "p05": 0.922752028447341,
+          "median": 0.9648069060081126,
+          "p95": 1.0110188891244591
+        },
+        "2026-09-04": {
+          "p05": 0.9201667900724054,
+          "median": 0.9631226643866705,
+          "p95": 1.009870517887963
+        },
+        "2026-09-07": {
+          "p05": 0.9257178778339998,
+          "median": 0.9686309318389249,
+          "p95": 1.0160206163791703
+        },
+        "2026-09-08": {
+          "p05": 0.9320508229934201,
+          "median": 0.9759392727349343,
+          "p95": 1.0233395737504212
+        },
+        "2026-09-09": {
+          "p05": 0.9282556016941834,
+          "median": 0.9721948744984634,
+          "p95": 1.0197531388810568
+        },
+        "2026-09-10": {
+          "p05": 0.9188662440125459,
+          "median": 0.9624578630770121,
+          "p95": 1.009306122284293
+        },
+        "2026-09-11": {
+          "p05": 0.9000353057671279,
+          "median": 0.9429243684240676,
+          "p95": 0.9889712430684068
+        },
+        "2026-09-14": {
+          "p05": 0.9035501326476101,
+          "median": 0.9464535904551029,
+          "p95": 0.9929698635736618
+        },
+        "2026-09-15": {
+          "p05": 0.8964549373792835,
+          "median": 0.9389973629602817,
+          "p95": 0.985336213373822
+        },
+        "2026-09-16": {
+          "p05": 0.9056674690119094,
+          "median": 0.9488478001606738,
+          "p95": 0.9961084013814341
+        },
+        "2026-09-17": {
+          "p05": 0.9031567219433977,
+          "median": 0.946370222171703,
+          "p95": 0.9938554928095462
+        },
+        "2026-09-18": {
+          "p05": 0.9151456695035506,
+          "median": 0.9591735163357535,
+          "p95": 1.007787580125246
+        },
+        "2026-09-21": {
+          "p05": 0.9280299108530168,
+          "median": 0.9729724270312101,
+          "p95": 1.0226765155719295
+        },
+        "2026-09-22": {
+          "p05": 0.9277478447977406,
+          "median": 0.9732493851161268,
+          "p95": 1.0239395196235095
+        },
+        "2026-09-23": {
+          "p05": 0.9220118048197721,
+          "median": 0.9675327603985828,
+          "p95": 1.0186719090009724
+        },
+        "2026-09-24": {
+          "p05": 0.9067744474646757,
+          "median": 0.9513801893979794,
+          "p95": 1.0014465369857513
+        },
+        "2026-09-28": {
+          "p05": 0.8854214349620635,
+          "median": 0.9292813443793685,
+          "p95": 0.9777362597110171
+        },
+        "2026-09-29": {
+          "p05": 0.8890668930257957,
+          "median": 0.9331527346229942,
+          "p95": 0.9817174016194773
+        },
+        "2026-09-30": {
+          "p05": 0.8912274647761769,
+          "median": 0.9359572632218662,
+          "p95": 0.9850510674806902
+        },
+        "2026-10-08": {
+          "p05": 0.8811047530965535,
+          "median": 0.9253904444314008,
+          "p95": 0.9739380012509489
+        },
+        "2026-10-09": {
+          "p05": 0.8890239007744083,
+          "median": 0.934542138484528,
+          "p95": 0.9840829315190754
+        }
+      },
       "settlement_quantiles": {
         "2026-07-10": {
           "p05": 0.9500336749818816,
@@ -44286,6 +46577,333 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
     {
       "strategy_spec": "P_66_9",
       "deterministic": false,
+      "daily_quantiles": {
+        "2026-07-03": {
+          "p05": 1.0,
+          "median": 1.0,
+          "p95": 1.0
+        },
+        "2026-07-06": {
+          "p05": 0.9855000062227268,
+          "median": 0.9914259985870671,
+          "p95": 0.9973261066261152
+        },
+        "2026-07-07": {
+          "p05": 0.9619900048126013,
+          "median": 0.9694239992052612,
+          "p95": 0.9768321125966456
+        },
+        "2026-07-08": {
+          "p05": 0.9486360065714853,
+          "median": 0.9584800012593276,
+          "p95": 0.9683701053249293
+        },
+        "2026-07-09": {
+          "p05": 0.9485878984673818,
+          "median": 0.9587100013531674,
+          "p95": 0.9693441046545598
+        },
+        "2026-07-10": {
+          "p05": 0.9569318930887885,
+          "median": 0.9680339958636074,
+          "p95": 0.9791900002538478
+        },
+        "2026-07-13": {
+          "p05": 0.9242875217280075,
+          "median": 0.9389049002174248,
+          "p95": 0.9535682755959347
+        },
+        "2026-07-14": {
+          "p05": 0.9315441918219503,
+          "median": 0.9470551002920218,
+          "p95": 0.9624908262652087
+        },
+        "2026-07-15": {
+          "p05": 0.9355700944542806,
+          "median": 0.9540615086673638,
+          "p95": 0.9722014323562516
+        },
+        "2026-07-16": {
+          "p05": 0.9293437509638366,
+          "median": 0.9504936073951954,
+          "p95": 0.9711175650852615
+        },
+        "2026-07-17": {
+          "p05": 0.8909612479515329,
+          "median": 0.9145538775680715,
+          "p95": 0.9376224793647538
+        },
+        "2026-07-20": {
+          "p05": 0.8884018914937664,
+          "median": 0.9159007838054903,
+          "p95": 0.9424527075987639
+        },
+        "2026-07-21": {
+          "p05": 0.9037167422166243,
+          "median": 0.9289423697690011,
+          "p95": 0.9535738518961999
+        },
+        "2026-07-22": {
+          "p05": 0.8949610130403606,
+          "median": 0.9214487897952603,
+          "p95": 0.9476930680693301
+        },
+        "2026-07-23": {
+          "p05": 0.9062783594832324,
+          "median": 0.9333352411039342,
+          "p95": 0.9599146251284535
+        },
+        "2026-07-24": {
+          "p05": 0.8788214092906388,
+          "median": 0.9049732105232517,
+          "p95": 0.930480276762449
+        },
+        "2026-07-27": {
+          "p05": 0.9026199381071814,
+          "median": 0.9288060594356171,
+          "p95": 0.9545432602274586
+        },
+        "2026-07-28": {
+          "p05": 0.896994987396295,
+          "median": 0.9248404168133115,
+          "p95": 0.9520977506310854
+        },
+        "2026-07-29": {
+          "p05": 0.9140506999947687,
+          "median": 0.9433303116954437,
+          "p95": 0.9714279139094121
+        },
+        "2026-07-30": {
+          "p05": 0.9067575780477138,
+          "median": 0.9388133574751989,
+          "p95": 0.9695806966023919
+        },
+        "2026-07-31": {
+          "p05": 0.9226301411249298,
+          "median": 0.9541576009777295,
+          "p95": 0.9845385273218105
+        },
+        "2026-08-03": {
+          "p05": 0.9324572333815768,
+          "median": 0.9648262968394293,
+          "p95": 0.9959153996729693
+        },
+        "2026-08-04": {
+          "p05": 0.9422268851408386,
+          "median": 0.9730516128148954,
+          "p95": 1.0033356152745347
+        },
+        "2026-08-05": {
+          "p05": 0.9543703949219567,
+          "median": 0.9843988350073607,
+          "p95": 1.0144741258186998
+        },
+        "2026-08-06": {
+          "p05": 0.9509069159726057,
+          "median": 0.9804825981836811,
+          "p95": 1.0105677689764319
+        },
+        "2026-08-07": {
+          "p05": 0.9564974321586429,
+          "median": 0.9860703308529524,
+          "p95": 1.0170727406499902
+        },
+        "2026-08-10": {
+          "p05": 0.9644114475957186,
+          "median": 0.9952574091753955,
+          "p95": 1.0282177550530587
+        },
+        "2026-08-11": {
+          "p05": 0.9596924629641702,
+          "median": 0.9903647744598196,
+          "p95": 1.0236887806505806
+        },
+        "2026-08-12": {
+          "p05": 0.9660904433861285,
+          "median": 0.9968720905222521,
+          "p95": 1.0310418462236242
+        },
+        "2026-08-13": {
+          "p05": 0.9568895989610431,
+          "median": 0.987644942729621,
+          "p95": 1.0215728094282521
+        },
+        "2026-08-14": {
+          "p05": 0.9540968017310469,
+          "median": 0.9845933812398713,
+          "p95": 1.0187145295746516
+        },
+        "2026-08-17": {
+          "p05": 0.9672967680168562,
+          "median": 0.9980675623723059,
+          "p95": 1.0326351618549638
+        },
+        "2026-08-18": {
+          "p05": 0.9638833569955017,
+          "median": 0.9949028521123489,
+          "p95": 1.0296650368935716
+        },
+        "2026-08-19": {
+          "p05": 0.9286329633592376,
+          "median": 0.9593592019526902,
+          "p95": 0.993612261008734
+        },
+        "2026-08-20": {
+          "p05": 0.9374946943549313,
+          "median": 0.9693414499181985,
+          "p95": 1.0048089426778977
+        },
+        "2026-08-21": {
+          "p05": 0.9339761627294589,
+          "median": 0.9649804156857613,
+          "p95": 0.9987976305410922
+        },
+        "2026-08-24": {
+          "p05": 0.9253300870862077,
+          "median": 0.9568481972494237,
+          "p95": 0.9911009169060293
+        },
+        "2026-08-25": {
+          "p05": 0.935127911450112,
+          "median": 0.9668586260062848,
+          "p95": 1.0010188604585122
+        },
+        "2026-08-26": {
+          "p05": 0.9386802664926546,
+          "median": 0.9707901140612104,
+          "p95": 1.005426982637384
+        },
+        "2026-08-27": {
+          "p05": 0.949393782900441,
+          "median": 0.9819421419287759,
+          "p95": 1.017562211140337
+        },
+        "2026-08-28": {
+          "p05": 0.9514810892643495,
+          "median": 0.9847364050253814,
+          "p95": 1.0210952627507115
+        },
+        "2026-08-31": {
+          "p05": 0.9534344942338504,
+          "median": 0.9868351786681395,
+          "p95": 1.0233679892184806
+        },
+        "2026-09-01": {
+          "p05": 0.9571180510918095,
+          "median": 0.9911469648536123,
+          "p95": 1.0286794716787115
+        },
+        "2026-09-02": {
+          "p05": 0.9444807487432763,
+          "median": 0.9780720452918399,
+          "p95": 1.0150688667634982
+        },
+        "2026-09-03": {
+          "p05": 0.9434209626155031,
+          "median": 0.9768820482535524,
+          "p95": 1.0136742404687953
+        },
+        "2026-09-04": {
+          "p05": 0.9423370684741516,
+          "median": 0.9763924818326604,
+          "p95": 1.013511158746231
+        },
+        "2026-09-07": {
+          "p05": 0.9465966129546044,
+          "median": 0.980841714023311,
+          "p95": 1.0184518510161
+        },
+        "2026-09-08": {
+          "p05": 0.953938072426345,
+          "median": 0.9888270717635106,
+          "p95": 1.0264618533052958
+        },
+        "2026-09-09": {
+          "p05": 0.9501428836345348,
+          "median": 0.9851552664551073,
+          "p95": 1.0230884973839913
+        },
+        "2026-09-10": {
+          "p05": 0.9406454461858748,
+          "median": 0.9754131053768338,
+          "p95": 1.0128269367511504
+        },
+        "2026-09-11": {
+          "p05": 0.9217508329610337,
+          "median": 0.9559381638070544,
+          "p95": 0.9925574050166069
+        },
+        "2026-09-14": {
+          "p05": 0.9248904265227736,
+          "median": 0.959056649983778,
+          "p95": 0.9960431443790342
+        },
+        "2026-09-15": {
+          "p05": 0.9170328440927703,
+          "median": 0.9509709961576687,
+          "p95": 0.9878824788933874
+        },
+        "2026-09-16": {
+          "p05": 0.9257871220124265,
+          "median": 0.9602724202417097,
+          "p95": 0.9978993619527885
+        },
+        "2026-09-17": {
+          "p05": 0.9232979386684615,
+          "median": 0.9577785398946463,
+          "p95": 0.995697429025331
+        },
+        "2026-09-18": {
+          "p05": 0.9351869225231928,
+          "median": 0.9702806143781828,
+          "p95": 1.0089318343953244
+        },
+        "2026-09-21": {
+          "p05": 0.9485544672588972,
+          "median": 0.9845368023845238,
+          "p95": 1.0242203789096571
+        },
+        "2026-09-22": {
+          "p05": 0.9484341912219789,
+          "median": 0.9847603237796931,
+          "p95": 1.0253400245404776
+        },
+        "2026-09-23": {
+          "p05": 0.9416905874173206,
+          "median": 0.9782904193668046,
+          "p95": 1.0192414185284508
+        },
+        "2026-09-24": {
+          "p05": 0.9266977856879149,
+          "median": 0.9626140567179757,
+          "p95": 1.0025454026204945
+        },
+        "2026-09-28": {
+          "p05": 0.9059746618759226,
+          "median": 0.9412763600337084,
+          "p95": 0.980022876121177
+        },
+        "2026-09-29": {
+          "p05": 0.9096850013246517,
+          "median": 0.9452536199782192,
+          "p95": 0.9839129941766056
+        },
+        "2026-09-30": {
+          "p05": 0.9124321286661685,
+          "median": 0.9484774652860408,
+          "p95": 0.9876988537092075
+        },
+        "2026-10-08": {
+          "p05": 0.9029638524524379,
+          "median": 0.9388128275813334,
+          "p95": 0.9774465941318894
+        },
+        "2026-10-09": {
+          "p05": 0.9119123935742327,
+          "median": 0.9487960479992491,
+          "p95": 0.988493662881159
+        }
+      },
       "settlement_quantiles": {
         "2026-07-10": {
           "p05": 0.9569318930887885,
@@ -44514,6 +47132,333 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
     {
       "strategy_spec": "P_88_12",
       "deterministic": false,
+      "daily_quantiles": {
+        "2026-07-03": {
+          "p05": 1.0,
+          "median": 1.0,
+          "p95": 1.0
+        },
+        "2026-07-06": {
+          "p05": 0.9873839957325508,
+          "median": 0.9922120050677722,
+          "p95": 0.9970220004276642
+        },
+        "2026-07-07": {
+          "p05": 0.9650099996415071,
+          "median": 0.9709499984098555,
+          "p95": 0.9769599990742343
+        },
+        "2026-07-08": {
+          "p05": 0.9526080087121962,
+          "median": 0.9606420077160474,
+          "p95": 0.9687699965051747
+        },
+        "2026-07-09": {
+          "p05": 0.9521500023066544,
+          "median": 0.9604019980706393,
+          "p95": 0.9690139959221723
+        },
+        "2026-07-10": {
+          "p05": 0.9616778955271957,
+          "median": 0.9705400011354909,
+          "p95": 0.979470001198794
+        },
+        "2026-07-13": {
+          "p05": 0.9305802075867288,
+          "median": 0.9424893629678885,
+          "p95": 0.954426933050242
+        },
+        "2026-07-14": {
+          "p05": 0.9380989579728406,
+          "median": 0.9510217776290375,
+          "p95": 0.9638508862637476
+        },
+        "2026-07-15": {
+          "p05": 0.9437763107150523,
+          "median": 0.9590788495208036,
+          "p95": 0.9741944425631204
+        },
+        "2026-07-16": {
+          "p05": 0.9388434299984736,
+          "median": 0.9563775669159862,
+          "p95": 0.973524208882208
+        },
+        "2026-07-17": {
+          "p05": 0.9021782234426312,
+          "median": 0.9217516241483228,
+          "p95": 0.9409935779702964
+        },
+        "2026-07-20": {
+          "p05": 0.901689476997885,
+          "median": 0.9244677195775091,
+          "p95": 0.9465259358614401
+        },
+        "2026-07-21": {
+          "p05": 0.9156799462814807,
+          "median": 0.9365582624832834,
+          "p95": 0.9570922724635286
+        },
+        "2026-07-22": {
+          "p05": 0.907198817798064,
+          "median": 0.9292619568662095,
+          "p95": 0.9511792072559475
+        },
+        "2026-07-23": {
+          "p05": 0.9190539467442098,
+          "median": 0.941516571401074,
+          "p95": 0.9636622418784023
+        },
+        "2026-07-24": {
+          "p05": 0.8911013791048511,
+          "median": 0.9126552768279979,
+          "p95": 0.9338633178454016
+        },
+        "2026-07-27": {
+          "p05": 0.9146766344815207,
+          "median": 0.9364149459968514,
+          "p95": 0.9576812614644469
+        },
+        "2026-07-28": {
+          "p05": 0.9104679934770711,
+          "median": 0.933553645838288,
+          "p95": 0.9561091851440398
+        },
+        "2026-07-29": {
+          "p05": 0.928466905484962,
+          "median": 0.9526774910962962,
+          "p95": 0.9759443115325929
+        },
+        "2026-07-30": {
+          "p05": 0.923000798681442,
+          "median": 0.9495788748450815,
+          "p95": 0.9749868930481056
+        },
+        "2026-07-31": {
+          "p05": 0.9382332142475737,
+          "median": 0.9643651526176102,
+          "p95": 0.989591823120678
+        },
+        "2026-08-03": {
+          "p05": 0.9486077473964395,
+          "median": 0.975411969658155,
+          "p95": 1.0011528095572009
+        },
+        "2026-08-04": {
+          "p05": 0.9567546867996859,
+          "median": 0.9822928844461563,
+          "p95": 1.0073405194872729
+        },
+        "2026-08-05": {
+          "p05": 0.9675719738252316,
+          "median": 0.9924976909336221,
+          "p95": 1.017518302454193
+        },
+        "2026-08-06": {
+          "p05": 0.9634387607708867,
+          "median": 0.9880527197042384,
+          "p95": 1.013029421092636
+        },
+        "2026-08-07": {
+          "p05": 0.9680504811450923,
+          "median": 0.9925172853355098,
+          "p95": 1.018120021578693
+        },
+        "2026-08-10": {
+          "p05": 0.9765014559210443,
+          "median": 1.002078204414555,
+          "p95": 1.0293130131192265
+        },
+        "2026-08-11": {
+          "p05": 0.9714412240089233,
+          "median": 0.9968730059410513,
+          "p95": 1.0242932536384148
+        },
+        "2026-08-12": {
+          "p05": 0.9775350523664906,
+          "median": 1.0032000946911679,
+          "p95": 1.0313798176533489
+        },
+        "2026-08-13": {
+          "p05": 0.9682831244974311,
+          "median": 0.9938457454539888,
+          "p95": 1.0217949457396518
+        },
+        "2026-08-14": {
+          "p05": 0.9648036020357315,
+          "median": 0.990075147927019,
+          "p95": 1.0180551418340689
+        },
+        "2026-08-17": {
+          "p05": 0.9770911773417001,
+          "median": 1.0025460734952611,
+          "p95": 1.0308429977601623
+        },
+        "2026-08-18": {
+          "p05": 0.9735836849949506,
+          "median": 0.9993382309616461,
+          "p95": 1.0282195531639142
+        },
+        "2026-08-19": {
+          "p05": 0.9399707267114898,
+          "median": 0.9655676104029352,
+          "p95": 0.9939330481093686
+        },
+        "2026-08-20": {
+          "p05": 0.9491656555457934,
+          "median": 0.9756114272266942,
+          "p95": 1.0048081353543623
+        },
+        "2026-08-21": {
+          "p05": 0.9451460648786911,
+          "median": 0.9709459478668302,
+          "p95": 0.9988365230229973
+        },
+        "2026-08-24": {
+          "p05": 0.9369684866451647,
+          "median": 0.9633970306636266,
+          "p95": 0.9918168052888819
+        },
+        "2026-08-25": {
+          "p05": 0.9471590761744835,
+          "median": 0.973646788598,
+          "p95": 1.0020211317397765
+        },
+        "2026-08-26": {
+          "p05": 0.9511295475979096,
+          "median": 0.977953032752866,
+          "p95": 1.006642539514642
+        },
+        "2026-08-27": {
+          "p05": 0.9611035261808349,
+          "median": 0.9883512197910286,
+          "p95": 1.0181043733223858
+        },
+        "2026-08-28": {
+          "p05": 0.9637657996364224,
+          "median": 0.9916826989107904,
+          "p95": 1.0219226537811332
+        },
+        "2026-08-31": {
+          "p05": 0.964709097074109,
+          "median": 0.9928177764509617,
+          "p95": 1.0233284497890958
+        },
+        "2026-09-01": {
+          "p05": 0.9697303573020788,
+          "median": 0.9984454000727954,
+          "p95": 1.0298081061720024
+        },
+        "2026-09-02": {
+          "p05": 0.9569424626430908,
+          "median": 0.9853692174001109,
+          "p95": 1.0161828232892112
+        },
+        "2026-09-03": {
+          "p05": 0.9554939928907549,
+          "median": 0.9838494997890403,
+          "p95": 1.0143980301064717
+        },
+        "2026-09-04": {
+          "p05": 0.9554186339467565,
+          "median": 0.9844078960812038,
+          "p95": 1.0154461097606136
+        },
+        "2026-09-07": {
+          "p05": 0.9586974539508839,
+          "median": 0.9876647309093836,
+          "p95": 1.0189727938908537
+        },
+        "2026-09-08": {
+          "p05": 0.9668275973812137,
+          "median": 0.996338538826016,
+          "p95": 1.0278201645926366
+        },
+        "2026-09-09": {
+          "p05": 0.9627139068640262,
+          "median": 0.9922585239328724,
+          "p95": 1.023890504379069
+        },
+        "2026-09-10": {
+          "p05": 0.9534698420541731,
+          "median": 0.982799596279091,
+          "p95": 1.013962369227977
+        },
+        "2026-09-11": {
+          "p05": 0.9344416656068998,
+          "median": 0.9631955524694149,
+          "p95": 0.9937481022391922
+        },
+        "2026-09-14": {
+          "p05": 0.9371350057052235,
+          "median": 0.9659120903231411,
+          "p95": 0.9966077316796708
+        },
+        "2026-09-15": {
+          "p05": 0.9287376692241365,
+          "median": 0.9573861936014905,
+          "p95": 0.9880164510402931
+        },
+        "2026-09-16": {
+          "p05": 0.936765149982066,
+          "median": 0.9659360897740741,
+          "p95": 0.9971839122137605
+        },
+        "2026-09-17": {
+          "p05": 0.9341031634089968,
+          "median": 0.9631866784266647,
+          "p95": 0.9946254527811652
+        },
+        "2026-09-18": {
+          "p05": 0.9454128305920821,
+          "median": 0.9750275879737781,
+          "p95": 1.0069899799441444
+        },
+        "2026-09-21": {
+          "p05": 0.959420024236387,
+          "median": 0.9897314373338201,
+          "p95": 1.022509084915406
+        },
+        "2026-09-22": {
+          "p05": 0.959167835939621,
+          "median": 0.989918889206676,
+          "p95": 1.0234509181884202
+        },
+        "2026-09-23": {
+          "p05": 0.9522092580081299,
+          "median": 0.9829458809975892,
+          "p95": 1.0166310454987377
+        },
+        "2026-09-24": {
+          "p05": 0.9376805924484335,
+          "median": 0.9678394867799729,
+          "p95": 1.0007160630321241
+        },
+        "2026-09-28": {
+          "p05": 0.9180812277479402,
+          "median": 0.9477749365838964,
+          "p95": 0.9797442211847287
+        },
+        "2026-09-29": {
+          "p05": 0.9218934503296765,
+          "median": 0.951677572939418,
+          "p95": 0.983652057794007
+        },
+        "2026-09-30": {
+          "p05": 0.925518821020622,
+          "median": 0.9556529499909329,
+          "p95": 0.9879819989414028
+        },
+        "2026-10-08": {
+          "p05": 0.9168992573454426,
+          "median": 0.9468732160434499,
+          "p95": 0.9788809323022791
+        },
+        "2026-10-09": {
+          "p05": 0.9269402439966647,
+          "median": 0.9577023098014888,
+          "p95": 0.9906157708217679
+        }
+      },
       "settlement_quantiles": {
         "2026-07-10": {
           "p05": 0.9616778955271957,
@@ -44742,6 +47687,333 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
     {
       "strategy_spec": "P_123_17",
       "deterministic": false,
+      "daily_quantiles": {
+        "2026-07-03": {
+          "p05": 1.0,
+          "median": 1.0,
+          "p95": 1.0
+        },
+        "2026-07-06": {
+          "p05": 0.9889700025433011,
+          "median": 0.9926580013768382,
+          "p95": 0.9963281049371395
+        },
+        "2026-07-07": {
+          "p05": 0.9670280025678728,
+          "median": 0.9718020032464325,
+          "p95": 0.976505998485971
+        },
+        "2026-07-08": {
+          "p05": 0.9567460054072778,
+          "median": 0.9630620021183938,
+          "p95": 0.969395998414482
+        },
+        "2026-07-09": {
+          "p05": 0.9549399943484241,
+          "median": 0.9613440016785015,
+          "p95": 0.967840000110227
+        },
+        "2026-07-10": {
+          "p05": 0.9647958929513677,
+          "median": 0.9718180012358699,
+          "p95": 0.9787400015665411
+        },
+        "2026-07-13": {
+          "p05": 0.936541589131623,
+          "median": 0.946172788561042,
+          "p95": 0.9557138410921636
+        },
+        "2026-07-14": {
+          "p05": 0.9444677712953191,
+          "median": 0.9548028769135681,
+          "p95": 0.9651671399442137
+        },
+        "2026-07-15": {
+          "p05": 0.9522148881162374,
+          "median": 0.9645255047920669,
+          "p95": 0.9767740819191563
+        },
+        "2026-07-16": {
+          "p05": 0.9494522389452045,
+          "median": 0.9633788446434288,
+          "p95": 0.9772125775202845
+        },
+        "2026-07-17": {
+          "p05": 0.9151372776182187,
+          "median": 0.9307179504564937,
+          "p95": 0.9462440774846094
+        },
+        "2026-07-20": {
+          "p05": 0.9179155212648317,
+          "median": 0.9358442132097876,
+          "p95": 0.9533557634126144
+        },
+        "2026-07-21": {
+          "p05": 0.9299092477511387,
+          "median": 0.9464080586720006,
+          "p95": 0.9629103530428493
+        },
+        "2026-07-22": {
+          "p05": 0.9215142146655829,
+          "median": 0.9391626238934558,
+          "p95": 0.9568242546655478
+        },
+        "2026-07-23": {
+          "p05": 0.9340170586302011,
+          "median": 0.9519762187381748,
+          "p95": 0.9698298119213019
+        },
+        "2026-07-24": {
+          "p05": 0.9055434453575062,
+          "median": 0.9227736957465352,
+          "p95": 0.9397726405280581
+        },
+        "2026-07-27": {
+          "p05": 0.9286228280878869,
+          "median": 0.9458743499593891,
+          "p95": 0.9630689415898606
+        },
+        "2026-07-28": {
+          "p05": 0.9263721629257093,
+          "median": 0.9445781766994672,
+          "p95": 0.9626207568489407
+        },
+        "2026-07-29": {
+          "p05": 0.9461130545730309,
+          "median": 0.9650350266290997,
+          "p95": 0.983480925784178
+        },
+        "2026-07-30": {
+          "p05": 0.9431665046807414,
+          "median": 0.9637923604263641,
+          "p95": 0.9838406447958482
+        },
+        "2026-07-31": {
+          "p05": 0.9579423352397971,
+          "median": 0.9780971253550659,
+          "p95": 0.9979453016861032
+        },
+        "2026-08-03": {
+          "p05": 0.9692639814589397,
+          "median": 0.9897822103129479,
+          "p95": 1.0099643631358048
+        },
+        "2026-08-04": {
+          "p05": 0.9755257814797565,
+          "median": 0.9952136418770514,
+          "p95": 1.0150154566695613
+        },
+        "2026-08-05": {
+          "p05": 0.9845656513125283,
+          "median": 1.0039621870125415,
+          "p95": 1.0238049290317817
+        },
+        "2026-08-06": {
+          "p05": 0.9798504442671652,
+          "median": 0.9991352682428956,
+          "p95": 1.0189299693234461
+        },
+        "2026-08-07": {
+          "p05": 0.9829404734501573,
+          "median": 1.0023667935476581,
+          "p95": 1.0228535649537511
+        },
+        "2026-08-10": {
+          "p05": 0.9921129267801855,
+          "median": 1.0122731814514152,
+          "p95": 1.033967513087781
+        },
+        "2026-08-11": {
+          "p05": 0.986551825013814,
+          "median": 1.0067881484774865,
+          "p95": 1.028658145066219
+        },
+        "2026-08-12": {
+          "p05": 0.9922728537357148,
+          "median": 1.0126559003586266,
+          "p95": 1.03507128205362
+        },
+        "2026-08-13": {
+          "p05": 0.9827640839141758,
+          "median": 1.0032960954941794,
+          "p95": 1.0255245479849584
+        },
+        "2026-08-14": {
+          "p05": 0.978301912778495,
+          "median": 0.9986405811614385,
+          "p95": 1.0209777445457573
+        },
+        "2026-08-17": {
+          "p05": 0.9893065750552299,
+          "median": 1.0097810730107906,
+          "p95": 1.032403425021621
+        },
+        "2026-08-18": {
+          "p05": 0.9850634031004689,
+          "median": 1.0057485574542988,
+          "p95": 1.0287355818052932
+        },
+        "2026-08-19": {
+          "p05": 0.9531267710222966,
+          "median": 0.9735911669864159,
+          "p95": 0.9961414095892358
+        },
+        "2026-08-20": {
+          "p05": 0.962727107642557,
+          "median": 0.9838941226760642,
+          "p95": 1.0071015371091943
+        },
+        "2026-08-21": {
+          "p05": 0.9581892369705745,
+          "median": 0.9788038264844248,
+          "p95": 1.0010943714330478
+        },
+        "2026-08-24": {
+          "p05": 0.9505992831846491,
+          "median": 0.9716377985163033,
+          "p95": 0.9944388235351743
+        },
+        "2026-08-25": {
+          "p05": 0.9611959888134253,
+          "median": 0.9823075748007061,
+          "p95": 1.0049769868831204
+        },
+        "2026-08-26": {
+          "p05": 0.9658415277803012,
+          "median": 0.9872481143218146,
+          "p95": 1.0101546450023895
+        },
+        "2026-08-27": {
+          "p05": 0.9745447775228587,
+          "median": 0.9962801063057172,
+          "p95": 1.0199399127288735
+        },
+        "2026-08-28": {
+          "p05": 0.9782603738821896,
+          "median": 1.0005527519721702,
+          "p95": 1.0247400071747577
+        },
+        "2026-08-31": {
+          "p05": 0.9786524324186411,
+          "median": 1.0010758580617614,
+          "p95": 1.0254497663509872
+        },
+        "2026-09-01": {
+          "p05": 0.9852617690779626,
+          "median": 1.008170646134607,
+          "p95": 1.0331473279728065
+        },
+        "2026-09-02": {
+          "p05": 0.9723090618935638,
+          "median": 0.9948871081381103,
+          "p95": 1.019473656741041
+        },
+        "2026-09-03": {
+          "p05": 0.970406292484889,
+          "median": 0.9929511193656895,
+          "p95": 1.0173046972079995
+        },
+        "2026-09-04": {
+          "p05": 0.9719998687899891,
+          "median": 0.9948873725357086,
+          "p95": 1.0195168601245106
+        },
+        "2026-09-07": {
+          "p05": 0.9739602692747897,
+          "median": 0.9968838200082779,
+          "p95": 1.0216958955099933
+        },
+        "2026-09-08": {
+          "p05": 0.9831789734846442,
+          "median": 1.0065879414858485,
+          "p95": 1.0317236649942407
+        },
+        "2026-09-09": {
+          "p05": 0.9788605996877291,
+          "median": 1.002367714301803,
+          "p95": 1.0276275669719235
+        },
+        "2026-09-10": {
+          "p05": 0.9695839575032188,
+          "median": 0.9929503861147375,
+          "p95": 1.0178770922850864
+        },
+        "2026-09-11": {
+          "p05": 0.9502715983233329,
+          "median": 0.9732272912650134,
+          "p95": 0.9977049358930282
+        },
+        "2026-09-14": {
+          "p05": 0.9522460752470502,
+          "median": 0.975227900148639,
+          "p95": 0.9997408315129274
+        },
+        "2026-09-15": {
+          "p05": 0.9431643062731038,
+          "median": 0.9659348709454273,
+          "p95": 0.9903711802356883
+        },
+        "2026-09-16": {
+          "p05": 0.9505425156288265,
+          "median": 0.9736020875428493,
+          "p95": 0.9984116691961205
+        },
+        "2026-09-17": {
+          "p05": 0.947473481778709,
+          "median": 0.9706336569558897,
+          "p95": 0.9955413956121083
+        },
+        "2026-09-18": {
+          "p05": 0.958233367340214,
+          "median": 0.9817586768405133,
+          "p95": 1.0070305864494113
+        },
+        "2026-09-21": {
+          "p05": 0.9725523186962771,
+          "median": 0.9967156435916851,
+          "p95": 1.0227379877125207
+        },
+        "2026-09-22": {
+          "p05": 0.9725231672685825,
+          "median": 0.9969175230092859,
+          "p95": 1.02342351160674
+        },
+        "2026-09-23": {
+          "p05": 0.9644597937574183,
+          "median": 0.9887656479721723,
+          "p95": 1.0154300626599004
+        },
+        "2026-09-24": {
+          "p05": 0.9501938480007371,
+          "median": 0.9741107060041376,
+          "p95": 1.000120471968134
+        },
+        "2026-09-28": {
+          "p05": 0.931814828541047,
+          "median": 0.9554009589795844,
+          "p95": 0.9809198866979939
+        },
+        "2026-09-29": {
+          "p05": 0.9359062077803509,
+          "median": 0.9596801048740007,
+          "p95": 0.9851620706883667
+        },
+        "2026-09-30": {
+          "p05": 0.940202740438156,
+          "median": 0.9643196020184834,
+          "p95": 0.9900163564594608
+        },
+        "2026-10-08": {
+          "p05": 0.9326716504080168,
+          "median": 0.9567634805026286,
+          "p95": 0.982245440920345
+        },
+        "2026-10-09": {
+          "p05": 0.9440016927700198,
+          "median": 0.9686287162387694,
+          "p95": 0.994814891197013
+        }
+      },
       "settlement_quantiles": {
         "2026-07-10": {
           "p05": 0.9647958929513677,
@@ -44970,7 +48242,405 @@ window.ARENA_SEASONS_DATA["season_csi1000"] = {
     {
       "strategy_spec": "P_ALL_0",
       "deterministic": true,
-      "settlement_quantiles": {},
+      "daily_quantiles": {
+        "2026-07-03": {
+          "p05": 1.0,
+          "median": 1.0,
+          "p95": 1.0
+        },
+        "2026-07-06": {
+          "p05": 0.9991819998020975,
+          "median": 0.9991819998020975,
+          "p95": 0.9991819998020975
+        },
+        "2026-07-07": {
+          "p05": 0.9974620008457112,
+          "median": 0.9974620008457112,
+          "p95": 0.9974620008457112
+        },
+        "2026-07-08": {
+          "p05": 0.9974200000368585,
+          "median": 0.9974200000368585,
+          "p95": 0.9974200000368585
+        },
+        "2026-07-09": {
+          "p05": 0.9968260002671109,
+          "median": 0.9968260002671109,
+          "p95": 0.9968260002671109
+        },
+        "2026-07-10": {
+          "p05": 0.9982760003762339,
+          "median": 0.9982760003762339,
+          "p95": 0.9982760003762339
+        },
+        "2026-07-13": {
+          "p05": 0.9970980003704578,
+          "median": 0.9970980003704578,
+          "p95": 0.9970980003704578
+        },
+        "2026-07-14": {
+          "p05": 0.998508000407685,
+          "median": 0.998508000407685,
+          "p95": 0.998508000407685
+        },
+        "2026-07-15": {
+          "p05": 1.0004160000359863,
+          "median": 1.0004160000359863,
+          "p95": 1.0004160000359863
+        },
+        "2026-07-16": {
+          "p05": 1.0007680007401192,
+          "median": 1.0007680007401192,
+          "p95": 1.0007680007401192
+        },
+        "2026-07-17": {
+          "p05": 0.9989620000275374,
+          "median": 0.9989620000275374,
+          "p95": 0.9989620000275374
+        },
+        "2026-07-20": {
+          "p05": 1.000306000435119,
+          "median": 1.000306000435119,
+          "p95": 1.000306000435119
+        },
+        "2026-07-21": {
+          "p05": 1.0004920002782118,
+          "median": 1.0004920002782118,
+          "p95": 1.0004920002782118
+        },
+        "2026-07-22": {
+          "p05": 1.0002280001216624,
+          "median": 1.0002280001216624,
+          "p95": 1.0002280001216624
+        },
+        "2026-07-23": {
+          "p05": 1.0021299998500814,
+          "median": 1.0021299998500814,
+          "p95": 1.0021299998500814
+        },
+        "2026-07-24": {
+          "p05": 0.9988280003127065,
+          "median": 0.9988280003127065,
+          "p95": 0.9988280003127065
+        },
+        "2026-07-27": {
+          "p05": 1.0009680002563046,
+          "median": 1.0009680002563046,
+          "p95": 1.0009680002563046
+        },
+        "2026-07-28": {
+          "p05": 1.0013580004940243,
+          "median": 1.0013580004940243,
+          "p95": 1.0013580004940243
+        },
+        "2026-07-29": {
+          "p05": 1.0036860003029824,
+          "median": 1.0036860003029824,
+          "p95": 1.0036860003029824
+        },
+        "2026-07-30": {
+          "p05": 1.0043999997853126,
+          "median": 1.0043999997853126,
+          "p95": 1.0043999997853126
+        },
+        "2026-07-31": {
+          "p05": 1.0052040003236795,
+          "median": 1.0052040003236795,
+          "p95": 1.0052040003236795
+        },
+        "2026-08-03": {
+          "p05": 1.007308000458059,
+          "median": 1.007308000458059,
+          "p95": 1.007308000458059
+        },
+        "2026-08-04": {
+          "p05": 1.0067759998542476,
+          "median": 1.0067759998542476,
+          "p95": 1.0067759998542476
+        },
+        "2026-08-05": {
+          "p05": 1.0066439996081569,
+          "median": 1.0066439996081569,
+          "p95": 1.0066439996081569
+        },
+        "2026-08-06": {
+          "p05": 1.00549799985659,
+          "median": 1.00549799985659,
+          "p95": 1.00549799985659
+        },
+        "2026-08-07": {
+          "p05": 1.0050200002378595,
+          "median": 1.0050200002378595,
+          "p95": 1.0050200002378595
+        },
+        "2026-08-10": {
+          "p05": 1.0060920003052343,
+          "median": 1.0060920003052343,
+          "p95": 1.0060920003052343
+        },
+        "2026-08-11": {
+          "p05": 1.0058040001677035,
+          "median": 1.0058040001677035,
+          "p95": 1.0058040001677035
+        },
+        "2026-08-12": {
+          "p05": 1.0066680002766573,
+          "median": 1.0066680002766573,
+          "p95": 1.0066680002766573
+        },
+        "2026-08-13": {
+          "p05": 1.005444000230346,
+          "median": 1.005444000230346,
+          "p95": 1.005444000230346
+        },
+        "2026-08-14": {
+          "p05": 1.0043780002674287,
+          "median": 1.0043780002674287,
+          "p95": 1.0043780002674287
+        },
+        "2026-08-17": {
+          "p05": 1.0052920001651222,
+          "median": 1.0052920001651222,
+          "p95": 1.0052920001651222
+        },
+        "2026-08-18": {
+          "p05": 1.0046759995014751,
+          "median": 1.0046759995014751,
+          "p95": 1.0046759995014751
+        },
+        "2026-08-19": {
+          "p05": 1.002916000668985,
+          "median": 1.002916000668985,
+          "p95": 1.002916000668985
+        },
+        "2026-08-20": {
+          "p05": 1.0039439998308366,
+          "median": 1.0039439998308366,
+          "p95": 1.0039439998308366
+        },
+        "2026-08-21": {
+          "p05": 1.0028220002234942,
+          "median": 1.0028220002234942,
+          "p95": 1.0028220002234942
+        },
+        "2026-08-24": {
+          "p05": 1.0028500005074303,
+          "median": 1.0028500005074303,
+          "p95": 1.0028500005074303
+        },
+        "2026-08-25": {
+          "p05": 1.0045379999531965,
+          "median": 1.0045379999531965,
+          "p95": 1.0045379999531965
+        },
+        "2026-08-26": {
+          "p05": 1.005492000417978,
+          "median": 1.005492000417978,
+          "p95": 1.005492000417978
+        },
+        "2026-08-27": {
+          "p05": 1.0057500004182103,
+          "median": 1.0057500004182103,
+          "p95": 1.0057500004182103
+        },
+        "2026-08-28": {
+          "p05": 1.0069499998921916,
+          "median": 1.0069499998921916,
+          "p95": 1.0069499998921916
+        },
+        "2026-08-31": {
+          "p05": 1.0065619995590125,
+          "median": 1.0065619995590125,
+          "p95": 1.0065619995590125
+        },
+        "2026-09-01": {
+          "p05": 1.0081040006844963,
+          "median": 1.0081040006844963,
+          "p95": 1.0081040006844963
+        },
+        "2026-09-02": {
+          "p05": 1.0061979993686359,
+          "median": 1.0061979993686359,
+          "p95": 1.0061979993686359
+        },
+        "2026-09-03": {
+          "p05": 1.005652000441483,
+          "median": 1.005652000441483,
+          "p95": 1.005652000441483
+        },
+        "2026-09-04": {
+          "p05": 1.006194000088228,
+          "median": 1.006194000088228,
+          "p95": 1.006194000088228
+        },
+        "2026-09-07": {
+          "p05": 1.0063280003399109,
+          "median": 1.0063280003399109,
+          "p95": 1.0063280003399109
+        },
+        "2026-09-08": {
+          "p05": 1.0086380001779625,
+          "median": 1.0086380001779625,
+          "p95": 1.0086380001779625
+        },
+        "2026-09-09": {
+          "p05": 1.0083519997199324,
+          "median": 1.0083519997199324,
+          "p95": 1.0083519997199324
+        },
+        "2026-09-10": {
+          "p05": 1.0077380010826116,
+          "median": 1.0077380010826116,
+          "p95": 1.0077380010826116
+        },
+        "2026-09-11": {
+          "p05": 1.0051859999995074,
+          "median": 1.0051859999995074,
+          "p95": 1.0051859999995074
+        },
+        "2026-09-14": {
+          "p05": 1.0051079995702559,
+          "median": 1.0051079995702559,
+          "p95": 1.0051079995702559
+        },
+        "2026-09-15": {
+          "p05": 1.0035619995078897,
+          "median": 1.0035619995078897,
+          "p95": 1.0035619995078897
+        },
+        "2026-09-16": {
+          "p05": 1.004030000176388,
+          "median": 1.004030000176388,
+          "p95": 1.004030000176388
+        },
+        "2026-09-17": {
+          "p05": 1.0037000009566972,
+          "median": 1.0037000009566972,
+          "p95": 1.0037000009566972
+        },
+        "2026-09-18": {
+          "p05": 1.0040659994904768,
+          "median": 1.0040659994904768,
+          "p95": 1.0040659994904768
+        },
+        "2026-09-21": {
+          "p05": 1.0058519995356985,
+          "median": 1.0058519995356985,
+          "p95": 1.0058519995356985
+        },
+        "2026-09-22": {
+          "p05": 1.0058899999290585,
+          "median": 1.0058899999290585,
+          "p95": 1.0058899999290585
+        },
+        "2026-09-23": {
+          "p05": 1.0044580004839319,
+          "median": 1.0044580004839319,
+          "p95": 1.0044580004839319
+        },
+        "2026-09-24": {
+          "p05": 1.0031020002579287,
+          "median": 1.0031020002579287,
+          "p95": 1.0031020002579287
+        },
+        "2026-09-28": {
+          "p05": 1.0018200004601077,
+          "median": 1.0018200004601077,
+          "p95": 1.0018200004601077
+        },
+        "2026-09-29": {
+          "p05": 1.0028499999375011,
+          "median": 1.0028499999375011,
+          "p95": 1.0028499999375011
+        },
+        "2026-09-30": {
+          "p05": 1.0038939992367142,
+          "median": 1.0038939992367142,
+          "p95": 1.0038939992367142
+        },
+        "2026-10-08": {
+          "p05": 1.0041460002845581,
+          "median": 1.0041460002845581,
+          "p95": 1.0041460002845581
+        },
+        "2026-10-09": {
+          "p05": 1.0058660001676374,
+          "median": 1.0058660001676374,
+          "p95": 1.0058660001676374
+        }
+      },
+      "settlement_quantiles": {
+        "2026-07-10": {
+          "p05": 0.9982760003762339,
+          "median": 0.9982760003762339,
+          "p95": 0.9982760003762339
+        },
+        "2026-07-17": {
+          "p05": 0.9989620000275374,
+          "median": 0.9989620000275374,
+          "p95": 0.9989620000275374
+        },
+        "2026-07-24": {
+          "p05": 0.9988280003127065,
+          "median": 0.9988280003127065,
+          "p95": 0.9988280003127065
+        },
+        "2026-07-31": {
+          "p05": 1.0052040003236795,
+          "median": 1.0052040003236795,
+          "p95": 1.0052040003236795
+        },
+        "2026-08-07": {
+          "p05": 1.0050200002378595,
+          "median": 1.0050200002378595,
+          "p95": 1.0050200002378595
+        },
+        "2026-08-14": {
+          "p05": 1.0043780002674287,
+          "median": 1.0043780002674287,
+          "p95": 1.0043780002674287
+        },
+        "2026-08-21": {
+          "p05": 1.0028220002234942,
+          "median": 1.0028220002234942,
+          "p95": 1.0028220002234942
+        },
+        "2026-08-28": {
+          "p05": 1.0069499998921916,
+          "median": 1.0069499998921916,
+          "p95": 1.0069499998921916
+        },
+        "2026-09-04": {
+          "p05": 1.006194000088228,
+          "median": 1.006194000088228,
+          "p95": 1.006194000088228
+        },
+        "2026-09-11": {
+          "p05": 1.0051859999995074,
+          "median": 1.0051859999995074,
+          "p95": 1.0051859999995074
+        },
+        "2026-09-18": {
+          "p05": 1.0040659994904768,
+          "median": 1.0040659994904768,
+          "p95": 1.0040659994904768
+        },
+        "2026-09-24": {
+          "p05": 1.0031020002579287,
+          "median": 1.0031020002579287,
+          "p95": 1.0031020002579287
+        },
+        "2026-09-30": {
+          "p05": 1.0038939992367142,
+          "median": 1.0038939992367142,
+          "p95": 1.0038939992367142
+        },
+        "2026-10-09": {
+          "p05": 1.0058660001676374,
+          "median": 1.0058660001676374,
+          "p95": 1.0058660001676374
+        }
+      },
       "histogram": {},
       "description": "Taotie (全池吞噬被动组合)",
       "topk": 0,

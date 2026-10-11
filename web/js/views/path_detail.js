@@ -1,7 +1,7 @@
 /**
  * QuantPits-Arena: Path Detail View
  * Deep-dive analysis for a single execution path:
- * - Cumulative NAV with Settlement-date pointwise Monkey Quantiles, Underwater Drawdown, Excess Return vs CSI 300
+ * - Cumulative NAV with Daily pointwise Monkey Quantiles, Underwater Drawdown, Excess Return vs CSI 300
  * - Parametric monkey null distribution boxplot & empirical p-value
  * - Finite-capital constraint diagnostics (CNY 500k, 100-share minimum lots)
  */
