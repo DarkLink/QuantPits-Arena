@@ -105,11 +105,11 @@ python cli.py rollforward --end-date <YYYY-MM-DD>
 ```
 
 > **该命令在底层自动执行原子闭环（无需人工干预）**：
-> 1. `bump-date`：原子更新 `arena/config.py`、各活跃赛季 `seasons/*/season_config.yaml` 及前端 `web/js/data/seasons_index.js`；
-> 2. `step`：全自动依次对 **5 大活跃赛季**（`season_01`, `season_csi300`, `season_csi500`, `season_csi800`, `season_csi1000`）执行增量周期结算、持仓撮合、盯市估值与 **55,000 只对标猴群（11 specs × 1000）零假设重估**；
-> 3. `export-web`：全自动重新编译 5 个前端数据文件（`web/js/data/*.js`）并同步 `arena_data.js`；
-> 4. `sync_chronicles`：自动同步英文战报文档至 `web/chronicles/en/`；
-> 5. `audit`：自动触发本地零泄密隐私审计 `scripts/audit_privacy.py`。
+> 1. 暂存推进：根据授权截止日复制现有快照并核对交易日，计算期间保留上一完整发布版本的可见日期；
+> 2. `step`：全自动依次对 **5 大活跃赛季**（`season_01`, `season_csi300`, `season_csi500`, `season_csi800`, `season_csi1000`）执行增量周期结算、持仓撮合、盯市估值与 **5,000,000 条对标随机路径（5池 × 10随机规格 × 100000）及5条确定性被动参考的增量评估**；
+> 3. 导出：全自动重新编译五池数据与共同统计校正，前端统一读取 `web/js/data/arena_release.js`，保留单池文件及 `arena_data.js` 兼容入口；
+> 4. 战报：根据结算数据重新生成并同步英文战报至 `web/chronicles/en/`；
+> 5. 审计与发布：通过暂存及仓库隐私审计后发布完整数据包，再更新可见截止日与全局默认日期；操作锁、发布日志和备份支持异常回滚及中断恢复。
 
 ### 3. 周度战报撰写规范 (Battle Report & Dispatches)
 增量推进完成后，依据最新生成的净值曲线数据撰写当周战报：

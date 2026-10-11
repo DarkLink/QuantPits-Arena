@@ -1,107 +1,118 @@
-# 🏛️ Episodes 01–08: The 41-Day Baseline & The Eagle King
-*(Evaluation Window: Anchored at 2026-07-03 inception NAV 1.0000; covers 41 trading days up to 2026-08-28 close)*
+# season_01 — repaired baseline through 2026-08-28
 
-> **Phase Classification**: **Retrospective Backtest Baseline (Fixed Historical Weights)**  
-> **Executable Universe Benchmark**: Taotie (`1.0000` $\to$ `0.9928`, Cumulative -0.72%)  
-> *(A capital-constrained, round-lot-constrained full-universe portfolio designed to approximate broad exposure with minimal active selection; utilizing greedy waterfall allocation across 500k capital to hold ~205 stocks with near-zero idle cash)*  
-> **Summary**: High selection intensity variants gained strong upside in this period. `CONTESTANT_B_eagle-5-1` finished the baseline at **+19.71%**, while delayed-signal Sloths also retained positive performance.
+This dispatch is a retrospective repair replay using the actual raw weekly signals preserved in legacy checkpoints and a frozen current daily-bar snapshot. Reporting anchor: 2026-07-03; cutoff: 2026-08-28. Period returns are NAV ratios; differences in returns are percentage points. Legacy artifacts are archived separately. This refreshed document is not evidence of a historical pre-market commitment.
 
----
+## ⚡ TL;DR
 
-## ⚡ TL;DR: The Forty-One Day Opening Gambit
+- 2026-07-03 → 2026-08-28: 40 return sessions, 41 NAV observations including the reporting anchor; 8 scheduled rebalances.
+- Period leader CONTESTANT_B_eagle-5-1: +19.7050%; end NAV 1.197050.
+- Cumulative leader CONTESTANT_B_eagle-5-1: +19.7050%; end NAV 1.197050.
+- 145/168 contestant paths gained during this segment; median path return +4.4656%.
+- Market index segment return -4.8117%; end normalized NAV 0.951883.
+- Taotie +2.3228% for the segment, end NAV 1.023228; Ghost scenario +0.3705%, NAV 1.003705.
+- Cumulative leader raw p=0.00171998, Bonferroni p=1; N=100,000 per matched random spec.
+- At this cutoff: 68/168 raw p<0.05 and 9/168 Bonferroni p<0.05 in this pool, within the visible 840-item family.
 
-* **The Arena Baseline Anchor**: 41 trading days retrospectively evaluated across July–August 2026 under CNY 500,000 capital and 100-share discrete constraints; executable universe benchmark **Taotie dipped -0.72%** (NAV `0.9928`), holding ~205 stocks with 0.02% idle cash.
-* **Coronation of the Apex Predator**: **`CONTESTANT_B_eagle-5-1` seized Rank 1** at **NAV `1.1971` (+19.71%)**, generating **+20.43pp of excess return over Taotie** through maximum selection intensity (TopK=5, DropN=1).
-* **The Silver Sloth**: **`CONTESTANT_B_sloth-1` claimed Rank 2** at **NAV `1.1247` (+12.47%)**, proving that low-turnover inertia containers can outpace active turnover when macro momentum trends smoothly.
-* **The Null Court Verdict**: Across 1,000 matched monkey portfolios sharing identical parameters, **zero monkeys beat `CONTESTANT_B_eagle-5-1`** ($p \approx 0.001$ raw empirical significance).
-* **Bonferroni Reality Check**: Adjusting for 168 simultaneously evaluated execution paths expands significance to $168 \times 0.001 \approx 0.168 > 0.05$—leaving the crown statistically uncertified under strict multiple-testing scrutiny.
-* **The Underworld (Downside Extremes)**: Inverse-selection Koalas suffered catastrophic adverse selection, bottoming at **NAV `0.6521` (-34.79%)** under `CONTESTANT_E_koala-5-1` ($p \approx 0.001$ in the lower tail).
+## Period and cumulative standings
 
----
+Top ten for the reporting segment:
 
+| path | period_pct | cumulative_pct | nav | period_mdd_pct | raw_p | bonferroni_p |
+| --- | --- | --- | --- | --- | --- | --- |
+| CONTESTANT_B_eagle-5-1 | 19.7050 | 19.7050 | 1.1971 | 7.1286 | 0.00171998 | 1 |
+| CONTESTANT_A_eagle-11-2 | 14.6836 | 14.6836 | 1.1468 | 6.5849 | 0.000399996 | 0.335997 |
+| CONTESTANT_A_rabbit-1 | 13.1345 | 13.1345 | 1.1313 | 4.0574 | 2.99997e-05 | 0.0251997 |
+| CONTESTANT_D_eagle-11-2 | 12.9625 | 12.9625 | 1.1296 | 2.5349 | 0.00143999 | 1 |
+| CONTESTANT_D_eagle-5-1 | 12.7888 | 12.7888 | 1.1279 | 3.3810 | 0.0237398 | 1 |
+| CONTESTANT_A_eagle-5-1 | 12.6742 | 12.6742 | 1.1267 | 8.1718 | 0.0246598 | 1 |
+| CONTESTANT_B_sloth-1 | 12.4160 | 12.4160 | 1.1242 | 4.2772 | 2.99997e-05 | 0.0251997 |
+| CONTESTANT_D_rabbit-1 | 12.3746 | 12.3746 | 1.1237 | 5.0213 | 7.99992e-05 | 0.0671993 |
+| CONTESTANT_C_eagle-5-1 | 12.1397 | 12.1397 | 1.1214 | 5.7589 | 0.0296897 | 1 |
+| CONTESTANT_B_robot | 12.0665 | 12.0665 | 1.1207 | 5.6491 | 2.99997e-05 | 0.0251997 |
 
-## I. Nature of the Evaluation: Retrospective Backtest
+Top ten cumulatively through this cutoff:
 
-This 41-day baseline covers the opening 8 weeks of the tournament calendar (Episodes 01–08):
+| path | period_pct | cumulative_pct | nav | period_mdd_pct | raw_p | bonferroni_p |
+| --- | --- | --- | --- | --- | --- | --- |
+| CONTESTANT_B_eagle-5-1 | 19.7050 | 19.7050 | 1.1971 | 7.1286 | 0.00171998 | 1 |
+| CONTESTANT_A_eagle-11-2 | 14.6836 | 14.6836 | 1.1468 | 6.5849 | 0.000399996 | 0.335997 |
+| CONTESTANT_A_rabbit-1 | 13.1345 | 13.1345 | 1.1313 | 4.0574 | 2.99997e-05 | 0.0251997 |
+| CONTESTANT_D_eagle-11-2 | 12.9625 | 12.9625 | 1.1296 | 2.5349 | 0.00143999 | 1 |
+| CONTESTANT_D_eagle-5-1 | 12.7888 | 12.7888 | 1.1279 | 3.3810 | 0.0237398 | 1 |
+| CONTESTANT_A_eagle-5-1 | 12.6742 | 12.6742 | 1.1267 | 8.1718 | 0.0246598 | 1 |
+| CONTESTANT_B_sloth-1 | 12.4160 | 12.4160 | 1.1242 | 4.2772 | 2.99997e-05 | 0.0251997 |
+| CONTESTANT_D_rabbit-1 | 12.3746 | 12.3746 | 1.1237 | 5.0213 | 7.99992e-05 | 0.0671993 |
+| CONTESTANT_C_eagle-5-1 | 12.1397 | 12.1397 | 1.1214 | 5.7589 | 0.0296897 | 1 |
+| CONTESTANT_B_robot | 12.0665 | 12.0665 | 1.1207 | 5.6491 | 2.99997e-05 | 0.0251997 |
 
-* **Retrospective Execution**: The simulation for these 41 trading days was conducted after July and August market data was already known. While the underlying model candidates had their training data cut off prior to June 30, 2026, the selection of models, execution handlers, and testbed parameters was performed with full knowledge of the market environment during this period.
-* **Purpose**: This phase serves as a standardized backtest baseline to establish initial contestant positions, cash balances, and behavioral fingerprints before forward tracking begins.
-* **Transition to Prospective Tracking & Cryptographic Provenance**: From the August 28 close onward, the evaluation transitions to prospective forward tracking (beginning with Episode 09). Evaluation results packages are sealed under SHA-256 cryptographic digests upon cycle completion for institutional anti-tampering embargo periods prior to public unlock (which proves zero modification during the embargo window, rather than serving as a pre-market prediction digest).
+Bottom five for the segment:
 
----
+| path | period_pct | cumulative_pct | nav | period_mdd_pct | raw_p | bonferroni_p |
+| --- | --- | --- | --- | --- | --- | --- |
+| CONTESTANT_C_koala | -8.8381 | -8.8381 | 0.9116 | 11.4693 | 0.99979 | 1 |
+| CONTESTANT_B_meerkat-90 | -10.3239 | -10.3239 | 0.8968 | 12.1729 | 0.99995 | 1 |
+| CONTESTANT_A_koala | -10.4825 | -10.4825 | 0.8952 | 13.2716 | 0.99995 | 1 |
+| CONTESTANT_B_koala | -10.5967 | -10.5967 | 0.8940 | 13.4733 | 0.99995 | 1 |
+| CONTESTANT_D_koala | -13.5181 | -13.5181 | 0.8648 | 15.0155 | 1 | 1 |
 
-## II. The Battlefield: Leaderboard Standings & The Coronation
+## Six anonymous contestants
 
-Across the 41-day baseline stretch, the executable universe benchmark (**Taotie**) ground through choppy terrain under its finite-capital and round-lot constraints, ending at `0.9928` (**-0.72%**). Under greedy waterfall allocation, Taotie held ~205 constituent stocks with ~0.02% idle cash, accurately reflecting equal-weighted market drag.
+Each row includes all 28 animals; no selection of winning combinations.
 
-Yet among the 168 living execution paths battling inside the Zoo, strategies with elevated selection intensity unlocked remarkable upside leverage:
+| contestant | mean_pct | median_pct | positive | best_pct | worst_pct | mean_mdd_pct |
+| --- | --- | --- | --- | --- | --- | --- |
+| CONTESTANT_A | 4.8457 | 4.9516 | 24 | 14.6836 | -10.4825 | 5.4608 |
+| CONTESTANT_B | 5.9247 | 6.8361 | 24 | 19.7050 | -10.5967 | 5.2520 |
+| CONTESTANT_C | 4.4946 | 5.7849 | 24 | 12.1397 | -8.8381 | 4.5068 |
+| CONTESTANT_D | 4.2777 | 4.0727 | 26 | 12.9625 | -13.5181 | 4.5156 |
+| CONTESTANT_E | 2.2310 | 2.3469 | 23 | 8.5629 | -3.0846 | 4.2381 |
+| CONTESTANT_F | 2.7130 | 2.9257 | 24 | 8.5053 | -4.3023 | 3.5101 |
 
-```text
-[Cumulative NAV Top 5 Standings as of August 28, 2026 (41 Trading Days)]
-🥇 CONTESTANT_B_eagle-5-1 : NAV 1.1971 (+19.71%, +20.43pp vs executable Taotie benchmark)
-🥈 CONTESTANT_A_eagle-11-2: NAV 1.1468 (+14.68%, +15.40pp vs executable Taotie benchmark)
-🥉 CONTESTANT_B_sloth-1   : NAV 1.1438 (+14.38%, +15.10pp vs executable Taotie benchmark)
-🎖️ CONTESTANT_A_rabbit-1  : NAV 1.1313 (+13.13%, +13.85pp vs executable Taotie benchmark)
-🎖️ CONTESTANT_D_rabbit-1  : NAV 1.1247 (+12.47%, +13.19pp vs executable Taotie benchmark)
-```
+## All animal policies
 
-### The Crowning of the Eagle King
-Pioneered under the `CONTESTANT_B` banner, **`CONTESTANT_B_eagle-5-1`** soared to **NAV `1.1971` (+19.71%)**, generating a staggering **20.43 percentage points of excess return** over the executable universe benchmark (Taotie).
+Each row summarizes segment returns across the six contestants; the range describes contestant-policy interaction.
 
-* **Short-Window Caveat**: Over this 41-day run, the Eagle posted an annualized Sharpe ratio of `2.64` with a maximum drawdown of just `-2.41%`. Spectacular short-window metrics in trending regimes must never be confused with long-horizon structural invariance.
+| animal | mean_pct | median_pct | best_pct | worst_pct |
+| --- | --- | --- | --- | --- |
+| eagle-11-2 | 9.1097 | 9.2272 | 14.6836 | 4.2060 |
+| eagle-44-6 | 6.2724 | 6.6399 | 10.7448 | 1.2911 |
+| eagle-5-1 | 12.2846 | 12.4069 | 19.7050 | 7.8943 |
+| eagle-66-9 | 4.8030 | 5.4360 | 6.7084 | 1.3716 |
+| eagle-88-12 | 5.4944 | 6.3649 | 7.2389 | 2.7008 |
+| koala | -5.9361 | -9.6603 | 5.0966 | -13.5181 |
+| meerkat-10 | 2.2955 | 2.6347 | 6.3438 | -0.8669 |
+| meerkat-20 | 6.0007 | 6.8038 | 8.5629 | 1.0267 |
+| meerkat-30 | 4.4227 | 4.9354 | 9.0557 | -1.3801 |
+| meerkat-40 | 4.5979 | 4.3935 | 8.7673 | 0.7484 |
+| meerkat-50 | 3.2293 | 2.3328 | 7.6162 | 0.6412 |
+| meerkat-60 | 2.1415 | 2.1120 | 5.5790 | -0.8496 |
+| meerkat-70 | -1.6977 | -1.1206 | 1.8723 | -6.6283 |
+| meerkat-80 | -1.4962 | -0.7426 | 0.9553 | -7.4040 |
+| meerkat-90 | -4.3346 | -3.6935 | -1.4732 | -10.3239 |
+| rabbit-1 | 7.4105 | 7.9979 | 13.1345 | -1.9396 |
+| rabbit-2 | 6.9181 | 7.8452 | 10.9002 | 0.7288 |
+| robot | 7.0955 | 7.2998 | 12.0665 | 1.9929 |
+| sloth-1 | 6.8889 | 6.9758 | 12.4160 | 2.7494 |
+| sloth-2 | 7.2472 | 7.2442 | 9.2700 | 5.2235 |
+| sloth-3 | 4.0457 | 4.1363 | 6.1021 | 1.9771 |
+| sloth-4 | 1.7932 | 1.4481 | 4.2207 | 0.1702 |
+| snail-1 | 5.1367 | 5.6697 | 9.2399 | 0.1347 |
+| snail-2 | 3.7370 | 3.5042 | 6.8786 | 0.7588 |
+| snail-3 | 3.8005 | 3.7113 | 8.0229 | 0.2431 |
+| snail-4 | 3.5686 | 3.6516 | 6.7936 | 0.5818 |
+| turtle | 5.2000 | 5.7939 | 10.5992 | 1.1443 |
+| whale-shark | 4.2428 | 4.3250 | 5.9196 | 2.7509 |
 
----
+## Mechanisms and interpretation
 
-## III. Execution Zoo Autopsy: Dual Resonances in a Summer Tailwind
+The TopK=5/DropN=1 segment spread across contestants is 11.8107 percentage points. A winning concentrated path does not establish a universal concentration advantage. Rabbit DropN changes weekly replacement capacity, not trading frequency. Sloth delay and cold-start cash, and Snail warm-start stale signals, jointly alter exposure and path dependence; these are whole-strategy comparisons, not an identified prediction half-life. Percentile Meerkats and inverted Koala should be read against the full contestant distribution above.
 
-### 1. The Eagles (High Selection Intensity)
-* **Mechanistic Fact (Level A)**: `eagle-5-1` concentrates its capital into the top 5 predicted assets (Top 5 quantile, Drop 1), exerting the highest selection intensity in the tournament.
-* **Attribution Hypothesis (Level B)**: In a persistent trending market, concentrating capital into the top 5 positions amplifies both exposure to the model signal and idiosyncratic concentration risk (magnifying both genuine signal and concentrated luck). Whatever the underlying macro driver, the Eagle King firmly claimed the crown.
+Contestant averages describe consistency across animals; the best row describes realized performance in this window. Pool membership, fees, lots, cash exposure and signal cross-sections all contribute to differences across environments. The results do not identify a single macro cause or disclose contestant architecture.
 
-### 2. The Sloths (Signal Delay Stress-Testing)
-* **Mechanistic Fact (Level A)**: `sloth-1` deliberately delays the incoming model prediction signal by one full rebalance cycle before executing, yet still delivered an NAV of `1.1438` (Rank 3 overall).
-* **Attribution Hypothesis (Level B)**: This observation is consistent with relatively slow signal decay over this window; a one-cycle delayed ranking retained substantial economic value. Note that Sloth mechanics combine signal delay with portfolio-path inertia and cash drag (Sloth variants hold substantial uninvested cash during delay windows). A rigorous claim of an extended pure prediction half-life would require cross-sectional verification across the full Sloth-1/2/3/4 lag gradient.
+## Random-control and execution contract
 
-> **Tactical Takeaway**: When market trends persist and signal decay is slow, elevating selection intensity (Eagle) and harvesting delayed alpha (Sloth) both captured significant upside during this period.
+Matching uses TopK/DropN only: ten random specifications and one deterministic passive reference. Delay, warm/cold starts, inversion and percentile selection do not introduce extra species. The p values above test cumulative returns from inception, not segment returns. The upper tail includes ties: p=(k+1)/(N+1). At N=100,000, minimum p is 9.9999e-06, never zero. Bonferroni/Holm/BH/BY are stored separately. The 840-item raw threshold is 5.952381e-05, with strict inequality; at the formal count, up to four exceedances can pass Bonferroni. Earlier cutoffs and repeated weekly reviews are descriptive monitoring. Correction does not cover all historical windows jointly or hidden prior research selection. Monte Carlo intervals measure simulation tail uncertainty and add no market history.
 
----
+Execution requires finite positive same-day quotes; missing-price sells retain the position. Valuation may carry the last valid close with stale-mark counts. Pool membership is separate from affordability. Decision-close intent is frozen before Monday execution. Taotie uses a 1.0 standard-account capital ratio and the same allocation policy. Ghost is a capital-granularity scenario, not a costless equal-weight index. Turnover is gross buys plus gross sells divided by starting assets.
 
-## IV. The Null Court: Monte Carlo Jurisdiction & Multiple Testing
-
-To determine whether the Eagle King represents genuine predictive skill or an artifact of concentrated luck, we summoned `CONTESTANT_B_eagle-5-1` before its **matched null colony of 1,000 deterministic pseudo-random monkeys** (identical TopK=5, DropN=1 rules, lot constraints, and capital frictions, with zero ranking signal):
-
-> *Note on Monkey Architecture*: Arena simulates 11,000 total monkeys across 11 unique matched portfolio-rule specifications (1,000 monkeys each). Because pseudo-random ranking completely strips out model identity, contestants sharing identical portfolio mechanics share the same matched null colony. Contestants are strictly judged against their own matched colony, not an aggregated pool.
-
-### 1. The Direct Verdict (Level A)
-* Across 1,000 matched random simulations, **exactly 0 monkeys outperformed the Eagle King**.
-* Under standard finite-sample plus-one correction:
-  $$p_{\text{upper}} = \frac{0 + 1}{1000 + 1} = \frac{1}{1001} \approx 0.000999 \approx 0.001$$
-* The strategy lands in the **`>99.9%` empirical percentile** (rendered in the UI as `>99.9%`, reflecting the finite simulation size of 1,000 runs). Individual test significance against the matched random baseline is strong.
-
-### 2. Multiple Testing Sensitivity (The Jurisdictional Boundary)
-Because `eagle-5-1` was selected as the best among 168 living tournament variants, its raw $p$-value cannot be interpreted as an unselected discovery.
-
-If we conduct a limited sensitivity analysis applying a distribution-free **Bonferroni upper bound** treating the 168 explicitly enumerated execution paths as a single family:
-$$168 \times 0.000999 \approx 0.168 > 0.05$$
-
-**The Bonferroni-adjusted $p$-value exceeds 0.05.**
-
-Key methodological nuances:
-1. **Monte Carlo Resolution Limitation**: With $N=1,000$ matched monkeys, the minimum reportable empirical $p$-value is $1 / 1001 \approx 0.001$. Across 168 actively tracked variants, an uncorrected $p \approx 0.001$ multiplied by 168 mathematically cannot reach a family-wise 0.05 significance threshold. This represents a known resolution limit of finite matched simulation rather than a mandate to arbitrarily inflate monkey count.
-2. **Unadjusted Researcher Degrees of Freedom**: Importantly, this 168-path calculation is only a narrow sensitivity check bounded to the actively tracked paths on the leaderboard. It does **not** represent an adjustment for the broader space of retrospective researcher degrees of freedom—such as prior model candidate screening, Zoo animal taxonomy design, or parameter grid formulation. In any retrospective backtest setting, multiple testing goes far beyond the enumerated paths on the leaderboard.
-
----
-
-## V. The Cliffhanger: Clouds on the Horizon
-
-As of Friday, August 28, 2026, the Eagle King's tournament record stood supreme:
-> **41 Trading Days: Cumulative +19.71% (+17.39pp vs Benchmark); 0 / 1,000 matched monkeys exceeded it (p ≈ 0.001).**
-
-Yet beneath the golden armor of extreme concentration lurks structural fragility. High selection intensity cuts both ways: what happens when steady summer tailwinds vanish overnight? When factor correlations invert and volatility spikes, can a top-heavy predator maneuver?
-
-The throne has been claimed, but the real storm is about to break.
-
----
-
-> **Please do not feed the models.**  
-> **The monkeys are already inside. The zoo is open.**
+This remains daily-bar research: full-day volume is a retrospective tradability proxy. Complete verified corporate-action, opening direction-limit and capacity data are unavailable. Factor changes are not guessed into dividend payments, and adjusted prices are not mixed with unchanged nominal shares to claim a total-return repair. Strict execution fails its preflight without required coverage.

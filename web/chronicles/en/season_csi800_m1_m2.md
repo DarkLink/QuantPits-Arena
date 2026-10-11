@@ -1,96 +1,118 @@
-# 🏛️ Month 01–02: The Baseline & Broad-Cap Rabbit Supremacy
+# season_csi800 — repaired baseline through 2026-08-28
 
-> **Evaluation Window**: Anchored at 2026-07-03 inception NAV 1.0000; covers 41 trading days up to 2026-08-28 close (Months 1 & 2 Combined Baseline).  
-> **Tournament Phase**: **Retrospective Backtest Calibration (Fixed Historical Weights)**  
-> **Executable Universe Benchmark**: Taotie 800 (`1.0000` $\to$ `0.9625`, Cumulative **-3.75%**; full 51d horizon NAV `0.9307`, **-6.93%**).  
-> **Market Index Benchmark**: CSI 800 Index (`SH000906`, Cumulative **-7.90%**).  
-> *(Under standardized CNY 1,600,000 capital and strict 100-share round-lot trading constraints across the 800 broad-market stock universe, utilizing greedy waterfall allocation to achieve ~99.9% capital utilization across 634 equities).*  
-> **Core Narrative**: Combining large-cap liquidity with mid-cap growth dispersion, the CSI 800 arena delivered outstanding multi-factor alpha. Agile execution handlers crushed the market benchmark by over 20 percentage points, with `CONTESTANT_B_rabbit-2` topping the podium at **+12.84%**.
+This dispatch is a retrospective repair replay using the actual raw weekly signals preserved in legacy checkpoints and a frozen current daily-bar snapshot. Reporting anchor: 2026-07-03; cutoff: 2026-08-28. Period returns are NAV ratios; differences in returns are percentage points. Legacy artifacts are archived separately. This refreshed document is not evidence of a historical pre-market commitment.
 
----
+## ⚡ TL;DR
 
-## ⚡ Season Baseline TL;DR: Broad-Cap Dispersion & Rabbit Supremacy
+- 2026-07-03 → 2026-08-28: 40 return sessions, 41 NAV observations including the reporting anchor; 8 scheduled rebalances.
+- Period leader CONTESTANT_A_sloth-2: +13.6564%; end NAV 1.136564.
+- Cumulative leader CONTESTANT_A_sloth-2: +13.6564%; end NAV 1.136564.
+- 84/168 contestant paths gained during this segment; median path return -0.0512%.
+- Market index segment return -6.2085%; end normalized NAV 0.937915.
+- Taotie +0.4546% for the segment, end NAV 1.004546; Ghost scenario -3.4824%, NAV 0.965176.
+- Cumulative leader raw p=9.9999e-06, Bonferroni p=0.00839992; N=100,000 per matched random spec.
+- At this cutoff: 49/168 raw p<0.05 and 7/168 Bonferroni p<0.05 in this pool, within the visible 840-item family.
 
-* **The Broad-Cap Landscape**: Retrospective baseline across Months 1 & 2 (41 trading days); the broad-market **CSI 800 index retreated -7.90%** as defensive mega-caps diverged sharply from cyclical mid-caps.
-* **Executable Benchmark Cushion**: Under CNY 1,600,000 capital and greedy waterfall allocation across 634 equities (~99.9% capital utilization), executable reference **Taotie 800 closed at NAV `0.9625` (-3.75%)**, beating the market index by **+4.15pp**.
-* **Rabbit Hegemony Across Broad Space**: Agile turnover handlers capitalized on cross-sector dispersion, with **`CONTESTANT_B_rabbit-2` seizing Rank 1 at NAV `1.1284` (+12.84%)**, delivering a massive **+20.74pp excess return over CSI 800** and **+16.59pp over Taotie 800**; `rabbit-1` took silver at **+9.84%**.
-* **Agility Premium in Liquid Universes**: Aggressive turnover (DropN=22) outpaced the canonical Robot (DropN=3, +5.18%) by **+7.66 percentage points**, demonstrating that high liquidity absorbs turnover frictions while rewarding signal freshness.
-* **The Whale-Shark Resilience**: Scaled-breadth container `whale-shark` secured 3rd overall at **+8.30%** with a maximum drawdown of just **-2.15%**, demonstrating institutional capacity-scaled robustness.
-* **Eagle Concentration Dilution**: Extreme concentration (`eagle-5-1`, +7.95%) placed only 6th, confirming that selecting only 5 names in an 800-stock universe misses valuable breadth advantages captured by broader Rabbits (TopK=22).
+## Period and cumulative standings
 
----
+Top ten for the reporting segment:
 
+| path | period_pct | cumulative_pct | nav | period_mdd_pct | raw_p | bonferroni_p |
+| --- | --- | --- | --- | --- | --- | --- |
+| CONTESTANT_A_sloth-2 | 13.6564 | 13.6564 | 1.1366 | 4.5330 | 9.9999e-06 | 0.00839992 |
+| CONTESTANT_D_rabbit-1 | 12.3744 | 12.3744 | 1.1237 | 10.4228 | 7.99992e-05 | 0.0671993 |
+| CONTESTANT_B_rabbit-2 | 11.5978 | 11.5978 | 1.1160 | 9.7943 | 6.99993e-05 | 0.0587994 |
+| CONTESTANT_C_sloth-2 | 11.1191 | 11.1191 | 1.1112 | 3.7804 | 2.99997e-05 | 0.0251997 |
+| CONTESTANT_D_meerkat-10 | 9.3915 | 9.3915 | 1.0939 | 1.7361 | 0.000299997 | 0.251997 |
+| CONTESTANT_A_rabbit-1 | 8.6274 | 8.6274 | 1.0863 | 10.1074 | 0.00137999 | 1 |
+| CONTESTANT_B_rabbit-1 | 8.1445 | 8.1445 | 1.0814 | 10.9683 | 0.00217998 | 1 |
+| CONTESTANT_A_rabbit-2 | 8.0647 | 8.0647 | 1.0806 | 11.4412 | 0.00151998 | 1 |
+| CONTESTANT_B_sloth-1 | 8.0082 | 8.0082 | 1.0801 | 4.0327 | 0.00120999 | 1 |
+| CONTESTANT_A_sloth-1 | 7.7341 | 7.7341 | 1.0773 | 5.5296 | 0.00145999 | 1 |
 
-## I. Nature of the Evaluation: Broad-Market Universe Calibration
+Top ten cumulatively through this cutoff:
 
-This 41-day opening baseline covers the combined Month 1 and Month 2 evaluation window (Weeks 1 to 8):
+| path | period_pct | cumulative_pct | nav | period_mdd_pct | raw_p | bonferroni_p |
+| --- | --- | --- | --- | --- | --- | --- |
+| CONTESTANT_A_sloth-2 | 13.6564 | 13.6564 | 1.1366 | 4.5330 | 9.9999e-06 | 0.00839992 |
+| CONTESTANT_D_rabbit-1 | 12.3744 | 12.3744 | 1.1237 | 10.4228 | 7.99992e-05 | 0.0671993 |
+| CONTESTANT_B_rabbit-2 | 11.5978 | 11.5978 | 1.1160 | 9.7943 | 6.99993e-05 | 0.0587994 |
+| CONTESTANT_C_sloth-2 | 11.1191 | 11.1191 | 1.1112 | 3.7804 | 2.99997e-05 | 0.0251997 |
+| CONTESTANT_D_meerkat-10 | 9.3915 | 9.3915 | 1.0939 | 1.7361 | 0.000299997 | 0.251997 |
+| CONTESTANT_A_rabbit-1 | 8.6274 | 8.6274 | 1.0863 | 10.1074 | 0.00137999 | 1 |
+| CONTESTANT_B_rabbit-1 | 8.1445 | 8.1445 | 1.0814 | 10.9683 | 0.00217998 | 1 |
+| CONTESTANT_A_rabbit-2 | 8.0647 | 8.0647 | 1.0806 | 11.4412 | 0.00151998 | 1 |
+| CONTESTANT_B_sloth-1 | 8.0082 | 8.0082 | 1.0801 | 4.0327 | 0.00120999 | 1 |
+| CONTESTANT_A_sloth-1 | 7.7341 | 7.7341 | 1.0773 | 5.5296 | 0.00145999 | 1 |
 
-* **Monthly Reporting Cadence**: Unlike Season 01 (CSI 300) which follows weekly episodic dispatches (`Episodes 01–08`, `Episode 09`, ...), the broader-cap testbeds follow a monthly cadence: the initial baseline covers Month 01 and Month 02 combined (`M1–M2`), with subsequent dispatches updated monthly as `M3`, `M4`, and beyond.
-* **Retrospective Calibration**: Simulated retrospectively across the 800 constituent universe (CSI 300 large caps + CSI 500 mid caps) using model candidate weights frozen prior to June 30, 2026.
-* **Why Combine Months 1 and 2**: Establishing a unified 41-day baseline provides a robust statistical baseline across two full monthly rebalance cycles (`M1–M2`) without premature mid-course noise.
-* **The Broad-Cap Opportunity Spectrum**: The CSI 800 index represents roughly 70% of total Chinese equity capitalization. Over July and August 2026, the broad market fell **-7.90%**, as defensive mega-caps diverged sharply from cyclical mid-caps. This cross-sector polarization created rich fertile ground for quantitative sorting engines.
+Bottom five for the segment:
 
----
+| path | period_pct | cumulative_pct | nav | period_mdd_pct | raw_p | bonferroni_p |
+| --- | --- | --- | --- | --- | --- | --- |
+| CONTESTANT_D_koala | -14.2918 | -14.2918 | 0.8571 | 18.8378 | 0.99993 | 1 |
+| CONTESTANT_B_meerkat-90 | -16.5258 | -16.5258 | 0.8347 | 20.2328 | 1 | 1 |
+| CONTESTANT_C_koala | -19.9334 | -19.9334 | 0.8007 | 23.2748 | 1 | 1 |
+| CONTESTANT_B_koala | -22.0185 | -22.0185 | 0.7798 | 25.7498 | 1 | 1 |
+| CONTESTANT_A_koala | -27.5350 | -27.5350 | 0.7247 | 32.4122 | 1 | 1 |
 
-## II. The Battlefield: Leaderboard Standings across the 800 Universe
+## Six anonymous contestants
 
-The executable full-universe reference benchmark (**Taotie 800**) ended the calibration baseline at `0.9625` (**-3.75%**, outperforming the market index by +4.15pp). Under greedy waterfall allocation, Taotie 800 holds an average of 634 constituent equities with near-zero idle cash, accurately capturing equal-weighted market friction across large and mid caps.
+Each row includes all 28 animals; no selection of winning combinations.
 
-Among the active execution paths, aggressive turnover handlers unlocked substantial active returns:
+| contestant | mean_pct | median_pct | positive | best_pct | worst_pct | mean_mdd_pct |
+| --- | --- | --- | --- | --- | --- | --- |
+| CONTESTANT_A | 1.2844 | 3.7356 | 19 | 13.6564 | -27.5350 | 8.5842 |
+| CONTESTANT_B | 2.0995 | 4.7449 | 23 | 11.5978 | -22.0185 | 7.1769 |
+| CONTESTANT_C | -1.0113 | -0.1342 | 13 | 11.1191 | -19.9334 | 9.0430 |
+| CONTESTANT_D | 1.3865 | 1.4439 | 17 | 12.3744 | -14.2918 | 6.7894 |
+| CONTESTANT_E | -2.1297 | -2.4912 | 7 | 5.5585 | -8.2275 | 7.3395 |
+| CONTESTANT_F | -3.8119 | -3.9506 | 5 | 5.8178 | -13.2444 | 7.9627 |
 
-```text
-[CSI 800 Cumulative NAV Top 5 Standings as of August 28, 2026 (41 Trading Days)]
-🥇 CONTESTANT_B_rabbit-2   : NAV 1.1284 (+12.84%, +20.74pp vs CSI 800, +16.59pp vs Taotie)
-🥈 CONTESTANT_B_rabbit-1   : NAV 1.0984 (+9.84%, +17.74pp vs CSI 800, +13.59pp vs Taotie)
-🥉 CONTESTANT_B_whale-shark : NAV 1.0830 (+8.30%, +16.20pp vs CSI 800, +12.05pp vs Taotie)
-🎖️ CONTESTANT_A_rabbit-2   : NAV 1.0821 (+8.21%, +16.11pp vs CSI 800, +11.96pp vs Taotie)
-🎖️ CONTESTANT_D_rabbit-2   : NAV 1.0805 (+8.05%, +15.95pp vs CSI 800, +11.80pp vs Taotie)
-```
+## All animal policies
 
-### The Crowning of the Broad-Cap Rabbit King
-Pioneered under `CONTESTANT_B`, **`rabbit-2`** vaulted to **NAV `1.1284` (+12.84%)**, delivering an extraordinary **20.74 percentage points of excess return** over the CSI 800 market index.
+Each row summarizes segment returns across the six contestants; the range describes contestant-policy interaction.
 
----
+| animal | mean_pct | median_pct | best_pct | worst_pct |
+| --- | --- | --- | --- | --- |
+| eagle-11-2 | -1.3638 | 0.5280 | 5.0158 | -13.1480 |
+| eagle-44-6 | 1.3367 | 2.7785 | 6.2848 | -5.1436 |
+| eagle-5-1 | -3.5586 | -3.3900 | 6.3206 | -13.2444 |
+| eagle-66-9 | 1.5425 | 2.5985 | 6.2031 | -4.0558 |
+| eagle-88-12 | 2.8683 | 4.2774 | 6.1740 | -1.9814 |
+| koala | -14.7426 | -17.1126 | -0.3185 | -27.5350 |
+| meerkat-10 | 1.7767 | 0.1385 | 9.3915 | -2.5246 |
+| meerkat-20 | 0.2577 | 1.0900 | 5.0393 | -6.7844 |
+| meerkat-30 | 0.1736 | 0.6890 | 3.0599 | -4.0977 |
+| meerkat-40 | -0.5859 | -0.2878 | 5.3021 | -6.2233 |
+| meerkat-50 | -0.6333 | -2.9636 | 5.9833 | -5.6413 |
+| meerkat-60 | -1.5986 | -2.4722 | 2.4868 | -4.6113 |
+| meerkat-70 | -3.5568 | -3.2973 | 2.1281 | -9.7951 |
+| meerkat-80 | -2.9415 | -4.5989 | 3.9392 | -7.3755 |
+| meerkat-90 | -6.1359 | -5.4786 | 1.2368 | -16.5258 |
+| rabbit-1 | 2.7207 | 2.8433 | 12.3744 | -6.9444 |
+| rabbit-2 | 3.2899 | 5.4169 | 11.5978 | -7.7679 |
+| robot | -0.2038 | 1.6930 | 4.5390 | -7.9663 |
+| sloth-1 | 3.4799 | 4.9884 | 8.0082 | -3.5897 |
+| sloth-2 | 8.0909 | 6.5205 | 13.6564 | 5.3202 |
+| sloth-3 | 3.9203 | 3.7747 | 7.1005 | 0.5404 |
+| sloth-4 | 1.4898 | 0.9601 | 4.6953 | -0.4730 |
+| snail-1 | 0.5354 | 1.9425 | 4.9508 | -7.0668 |
+| snail-2 | -0.4299 | 0.1043 | 4.3894 | -4.9598 |
+| snail-3 | -4.1705 | -4.0548 | 0.0073 | -8.2275 |
+| snail-4 | -3.7588 | -3.6499 | 0.4540 | -7.5656 |
+| turtle | -2.1885 | -2.7269 | 1.7484 | -5.4726 |
+| whale-shark | 4.2014 | 5.3287 | 7.2317 | 0.4711 |
 
-## III. Execution Zoo Autopsy: Capital Allocation Across Dual Horizons
+## Mechanisms and interpretation
 
-The 800-stock universe spans two distinct regimes: high-liquidity large caps and high-beta mid caps. How did different Zoo handlers navigate this blended territory?
+The TopK=5/DropN=1 segment spread across contestants is 19.5650 percentage points. A winning concentrated path does not establish a universal concentration advantage. Rabbit DropN changes weekly replacement capacity, not trading frequency. Sloth delay and cold-start cash, and Snail warm-start stale signals, jointly alter exposure and path dependence; these are whole-strategy comparisons, not an identified prediction half-life. Percentile Meerkats and inverted Koala should be read against the full contestant distribution above.
 
-### 1. 🐇 The Rabbits (Optimal Trade Execution in Large Universes)
-* **Mechanistic Fact**: With 800 assets to choose from, model ranking scores spread across a wider distribution. Rabbit-2 (DropN=22) rotates through the top tier with maximum agility, capturing fast-moving momentum shifts between mega-cap leaders and mid-cap breakouts.
-* **Controlled Pairwise Comparison**:
-  * Baseline Robot (DropN=3) achieved `+5.18%` under `CONTESTANT_B`.
-  * Rabbit-1 (DropN=11) delivered `+9.84%`.
-  * Rabbit-2 (DropN=22) delivered `+12.84%` (+7.66pp over Robot).
-* In broad universes, portfolio turnover friction is easily absorbed by abundant liquidity, while signal freshness yields massive compounding advantages.
+Contestant averages describe consistency across animals; the best row describes realized performance in this window. Pool membership, fees, lots, cash exposure and signal cross-sections all contribute to differences across environments. The results do not identify a single macro cause or disclose contestant architecture.
 
-### 2. 🐋 The Whale-Shark (Capacity-Scaled Robustness)
-* `whale-shark` finished third overall at `+8.30%`. Designed to test wider portfolio breadth with controlled turnover, it demonstrated remarkable resilience, navigating the 41-day run with a maximum drawdown of only `-2.15%`.
+## Random-control and execution contract
 
-### 3. 🦅 The Eagles (Concentration vs Diversification Balance)
-* Unlike in CSI 300 where `eagle-5-1` captured Rank 1 (+19.71%), in the 800 universe `eagle-5-1` placed 6th (+7.95%). The vast opportunity set in CSI 800 meant that selecting only 5 stocks missed valuable breadth advantages, allowing well-diversified Rabbits (TopK=22) to take the crown.
+Matching uses TopK/DropN only: ten random specifications and one deterministic passive reference. Delay, warm/cold starts, inversion and percentile selection do not introduce extra species. The p values above test cumulative returns from inception, not segment returns. The upper tail includes ties: p=(k+1)/(N+1). At N=100,000, minimum p is 9.9999e-06, never zero. Bonferroni/Holm/BH/BY are stored separately. The 840-item raw threshold is 5.952381e-05, with strict inequality; at the formal count, up to four exceedances can pass Bonferroni. Earlier cutoffs and repeated weekly reviews are descriptive monitoring. Correction does not cover all historical windows jointly or hidden prior research selection. Monte Carlo intervals measure simulation tail uncertainty and add no market history.
 
-### 4. 🦥 vs 🐌 The Sloths & Snails: Cash Shield Disentanglement
-* Sloth variants (`sloth-1` at `+5.27%`, `sloth-2` at `+4.36%`) recorded positive returns partly through their initial cold-start cash buffer during July's broad-market drawdown (-7.90%).
-* The exposure-matched control **Snail-1 (蜗牛)** held equities continuously (mean cash 2.56%), delivering **+2.37%** (+10.27pp over the falling index). This isolates genuine full-exposure alpha from the timing buffer, proving that model stock selection added positive value even when turnover was deliberately suppressed.
+Execution requires finite positive same-day quotes; missing-price sells retain the position. Valuation may carry the last valid close with stale-mark counts. Pool membership is separate from affordability. Decision-close intent is frozen before Monday execution. Taotie uses a 1.0 standard-account capital ratio and the same allocation policy. Ghost is a capital-granularity scenario, not a costless equal-weight index. Turnover is gross buys plus gross sells divided by starting assets.
 
----
-
-## IV. The Null Court: Monte Carlo Jurisdiction
-
-Subjected to the **colony of 1,000 matched pseudo-random monkeys** operating across the CSI 800 universe under identical TopK=22, DropN=22 rules:
-
-* **Colony Median**: The 1,000 random monkeys posted a median return of **`-0.85%`**.
-* **Empirical Percentile**: `CONTESTANT_B_rabbit-2` (+12.84%) placed in the **`>99.8%` empirical percentile** ($p \approx 0.002$).
-* Even after accounting for finite-sample Monte Carlo constraints, active signal selection proved definitively superior to random broad-market exposure.
-
----
-
-## V. Baseline Summary
-
-The Months 1 & 2 baseline confirms that broad-cap universes provide an ideal balance of liquidity and dispersion, allowing high-refresh alpha strategies to excel.
-
-Subsequent CSI 800 dispatches will update on a monthly (4-week) cadence.
-
-> **Please do not feed the models.**  
-> **The broad-cap zoo is open.**
+This remains daily-bar research: full-day volume is a retrospective tradability proxy. Complete verified corporate-action, opening direction-limit and capacity data are unavailable. Factor changes are not guessed into dividend payments, and adjusted prices are not mixed with unchanged nominal shares to claim a total-return repair. Strict execution fails its preflight without required coverage.

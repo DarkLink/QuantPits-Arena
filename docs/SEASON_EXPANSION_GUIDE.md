@@ -1,3 +1,5 @@
+> Historical design document. The current execution, control counts, recovery and publishing contract is documented in [EVALUATION_V2.md](EVALUATION_V2.md). Older count and timing examples below are archival.
+
 # QuantPits Arena: Season & Universe Expansion Architecture Guide
 > **Document Version:** 1.0.0  
 > **Audience:** Quant Developers, AI Agents, Strategy Researchers  

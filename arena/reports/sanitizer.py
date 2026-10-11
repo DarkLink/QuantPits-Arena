@@ -262,115 +262,52 @@ class DualTierExporter:
         """
         from arena.controls.monkey import CANONICAL_STRATEGY_SPECS, map_animal_to_spec_id, MonkeyColony
 
+        import numpy as np
+        from arena.reports.statistics import empirical
         colony = MonkeyColony()
-        summary_rows = []
-        spec_distributions = {}
-
-        # 1. 汇总各策略规格的零假设分布指标
+        distributions, summaries = {}, []
         for spec_id, paths in monkey_results.items():
-            spec = CANONICAL_STRATEGY_SPECS.get(spec_id)
-            returns = [p.total_return for p in paths]
-            dist = colony.summarize_distribution(returns)
-            spec_distributions[spec_id] = {
-                "paths": paths,
-                "returns": returns,
-                "dist": dist
-            }
-
-            topk_str = "全池" if (spec and spec.topk == 0) else str(spec.topk if spec else "N/A")
-            ndrop_str = "被动" if (spec and spec.n_drop == 0 and spec.passive_pool) else str(spec.n_drop if spec else "N/A")
-            desc = spec.description if spec else ""
-
-            summary_rows.append({
-                "strategy_spec": spec_id,
-                "topk": topk_str,
-                "n_drop": ndrop_str,
-                "description": desc,
-                "colony_size": len(paths),
-                "monkey_min": f"{dist['min'] * 100:.2f}%",
-                "monkey_p05": f"{dist['p05'] * 100:.2f}%",
-                "monkey_median": f"{dist['median'] * 100:.2f}%",
-                "monkey_mean": f"{dist['mean'] * 100:.2f}%",
-                "monkey_p95": f"{dist['p95'] * 100:.2f}%",
-                "monkey_max": f"{dist['max'] * 100:.2f}%",
-                "monkey_std": f"{dist['std'] * 100:.2f}%",
-            })
-
-        pub_dist_csv = self.public_dir / "monkey_null_distributions.csv"
-        df_dist = pd.DataFrame(summary_rows)
-        df_dist.to_csv(pub_dist_csv, index=False)
-
-        # 2. 计算各参赛选手对标对应猴子分布的显著性指标
-        significance_rows = []
-        for (cid, aid), path in contestant_results.items():
-            anon_cid = registry.get_anonymous_id(cid)
-            spec_id = map_animal_to_spec_id(aid)
-            spec_info = spec_distributions.get(spec_id)
-
-            act_ret = path.total_return
-            if spec_info and spec_info["returns"]:
-                monkey_rets = spec_info["returns"]
-                p_val = colony.compute_empirical_pvalue(act_ret, monkey_rets, higher_is_better=True)
-                pct_rank = colony.compute_percentile_rank(act_ret, monkey_rets)
-                median_monkey = spec_info["dist"]["median"]
-                excess_over_monkey = act_ret - median_monkey
-            else:
-                p_val = 1.0
-                pct_rank = 0.5
-                median_monkey = 0.0
-                excess_over_monkey = 0.0
-
-            significance_rows.append({
-                "contestant_id": anon_cid,
-                "animal_id": aid,
-                "strategy_spec": spec_id,
-                "actual_return_pct": f"{act_ret * 100:.2f}%",
-                "monkey_median_pct": f"{median_monkey * 100:.2f}%",
-                "excess_over_monkey_pct": f"{excess_over_monkey * 100:+.2f}%",
-                "percentile_rank": f"{pct_rank * 100:.1f}%",
-                "empirical_p_value": f"{p_val:.4f}",
-                "significant_95pct": "YES (p < 0.05)" if p_val < 0.05 else "NO"
-            })
-
-        pub_sig_csv = self.public_dir / "contestant_monkey_significance.csv"
-        df_sig = pd.DataFrame(significance_rows)
-        df_sig.to_csv(pub_sig_csv, index=False)
-
-        actual_colony_size = len(next(iter(monkey_results.values()))) if monkey_results else 1000
-        total_groups = len(monkey_results)
-        total_monkeys = total_groups * actual_colony_size
-
-        # 3. 产出 Markdown 报告
-        report_md = self.reports_dir / "monkey_null_distributions.md"
-        with open(report_md, "w", encoding="utf-8") as f:
-            f.write("# QuantPits Graveyard Arena — Parametric Monkey Colony Diagnostics\n\n")
-            f.write(f"Run ID: `{self.run_id}`\n\n")
-            f.write("## 1. Methodology & Scientific Rationale\n\n")
-            f.write("The **Parametric Monkey Colony** serves as the rigorous empirical null model for evaluating whether contestants' alpha returns are statistically distinguishable from pure random stock picking.\n\n")
-            f.write("- **Zero Future Information**: Every monkey draws uniform random scores across the cross-section using deterministic seeds: `seed = (2026 + m * 10007 + t * 37) % (2**31 - 1)`.\n")
-            f.write("- **Strict Parity**: Each monkey group operates under the **exact same 100-share minimum trading lot and CNY 500,000 capital constraints** as the real models.\n")
-            f.write(f"- **Complete Parameter Coverage**: All {total_groups} distinct portfolio execution policies (TopK / DropN pairs, including Taotie passive full-universe) are individually benchmarked by {actual_colony_size} random monkeys ({total_monkeys:,} monkeys total).\n")
-            f.write("- **Empirical P-Value**: Formally defined as $p = \\frac{1}{N} \\sum_{i=1}^N \\mathbb{I}(\\text{monkey}_i \\ge \\text{actual_return})$. $p < 0.05$ indicates significant alpha superiority over random chance at 95% confidence.\n\n")
-
-            f.write(f"## 2. Null Distributions by Strategy Parameter Group ({total_groups} Groups × {actual_colony_size} Monkeys)\n\n")
-            f.write(self._to_markdown_table(df_dist, include_index=False))
-            f.write("\n\n")
-
-            f.write("## 3. Contestant Significance vs. Corresponding Monkey Colony\n\n")
-            f.write(self._to_markdown_table(df_sig, include_index=False))
-            f.write("\n")
-
-        return {
-            "monkey_distributions_csv": pub_dist_csv,
-            "contestant_significance_csv": pub_sig_csv,
-            "monkey_report_md": report_md
-        }
+            spec = CANONICAL_STRATEGY_SPECS[spec_id]
+            values = np.asarray(paths.returns if hasattr(paths, "returns") else [p.total_return for p in paths])
+            distributions[spec_id] = values
+            dist = colony.summarize_distribution(values)
+            summaries.append(dict(strategy_spec=spec_id, topk=spec.topk, n_drop=spec.n_drop,
+                description=spec.description, colony_size=len(values), deterministic=spec.passive_pool,
+                **{f"monkey_{k}":v*100 for k,v in dist.items()}))
+        rows=[]
+        for (cid,aid),path in contestant_results.items():
+            spec_id=map_animal_to_spec_id(aid)
+            values=distributions.get(spec_id)
+            tested=spec_id is not None and not CANONICAL_STRATEGY_SPECS[spec_id].passive_pool
+            row=dict(contestant_id=registry.get_anonymous_id(cid),animal_id=aid,strategy_spec=spec_id,
+                     actual_return_pct=path.total_return*100,
+                     test_status="random_control" if tested else "not_applicable",
+                     empirical_p_value=None,significant_95pct=False,monkey_count=0,
+                     monkey_median_pct=float(np.median(values))*100 if values is not None else None,
+                     excess_over_monkey_pct=(path.total_return-float(np.median(values)))*100 if values is not None else None)
+            if tested:
+                row.update(empirical(path.total_return,values))
+            rows.append(row)
+        dist_path=self.public_dir / "monkey_null_distributions.csv"
+        sig_path=self.public_dir / "contestant_monkey_significance.csv"
+        pd.DataFrame(summaries).to_csv(dist_path,index=False)
+        pd.DataFrame(rows).to_csv(sig_path,index=False)
+        report=self.reports_dir / "monkey_null_distributions.md"
+        report.write_text("# Random-control diagnostics\n\n"
+            "Only TopK/DropN determine matching. Ten random specifications and one deterministic passive reference. "
+            "All paths use the declared execution policy; delayed animals retain their own cold/warm start.\n\n"
+            "Upper-tail p = (k+1)/(N+1), including ties. N and k are saved without rounding. "
+            "Deterministic and unmatched references have no random-control p value. "
+            "Confidence intervals describe Monte Carlo tail uncertainty, not additional market observations.\n\n"
+            +self._to_markdown_table(pd.DataFrame(summaries))+"\n",encoding="utf-8")
+        return dict(monkey_distributions_csv=dist_path,contestant_significance_csv=sig_path,monkey_report_md=report)
 
     def export_web_payload(
         self,
         season_cfg: Any,
         manifests_public_dir: Optional[Path] = None,
-        web_output_path: Optional[Path] = None
+        web_output_path: Optional[Path] = None,
+        publish_auxiliary: bool = True
     ) -> Path:
         """
         Universal Web Payload Serializer (Stage 3).
@@ -415,11 +352,11 @@ class DualTierExporter:
                     })
 
         # 2. Public CSVs
-        df_metrics = pd.read_csv(pub_dir / "summary_metrics.csv") if (pub_dir / "summary_metrics.csv").exists() else pd.DataFrame()
-        df_diag = pd.read_csv(pub_dir / "capital_constraint_diagnostics.csv") if (pub_dir / "capital_constraint_diagnostics.csv").exists() else pd.DataFrame()
-        df_sig = pd.read_csv(pub_dir / "contestant_monkey_significance.csv") if (pub_dir / "contestant_monkey_significance.csv").exists() else pd.DataFrame()
-        df_null = pd.read_csv(pub_dir / "monkey_null_distributions.csv") if (pub_dir / "monkey_null_distributions.csv").exists() else pd.DataFrame()
-        df_matrix = pd.read_csv(pub_dir / "model_animal_matrix.csv", index_col=0) if (pub_dir / "model_animal_matrix.csv").exists() else pd.DataFrame()
+        df_metrics = pd.read_csv(pub_dir / "summary_metrics.csv", float_precision="round_trip") if (pub_dir / "summary_metrics.csv").exists() else pd.DataFrame()
+        df_diag = pd.read_csv(pub_dir / "capital_constraint_diagnostics.csv", float_precision="round_trip") if (pub_dir / "capital_constraint_diagnostics.csv").exists() else pd.DataFrame()
+        df_sig = pd.read_csv(pub_dir / "contestant_monkey_significance.csv", float_precision="round_trip") if (pub_dir / "contestant_monkey_significance.csv").exists() else pd.DataFrame()
+        df_null = pd.read_csv(pub_dir / "monkey_null_distributions.csv", float_precision="round_trip") if (pub_dir / "monkey_null_distributions.csv").exists() else pd.DataFrame()
+        df_matrix = pd.read_csv(pub_dir / "model_animal_matrix.csv", index_col=0, float_precision="round_trip") if (pub_dir / "model_animal_matrix.csv").exists() else pd.DataFrame()
         if not df_matrix.empty:
             df_matrix = df_matrix[~df_matrix.index.astype(str).str.contains("BENCHMARK", case=False, na=False)]
             cols_to_drop = [c for c in ["taotie", "ghost_taotie"] if c in df_matrix.columns]
@@ -427,12 +364,12 @@ class DualTierExporter:
                 df_matrix = df_matrix.drop(columns=cols_to_drop)
 
         # 3. NAV curves
-        df_nav = pd.read_csv(pub_dir / "daily_nav_curves.csv") if (pub_dir / "daily_nav_curves.csv").exists() else pd.DataFrame()
+        df_nav = pd.read_csv(pub_dir / "daily_nav_curves.csv", float_precision="round_trip") if (pub_dir / "daily_nav_curves.csv").exists() else pd.DataFrame()
         nav_dates = df_nav["datetime"].tolist() if "datetime" in df_nav.columns else []
         nav_series_map: Dict[str, List[float]] = {}
         for col in df_nav.columns:
             if col != "datetime":
-                nav_series_map[col] = [round(float(v), 4) for v in df_nav[col].tolist()]
+                nav_series_map[col] = [float(v) for v in df_nav[col].tolist()]
 
         # 4. Market benchmark from universe definition or benchmarks list
         univ = raw_dict.get("universe", {})
@@ -461,16 +398,13 @@ class DualTierExporter:
             cal = TradingCalendar()
             bin_file = Path.home() / ".qlib" / "qlib_data" / "cn_data" / "features" / bench_symbol / "close.day.bin"
             if bin_file.exists() and len(nav_dates) > 0:
-                with open(bin_file, "rb") as f:
-                    start_idx = np.fromfile(f, dtype="<u4", count=1)[0]
-                    data = np.fromfile(f, dtype="<f4")
-                d_start = cal.day_to_idx.get(nav_dates[0], 0)
-                d_end = cal.day_to_idx.get(nav_dates[-1], 0)
-                if d_start >= start_idx and d_end >= d_start:
-                    prices = data[d_start - start_idx : d_end - start_idx + 1]
-                    if len(prices) == len(nav_dates) and prices[0] > 0:
-                        bench_curve = [round(float(p / prices[0]), 4) for p in prices]
-                        bench_ret = round(float((prices[-1] / prices[0] - 1) * 100), 2)
+                from arena.benchmarks.index import read_feature_slice
+                d_start=cal.day_to_idx[nav_dates[0]]
+                d_end=cal.day_to_idx[nav_dates[-1]]
+                prices=read_feature_slice(bin_file,d_start,d_end)
+                if len(prices)==len(nav_dates):
+                    bench_curve=[float(p/prices[0]) for p in prices]
+                    bench_ret=float((prices[-1]/prices[0]-1)*100)
         except Exception:
             pass
 
@@ -481,7 +415,7 @@ class DualTierExporter:
 
         def _parse_pct(val: Any, default: float = 0.0) -> float:
             if isinstance(val, (int, float)):
-                return float(val)
+                return float(val) if np.isfinite(val) else default
             if isinstance(val, str) and "%" in val:
                 try:
                     return float(val.replace("%", "").strip())
@@ -503,20 +437,19 @@ class DualTierExporter:
             d_info = diag_lookup.get(key, {})
             s_info = sig_lookup.get(key, {})
 
-            tot_ret = _parse_pct(row.get("total_return_pct", 0.0))
+            tot_ret = _parse_pct(s_info.get("actual_return_pct", row.get("total_return_pct", 0.0)))
             mdd = _parse_pct(row.get("max_drawdown_pct", 0.0))
             monkey_med = _parse_pct(s_info.get("monkey_median_pct", 0.0))
             excess_monkey = _parse_pct(s_info.get("excess_over_monkey_pct", tot_ret - monkey_med))
             pct_rank = _parse_pct(s_info.get("percentile_rank", 50.0))
-            pct_rank = min(pct_rank, 99.9)
-            p_val = float(s_info.get("empirical_p_value", 1.0)) if s_info.get("empirical_p_value") is not None else 1.0
-            if p_val < 0.001:
-                p_val = 0.001
+            raw_p = s_info.get("empirical_p_value")
+            p_val = float(raw_p) if raw_p is not None and pd.notna(raw_p) else None
 
             col_key = f"{cid}_{aid}"
             sharpe = 0.0
             if col_key in nav_series_map:
                 series = pd.Series(nav_series_map[col_key])
+                mdd = float(-(series / series.cummax() - 1).min()) * 100
                 rets = series.pct_change().dropna()
                 if len(rets) > 1 and rets.std() > 0:
                     sharpe = round(float((rets.mean() / rets.std()) * (250 ** 0.5)), 2)
@@ -543,7 +476,7 @@ class DualTierExporter:
                 elif animal_id == "taotie":
                     return "Taotie (100% Passive)"
                 elif animal_id == "ghost_taotie":
-                    return "Ghost Taotie (Theoretical Equal Weight)"
+                    return "Ghost Taotie (Capital Granularity Scenario)"
                 return "Custom"
 
             badges = []
@@ -570,14 +503,22 @@ class DualTierExporter:
                 "max_drawdown_pct": mdd,
                 "final_nav": final_nav,
                 "sharpe_ratio": sharpe,
-                "excess_over_csi300_pct": round(tot_ret - bench_ret, 2),
-                "excess_over_monkey_pct": round(excess_monkey, 2),
-                "percentile_rank": round(pct_rank, 1),
-                "monkey_percentile": round(pct_rank, 1),
-                "monkey_percentile_rank": round(pct_rank, 1),
+                "excess_over_csi300_pct": tot_ret - bench_ret,
+                "excess_over_monkey_pct": excess_monkey,
+                "percentile_rank": pct_rank if p_val is not None else None,
+                "monkey_percentile": pct_rank if p_val is not None else None,
+                "monkey_percentile_rank": pct_rank if p_val is not None else None,
                 "empirical_p_value": p_val,
                 "p_value": p_val,
-                "is_statistically_significant": (p_val < 0.05),
+                "is_statistically_significant": (p_val is not None and p_val < 0.05),
+                "test_status": s_info.get("test_status", "not_evaluated"),
+                "monkey_count": int(s_info.get("monkey_count", 0)),
+                "exceedance_count": int(s_info["exceedance_count"]) if pd.notna(s_info.get("exceedance_count")) else None,
+                "p_resolution": float(s_info["p_resolution"]) if pd.notna(s_info.get("p_resolution")) else None,
+                **{key: float(s_info[key]) if pd.notna(s_info.get(key)) else None for key in
+                   ("bonferroni_p", "holm_p", "bh_q", "by_q", "mc_tail_lower_95", "mc_tail_upper_95")},
+                "family_size": int(s_info.get("family_size", 0)),
+                "is_bonferroni_significant": bool(s_info.get("bonferroni_p", 1.0) < .05),
                 "buy_attempt_count": int(d_info.get("buy_attempt_count", 0)),
                 "unaffordable_buy_ratio": _parse_pct(d_info.get("unaffordable_buy_ratio", 0)),
                 "unaffordable_buy_count": int(d_info.get("unaffordable_buy_count", 0)),
@@ -606,9 +547,15 @@ class DualTierExporter:
                     excess_map[k] = excess
 
         # Benchmark returns
+        evaluation_file = self.public_dir / "evaluation_manifest.json"
+        evaluation_metadata = json.loads(evaluation_file.read_text()) if evaluation_file.exists() else {}
         taotie_tot_ret = round(float((nav_series_map["BENCHMARK_taotie"][-1] - 1.0) * 100.0), 2) if "BENCHMARK_taotie" in nav_series_map and nav_series_map["BENCHMARK_taotie"] else 0.0
         ghost_tot_ret = round(float((nav_series_map["BENCHMARK_ghost_taotie"][-1] - 1.0) * 100.0), 2) if "BENCHMARK_ghost_taotie" in nav_series_map and nav_series_map["BENCHMARK_ghost_taotie"] else 0.0
 
+        timeline_file = self.public_dir / "monkey_timeline.json"
+        null_timeline = json.loads(timeline_file.read_text()) if timeline_file.exists() else {}
+        hist_file = self.public_dir / "monkey_histograms.json"
+        null_histograms = json.loads(hist_file.read_text()) if hist_file.exists() else {}
         null_records = []
         if not df_null.empty:
             for r in df_null.to_dict(orient="records"):
@@ -622,6 +569,9 @@ class DualTierExporter:
 
                 null_records.append({
                     "strategy_spec": r.get("strategy_spec", ""),
+                    "deterministic": bool(r.get("deterministic", False)),
+                    "settlement_quantiles": null_timeline.get(r.get("strategy_spec"), {}),
+                    "histogram": null_histograms.get(r.get("strategy_spec"), {}),
                     "description": r.get("description", ""),
                     "topk": r.get("topk", ""),
                     "n_drop": r.get("n_drop", ""),
@@ -690,6 +640,7 @@ class DualTierExporter:
             "season_subtitle": getattr(season_cfg, "description", ""),
             "status": getattr(season_cfg, "status", "ACTIVE"),
             "total_paths": len(path_records),
+            **evaluation_metadata,
             "total_contestants": len(contestants),
             "csi300_return_pct": bench_ret,
             "market_benchmark_name": bench_name,
@@ -706,7 +657,7 @@ class DualTierExporter:
                 bench_name,
                 f"Taotie ({univ_code})",
                 f"Ghost Taotie ({univ_code})",
-                f"{len(null_records)} Matched Specifications / {sum(r['colony_size'] for r in null_records):,} Monkeys"
+                f"10 Random Specifications / {sum(r['colony_size'] for r in null_records if not r['deterministic']):,} Random Paths + 1 Deterministic Reference"
             ],
             "trading_days": len(nav_dates),
             "nav_observations": len(nav_dates),
@@ -746,7 +697,7 @@ class DualTierExporter:
             json.dump(web_payload, f, ensure_ascii=False, indent=2)
             f.write(";\n")
         # Also synchronize legacy arena_data.js for Season 1 canonical baseline
-        if season_id == "season_01":
+        if publish_auxiliary and season_id == "season_01":
             try:
                 arena_file = REPO_ROOT / "web" / "js" / "data" / "arena_data.js"
                 with open(arena_file, "w", encoding="utf-8") as f_ad:
@@ -761,13 +712,15 @@ class DualTierExporter:
 
         # 6. Auto-sync seasons_index.js
         try:
-            self._sync_seasons_index(season_cfg, web_payload)
+            if publish_auxiliary:
+                self._sync_seasons_index(season_cfg, web_payload)
         except Exception as e:
             print(f"[WARN] Failed to auto-sync seasons_index.js: {e}")
 
         # 7. Auto-sync web/index.html script tag
         try:
-            self._sync_index_html(season_id)
+            if publish_auxiliary:
+                self._sync_index_html(season_id)
         except Exception as e:
             print(f"[WARN] Failed to auto-sync web/index.html: {e}")
 
@@ -849,7 +802,7 @@ class DualTierExporter:
                 "framework_name": f"{meta.get('universe_name', 'Custom Universe')} Empirical Evaluation",
                 "anchor_spec": f"Retrospective Common Anchor ({anchor})",
                 "capital_spec": "Standardized simulation budget with 100-share trading lots; normalized NAV",
-                "benchmarks_summary": f"Market Index ({meta.get('market_benchmark_name', 'Index')}) + Taotie + Ghost Taotie + 11 matching groups of 1,000 monkeys",
+                "benchmarks_summary": f"Market Index ({meta.get('market_benchmark_name', 'Index')}) + Taotie + Ghost Taotie + 10 random TopK/DropN groups plus one deterministic passive reference",
                 "execution_flow": "Monday Open Rebalance; Holiday Mondays Skip Trading; Daily Valuation"
             }
         }

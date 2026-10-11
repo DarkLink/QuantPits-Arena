@@ -8,6 +8,7 @@ from typing import List, Optional
 import numpy as np
 import pandas as pd
 
+from arena.data.market import MarketDataProvider
 from arena.contestants.manifest import ContestantManifest
 from arena.contestants.adapters.base import BaseInferenceAdapter, rank_norm_score
 
@@ -24,7 +25,7 @@ class MockInferenceAdapter(BaseInferenceAdapter):
         super().__init__(manifest)
         self.seed_offset = seed_offset
         # 基于 contestant_id 生成固定的 base seed
-        self.base_seed = abs(hash(manifest.contestant_id)) % 100000 + seed_offset
+        self.base_seed = MarketDataProvider._hash(manifest.contestant_id) % 100000 + seed_offset
 
     def load_models(self) -> None:
         self.is_loaded = True
@@ -41,7 +42,7 @@ class MockInferenceAdapter(BaseInferenceAdapter):
             instruments = [f"STOCK_{i:03d}" for i in range(100)]
 
         # 单日截面打分生成（包含日期种子，保证打分随每周时间推进动态演化）
-        date_seed = (self.base_seed + abs(hash(str(start_date)))) % 1000000
+        date_seed = (self.base_seed + MarketDataProvider._hash(str(start_date))) % 1000000
         rng = np.random.RandomState(date_seed)
         # 生成有一定排名的得分
         raw_scores = rng.normal(loc=0.0, scale=1.0, size=len(instruments))

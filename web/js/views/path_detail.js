@@ -1,7 +1,7 @@
 /**
  * QuantPits-Arena: Path Detail View
  * Deep-dive analysis for a single execution path:
- * - Cumulative NAV with Monkey 90% Confidence Envelope, Underwater Drawdown, Excess Return vs CSI 300
+ * - Cumulative NAV with Settlement-date pointwise Monkey Quantiles, Underwater Drawdown, Excess Return vs CSI 300
  * - Parametric monkey null distribution boxplot & empirical p-value
  * - Finite-capital constraint diagnostics (CNY 500k, 100-share minimum lots)
  */
@@ -27,14 +27,14 @@ window.PathDetailView = {
       return;
     }
 
-    const specId = path.strategy_spec || window.arenaAdapter.getAllAnimals()?.find(a => a.id === path.animal_id)?.spec || "P_22_3";
+    const specId = path.strategy_spec || window.arenaAdapter.getAllAnimals()?.find(a => a.id === path.animal_id)?.spec || null;
     const contestant = window.arenaAdapter.getContestant(path.contestant_id);
     const dates = window.arenaAdapter.getNavDates();
     const taotieCurve = window.arenaAdapter.getBenchmarkTaotieCurve();
     const csi300Curve = window.arenaAdapter.getBenchmarkCsi300Curve();
     const monkeyDist = window.arenaAdapter.getMonkeyDistribution(specId);
 
-    const isSig = path.is_statistically_significant || (path.empirical_p_value !== undefined && path.empirical_p_value < 0.05);
+    const isSig = path.empirical_p_value != null && path.empirical_p_value < 0.05;
     const pVal = path.empirical_p_value !== undefined ? path.empirical_p_value : (path.p_value !== undefined ? path.p_value : 1.0);
     const pRank = path.percentile_rank !== undefined ? path.percentile_rank : (path.monkey_percentile !== undefined ? path.monkey_percentile : (path.monkey_percentile_rank !== undefined ? path.monkey_percentile_rank : 50.0));
     const retColor = path.total_return_pct >= 0 ? "var(--accent-positive)" : "var(--accent-negative)";
@@ -100,10 +100,12 @@ window.PathDetailView = {
             <div style="text-align:right; border-left:1px solid var(--border-subtle); padding-left:1.25rem;">
               <div style="font-size:0.75rem; color:var(--text-tertiary); text-transform:uppercase;" data-tooltip-term="monkey_percentile">Monkey Percentile</div>
               <div style="font-size:2.2rem; font-weight:800; color:${isSig ? 'var(--accent-positive)' : 'var(--accent-warning)'};">
-                ${window.formatPercentile ? window.formatPercentile(pRank) : pRank.toFixed(1) + '%'}
+                ${window.formatPercentile ? window.formatPercentile(pRank, path.monkey_count) : pRank.toFixed(1) + '%'}
               </div>
               <div style="font-size:0.75rem; color:var(--text-tertiary);">
-                Empirical p-value: <b data-tooltip-term="p_value">${window.formatPValue ? window.formatPValue(pVal) : pVal.toFixed(4)}</b>
+                Raw p: <b data-tooltip-term="p_value">${window.formatPValue(pVal)}</b><br>
+                Bonferroni p (M=${path.family_size || 840}): <b>${window.formatPValue(path.bonferroni_p)}</b><br>
+                ${path.monkey_count ? `k/N: ${path.exceedance_count}/${path.monkey_count}; resolution ${(path.p_resolution || 1/(path.monkey_count+1)).toExponential(3)}` : 'Random-control test: N/A'}
               </div>
             </div>
           </div>
@@ -157,8 +159,8 @@ window.PathDetailView = {
                   <span class="bm-line-badge"></span> Monkey Null
                 </button>
                 ${window.arenaAdapter.hasGhostTaotie() ? `
-                <button type="button" class="benchmark-pill ghost-taotie is-active" data-benchmark="ghost" title="Toggle Ghost Taotie (100M)">
-                  <span class="bm-line-badge"></span> Ghost (100M)
+                <button type="button" class="benchmark-pill ghost-taotie is-active" data-benchmark="ghost" title="Toggle Ghost Capital Scenario">
+                  <span class="bm-line-badge"></span> Ghost Scenario
                 </button>` : ''}
                 <button type="button" class="benchmark-pill taotie is-active" data-benchmark="taotie" title="Toggle ${window.arenaAdapter.getTaotieDisplayName()}">
                   <span class="bm-line-badge"></span> ${window.arenaAdapter.getTaotieShortName()}
@@ -180,7 +182,7 @@ window.PathDetailView = {
           <div class="card-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
             <div>
               <h3 class="card-title">Null Distribution & Statistical Significance</h3>
-              <div class="card-subtitle">Benchmarked against 1,000 random monkeys with identical portfolio parameters (${specId})</div>
+              <div class="card-subtitle">${path.monkey_count ? `${path.monkey_count.toLocaleString()} random TopK/DropN controls (${specId})` : `Deterministic or unmatched reference — p value N/A`}</div>
             </div>
             <button class="chart-spec-pill" onclick="if(window.ArenaSpecDrawer) window.ArenaSpecDrawer.openTerm('metric_monkey_percentile');">
               🐒 Monkey Specs
@@ -191,7 +193,7 @@ window.PathDetailView = {
           <!-- Finite Capital Diagnostics & Metadata -->
           <div style="margin-top:1.5rem; padding-top:1rem; border-top:1px solid var(--border-subtle);">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
-              <h4 style="font-size:0.95rem; margin:0;">Finite Capital Execution Diagnostics (${seasonMeta?.initial_cash ? 'CNY ' + (seasonMeta.initial_cash >= 1000000 ? (seasonMeta.initial_cash / 1000000).toFixed(0) + 'M' : (seasonMeta.initial_cash / 1000).toFixed(0) + 'k') : 'CNY 500k'} Constraint)</h4>
+              <h4 style="font-size:0.95rem; margin:0;">Capital Granularity Diagnostics</h4>
               <span class="badge badge-neutral" style="font-size:0.75rem;">100-Share Lot Enforced</span>
             </div>
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; font-size:0.85rem;">
@@ -222,7 +224,7 @@ window.PathDetailView = {
             </div>
 
             <div style="margin-top:1rem; font-size:0.8rem; color:var(--text-tertiary); line-height:1.5;">
-              <b>Model Metadata:</b> Family: <i>${contestant?.family || 'Alpha Family'}</i> | Architecture: <i>${contestant?.training_mode || 'Multi-Factor Ensemble'}</i> | Cutoff: <i>${contestant?.train_cutoff || '2026-06-26'}</i>
+              <b>Signal source:</b> Preserved anonymous weekly history; retrospective repair replay.
             </div>
           </div>
         </div>
@@ -256,7 +258,7 @@ window.PathDetailView = {
       } else {
         const dom = document.getElementById("chart-path-monkey-dist");
         if (dom) {
-          dom.innerHTML = `<div style="display:flex; align-items:center; justify-content:center; height:100%; color:var(--text-tertiary); font-size:0.85rem;">Null distribution for ${specId} pending simulation</div>`;
+          dom.innerHTML = `<div style="display:flex; align-items:center; justify-content:center; height:100%; color:var(--text-tertiary); font-size:0.85rem;">${path.test_status === "not_applicable" ? "Random-control test is not applicable to this reference" : `Null distribution for ${specId} pending simulation`}</div>`;
         }
       }
 

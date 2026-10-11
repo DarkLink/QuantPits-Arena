@@ -70,7 +70,7 @@ window.ContestantDetailView = {
       const minRet = returns.length ? Math.min(...returns) : 0;
       const robotPath = paths.find(p => p.animal_id === "robot");
       const robotRet = robotPath ? robotPath.total_return_pct : 0;
-      const beatMonkeys = paths.filter(p => (p.percentile_rank !== undefined ? p.percentile_rank : (p.monkey_percentile || 0)) >= 95).length;
+      const beatMonkeys = paths.filter(p => p.empirical_p_value != null && p.empirical_p_value < .05).length;
       const avgMonkeyPct = (paths.reduce((s, p) => s + (p.percentile_rank !== undefined ? p.percentile_rank : (p.monkey_percentile || 0)), 0) / Math.max(1, paths.length)).toFixed(1);
 
       container.innerHTML = `
@@ -363,7 +363,7 @@ window.ContestantDetailView = {
                 ${paths.map(p => {
                   const retColor = p.total_return_pct >= 0 ? "text-up" : "text-down";
                   const pRank = p.percentile_rank !== undefined ? p.percentile_rank : (p.monkey_percentile || 0);
-                  const isSig = pRank >= 95;
+                  const isSig = p.empirical_p_value != null && p.empirical_p_value < .05;
                   const pVal = p.empirical_p_value !== undefined ? p.empirical_p_value : (p.p_value !== undefined ? p.p_value : 1.0);
                   return `
                     <tr style="cursor: pointer;" onclick="window.appRouter.navigate('path-detail', { pathId: '${p.path_id}' })">

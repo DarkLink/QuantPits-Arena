@@ -45,7 +45,7 @@ class TaotieBenchmark(Benchmark):
             topk=0,  # 0 表示动态匹配全部有效池
             initial_cash=initial_cash,
             deal_price_mode=deal_price_mode,
-            greedy_allocation=True  # 启用贪心瀑布流再分配，消除全池大容量一手约束导致的死现金沉淀
+            greedy_allocation=False  # 启用贪心瀑布流再分配，消除全池大容量一手约束导致的死现金沉淀
         )
 
     def step(
@@ -85,7 +85,8 @@ class TaotieBenchmark(Benchmark):
         self.engine.execute_weekly_cycle(
             cycle=cycle,
             order=order,
-            price_lookup=price_lookup_fn
+            price_lookup=price_lookup_fn,
+            tradability_filter=tradability_filter_fn
         )
 
     def to_portfolio_path(self) -> PortfolioPath:

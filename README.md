@@ -10,15 +10,17 @@
 
 The bundled data cover **2026-07-03 through 2026-10-09** across five parallel testbeds. Each contains **64 evaluated market sessions plus one initial NAV anchor**, for **65 NAV observations**. Every path starts at NAV **1.0000**.
 
-Each testbed evaluates **6 anonymous contestants × 28 animal handlers = 168 contestant paths**, alongside two portfolio benchmarks. Its null court contains **11 matching specifications × 1,000 monkey paths**; the five testbeds together contain **55,000 configured control paths**.
+Each testbed evaluates **6 anonymous contestants × 28 animal handlers = 168 contestant paths**, alongside two portfolio benchmarks. Its null court contains **10 random TopK/DropN specifications × 100,000 paths, plus one deterministic passive reference**; the five testbeds together contain **5,000,000 random paths plus five references**.
 
 | Testbed | Cumulative leader at October 9 | Final NAV | Cumulative return | Latest dispatch |
 | :--- | :--- | ---: | ---: | :--- |
-| csirun300 subset (246 stocks) | CONTESTANT_B_eagle-5-1 | 1.2240 | +22.40% | [Episode 14: The Same Holdings, a Wider Crown](chronicles/en/episode_14_the_two_day_return.md) |
-| CSI 300 full universe (300 stocks) | CONTESTANT_D_rabbit-1 | 1.1886 | +18.86% | [M3: Rabbit Crown, Eagle Month](chronicles/en/season_csi300_m3.md) |
-| CSI 500 | CONTESTANT_B_eagle-5-1 | 1.0885 | +8.85% | [M3: Two Survivors, Two Different Crowns](chronicles/en/season_csi500_m3.md) |
-| CSI 800 | CONTESTANT_B_rabbit-2 | 1.1172 | +11.72% | [M3: Rabbit Crown, Eagle Month](chronicles/en/season_csi800_m3.md) |
-| CSI 1000 | CONTESTANT_B_eagle-5-1 | 1.1349 | +13.49% | [M3: Eagle Rally, Sloth Lead](chronicles/en/season_csi1000_m3.md) |
+| csirun300 subset (246 stocks) | CONTESTANT_B_eagle-5-1 | 1.2125 | +21.25% | [Episode 14: The Same Holdings, a Wider Crown](chronicles/en/episode_14_the_two_day_return.md) |
+| CSI 300 full universe (300 stocks) | CONTESTANT_D_rabbit-1 | 1.1886 | +18.86% | [October repaired dispatch](chronicles/en/season_csi300_20261009.md) |
+| CSI 500 | CONTESTANT_B_eagle-5-1 | 1.0885 | +8.85% | [October repaired dispatch](chronicles/en/season_csi500_20261009.md) |
+| CSI 800 | CONTESTANT_B_rabbit-2 | 1.1210 | +12.10% | [October repaired dispatch](chronicles/en/season_csi800_20261009.md) |
+| CSI 1000 | CONTESTANT_B_eagle-5-1 | 1.1349 | +13.49% | [October repaired dispatch](chronicles/en/season_csi1000_20261009.md) |
+
+The current release is a retrospective daily-bar repair using preserved historical signals. [Execution, provenance, statistical corrections and remaining data limits](docs/EVALUATION_V2.md) describe the contract.
 
 These are cumulative standings in the repository snapshot. A monthly or two-day winner can differ from the cumulative leader; the figures do not establish durable forecasting skill.
 
@@ -36,7 +38,7 @@ python3 -m http.server 8080 --directory web
 
 Open `http://localhost:8080`. Use the season selector to switch among the five testbeds, then explore the overview, leaderboard, NAV curves, animal comparisons and dispatches.
 
-The bundled frontend datasets require no model inference or Python analytics stack to browse. The browser loads charting, math-rendering and font assets from external CDNs; completely offline browsing requires local copies of those assets. Interface and data assets use version **6.3** for cache refresh.
+The bundled frontend datasets require no model inference or Python analytics stack to browse. The browser loads charting, math-rendering and font assets from external CDNs; completely offline browsing requires local copies of those assets. The dashboard reads one complete evaluation bundle for consistent data generation.
 
 ## Evaluation Scope and Evidence
 
@@ -46,9 +48,9 @@ The bundled frontend datasets require no model inference or Python analytics sta
 - **Statistical limits:** upper-tail empirical probabilities use finite-sample plus-one correction. Winner selection, multiple comparisons and differences in entry exposure limit interpretation; a nominal p-value below 0.05 does not certify alpha.
 - **Exposure matters:** constrained Taotie can retain substantial cash. Sloth and Snail have different entry histories. Return differences alone do not isolate selection, cash shelter or signal decay.
 
-`season_01` uses **csirun300**, a **246-stock subset of CSI 300**, preserving its existing evaluation history. The new **`season_csi300`** uses **csi300**, the **full 300-stock universe**, with its own predictions, checkpoints, portfolio benchmarks and 11,000 matched controls. Select it in the dashboard or use `?season=csi300`; `?season=csirun300` selects the original subset. Both use the CSI 300 index, while their executable and theoretical portfolios cover their respective pools.
+`season_01` uses **csirun300**, a **246-stock subset of CSI 300**, replaying its preserved historical signals under the repaired engine. The new **`season_csi300`** uses **csi300**, the **full 300-stock universe**, with its own predictions, checkpoints, portfolio benchmarks and 1,000,000 random controls and one deterministic reference. Select it in the dashboard or use `?season=csi300`; `?season=csirun300` selects the original subset. Both use the CSI 300 index, while their executable and capital-scenario portfolios cover their respective pools.
 
-The full CSI 300 history was reconstructed on **2026-10-10**, from the common July 3 anchor through October 9. Its M1–M2 and M3 reports are retrospective; filling historical data does not constitute a prospective commitment. Other testbeds' July–August baseline was also simulated retrospectively. Later dispatches continue the existing evaluation; a completed report alone does not establish a verifiable pre-market commitment.
+The full CSI 300 history was reconstructed on **2026-10-10**, from the common July 3 anchor through October 9. Its M1–M2 and M3 reports are retrospective; filling historical data does not constitute a prospective commitment. Other testbeds' July–August baseline was also simulated retrospectively. All current dispatches have been recalculated under the repaired policy; a completed report alone does not establish a verifiable pre-market commitment.
 
 The full CSI 300 definition has 300 constituents, but one has no supplied local market rows after September 14. All six contestants therefore have 299 scored names thereafter. Missing quotes prevent trading; existing holdings use the last available price. This data limitation is recorded in the season and its M3 report.
 
@@ -65,7 +67,7 @@ The full CSI 300 definition has 300 constituents, but one has no supplied local 
 | Concentration and breadth | Eagle suite | TopK/DropN: 5/1, 11/2, 44/6, 66/9, 88/12 |
 | Broad selection | Whale Shark | TopK=123, DropN=17 |
 
-The independent **Taotie** and **Ghost Taotie** portfolios sit outside the 28 contestant handlers. Taotie is the executable universe reference; Ghost is the theoretical broad-exposure reference. Each testbed also has its corresponding external market index and matched monkey distributions. **The Rock** is a separate simplicity reference, not another contestant path.
+The independent **Taotie** and **Ghost Taotie** portfolios sit outside the 28 contestant handlers. Taotie is the executable universe reference; Ghost is a separate capital-granularity scenario retaining costs and round lots. Each testbed also has its corresponding external market index and matched monkey distributions. **The Rock** is a separate simplicity reference, not another contestant path.
 
 ## Maintainer Operations and Holiday Alignment
 
@@ -127,7 +129,7 @@ PYTHONPATH=. pytest
 python3 scripts/audit_privacy.py
 ```
 
-For documentation changes, verify dates, figures and links against the current repository exports, then run the privacy audit. The full CSI 300 addition passed **92 regression tests**. Validation also includes five-season frontend rendering checks, preserved historical NAV and private-cache checks, and date-matched significance checks.
+For documentation changes, verify dates, figures and links against the current repository exports, then run the privacy audit. The repaired evaluation passes the full regression suite, including independent source-quote mapping, bounded-control reference equivalence, same-week recovery, complete commitment disk round trips and small-p serialization checks. Historical raw signals are checked against the archived originals; all five pool generations and date-matched significance families are verified.
 
 ## Disclaimer
 

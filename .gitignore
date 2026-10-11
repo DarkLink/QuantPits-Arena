@@ -49,6 +49,10 @@ docs/internal/
 
 # Workflow configs containing model architecture details
 artifacts/configs/
+artifacts/predictions/
+artifacts/evaluations/
+artifacts/native/
+runs/**/commitments/
 
 # Raw specifications containing private host paths and un-anonymized model names
 INIT.md

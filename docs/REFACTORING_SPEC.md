@@ -1,3 +1,5 @@
+> Historical design document. The current execution, control counts, recovery and publishing contract is documented in [EVALUATION_V2.md](EVALUATION_V2.md). Older count and timing examples below are archival.
+
 # QuantPits Arena: 系统架构重构规划与实施规范 (REFACTORING_SPEC)
 > **文档版本:** 1.0.0 (Release Candidate)  
 > **保密安全标准:** 严格遵守 `AGENTS.md` 零泄密与公开开源规范（禁止出现私有开发机绝对路径、真实资金与未脱敏个股）  

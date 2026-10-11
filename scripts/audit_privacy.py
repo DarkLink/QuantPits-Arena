@@ -35,7 +35,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 
 # 扫描的目标文本文件扩展名
 TEXT_EXTENSIONS = {
-    ".md", ".yaml", ".yml", ".json", ".py", ".sh", ".txt", ".csv", ".js", ".html", ".css"
+    ".cpp", ".md", ".yaml", ".yml", ".json", ".py", ".sh", ".txt", ".csv", ".js", ".html", ".css"
 }
 
 # 必须排除的私有/动态目录（不纳入公开开源扫描）
@@ -135,7 +135,7 @@ def get_git_tracked_files():
     """获取所有被 git 跟踪以及 staged 的文件列表"""
     try:
         res = subprocess.run(
-            ["git", "ls-files"],
+            ["git", "ls-files", "--cached", "--others", "--exclude-standard"],
             cwd=REPO_ROOT,
             capture_output=True,
             text=True,

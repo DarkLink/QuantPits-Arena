@@ -71,6 +71,10 @@ class PortfolioEngine:
         self.unaffordable_buy_count: int = 0
         self.rebalance_days_with_buy: int = 0
         self.unaffordable_event_days: int = 0
+        self.rejected_orders = []
+        self.applied_events = set()
+        self.stale_marks = []
+        self.cash_entitlements = {}
 
     def get_current_held_instruments(self) -> Set[str]:
         return {inst for inst, shares in self.holdings.items() if shares > 0}
@@ -99,128 +103,109 @@ class PortfolioEngine:
             # 冷启动空仓期（如 Sloth 前置周期）：不产生订单，维持空仓
             return None
 
-        current_held = self.get_current_held_instruments()
-
-        # 筛选具备可交易性且“买得起”的候选标的列表（顺延缓冲机制）
-        sorted_candidates = list(score.sort_values(ascending=False).index)
-        tradable_candidates = []
-
-        # 预估单只标的分配可用资金
-        effective_topk = len(sorted_candidates) if (topk <= 0 or topk >= len(sorted_candidates)) else topk
-        if is_first_entry or len(current_held) == 0:
-            est_per_stock_cash = (self.cash_balance * 0.995) / max(effective_topk, 1)
-        else:
-            est_per_stock_cash = self.initial_cash / max(effective_topk, 1)
-
-        for inst in sorted_candidates:
-            # 1. 停牌/涨跌停过滤
-            if tradability_filter is not None and not tradability_filter(inst, trade_date):
+        # Stable ties preserve the declared input order. Pool membership is independent
+        # of affordability and opening execution status.
+        score = score[np.isfinite(score.to_numpy())]
+        ranked = list(score.sort_values(ascending=False, kind="stable").index)
+        current = sorted(self.get_current_held_instruments())
+        effective_k = len(ranked) if topk <= 0 else min(topk, len(ranked))
+        budget = (self.cash_balance * .995 if not current or is_first_entry else self.initial_cash) / max(effective_k, 1)
+        candidates = []
+        for inst in ranked:
+            if not self._tradable(tradability_filter, inst, trade_date, "BUY"):
                 continue
-
-            # 2. 资金承受能力过滤：若不支持碎股且买不起一手 (100股)，跳过并顺延
-            # 注意：对于全池纯被动动物 (passive_pool=True，如饕餮)，目标是全量覆盖池中所有标的，
-            # 无后续标的可以顺延，因此不在候选阶段提前截断剔除，而是在撮合执行阶段真实体现资本粒度受阻与跳过！
-            if not passive_pool and not self.allow_fractional_shares and price_lookup is not None:
-                try:
-                    p = price_lookup(inst, trade_date, self.deal_price_mode)
-                    if p <= 0 or (p * self.lot_size) > est_per_stock_cash:
-                        continue
-                except Exception:
-                    # 无法获取有效价格的标的，视为不可交易直接跳过
+            if price_lookup is not None:
+                p = self._price(price_lookup, inst, trade_date, self.deal_price_mode, True)
+                if not np.isfinite(p) or p <= 0:
                     continue
+                if not passive_pool and not self.allow_fractional_shares and inst not in current and p * self.lot_size > budget:
+                    continue
+            candidates.append(inst)
+        capacity = len(candidates) if topk <= 0 else min(topk, len(candidates))
+        self.target_capacities.append(capacity)
+        if not current or is_first_entry:
+            return Order(trade_date, candidates[:capacity], [], True)
+        sellable = [i for i in current if self._tradable(tradability_filter, i, trade_date, "SELL")
+                    and (price_lookup is None or self._price(price_lookup, i, trade_date, self.deal_price_mode, True) > 0)]
+        out = [i for i in sellable if i not in score.index]
+        inside = [i for i in sellable if i in score.index]
+        if passive_pool or (n_drop == 0 and capacity >= len(candidates)):
+            return Order(trade_date, [i for i in candidates if i not in current], out)
+        sells = out[:n_drop]
+        target = candidates[:capacity]
+        # Lowest score exits first; deterministic identifier breaks equal-score ties.
+        active = sorted(inside, key=lambda i: (i in target, float(score[i]), i))
+        entrants = [i for i in target if i not in current]
+        count = min(max(0, n_drop-len(sells)), len(entrants), len(active))
+        sells += active[:count]
+        need = max(0, capacity - (len(current)-len(sells)))
+        buys = [i for i in candidates if i not in current or i in sells][:need]
+        return Order(trade_date, buys, sells)
 
-            tradable_candidates.append(inst)
+    @staticmethod
+    def freeze_order(score, trade_date, **policy):
+        if score is None:
+            return None
+        return Order(trade_date, [], [], frozen_score=score.copy(deep=True), policy=policy)
 
-        # 重新校准实际有效 topk（不超过实际可交易候选池大小）
-        if topk <= 0 or topk >= len(tradable_candidates):
-            target_capacity = len(tradable_candidates)
-        else:
-            target_capacity = topk
+    @staticmethod
+    def _tradable(callback, instrument, date, side):
+        if callback is None:
+            return True
+        owner = getattr(callback, "__self__", None)
+        if owner is not None and hasattr(owner, "direction_status"):
+            return callback(instrument, date, side)
+        return callback(instrument, date)
 
-        self.target_capacities.append(target_capacity)
+    @staticmethod
+    def _price(callback, instrument, date, field, execution=False):
+        owner = getattr(callback, "__self__", None)
+        try:
+            if execution and owner is not None and hasattr(owner, "get_execution_price"):
+                return owner.get_execution_price(instrument, date, field)
+            return float(callback(instrument, date, field))
+        except (KeyError, ValueError, TypeError):
+            return np.nan
 
-        # 1. 首次建仓（或持仓为空时的首次买入）
-        if is_first_entry or len(current_held) == 0:
-            target_buys = tradable_candidates[:target_capacity]
-            return Order(
-                trade_date=trade_date,
-                buy_instruments=target_buys,
-                sell_instruments=[],
-                is_first_entry=True
-            )
+    def apply_corporate_events(self, date, events):
+        for event in events:
+            key = event["event_id"]
+            if key in self.applied_events:
+                continue
+            ratio = float(event.get("share_ratio", 1.0))
+            dividend = float(event.get("cash_per_share", 0.0))
+            if not np.isfinite(ratio) or ratio <= 0 or not np.isfinite(dividend) or dividend < 0:
+                raise ValueError("Invalid verified corporate event")
+            inst = event["instrument"]
+            shares = self.holdings.get(inst, 0.0)
+            kind = event.get("event_type", "effective_action")
+            entitlement = event.get("entitlement_id", key)
+            if kind == "cash_record":
+                if entitlement in self.cash_entitlements:
+                    raise ValueError("Duplicate dividend entitlement")
+                self.cash_entitlements[entitlement] = shares * dividend
+            elif kind == "cash_payment":
+                if entitlement not in self.cash_entitlements:
+                    raise ValueError("Missing recorded dividend entitlement")
+                self.cash_balance += self.cash_entitlements.pop(entitlement)
+            elif kind == "effective_action":
+                self.cash_balance += shares * dividend
+            else:
+                raise ValueError("Unknown verified event type")
+            if shares and kind == "effective_action":
+                self.holdings[inst] = shares * ratio
+            self.applied_events.add(key)
 
-        # 2. 常规周频调仓
-        # 识别出池持仓与在池持仓
-        # ⚠️ 关键真实摩擦与停牌防线：
-        # 若持仓中的标的在调仓日停牌/不可交易 (tradability_filter 返回 False)，
-        # 该标的绝对无法在二级市场卖出，必须强制锁定在持仓中（“烂在手里”），不可调仓卖出！
-        untradable_held = [inst for inst in current_held if tradability_filter is not None and not tradability_filter(inst, trade_date)]
-        tradable_current_held = [inst for inst in current_held if inst not in untradable_held]
+    def execute_weekly_cycle(self, cycle, order, price_lookup, tradability_filter=None):
+        before = self.export_checkpoint()
+        try:
+            return self._execute_weekly_cycle(cycle, order, price_lookup, tradability_filter)
+        except BaseException:
+            restored = self.from_checkpoint(before)
+            self.__dict__.update(restored.__dict__)
+            raise
 
-        out_of_pool_held = [inst for inst in tradable_current_held if inst not in tradable_candidates]
-        in_pool_held = [inst for inst in tradable_current_held if inst in tradable_candidates]
-
-        target_topk = tradable_candidates[:target_capacity]
-
-        # 模式 A: 纯被动全池复制模式（如饕餮 Taotie: passive_pool=True 或 n_drop=0 且全池）
-        if passive_pool or (n_drop == 0 and target_capacity >= len(tradable_candidates)):
-            sell_list = list(out_of_pool_held)
-            buy_list = [inst for inst in tradable_candidates if inst not in current_held]
-            if len(sell_list) == 0 and len(buy_list) == 0:
-                return Order(trade_date=trade_date, buy_instruments=[], sell_instruments=[], is_first_entry=False)
-            return Order(trade_date=trade_date, buy_instruments=buy_list, sell_instruments=sell_list, is_first_entry=False)
-
-        # 模式 B: 主动配额调仓模式（含出池被动优先调仓与 DropN 卖出上限约束）
-        max_sells = n_drop
-
-        # 1) 出池优先卖出（上限不超过 DropN，仅限具备可交易性的出池标的）
-        sells_from_out = out_of_pool_held[:max_sells]
-        remaining_drop = max_sells - len(sells_from_out)
-
-        # 2) 若仍有剩余 DropN 额度，进行常规主动得分 Drop
-        sells_from_active = []
-        if remaining_drop > 0 and len(in_pool_held) > 0:
-            held_in_score = [inst for inst in in_pool_held if inst in score.index]
-            held_score_series = score.loc[held_in_score]
-
-            exits_not_in_target = [inst for inst in in_pool_held if inst not in target_topk]
-            exits_not_in_target_sorted = list(held_score_series.loc[exits_not_in_target].nsmallest(len(exits_not_in_target)).index)
-
-            in_target_held = [inst for inst in in_pool_held if inst in target_topk]
-            in_target_held_sorted = list(held_score_series.loc[in_target_held].nsmallest(len(in_target_held)).index)
-
-            active_candidates = exits_not_in_target_sorted + in_target_held_sorted
-            entrants = [inst for inst in target_topk if inst not in current_held]
-
-            # 主动换出受限于剩余配额、新入围需求以及可换出标的数
-            num_active = min(remaining_drop, len(entrants), len(active_candidates))
-            sells_from_active = active_candidates[:num_active]
-
-        sell_list = sells_from_out + sells_from_active
-
-        # 3) 计算买入标的列表，维持目标持仓规模 (卖出后组合实际保留的总持股数，含停牌锁死的持仓)
-        retained_held = [inst for inst in current_held if inst not in sell_list]
-        need_to_buy = max(0, target_capacity - len(retained_held))
-
-        available_buys = [inst for inst in tradable_candidates if inst not in current_held or inst in sell_list]
-        buy_list = available_buys[:need_to_buy]
-
-        if len(buy_list) == 0 and len(sell_list) == 0:
-            return Order(
-                trade_date=trade_date,
-                buy_instruments=[],
-                sell_instruments=[],
-                is_first_entry=False
-            )
-
-        return Order(
-            trade_date=trade_date,
-            buy_instruments=buy_list,
-            sell_instruments=sell_list,
-            is_first_entry=False
-        )
-
-    def execute_weekly_cycle(
+    def _execute_weekly_cycle(
         self,
         cycle: WeeklyCycle,
         order: Optional[Order],
@@ -238,6 +223,20 @@ class PortfolioEngine:
         """
         if not cycle.has_rebalance and order is not None:
             raise ValueError("Valuation-only cycles cannot execute rebalance orders")
+        last_date = self.daily_valuations[-1].date if self.daily_valuations else ""
+        if last_date >= cycle.settle_date and self.weekly_settlements:
+            return self.weekly_settlements[-1]
+        owner = getattr(price_lookup, "__self__", None)
+        if cycle.trade_date and cycle.trade_date > last_date and owner is not None and hasattr(owner, "corporate_events"):
+            self.apply_corporate_events(cycle.trade_date, owner.corporate_events(cycle.trade_date))
+        if order is not None and order.frozen_score is not None and cycle.trade_date and cycle.trade_date > last_date:
+            order = self.generate_order(order.frozen_score, trade_date=cycle.trade_date,
+                                        price_lookup=price_lookup, tradability_filter=tradability_filter,
+                                        **order.policy)
+        if cycle.trade_date and cycle.trade_date <= last_date:
+            order = None
+        if not cycle.has_rebalance and order is not None:
+            raise ValueError("Valuation-only cycles cannot execute rebalance orders")
 
         # 如果是首次运行，记录 T0 起点 (Anchor 收盘状态: NAV=1.000000, 现金=100%, 仓位=0%)
         if len(self.daily_valuations) == 0:
@@ -253,7 +252,8 @@ class PortfolioEngine:
             )
 
         prev_nav = self.daily_valuations[-1].nav
-        start_week_nav = prev_nav
+        previous = next((w for w in self.weekly_settlements if w.week_idx == cycle.cycle_idx), None)
+        start_week_nav = previous.start_nav if previous else prev_nav
         weekly_cost = 0.0
         turnover_value = 0.0
 
@@ -265,11 +265,14 @@ class PortfolioEngine:
             for inst in order.sell_instruments:
                 if inst in self.holdings and self.holdings[inst] > 0:
                     # 停牌/不可交易标的无法卖出，继续留在持仓中 ("烂在手里")
-                    if tradability_filter is not None and not tradability_filter(inst, cycle.trade_date):
+                    if tradability_filter is not None and not self._tradable(tradability_filter, inst, cycle.trade_date, "SELL"):
                         continue
 
                     shares = self.holdings[inst]
-                    price = price_lookup(inst, cycle.trade_date, exec_field)
+                    price = self._price(price_lookup, inst, cycle.trade_date, exec_field, True)
+                    if not np.isfinite(price) or price <= 0:
+                        self.rejected_orders.append({"date": cycle.trade_date, "instrument": inst, "side": "SELL", "reason": "invalid_quote"})
+                        continue
                     gross_val = shares * price
                     cost = self.cost_model.calculate_sell_cost(gross_val)
                     net_val = gross_val - cost
@@ -303,12 +306,15 @@ class PortfolioEngine:
 
                 for inst in order.buy_instruments:
                     self.buy_attempt_count += 1
+                    if not self._tradable(tradability_filter, inst, cycle.trade_date, "BUY"):
+                        self.rejected_orders.append({"date": cycle.trade_date, "instrument": inst, "side": "BUY", "reason": "direction_status"})
+                        continue
                     try:
-                        price = price_lookup(inst, cycle.trade_date, exec_field)
+                        price = self._price(price_lookup, inst, cycle.trade_date, exec_field, True)
                     except Exception:
                         # 无法获取有效真实价格，严禁使用模拟数据撮合，直接跳过
                         continue
-                    if price <= 0:
+                    if not np.isfinite(price) or price <= 0:
                         continue
                     if self.allow_fractional_shares:
                         shares = per_stock_cash / price
@@ -354,8 +360,8 @@ class PortfolioEngine:
                     price_cache: Dict[str, float] = {}
                     for inst in order.buy_instruments:
                         try:
-                            p = price_lookup(inst, cycle.trade_date, exec_field)
-                            if p > 0:
+                            p = self._price(price_lookup, inst, cycle.trade_date, exec_field, True)
+                            if np.isfinite(p) and p > 0 and self._tradable(tradability_filter, inst, cycle.trade_date, "BUY"):
                                 price_cache[inst] = p
                         except Exception:
                             pass
@@ -396,12 +402,22 @@ class PortfolioEngine:
 
         # --- Phase 2: 周内日频盯市估值 (Daily Marked-to-Market) ---
         for day in cycle.trading_days:
+            if day <= last_date:
+                continue
+            if owner is not None and hasattr(owner, "corporate_events"):
+                self.apply_corporate_events(day, owner.corporate_events(day))
             # 每日以当日收盘价核算持仓市值
             held_market_value = 0.0
             act_held_count = 0
             for inst, shares in self.holdings.items():
                 if shares > 0:
-                    c_price = price_lookup(inst, day, "close")
+                    c_price = self._price(price_lookup, inst, day, "close")
+                    if not np.isfinite(c_price) or c_price <= 0:
+                        raise ValueError("Held position has no valid valuation quote")
+                    if owner is not None and hasattr(owner, "quote"):
+                        q = owner.quote(inst, day)
+                        if q.stale:
+                            self.stale_marks.append({"date": day, "instrument": inst, "source_date": q.source_date})
                     held_market_value += shares * c_price
                     act_held_count += 1
 
@@ -442,6 +458,10 @@ class PortfolioEngine:
             weekly_cost=weekly_cost,
             num_holdings=len(self.holdings)
         )
+        if previous:
+            settlement.weekly_cost += previous.weekly_cost
+            settlement.turnover += previous.turnover
+            self.weekly_settlements.remove(previous)
         self.weekly_settlements.append(settlement)
 
         return settlement
@@ -475,6 +495,9 @@ class PortfolioEngine:
         mean_invested = max(0.0, 1.0 - mean_cash)
 
         diagnostics = {
+            "rejected_order_count": len(self.rejected_orders),
+            "stale_mark_count": len(self.stale_marks),
+            "turnover_convention": "buy_plus_sell_over_start_assets",
             "target_holdings_mean": round(target_mean, 2),
             "actual_holdings_mean": round(act_mean, 2),
             "actual_holdings_min": act_min,
@@ -529,7 +552,11 @@ class PortfolioEngine:
             },
             last_cycle_idx=last_cycle,
             last_settle_date=last_date,
-            greedy_allocation=self.greedy_allocation
+            greedy_allocation=self.greedy_allocation,
+            rejected_orders=list(self.rejected_orders),
+            applied_events=sorted(self.applied_events),
+            stale_marks=list(self.stale_marks),
+            cash_entitlements=dict(self.cash_entitlements),
         )
 
     @classmethod
@@ -551,6 +578,10 @@ class PortfolioEngine:
             lot_size=cp.lot_size,
             greedy_allocation=getattr(cp, "greedy_allocation", False),
         )
+        engine.rejected_orders = list(getattr(cp, "rejected_orders", []))
+        engine.applied_events = set(getattr(cp, "applied_events", []))
+        engine.stale_marks = list(getattr(cp, "stale_marks", []))
+        engine.cash_entitlements = dict(getattr(cp, "cash_entitlements", {}))
         engine.cash_balance = float(cp.cash_balance)
         engine.holdings = dict(cp.holdings)
         engine.daily_valuations = list(cp.daily_valuations)

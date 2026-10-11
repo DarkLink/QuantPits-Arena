@@ -66,6 +66,8 @@ class WeeklyCycleRunner:
         season_id: Optional[str] = None,
         auth_store_path: Optional[Path] = None,
         run_dir: Optional[Path] = None,
+        execution_policy=None,
+        frozen_signals=None,
     ):
         self.anchor_date = anchor_date
         self.end_date = end_date
@@ -75,6 +77,11 @@ class WeeklyCycleRunner:
         self.mock_mode = mock_mode
         self.season_id = season_id
         self.run_dir = run_dir
+        from arena.portfolio.policy import ExecutionPolicy
+        self.execution_policy = execution_policy or (ExecutionPolicy.from_season(SeasonManager.get_season_config(season_id)) if season_id else ExecutionPolicy(deal_price_mode=deal_price_mode))
+        self.deal_price_mode = self.execution_policy.deal_price_mode
+        self.frozen_signals = frozen_signals
+        self.source_signature = None
 
         if auth_store_path is not None:
             self.auth_store_path = Path(auth_store_path)
@@ -133,6 +140,7 @@ class WeeklyCycleRunner:
             except Exception:
                 pass
 
+        taotie_cash = self.initial_cash
         self.taotie_benchmark = TaotieBenchmark(
             initial_cash=taotie_cash,
             deal_price_mode=self.deal_price_mode,
@@ -143,6 +151,16 @@ class WeeklyCycleRunner:
             deal_price_mode=self.deal_price_mode,
             display_name=ghost_name
         )
+
+    def _apply_policy(self):
+        from arena.portfolio.costs import CostModel
+        p = self.execution_policy
+        for engine in list(getattr(self, "engines", {}).values()) + [self.taotie_benchmark.engine, self.ghost_taotie_benchmark.engine]:
+            engine.deal_price_mode = p.deal_price_mode
+            engine.lot_size = p.lot_size
+            engine.allow_fractional_shares = p.allow_fractional_shares
+            engine.greedy_allocation = p.greedy_allocation
+            engine.cost_model = CostModel(p.open_cost, p.close_cost, p.min_cost)
 
     def _init_engines(self, contestants: List[ContestantManifest]):
         """初始化所有 (Contestant, Animal) 组合的回测引擎"""
@@ -172,6 +190,7 @@ class WeeklyCycleRunner:
 
         self._create_benchmarks()
         self.last_completed_cycle_idx = -1
+        self._apply_policy()
 
     def _setup_market_provider(
         self,
@@ -183,29 +202,25 @@ class WeeklyCycleRunner:
             if not self.mock_mode:
                 if self.market_provider is None:
                     self.market_provider = MarketDataProvider(use_real_qlib=True)
-                # 获取首个预测标的池并预加载真实 Qlib 价格
-                try:
-                    if not self.adapters and active_contestants:
-                        for c in active_contestants:
-                            self.adapters[c.contestant_id] = create_adapter(
-                                c,
-                                mock=self.mock_mode,
-                                use_replay=not self.mock_mode,
-                                auth_store_path=self.auth_store_path
-                            )
-                    first_adapter = next(iter(self.adapters.values()))
-                    sample_score = first_adapter.predict(start_date=self.anchor_date, end_date=self.anchor_date)
-                    insts = list(sample_score.index)
-                    self.market_provider.load_qlib_data(insts, self.anchor_date, self.end_date)
-                except Exception as e:
-                    print(f"[WARN] 真实 Qlib 价格批量加载异常，降级为模拟价格: {e}")
+                if not self.adapters:
+                    for c in active_contestants:
+                        self.adapters[c.contestant_id] = create_adapter(c, mock=False, use_replay=True, auth_store_path=self.auth_store_path)
+                instruments = set()
+                for c in active_contestants:
+                    for cycle in self.cycles:
+                        raw = self.frozen_signals[c.contestant_id][cycle.cycle_idx] if self.frozen_signals is not None else self.adapters[c.contestant_id].predict(cycle.decision_date, cycle.decision_date)
+                        instruments.update(raw.index)
+                instruments.update(i for e in self.engines.values() for i in e.holdings)
+                if not getattr(self.market_provider, "snapshot_frozen", False):
+                    self.market_provider.load_qlib_data(sorted(instruments), self.anchor_date, self.end_date)
+                self.market_provider.preflight(self.execution_policy.profile, self.cycles[-1].settle_date)
                 price_lookup_fn = self.market_provider.get_real_price
                 if tradability_filter_fn is None:
                     tradability_filter_fn = self.market_provider.is_tradable
             else:
                 def default_price_lookup(inst: str, date: str, field: str) -> float:
-                    base = (abs(hash(inst)) % 3000 + 1000) / 100.0
-                    day_offset = ((abs(hash(f"{inst}_{date}")) % 20) - 10) / 1000.0
+                    base = (MarketDataProvider._hash(inst) % 3000 + 1000) / 100.0
+                    day_offset = ((MarketDataProvider._hash(f"{inst}_{date}") % 20) - 10) / 1000.0
                     if field == "open":
                         return base
                     return base * (1.0 + day_offset)
@@ -241,10 +256,12 @@ class WeeklyCycleRunner:
                 )
             adapter = self.adapters[cid]
 
-            raw_score = adapter.predict(
-                start_date=cycle.decision_date,
-                end_date=cycle.decision_date
-            )
+            if self.frozen_signals is not None:
+                raw_score = self.frozen_signals[cid][c_idx].copy(deep=True)
+            elif c_idx in self.signal_history.get(cid, {}):
+                raw_score = self.signal_history[cid][c_idx]
+            else:
+                raw_score = adapter.predict(start_date=cycle.decision_date, end_date=cycle.decision_date)
             if cid not in self.signal_history:
                 self.signal_history[cid] = {}
             self.signal_history[cid][c_idx] = raw_score
@@ -284,14 +301,12 @@ class WeeklyCycleRunner:
                 passive_pool = policy.get("passive_pool", False)
 
                 is_first = (c_idx == 0)
-                order = engine.generate_order(
+                order = engine.freeze_order(
                     score=transformed_score,
                     topk=topk,
                     n_drop=n_drop,
                     trade_date=cycle.trade_date,
                     is_first_entry=is_first,
-                    tradability_filter=tradability_filter_fn,
-                    price_lookup=price_lookup_fn,
                     passive_pool=passive_pool
                 )
                 orders[key] = order
@@ -304,26 +319,22 @@ class WeeklyCycleRunner:
         universe = list(first_raw.index)
         is_first_taotie = (c_idx == 0)
         mock_score = pd.Series(1.0, index=universe)
-        taotie_order = self.taotie_benchmark.engine.generate_order(
+        taotie_order = self.taotie_benchmark.engine.freeze_order(
             score=mock_score,
             topk=0,
             n_drop=0,
             trade_date=cycle.trade_date,
             is_first_entry=is_first_taotie,
-            tradability_filter=tradability_filter_fn,
-            price_lookup=price_lookup_fn,
             passive_pool=True
         )
         orders[("BENCHMARK", "taotie")] = taotie_order
 
-        ghost_order = self.ghost_taotie_benchmark.engine.generate_order(
+        ghost_order = self.ghost_taotie_benchmark.engine.freeze_order(
             score=mock_score,
             topk=0,
             n_drop=0,
             trade_date=cycle.trade_date,
             is_first_entry=is_first_taotie,
-            tradability_filter=tradability_filter_fn,
-            price_lookup=price_lookup_fn,
             passive_pool=True
         )
         orders[("BENCHMARK", "ghost_taotie")] = ghost_order
@@ -515,6 +526,12 @@ class WeeklyCycleRunner:
         if colony_size is not None:
             self.monkey_colony.colony_size = colony_size
 
+        if specs is None and self.monkey_colony.colony_size >= 200 and self.run_dir is not None:
+            if self.market_provider is not None and self.market_provider.events:
+                raise ValueError("Large compact controls do not support event ledgers; use a separately validated execution version")
+            from arena.controls.compact import run_compact
+            return run_compact(self, self.run_dir / "monkey/compact", self.monkey_colony.colony_size)
+
         target_specs = specs or list(CANONICAL_STRATEGY_SPECS.values())
         cycles_to_run = self.cycles[:max_cycles] if max_cycles else self.cycles
 
@@ -563,6 +580,10 @@ class WeeklyCycleRunner:
     def export_checkpoint(self) -> Dict[str, Any]:
         """导出整个 Arena 运行器的完整状态快照字典"""
         return {
+            "cycle_contract": {c.cycle_idx: (c.decision_date, c.trade_date) for c in self.cycles if c.cycle_idx <= self.last_completed_cycle_idx},
+            "policy_signature": self.execution_policy.signature,
+            "execution_policy": self.execution_policy,
+            "source_signature": self.source_signature,
             "last_completed_cycle_idx": self.last_completed_cycle_idx,
             "anchor_date": self.anchor_date,
             "end_date": self.end_date,
@@ -577,6 +598,26 @@ class WeeklyCycleRunner:
 
     def load_checkpoint(self, state: Dict[str, Any]):
         """从状态快照字典恢复运行器状态"""
+        if state.get("policy_signature") != self.execution_policy.signature:
+            raise ValueError("Checkpoint execution policy differs; use an explicit full refresh")
+        if state.get("anchor_date") != self.anchor_date:
+            raise ValueError("Checkpoint anchor differs")
+        for cp in state.get("engines", {}).values():
+            if cp.initial_cash != self.initial_cash:
+                raise ValueError("Checkpoint capital policy differs")
+        for name,benchmark in (("taotie_engine",self.taotie_benchmark),("ghost_taotie_engine",self.ghost_taotie_benchmark)):
+            if name in state and state[name].initial_cash != benchmark.engine.initial_cash:
+                raise ValueError("Checkpoint benchmark capital policy differs")
+        for idx,contract in state.get("cycle_contract", {}).items():
+            if idx >= len(self.cycles) or tuple(contract) != (self.cycles[idx].decision_date,self.cycles[idx].trade_date):
+                raise ValueError("Historical decision calendar changed")
+        sample=next(iter(state.get("engines", {}).values()),None)
+        if sample is not None:
+            old_days=[v.date for v in sample.daily_valuations[1:]]
+            new_days=[d for c in self.cycles for d in c.trading_days]
+            if new_days[:len(old_days)] != old_days:
+                raise ValueError("Historical valuation calendar changed")
+        self.source_signature = state.get("source_signature")
         self.last_completed_cycle_idx = state["last_completed_cycle_idx"]
         self.signal_history = state.get("signal_history", {})
 
@@ -599,16 +640,16 @@ class WeeklyCycleRunner:
         latest_path = checkpoint_dir / "latest_state.pkl"
         cycle_path = checkpoint_dir / f"cycle_{cycle_idx}.pkl"
 
-        with open(latest_path, "wb") as f:
-            pickle.dump(state, f)
-        with open(cycle_path, "wb") as f:
-            pickle.dump(state, f)
+        from arena.state import atomic_pickle
+        atomic_pickle(cycle_path, state)
+        atomic_pickle(latest_path, state)
 
     def load_checkpoint_from_disk(self, checkpoint_path: Path):
         """从指定文件加载状态快照"""
         with open(checkpoint_path, "rb") as f:
             state = pickle.load(f)
         self.load_checkpoint(state)
+        return self.last_completed_cycle_idx
 
     def export_isolated_orders(
         self,
@@ -662,6 +703,11 @@ class WeeklyCycleRunner:
 
             # 导出标准化 CSV
             order_rows = []
+            if order_obj.frozen_score is not None:
+                for rank, (inst, score) in enumerate(order_obj.frozen_score.items()):
+                    order_rows.append({"trade_date": order_obj.trade_date,"direction": "INTENT",
+                        "instrument":inst,"score":float(score),"input_order":rank,
+                        "policy":json.dumps(order_obj.policy,sort_keys=True)})
             for inst in order_obj.buy_instruments:
                 order_rows.append({
                     "trade_date": order_obj.trade_date,

@@ -19,7 +19,7 @@ window.LandingView = {
         </div>
         <h1 class="hero-title">Where Quantitative Strategies Face the Execution Zoo</h1>
         <p class="hero-description">
-          An empirical laboratory for stress-testing anonymous quantitative contestants. Every path starts at NAV 1.0000, faces 28 execution handlers, and is compared with 11,000 matched random controls. Retrospective reconstruction and subsequent tracking are identified in each season's dispatches.
+          An empirical laboratory for stress-testing anonymous quantitative contestants. Each pool evaluates six contestants across 28 handlers from NAV 1.0000. Its ten random specifications contain 1,000,000 controls in total; each animal is tested against only its matched 100,000-path group. The passive reference is deterministic. All current curves and dispatches belong to the disclosed retrospective repair replay.
         </p>
         <div class="hero-actions">
           <button class="btn btn-primary" onclick="window.appRouter.navigate('overview')">
@@ -97,7 +97,7 @@ window.LandingView = {
           <div class="concept-icon">🐒</div>
           <h3>Parametric Monkeys</h3>
           <p style="font-size:0.88rem; color:var(--text-secondary);">
-            A high-resolution null model suite: 11 distinct portfolio execution policies, each benchmarked by 1,000 deterministic pseudo-random monkeys (11,000 monkeys total) under identical 100-share trading lot constraints.
+            A high-resolution null model suite: 10 random TopK/DropN specifications, each with 100,000 pseudo-random paths per pool, plus one deterministic passive reference under identical 100-share trading lot constraints.
           </p>
           <div style="display:flex; justify-content:space-between; align-items:center; margin-top:auto;">
             <a href="#methodology" style="font-size:0.84rem; font-weight:600; color:var(--accent-cyan);">Read Null Methodology →</a>

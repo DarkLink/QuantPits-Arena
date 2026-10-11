@@ -65,7 +65,7 @@ def map_animal_to_spec_id(animal_id: str) -> str:
         return "P_123_17"
     elif animal_id == "taotie":
         return "P_ALL_0"
-    return "P_22_3"
+    return None
 
 
 class MonkeyColony:
@@ -146,7 +146,8 @@ class MonkeyColony:
             engine.execute_weekly_cycle(
                 cycle=cycle,
                 order=order,
-                price_lookup=price_lookup_fn
+                price_lookup=price_lookup_fn,
+                tradability_filter=tradability_filter_fn
             )
 
     def run_group(
@@ -186,9 +187,9 @@ class MonkeyColony:
                     price_lookup=price_lookup_fn,
                     passive_pool=True
                 )
-                single_engine.execute_weekly_cycle(cycle, order, price_lookup_fn)
+                single_engine.execute_weekly_cycle(cycle, order, price_lookup_fn, tradability_filter_fn)
             base_path = single_engine.to_portfolio_path()
-            return [base_path] * self.colony_size
+            return [base_path]
 
         engines = self.init_group_engines(spec, initial_cash, deal_price_mode)
         for cycle in cycles:

@@ -239,7 +239,7 @@ window.LeaderboardView = {
     tbody.innerHTML = sorted.map(p => {
       const isPositive = p.total_return_pct >= 0;
       const pct = (p.percentile_rank !== undefined ? p.percentile_rank : (p.monkey_percentile !== undefined ? p.monkey_percentile : (p.monkey_percentile_rank || 0)));
-      const isSig = pct >= 95.0;
+      const isSig = p.empirical_p_value != null && p.empirical_p_value < 0.05;
       const pVal = (p.empirical_p_value !== undefined ? p.empirical_p_value : (p.p_value !== undefined ? p.p_value : 1.0));
 
       const alphaTao = p.total_return_pct - taotieRet;
@@ -303,7 +303,7 @@ window.LeaderboardView = {
           </td>
           <td class="numeric">
             <span class="badge ${isSig ? 'badge-green' : 'badge-neutral'}">
-              ${window.formatPercentile ? window.formatPercentile(pct) : pct.toFixed(1) + '%'}
+              ${window.formatPercentile ? window.formatPercentile(pct, p.monkey_count) : pct.toFixed(1) + '%'}
             </span>
           </td>
           <td class="numeric" style="font-family:monospace; color:${isSig ? 'var(--accent-positive)' : 'var(--text-tertiary)'};">

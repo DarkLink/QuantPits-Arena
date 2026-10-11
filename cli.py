@@ -155,7 +155,7 @@ def cmd_run(args):
 
     # 可选：运行参数化猴子群落
     if getattr(args, "monkeys", False):
-        m_count = getattr(args, "monkey_count", 1000)
+        m_count = getattr(args, "monkey_count", 100000)
         print("\n" + "=" * 70)
         print(f" 🐒 启动参数化猴子群落零假设评估 (11 组策略规格 × {m_count} 只随机猴子)...")
         print("=" * 70)
@@ -183,6 +183,8 @@ def cmd_step(args):
     run_id = args.run_id or f"{season_id}_run"
     base_dir = Path(args.output) if args.output else RUNS_DIR
     run_dir = base_dir / run_id
+    from arena.evaluation import verify_execution_sources
+    verify_execution_sources(run_dir)
     cp_dir = run_dir / "checkpoints"
     latest_path = cp_dir / "latest_state.pkl"
 
@@ -217,6 +219,10 @@ def cmd_step(args):
     print(f"    已恢复至周期: Cycle {runner.last_completed_cycle_idx}")
 
     next_idx = runner.last_completed_cycle_idx + 1
+    if runner.last_completed_cycle_idx >= 0:
+        actual_date = next(iter(runner.engines.values())).daily_valuations[-1].date
+        if actual_date < runner.cycles[runner.last_completed_cycle_idx].settle_date:
+            next_idx = runner.last_completed_cycle_idx
     needs_step = next_idx < len(runner.cycles)
 
     active_contestants = None
@@ -247,16 +253,12 @@ def cmd_step(args):
         print(f"       结算日: {target_cycle.settle_date} (收盘)")
         print("=" * 70)
 
-        # 仅执行目标这 1 个周期
-        runner.step_cycle(
-            cycle=target_cycle,
-            active_contestants=active_contestants,
-            price_lookup_fn=price_lookup_fn,
-            tradability_filter_fn=tradability_filter_fn
-        )
-
-        # 持久化最新状态
-        runner.save_checkpoint_to_disk(cp_dir, cycle_idx=next_idx)
+        for target_cycle in runner.cycles[next_idx:]:
+            runner.step_cycle(target_cycle,active_contestants,price_lookup_fn,tradability_filter_fn)
+            runner.save_checkpoint_to_disk(cp_dir,cycle_idx=target_cycle.cycle_idx)
+        actual_date=next(iter(runner.engines.values())).daily_valuations[-1].date
+        if actual_date != runner.cycles[-1].settle_date:
+            raise ValueError("Actual valuation cutoff differs from requested cutoff")
 
     # 导出最新累积路径
     results = {
@@ -271,7 +273,7 @@ def cmd_step(args):
 
     # 可选：运行参数化猴子群落
     if getattr(args, "monkeys", False):
-        m_count = getattr(args, "monkey_count", 1000)
+        m_count = getattr(args, "monkey_count", 100000)
         eval_cycles = runner.last_completed_cycle_idx + 1
         print("\n" + "=" * 70)
         print(f" 🐒 启动参数化猴子群落零假设评估 (11 组策略规格 × {m_count} 只随机猴子，覆盖 {eval_cycles} 个周期)...")
@@ -337,7 +339,7 @@ def cmd_cycle_step(args):
     )
 
     # 检查历史进度
-    latest_path = cp_dir / "latest_checkpoint.pkl"
+    latest_path = cp_dir / "latest_state.pkl"
     next_idx = 0
     if latest_path.exists():
         loaded_idx = runner.load_checkpoint_from_disk(latest_path)
@@ -360,11 +362,12 @@ def cmd_cycle_step(args):
     )
 
     # 1. 尝试读取上一次预存证的下周订单 (若有)
-    pending_file = orders_dir / f"orders_cycle_{next_idx}.json"
+    pending_file = orders_dir / f"orders_cycle_{next_idx}.pkl"
     pending_orders = None
     if pending_file.exists():
         print(f"[1/3] 发现上周五已冻结订单: {pending_file.name}")
-        # 在此处可做 SHA-256 校验
+        from arena.runner.commitments import load_commitment
+        pending_orders = load_commitment(pending_file, cur_cycle, runner.execution_policy.signature)
     else:
         print(f"[1/3] 首周/无前置预存证订单，执行首周开盘建仓流水线...")
 
@@ -380,23 +383,9 @@ def cmd_cycle_step(args):
 
     # 2. 锁定并存证下周订单
     if next_orders is not None:
-        next_file = orders_dir / f"orders_cycle_{next_idx + 1}.json"
-        import hashlib, json
-        # 简单序列化订单标的
-        order_summary = {}
-        for (cid, aid), ord_obj in next_orders.items():
-            if ord_obj is not None:
-                order_summary[f"{cid}_{aid}"] = {
-                    "buy": ord_obj.buy_instruments,
-                    "sell": ord_obj.sell_instruments,
-                    "trade_date": ord_obj.trade_date
-                }
-            else:
-                order_summary[f"{cid}_{aid}"] = None
-        serialized = json.dumps(order_summary, sort_keys=True)
-        order_hash = hashlib.sha256(serialized.encode("utf-8")).hexdigest()
-        with open(next_file, "w", encoding="utf-8") as f:
-            f.write(serialized)
+        next_file = orders_dir / f"orders_cycle_{next_idx + 1}.pkl"
+        from arena.runner.commitments import save_commitment
+        order_hash = save_commitment(next_file, next_orders, runner.cycles[next_idx+1],runner.execution_policy.signature)
 
         print(f"[2/3] 成功生成并锁定下周订单: {next_file.name}")
         print(f"    🔐 密码学存证指纹 (SHA-256): {order_hash}")
@@ -630,80 +619,9 @@ def cmd_bump_date(args):
 
 
 def cmd_rollforward(args):
-    """一键执行全部赛季批量增量推进、Web 导出、Chronicles 同步与安全审计 (Batch Roll-Forward)"""
-    print("\n" + "=" * 70)
-    print(" 🚀 QuantPits-Arena 批量全自动周频滚动推进 (The Grand Roll-Forward)")
-    print("=" * 70)
-
-    # 1. 若指定了 --end-date，则首先原子执行 bump-date
-    if args.end_date:
-        print(f"\n[Step 1/5] 执行全局截止日期原子推进: -> {args.end_date}...")
-        bump_args = argparse.Namespace(
-            end_date=args.end_date,
-            seasons=args.seasons if args.seasons != ["all"] else None
-        )
-        actual_end = cmd_bump_date(bump_args)
-    else:
-        actual_end = DEFAULT_END_DATE
-        print(f"\n[Step 1/5] 使用当前全局默认截止日期: {actual_end}")
-
-    # 2. 确定待推进赛季列表
-    if args.seasons and args.seasons != ["all"]:
-        target_seasons = args.seasons
-    else:
-        target_seasons = []
-        for sid in SeasonManager.list_seasons():
-            cfg = SeasonManager.get_season_config(sid)
-            if cfg.status in ["ACTIVE", "PREVIEW", "DEMO"]:
-                target_seasons.append(sid)
-
-    print(f"\n[Step 2/5] 待推进目标赛季列表: {target_seasons}")
-
-    # 3. 逐个赛季执行增量推进 step
-    for idx, sid in enumerate(target_seasons, 1):
-        print(f"\n--- [Step 3/5] ({idx}/{len(target_seasons)}) 增量推进赛季: {sid} ---")
-        step_args = argparse.Namespace(
-            season=sid,
-            run_id=None,
-            anchor_date=DEFAULT_ANCHOR_DATE,
-            end_date=actual_end,
-            initial_cash=500_000.0,
-            mock=getattr(args, "mock", False),
-            monkeys=getattr(args, "monkeys", True),
-            monkey_count=getattr(args, "monkey_count", 1000),
-            contestants=None,
-            output=getattr(args, "output", None)
-        )
-        cmd_step(step_args)
-
-    # 4. 逐个赛季导出通用前端 Payload export-web
-    for idx, sid in enumerate(target_seasons, 1):
-        print(f"\n--- [Step 4/5] ({idx}/{len(target_seasons)}) 导出 Web Payload: {sid} ---")
-        exp_args = argparse.Namespace(
-            season=sid,
-            run_id=None,
-            output=getattr(args, "output", None)
-        )
-        cmd_export_web(exp_args)
-
-    # 5. 可选同步 Chronicles
-    if not getattr(args, "no_sync_chronicles", False):
-        print(f"\n[Step 5/5] 检查并同步 Chronicles 文档...")
-        n_synced = sync_chronicles()
-        if n_synced > 0:
-            print(f"[✔] 成功自动同步 {n_synced} 篇 Chronicles 到 web/chronicles/en/")
-        else:
-            print(f"[i] Chronicles 与 web/chronicles/en/ 保持一致，无需拷贝")
-
-    # 6. 安全隐私合规审计
-    if not getattr(args, "no_audit", False):
-        print(f"\n[Final] 强制执行本地零泄密隐私审计...")
-        cmd_audit(args)
-
-    print("\n" + "=" * 70)
-    print(" 🎉 全部赛季增量推进与导出圆满完成！")
-    print("=" * 70 + "\n")
-
+    """Incremental staged generation; no visible date advance before completion."""
+    from arena.evaluation import advance
+    advance(args)
 
 
 def main():
@@ -743,7 +661,7 @@ def main():
     p_run.add_argument("--initial-cash", type=float, default=500_000.0, help="初始资金规模 (默认 500,000 元)")
     p_run.add_argument("--mock", action="store_true", help="使用 Mock 适配器运行全流程快速验证")
     p_run.add_argument("--monkeys", action="store_true", help="同时运行参数化猴子群落零假设评估")
-    p_run.add_argument("--monkey-count", type=int, default=1000, help="每组策略规格的猴子数量 (默认 1000 只)")
+    p_run.add_argument("--monkey-count", type=int, default=100000, help="每组策略规格的猴子数量 (默认 100000 只)")
     p_run.add_argument("--contestants", type=str, default=None, help="逗号分隔的参赛选手 ID (如 QP-20260626-STATIC,QP-20260626-CPCV)")
     p_run.add_argument("--output", type=str, default=None, help="指定输出根目录")
 
@@ -757,7 +675,7 @@ def main():
     p_step.add_argument("--mock", action="store_true", help="使用 Mock 适配器运行")
     p_step.add_argument("--monkeys", dest="monkeys", action="store_true", default=True, help="同时运行参数化猴子群落零假设评估 (默认开启)")
     p_step.add_argument("--no-monkeys", dest="monkeys", action="store_false", help="跳过参数化猴子群落零假设评估")
-    p_step.add_argument("--monkey-count", type=int, default=1000, help="每组策略规格的猴子数量 (默认 1000 只)")
+    p_step.add_argument("--monkey-count", type=int, default=100000, help="每组策略规格的猴子数量 (默认 100000 只)")
     p_step.add_argument("--contestants", type=str, default=None, help="逗号分隔的参赛选手 ID")
     p_step.add_argument("--output", type=str, default=None, help="指定输出根目录")
 
@@ -769,7 +687,7 @@ def main():
     p_pipe.add_argument("--end-date", type=str, default=DEFAULT_END_DATE, help="回测结束日期")
     p_pipe.add_argument("--initial-cash", type=float, default=500_000.0, help="初始资金规模")
     p_pipe.add_argument("--mock", action="store_true", help="使用 Mock 适配器运行全流程快速验证")
-    p_pipe.add_argument("--monkey-count", type=int, default=1000, help="每组策略规格的猴子数量")
+    p_pipe.add_argument("--monkey-count", type=int, default=100000, help="每组策略规格的猴子数量")
     p_pipe.add_argument("--contestants", type=str, default=None, help="逗号分隔的参赛选手 ID")
     p_pipe.add_argument("--cycles", type=int, default=0, help="限制运行的最大周数")
     p_pipe.add_argument("--output", type=str, default=None, help="指定输出根目录")
@@ -796,6 +714,16 @@ def main():
     p_bump.add_argument("--end-date", type=str, required=True, help="新的截止交易日 (YYYY-MM-DD，如 2026-09-18)")
     p_bump.add_argument("--seasons", nargs="+", default=None, help="指定待更新赛季 ID (默认所有活跃赛季，支持 all)")
 
+    p_refresh = subparsers.add_parser("refresh", help="授权全量历史修复、固定预算猴群与战报重发布")
+    p_refresh.add_argument("--end-date", required=True)
+    p_refresh.add_argument("--evaluation-id", default="refresh_20261011")
+    p_refresh.add_argument("--stage", choices=["all", "replay", "pilot", "formal", "publish", "verify-inputs"], default="all")
+    p_refresh.add_argument("--pilot-count", type=int, default=20000)
+    p_refresh.add_argument("--monkey-count", type=int, default=100000)
+    p_refresh.add_argument("--batch-size", type=int, default=1000)
+    p_refresh.add_argument("--threads", type=int, default=8)
+    p_refresh.add_argument("--timeout", type=int, default=7200)
+
     # rollforward (一键全赛季批量增量推进)
     p_rf = subparsers.add_parser("rollforward", help="一键批量周频滚动推进全量赛季 (Bump -> Step -> Export -> Sync -> Audit)")
     p_rf.add_argument("--end-date", type=str, default=None, help="可选：指定新截止日期并先原子执行 bump-date")
@@ -803,7 +731,7 @@ def main():
     p_rf.add_argument("--mock", action="store_true", help="使用 Mock 模式快速推进")
     p_rf.add_argument("--monkeys", dest="monkeys", action="store_true", default=True, help="增量推进同时运行猴群零假设评估 (默认开启)")
     p_rf.add_argument("--no-monkeys", dest="monkeys", action="store_false", help="跳过猴群零假设评估")
-    p_rf.add_argument("--monkey-count", type=int, default=1000, help="每组策略规格猴子数量")
+    p_rf.add_argument("--monkey-count", type=int, default=100000, help="每组策略规格猴子数量")
     p_rf.add_argument("--no-sync-chronicles", action="store_true", help="跳过自动同步 Chronicles 文档")
     p_rf.add_argument("--no-audit", action="store_true", help="跳过末尾本地零泄密隐私审计")
     p_rf.add_argument("--output", type=str, default=None, help="指定输出根目录")
@@ -839,6 +767,9 @@ def main():
         cmd_export_web(args)
     elif args.subcommand == "bump-date":
         cmd_bump_date(args)
+    elif args.subcommand == "refresh":
+        from arena.evaluation import refresh
+        refresh(args)
     elif args.subcommand == "rollforward":
         cmd_rollforward(args)
 

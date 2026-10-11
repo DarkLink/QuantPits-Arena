@@ -5,7 +5,7 @@
  * Includes:
  *   1. Return vs. Monkey Percentile Significance Scatter Plot
  *   2. Contestant × Animal Handler Heatmap Matrix
- *   3. Multi-Line Equity Curves with Monkey 90% Confidence Envelope (P05 ~ P95) & Benchmarks (Taotie & CSI 300)
+ *   3. Multi-Line Equity Curves with settlement-date pointwise monkey quantiles & Benchmarks (Taotie & CSI 300)
  *   4. Monkey Null Distribution Boxplot with Significance Marker
  *   5. Decision Archaeology Regret Curve & Area Spread
  *   6. Behavioral Fingerprint Analysis Group (Delay, Turnover, Capacity, Polarity, Meerkat)
@@ -95,7 +95,7 @@ window.ArenaCharts = {
 
     const tc = this.getThemeColors();
 
-    const data = paths.map(p => {
+    const data = paths.filter(p => p.percentile_rank != null).map(p => {
       const pctRank = p.percentile_rank !== undefined ? p.percentile_rank : (p.monkey_percentile !== undefined ? p.monkey_percentile : (p.monkey_percentile_rank || 50));
       const ret = p.total_return_pct;
       const sharpe = Math.max(0.2, p.sharpe_ratio || 0.5);
@@ -137,7 +137,7 @@ window.ArenaCharts = {
       },
       xAxis: {
         type: "value",
-        name: "1,000-Monkey Null Percentile Rank (%)",
+        name: "Matched Null Percentile Rank (%)",
         nameLocation: "middle",
         nameGap: 28,
         min: 0,
@@ -337,7 +337,7 @@ window.ArenaCharts = {
   },
 
   /**
-   * 3. Multi-Line Equity Curves with Monkey 90% Confidence Envelope (P05 ~ P95) & Benchmarks (Taotie & CSI 300)
+   * 3. Multi-Line Equity Curves with settlement-date pointwise monkey quantiles & Benchmarks (Taotie & CSI 300)
    */
   renderEquityCurves(domId, dates, targetPath, taotieCurve = [], csi300Curve = [], monkeyDist = null, metricType = "nav") {
     const dom = document.getElementById(domId);
@@ -403,7 +403,7 @@ window.ArenaCharts = {
 
       if (ghostDD && ghostDD.length > 0) {
         series.push({
-          name: "Ghost Taotie (100M)",
+          name: "Ghost Capital Scenario",
           type: "line",
           data: ghostDD,
           smooth: true,
@@ -499,57 +499,13 @@ window.ArenaCharts = {
     } else {
       // Default: Cumulative NAV
       const targetCurve = window.arenaAdapter.getNavCurve(targetPath.path_id);
-      let p05 = -3.40;
-      let p95 = 5.45;
-      let med = 1.07;
-      if (monkeyDist) {
-        p05 = parsePct(monkeyDist.monkey_p05 ?? monkeyDist.p05_return_pct);
-        p95 = parsePct(monkeyDist.monkey_p95 ?? monkeyDist.p95_return_pct);
-        med = parsePct(monkeyDist.monkey_median ?? monkeyDist.median_return_pct);
-      }
-
-      const numPoints = dates.length;
-      monkeyLower = dates.map((_, i) => round(1.0 + (p05 / 100) * (i / Math.max(1, numPoints - 1)), 4));
-      const monkeyDiff = dates.map((_, i) => {
-        const upper = 1.0 + (p95 / 100) * (i / Math.max(1, numPoints - 1));
-        return round(Math.max(0, upper - monkeyLower[i]), 4);
-      });
-      const monkeyMedCurve = dates.map((_, i) => round(1.0 + (med / 100) * (i / Math.max(1, numPoints - 1)), 4));
-
+      const snapshots = monkeyDist?.settlement_quantiles || {};
+      const sample = key => dates.map(d => snapshots[d]?.[key] ?? null);
       const targetLabel = `Path: ${targetPath.path_id}`;
-
       series = [
-        {
-          name: "Monkey P05 Base",
-          type: "line",
-          stack: "monkey-envelope",
-          data: monkeyLower,
-          showSymbol: false,
-          color: "transparent",
-          lineStyle: { opacity: 0 },
-          tooltip: { show: false }
-        },
-        {
-          name: "Monkey 90% Null",
-          type: "line",
-          stack: "monkey-envelope",
-          data: monkeyDiff,
-          showSymbol: false,
-          color: "rgba(192, 132, 252, 0.18)",
-          itemStyle: { color: "rgba(192, 132, 252, 0.18)" },
-          lineStyle: { opacity: 0 },
-          areaStyle: { color: "rgba(192, 132, 252, 0.18)" }
-        },
-        {
-          name: "Monkey Median",
-          type: "line",
-          data: monkeyMedCurve,
-          smooth: true,
-          showSymbol: false,
-          color: "#94a3b8",
-          itemStyle: { color: "#94a3b8" },
-          lineStyle: { width: 1.8, color: "#94a3b8", type: [3, 3], opacity: 0.85 }
-        },
+        {name:"Weekly Monkey P05",type:"scatter",data:sample('p05'),symbolSize:5,color:"#c084fc"},
+        {name:"Weekly Monkey P95",type:"scatter",data:sample('p95'),symbolSize:5,color:"#c084fc"},
+        {name:"Weekly Monkey Median",type:"scatter",data:sample('median'),symbolSize:4,color:"#94a3b8"},
         {
           name: marketBmName,
           type: "line",
@@ -580,7 +536,7 @@ window.ArenaCharts = {
         const ghostCurve = window.arenaAdapter.getBenchmarkGhostTaotieCurve();
         if (ghostCurve && ghostCurve.length > 0) {
           series.push({
-            name: "Ghost Taotie (100M)",
+            name: "Ghost Capital Scenario",
             type: "line",
             data: ghostCurve,
             smooth: true,
@@ -717,7 +673,7 @@ window.ArenaCharts = {
     const option = {
       backgroundColor: tc.bg,
       title: {
-        text: `1,000-Monkey Null Distribution [P05 ~ P95] vs Actual Return`,
+        text: monkeyDist.deterministic ? "Deterministic Passive Reference (p N/A)" : `${Number(monkeyDist.colony_size || 0).toLocaleString()}-Path Null Range [P05 ~ P95] vs Actual Return`,
         textStyle: { color: tc.textPrimary, fontSize: 13, fontWeight: 600 },
         left: "center",
         top: 0
@@ -755,7 +711,8 @@ window.ArenaCharts = {
       },
       series: [
         {
-          name: "1,000 Random Monkey Distribution",
+          name: "Random-control P05/P95 Range",
+          tooltip: {formatter: () => `Min ${minVal.toFixed(4)}%<br>P05 ${p05.toFixed(4)}%<br>Median ${med.toFixed(4)}%<br>P95 ${p95.toFixed(4)}%<br>Max ${maxVal.toFixed(4)}%`},
           type: "boxplot",
           data: [[minVal, p05, med, p95, maxVal]],
           itemStyle: {
@@ -772,7 +729,7 @@ window.ArenaCharts = {
                 xAxis: actualReturnPct,
                 label: {
                   formatter: () => {
-                    const pctStr = window.formatPercentile ? window.formatPercentile(pctRank) : `${pctRank.toFixed(1)}%`;
+                    const pctStr = window.formatPercentile ? window.formatPercentile(pctRank, monkeyDist.colony_size) : `${pctRank.toFixed(1)}%`;
                     const pValStr = window.formatPValue ? window.formatPValue(pValue) : pValue.toFixed(4);
                     const pLabel = pValStr.startsWith("<") ? `p ${pValStr}` : `p = ${pValStr}`;
                     return `Actual: ${actualReturnPct >= 0 ? '+' : ''}${actualReturnPct.toFixed(2)}%\n(Rank: ${pctStr}, ${pLabel})`;
@@ -1192,7 +1149,7 @@ window.ArenaCharts = {
         const ghostCurve = window.arenaAdapter.getBenchmarkGhostTaotieCurve();
         if (ghostCurve && ghostCurve.length > 0) {
           series.push({
-            name: "Ghost Taotie (100M)",
+            name: "Ghost Capital Scenario",
             type: "line",
             data: ghostCurve,
             smooth: true,
@@ -1516,7 +1473,7 @@ window.ArenaCharts = {
         const ghostCurve = window.arenaAdapter.getBenchmarkGhostTaotieCurve();
         if (ghostCurve && ghostCurve.length > 0) {
           series.push({
-            name: "Ghost Taotie (100M)",
+            name: "Ghost Capital Scenario",
             type: "line",
             data: ghostCurve,
             smooth: true,

@@ -1,70 +1,135 @@
-# 🏛️ CSI 500 — Month 03: Two Survivors, Two Different Crowns
+# season_csi500 — repaired dispatch through 2026-09-30
 
-> **M3 anchor**: August 28 close; **August 31–September 30, 2026**, 22 trading sessions.<br />
-> **Cumulative M3 cutoff**: July 3–September 30, 63 NAV observations including the initial anchor.<br />
-> **Scope**: CSI 500 only, 168 contestant paths; market index, executable Taotie, Ghost Taotie and matched monkeys. October belongs to the separate appendix.
+This dispatch is a retrospective repair replay using the actual raw weekly signals preserved in legacy checkpoints and a frozen current daily-bar snapshot. Reporting anchor: 2026-08-28; cutoff: 2026-09-30. Period returns are NAV ratios; differences in returns are percentage points. Legacy artifacts are archived separately. This refreshed document is not evidence of a historical pre-market commitment.
 
-## ⚡ Season Review TL;DR
+## ⚡ TL;DR
 
-- **September breadth**: only **2/168** paths gained; mean return **-3.73%**, median **-3.49%**, against the CSI 500 index's **-5.83%**.
-- **Monthly winner**: `CONTESTANT_A_meerkat-10` returned **+0.42%**, ending at NAV **1.0144**; F's concentrated Eagle was the other positive path, at **+0.25%**.
-- **Cumulative crown**: A's `sloth-2` ended September at NAV **1.0791** (**+7.91%**), despite losing **-4.10%** in M3; B's `eagle-5-1` followed at **+7.48%** cumulative.
-- **Baseline split**: September Taotie returned **-1.00%** and Ghost Taotie **-4.57%**; their cumulative returns were **-0.11%** and **-9.21%**.
-- **Exposure matters**: Taotie averaged **72.63%** cash and **165.11** holdings through September, versus Ghost's **0.33%** cash and **499.84** holdings.
-- **Delay comparison**: A's Sloth-2 and Snail-2 returned **+7.91%** and **-0.26%** cumulatively, with mean cash ratios **17.82%** and **2.58%**.
-- **Cumulative null court**: September's cumulative leader had matched raw plus-one **p = 0.0010**, median monkey return **-7.16%**, and maximum drawdown **8.93%**; the limited 168-path Bonferroni sensitivity is **0.168**.
+- 2026-08-28 → 2026-09-30: 22 return sessions, 23 NAV observations including the reporting anchor; 5 scheduled rebalances.
+- Period leader CONTESTANT_A_meerkat-10: +0.3776%; end NAV 1.025008.
+- Cumulative leader CONTESTANT_A_sloth-2: +8.1326%; end NAV 1.081326.
+- 2/168 contestant paths gained during this segment; median path return -3.5231%.
+- Market index segment return -5.8298%; end normalized NAV 0.850193.
+- Taotie -1.0037% for the segment, end NAV 0.998900; Ghost scenario -4.3558%, NAV 0.915281.
+- Cumulative leader raw p=2.99997e-05, Bonferroni p=0.0251997; N=100,000 per matched random spec.
+- At this cutoff: 58/168 raw p<0.05 and 10/168 Bonferroni p<0.05 in this pool, within the visible 840-item family.
 
-## I. September: Almost Everyone Lost, but Not Equally
+## Period and cumulative standings
 
-| September rank | Path | M3 return | September 30 NAV |
-| ---: | :--- | ---: | ---: |
-| 1 | CONTESTANT_A_meerkat-10 | +0.42% | 1.0144 |
-| 2 | CONTESTANT_F_eagle-5-1 | +0.25% | 0.8941 |
-| 3 | CONTESTANT_B_eagle-11-2 | -0.07% | 1.0291 |
-| 4 | CONTESTANT_B_sloth-4 | -0.77% | 0.9844 |
-| 5 | CONTESTANT_A_koala | -1.04% | 0.7390 |
+Top ten for the reporting segment:
 
-F's small monthly gain did not restore its NAV above 1.0000. A's Koala ranked fifth for September yet remained far below its initial NAV. Monthly resilience and cumulative recovery are different claims.
+| path | period_pct | cumulative_pct | nav | period_mdd_pct | raw_p | bonferroni_p |
+| --- | --- | --- | --- | --- | --- | --- |
+| CONTESTANT_A_meerkat-10 | 0.3776 | 2.5008 | 1.0250 | 2.5481 | 0.00332997 | 1 |
+| CONTESTANT_F_eagle-5-1 | 0.2471 | -10.5854 | 0.8941 | 7.7672 | 0.586144 | 1 |
+| CONTESTANT_B_eagle-11-2 | -0.0733 | 2.9136 | 1.0291 | 3.5506 | 0.0188098 | 1 |
+| CONTESTANT_B_sloth-4 | -0.7652 | -1.5618 | 0.9844 | 3.7621 | 0.0529895 | 1 |
+| CONTESTANT_A_koala | -1.0405 | -26.0972 | 0.7390 | 6.0328 | 1 | 1 |
+| CONTESTANT_C_meerkat-20 | -1.1173 | 2.0566 | 1.0206 | 2.7810 | 0.00479995 | 1 |
+| CONTESTANT_B_snail-4 | -1.2437 | -1.7904 | 0.9821 | 3.7827 | 0.0602794 | 1 |
+| CONTESTANT_B_turtle | -1.3810 | 1.9341 | 1.0193 | 4.2204 | 0.00653993 | 1 |
+| CONTESTANT_B_robot | -1.4190 | 4.4100 | 1.0441 | 3.1597 | 0.000579994 | 0.487195 |
+| CONTESTANT_B_sloth-1 | -1.5071 | 7.2615 | 1.0726 | 3.3664 | 6.99993e-05 | 0.0587994 |
 
-At the other end, E's `meerkat-50` lost **-8.41%**, D's `sloth-4` **-7.83%**, and F's `rabbit-1` **-7.59%**. The monthly leader's **4.43%** cumulative maximum drawdown was lower than B's concentrated Eagle's **11.91%**. These are observed paths, without an identified industry or factor explanation.
+Top ten cumulatively through this cutoff:
 
-## II. The September Crown Stayed with Sloth
+| path | period_pct | cumulative_pct | nav | period_mdd_pct | raw_p | bonferroni_p |
+| --- | --- | --- | --- | --- | --- | --- |
+| CONTESTANT_A_sloth-2 | -3.9050 | 8.1326 | 1.0813 | 6.3180 | 2.99997e-05 | 0.0251997 |
+| CONTESTANT_B_eagle-5-1 | -3.1274 | 7.4843 | 1.0748 | 4.8831 | 0.0246698 | 1 |
+| CONTESTANT_B_sloth-1 | -1.5071 | 7.2615 | 1.0726 | 3.3664 | 6.99993e-05 | 0.0587994 |
+| CONTESTANT_B_rabbit-1 | -2.1118 | 7.1565 | 1.0716 | 4.8020 | 0.000119999 | 0.100799 |
+| CONTESTANT_D_rabbit-1 | -3.1257 | 6.9955 | 1.0700 | 4.6844 | 0.000139999 | 0.117599 |
+| CONTESTANT_A_sloth-1 | -3.4490 | 6.9579 | 1.0696 | 6.3159 | 8.99991e-05 | 0.0755992 |
+| CONTESTANT_B_rabbit-2 | -2.1348 | 6.5832 | 1.0658 | 4.8004 | 9.9999e-05 | 0.0839992 |
+| CONTESTANT_A_eagle-11-2 | -1.6782 | 6.4659 | 1.0647 | 7.0015 | 0.00348997 | 1 |
+| CONTESTANT_D_robot | -1.8317 | 4.5569 | 1.0456 | 4.1474 | 0.000519995 | 0.436796 |
+| CONTESTANT_B_snail-1 | -1.7260 | 4.5167 | 1.0452 | 3.4494 | 0.000519995 | 0.436796 |
 
-| Cumulative rank at September 30 | Path | Cumulative return | NAV |
-| ---: | :--- | ---: | ---: |
-| 1 | CONTESTANT_A_sloth-2 | +7.91% | 1.0791 |
-| 2 | CONTESTANT_B_eagle-5-1 | +7.48% | 1.0748 |
-| 3 | CONTESTANT_B_sloth-1 | +7.26% | 1.0726 |
-| 4 | CONTESTANT_B_rabbit-1 | +7.16% | 1.0716 |
-| 5 | CONTESTANT_D_rabbit-1 | +7.00% | 1.0700 |
+Bottom five for the segment:
 
-The monthly winner and cumulative leader belonged to A but used different handlers. The Sloth crown inherited earlier gains; it did not win September.
+| path | period_pct | cumulative_pct | nav | period_mdd_pct | raw_p | bonferroni_p |
+| --- | --- | --- | --- | --- | --- | --- |
+| CONTESTANT_F_rabbit-1 | -7.5604 | -10.6934 | 0.8931 | 7.7082 | 0.793922 | 1 |
+| CONTESTANT_D_snail-3 | -7.5865 | -7.8466 | 0.9215 | 7.7835 | 0.557624 | 1 |
+| CONTESTANT_D_sloth-4 | -8.3894 | -7.5122 | 0.9249 | 9.3784 | 0.519855 | 1 |
+| CONTESTANT_E_meerkat-50 | -8.4101 | -2.0802 | 0.9792 | 8.8424 | 0.0704793 | 1 |
+| CONTESTANT_D_snail-4 | -8.5731 | -9.6857 | 0.9031 | 9.5014 | 0.752622 | 1 |
 
-| Robot | September return | Cumulative return at September 30 |
-| :--- | ---: | ---: |
-| A | -4.28% | +0.95% |
-| B | -1.42% | +4.41% |
-| C | -6.25% | -11.21% |
-| D | -1.42% | +4.34% |
-| E | -1.64% | -8.26% |
-| F | -4.69% | -7.97% |
+## Six anonymous contestants
 
-## III. Cash and the September Null Court
+Each row includes all 28 animals; no selection of winning combinations.
 
-Taotie's **72.63%** mean cash and **96.21%** unaffordable-buy ratio describe a constrained execution baseline, while Ghost's **0.33%** cash describes much fuller exposure. Their September difference cannot be assigned entirely to selection. The same caution applies to A's cold-start Sloth-2 and warm-start Snail-2: both use delayed signals after their entry phase, but their exposure histories differ.
+| contestant | mean_pct | median_pct | positive | best_pct | worst_pct | mean_mdd_pct |
+| --- | --- | --- | --- | --- | --- | --- |
+| CONTESTANT_A | -3.4851 | -3.5739 | 1 | 0.3776 | -6.6376 | 5.7154 |
+| CONTESTANT_B | -2.8657 | -2.6998 | 0 | -0.0733 | -7.2632 | 4.8076 |
+| CONTESTANT_C | -4.4171 | -4.3531 | 0 | -1.1173 | -6.9481 | 6.2738 |
+| CONTESTANT_D | -4.2083 | -3.5272 | 0 | -1.6804 | -8.5731 | 5.7432 |
+| CONTESTANT_E | -3.7923 | -3.4003 | 0 | -1.6423 | -8.4101 | 5.4372 |
+| CONTESTANT_F | -4.2277 | -4.2803 | 1 | 0.2471 | -7.5604 | 5.8699 |
 
-The cumulative Sloth leader sits above the matching `P_22_3` monkey median of **-7.16%**, with raw upper-tail plus-one **p = 0.0010** among **1,000** simulations. This tests cumulative return through **September 30**, not M3 return alone. The limited **168-path** Bonferroni sensitivity of **0.168** exceeds 0.05; it also leaves historical selection and handler design outside its adjustment. Delayed paths have further exposure differences from the matched trading-policy null.
+## All animal policies
 
-## IV. October Appendix — The Same Holdings Resume
+Each row summarizes segment returns across the six contestants; the range describes contestant-policy interaction.
 
-October 8–9 contains two valuation sessions after the September 28 rebalance. No rebalance occurs on either day; the next scheduled rebalance is October 12. CSI 500 returns **-2.48%** here, reaching **-17.09%** cumulatively. Only **78/168** contestant paths gain; the mean two-day return is **-0.18%**.
+| animal | mean_pct | median_pct | best_pct | worst_pct |
+| --- | --- | --- | --- | --- |
+| eagle-11-2 | -3.1353 | -2.9781 | -0.0733 | -5.7842 |
+| eagle-44-6 | -3.1431 | -3.4186 | -1.7516 | -4.3592 |
+| eagle-5-1 | -4.1319 | -4.1626 | 0.2471 | -6.9481 |
+| eagle-66-9 | -3.3206 | -3.2508 | -2.3452 | -4.5131 |
+| eagle-88-12 | -3.5858 | -3.2919 | -2.6387 | -5.0007 |
+| koala | -3.5180 | -3.7124 | -1.0405 | -5.2267 |
+| meerkat-10 | -3.2855 | -3.1775 | 0.3776 | -7.0820 |
+| meerkat-20 | -3.0977 | -2.9442 | -1.1173 | -4.9946 |
+| meerkat-30 | -3.7798 | -3.5084 | -1.9093 | -6.4882 |
+| meerkat-40 | -3.7447 | -3.7964 | -1.8342 | -6.2514 |
+| meerkat-50 | -4.6814 | -4.1029 | -1.7306 | -8.4101 |
+| meerkat-60 | -4.7011 | -4.9664 | -3.1055 | -5.8947 |
+| meerkat-70 | -4.5024 | -4.1254 | -1.7438 | -7.2632 |
+| meerkat-80 | -4.0304 | -3.3107 | -2.7610 | -6.7380 |
+| meerkat-90 | -4.1295 | -3.9684 | -2.9097 | -5.8068 |
+| rabbit-1 | -4.3159 | -4.0029 | -2.1118 | -7.5604 |
+| rabbit-2 | -3.6645 | -3.6803 | -2.1348 | -4.9469 |
+| robot | -3.4018 | -3.2036 | -1.4190 | -6.2473 |
+| sloth-1 | -3.2547 | -3.4513 | -1.5071 | -5.1741 |
+| sloth-2 | -4.3113 | -3.6255 | -2.5871 | -6.6079 |
+| sloth-3 | -4.3033 | -3.7556 | -2.6295 | -7.2882 |
+| sloth-4 | -3.7551 | -3.0629 | -0.7652 | -8.3894 |
+| snail-1 | -3.4220 | -3.5439 | -1.7260 | -5.1943 |
+| snail-2 | -4.3245 | -3.5559 | -2.3733 | -6.8851 |
+| snail-3 | -4.3255 | -3.8617 | -2.8885 | -7.5865 |
+| snail-4 | -3.9276 | -2.6221 | -1.2437 | -8.5731 |
+| turtle | -3.8881 | -4.0266 | -1.3810 | -5.6965 |
+| whale-shark | -3.6339 | -3.0089 | -2.3725 | -5.6900 |
 
-| Rank at October 9 | Path | Two-day return | NAV | Cumulative return |
-| ---: | :--- | ---: | ---: | ---: |
-| 1 | CONTESTANT_B_eagle-5-1 | +1.27% | 1.0885 | +8.85% |
-| 2 | CONTESTANT_B_rabbit-1 | +1.57% | 1.0884 | +8.84% |
-| 3 | CONTESTANT_B_rabbit-2 | +1.57% | 1.0825 | +8.25% |
+## Mechanisms and interpretation
 
-The Eagle's lead is narrow at displayed precision. Taotie gains **+0.25%** to **+0.14%** cumulative; Ghost loses **-0.73%** to **-9.88%**. The October cumulative leader's maximum drawdown is **11.91%**; its matched `P_5_1` median is **-9.25%**, with raw upper-tail plus-one **p = 0.0150**. Its limited 168-path Bonferroni sensitivity is capped at **1.000**. These are cumulative tests through October 9, separate from the September Sloth test and the two-day return.
+The TopK=5/DropN=1 segment spread across contestants is 7.1953 percentage points. A winning concentrated path does not establish a universal concentration advantage. Rabbit DropN changes weekly replacement capacity, not trading frequency. Sloth delay and cold-start cash, and Snail warm-start stale signals, jointly alter exposure and path dependence; these are whole-strategy comparisons, not an identified prediction half-life. Percentile Meerkats and inverted Koala should be read against the full contestant distribution above.
 
-**Evidence boundary**: returns, ranks, cash, drawdowns and null placement are Level A. Sector, style, liquidity and durable forecasting explanations remain unidentified. Source: CSI 500 public NAV, diagnostics, metrics and date-matched significance exports, plus its market-index series. Returns use unrounded NAV; displayed NAV has four decimals.
+Contestant averages describe consistency across animals; the best row describes realized performance in this window. Pool membership, fees, lots, cash exposure and signal cross-sections all contribute to differences across environments. The results do not identify a single macro cause or disclose contestant architecture.
+
+## Random-control and execution contract
+
+Matching uses TopK/DropN only: ten random specifications and one deterministic passive reference. Delay, warm/cold starts, inversion and percentile selection do not introduce extra species. The p values above test cumulative returns from inception, not segment returns. The upper tail includes ties: p=(k+1)/(N+1). At N=100,000, minimum p is 9.9999e-06, never zero. Bonferroni/Holm/BH/BY are stored separately. The 840-item raw threshold is 5.952381e-05, with strict inequality; at the formal count, up to four exceedances can pass Bonferroni. Earlier cutoffs and repeated weekly reviews are descriptive monitoring. Correction does not cover all historical windows jointly or hidden prior research selection. Monte Carlo intervals measure simulation tail uncertainty and add no market history.
+
+Execution requires finite positive same-day quotes; missing-price sells retain the position. Valuation may carry the last valid close with stale-mark counts. Pool membership is separate from affordability. Decision-close intent is frozen before Monday execution. Taotie uses a 1.0 standard-account capital ratio and the same allocation policy. Ghost is a capital-granularity scenario, not a costless equal-weight index. Turnover is gross buys plus gross sells divided by starting assets.
+
+This remains daily-bar research: full-day volume is a retrospective tradability proxy. Complete verified corporate-action, opening direction-limit and capacity data are unavailable. Factor changes are not guessed into dividend payments, and adjusted prices are not mixed with unchanged nominal shares to claim a total-return repair. Strict execution fails its preflight without required coverage.
+
+## Separate October appendix
+
+September 30 close to October 9 contains two return sessions. The holiday Monday produces no makeup rebalance. October is reported separately from September.
+
+| path | period_pct | cumulative_pct | nav | period_mdd_pct | raw_p | bonferroni_p |
+| --- | --- | --- | --- | --- | --- | --- |
+| CONTESTANT_F_eagle-5-1 | 2.4719 | -8.3752 | 0.9162 | 0.0939 | 0.4387 | 1.0000 |
+| CONTESTANT_D_eagle-11-2 | 1.6580 | 3.0084 | 1.0301 | -0.0000 | 0.0138 | 1.0000 |
+| CONTESTANT_B_meerkat-10 | 1.6493 | 1.8275 | 1.0183 | -0.0000 | 0.0040 | 1.0000 |
+| CONTESTANT_B_rabbit-1 | 1.5704 | 8.8393 | 1.0884 | -0.0000 | 0.0000 | 0.0168 |
+| CONTESTANT_B_rabbit-2 | 1.5669 | 8.2532 | 1.0825 | -0.0000 | 0.0000 | 0.0168 |
+| CONTESTANT_F_koala | 1.3960 | -4.3597 | 0.9564 | 0.2008 | 0.1712 | 1.0000 |
+| CONTESTANT_F_meerkat-90 | 1.3732 | -3.6341 | 0.9637 | 0.0147 | 0.1258 | 1.0000 |
+| CONTESTANT_A_meerkat-30 | 1.3438 | 1.8380 | 1.0184 | -0.0000 | 0.0039 | 1.0000 |
+| CONTESTANT_B_eagle-44-6 | 1.3382 | 5.0782 | 1.0508 | -0.0000 | 0.0000 | 0.0084 |
+| CONTESTANT_D_eagle-5-1 | 1.2956 | -3.4738 | 0.9653 | -0.0000 | 0.2245 | 1.0000 |

@@ -1,93 +1,118 @@
-# 🏛️ Month 01–02: The Baseline & The Mid-Cap Rabbit Surge
+# season_csi500 — repaired baseline through 2026-08-28
 
-> **Evaluation Window**: Anchored at 2026-07-03 inception NAV 1.0000; covers 41 trading days up to 2026-08-28 close (Months 1 & 2 Combined Baseline).  
-> **Tournament Phase**: **Retrospective Backtest Calibration (Fixed Historical Weights)**  
-> **Executable Universe Benchmark**: Taotie 500 (`1.0000` $\to$ `0.9472`, Cumulative -5.28% at 41-day baseline; -8.75% across full 51-day horizon).  
-> **Market Index Benchmark**: CSI 500 Index (`SH000905`, Cumulative **-12.49%**).  
-> *(Under standardized CNY 1,000,000 capital and strict 100-share round-lot trading constraints with greedy waterfall allocation across the 500 mid-cap stock universe).*  
-> **Core Narrative**: While the mid-cap index endured a severe -12.49% market drawdown, the executable Taotie reference absorbed a milder -5.28% pullback (+7.21pp over the index), actively covering 403 equities through greedy waterfall allocation. High-refresh Rabbit handlers capitalized on heightened cross-sectional dispersion, generating nearly +10% absolute returns led by `CONTESTANT_B_rabbit-1` (+9.98%).
+This dispatch is a retrospective repair replay using the actual raw weekly signals preserved in legacy checkpoints and a frozen current daily-bar snapshot. Reporting anchor: 2026-07-03; cutoff: 2026-08-28. Period returns are NAV ratios; differences in returns are percentage points. Legacy artifacts are archived separately. This refreshed document is not evidence of a historical pre-market commitment.
 
----
+## ⚡ TL;DR
 
-## ⚡ Season Baseline TL;DR: Mid-Cap Dispersion & The Agile Rabbit Surge
+- 2026-07-03 → 2026-08-28: 40 return sessions, 41 NAV observations including the reporting anchor; 8 scheduled rebalances.
+- Period leader CONTESTANT_A_sloth-2: +12.5267%; end NAV 1.125267.
+- Cumulative leader CONTESTANT_A_sloth-2: +12.5267%; end NAV 1.125267.
+- 82/168 contestant paths gained during this segment; median path return -0.1795%.
+- Market index segment return -9.7174%; end normalized NAV 0.902826.
+- Taotie +0.9028% for the segment, end NAV 1.009028; Ghost scenario -4.3035%, NAV 0.956965.
+- Cumulative leader raw p=9.9999e-06, Bonferroni p=0.00839992; N=100,000 per matched random spec.
+- At this cutoff: 56/168 raw p<0.05 and 9/168 Bonferroni p<0.05 in this pool, within the visible 840-item family.
 
-* **The Mid-Cap Crucible**: Retrospective baseline across Months 1 & 2 (41 trading days); the mid-cap market benchmark **CSI 500 slumped -12.49%** under pervasive market pressure, with 72% of constituent assets losing value.
-* **Executable Benchmark Cushion**: Under CNY 1,000,000 capital and greedy waterfall allocation across 403 equities, executable reference **Taotie 500 closed at NAV `0.9472` (-5.28%)**, delivering **+7.21pp of active protection** over the raw market index.
-* **Triumph of Agile Rabbits**: High-turnover Rabbit handlers dominated the podium, led by **`CONTESTANT_B_rabbit-1` at NAV `1.0998` (+9.98%)**, outperforming CSI 500 by **+22.47pp** and Taotie by **+15.26pp**; `CONTESTANT_B_rabbit-2` took silver at **+9.39%**.
-* **Pairwise Agility Premium**: Aggressive weekly turnover (DropN=11) outperformed the standard Robot (DropN=3, +4.12%) by **+5.86 percentage points**, proving that high turnover acted as an essential risk-clearing mechanism rather than a frictional drag in declining mid-cap regimes.
-* **Concentration Volatility Penalty**: While `eagle-5-1` placed 3rd (+9.05%), extreme 5-stock mid-cap concentration triggered sharp idiosyncratic volatility with a maximum drawdown of **-4.12%** (vs just **-1.85%** for Rabbit-1).
+## Period and cumulative standings
 
----
+Top ten for the reporting segment:
 
+| path | period_pct | cumulative_pct | nav | period_mdd_pct | raw_p | bonferroni_p |
+| --- | --- | --- | --- | --- | --- | --- |
+| CONTESTANT_A_sloth-2 | 12.5267 | 12.5267 | 1.1253 | 5.0766 | 9.9999e-06 | 0.00839992 |
+| CONTESTANT_B_eagle-5-1 | 10.9544 | 10.9544 | 1.1095 | 11.9115 | 0.0234098 | 1 |
+| CONTESTANT_A_sloth-1 | 10.7786 | 10.7786 | 1.1078 | 5.8220 | 4.99995e-05 | 0.0419996 |
+| CONTESTANT_C_sloth-2 | 10.5625 | 10.5625 | 1.1056 | 4.6242 | 5.99994e-05 | 0.0503995 |
+| CONTESTANT_D_rabbit-1 | 10.4477 | 10.4477 | 1.1045 | 10.2636 | 8.99991e-05 | 0.0755992 |
+| CONTESTANT_B_rabbit-1 | 9.4683 | 9.4683 | 1.0947 | 8.3355 | 0.000229998 | 0.193198 |
+| CONTESTANT_B_rabbit-2 | 8.9081 | 8.9081 | 1.0891 | 8.9561 | 0.000309997 | 0.260397 |
+| CONTESTANT_B_sloth-1 | 8.9028 | 8.9028 | 1.0890 | 4.2451 | 0.000259997 | 0.218398 |
+| CONTESTANT_A_snail-1 | 8.2977 | 8.2977 | 1.0830 | 7.2261 | 0.000389996 | 0.327597 |
+| CONTESTANT_A_eagle-11-2 | 8.2832 | 8.2832 | 1.0828 | 15.1663 | 0.00873991 | 1 |
 
-## I. Nature of the Evaluation: Retrospective Calibration Across Mid-Cap Dispersion
+Top ten cumulatively through this cutoff:
 
-This 41-day opening baseline covers the combined Month 1 and Month 2 evaluation window (Weeks 1 to 8):
+| path | period_pct | cumulative_pct | nav | period_mdd_pct | raw_p | bonferroni_p |
+| --- | --- | --- | --- | --- | --- | --- |
+| CONTESTANT_A_sloth-2 | 12.5267 | 12.5267 | 1.1253 | 5.0766 | 9.9999e-06 | 0.00839992 |
+| CONTESTANT_B_eagle-5-1 | 10.9544 | 10.9544 | 1.1095 | 11.9115 | 0.0234098 | 1 |
+| CONTESTANT_A_sloth-1 | 10.7786 | 10.7786 | 1.1078 | 5.8220 | 4.99995e-05 | 0.0419996 |
+| CONTESTANT_C_sloth-2 | 10.5625 | 10.5625 | 1.1056 | 4.6242 | 5.99994e-05 | 0.0503995 |
+| CONTESTANT_D_rabbit-1 | 10.4477 | 10.4477 | 1.1045 | 10.2636 | 8.99991e-05 | 0.0755992 |
+| CONTESTANT_B_rabbit-1 | 9.4683 | 9.4683 | 1.0947 | 8.3355 | 0.000229998 | 0.193198 |
+| CONTESTANT_B_rabbit-2 | 8.9081 | 8.9081 | 1.0891 | 8.9561 | 0.000309997 | 0.260397 |
+| CONTESTANT_B_sloth-1 | 8.9028 | 8.9028 | 1.0890 | 4.2451 | 0.000259997 | 0.218398 |
+| CONTESTANT_A_snail-1 | 8.2977 | 8.2977 | 1.0830 | 7.2261 | 0.000389996 | 0.327597 |
+| CONTESTANT_A_eagle-11-2 | 8.2832 | 8.2832 | 1.0828 | 15.1663 | 0.00873991 | 1 |
 
-* **Monthly Reporting Cadence**: Unlike Season 01 (CSI 300) which follows weekly episodic dispatches (`Episodes 01–08`, `Episode 09`, ...), the broader-cap testbeds follow a monthly cadence: the initial baseline covers Month 01 and Month 02 combined (`M1–M2`), with subsequent dispatches updated monthly as `M3`, `M4`, and beyond.
-* **Retrospective Calibration**: The evaluation over this 41 trading-day period was conducted post-hoc with knowledge of July and August market data. The 6 core contestant candidate architectures had training data frozen prior to June 30, 2026, but the execution container parameters and testbed calibrations were verified retrospectively against known mid-cap market dynamics.
-* **Why Combine Months 1 and 2**: Because both months serve as the calibration baseline to measure execution frictions, capital granularity, and behavioral container mechanics before forward live tracking begins, they are evaluated as a cohesive 41-day foundation (`M1–M2`) rather than artificially split.
-* **The Mid-Cap Market Regime**: Unlike large-cap stability, the CSI 500 universe experienced severe downward pressure during this window, with the benchmark index falling **-12.49%**. This challenging environment created an exceptional laboratory for evaluating whether alpha models could extract active returns amidst broader market attrition.
+Bottom five for the segment:
 
----
+| path | period_pct | cumulative_pct | nav | period_mdd_pct | raw_p | bonferroni_p |
+| --- | --- | --- | --- | --- | --- | --- |
+| CONTESTANT_E_eagle-5-1 | -18.2807 | -18.2807 | 0.8172 | 21.0777 | 0.97012 | 1 |
+| CONTESTANT_C_koala | -19.1637 | -19.1637 | 0.8084 | 24.6696 | 1 | 1 |
+| CONTESTANT_B_meerkat-90 | -20.1578 | -20.1578 | 0.7984 | 22.6646 | 1 | 1 |
+| CONTESTANT_B_koala | -24.6664 | -24.6664 | 0.7533 | 26.7200 | 1 | 1 |
+| CONTESTANT_A_koala | -25.3201 | -25.3201 | 0.7468 | 29.6022 | 1 | 1 |
 
-## II. The Battlefield: Leaderboard Standings in Mid-Cap Space
+## Six anonymous contestants
 
-Across the 41-day stretch, the executable reference portfolio (**Taotie 500**) demonstrated equal-weight defensive cushioning against the index decline, closing at `0.9472` (**-5.28%**, generating +7.21pp of active protection over the raw CSI 500 index).
+Each row includes all 28 animals; no selection of winning combinations.
 
-Inside the Zoo, execution containers with agile rebalancing capabilities thoroughly decoupled from the market downturn:
+| contestant | mean_pct | median_pct | positive | best_pct | worst_pct | mean_mdd_pct |
+| --- | --- | --- | --- | --- | --- | --- |
+| CONTESTANT_A | 1.6126 | 3.7774 | 21 | 12.5267 | -25.3201 | 8.8785 |
+| CONTESTANT_B | 1.2161 | 3.0444 | 18 | 10.9544 | -24.6664 | 7.7023 |
+| CONTESTANT_C | -0.5364 | 0.7963 | 16 | 10.5625 | -19.1637 | 8.9641 |
+| CONTESTANT_D | 0.9377 | 1.4341 | 17 | 10.4477 | -13.6728 | 7.8692 |
+| CONTESTANT_E | -3.6349 | -3.5546 | 6 | 6.9111 | -18.2807 | 8.6082 |
+| CONTESTANT_F | -3.4817 | -3.4104 | 4 | 1.8972 | -10.8058 | 7.9409 |
 
-```text
-[CSI 500 Cumulative NAV Top 5 Standings as of August 28, 2026 (41 Trading Days)]
-🥇 CONTESTANT_B_rabbit-1  : NAV 1.0998 (+9.98%, +22.47pp vs CSI 500, +15.26pp vs Taotie)
-🥈 CONTESTANT_B_rabbit-2  : NAV 1.0939 (+9.39%, +21.88pp vs CSI 500, +14.67pp vs Taotie)
-🥉 CONTESTANT_B_eagle-5-1 : NAV 1.0905 (+9.05%, +21.54pp vs CSI 500, +14.33pp vs Taotie)
-🎖️ CONTESTANT_B_whale-shark: NAV 1.0893 (+8.93%, +21.42pp vs CSI 500, +14.21pp vs Taotie)
-🎖️ CONTESTANT_A_rabbit-1  : NAV 1.0877 (+8.77%, +21.26pp vs CSI 500, +14.05pp vs Taotie)
-```
+## All animal policies
 
-### The Triumph of Agile Execution
-Under `CONTESTANT_B`, **`rabbit-1`** surged to **NAV `1.0998` (+9.98%)**, closely followed by **`rabbit-2` (+9.39%)**. In a universe where 72% of mid-cap assets lost value, these agile variants captured an astounding **+22.47 percentage points of alpha over the benchmark**.
+Each row summarizes segment returns across the six contestants; the range describes contestant-policy interaction.
 
----
+| animal | mean_pct | median_pct | best_pct | worst_pct |
+| --- | --- | --- | --- | --- |
+| eagle-11-2 | -2.6203 | -2.6097 | 8.2832 | -13.4018 |
+| eagle-44-6 | 1.5589 | 2.7103 | 5.5392 | -3.7401 |
+| eagle-5-1 | -1.2049 | 2.1243 | 10.9544 | -18.2807 |
+| eagle-66-9 | 1.5959 | 2.4882 | 6.7307 | -3.9062 |
+| eagle-88-12 | 2.9925 | 3.8163 | 6.1171 | -1.0225 |
+| koala | -14.4027 | -16.4182 | -1.4679 | -25.3201 |
+| meerkat-10 | -0.3598 | 1.8593 | 3.0998 | -6.4786 |
+| meerkat-20 | 0.0767 | 1.1448 | 3.2097 | -4.6373 |
+| meerkat-30 | -1.3238 | -0.1864 | 4.1064 | -10.4081 |
+| meerkat-40 | -0.3786 | -0.0245 | 3.7280 | -5.1543 |
+| meerkat-50 | -1.1497 | -3.2512 | 6.9111 | -4.7904 |
+| meerkat-60 | -4.3642 | -4.6316 | -1.3825 | -6.1998 |
+| meerkat-70 | -3.9351 | -4.3654 | 1.8972 | -9.7934 |
+| meerkat-80 | -7.6873 | -5.8577 | -3.1088 | -15.1348 |
+| meerkat-90 | -8.5681 | -7.6835 | -1.5266 | -20.1578 |
+| rabbit-1 | 2.6153 | 3.3404 | 10.4477 | -7.5156 |
+| rabbit-2 | 2.2876 | 4.2546 | 8.9081 | -7.3362 |
+| robot | 0.4037 | 1.0120 | 6.5078 | -6.7270 |
+| sloth-1 | 4.5692 | 5.1449 | 10.7786 | -2.5089 |
+| sloth-2 | 6.3903 | 7.1344 | 12.5267 | 0.4508 |
+| sloth-3 | 4.1648 | 4.5365 | 6.3221 | 1.3048 |
+| sloth-4 | 0.9971 | 1.0904 | 2.5901 | -0.8028 |
+| snail-1 | 2.0668 | 1.9894 | 8.2977 | -3.2773 |
+| snail-2 | -0.3675 | 1.6798 | 4.0520 | -6.7283 |
+| snail-3 | -2.3750 | -1.2688 | -0.2815 | -5.5389 |
+| snail-4 | -2.4269 | -1.2160 | -0.5536 | -5.9061 |
+| turtle | -0.6249 | -0.4820 | 3.3614 | -4.7742 |
+| whale-shark | 3.9323 | 5.6996 | 6.4885 | -0.9732 |
 
-## III. Execution Zoo Autopsy: Why Rabbits Dominated Mid-Cap Space
+## Mechanisms and interpretation
 
-The 500-stock universe possesses structural characteristics distinct from large-cap indices: wider valuation dispersion, lower institutional crowding, and higher cross-sectional turnover opportunities.
+The TopK=5/DropN=1 segment spread across contestants is 29.2350 percentage points. A winning concentrated path does not establish a universal concentration advantage. Rabbit DropN changes weekly replacement capacity, not trading frequency. Sloth delay and cold-start cash, and Snail warm-start stale signals, jointly alter exposure and path dependence; these are whole-strategy comparisons, not an identified prediction half-life. Percentile Meerkats and inverted Koala should be read against the full contestant distribution above.
 
-### 1. 🐇 The Rabbits (Decisive Rebalancing in Dispersed Markets)
-* **Mechanistic Fact**: Rabbit variants feature high turnover quotas (DropN=11 or 22). When market momentum is choppy or downward-trending, stagnant stocks quickly deteriorate. Rabbits aggressively purged declining names every Monday morning, constantly reallocating capital into top-ranked candidates.
-* **Controlled Pairwise Comparison**:
-  * Baseline Robot (DropN=3) achieved `+4.12%` under `CONTESTANT_B`.
-  * Rabbit-1 (DropN=11) delivered `+9.98%` (+5.86pp higher than Robot).
-  * Rabbit-2 (DropN=22) delivered `+9.39%` (+5.27pp higher than Robot).
-* **Takeaway**: In declining mid-cap regimes, active portfolio agility acts as an essential risk-clearing mechanism rather than an unnecessary transaction drag.
+Contestant averages describe consistency across animals; the best row describes realized performance in this window. Pool membership, fees, lots, cash exposure and signal cross-sections all contribute to differences across environments. The results do not identify a single macro cause or disclose contestant architecture.
 
-### 2. 🦅 The Eagles (High Concentration Resilience & Volatility)
-* `eagle-5-1` finished third overall at `+9.05%`. However, holding only 5 mid-cap stocks exposed the portfolio to sharp localized intraday volatility, suffering a maximum drawdown of `-4.12%` compared to just `-1.85%` for Rabbit-1.
-* In mid-cap space, concentration carries heightened idiosyncratic risk due to wider bid-ask spreads and liquidity variation.
+## Random-control and execution contract
 
-### 3. 🦥 vs 🐌 The Sloths & Snails: Cash Shield vs. Sluggish Turnover
-* While `sloth-1` (+6.07%) delivered positive absolute returns, its performance was bolstered by holding 100% cash during the initial week when the CSI 500 benchmark fell steeply.
-* In contrast, **Snail-1 (蜗牛)** maintained full equity exposure from Day 1 (mean cash 2.11%), achieving **+3.52%** (+16.01pp over the -12.49% index). Snail's positive return confirms robust mid-cap selection alpha without timing assistance, while demonstrating that Sloth's additional margin was partly driven by the unearned cash shield during the early July slide. As signal latency lengthened to 4 weeks, Sloth returns collapsed to -3.35%, illustrating rapid factor half-life decay in mid caps.
+Matching uses TopK/DropN only: ten random specifications and one deterministic passive reference. Delay, warm/cold starts, inversion and percentile selection do not introduce extra species. The p values above test cumulative returns from inception, not segment returns. The upper tail includes ties: p=(k+1)/(N+1). At N=100,000, minimum p is 9.9999e-06, never zero. Bonferroni/Holm/BH/BY are stored separately. The 840-item raw threshold is 5.952381e-05, with strict inequality; at the formal count, up to four exceedances can pass Bonferroni. Earlier cutoffs and repeated weekly reviews are descriptive monitoring. Correction does not cover all historical windows jointly or hidden prior research selection. Monte Carlo intervals measure simulation tail uncertainty and add no market history.
 
----
+Execution requires finite positive same-day quotes; missing-price sells retain the position. Valuation may carry the last valid close with stale-mark counts. Pool membership is separate from affordability. Decision-close intent is frozen before Monday execution. Taotie uses a 1.0 standard-account capital ratio and the same allocation policy. Ghost is a capital-granularity scenario, not a costless equal-weight index. Turnover is gross buys plus gross sells divided by starting assets.
 
-## IV. The Null Court: 1,000 Mid-Cap Monkey Colonization
-
-To determine whether the Mid-Cap Rabbit's +9.98% return was statistically distinguishable from luck under finite capital constraints, we summoned `CONTESTANT_B_rabbit-1` before its **colony of 1,000 deterministic pseudo-random monkeys** operating on the identical CSI 500 universe with identical TopK=22, DropN=11 execution rules:
-
-* **Colony Median**: The 1,000 matched random monkeys produced a median return of **`-1.42%`** over the 41-day window.
-* **Empirical Percentile**: `CONTESTANT_B_rabbit-1` (+9.98%) landed in the **`>99.5%` empirical percentile** ($p \approx 0.005$).
-* **Multiple Testing Sensitivity**: With 168 living execution paths in the arena, applying a conservative Bonferroni upper bound ($168 \times 0.005 = 0.84 > 0.05$) indicates that while individual superiority against pure random selection is pronounced, cross-sectional selection among many variants requires caution against selection bias.
-
----
-
-## V. Baseline Summary & Transition
-
-The combined Months 1 & 2 baseline proves that quantitative alpha models developed on standardized features remain potent inside the mid-cap universe, successfully decoupling from a double-digit index drop.
-
-Subsequent evaluation updates for CSI 500 will follow a 4-week institutional monthly cadence.
-
-> **Please do not feed the models.**  
-> **The mid-cap zoo is open.**
+This remains daily-bar research: full-day volume is a retrospective tradability proxy. Complete verified corporate-action, opening direction-limit and capacity data are unavailable. Factor changes are not guessed into dividend payments, and adjusted prices are not mixed with unchanged nominal shares to claim a total-return repair. Strict execution fails its preflight without required coverage.

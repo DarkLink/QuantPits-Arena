@@ -1,136 +1,118 @@
-# 🏛️ Episode 09: The September 02 Breadth Shock & The Rabbit Rampage
+# season_01 — repaired dispatch through 2026-09-04
 
-> **Evaluation Window**: Anchored at 2026-08-28 close; prospective evaluation cycle covers 2026-08-31 ~ 2026-09-04 (5 trading days, Days 42 ~ 46 of the tournament calendar).  
-> **Tournament Phase**: **Prospective Forward Tracking (Cycle 1)**  
-> **Cryptographic Provenance**: Institutional results sealed under SHA-256 commit hash on 2026-09-05 23:42.  
-> **Executable Universe Benchmark**: Taotie (`0.9928` $\to$ `0.9906`, weekly return -0.22%).  
-> *(Executable universe benchmark).*  
-> **Core Narrative**: On Wednesday, September 2, 99.4% of execution paths simultaneously suffered active exposure pullbacks. High-refresh agile Rabbits mounted a counter-offensive (+2.41% on the week), compressing the tournament crown gap to just **1.89 percentage points**.
+This dispatch is a retrospective repair replay using the actual raw weekly signals preserved in legacy checkpoints and a frozen current daily-bar snapshot. Reporting anchor: 2026-08-28; cutoff: 2026-09-04. Period returns are NAV ratios; differences in returns are percentage points. Legacy artifacts are archived separately. This refreshed document is not evidence of a historical pre-market commitment.
 
----
+## ⚡ TL;DR
 
-> ### 💡 Cycle Core Epiphany
-> **Episodes 01–08 Retrospective Baseline demonstrated**: During persistent trending tailwinds, extreme concentration (Eagle) dramatically amplifies exposure to the model signal.  
-> **Episode 09 Prospective Week 1 immediately proved**: Concentration is a strictly symmetric double-edged sword. It magnifies signal exposure while equally amplifying idiosyncratic volatility; meanwhile, distinct Zoo execution policies generated diametrically opposite survival trajectories under the very same market shock.
+- 2026-08-28 → 2026-09-04: 5 return sessions, 6 NAV observations including the reporting anchor; 1 scheduled rebalances.
+- Period leader CONTESTANT_D_rabbit-1: +2.4500%; end NAV 1.151278.
+- Cumulative leader CONTESTANT_B_eagle-5-1: +17.0720%; end NAV 1.170720.
+- 62/168 contestant paths gained during this segment; median path return -0.4037%.
+- Market index segment return -1.3263%; end normalized NAV 0.939259.
+- Taotie +0.3282% for the segment, end NAV 1.026586; Ghost scenario -0.1735%, NAV 1.001964.
+- Cumulative leader raw p=0.00563994, Bonferroni p=1; N=100,000 per matched random spec.
+- At this cutoff: 53/168 raw p<0.05 and 12/168 Bonferroni p<0.05 in this pool, within the visible 840-item family.
 
----
+## Period and cumulative standings
 
-## ⚡ TL;DR: The Wednesday Breadth Shock
+Top ten for the reporting segment:
 
-* **The Arena Benchmark Anchor**: First prospective forward week (5 trading days, Days 42~46 anchored at 08-28 close); executable universe benchmark **Taotie slipped -0.22%** (NAV `0.9928` $\to$ `0.9906`).
-* **Black Wednesday Liquidity Flash**: On September 2, **99.4% of all 168 living execution paths posted negative daily active returns vs Taotie** (daily path mean -0.73% vs Taotie +0.07%), marking a synchronized cross-sectional breadth contraction.
-* **The Rampage of the Rabbits**: Weekly crown captured by **`CONTESTANT_D_rabbit-1` (+2.41% on the week)**, advancing to **NAV `1.1278`** via relentless weekly portfolio refreshes (TopK=22, DropN=11).
-* **The Eagle King Bleeds**: Baseline champion **`CONTESTANT_B_eagle-5-1` stumbled -4.21%** on the week (NAV `1.1971` $\to$ `1.1467`), suffering concentrated factor mean-reversion.
-* **Championship Gap Compressed**: The margin between Rank 1 (`CONTESTANT_B_eagle-5-1`) and Rank 2 (`CONTESTANT_D_rabbit-1`) plummeted from **7.24pp to razor-thin 1.89 percentage points**.
-* **Sloth Sinks in the Chop**: Delayed-signal **`CONTESTANT_B_sloth-1` dropped -4.89%** (NAV `1.1247` $\to$ `1.0697`), demonstrating that unhedged inertia strategies take full unbuffered hits when cross-sectional dispersion reverses.
+| path | period_pct | cumulative_pct | nav | period_mdd_pct | raw_p | bonferroni_p |
+| --- | --- | --- | --- | --- | --- | --- |
+| CONTESTANT_D_rabbit-1 | 2.4500 | 15.1278 | 1.1513 | 0.2264 | 9.9999e-06 | 0.00839992 |
+| CONTESTANT_B_meerkat-50 | 2.2451 | 4.0524 | 1.0405 | 0.8143 | 0.127249 | 1 |
+| CONTESTANT_B_rabbit-1 | 2.1438 | 13.1379 | 1.1314 | 0.5869 | 2.99997e-05 | 0.0251997 |
+| CONTESTANT_B_rabbit-2 | 2.0750 | 11.2132 | 1.1121 | 0.5943 | 0.000209998 | 0.176398 |
+| CONTESTANT_D_rabbit-2 | 1.8910 | 12.9974 | 1.1300 | 0.3720 | 5.99994e-05 | 0.0503995 |
+| CONTESTANT_E_eagle-5-1 | 1.6923 | 9.7202 | 1.0972 | 0.7192 | 0.0668693 | 1 |
+| CONTESTANT_A_meerkat-20 | 1.6767 | 6.4087 | 1.0641 | 0.4126 | 0.0244498 | 1 |
+| CONTESTANT_B_eagle-88-12 | 1.4498 | 8.7937 | 1.0879 | 0.4469 | 9.9999e-06 | 0.00839992 |
+| CONTESTANT_B_meerkat-20 | 1.4353 | 8.9555 | 1.0896 | 0.1380 | 0.00220998 | 1 |
+| CONTESTANT_A_meerkat-30 | 1.4051 | 6.1750 | 1.0618 | 0.7903 | 0.0297097 | 1 |
 
----
+Top ten cumulatively through this cutoff:
 
+| path | period_pct | cumulative_pct | nav | period_mdd_pct | raw_p | bonferroni_p |
+| --- | --- | --- | --- | --- | --- | --- |
+| CONTESTANT_B_eagle-5-1 | -2.1996 | 17.0720 | 1.1707 | 2.1996 | 0.00563994 | 1 |
+| CONTESTANT_D_rabbit-1 | 2.4500 | 15.1278 | 1.1513 | 0.2264 | 9.9999e-06 | 0.00839992 |
+| CONTESTANT_A_rabbit-1 | 1.0358 | 14.3063 | 1.1431 | 0.7265 | 9.9999e-06 | 0.00839992 |
+| CONTESTANT_B_rabbit-1 | 2.1438 | 13.1379 | 1.1314 | 0.5869 | 2.99997e-05 | 0.0251997 |
+| CONTESTANT_D_rabbit-2 | 1.8910 | 12.9974 | 1.1300 | 0.3720 | 5.99994e-05 | 0.0503995 |
+| CONTESTANT_D_eagle-11-2 | -0.4044 | 12.5057 | 1.1251 | 1.2362 | 0.00246998 | 1 |
+| CONTESTANT_B_eagle-44-6 | 1.2429 | 12.1212 | 1.1212 | 0.3991 | 9.9999e-06 | 0.00839992 |
+| CONTESTANT_A_rabbit-2 | 1.0731 | 11.5862 | 1.1159 | 0.5583 | 0.000179998 | 0.151198 |
+| CONTESTANT_B_rabbit-2 | 2.0750 | 11.2132 | 1.1121 | 0.5943 | 0.000209998 | 0.176398 |
+| CONTESTANT_B_robot | -0.8829 | 11.0771 | 1.1108 | 1.4530 | 0.000239998 | 0.201598 |
 
-## I. Five Turbulent Days: Market Trajectory & Synchronized Active Exposure Shock
+Bottom five for the segment:
 
-Over the first prospective evaluation week (2026-08-28 Friday close to 2026-09-04 Friday close), the executable universe benchmark (Taotie) moved at an unassuming pace, recording a modest full-week change of `-0.22%` (`0.9928` $\to$ `0.9906`). Beneath this tranquil surface, however, contestant execution paths collided with an aggressive cross-sectional shock on Wednesday (09-02):
+| path | period_pct | cumulative_pct | nav | period_mdd_pct | raw_p | bonferroni_p |
+| --- | --- | --- | --- | --- | --- | --- |
+| CONTESTANT_A_sloth-2 | -4.2847 | 4.5645 | 1.0456 | 4.6408 | 0.0936791 | 1 |
+| CONTESTANT_A_snail-3 | -4.3922 | -0.7077 | 0.9929 | 4.5073 | 0.695603 | 1 |
+| CONTESTANT_A_sloth-3 | -4.5644 | 1.2592 | 1.0126 | 4.6615 | 0.433356 | 1 |
+| CONTESTANT_A_eagle-5-1 | -4.6476 | 7.4376 | 1.0744 | 6.1793 | 0.125079 | 1 |
+| CONTESTANT_C_eagle-5-1 | -4.8423 | 6.7096 | 1.0671 | 4.8423 | 0.149059 | 1 |
 
-```text
-[Daily Path Average vs Executable Taotie Benchmark: Aug 31 – Sep 04]
-• 08-31 (Mon): Taotie -0.05% | 70.2% of paths green (Mean +0.16%)
-• 09-01 (Tue): Taotie +0.37% | 67.9% of paths green (Mean +0.19%)
-• 09-02 (Wed): Taotie -1.27% | 99.4% of paths red (Mean -1.26%, +0.01pp vs Taotie)
-• 09-03 (Thu): Taotie +0.48% | High-refresh Rabbits rebound (Mean +0.22%)
-• 09-04 (Fri): Taotie +0.26% | Dispersion hardens; Rabbits take weekly crown (Mean -0.09%)
-```
+## Six anonymous contestants
 
-### 1. The September 02 Empirical Shock (Level A: Directly Proved by Data)
-* **Executable Benchmark Dip**: Executable universe benchmark Taotie dipped `-1.27%`.
-* **Synchronized Active Exposure Shock**: Across all 168 living execution paths inside the Zoo, the single-day mean return plunged to **`-1.26%`**, tracking the broad market retreat as concentrated holdings incurred sharp mark-to-market swings.
-* **Overwhelming Breadth Breakdown**:
-  * **167 / 168 execution paths (99.4%) recorded negative absolute daily returns**, with only 1 path remaining marginally green.
-  * **Statistical Inference**: When nearly all uncorrelated model families and execution containers simultaneously incur negative excess returns, it **strongly indicates a shared common active exposure** across contestant selection rankings relative to the equal-weight universe.
+Each row includes all 28 animals; no selection of winning combinations.
 
-### 2. Attribution Hypotheses & Evidentiary Boundaries (Level B / Level D)
-* **Consistent Market Observation (Level B)**: This sudden drop coincides with a sharp market breadth contraction and violent mean-reversion among prior momentum leaders across broad equity indices.
-* **Strict Boundary Disclaimers (Level D)**:
-  * **Not Proof of Exact Ranking Overlap**: Synchronized losses can stem from shared industry overweights, style tilts (e.g. high-beta or liquidity preferences), or correlated factor loadings, not necessarily identical stock pick lists.
-  * **No Premature Causal Assertion**: Absent order-book depth, bid-ask spreads, or formal Barra/style factor attribution, this phenomenon is rigorously categorized as "market breadth contraction and sharp rotation in prior leading deciles," rather than "liquidity spiral" or "factor crash."
+| contestant | mean_pct | median_pct | positive | best_pct | worst_pct | mean_mdd_pct |
+| --- | --- | --- | --- | --- | --- | --- |
+| CONTESTANT_A | -1.4756 | -1.4040 | 11 | 1.6767 | -4.6476 | 2.4535 |
+| CONTESTANT_B | -0.7811 | -0.9552 | 12 | 2.2451 | -4.2363 | 1.8604 |
+| CONTESTANT_C | -0.8709 | -0.9531 | 13 | 1.3683 | -4.8423 | 1.7468 |
+| CONTESTANT_D | -0.6402 | -0.3449 | 13 | 2.4500 | -4.2663 | 1.6715 |
+| CONTESTANT_E | -0.2584 | -0.2734 | 8 | 1.6923 | -1.5566 | 1.3402 |
+| CONTESTANT_F | -0.5230 | -0.3968 | 5 | 0.6301 | -2.4639 | 1.4912 |
 
----
+## All animal policies
 
-## II. The Battlefield: Weekly Gainers & Casualties
+Each row summarizes segment returns across the six contestants; the range describes contestant-policy interaction.
 
-While the market benchmark ground out a minor `+0.33%`, intra-Zoo performance fractured into dramatic divergence ($\text{Return} = \text{NAV}_{0904} / \text{NAV}_{0828} - 1$):
+| animal | mean_pct | median_pct | best_pct | worst_pct |
+| --- | --- | --- | --- | --- |
+| eagle-11-2 | -1.0859 | -1.0005 | 0.7410 | -3.2711 |
+| eagle-44-6 | 0.5045 | 0.3200 | 1.2467 | -0.0926 |
+| eagle-5-1 | -2.4659 | -2.6313 | 1.6923 | -4.8423 |
+| eagle-66-9 | 0.5879 | 0.6458 | 1.3800 | -0.3798 |
+| eagle-88-12 | 0.7861 | 0.9468 | 1.4498 | 0.0376 |
+| koala | -0.6964 | -0.7714 | 0.6301 | -1.6225 |
+| meerkat-10 | 0.4233 | 0.6253 | 1.3193 | -0.9639 |
+| meerkat-20 | 0.6941 | 0.6845 | 1.6767 | -0.2899 |
+| meerkat-30 | 0.5360 | 0.7967 | 1.4051 | -1.3976 |
+| meerkat-40 | -0.3241 | -0.3826 | 1.1590 | -1.5823 |
+| meerkat-50 | -0.0284 | 0.1484 | 2.2451 | -2.4639 |
+| meerkat-60 | -0.1412 | 0.0345 | 0.5091 | -1.1384 |
+| meerkat-70 | -0.0657 | 0.1941 | 0.9869 | -1.8734 |
+| meerkat-80 | -0.9188 | -0.6238 | -0.2681 | -2.0657 |
+| meerkat-90 | -1.2617 | -1.2574 | 0.1441 | -2.4106 |
+| rabbit-1 | 0.9625 | 0.7226 | 2.4500 | -0.4045 |
+| rabbit-2 | 0.8828 | 1.1208 | 2.0750 | -0.5061 |
+| robot | -0.8258 | -0.7506 | 0.3499 | -2.1764 |
+| sloth-1 | -1.4434 | -1.2970 | -0.3406 | -3.2695 |
+| sloth-2 | -2.0919 | -2.5005 | -0.1516 | -4.2847 |
+| sloth-3 | -2.4331 | -2.8246 | -0.3416 | -4.5644 |
+| sloth-4 | -2.7555 | -3.5233 | -0.4031 | -4.2663 |
+| snail-1 | -1.5046 | -1.3696 | -0.3560 | -3.3863 |
+| snail-2 | -2.0592 | -2.5514 | -0.0046 | -4.2497 |
+| snail-3 | -2.3088 | -2.6124 | -0.2338 | -4.3922 |
+| snail-4 | -2.6223 | -3.2795 | -0.2570 | -4.2363 |
+| turtle | -2.1933 | -2.2094 | -0.7123 | -3.7248 |
+| whale-shark | 0.6189 | 0.8504 | 0.9670 | 0.0167 |
 
-### 🏆 Top 5 Weekly Gainers
-1. **`CONTESTANT_D_rabbit-1`**: **`+2.41%`** (NAV `1.1247` $\to$ `1.1518`) — **Rank 1 Overall for the Week**
-2. **`CONTESTANT_B_rabbit-1`**: **`+2.14%`** (NAV `1.1076` $\to$ `1.1314`)
-3. **`CONTESTANT_B_rabbit-2`**: **`+2.07%`** (NAV `1.0895` $\to$ `1.1121`)
-4. **`CONTESTANT_D_rabbit-2`**: **`+1.89%`** (NAV `1.1090` $\to$ `1.1300`)
-5. **`CONTESTANT_E_eagle-5-1`**: **`+1.69%`** (NAV `1.0789` $\to$ `1.0972`)
+## Mechanisms and interpretation
 
-### 🩸 Top 5 Weekly Casualties
-1. **`CONTESTANT_C_eagle-5-1`**: **`-4.84%`** (NAV `1.1214` $\to$ `1.0671`)
-2. **`CONTESTANT_B_snail-4`**: **`-4.75%`** (NAV `1.0628` $\to$ `1.0123`)
-3. **`CONTESTANT_A_eagle-5-1`**: **`-4.65%`** (NAV `1.1267` $\to$ `1.0744`)
-4. **`CONTESTANT_A_sloth-3`**: **`-4.56%`** (NAV `1.0610` $\to$ `1.0126`)
-5. **`CONTESTANT_B_sloth-4`**: **`-4.55%`** (NAV `1.0011` $\to$ `0.9556`)
+The TopK=5/DropN=1 segment spread across contestants is 6.5346 percentage points. A winning concentrated path does not establish a universal concentration advantage. Rabbit DropN changes weekly replacement capacity, not trading frequency. Sloth delay and cold-start cash, and Snail warm-start stale signals, jointly alter exposure and path dependence; these are whole-strategy comparisons, not an identified prediction half-life. Percentile Meerkats and inverted Koala should be read against the full contestant distribution above.
 
----
+Contestant averages describe consistency across animals; the best row describes realized performance in this window. Pool membership, fees, lots, cash exposure and signal cross-sections all contribute to differences across environments. The results do not identify a single macro cause or disclose contestant architecture.
 
-## III. Zoo Mechanisms Autopsy: Controlled Responses Under Market Stress
+## Random-control and execution contract
 
-The foundational virtue of the Zoo testbed is its ability to **isolate control variables and observe divergent policy behavior under identical real-world market stress.**
+Matching uses TopK/DropN only: ten random specifications and one deterministic passive reference. Delay, warm/cold starts, inversion and percentile selection do not introduce extra species. The p values above test cumulative returns from inception, not segment returns. The upper tail includes ties: p=(k+1)/(N+1). At N=100,000, minimum p is 9.9999e-06, never zero. Bonferroni/Holm/BH/BY are stored separately. The 840-item raw threshold is 5.952381e-05, with strict inequality; at the formal count, up to four exceedances can pass Bonferroni. Earlier cutoffs and repeated weekly reviews are descriptive monitoring. Correction does not cover all historical windows jointly or hidden prior research selection. Monte Carlo intervals measure simulation tail uncertainty and add no market history.
 
-### 1. 🐇 The Rabbits (Aggressive Refresh Bandwidth)
-* **Mechanistic Fact**: Rabbit variants operate with expanded rebalancing quotas (DropN=11 or 22), flushing out stale ranks and writing the newest model signals directly into portfolio holdings every Monday morning. Their weekly portfolios were established on Monday open (08-31); **no intraday evasive maneuvers occurred after Wednesday's drop**.
-* **Controlled Pairwise Comparison**:
-  * Under `CONTESTANT_D`: Baseline Robot (DropN=3) declined `-0.43%` on the week, whereas high-refresh Rabbit-1 (DropN=11) gained `+2.41%` and Rabbit-2 (DropN=22) added `+1.89%`.
-  * Under `CONTESTANT_B`: Baseline Robot fell `-1.00%`, while Rabbit-1 gained `+2.14%` and Rabbit-2 gained `+2.07%`.
-* **Methodological Caution (Level B)**: Portfolios incorporating higher fresh-signal turnover substantially outperformed. This supports the hypothesis that current prediction scores adapted better to shifts in cross-sectional rank than lagging scores. However, path dependency from cumulative cash balances cannot be entirely disentangled in a single evaluation week.
+Execution requires finite positive same-day quotes; missing-price sells retain the position. Valuation may carry the last valid close with stale-mark counts. Pool membership is separate from affordability. Decision-close intent is frozen before Monday execution. Taotie uses a 1.0 standard-account capital ratio and the same allocation policy. Ghost is a capital-granularity scenario, not a costless equal-weight index. Turnover is gross buys plus gross sells divided by starting assets.
 
-### 2. 🦥 The Sloths (Signal Lag Gradient & Decay Ladder)
-Within identical model families, holding execution parameters constant while incrementally inserting 1 to 4 weeks of artificial signal lag revealed an unmistakably steep penalty gradient:
-
-```text
-[CONTESTANT_B Sloth Lag Ladder: Weekly Performance]
-Robot   (Baseline, Lag = 0 Weeks): -1.00%
-  │
-  ├─ Sloth-1 (Lag = 1 Week)      : -2.52% (-1.52pp vs Robot)
-  ├─ Sloth-2 (Lag = 2 Weeks)     : -3.20% (-2.20pp vs Robot)
-  ├─ Sloth-3 (Lag = 3 Weeks)     : -3.92% (-2.92pp vs Robot)
-  └─ Sloth-4 (Lag = 4 Weeks)     : -4.55% (-3.55pp vs Robot)
-```
-
-In July and August, delayed signals retained value because directional market momentum was persistent. Once regime volatility struck on September 02, stale signals were severely punished.
-
-### 3. 🦅 The Eagles (Concentration Double-Edged Sword)
-The crowning star of the retrospective baseline—`eagle-5-1`—encountered heavy turbulence:
-* `CONTESTANT_C_eagle-5-1` plunged **`-4.84%`** (worst performer across all 168 paths).
-* `CONTESTANT_A_eagle-5-1` dropped **`-4.65%`**.
-* The reigning Eagle King (`CONTESTANT_B_eagle-5-1`) weathered the storm with a `-2.21%` drawdown (NAV `1.1971` $\to$ `1.1707`). While retaining the tournament lead, its defensive buffer evaporated rapidly.
-
----
-
-## IV. Leaderboard Standings: Crown Gap Compresses to 1.89pp
-
-Entering Week 9, the Eagle King's once-commanding lead has collapsed:
-
-```text
-[Overall Cumulative NAV Top 5 Standings as of September 04, 2026]
-🥇 CONTESTANT_B_eagle-5-1 : NAV 1.1707 (+17.07%, Lead narrowed to +1.89pp)
-🥈 CONTESTANT_D_rabbit-1  : NAV 1.1518 (+15.18%, Up from Rank 5 to Rank 2!)
-🥉 CONTESTANT_B_rabbit-1  : NAV 1.1314 (+13.14%)
-🎖️ CONTESTANT_D_rabbit-2  : NAV 1.1300 (+13.00%)
-🎖️ CONTESTANT_A_rabbit-1  : NAV 1.1293 (+12.93%)
-```
-
-In just 5 trading days, high-refresh Rabbits captured 4 out of the top 5 seats on the overall leaderboard. The gap between Rank 1 and Rank 2 stands at just **1.89 percentage points**—a distance easily overcome in a single volatile trading session.
-
----
-
-## V. The Cliffhanger: The Zoo Remains Open
-
-The retrospective calibration phase is long over. Every tick from August 28 onward is genuine, prospective, and permanent.
-
-The Eagle King still clings to its throne, but the agile Rabbits are closing in with ferocious momentum. As the tournament moves into Episode 10, will mean-reversion persist to favor aggressive turnover, or will macro factors stabilize to reward concentrated alpha?
-
-> **Please do not feed the models.**  
-> **The monkeys are watching. The zoo is open.**
+This remains daily-bar research: full-day volume is a retrospective tradability proxy. Complete verified corporate-action, opening direction-limit and capacity data are unavailable. Factor changes are not guessed into dividend payments, and adjusted prices are not mixed with unchanged nominal shares to claim a total-return repair. Strict execution fails its preflight without required coverage.

@@ -1,7 +1,7 @@
 """
 arena/benchmarks/ghost_taotie.py
 ================================
-Ghost Taotie (幽灵饕餮) — 理论全池等权基准 (Theoretical Unconstrained Universe Benchmark)
+Ghost Taotie (幽灵饕餮) — 较低资本粒度摩擦的全池被动情景 (Theoretical Unconstrained Universe Benchmark)
 """
 
 from typing import Optional, Callable, Dict, Any, List
@@ -16,10 +16,10 @@ from arena.calendar import WeeklyCycle
 class GhostTaotieBenchmark(Benchmark):
     """
     幽灵饕餮基准：
-    - 定位为“全市场理论等权无偏 Beta 基准”；
+    - 定位为“保留交易费用与整手约束的大资本被动情景”；
     - 采用机构大资金规模 (默认 1 亿元: 100,000,000.0)，单标的配额超 40 万元；
     - 彻底消解 100 股整手约束导致的高价股系统性拒单失真，买单受阻率接近 0；
-    - 调仓周频、估值日频，依然计入买卖印花税与佣金，精准刻画理论全池等权潜能。
+    - 调仓周频、估值日频，依然计入买卖印花税与佣金，不强制每周重新等权。
     """
 
     def __init__(
@@ -80,7 +80,8 @@ class GhostTaotieBenchmark(Benchmark):
         self.engine.execute_weekly_cycle(
             cycle=cycle,
             order=order,
-            price_lookup=price_lookup_fn
+            price_lookup=price_lookup_fn,
+            tradability_filter=tradability_filter_fn
         )
 
     def to_portfolio_path(self) -> PortfolioPath:

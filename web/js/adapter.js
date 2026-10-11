@@ -62,7 +62,7 @@ class ArenaDataAdapter {
 
     this.pathMap = new Map();
     this.paths.forEach(p => {
-      // Statistical data normalization: preserve empirical values, floor p-values at 0.001 (plus-one limit)
+      // Statistical data normalization: preserve full-precision empirical values and N/A
       if (p.percentile_rank !== undefined && p.percentile_rank !== null) {
         p.percentile_rank = Number(p.percentile_rank);
       }
@@ -70,10 +70,10 @@ class ArenaDataAdapter {
         p.monkey_percentile = Number(p.monkey_percentile);
       }
       if (p.empirical_p_value !== undefined && p.empirical_p_value !== null) {
-        p.empirical_p_value = Math.max(Number(p.empirical_p_value), 0.001);
+        p.empirical_p_value = Number(p.empirical_p_value);
       }
       if (p.p_value !== undefined && p.p_value !== null) {
-        p.p_value = Math.max(Number(p.p_value), 0.001);
+        p.p_value = Number(p.p_value);
       }
       // Badge text normalization: replace any legacy "Alpha (p < 0.05)" or "Monkey Slayer"
       if (Array.isArray(p.badges)) {
@@ -86,7 +86,7 @@ class ArenaDataAdapter {
       // Strategy spec fallback resolution
       if (!p.strategy_spec) {
         const animal = this.getAllAnimals().find(a => a.id === p.animal_id);
-        p.strategy_spec = animal ? animal.spec : "P_22_3";
+        p.strategy_spec = animal ? animal.spec : null;
       }
       if (p.mean_cash_ratio_pct === undefined && p.mean_cash_ratio !== undefined) {
         p.mean_cash_ratio_pct = Number(p.mean_cash_ratio);
@@ -114,21 +114,21 @@ class ArenaDataAdapter {
   formatPValue(pVal) {
     if (pVal === undefined || pVal === null || isNaN(pVal)) return "N/A";
     const num = Number(pVal);
-    if (num <= 0.001) return "< 0.001";
-    return num.toFixed(4);
+    if (num < 0.001) return num.toExponential(3);
+    return num.toPrecision(6);
   }
 
-  formatPercentile(rank, n = 1000) {
+  formatPercentile(rank, n = 100000) {
     if (rank === undefined || rank === null || isNaN(rank)) return "N/A";
     const num = Number(rank);
     const resolution = 100 / (n + 1);
     if (num <= 0) {
-      return `<${resolution.toFixed(1)}%`;
+      return `0% (finite rank)`;
     }
     if (num >= 100 - resolution - 0.005) {
-      return `>${(100 - resolution).toFixed(1)}%`;
+      return `${num.toFixed(n >= 100000 ? 3 : 1)}% (finite rank)`;
     }
-    return `${num.toFixed(1)}%`;
+    return `${num.toFixed(n >= 100000 ? 3 : 1)}%`;
   }
 
   getContestants() {
@@ -519,7 +519,7 @@ class ArenaDataAdapter {
     }
     const p = this.getPath("BENCHMARK_taotie");
     if (p && p.display_name && !p.display_name.includes("BENCHMARK")) return p.display_name;
-    return "Taotie (Physical Baseline 500k)";
+    return "Taotie (Executable Passive)";
   }
 
   getTaotieShortName() {
@@ -532,7 +532,7 @@ class ArenaDataAdapter {
         return tb;
       }
     }
-    return "Taotie (500k)";
+    return "Taotie";
   }
 
   hasGhostTaotie() {
@@ -933,7 +933,7 @@ class ArenaDataAdapter {
     const topRet = Math.max(...rets);
     const bestSharpe = Math.max(...alphaPaths.map(p => p.sharpe_ratio || 0));
 
-    const sigCount = alphaPaths.filter(p => (p.percentile_rank !== undefined ? p.percentile_rank : (p.monkey_percentile || 0)) >= 95.0).length;
+    const sigCount = alphaPaths.filter(p => p.empirical_p_value != null && p.empirical_p_value < 0.05).length;
     const sigPct = ((sigCount / alphaPaths.length) * 100).toFixed(1) + "%";
 
     const taotieRet = this.getTaotieReturn();
@@ -985,11 +985,11 @@ class ArenaDataAdapter {
     const sig = filters.significance || filters.statFilter;
     if (sig) {
       if (sig === "SIG" || sig === "SIG_95") {
-        result = result.filter(p => (p.monkey_percentile !== undefined ? p.monkey_percentile : (p.percentile_rank || 0)) >= 95.0);
+        result = result.filter(p => p.empirical_p_value != null && p.empirical_p_value < 0.05);
       } else if (sig === "NOT_SIG") {
-        result = result.filter(p => (p.monkey_percentile !== undefined ? p.monkey_percentile : (p.percentile_rank || 0)) < 95.0);
+        result = result.filter(p => p.empirical_p_value != null && p.empirical_p_value >= 0.05);
       } else if (sig === "SIG_99") {
-        result = result.filter(p => (p.monkey_percentile !== undefined ? p.monkey_percentile : (p.percentile_rank || 0)) >= 99.0);
+        result = result.filter(p => p.empirical_p_value != null && p.empirical_p_value < 0.01);
       }
     }
 
@@ -1109,21 +1109,21 @@ class ArenaDataAdapter {
 window.formatPValue = function(pVal) {
   if (pVal === undefined || pVal === null || isNaN(pVal)) return "N/A";
   const num = Number(pVal);
-  if (num <= 0.001) return "< 0.001";
-  return num.toFixed(4);
+  if (num < 0.001) return num.toExponential(3);
+  return num.toPrecision(6);
 };
 
-window.formatPercentile = function(rank, n = 1000) {
+window.formatPercentile = function(rank, n = 100000) {
   if (rank === undefined || rank === null || isNaN(rank)) return "N/A";
   const num = Number(rank);
   const resolution = 100 / (n + 1);
   if (num <= 0) {
-    return `<${resolution.toFixed(1)}%`;
+    return `0% (finite rank)`;
   }
   if (num >= 100 - resolution - 0.005) {
-    return `>${(100 - resolution).toFixed(1)}%`;
+    return `${num.toFixed(n >= 100000 ? 3 : 1)}% (finite rank)`;
   }
-  return `${num.toFixed(1)}%`;
+  return `${num.toFixed(n >= 100000 ? 3 : 1)}%`;
 };
 
 // Attach class and singleton adapter to global window scope

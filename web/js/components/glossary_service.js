@@ -37,8 +37,8 @@ window.ArenaGlossaryService = {
       name: "Annualized Sharpe Ratio",
       category: "Metrics",
       tagline: "Risk-Adjusted Return",
-      tooltip: "Risk-adjusted return ratio: (Annualized Return - Risk-Free Rate) / Annualized Volatility. Higher is better (>1.0 is solid, >2.0 is elite in short windows).",
-      details: "Calculated from daily return time series annualized by √244. Evaluates whether returns stem from consistent excess alpha or erratic volatility bursts."
+      tooltip: "Daily mean / daily sample standard deviation × √250; short-window descriptive annualization.",
+      details: "Daily mean return divided by sample standard deviation, multiplied by √250, with zero risk-free baseline; this short-window annualization is descriptive."
     },
     "max_drawdown_pct": {
       id: "max_drawdown_pct",
@@ -56,7 +56,7 @@ window.ArenaGlossaryService = {
       category: "Metrics",
       tagline: "Statistical Significance",
       tooltip: "The empirical probability that a pure random monkey strategy could match or exceed this performance. p < 0.05 indicates statistical significance.",
-      details: "Computed via finite-sample plus-one correction against 1,000 deterministic pseudo-random monkeys sharing identical portfolio rules: p = (Count_beaten + 1) / (1,000 + 1). p < 0.05 represents statistical dismissal of pure luck."
+      details: "Upper-tail p = (k+1)/(N+1), where k counts random returns >= the actual return. Matching uses TopK/DropN only. Raw p < 0.05 is nominal; the declared cumulative family has 840 comparisons."
     },
     "monkey_percentile": {
       id: "monkey_percentile",
@@ -232,18 +232,18 @@ window.ArenaGlossaryService = {
       category: "Benchmarks",
       tagline: "Executable Universe Baseline",
       tooltip: `【The Real-World Floor】Capital-constrained full-universe portfolio with strict 100-share round lots and retail cash constraints. Reflects the true unselected market floor.`,
-      details: `Operates under identical capital (${seasonMeta.methodology?.capital_spec || 'CNY 500k'}) and lot constraints as contestant portfolios via greedy waterfall allocation.`
+      details: `Operates under identical capital (${seasonMeta.methodology?.capital_spec || 'the standard simulation budget'}) and lot constraints as contestant portfolios using the standard allocation policy, with residual cash preserved.`
     };
 
     if (hasGhost) {
       dict.benchmarks["ghost_taotie"] = {
         id: "ghost_taotie",
         term: "Ghost Taotie",
-        name: "Ghost Taotie (Theoretical Equal-Weight)",
+        name: "Ghost Taotie (Capital Scenario)",
         category: "Benchmarks",
-        tagline: "Frictionless Mathematical Ideal",
-        tooltip: "【The Frictionless Utopia】Theoretical 100M portfolio buying all stocks with zero lot exclusions and zero cash drag. Measures how much alpha real frictions devour.",
-        details: "Eliminates discrete retail lot frictions to measure the theoretical pure equal-weighted universe drift."
+        tagline: "Capital Granularity Reference",
+        tooltip: "Larger standardized capital reduces lot-granularity effects; costs, residual cash and round lots remain.",
+        details: "Passive holdings are retained between membership changes; no weekly full equal-weight reset."
       };
     }
 
@@ -252,9 +252,9 @@ window.ArenaGlossaryService = {
       term: "Matched Monkeys",
       name: "Matched Monkeys (Statistical Null Colony)",
       category: "Benchmarks",
-      tagline: "1,000 Dart-Throwing Monkeys",
-      tooltip: "【1,000 Dart-Throwing Monkeys】Deterministic pseudo-random portfolios sharing each animal's exact capital, lot constraints, and turnover rules, but zero model signals.",
-      details: "Answers: 'Could 1,000 monkeys achieve this return through pure luck?' Isolates skill from portfolio mechanics."
+      tagline: "100,000 Random Controls",
+      tooltip: "【100,000 Random Controls】Deterministic pseudo-random portfolios sharing each animal's exact capital, lot constraints, and turnover rules, but zero model signals.",
+      details: "Answers: 'How unusual is this return under the declared random-ranking baseline?' Delay and initial exposure remain properties of the animal, not new control species."
     };
 
     dict.benchmarks["null_court"] = {
@@ -263,7 +263,7 @@ window.ArenaGlossaryService = {
       name: "Null Court (Monte Carlo Jurisdiction)",
       category: "Benchmarks",
       tagline: "The Truth Tribunal",
-      tooltip: "【Significance Tribunal】Statistical jurisdiction where strategies must outperform at least 95% of their matched random monkeys (p < 0.05) to claim authentic alpha.",
+      tooltip: "【Significance Tribunal】Random-ranking diagnostic court. Raw p and family corrections are separate; exploratory results do not establish universal alpha.",
       details: "Standard finite-sample plus-one correction with Bonferroni multiple-testing sensitivity bounds."
     };
 

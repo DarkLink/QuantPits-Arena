@@ -133,7 +133,7 @@ window.OverviewView = {
               </button>
             </div>
             <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">
-              Multi-line trajectory panorama comparing model strategies against ${window.arenaAdapter.getTaotieShortName()}, ${window.arenaAdapter.hasGhostTaotie() ? 'Ghost Taotie (100M), ' : ''}and ${window.arenaAdapter.getMarketBenchmarkName()}
+              Multi-line trajectory panorama comparing model strategies against ${window.arenaAdapter.getTaotieShortName()}, ${window.arenaAdapter.hasGhostTaotie() ? 'Ghost Capital Scenario, ' : ''}and ${window.arenaAdapter.getMarketBenchmarkName()}
             </div>
           </div>
 
@@ -171,7 +171,7 @@ window.OverviewView = {
                 <button class="chart-metric-btn ${this.activeMetricMode === 'nav' ? 'active' : ''}" data-metric="nav">📈 NAV</button>
                 <button class="chart-metric-btn ${this.activeMetricMode === 'excess_taotie' ? 'active' : ''}" data-metric="excess_taotie">🐾 vs Taotie</button>
                 ${window.arenaAdapter.hasGhostTaotie() ? `
-                <button class="chart-metric-btn ${this.activeMetricMode === 'excess_ghost' ? 'active' : ''}" data-metric="excess_ghost">👻 vs Ghost (100M)</button>
+                <button class="chart-metric-btn ${this.activeMetricMode === 'excess_ghost' ? 'active' : ''}" data-metric="excess_ghost">👻 vs Ghost Scenario</button>
                 ` : ''}
                 <button class="chart-metric-btn ${this.activeMetricMode === 'excess_csi300' ? 'active' : ''}" data-metric="excess_csi300">🏛️ vs ${window.arenaAdapter.getMarketBenchmarkName()}</button>
                 <button class="chart-metric-btn ${this.activeMetricMode === 'drawdown' ? 'active' : ''}" data-metric="drawdown">🌊 Drawdown</button>
@@ -182,8 +182,8 @@ window.OverviewView = {
             <div class="benchmark-pill-group" id="panorama-benchmark-pill-group">
               <span class="benchmark-pill-label">Benchmarks:</span>
               ${window.arenaAdapter.hasGhostTaotie() ? `
-              <button type="button" class="benchmark-pill ghost-taotie is-active" data-benchmark="ghost" title="Toggle Ghost Taotie (100M)">
-                <span class="bm-line-badge"></span> Ghost (100M)
+              <button type="button" class="benchmark-pill ghost-taotie is-active" data-benchmark="ghost" title="Toggle Ghost Capital Scenario">
+                <span class="bm-line-badge"></span> Ghost Scenario
               </button>` : ''}
               <button type="button" class="benchmark-pill taotie is-active" data-benchmark="taotie" title="Toggle ${window.arenaAdapter.getTaotieDisplayName()}">
                 <span class="bm-line-badge"></span> ${window.arenaAdapter.getTaotieShortName()}
@@ -211,11 +211,11 @@ window.OverviewView = {
                 </button>
               </div>
               <div class="card-subtitle">
-                X-axis: 1,000-Monkey Null Percentile | Y-axis: OOS Total Return (%) | Bubble Size: Sharpe Ratio
+                X-axis: Matched Null Percentile | Y-axis: OOS Total Return (%) | Bubble Size: Sharpe Ratio
               </div>
             </div>
             <div style="font-size:0.8rem; color:var(--text-tertiary);">
-              Green Line: 95% Confidence (p = 0.05)
+              Green Line: 95th observed percentile (raw p is evaluated separately)
             </div>
           </div>
           <div id="chart-overview-scatter" class="chart-container tall"></div>

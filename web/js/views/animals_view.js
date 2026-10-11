@@ -368,7 +368,7 @@ window.AnimalsView = {
                 : `Multi-Animal Comparison Matrix (${chartPaths.length} Paths)`}
             </h3>
             <p style="font-size: 12px; color: var(--text-secondary); margin: 2px 0 0 0;">
-              Ranked by Out-of-Sample Return. Compare empirical significance against the 1,000-monkey null benchmark.
+              Ranked by Out-of-Sample Return. Compare empirical significance against the 100,000-path matched random-control benchmark.
             </p>
           </div>
 
@@ -396,7 +396,7 @@ window.AnimalsView = {
                   const pct = window.formatPercentile ? window.formatPercentile(rawPct) : rawPct.toFixed(1) + "%";
                   const rawP = p.empirical_p_value !== undefined ? p.empirical_p_value : (p.p_value !== undefined ? p.p_value : 1.0);
                   const pVal = window.formatPValue ? window.formatPValue(rawP) : rawP.toFixed(4);
-                  const isSig = (typeof rawPct === "number" ? rawPct : parseFloat(pct)) >= 95;
+                  const isSig = p.empirical_p_value != null && p.empirical_p_value < .05;
                   const spreadCsi = p.total_return_pct - csi300Ret;
                   const spreadTaotie = p.total_return_pct - taotieRet;
 

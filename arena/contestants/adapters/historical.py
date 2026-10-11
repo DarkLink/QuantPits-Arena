@@ -40,10 +40,20 @@ class HistoricalReplayAdapter(BaseInferenceAdapter):
         self.snapshot_path = snapshot_path or (Path.home() / "src/QLIB-TEST-RUN/ARCHAEOLOGY/raw_preds.pkl")
         self.role_key = "static" if "static" in manifest.contestant_id.lower() or "static" in manifest.training_mode.lower() else "cpcv"
         self._fused_cache: Dict[str, pd.Series] = {}
+        self._store_stat = None
+        self._store_key = None
 
     def load_models(self) -> None:
         # 1. 优先载入权威全量预测库
+        import hashlib
         p_str = str(self.auth_store_path)
+        if self.auth_store_path.exists():
+            stat = self.auth_store_path.stat()
+            self._store_stat = (stat.st_mtime_ns, stat.st_size, stat.st_ino)
+            with self.auth_store_path.open("rb") as stream:
+                signature = hashlib.file_digest(stream, "sha256").hexdigest()
+            p_str += ":" + signature
+            self._store_key = p_str
         if p_str not in HistoricalReplayAdapter._cached_stores and self.auth_store_path.exists():
             with open(self.auth_store_path, "rb") as f:
                 HistoricalReplayAdapter._cached_stores[p_str] = pickle.load(f)
@@ -65,11 +75,15 @@ class HistoricalReplayAdapter(BaseInferenceAdapter):
         if not self.is_loaded:
             self.load_models()
 
+        if self._store_stat is not None:
+            stat=self.auth_store_path.stat()
+            if (stat.st_mtime_ns,stat.st_size,stat.st_ino)!=self._store_stat:
+                raise ValueError("Prediction store changed during a bound replay; start a new generation")
         if start_date in self._fused_cache:
-            return self._fused_cache[start_date]
+            return self._fused_cache[start_date].copy(deep=True)
 
         # 优先从权威预测库提取
-        p_str = str(self.auth_store_path)
+        p_str = self._store_key or str(self.auth_store_path)
         auth_store = HistoricalReplayAdapter._cached_stores.get(p_str)
         if auth_store is not None:
             c_store = auth_store.get(self.manifest.contestant_id)
@@ -84,7 +98,7 @@ class HistoricalReplayAdapter(BaseInferenceAdapter):
                 if instruments is not None:
                     res = res.reindex(instruments).fillna(0.5)
                 self._fused_cache[start_date] = res
-                return res
+                return res.copy(deep=True)
 
         if self.require_authoritative_store:
             raise ValueError("Authoritative prediction cache does not cover the requested contestant and date")

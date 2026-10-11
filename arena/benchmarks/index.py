@@ -6,10 +6,27 @@ IndexBenchmark: 公开市场指数基准 (如 CSI300 沪深300)
 
 from typing import Optional, Callable, Dict, Any, List
 import pandas as pd
+import numpy as np
 
 from arena.benchmarks.base import Benchmark, BenchmarkCategory
 from arena.portfolio.types import PortfolioPath, DailyValuation
 from arena.calendar import WeeklyCycle
+
+
+def read_feature_slice(path, start, end):
+    """Qlib feature files store the starting calendar offset as float32."""
+    with open(path, 'rb') as stream:
+        header=np.fromfile(stream,dtype='<f4',count=1)
+        data=np.fromfile(stream,dtype='<f4')
+    if len(header)!=1 or not np.isfinite(header[0]) or header[0]<0 or int(header[0])!=header[0]:
+        raise ValueError('Invalid feature start offset')
+    offset=int(header[0])
+    if start<offset or end<start or end-offset>=len(data):
+        raise ValueError('Index feature does not cover the evaluation window')
+    result=data[start-offset:end-offset+1].astype(float)
+    if not np.isfinite(result).all() or (result<=0).any():
+        raise ValueError('Index feature contains an invalid quote')
+    return result
 
 
 class IndexBenchmark(Benchmark):

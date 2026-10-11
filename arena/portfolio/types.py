@@ -16,6 +16,8 @@ class Order:
     buy_instruments: List[str]              # 拟买入标的清单
     sell_instruments: List[str]             # 拟卖出标的清单
     is_first_entry: bool = False            # 是否为首次冷启动满额建仓
+    frozen_score: Optional[pd.Series] = None
+    policy: Dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
@@ -50,7 +52,7 @@ class WeeklySettlement:
     start_nav: float                        # 周初净值
     end_nav: float                          # 周末净值
     weekly_return: float                    # 当周区间收益率
-    turnover: float                         # 当周单边换手率
+    turnover: float                         # 当周买卖双边成交总额 / 周初资产
     weekly_cost: float                      # 当周累计交易成本
     num_holdings: int                       # 期末持股数量
 
@@ -117,6 +119,10 @@ class EngineCheckpoint:
     last_cycle_idx: int
     last_settle_date: str
     greedy_allocation: bool = False
+    rejected_orders: List[Dict[str, Any]] = field(default_factory=list)
+    applied_events: List[str] = field(default_factory=list)
+    stale_marks: List[Dict[str, Any]] = field(default_factory=list)
+    cash_entitlements: Dict[str, float] = field(default_factory=dict)
 
 
 
