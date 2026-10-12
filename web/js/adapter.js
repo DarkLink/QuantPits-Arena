@@ -891,7 +891,6 @@ class ArenaDataAdapter {
   getCurrentSeasonMeta() {
     let sid = this.metadata.season_id || window.ArenaApp?.currentSeasonId || "season_01";
     if (sid === "season_1") sid = "season_01";
-    if (sid === "season_2") sid = "season_02";
     const seasons = window.ARENA_SEASONS_INDEX || [];
     const fromIndex = seasons.find(s => s.id === sid) || {};
     return { ...this.metadata, ...fromIndex, id: sid };

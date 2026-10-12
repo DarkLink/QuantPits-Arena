@@ -319,6 +319,13 @@ def build_dispatches(root,datasets):
 def publish(root,sids,end_date,count):
     from arena.evaluation import family_corrections
     recover_publication(root)
+    sids=sorted(sids,key=SeasonManager.season_sort_key)
+    registered=SeasonManager.list_seasons()
+    # Reusing a staged evaluation must not resurrect removed draft seasons.
+    staged_seasons=root/'staging/seasons'
+    if staged_seasons.exists():
+        for directory in staged_seasons.iterdir():
+            if directory.is_dir() and directory.name not in registered:shutil.rmtree(directory)
     family_corrections(root,sids)
     common_sources=['arena/data/market.py','arena/portfolio/engine.py','arena/portfolio/policy.py',
         'arena/portfolio/types.py','arena/portfolio/costs.py','arena/runner/weekly_cycle.py',
@@ -349,7 +356,7 @@ def publish(root,sids,end_date,count):
         content=output.read_text();outputs.append(content)
         payload=json.loads(content.split(f'window.ARENA_SEASONS_DATA["{sid}"] = ',1)[1].rstrip().rstrip(';'))
         meta=payload['meta']
-        index.append(dict(id=sid,title=data['cfg'].title,short_title=data['cfg'].universe_code,
+        index.append(dict(id=sid,title=data['cfg'].title,short_title=data['cfg'].raw_dict.get('short_title',data['cfg'].universe_code),
             status=data['cfg'].status,badge_type='active',period='2026.07 - 2026.10',anchor_date=data['cfg'].anchor_date,
             end_date=end_date,trading_days=len(data['nav']),contestants_count=6,animals_count=28,
             description=data['cfg'].description,dispatches_banner=dict(title='Recalculated research dispatches',link='#dispatches',link_text='Read dispatches'),
@@ -360,16 +367,17 @@ def publish(root,sids,end_date,count):
         if sid=='season_01':
             legacy='window.ARENA_DATA = '+json.dumps(payload,ensure_ascii=False,allow_nan=False)+';\n'
             (root/'staging/web/js/data/arena_data.js').write_text(legacy)
-    for sid in set(SeasonManager.list_seasons())-set(sids):
+    for sid in sorted(set(registered)-set(sids),key=SeasonManager.season_sort_key):
         cfg=effective_config(sid)
-        index.append(dict(id=sid,title=cfg.title,short_title=cfg.universe_code,status=cfg.status,
+        index.append(dict(id=sid,title=cfg.title,short_title=cfg.raw_dict.get('short_title',cfg.universe_code),status=cfg.status,
             anchor_date=cfg.anchor_date,end_date=cfg.end_date,trading_days=0,contestants_count=6,animals_count=28,
             description='Draft season; no future observations generated.',badge_type='warning'))
+    index.sort(key=lambda value:SeasonManager.season_sort_key(value['id']))
     index_text='window.ARENA_SEASONS_INDEX = '+json.dumps(index,ensure_ascii=False,indent=2)+';\n'
     (root/'staging/web/js/data/seasons_index.js').write_text(index_text)
     bundle='\n'.join(outputs)+legacy+index_text+'window.ARENA_ACTIVE_EVALUATION = '+json.dumps(root.name)+';\n'
     bundle_path=root/'staging/web/js/data/arena_release.js';bundle_path.write_text(bundle)
-    html=release_html((REPO_ROOT/'web/index.html').read_text(),root.name)
+    html=release_html((REPO_ROOT/'web/index.html').read_text(),f'{root.name}-{digest(bundle_path)[:12]}')
     (root/'staging/web/index.html').write_text(html)
     # Publishing journal keeps backups before every replace. Bundle is the last data commit.
     publish_files=[]

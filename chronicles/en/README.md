@@ -2,6 +2,7 @@
 
 All listed reports use the preserved historical raw signals and the unified repaired daily-bar research engine. The formal controls contain 100,000 random paths per TopK/DropN specification, ten random specifications per pool, plus one deterministic passive reference. Historical versions remain in the local evaluation archive.
 
+- [README](README.md)
 - [episode_09_the_september_02_breadth_shock_and_rabbit_rampage](episode_09_the_september_02_breadth_shock_and_rabbit_rampage.md)
 - [episode_10_the_apex_strike_and_the_120_milestone](episode_10_the_apex_strike_and_the_120_milestone.md)
 - [episode_11_the_mid_september_turbulence_and_contestant_d_surge](episode_11_the_mid_september_turbulence_and_contestant_d_surge.md)

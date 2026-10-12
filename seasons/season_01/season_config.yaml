@@ -1,7 +1,8 @@
 season_id: season_01
-title: 'Season 1: csirun300 Subset Arena'
+title: csirun300
+short_title: csirun300
 status: ACTIVE
-description: 'Season 1 csirun300 subset of CSI 300: 246 stocks, 6 anonymous contestants
+description: 'Live-aligned csirun300 subset of CSI 300: 246 stocks, 6 anonymous contestants
   x 28 execution variants x matched monkey control groups'
 calendar:
   anchor_date: '2026-07-03'
@@ -41,9 +42,13 @@ benchmarks:
   type: INDEX
   symbol: SH000300
   display_name: CSI 300 (Market Benchmark)
+- id: ghost_taotie
+  type: THEORETICAL
+  initial_cash: 100000000.0
+  display_name: Ghost Taotie (Capital Granularity Scenario)
 - id: monkeys
   type: STATISTICAL
-  colony_size_per_spec: 100
+  colony_size_per_spec: 100000
 dispatches:
   executive:
     tag: Repaired Research Release
@@ -1249,10 +1254,13 @@ dispatches:
       inception, not segment returns. The upper tail includes ties: p=(k+1)/(N+1).
       At N=100,000, minimum p is 9.9999e-06, never zero. Bonferroni/Holm/BH/BY are
       stored separately. The 840-item raw threshold is 5.952381e-05, with strict inequality;
-      at the formal count, up to four exceedances can pass Bonferroni. Earlier cutoffs
-      and repeated weekly reviews are descriptive monitoring. Correction does not
-      cover all historical windows jointly or hidden prior research selection. Monte
-      Carlo intervals measure simulation tail uncertainty and add no market history.</p>
+      at the formal count, up to four exceedances can pass Bonferroni. The same monkeys
+      retain cash and positions across weeks; actual daily NAV and pointwise quantiles
+      are saved, while weekly settlements define reporting segments. Earlier cutoffs
+      and repeated daily or weekly reviews are descriptive monitoring. Correction
+      does not cover all historical windows jointly or hidden prior research selection.
+      Monte Carlo intervals measure simulation tail uncertainty and add no market
+      history.</p>
 
       <p>Execution requires finite positive same-day quotes; missing-price sells retain
       the position. Valuation may carry the last valid close with stale-mark counts.
@@ -2447,10 +2455,13 @@ dispatches:
       inception, not segment returns. The upper tail includes ties: p=(k+1)/(N+1).
       At N=100,000, minimum p is 9.9999e-06, never zero. Bonferroni/Holm/BH/BY are
       stored separately. The 840-item raw threshold is 5.952381e-05, with strict inequality;
-      at the formal count, up to four exceedances can pass Bonferroni. Earlier cutoffs
-      and repeated weekly reviews are descriptive monitoring. Correction does not
-      cover all historical windows jointly or hidden prior research selection. Monte
-      Carlo intervals measure simulation tail uncertainty and add no market history.</p>
+      at the formal count, up to four exceedances can pass Bonferroni. The same monkeys
+      retain cash and positions across weeks; actual daily NAV and pointwise quantiles
+      are saved, while weekly settlements define reporting segments. Earlier cutoffs
+      and repeated daily or weekly reviews are descriptive monitoring. Correction
+      does not cover all historical windows jointly or hidden prior research selection.
+      Monte Carlo intervals measure simulation tail uncertainty and add no market
+      history.</p>
 
       <p>Execution requires finite positive same-day quotes; missing-price sells retain
       the position. Valuation may carry the last valid close with stale-mark counts.
@@ -3645,10 +3656,13 @@ dispatches:
       inception, not segment returns. The upper tail includes ties: p=(k+1)/(N+1).
       At N=100,000, minimum p is 9.9999e-06, never zero. Bonferroni/Holm/BH/BY are
       stored separately. The 840-item raw threshold is 5.952381e-05, with strict inequality;
-      at the formal count, up to four exceedances can pass Bonferroni. Earlier cutoffs
-      and repeated weekly reviews are descriptive monitoring. Correction does not
-      cover all historical windows jointly or hidden prior research selection. Monte
-      Carlo intervals measure simulation tail uncertainty and add no market history.</p>
+      at the formal count, up to four exceedances can pass Bonferroni. The same monkeys
+      retain cash and positions across weeks; actual daily NAV and pointwise quantiles
+      are saved, while weekly settlements define reporting segments. Earlier cutoffs
+      and repeated daily or weekly reviews are descriptive monitoring. Correction
+      does not cover all historical windows jointly or hidden prior research selection.
+      Monte Carlo intervals measure simulation tail uncertainty and add no market
+      history.</p>
 
       <p>Execution requires finite positive same-day quotes; missing-price sells retain
       the position. Valuation may carry the last valid close with stale-mark counts.
@@ -4843,10 +4857,13 @@ dispatches:
       inception, not segment returns. The upper tail includes ties: p=(k+1)/(N+1).
       At N=100,000, minimum p is 9.9999e-06, never zero. Bonferroni/Holm/BH/BY are
       stored separately. The 840-item raw threshold is 5.952381e-05, with strict inequality;
-      at the formal count, up to four exceedances can pass Bonferroni. Earlier cutoffs
-      and repeated weekly reviews are descriptive monitoring. Correction does not
-      cover all historical windows jointly or hidden prior research selection. Monte
-      Carlo intervals measure simulation tail uncertainty and add no market history.</p>
+      at the formal count, up to four exceedances can pass Bonferroni. The same monkeys
+      retain cash and positions across weeks; actual daily NAV and pointwise quantiles
+      are saved, while weekly settlements define reporting segments. Earlier cutoffs
+      and repeated daily or weekly reviews are descriptive monitoring. Correction
+      does not cover all historical windows jointly or hidden prior research selection.
+      Monte Carlo intervals measure simulation tail uncertainty and add no market
+      history.</p>
 
       <p>Execution requires finite positive same-day quotes; missing-price sells retain
       the position. Valuation may carry the last valid close with stale-mark counts.
@@ -6041,10 +6058,13 @@ dispatches:
       inception, not segment returns. The upper tail includes ties: p=(k+1)/(N+1).
       At N=100,000, minimum p is 9.9999e-06, never zero. Bonferroni/Holm/BH/BY are
       stored separately. The 840-item raw threshold is 5.952381e-05, with strict inequality;
-      at the formal count, up to four exceedances can pass Bonferroni. Earlier cutoffs
-      and repeated weekly reviews are descriptive monitoring. Correction does not
-      cover all historical windows jointly or hidden prior research selection. Monte
-      Carlo intervals measure simulation tail uncertainty and add no market history.</p>
+      at the formal count, up to four exceedances can pass Bonferroni. The same monkeys
+      retain cash and positions across weeks; actual daily NAV and pointwise quantiles
+      are saved, while weekly settlements define reporting segments. Earlier cutoffs
+      and repeated daily or weekly reviews are descriptive monitoring. Correction
+      does not cover all historical windows jointly or hidden prior research selection.
+      Monte Carlo intervals measure simulation tail uncertainty and add no market
+      history.</p>
 
       <p>Execution requires finite positive same-day quotes; missing-price sells retain
       the position. Valuation may carry the last valid close with stale-mark counts.
@@ -7240,10 +7260,13 @@ dispatches:
       inception, not segment returns. The upper tail includes ties: p=(k+1)/(N+1).
       At N=100,000, minimum p is 9.9999e-06, never zero. Bonferroni/Holm/BH/BY are
       stored separately. The 840-item raw threshold is 5.952381e-05, with strict inequality;
-      at the formal count, up to four exceedances can pass Bonferroni. Earlier cutoffs
-      and repeated weekly reviews are descriptive monitoring. Correction does not
-      cover all historical windows jointly or hidden prior research selection. Monte
-      Carlo intervals measure simulation tail uncertainty and add no market history.</p>
+      at the formal count, up to four exceedances can pass Bonferroni. The same monkeys
+      retain cash and positions across weeks; actual daily NAV and pointwise quantiles
+      are saved, while weekly settlements define reporting segments. Earlier cutoffs
+      and repeated daily or weekly reviews are descriptive monitoring. Correction
+      does not cover all historical windows jointly or hidden prior research selection.
+      Monte Carlo intervals measure simulation tail uncertainty and add no market
+      history.</p>
 
       <p>Execution requires finite positive same-day quotes; missing-price sells retain
       the position. Valuation may carry the last valid close with stale-mark counts.
@@ -8439,10 +8462,13 @@ dispatches:
       inception, not segment returns. The upper tail includes ties: p=(k+1)/(N+1).
       At N=100,000, minimum p is 9.9999e-06, never zero. Bonferroni/Holm/BH/BY are
       stored separately. The 840-item raw threshold is 5.952381e-05, with strict inequality;
-      at the formal count, up to four exceedances can pass Bonferroni. Earlier cutoffs
-      and repeated weekly reviews are descriptive monitoring. Correction does not
-      cover all historical windows jointly or hidden prior research selection. Monte
-      Carlo intervals measure simulation tail uncertainty and add no market history.</p>
+      at the formal count, up to four exceedances can pass Bonferroni. The same monkeys
+      retain cash and positions across weeks; actual daily NAV and pointwise quantiles
+      are saved, while weekly settlements define reporting segments. Earlier cutoffs
+      and repeated daily or weekly reviews are descriptive monitoring. Correction
+      does not cover all historical windows jointly or hidden prior research selection.
+      Monte Carlo intervals measure simulation tail uncertainty and add no market
+      history.</p>
 
       <p>Execution requires finite positive same-day quotes; missing-price sells retain
       the position. Valuation may carry the last valid close with stale-mark counts.

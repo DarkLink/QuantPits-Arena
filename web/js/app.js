@@ -97,7 +97,7 @@ window.ArenaApp = {
     const rawRequestedSeason = urlParams.get("season") || hashParams.season;
 
     const seasons = window.ARENA_SEASONS_INDEX || [
-      { id: "season_01", title: "Season 1: Graveyard Arena", short_title: "Season 1", status: "ACTIVE" }
+      { id: "season_01", title: "csirun300", short_title: "csirun300", status: "ACTIVE" }
     ];
 
     if (rawRequestedSeason) {
@@ -190,7 +190,7 @@ window.ArenaApp = {
 
     const seasons = window.ARENA_SEASONS_INDEX || [];
     const current = seasons.find(s => s.id === this.currentSeasonId);
-    const shortTitle = current ? current.short_title : "Season 1";
+    const shortTitle = current ? current.short_title : "csirun300";
     label.textContent = shortTitle;
 
     if (current && current.status === "DRAFT") {

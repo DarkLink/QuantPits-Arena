@@ -81,7 +81,7 @@ def freeze(root,sids,end_date):
     marker=inputs/'manifest.json'
     if marker.exists():
         saved=json.loads(marker.read_text())
-        if saved['cutoff']!=end_date or saved['seasons']!=sids:
+        if saved['cutoff']!=end_date or sorted(saved['seasons'])!=sorted(sids):
             raise ValueError('Immutable evaluation selection differs')
         for rel,sha in saved['files'].items():
             if digest(root/rel)!=sha: raise ValueError('Frozen input digest changed')

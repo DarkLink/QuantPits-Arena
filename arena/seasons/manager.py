@@ -101,6 +101,12 @@ class SeasonManager:
     """
 
     DEFAULT_SEASON = "season_01"
+    SEASON_ORDER = ("season_01", "season_csi300", "season_csi500", "season_csi800", "season_csi1000")
+    RETIRED_SEASONS = ("season_02",)
+
+    @classmethod
+    def season_sort_key(cls, season_id: str):
+        return (cls.SEASON_ORDER.index(season_id) if season_id in cls.SEASON_ORDER else len(cls.SEASON_ORDER), season_id)
 
     @classmethod
     def list_seasons(cls) -> List[str]:
@@ -111,7 +117,7 @@ class SeasonManager:
             d.name for d in sorted(SEASONS_DIR.iterdir())
             if d.is_dir() and ((d / "season_config.yaml").exists() or (d / "season.yaml").exists())
         ]
-        return seasons if seasons else [cls.DEFAULT_SEASON]
+        return sorted(seasons,key=cls.season_sort_key) if seasons else [cls.DEFAULT_SEASON]
 
     @classmethod
     def get_season_config(cls, season_id: Optional[str] = None) -> SeasonConfig:
@@ -121,6 +127,8 @@ class SeasonManager:
         若目标文件不存在则优雅回退至默认参数构建。
         """
         sid = season_id or cls.DEFAULT_SEASON
+        if sid in cls.RETIRED_SEASONS:
+            raise ValueError("The retired preview has been consolidated into season_01 (csirun300)")
         config_path = SEASONS_DIR / sid / "season_config.yaml"
         if not config_path.exists():
             config_path = SEASONS_DIR / sid / "season.yaml"

@@ -2,6 +2,7 @@
 import json
 import pytest
 from arena.reports import refresh_release as release
+from arena.evaluation import freeze
 
 
 def test_release_loader_is_idempotent():
@@ -15,6 +16,19 @@ def test_release_loader_is_idempotent():
     assert 'season_01.js' not in result
     assert release.release_html(result,'generation_a')==result
     assert 'v=generation_b' in release.release_html(result,'generation_b')
+
+
+def test_frozen_inputs_survive_catalog_reordering(tmp_path):
+    path=tmp_path/'inputs';path.mkdir()
+    frozen=path/'fixture.txt';frozen.write_text('unchanged frozen input')
+    release.save_json(path/'manifest.json',dict(cutoff='2026-10-09',
+        seasons=['season_01','season_csi1000','season_csi300','season_csi500','season_csi800'],
+        files={'inputs/fixture.txt':release.digest(frozen)}))
+    reordered=['season_01','season_csi300','season_csi500','season_csi800','season_csi1000']
+    result=freeze(tmp_path,reordered,'2026-10-09')
+    assert result['files']['inputs/fixture.txt']==release.digest(frozen)
+    with pytest.raises(ValueError,match='selection differs'):
+        freeze(tmp_path,reordered[:-1],'2026-10-09')
 
 
 @pytest.mark.parametrize('interruption',['before_swap','after_backup','after_install'])

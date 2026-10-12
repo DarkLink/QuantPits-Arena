@@ -11,11 +11,20 @@ def test_release_contract_and_view_runtime():
 const fs=require('fs');const vm=require('vm');
 const nodes=new Map();
 function node(id){if(!nodes.has(id))nodes.set(id,{innerHTML:'',addEventListener(){},querySelectorAll(){return[];},classList:{toggle(){},add(){},remove(){}}});return nodes.get(id);}
-global.window={addEventListener(){}};
-global.document={documentElement:{getAttribute(){return'dark';}},getElementById:node,querySelectorAll(){return[];},querySelector(){return node('query');}};
+global.window={addEventListener(){},location:{search:'',hash:'',href:'https://arena.invalid/'}};
+global.document={readyState:'loading',addEventListener(){},documentElement:{getAttribute(){return'dark';}},getElementById:node,querySelectorAll(){return[];},querySelector(){return node('query');}};
 global.setTimeout=cb=>{cb();return 0;};
 global.echarts={getInstanceByDom(){return null;},init(){return {setOption(option){global.lastChart=option;},resize(){},getOption(){return{series:[]};},on(){}};},graphic:{LinearGradient:function(){}}};
-for(const file of ['web/js/data/arena_release.js','web/js/adapter.js','web/js/components/charts.js','web/js/views/methodology.js','web/js/views/path_detail.js'])vm.runInThisContext(fs.readFileSync(file,'utf8'));
+for(const file of ['web/js/data/arena_release.js','web/js/adapter.js','web/js/components/charts.js','web/js/views/methodology.js','web/js/views/path_detail.js','web/js/app.js'])vm.runInThisContext(fs.readFileSync(file,'utf8'));
+const expected=['season_01','season_csi300','season_csi500','season_csi800','season_csi1000'];
+if(JSON.stringify(window.ARENA_SEASONS_INDEX.map(s=>s.id))!==JSON.stringify(expected))throw Error('season order differs');
+if(JSON.stringify(Object.keys(window.ARENA_SEASONS_DATA))!==JSON.stringify(expected))throw Error('bundle order differs');
+if(JSON.stringify(window.ARENA_SEASONS_INDEX.map(s=>s.short_title))!==JSON.stringify(['csirun300','CSI300','CSI500','CSI800','CSI1000']))throw Error('season labels differ');
+if(window.ARENA_SEASONS_INDEX.some(s=>s.status!=='ACTIVE'))throw Error('retired or inactive season visible');
+if(window.ArenaApp.normalizeSeasonId('season_02')!==null||window.ArenaApp.normalizeSeasonId('csirun300')!=='season_01')throw Error('season aliases differ');
+window.ArenaApp.initSeasonSelector();
+const dropdownIds=[...node('season-dropdown').innerHTML.matchAll(/data-season-id="([^"]+)"/g)].map(m=>m[1]);
+if(JSON.stringify(dropdownIds)!==JSON.stringify(expected)||node('current-season-label').textContent!=='csirun300')throw Error('dropdown order or default differs');
 const results=[];
 for(const [sid,data] of Object.entries(window.ARENA_SEASONS_DATA)){
  if(data.meta.evaluation_id!==window.ARENA_ACTIVE_EVALUATION)throw Error('mixed generations');

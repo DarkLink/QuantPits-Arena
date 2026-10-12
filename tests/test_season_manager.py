@@ -11,8 +11,9 @@ from arena.seasons import SeasonManager, SeasonConfig
 def test_season_manager_discovery():
     """验证赛季自动发现功能"""
     seasons = SeasonManager.list_seasons()
-    assert "season_01" in seasons
-    assert "season_02" in seasons
+    assert seasons == ["season_01", "season_csi300", "season_csi500", "season_csi800", "season_csi1000"]
+    assert [SeasonManager.get_season_config(s).title for s in seasons] == ['csirun300','CSI300','CSI500','CSI800','CSI1000']
+    assert all(SeasonManager.get_season_config(s).status == 'ACTIVE' for s in seasons)
 
 
 def test_default_season_01_config():
@@ -28,15 +29,17 @@ def test_default_season_01_config():
     assert any(b.get("id") == "csi300" for b in cfg.benchmarks)
 
 
-def test_season_02_config_and_ghost_taotie():
-    """验证 season_02 独立配置及其包含的 Ghost Taotie 基准"""
-    cfg = SeasonManager.get_season_config("season_02")
-    assert cfg.season_id == "season_02"
-    assert cfg.status == "DRAFT"
-    # season_02 启用了 ghost_taotie
+def test_csirun300_includes_current_policy_and_ghost_reference():
+    """当前执行规则和资本粒度参考直接应用于默认赛季。"""
+    cfg = SeasonManager.get_season_config()
+    assert cfg.title == "csirun300"
+    assert cfg.status == "ACTIVE"
+    assert cfg.raw_dict['execution_policy']['profile'] == 'daily_bar_research'
     benchmark_ids = [b.get("id") for b in cfg.benchmarks]
     assert "ghost_taotie" in benchmark_ids
     assert "taotie" in benchmark_ids
+    with pytest.raises(ValueError,match='consolidated'):
+        SeasonManager.get_season_config('season_02')
 
 
 def test_nonexistent_season_graceful_fallback():
