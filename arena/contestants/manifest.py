@@ -47,6 +47,8 @@ class ContestantManifest:
     # 溯源标记：来源文件路径及是否为公开匿名版
     source_file: Optional[str] = None
     is_anonymous: bool = False
+    observation_start: Optional[str] = None
+    statistics_eligible: bool = True
 
 
 def load_manifest(yaml_path: Path) -> ContestantManifest:
@@ -95,5 +97,7 @@ def load_manifest(yaml_path: Path) -> ContestantManifest:
         paired_rival=data.get("paired_rival"),
         notes=data.get("notes", ""),
         source_file=str(yaml_path),
-        is_anonymous=is_anon
+        is_anonymous=is_anon,
+        observation_start=str(data['observation_start']) if data.get('observation_start') else None,
+        statistics_eligible=bool(data.get('statistics_eligible', True)),
     )

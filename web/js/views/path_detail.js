@@ -32,13 +32,15 @@ window.PathDetailView = {
     const dates = window.arenaAdapter.getNavDates();
     const taotieCurve = window.arenaAdapter.getBenchmarkTaotieCurve();
     const csi300Curve = window.arenaAdapter.getBenchmarkCsi300Curve();
-    const monkeyDist = window.arenaAdapter.getMonkeyDistribution(specId);
+    const monkeyDist = path.test_status === 'observation' ? null : window.arenaAdapter.getMonkeyDistribution(specId);
 
     const isSig = path.empirical_p_value != null && path.empirical_p_value < 0.05;
     const pVal = path.empirical_p_value !== undefined ? path.empirical_p_value : (path.p_value !== undefined ? path.p_value : 1.0);
     const pRank = path.percentile_rank !== undefined ? path.percentile_rank : (path.monkey_percentile !== undefined ? path.monkey_percentile : (path.monkey_percentile_rank !== undefined ? path.monkey_percentile_rank : 50.0));
     const retColor = path.total_return_pct >= 0 ? "var(--accent-positive)" : "var(--accent-negative)";
-    const taotieRet = window.arenaAdapter.getTaotieReturn();
+    const taotieRet = path.observation_start && dates.includes(path.observation_start)
+      ? (taotieCurve.at(-1)/taotieCurve[dates.indexOf(path.observation_start)]-1)*100
+      : window.arenaAdapter.getTaotieReturn();
     const taotieExcess = path.total_return_pct - taotieRet;
     const seasonMeta = window.arenaAdapter?.getCurrentSeasonMeta() || {};
 
@@ -89,22 +91,22 @@ window.PathDetailView = {
           <!-- Return & Percentile Highlights -->
           <div style="display:flex; gap:1.25rem; align-items:center;">
             <div style="text-align:right;">
-              <div style="font-size:0.75rem; color:var(--text-tertiary); text-transform:uppercase;">OOS Total Return</div>
+              <div style="font-size:0.75rem; color:var(--text-tertiary); text-transform:uppercase;">${path.observation_start ? 'Observation return since '+path.observation_start : 'OOS Total Return'}</div>
               <div style="font-size:2.2rem; font-weight:800; color:${retColor};">
                 ${path.total_return_pct >= 0 ? '+' : ''}${path.total_return_pct.toFixed(2)}%
               </div>
               <div style="font-size:0.75rem; color:var(--text-tertiary);">
-                Excess vs Executable <span data-tooltip-term="taotie">${window.arenaAdapter.getTaotieShortName()}</span>: <b>${taotieExcess >= 0 ? '+' : ''}${taotieExcess.toFixed(2)}%</b>
+                Excess vs Executable <span data-tooltip-term="taotie">${window.arenaAdapter.getTaotieShortName()}</span>: <b>${taotieExcess >= 0 ? '+' : ''}${taotieExcess.toFixed(2)} pp</b>
               </div>
             </div>
             <div style="text-align:right; border-left:1px solid var(--border-subtle); padding-left:1.25rem;">
               <div style="font-size:0.75rem; color:var(--text-tertiary); text-transform:uppercase;" data-tooltip-term="monkey_percentile">Monkey Percentile</div>
               <div style="font-size:2.2rem; font-weight:800; color:${isSig ? 'var(--accent-positive)' : 'var(--accent-warning)'};">
-                ${window.formatPercentile ? window.formatPercentile(pRank, path.monkey_count) : pRank.toFixed(1) + '%'}
+                ${pRank == null ? 'N/A' : window.formatPercentile ? window.formatPercentile(pRank, path.monkey_count) : pRank.toFixed(1) + '%'}
               </div>
               <div style="font-size:0.75rem; color:var(--text-tertiary);">
                 Raw p: <b data-tooltip-term="p_value">${window.formatPValue(pVal)}</b><br>
-                Bonferroni p (M=${path.family_size || 840}): <b>${window.formatPValue(path.bonferroni_p)}</b><br>
+                Bonferroni p${path.observation_start ? '' : ' (M='+(path.family_size || 840)+')'}: <b>${window.formatPValue(path.bonferroni_p)}</b><br>
                 ${path.monkey_count ? `k/N: ${path.exceedance_count}/${path.monkey_count}; resolution ${(path.p_resolution || 1/(path.monkey_count+1)).toExponential(3)}` : 'Random-control test: N/A'}
               </div>
             </div>
@@ -258,7 +260,7 @@ window.PathDetailView = {
       } else {
         const dom = document.getElementById("chart-path-monkey-dist");
         if (dom) {
-          dom.innerHTML = `<div style="display:flex; align-items:center; justify-content:center; height:100%; color:var(--text-tertiary); font-size:0.85rem;">${path.test_status === "not_applicable" ? "Random-control test is not applicable to this reference" : `Null distribution for ${specId} pending simulation`}</div>`;
+          dom.innerHTML = `<div style="display:flex; align-items:center; justify-content:center; height:100%; color:var(--text-tertiary); font-size:0.85rem;">${path.test_status === 'observation' ? 'Observation window: no random-control test is assigned' : path.test_status === "not_applicable" ? "Random-control test is not applicable to this reference" : `Null distribution for ${specId} pending simulation`}</div>`;
         }
       }
 

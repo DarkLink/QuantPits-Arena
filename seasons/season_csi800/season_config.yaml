@@ -7,7 +7,7 @@ description: 'CSI 800 broad-cap universe benchmark: evaluating the 6 Alpha candi
 calendar:
   anchor_date: '2026-07-03'
   first_trade_date: '2026-07-06'
-  end_date: '2026-10-09'
+  end_date: '2026-10-16'
   cycle_freq: weekly
 execution:
   initial_cash: 500000.0
@@ -51,26 +51,26 @@ benchmarks:
 dispatches:
   executive:
     tag: Repaired Research Release
-    title: 'season_csi800: through 2026-10-09'
-    window_label: 2026-07-03 ~ 2026-10-09 · 65 NAV observations · 64 return sessions
+    title: 'season_csi800: through 2026-10-16'
+    window_label: 2026-07-03 ~ 2026-10-16 · 70 NAV observations · 69 return sessions
     nature_label: Retrospective repair using preserved historical signals; daily-bar
       execution research.
-    leader_summary: CONTESTANT_B_rabbit-2 leads at NAV 1.1210 (+12.10%). October segment
-      leader CONTESTANT_E_meerkat-50 at +1.84%.
+    leader_summary: CONTESTANT_B_rabbit-2 leads at NAV 1.1252 (+12.52%). October segment
+      leader CONTESTANT_B_eagle-66-9 at +0.80%.
   climate:
     tag: Recalculated Market Review
     status_badge: Released
     title: Recalculated reporting segment
-    summary: '2026-09-30 ~ 2026-10-09: 90/168 contestant paths positive. All statistics
+    summary: '2026-10-09 ~ 2026-10-16: 13/168 contestant paths positive. All statistics
       use the repaired execution policy and 100,000 matched random controls per spec.'
     bullets:
-    - 45/168 raw cumulative p<0.05 in this pool; 14/168 Bonferroni p<0.05 within the
+    - 51/168 raw cumulative p<0.05 in this pool; 22/168 Bonferroni p<0.05 within the
       complete 840-item family.
     - Past dispatches are retrospectively recalculated; historical pre-market commitment
       is not established.
     - Daily-bar research lacks complete verified corporate actions and opening direction-limit
       data.
-    decrypt_label: All dispatches recalculated through 2026-10-09
+    decrypt_label: All dispatches recalculated through 2026-10-16
   episodes:
   - id: csi800_m1_m2
     tab_label: '📜 M1–M2: Broad-Cap Supremacy'
@@ -3890,6 +3890,1807 @@ dispatches:
       data are unavailable. Factor changes are not guessed into dividend payments,
       and adjusted prices are not mixed with unchanged nominal shares to claim a total-return
       repair. Strict execution fails its preflight without required coverage.</p>'
+  - id: refresh_20261016
+    date: '2026-10-16'
+    file: chronicles/en/season_csi800_20261016.md
+    tab_label: 2026-10-16 Recalculated
+    title: season_csi800 — repaired dispatch through 2026-10-16
+    summary: 'Repaired replay: 5 return sessions; CONTESTANT_B_eagle-66-9 segment
+      +0.80%. Cumulative leader CONTESTANT_B_rabbit-2 at NAV 1.1252.'
+    badge: Recalculated
+    read_time: 8 min read
+    content_html: '<h1>season_csi800 — repaired dispatch through 2026-10-16</h1>
+
+      <p>This dispatch is a retrospective repair replay using the actual raw weekly
+      signals preserved in legacy checkpoints and a frozen current daily-bar snapshot.
+      Reporting anchor: 2026-10-09; cutoff: 2026-10-16. Period returns are NAV ratios;
+      differences in returns are percentage points. Legacy artifacts are archived
+      separately. This refreshed document is not evidence of a historical pre-market
+      commitment.</p>
+
+      <h2>⚡ TL;DR</h2>
+
+      <ul>
+
+      <li>2026-10-09 → 2026-10-16: 5 return sessions, 6 NAV observations including
+      the reporting anchor; 1 scheduled rebalances.</li>
+
+      <li>Period leader CONTESTANT_B_eagle-66-9: +0.8040%; end NAV 1.080010.</li>
+
+      <li>Cumulative leader CONTESTANT_B_rabbit-2: +12.5165%; end NAV 1.125165.</li>
+
+      <li>13/168 contestant paths gained during this segment; median path return -3.4731%.</li>
+
+      <li>Market index segment return -4.2615%; end normalized NAV 0.836572.</li>
+
+      <li>Taotie -0.2849% for the segment, end NAV 0.998994; Ghost scenario -3.7552%,
+      NAV 0.883481.</li>
+
+      <li>Cumulative leader raw p=9.9999e-06, Bonferroni p=0.00839992; N=100,000 per
+      matched random spec.</li>
+
+      <li>At this cutoff: 51/168 raw p&lt;0.05 and 22/168 Bonferroni p&lt;0.05 in
+      this pool, within the visible 840-item family.</li>
+
+      </ul>
+
+      <h2>Period and cumulative standings</h2>
+
+      <p>Top ten for the reporting segment:</p>
+
+      <table>
+
+      <thead>
+
+      <tr>
+
+      <th>path</th>
+
+      <th>period_pct</th>
+
+      <th>cumulative_pct</th>
+
+      <th>nav</th>
+
+      <th>period_mdd_pct</th>
+
+      <th>raw_p</th>
+
+      <th>bonferroni_p</th>
+
+      </tr>
+
+      </thead>
+
+      <tbody>
+
+      <tr>
+
+      <td>CONTESTANT_B_eagle-66-9</td>
+
+      <td>0.8040</td>
+
+      <td>8.0010</td>
+
+      <td>1.0800</td>
+
+      <td>1.0113</td>
+
+      <td>9.9999e-06</td>
+
+      <td>0.00839992</td>
+
+      </tr>
+
+      <tr>
+
+      <td>CONTESTANT_C_meerkat-10</td>
+
+      <td>0.7555</td>
+
+      <td>-1.5806</td>
+
+      <td>0.9842</td>
+
+      <td>0.9179</td>
+
+      <td>0.0133699</td>
+
+      <td>1</td>
+
+      </tr>
+
+      <tr>
+
+      <td>CONTESTANT_C_meerkat-20</td>
+
+      <td>0.6436</td>
+
+      <td>3.2816</td>
+
+      <td>1.0328</td>
+
+      <td>0.9046</td>
+
+      <td>0.000119999</td>
+
+      <td>0.100799</td>
+
+      </tr>
+
+      <tr>
+
+      <td>CONTESTANT_B_eagle-88-12</td>
+
+      <td>0.5977</td>
+
+      <td>7.1515</td>
+
+      <td>1.0715</td>
+
+      <td>1.2509</td>
+
+      <td>9.9999e-06</td>
+
+      <td>0.00839992</td>
+
+      </tr>
+
+      <tr>
+
+      <td>CONTESTANT_A_meerkat-10</td>
+
+      <td>0.5455</td>
+
+      <td>2.0932</td>
+
+      <td>1.0209</td>
+
+      <td>1.6189</td>
+
+      <td>0.000539995</td>
+
+      <td>0.453595</td>
+
+      </tr>
+
+      <tr>
+
+      <td>CONTESTANT_B_eagle-44-6</td>
+
+      <td>0.5238</td>
+
+      <td>7.1175</td>
+
+      <td>1.0712</td>
+
+      <td>0.9932</td>
+
+      <td>9.9999e-06</td>
+
+      <td>0.00839992</td>
+
+      </tr>
+
+      <tr>
+
+      <td>CONTESTANT_B_rabbit-2</td>
+
+      <td>0.3709</td>
+
+      <td>12.5165</td>
+
+      <td>1.1252</td>
+
+      <td>1.1045</td>
+
+      <td>9.9999e-06</td>
+
+      <td>0.00839992</td>
+
+      </tr>
+
+      <tr>
+
+      <td>CONTESTANT_B_rabbit-1</td>
+
+      <td>0.3070</td>
+
+      <td>9.1555</td>
+
+      <td>1.0916</td>
+
+      <td>1.1354</td>
+
+      <td>9.9999e-06</td>
+
+      <td>0.00839992</td>
+
+      </tr>
+
+      <tr>
+
+      <td>CONTESTANT_D_eagle-66-9</td>
+
+      <td>0.1912</td>
+
+      <td>4.3104</td>
+
+      <td>1.0431</td>
+
+      <td>1.2791</td>
+
+      <td>9.9999e-06</td>
+
+      <td>0.00839992</td>
+
+      </tr>
+
+      <tr>
+
+      <td>CONTESTANT_D_eagle-88-12</td>
+
+      <td>0.1498</td>
+
+      <td>5.9335</td>
+
+      <td>1.0593</td>
+
+      <td>1.2665</td>
+
+      <td>9.9999e-06</td>
+
+      <td>0.00839992</td>
+
+      </tr>
+
+      </tbody>
+
+      </table>
+
+      <p>Top ten cumulatively through this cutoff:</p>
+
+      <table>
+
+      <thead>
+
+      <tr>
+
+      <th>path</th>
+
+      <th>period_pct</th>
+
+      <th>cumulative_pct</th>
+
+      <th>nav</th>
+
+      <th>period_mdd_pct</th>
+
+      <th>raw_p</th>
+
+      <th>bonferroni_p</th>
+
+      </tr>
+
+      </thead>
+
+      <tbody>
+
+      <tr>
+
+      <td>CONTESTANT_B_rabbit-2</td>
+
+      <td>0.3709</td>
+
+      <td>12.5165</td>
+
+      <td>1.1252</td>
+
+      <td>1.1045</td>
+
+      <td>9.9999e-06</td>
+
+      <td>0.00839992</td>
+
+      </tr>
+
+      <tr>
+
+      <td>CONTESTANT_D_rabbit-1</td>
+
+      <td>-1.2226</td>
+
+      <td>9.7918</td>
+
+      <td>1.0979</td>
+
+      <td>1.6726</td>
+
+      <td>9.9999e-06</td>
+
+      <td>0.00839992</td>
+
+      </tr>
+
+      <tr>
+
+      <td>CONTESTANT_B_rabbit-1</td>
+
+      <td>0.3070</td>
+
+      <td>9.1555</td>
+
+      <td>1.0916</td>
+
+      <td>1.1354</td>
+
+      <td>9.9999e-06</td>
+
+      <td>0.00839992</td>
+
+      </tr>
+
+      <tr>
+
+      <td>CONTESTANT_B_eagle-66-9</td>
+
+      <td>0.8040</td>
+
+      <td>8.0010</td>
+
+      <td>1.0800</td>
+
+      <td>1.0113</td>
+
+      <td>9.9999e-06</td>
+
+      <td>0.00839992</td>
+
+      </tr>
+
+      <tr>
+
+      <td>CONTESTANT_D_meerkat-10</td>
+
+      <td>-0.7876</td>
+
+      <td>7.7457</td>
+
+      <td>1.0775</td>
+
+      <td>1.7053</td>
+
+      <td>9.9999e-06</td>
+
+      <td>0.00839992</td>
+
+      </tr>
+
+      <tr>
+
+      <td>CONTESTANT_B_whale-shark</td>
+
+      <td>0.1426</td>
+
+      <td>7.5289</td>
+
+      <td>1.0753</td>
+
+      <td>1.4688</td>
+
+      <td>9.9999e-06</td>
+
+      <td>0.00839992</td>
+
+      </tr>
+
+      <tr>
+
+      <td>CONTESTANT_B_eagle-88-12</td>
+
+      <td>0.5977</td>
+
+      <td>7.1515</td>
+
+      <td>1.0715</td>
+
+      <td>1.2509</td>
+
+      <td>9.9999e-06</td>
+
+      <td>0.00839992</td>
+
+      </tr>
+
+      <tr>
+
+      <td>CONTESTANT_B_eagle-44-6</td>
+
+      <td>0.5238</td>
+
+      <td>7.1175</td>
+
+      <td>1.0712</td>
+
+      <td>0.9932</td>
+
+      <td>9.9999e-06</td>
+
+      <td>0.00839992</td>
+
+      </tr>
+
+      <tr>
+
+      <td>CONTESTANT_B_sloth-1</td>
+
+      <td>-0.5804</td>
+
+      <td>6.7521</td>
+
+      <td>1.0675</td>
+
+      <td>1.4789</td>
+
+      <td>9.9999e-06</td>
+
+      <td>0.00839992</td>
+
+      </tr>
+
+      <tr>
+
+      <td>CONTESTANT_D_rabbit-2</td>
+
+      <td>-0.8450</td>
+
+      <td>5.9351</td>
+
+      <td>1.0594</td>
+
+      <td>1.5031</td>
+
+      <td>3.99996e-05</td>
+
+      <td>0.0335997</td>
+
+      </tr>
+
+      </tbody>
+
+      </table>
+
+      <p>Bottom five for the segment:</p>
+
+      <table>
+
+      <thead>
+
+      <tr>
+
+      <th>path</th>
+
+      <th>period_pct</th>
+
+      <th>cumulative_pct</th>
+
+      <th>nav</th>
+
+      <th>period_mdd_pct</th>
+
+      <th>raw_p</th>
+
+      <th>bonferroni_p</th>
+
+      </tr>
+
+      </thead>
+
+      <tbody>
+
+      <tr>
+
+      <td>CONTESTANT_A_snail-3</td>
+
+      <td>-8.0047</td>
+
+      <td>-17.7526</td>
+
+      <td>0.8225</td>
+
+      <td>8.1919</td>
+
+      <td>0.98477</td>
+
+      <td>1</td>
+
+      </tr>
+
+      <tr>
+
+      <td>CONTESTANT_A_eagle-5-1</td>
+
+      <td>-8.7891</td>
+
+      <td>-21.1531</td>
+
+      <td>0.7885</td>
+
+      <td>8.7891</td>
+
+      <td>0.873411</td>
+
+      <td>1</td>
+
+      </tr>
+
+      <tr>
+
+      <td>CONTESTANT_A_sloth-4</td>
+
+      <td>-9.1332</td>
+
+      <td>-16.0220</td>
+
+      <td>0.8398</td>
+
+      <td>9.1332</td>
+
+      <td>0.95466</td>
+
+      <td>1</td>
+
+      </tr>
+
+      <tr>
+
+      <td>CONTESTANT_A_snail-4</td>
+
+      <td>-9.1956</td>
+
+      <td>-18.7340</td>
+
+      <td>0.8127</td>
+
+      <td>9.1956</td>
+
+      <td>0.99237</td>
+
+      <td>1</td>
+
+      </tr>
+
+      <tr>
+
+      <td>CONTESTANT_A_sloth-3</td>
+
+      <td>-10.0706</td>
+
+      <td>-15.5393</td>
+
+      <td>0.8446</td>
+
+      <td>10.1198</td>
+
+      <td>0.940491</td>
+
+      <td>1</td>
+
+      </tr>
+
+      </tbody>
+
+      </table>
+
+      <h2>Six anonymous contestants</h2>
+
+      <p>Each row includes all 28 animals; no selection of winning combinations.</p>
+
+      <table>
+
+      <thead>
+
+      <tr>
+
+      <th>contestant</th>
+
+      <th>mean_pct</th>
+
+      <th>median_pct</th>
+
+      <th>positive</th>
+
+      <th>best_pct</th>
+
+      <th>worst_pct</th>
+
+      <th>mean_mdd_pct</th>
+
+      </tr>
+
+      </thead>
+
+      <tbody>
+
+      <tr>
+
+      <td>CONTESTANT_A</td>
+
+      <td>-4.6464</td>
+
+      <td>-4.7017</td>
+
+      <td>1</td>
+
+      <td>0.5455</td>
+
+      <td>-10.0706</td>
+
+      <td>5.2632</td>
+
+      </tr>
+
+      <tr>
+
+      <td>CONTESTANT_B</td>
+
+      <td>-2.0991</td>
+
+      <td>-1.8362</td>
+
+      <td>8</td>
+
+      <td>0.8040</td>
+
+      <td>-6.7498</td>
+
+      <td>3.0522</td>
+
+      </tr>
+
+      <tr>
+
+      <td>CONTESTANT_C</td>
+
+      <td>-3.1450</td>
+
+      <td>-2.9238</td>
+
+      <td>2</td>
+
+      <td>0.7555</td>
+
+      <td>-7.1694</td>
+
+      <td>3.6370</td>
+
+      </tr>
+
+      <tr>
+
+      <td>CONTESTANT_D</td>
+
+      <td>-2.5442</td>
+
+      <td>-2.6144</td>
+
+      <td>2</td>
+
+      <td>0.1912</td>
+
+      <td>-6.1086</td>
+
+      <td>3.1823</td>
+
+      </tr>
+
+      <tr>
+
+      <td>CONTESTANT_E</td>
+
+      <td>-4.7076</td>
+
+      <td>-4.8188</td>
+
+      <td>0</td>
+
+      <td>-2.3021</td>
+
+      <td>-7.0907</td>
+
+      <td>4.9091</td>
+
+      </tr>
+
+      <tr>
+
+      <td>CONTESTANT_F</td>
+
+      <td>-4.2641</td>
+
+      <td>-4.1158</td>
+
+      <td>0</td>
+
+      <td>-1.8592</td>
+
+      <td>-6.6555</td>
+
+      <td>4.8256</td>
+
+      </tr>
+
+      </tbody>
+
+      </table>
+
+      <h2>All animal policies</h2>
+
+      <p>Each row summarizes segment returns across the six contestants; the range
+      describes contestant-policy interaction.</p>
+
+      <table>
+
+      <thead>
+
+      <tr>
+
+      <th>animal</th>
+
+      <th>mean_pct</th>
+
+      <th>median_pct</th>
+
+      <th>best_pct</th>
+
+      <th>worst_pct</th>
+
+      </tr>
+
+      </thead>
+
+      <tbody>
+
+      <tr>
+
+      <td>eagle-11-2</td>
+
+      <td>-4.4855</td>
+
+      <td>-4.5948</td>
+
+      <td>-1.7288</td>
+
+      <td>-7.5257</td>
+
+      </tr>
+
+      <tr>
+
+      <td>eagle-44-6</td>
+
+      <td>-1.8122</td>
+
+      <td>-0.9467</td>
+
+      <td>0.5238</td>
+
+      <td>-4.5064</td>
+
+      </tr>
+
+      <tr>
+
+      <td>eagle-5-1</td>
+
+      <td>-5.4353</td>
+
+      <td>-5.7608</td>
+
+      <td>-1.6491</td>
+
+      <td>-8.7891</td>
+
+      </tr>
+
+      <tr>
+
+      <td>eagle-66-9</td>
+
+      <td>-1.2090</td>
+
+      <td>-0.4202</td>
+
+      <td>0.8040</td>
+
+      <td>-4.1042</td>
+
+      </tr>
+
+      <tr>
+
+      <td>eagle-88-12</td>
+
+      <td>-1.2069</td>
+
+      <td>-0.3198</td>
+
+      <td>0.5977</td>
+
+      <td>-4.0909</td>
+
+      </tr>
+
+      <tr>
+
+      <td>koala</td>
+
+      <td>-4.2400</td>
+
+      <td>-4.0078</td>
+
+      <td>-3.0666</td>
+
+      <td>-6.7498</td>
+
+      </tr>
+
+      <tr>
+
+      <td>meerkat-10</td>
+
+      <td>-1.8053</td>
+
+      <td>-0.3482</td>
+
+      <td>0.7555</td>
+
+      <td>-5.8758</td>
+
+      </tr>
+
+      <tr>
+
+      <td>meerkat-20</td>
+
+      <td>-1.4764</td>
+
+      <td>-0.5588</td>
+
+      <td>0.6436</td>
+
+      <td>-4.8491</td>
+
+      </tr>
+
+      <tr>
+
+      <td>meerkat-30</td>
+
+      <td>-2.2617</td>
+
+      <td>-2.1901</td>
+
+      <td>0.0654</td>
+
+      <td>-3.9400</td>
+
+      </tr>
+
+      <tr>
+
+      <td>meerkat-40</td>
+
+      <td>-3.0076</td>
+
+      <td>-2.4676</td>
+
+      <td>-1.3283</td>
+
+      <td>-4.7885</td>
+
+      </tr>
+
+      <tr>
+
+      <td>meerkat-50</td>
+
+      <td>-3.3113</td>
+
+      <td>-3.3793</td>
+
+      <td>-2.4079</td>
+
+      <td>-4.1275</td>
+
+      </tr>
+
+      <tr>
+
+      <td>meerkat-60</td>
+
+      <td>-4.1760</td>
+
+      <td>-4.1952</td>
+
+      <td>-1.8592</td>
+
+      <td>-6.6509</td>
+
+      </tr>
+
+      <tr>
+
+      <td>meerkat-70</td>
+
+      <td>-4.5764</td>
+
+      <td>-5.1755</td>
+
+      <td>-2.3021</td>
+
+      <td>-5.9126</td>
+
+      </tr>
+
+      <tr>
+
+      <td>meerkat-80</td>
+
+      <td>-4.5712</td>
+
+      <td>-3.9873</td>
+
+      <td>-3.4690</td>
+
+      <td>-7.1576</td>
+
+      </tr>
+
+      <tr>
+
+      <td>meerkat-90</td>
+
+      <td>-4.7068</td>
+
+      <td>-5.2572</td>
+
+      <td>-2.0759</td>
+
+      <td>-6.8657</td>
+
+      </tr>
+
+      <tr>
+
+      <td>rabbit-1</td>
+
+      <td>-2.2777</td>
+
+      <td>-2.6469</td>
+
+      <td>0.3070</td>
+
+      <td>-3.8829</td>
+
+      </tr>
+
+      <tr>
+
+      <td>rabbit-2</td>
+
+      <td>-2.4662</td>
+
+      <td>-3.1808</td>
+
+      <td>0.3709</td>
+
+      <td>-4.6333</td>
+
+      </tr>
+
+      <tr>
+
+      <td>robot</td>
+
+      <td>-3.8113</td>
+
+      <td>-4.0766</td>
+
+      <td>-0.1155</td>
+
+      <td>-7.3881</td>
+
+      </tr>
+
+      <tr>
+
+      <td>sloth-1</td>
+
+      <td>-3.7373</td>
+
+      <td>-3.8825</td>
+
+      <td>-0.5804</td>
+
+      <td>-6.4457</td>
+
+      </tr>
+
+      <tr>
+
+      <td>sloth-2</td>
+
+      <td>-4.2422</td>
+
+      <td>-4.0638</td>
+
+      <td>-1.9435</td>
+
+      <td>-7.3720</td>
+
+      </tr>
+
+      <tr>
+
+      <td>sloth-3</td>
+
+      <td>-5.1172</td>
+
+      <td>-4.2581</td>
+
+      <td>-3.0451</td>
+
+      <td>-10.0706</td>
+
+      </tr>
+
+      <tr>
+
+      <td>sloth-4</td>
+
+      <td>-5.4368</td>
+
+      <td>-5.4181</td>
+
+      <td>-2.0902</td>
+
+      <td>-9.1332</td>
+
+      </tr>
+
+      <tr>
+
+      <td>snail-1</td>
+
+      <td>-3.7519</td>
+
+      <td>-4.0428</td>
+
+      <td>-0.5989</td>
+
+      <td>-6.4395</td>
+
+      </tr>
+
+      <tr>
+
+      <td>snail-2</td>
+
+      <td>-4.2710</td>
+
+      <td>-4.0923</td>
+
+      <td>-1.9716</td>
+
+      <td>-7.3913</td>
+
+      </tr>
+
+      <tr>
+
+      <td>snail-3</td>
+
+      <td>-4.7711</td>
+
+      <td>-4.3573</td>
+
+      <td>-2.8226</td>
+
+      <td>-8.0047</td>
+
+      </tr>
+
+      <tr>
+
+      <td>snail-4</td>
+
+      <td>-5.6424</td>
+
+      <td>-5.8313</td>
+
+      <td>-2.6696</td>
+
+      <td>-9.1956</td>
+
+      </tr>
+
+      <tr>
+
+      <td>turtle</td>
+
+      <td>-4.8697</td>
+
+      <td>-5.1250</td>
+
+      <td>-2.4204</td>
+
+      <td>-7.1694</td>
+
+      </tr>
+
+      <tr>
+
+      <td>whale-shark</td>
+
+      <td>-1.2200</td>
+
+      <td>-0.4255</td>
+
+      <td>0.1426</td>
+
+      <td>-3.4123</td>
+
+      </tr>
+
+      </tbody>
+
+      </table>
+
+      <h2>Mechanisms and interpretation</h2>
+
+      <p>The TopK=5/DropN=1 segment spread across contestants is 7.1400 percentage
+      points. A winning concentrated path does not establish a universal concentration
+      advantage. Rabbit DropN changes weekly replacement capacity, not trading frequency.
+      Sloth delay and cold-start cash, and Snail warm-start stale signals, jointly
+      alter exposure and path dependence; these are whole-strategy comparisons, not
+      an identified prediction half-life. Percentile Meerkats and inverted Koala should
+      be read against the full contestant distribution above.</p>
+
+      <p>Contestant averages describe consistency across animals; the best row describes
+      realized performance in this window. Pool membership, fees, lots, cash exposure
+      and signal cross-sections all contribute to differences across environments.
+      The results do not identify a single macro cause or disclose contestant architecture.</p>
+
+      <h2>Random-control and execution contract</h2>
+
+      <p>Matching uses TopK/DropN only: ten random specifications and one deterministic
+      passive reference. Delay, warm/cold starts, inversion and percentile selection
+      do not introduce extra species. The p values above test cumulative returns from
+      inception, not segment returns. The upper tail includes ties: p=(k+1)/(N+1).
+      At N=100,000, minimum p is 9.9999e-06, never zero. Bonferroni/Holm/BH/BY are
+      stored separately. The 840-item raw threshold is 5.952381e-05, with strict inequality;
+      at the formal count, up to four exceedances can pass Bonferroni. The same monkeys
+      retain cash and positions across weeks; actual daily NAV and pointwise quantiles
+      are saved, while weekly settlements define reporting segments. Earlier cutoffs
+      and repeated daily or weekly reviews are descriptive monitoring. Correction
+      does not cover all historical windows jointly or hidden prior research selection.
+      Monte Carlo intervals measure simulation tail uncertainty and add no market
+      history.</p>
+
+      <p>Execution requires finite positive same-day quotes; missing-price sells retain
+      the position. Valuation may carry the last valid close with stale-mark counts.
+      Pool membership is separate from affordability. Decision-close intent is frozen
+      before Monday execution. Taotie uses a 1.0 standard-account capital ratio and
+      the same allocation policy. Ghost is a capital-granularity scenario, not a costless
+      equal-weight index. Turnover is gross buys plus gross sells divided by starting
+      assets.</p>
+
+      <p>This remains daily-bar research: full-day volume is a retrospective tradability
+      proxy. Complete verified corporate-action, opening direction-limit and capacity
+      data are unavailable. Factor changes are not guessed into dividend payments,
+      and adjusted prices are not mixed with unchanged nominal shares to claim a total-return
+      repair. Strict execution fails its preflight without required coverage.</p>
+
+      <h2>Separate observation windows</h2>
+
+      <p>These anonymous paths are reported over their stated observation windows
+      and are excluded from the full-season cumulative standings and 840-item tests
+      above. Reference paths use the same animal and close anchor; differences are
+      observation returns minus reference returns in percentage points. No random-control
+      p value is assigned to these windows.</p>
+
+      <table>
+
+      <thead>
+
+      <tr>
+
+      <th>path</th>
+
+      <th>anchor</th>
+
+      <th>cutoff</th>
+
+      <th>return_pct</th>
+
+      <th>mdd_pct</th>
+
+      <th>reference_path</th>
+
+      <th>reference_return_pct</th>
+
+      <th>difference_pp</th>
+
+      </tr>
+
+      </thead>
+
+      <tbody>
+
+      <tr>
+
+      <td>CONTESTANT_G_robot</td>
+
+      <td>2026-10-09</td>
+
+      <td>2026-10-16</td>
+
+      <td>-7.4401</td>
+
+      <td>7.6767</td>
+
+      <td>CONTESTANT_A_robot</td>
+
+      <td>-7.3881</td>
+
+      <td>-0.0520</td>
+
+      </tr>
+
+      <tr>
+
+      <td>CONTESTANT_G_sloth-1</td>
+
+      <td>2026-10-09</td>
+
+      <td>2026-10-16</td>
+
+      <td>-6.4457</td>
+
+      <td>7.2647</td>
+
+      <td>CONTESTANT_A_sloth-1</td>
+
+      <td>-6.4457</td>
+
+      <td>0.0000</td>
+
+      </tr>
+
+      <tr>
+
+      <td>CONTESTANT_G_sloth-2</td>
+
+      <td>2026-10-09</td>
+
+      <td>2026-10-16</td>
+
+      <td>-7.3720</td>
+
+      <td>7.8579</td>
+
+      <td>CONTESTANT_A_sloth-2</td>
+
+      <td>-7.3720</td>
+
+      <td>0.0000</td>
+
+      </tr>
+
+      <tr>
+
+      <td>CONTESTANT_G_sloth-3</td>
+
+      <td>2026-10-09</td>
+
+      <td>2026-10-16</td>
+
+      <td>-10.0706</td>
+
+      <td>10.1198</td>
+
+      <td>CONTESTANT_A_sloth-3</td>
+
+      <td>-10.0706</td>
+
+      <td>0.0000</td>
+
+      </tr>
+
+      <tr>
+
+      <td>CONTESTANT_G_sloth-4</td>
+
+      <td>2026-10-09</td>
+
+      <td>2026-10-16</td>
+
+      <td>-9.1332</td>
+
+      <td>9.1332</td>
+
+      <td>CONTESTANT_A_sloth-4</td>
+
+      <td>-9.1332</td>
+
+      <td>0.0000</td>
+
+      </tr>
+
+      <tr>
+
+      <td>CONTESTANT_G_snail-1</td>
+
+      <td>2026-10-09</td>
+
+      <td>2026-10-16</td>
+
+      <td>-6.4395</td>
+
+      <td>7.2715</td>
+
+      <td>CONTESTANT_A_snail-1</td>
+
+      <td>-6.4395</td>
+
+      <td>0.0000</td>
+
+      </tr>
+
+      <tr>
+
+      <td>CONTESTANT_G_snail-2</td>
+
+      <td>2026-10-09</td>
+
+      <td>2026-10-16</td>
+
+      <td>-7.3913</td>
+
+      <td>7.8527</td>
+
+      <td>CONTESTANT_A_snail-2</td>
+
+      <td>-7.3913</td>
+
+      <td>0.0000</td>
+
+      </tr>
+
+      <tr>
+
+      <td>CONTESTANT_G_snail-3</td>
+
+      <td>2026-10-09</td>
+
+      <td>2026-10-16</td>
+
+      <td>-8.0047</td>
+
+      <td>8.1919</td>
+
+      <td>CONTESTANT_A_snail-3</td>
+
+      <td>-8.0047</td>
+
+      <td>0.0000</td>
+
+      </tr>
+
+      <tr>
+
+      <td>CONTESTANT_G_snail-4</td>
+
+      <td>2026-10-09</td>
+
+      <td>2026-10-16</td>
+
+      <td>-9.1956</td>
+
+      <td>9.1956</td>
+
+      <td>CONTESTANT_A_snail-4</td>
+
+      <td>-9.1956</td>
+
+      <td>0.0000</td>
+
+      </tr>
+
+      <tr>
+
+      <td>CONTESTANT_G_rabbit-1</td>
+
+      <td>2026-10-09</td>
+
+      <td>2026-10-16</td>
+
+      <td>-1.8390</td>
+
+      <td>2.0840</td>
+
+      <td>CONTESTANT_A_rabbit-1</td>
+
+      <td>-2.3375</td>
+
+      <td>0.4986</td>
+
+      </tr>
+
+      <tr>
+
+      <td>CONTESTANT_G_rabbit-2</td>
+
+      <td>2026-10-09</td>
+
+      <td>2026-10-16</td>
+
+      <td>-2.1479</td>
+
+      <td>2.3098</td>
+
+      <td>CONTESTANT_A_rabbit-2</td>
+
+      <td>-3.3284</td>
+
+      <td>1.1805</td>
+
+      </tr>
+
+      <tr>
+
+      <td>CONTESTANT_G_turtle</td>
+
+      <td>2026-10-09</td>
+
+      <td>2026-10-16</td>
+
+      <td>-5.4894</td>
+
+      <td>6.6739</td>
+
+      <td>CONTESTANT_A_turtle</td>
+
+      <td>-5.4894</td>
+
+      <td>0.0000</td>
+
+      </tr>
+
+      <tr>
+
+      <td>CONTESTANT_G_koala</td>
+
+      <td>2026-10-09</td>
+
+      <td>2026-10-16</td>
+
+      <td>-4.1030</td>
+
+      <td>5.4830</td>
+
+      <td>CONTESTANT_A_koala</td>
+
+      <td>-3.9191</td>
+
+      <td>-0.1840</td>
+
+      </tr>
+
+      <tr>
+
+      <td>CONTESTANT_G_meerkat-10</td>
+
+      <td>2026-10-09</td>
+
+      <td>2026-10-16</td>
+
+      <td>0.9626</td>
+
+      <td>1.3709</td>
+
+      <td>CONTESTANT_A_meerkat-10</td>
+
+      <td>0.5455</td>
+
+      <td>0.4171</td>
+
+      </tr>
+
+      <tr>
+
+      <td>CONTESTANT_G_meerkat-20</td>
+
+      <td>2026-10-09</td>
+
+      <td>2026-10-16</td>
+
+      <td>0.2403</td>
+
+      <td>1.1438</td>
+
+      <td>CONTESTANT_A_meerkat-20</td>
+
+      <td>-0.0286</td>
+
+      <td>0.2689</td>
+
+      </tr>
+
+      <tr>
+
+      <td>CONTESTANT_G_meerkat-30</td>
+
+      <td>2026-10-09</td>
+
+      <td>2026-10-16</td>
+
+      <td>-0.9760</td>
+
+      <td>1.6964</td>
+
+      <td>CONTESTANT_A_meerkat-30</td>
+
+      <td>-1.7684</td>
+
+      <td>0.7925</td>
+
+      </tr>
+
+      <tr>
+
+      <td>CONTESTANT_G_meerkat-40</td>
+
+      <td>2026-10-09</td>
+
+      <td>2026-10-16</td>
+
+      <td>-2.1521</td>
+
+      <td>2.2433</td>
+
+      <td>CONTESTANT_A_meerkat-40</td>
+
+      <td>-1.3283</td>
+
+      <td>-0.8239</td>
+
+      </tr>
+
+      <tr>
+
+      <td>CONTESTANT_G_meerkat-50</td>
+
+      <td>2026-10-09</td>
+
+      <td>2026-10-16</td>
+
+      <td>-3.3907</td>
+
+      <td>4.2954</td>
+
+      <td>CONTESTANT_A_meerkat-50</td>
+
+      <td>-2.4079</td>
+
+      <td>-0.9828</td>
+
+      </tr>
+
+      <tr>
+
+      <td>CONTESTANT_G_meerkat-60</td>
+
+      <td>2026-10-09</td>
+
+      <td>2026-10-16</td>
+
+      <td>-4.5148</td>
+
+      <td>4.8495</td>
+
+      <td>CONTESTANT_A_meerkat-60</td>
+
+      <td>-4.1422</td>
+
+      <td>-0.3726</td>
+
+      </tr>
+
+      <tr>
+
+      <td>CONTESTANT_G_meerkat-70</td>
+
+      <td>2026-10-09</td>
+
+      <td>2026-10-16</td>
+
+      <td>-5.8166</td>
+
+      <td>6.1760</td>
+
+      <td>CONTESTANT_A_meerkat-70</td>
+
+      <td>-5.2611</td>
+
+      <td>-0.5555</td>
+
+      </tr>
+
+      <tr>
+
+      <td>CONTESTANT_G_meerkat-80</td>
+
+      <td>2026-10-09</td>
+
+      <td>2026-10-16</td>
+
+      <td>-4.6482</td>
+
+      <td>4.6482</td>
+
+      <td>CONTESTANT_A_meerkat-80</td>
+
+      <td>-4.1198</td>
+
+      <td>-0.5285</td>
+
+      </tr>
+
+      <tr>
+
+      <td>CONTESTANT_G_meerkat-90</td>
+
+      <td>2026-10-09</td>
+
+      <td>2026-10-16</td>
+
+      <td>-5.9859</td>
+
+      <td>6.1067</td>
+
+      <td>CONTESTANT_A_meerkat-90</td>
+
+      <td>-6.8657</td>
+
+      <td>0.8798</td>
+
+      </tr>
+
+      <tr>
+
+      <td>CONTESTANT_G_eagle-5-1</td>
+
+      <td>2026-10-09</td>
+
+      <td>2026-10-16</td>
+
+      <td>-9.1095</td>
+
+      <td>9.1095</td>
+
+      <td>CONTESTANT_A_eagle-5-1</td>
+
+      <td>-8.7891</td>
+
+      <td>-0.3204</td>
+
+      </tr>
+
+      <tr>
+
+      <td>CONTESTANT_G_eagle-11-2</td>
+
+      <td>2026-10-09</td>
+
+      <td>2026-10-16</td>
+
+      <td>-5.9295</td>
+
+      <td>6.1464</td>
+
+      <td>CONTESTANT_A_eagle-11-2</td>
+
+      <td>-7.5257</td>
+
+      <td>1.5962</td>
+
+      </tr>
+
+      <tr>
+
+      <td>CONTESTANT_G_eagle-44-6</td>
+
+      <td>2026-10-09</td>
+
+      <td>2026-10-16</td>
+
+      <td>-0.4698</td>
+
+      <td>1.9206</td>
+
+      <td>CONTESTANT_A_eagle-44-6</td>
+
+      <td>-1.0658</td>
+
+      <td>0.5961</td>
+
+      </tr>
+
+      <tr>
+
+      <td>CONTESTANT_G_eagle-66-9</td>
+
+      <td>2026-10-09</td>
+
+      <td>2026-10-16</td>
+
+      <td>-0.1237</td>
+
+      <td>1.4596</td>
+
+      <td>CONTESTANT_A_eagle-66-9</td>
+
+      <td>-0.4321</td>
+
+      <td>0.3084</td>
+
+      </tr>
+
+      <tr>
+
+      <td>CONTESTANT_G_eagle-88-12</td>
+
+      <td>2026-10-09</td>
+
+      <td>2026-10-16</td>
+
+      <td>0.1119</td>
+
+      <td>1.2984</td>
+
+      <td>CONTESTANT_A_eagle-88-12</td>
+
+      <td>-0.1942</td>
+
+      <td>0.3061</td>
+
+      </tr>
+
+      <tr>
+
+      <td>CONTESTANT_G_whale-shark</td>
+
+      <td>2026-10-09</td>
+
+      <td>2026-10-16</td>
+
+      <td>0.0226</td>
+
+      <td>1.2758</td>
+
+      <td>CONTESTANT_A_whale-shark</td>
+
+      <td>-0.1993</td>
+
+      <td>0.2219</td>
+
+      </tr>
+
+      </tbody>
+
+      </table>'
 execution_policy:
   profile: daily_bar_research
   greedy_allocation: false

@@ -13,6 +13,26 @@
  */
 
 window.ArenaCharts = {
+  renderPairComparison(domId, data) {
+    const dom = document.getElementById(domId);
+    if (!dom) return;
+    const chart = echarts.getInstanceByDom(dom) || echarts.init(dom);
+    const colors = this.getThemeColors();
+    const palette = ['#38bdf8','#f59e0b','#f43f5e','#a855f7','#94a3b8','#fb7185','#10b981','#c084fc'];
+    const color = id => palette[(id.charCodeAt(id.length-1)-65+palette.length)%palette.length];
+    chart.setOption({backgroundColor:'transparent',color:[color(data.referenceId),color(data.candidateId),colors.accentAmber],
+      legend:{data:[data.referenceId,data.candidateId,'Difference (pp)'],textStyle:{color:colors.textPrimary}},
+      grid:[{left:65,right:25,top:45,height:'48%'},{left:65,right:25,top:'64%',height:'20%'}],
+      axisPointer:{link:[{xAxisIndex:'all'}]},tooltip:{trigger:'axis',valueFormatter:v => typeof v==='number'?v.toFixed(4):'—'},
+      xAxis:[{type:'category',data:data.dates,gridIndex:0},{type:'category',data:data.dates,gridIndex:1}],
+      yAxis:[{type:'value',scale:true,name:'NAV',gridIndex:0},{type:'value',name:'pp',gridIndex:1}],
+      dataZoom:[{type:'inside',xAxisIndex:[0,1]},{type:'slider',xAxisIndex:[0,1],bottom:5}],
+      series:[{name:data.referenceId,type:'line',data:data.reference,smooth:false,symbol:'none'},
+        {name:data.candidateId,type:'line',data:data.candidate,smooth:false,symbol:'none'},
+        {name:'Difference (pp)',type:'line',data:data.spread,xAxisIndex:1,yAxisIndex:1,smooth:false,symbol:'none',
+          markLine:{silent:true,symbol:'none',data:[{yAxis:0}]}}]},true);
+  },
+
   getThemeColors() {
     const isDark = document.documentElement.getAttribute("data-theme") !== "light";
     return {
@@ -346,6 +366,26 @@ window.ArenaCharts = {
     if (!chart) chart = echarts.init(dom);
 
     if (!dates || !Array.isArray(dates) || dates.length === 0) return null;
+    if (targetPath.observation_start) {
+      const first=dates.indexOf(targetPath.observation_start);
+      if(first<0)return null;
+      const windowDates=dates.slice(first);
+      const normalize=values=>{
+        const selected=values.slice(first);
+        return selected.map(v=>v==null?null:v/selected[0]);
+      };
+      const target=normalize(window.arenaAdapter.getNavCurve(targetPath.path_id));
+      const market=normalize(csi300Curve), passive=normalize(taotieCurve);
+      const underwater=values=>{let peak=1;return values.map(v=>{if(v==null)return null;peak=Math.max(peak,v);return(v/peak-1)*100;});};
+      let selected=[{name:targetPath.contestant_id,data:target},{name:window.arenaAdapter.getMarketBenchmarkName(),data:market},{name:'Executable passive',data:passive}];
+      if(metricType==='drawdown')selected=selected.map(s=>({...s,data:underwater(s.data)}));
+      if(metricType==='excess_csi300')selected=selected.map(s=>({...s,data:s.data.map((v,i)=>v==null||market[i]==null?null:(v-market[i])*100)}));
+      chart.setOption({tooltip:{trigger:'axis',valueFormatter:v=>typeof v==='number'?v.toFixed(4):'N/A'},
+        legend:{data:selected.map(s=>s.name)},grid:{left:65,right:25,top:45,bottom:55},
+        xAxis:{type:'category',data:windowDates},yAxis:{type:'value',scale:true,name:metricType==='nav'?'NAV':metricType==='drawdown'?'%':'pp'},
+        series:selected.map(s=>({...s,type:'line',smooth:false,symbol:'none'})),dataZoom:[{type:'inside'},{type:'slider'}]},true);
+      return chart;
+    }
     const tc = this.getThemeColors();
     const marketBmName = (window.arenaAdapter && window.arenaAdapter.getMarketBenchmarkName) ? window.arenaAdapter.getMarketBenchmarkName() : "CSI 300";
     const taotieName = (window.arenaAdapter && window.arenaAdapter.getTaotieShortName) ? window.arenaAdapter.getTaotieShortName() : "Taotie";
@@ -975,6 +1015,23 @@ window.ArenaCharts = {
     if (!chart) chart = echarts.init(dom);
 
     if (!dates || !Array.isArray(dates) || dates.length === 0) return null;
+    const adapter=window.arenaAdapter;
+    const anchor=paths.map(p=>p.observation_start).filter(Boolean).sort().at(-1);
+    const offset=anchor?dates.indexOf(anchor):0;
+    if(offset<0)throw Error('The observation anchor is not covered.');
+    const normalize=values=>{
+      if(!anchor)return values;
+      const rows=values.slice(offset);
+      if(rows.length!==dates.length||rows.some(v=>typeof v!=='number'||!Number.isFinite(v)||v<=0))
+        throw Error('Observation and benchmark coverage differ.');
+      return rows.map(v=>v/rows[0]);
+    };
+    if(anchor)dates=dates.slice(offset);
+    taotieCurve=normalize(taotieCurve);csi300Curve=normalize(csi300Curve);
+    const nav=id=>normalize(id==='BENCHMARK_taotie'?adapter.getBenchmarkTaotieCurve():
+      id==='BENCHMARK_ghost_taotie'?adapter.getBenchmarkGhostTaotieCurve():adapter.getNavCurve(id));
+    const drawdown=curve=>{let peak=1;return curve.map(v=>{peak=Math.max(peak,v);return(v/peak-1)*100;});};
+    const excess=curve=>curve.map((v,i)=>(v-csi300Curve[i])*100);
     const tc = this.getThemeColors();
     const marketBmName = (window.arenaAdapter && window.arenaAdapter.getMarketBenchmarkName) ? window.arenaAdapter.getMarketBenchmarkName() : "CSI 300";
     const taotieName = (window.arenaAdapter && window.arenaAdapter.getTaotieShortName) ? window.arenaAdapter.getTaotieShortName() : "Taotie";
@@ -995,14 +1052,14 @@ window.ArenaCharts = {
       yAxisFormatter = v => `${v.toFixed(1)}%`;
 
       paths.forEach((p, idx) => {
-        const curve = window.arenaAdapter.getPathDrawdown(p.path_id);
+        const curve = anchor?drawdown(nav(p.path_id)):adapter.getPathDrawdown(p.path_id);
         if (curve && curve.length > 0) {
           const color = p.animal_id === "robot" ? "#38bdf8" : (p.animal_id === "koala" ? "#f43f5e" : colorPalette[idx % colorPalette.length]);
           series.push({
             name: `${p.animal_id} (MDD: -${p.max_drawdown_pct.toFixed(2)}%)`,
             type: "line",
             data: curve,
-            smooth: true,
+            smooth: false,
             showSymbol: false,
             color: color,
             itemStyle: { color: color },
@@ -1015,13 +1072,13 @@ window.ArenaCharts = {
         }
       });
 
-      const ghostDD = window.arenaAdapter.hasGhostTaotie() ? window.arenaAdapter.getGhostTaotieDrawdown() : null;
+      const ghostDD = adapter.hasGhostTaotie() ? (anchor?drawdown(nav("BENCHMARK_ghost_taotie")):adapter.getGhostTaotieDrawdown()) : null;
       if (ghostDD && ghostDD.length > 0) {
         series.push({
           name: "Ghost Taotie Drawdown",
           type: "line",
           data: ghostDD,
-          smooth: true,
+          smooth: false,
           showSymbol: false,
           color: "#00f0ff",
           itemStyle: { color: "#00f0ff" },
@@ -1029,13 +1086,13 @@ window.ArenaCharts = {
         });
       }
 
-      const taotieDD = window.arenaAdapter.getTaotieDrawdown();
+      const taotieDD = anchor?drawdown(taotieCurve):adapter.getTaotieDrawdown();
       if (taotieDD && taotieDD.length > 0) {
         series.push({
           name: "Taotie Drawdown",
           type: "line",
           data: taotieDD,
-          smooth: true,
+          smooth: false,
           showSymbol: false,
           color: "#c084fc",
           itemStyle: { color: "#c084fc" },
@@ -1043,13 +1100,13 @@ window.ArenaCharts = {
         });
       }
 
-      const csi300DD = window.arenaAdapter.getMarketDrawdown();
+      const csi300DD = anchor?drawdown(csi300Curve):adapter.getMarketDrawdown();
       if (csi300DD && csi300DD.length > 0) {
         series.push({
           name: `${marketBmName} Drawdown`,
           type: "line",
           data: csi300DD,
-          smooth: true,
+          smooth: false,
           showSymbol: false,
           color: "#f59e0b",
           itemStyle: { color: "#f59e0b" },
@@ -1059,18 +1116,18 @@ window.ArenaCharts = {
 
     } else if (metricType === "excess_csi300") {
       titleText = `Multi-Animal Active Spread vs. ${marketBmName}`;
-      yAxisName = `Excess vs. ${marketBmName} (%)`;
-      yAxisFormatter = v => `${v >= 0 ? '+' : ''}${v.toFixed(1)}%`;
+      yAxisName = `Excess vs. ${marketBmName} (pp)`;
+      yAxisFormatter = v => `${v >= 0 ? '+' : ''}${v.toFixed(1)} pp`;
 
       paths.forEach((p, idx) => {
-        const curve = window.arenaAdapter.getPathExcessMarket(p.path_id);
+        const curve = anchor?excess(nav(p.path_id)):adapter.getPathExcessMarket(p.path_id);
         if (curve && curve.length > 0) {
           const color = p.animal_id === "robot" ? "#38bdf8" : colorPalette[idx % colorPalette.length];
           series.push({
             name: `${p.animal_id} (${p.total_return_pct >= 0 ? '+' : ''}${p.total_return_pct.toFixed(2)}%)`,
             type: "line",
             data: curve,
-            smooth: true,
+            smooth: false,
             showSymbol: false,
             color: color,
             itemStyle: { color: color },
@@ -1094,13 +1151,13 @@ window.ArenaCharts = {
         showSymbol: false
       });
 
-      const taotieExcess = window.arenaAdapter.getPathExcessMarket("BENCHMARK_taotie");
+      const taotieExcess = anchor?excess(taotieCurve):adapter.getPathExcessMarket("BENCHMARK_taotie");
       if (taotieExcess && taotieExcess.length > 0) {
         series.push({
           name: `Taotie vs ${marketBmName}`,
           type: "line",
           data: taotieExcess,
-          smooth: true,
+          smooth: false,
           showSymbol: false,
           color: "#c084fc",
           itemStyle: { color: "#c084fc" },
@@ -1108,13 +1165,13 @@ window.ArenaCharts = {
         });
       }
 
-      const ghostExcess = window.arenaAdapter.hasGhostTaotie() ? window.arenaAdapter.getPathExcessMarket("BENCHMARK_ghost_taotie") : null;
+      const ghostExcess = adapter.hasGhostTaotie() ? (anchor?excess(nav("BENCHMARK_ghost_taotie")):adapter.getPathExcessMarket("BENCHMARK_ghost_taotie")) : null;
       if (ghostExcess && ghostExcess.length > 0) {
         series.push({
           name: `Ghost Taotie vs ${marketBmName}`,
           type: "line",
           data: ghostExcess,
-          smooth: true,
+          smooth: false,
           showSymbol: false,
           color: "#00f0ff",
           itemStyle: { color: "#00f0ff" },
@@ -1129,14 +1186,14 @@ window.ArenaCharts = {
       yAxisFormatter = v => v.toFixed(4);
 
       paths.forEach((p, idx) => {
-        const curve = window.arenaAdapter.getNavCurve(p.path_id);
+        const curve = nav(p.path_id);
         if (curve && curve.length > 0) {
           const color = p.animal_id === "robot" ? "#38bdf8" : colorPalette[idx % colorPalette.length];
           series.push({
             name: `${p.animal_id} (${p.total_return_pct >= 0 ? '+' : ''}${p.total_return_pct.toFixed(2)}%)`,
             type: "line",
             data: curve,
-            smooth: true,
+            smooth: false,
             showSymbol: false,
             color: color,
             itemStyle: { color: color },
@@ -1150,13 +1207,13 @@ window.ArenaCharts = {
       });
 
       if (window.arenaAdapter && window.arenaAdapter.hasGhostTaotie()) {
-        const ghostCurve = window.arenaAdapter.getBenchmarkGhostTaotieCurve();
+        const ghostCurve = nav("BENCHMARK_ghost_taotie");
         if (ghostCurve && ghostCurve.length > 0) {
           series.push({
             name: "Ghost Capital Scenario",
             type: "line",
             data: ghostCurve,
-            smooth: true,
+            smooth: false,
             showSymbol: false,
             color: "#00f0ff",
             itemStyle: { color: "#00f0ff" },
@@ -1170,7 +1227,7 @@ window.ArenaCharts = {
           name: taotieName,
           type: "line",
           data: taotieCurve,
-          smooth: true,
+          smooth: false,
           showSymbol: false,
           color: "#c084fc",
           itemStyle: { color: "#c084fc" },
@@ -1183,7 +1240,7 @@ window.ArenaCharts = {
           name: marketBmName,
           type: "line",
           data: csi300Curve,
-          smooth: true,
+          smooth: false,
           showSymbol: false,
           color: "#f59e0b",
           itemStyle: { color: "#f59e0b" },
@@ -1211,7 +1268,7 @@ window.ArenaCharts = {
           params.forEach(item => {
             let val = item.value;
             const formattedVal = (metricType === "drawdown" || metricType === "excess_csi300")
-              ? `${typeof val === 'number' ? (val >= 0 && metricType === "excess_csi300" ? '+' : '') + val.toFixed(2) : val}%`
+              ? `${typeof val === 'number' ? (val >= 0 && metricType === "excess_csi300" ? '+' : '') + val.toFixed(2) : val}${metricType==='excess_csi300'?' pp':'%'}`
               : (typeof val === 'number' ? val.toFixed(4) : val);
             const marker = item.marker || `<span style="display:inline-block;margin-right:4px;border-radius:10px;width:10px;height:10px;background-color:${item.color};"></span>`;
             html += `<div style="display:flex; justify-content:space-between; align-items:center; gap:12px; font-size:11px;">
@@ -1753,10 +1810,12 @@ window.ArenaCharts = {
     const m2 = modelsData[1];
     const m3 = modelsData[2] || null;
 
-    const len = Math.min(m1.curve.length, m2.curve.length);
+    if(modelsData.some(m=>m.curve.length!==dates.length||m.curve[0]!==1||m.curve.some(v=>!Number.isFinite(v)||v<=0)))
+      throw Error('Comparison curves must share the rebased window.');
+    const len = dates.length;
     const spreadM1M2 = [];
     for (let i = 0; i < len; i++) {
-      spreadM1M2.push(Number(((m1.curve[i] - m2.curve[i]) * 100).toFixed(2)));
+      spreadM1M2.push((m1.curve[i] - m2.curve[i]) * 100);
     }
 
     const series = [
@@ -1766,7 +1825,7 @@ window.ArenaCharts = {
         xAxisIndex: 0,
         yAxisIndex: 0,
         data: m1.curve,
-        smooth: true,
+        smooth: false,
         showSymbol: false,
         lineStyle: { width: 3, color: m1.color || "#10b981" },
         itemStyle: { color: m1.color || "#10b981" }
@@ -1777,7 +1836,7 @@ window.ArenaCharts = {
         xAxisIndex: 0,
         yAxisIndex: 0,
         data: m2.curve,
-        smooth: true,
+        smooth: false,
         showSymbol: false,
         lineStyle: { width: 3, color: m2.color || "#f43f5e" },
         itemStyle: { color: m2.color || "#f43f5e" }
@@ -1791,7 +1850,7 @@ window.ArenaCharts = {
         xAxisIndex: 0,
         yAxisIndex: 0,
         data: m3.curve,
-        smooth: true,
+        smooth: false,
         showSymbol: false,
         lineStyle: {
           width: 2.5,
@@ -1808,7 +1867,7 @@ window.ArenaCharts = {
       xAxisIndex: 1,
       yAxisIndex: 1,
       data: spreadM1M2,
-      smooth: true,
+      smooth: false,
       showSymbol: false,
       lineStyle: { width: 2, color: "#a855f7" },
       itemStyle: { color: "#a855f7" },
@@ -1872,10 +1931,10 @@ window.ArenaCharts = {
           type: "value",
           gridIndex: 1,
           scale: true,
-          name: "Spread (%)",
+          name: "Spread (pp)",
           nameTextStyle: { color: tc.textSecondary, fontSize: 10 },
           splitLine: { lineStyle: { color: tc.gridLine } },
-          axisLabel: { color: tc.textSecondary, formatter: v => `${v >= 0 ? '+' : ''}${v.toFixed(1)}%` }
+          axisLabel: { color: tc.textSecondary, formatter: v => `${v >= 0 ? '+' : ''}${v.toFixed(2)} pp` }
         }
       ],
       series: series

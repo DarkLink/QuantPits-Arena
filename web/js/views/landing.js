@@ -19,7 +19,7 @@ window.LandingView = {
         </div>
         <h1 class="hero-title">Where Quantitative Strategies Face the Execution Zoo</h1>
         <p class="hero-description">
-          An empirical laboratory for stress-testing anonymous quantitative contestants. Each pool evaluates six contestants across 28 handlers from NAV 1.0000. Its ten random specifications contain 1,000,000 controls in total; each animal is tested against only its matched 100,000-path group. The passive reference is deterministic. All current curves and dispatches belong to the disclosed retrospective repair replay.
+          An empirical laboratory for anonymous quantitative participants across 28 handlers. Every observation window starts at NAV 1.0000. The six full-season participants retain their 840-item comparison family across five pools; later entrants have separate observation windows and can be compared from a common start. Each pool contains ten random specifications with 100,000 controls each, plus a deterministic passive reference. Results remain daily-bar research.
         </p>
         <div class="hero-actions">
           <button class="btn btn-primary" onclick="window.appRouter.navigate('overview')">
@@ -32,7 +32,7 @@ window.LandingView = {
             <span>🧬 Explore Models</span>
           </button>
           <button class="btn btn-secondary" onclick="window.appRouter.navigate('decision-audit')">
-            <span>⚖️ Decision Archaeology</span>
+            <span>⚖️ Compare Participants</span>
           </button>
           <button class="btn btn-secondary" onclick="if(window.ArenaSpecDrawer) window.ArenaSpecDrawer.toggle();">
             <span>📖 Field Guide Specs</span>

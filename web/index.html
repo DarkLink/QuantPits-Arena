@@ -11,10 +11,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- Core Stylesheets -->
-  <link rel="stylesheet" href="css/variables.css?v=daily_nav_20261011-4e600faaf4b8">
-  <link rel="stylesheet" href="css/main.css?v=daily_nav_20261011-4e600faaf4b8">
-  <link rel="stylesheet" href="css/components.css?v=daily_nav_20261011-4e600faaf4b8">
-  <link rel="stylesheet" href="css/views.css?v=daily_nav_20261011-4e600faaf4b8">
+  <link rel="stylesheet" href="css/variables.css?v=entry_g_20261009_v2-58a472979fca">
+  <link rel="stylesheet" href="css/main.css?v=entry_g_20261009_v2-58a472979fca">
+  <link rel="stylesheet" href="css/components.css?v=entry_g_20261009_v2-58a472979fca">
+  <link rel="stylesheet" href="css/views.css?v=entry_g_20261009_v2-58a472979fca">
 
   <!-- Apache ECharts CDN -->
   <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
@@ -45,7 +45,7 @@
         <a href="#leaderboard" class="nav-link" data-route="leaderboard">Leaderboard</a>
         <a href="#contestants" class="nav-link" data-route="contestants">Contestants</a>
         <a href="#animals" class="nav-link" data-route="animals">The Zoo</a>
-        <a href="#decision-audit" class="nav-link" data-route="decision-audit">Archaeology</a>
+        <a href="#decision-audit" class="nav-link" data-route="decision-audit">Compare</a>
       </nav>
 
       <!-- Right Header Actions & Global Docs Links -->
@@ -93,7 +93,7 @@
             <a href="#leaderboard" class="mobile-nav-link" data-route="leaderboard"><span>🏆</span> Leaderboard</a>
             <a href="#contestants" class="mobile-nav-link" data-route="contestants"><span>🧬</span> Contestants</a>
             <a href="#animals" class="mobile-nav-link" data-route="animals"><span>🦁</span> The Zoo</a>
-            <a href="#decision-audit" class="mobile-nav-link" data-route="decision-audit"><span>⚖️</span> Archaeology</a>
+            <a href="#decision-audit" class="mobile-nav-link" data-route="decision-audit"><span>⚖️</span> Compare</a>
           </div>
         </div>
         <div class="mobile-nav-group">
@@ -117,7 +117,7 @@
       <a href="#leaderboard" class="mobile-subnav-link" data-route="leaderboard">Leaderboard</a>
       <a href="#contestants" class="mobile-subnav-link" data-route="contestants">Contestants</a>
       <a href="#animals" class="mobile-subnav-link" data-route="animals">The Zoo</a>
-      <a href="#decision-audit" class="mobile-subnav-link" data-route="decision-audit">Archaeology</a>
+      <a href="#decision-audit" class="mobile-subnav-link" data-route="decision-audit">Compare</a>
     </div>
   </nav>
 
@@ -180,19 +180,19 @@
   <!-- Multi-Season Data Registry & Providers -->
 
   <!-- Data Adapter -->
-  <script src="js/data/arena_release.js?v=daily_nav_20261011-4e600faaf4b8"></script>
-  <script src="js/adapter.js?v=daily_nav_20261011-4e600faaf4b8"></script>
+  <script src="js/data/arena_release.js?v=entry_g_20261009_v2-58a472979fca"></script>
+  <script src="js/adapter.js?v=entry_g_20261009_v2-58a472979fca"></script>
 
   <!-- ECharts Suite -->
-  <script src="js/components/charts.js?v=daily_nav_20261011-4e600faaf4b8"></script>
+  <script src="js/components/charts.js?v=entry_g_20261009_v2-58a472979fca"></script>
 
   <!-- Global Filters -->
-  <script src="js/components/filters.js?v=daily_nav_20261011-4e600faaf4b8"></script>
+  <script src="js/components/filters.js?v=entry_g_20261009_v2-58a472979fca"></script>
 
   <!-- Glossary & Specification System (Season-Aware) -->
-  <script src="js/components/glossary_service.js?v=daily_nav_20261011-4e600faaf4b8"></script>
-  <script src="js/components/tooltip_manager.js?v=daily_nav_20261011-4e600faaf4b8"></script>
-  <script src="js/components/spec_drawer.js?v=daily_nav_20261011-4e600faaf4b8"></script>
+  <script src="js/components/glossary_service.js?v=entry_g_20261009_v2-58a472979fca"></script>
+  <script src="js/components/tooltip_manager.js?v=entry_g_20261009_v2-58a472979fca"></script>
+  <script src="js/components/spec_drawer.js?v=entry_g_20261009_v2-58a472979fca"></script>
 
   <!-- Markdown & Math Parsers for Dispatches & Chronicles -->
   <script src="js/lib/marked.min.js"></script>
@@ -200,19 +200,19 @@
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
 
   <!-- Application Views -->
-  <script src="js/views/landing.js?v=daily_nav_20261011-4e600faaf4b8"></script>
-  <script src="js/views/dispatches.js?v=daily_nav_20261011-4e600faaf4b8"></script>
-  <script src="js/views/overview.js?v=daily_nav_20261011-4e600faaf4b8"></script>
-  <script src="js/views/leaderboard_view.js?v=daily_nav_20261011-4e600faaf4b8"></script>
-  <script src="js/views/animals_view.js?v=daily_nav_20261011-4e600faaf4b8"></script>
-  <script src="js/views/path_detail.js?v=daily_nav_20261011-4e600faaf4b8"></script>
-  <script src="js/views/contestant_detail.js?v=daily_nav_20261011-4e600faaf4b8"></script>
-  <script src="js/views/decision_audit.js?v=daily_nav_20261011-4e600faaf4b8"></script>
-  <script src="js/views/methodology.js?v=daily_nav_20261011-4e600faaf4b8"></script>
-  <script src="js/views/disclaimer.js?v=daily_nav_20261011-4e600faaf4b8"></script>
-  <script src="js/views/discussion.js?v=daily_nav_20261011-4e600faaf4b8"></script>
+  <script src="js/views/landing.js?v=entry_g_20261009_v2-58a472979fca"></script>
+  <script src="js/views/dispatches.js?v=entry_g_20261009_v2-58a472979fca"></script>
+  <script src="js/views/overview.js?v=entry_g_20261009_v2-58a472979fca"></script>
+  <script src="js/views/leaderboard_view.js?v=entry_g_20261009_v2-58a472979fca"></script>
+  <script src="js/views/animals_view.js?v=entry_g_20261009_v2-58a472979fca"></script>
+  <script src="js/views/path_detail.js?v=entry_g_20261009_v2-58a472979fca"></script>
+  <script src="js/views/contestant_detail.js?v=entry_g_20261009_v2-58a472979fca"></script>
+  <script src="js/views/decision_audit.js?v=entry_g_20261009_v2-58a472979fca"></script>
+  <script src="js/views/methodology.js?v=entry_g_20261009_v2-58a472979fca"></script>
+  <script src="js/views/disclaimer.js?v=entry_g_20261009_v2-58a472979fca"></script>
+  <script src="js/views/discussion.js?v=entry_g_20261009_v2-58a472979fca"></script>
 
   <!-- Main Controller & Router -->
-  <script src="js/app.js?v=daily_nav_20261011-4e600faaf4b8"></script>
+  <script src="js/app.js?v=entry_g_20261009_v2-58a472979fca"></script>
 </body>
 </html>

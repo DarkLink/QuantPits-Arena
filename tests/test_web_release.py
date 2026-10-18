@@ -10,12 +10,12 @@ def test_release_contract_and_view_runtime():
     program=r'''
 const fs=require('fs');const vm=require('vm');
 const nodes=new Map();
-function node(id){if(!nodes.has(id))nodes.set(id,{innerHTML:'',addEventListener(){},querySelectorAll(){return[];},classList:{toggle(){},add(){},remove(){}}});return nodes.get(id);}
+function node(id){if(!nodes.has(id))nodes.set(id,{innerHTML:'',addEventListener(){},querySelectorAll(){return[];},querySelector(){return null;},classList:{toggle(){},add(){},remove(){},contains(){return true;}}});return nodes.get(id);}
 global.window={addEventListener(){},location:{search:'',hash:'',href:'https://arena.invalid/'}};
 global.document={readyState:'loading',addEventListener(){},documentElement:{getAttribute(){return'dark';}},getElementById:node,querySelectorAll(){return[];},querySelector(){return node('query');}};
 global.setTimeout=cb=>{cb();return 0;};
 global.echarts={getInstanceByDom(){return null;},init(){return {setOption(option){global.lastChart=option;},resize(){},getOption(){return{series:[]};},on(){}};},graphic:{LinearGradient:function(){}}};
-for(const file of ['web/js/data/arena_release.js','web/js/adapter.js','web/js/components/charts.js','web/js/views/methodology.js','web/js/views/path_detail.js','web/js/app.js'])vm.runInThisContext(fs.readFileSync(file,'utf8'));
+for(const file of ['web/js/data/arena_release.js','web/js/adapter.js','web/js/components/charts.js','web/js/views/methodology.js','web/js/views/path_detail.js','web/js/views/contestant_detail.js','web/js/views/decision_audit.js','web/js/views/leaderboard_view.js','web/js/app.js'])vm.runInThisContext(fs.readFileSync(file,'utf8'));
 const expected=['season_01','season_csi300','season_csi500','season_csi800','season_csi1000'];
 if(JSON.stringify(window.ARENA_SEASONS_INDEX.map(s=>s.id))!==JSON.stringify(expected))throw Error('season order differs');
 if(JSON.stringify(Object.keys(window.ARENA_SEASONS_DATA))!==JSON.stringify(expected))throw Error('bundle order differs');
@@ -30,7 +30,12 @@ for(const [sid,data] of Object.entries(window.ARENA_SEASONS_DATA)){
  if(data.meta.evaluation_id!==window.ARENA_ACTIVE_EVALUATION)throw Error('mixed generations');
  if(data.nav_timeline.dates.at(-1)!==data.meta.cutoff)throw Error('cutoff differs');
  if(data.meta.monkey_nav_frequency!=='daily')throw Error('monkey frequency differs');
- for(const values of Object.values(data.nav_timeline.curves))if(values[0]!==1)throw Error('anchor differs');
+ for(const [id,values] of Object.entries(data.nav_timeline.curves)){
+  const first=values.findIndex(v=>v!==null);
+  if(first<0||values[first]!==1||values.slice(first).some(v=>!Number.isFinite(v)))throw Error('anchor or coverage differs');
+  const path=data.paths.find(p=>p.path_id===id);
+  if(path?.observation_start && data.nav_timeline.dates[first]!==path.observation_start)throw Error('observation anchor differs');
+ }
  const tested=data.paths.filter(p=>p.test_status==='random_control');
  if(tested.length!==168)throw Error('comparison coverage differs');
  for(const p of tested){
@@ -60,7 +65,31 @@ for(const [sid,data] of Object.entries(window.ARENA_SEASONS_DATA)){
  if(!tooltip.includes('Monkey Median')||tooltip.includes('null')||tooltip.includes('undefined'))throw Error('non-rebalance tooltip differs');
  window.PathDetailView.render('root',tested[0].path_id);
  window.PathDetailView.render('root',data.paths.find(p=>p.animal_id==='ghost_taotie').path_id);
- results.push({sid,paths:data.paths.length,tests:tested.length,count:tested[0].monkey_count,daily:dates.length});
+ const observers=data.paths.filter(p=>p.observation_start);
+ if(observers.length){
+  const retrained=data.contestants.find(c=>c.contestant_id==='CONTESTANT_G');
+  if(retrained.retrained_from!=='CONTESTANT_A'||retrained.retraining_context.information_cutoff!=='2026-10-09'||retrained.retraining_context.first_execution!=='2026-10-12')throw Error('public retraining introduction is missing');
+  if(observers.some(p=>p.empirical_p_value!==null||p.is_statistically_significant!==null||p.full_season_eligible!==false||p.test_status!=='observation'))throw Error('observer has cumulative inference');
+  const observer=observers.find(p=>p.animal_id==='robot');
+  window.PathDetailView.render('root',observer.path_id);
+  window.ContestantDetailView.render('root',observer.contestant_id);
+  if(!node('root').innerHTML.includes('Participant Background')||!node('root').innerHTML.includes('Five Behavioral')||node('root').innerHTML.includes('Failed to load'))throw Error('shared contestant layout differs');
+  if(!node('root').innerHTML.includes('Retrained from CONTESTANT_A')||node('root').innerHTML.includes('Burial Annualized Return'))throw Error('retraining introduction or unavailable legacy metrics differ');
+  for(const metric of ['nav','drawdown','excess_csi300']){
+   window.ArenaCharts.renderMultiAnimalCurves('root',dates,observers,window.arenaAdapter.getBenchmarkTaotieCurve(),window.arenaAdapter.getBenchmarkCsi300Curve(),metric);
+   if(lastChart.xAxis.data[0]!==observer.observation_start||lastChart.series.some(s=>s.data.length!==lastChart.xAxis.data.length||s.data.some(v=>!Number.isFinite(v))||s.data[0]!== (metric==='nav'?1:0)))throw Error('observation profile benchmark window differs');
+  }
+  window.DecisionAuditView.start=null;window.DecisionAuditView.end=null;
+  window.DecisionAuditView.activePreset=null;window.DecisionAuditView.slotC='';
+  window.DecisionAuditView.render('root');
+  if(!node('root').innerHTML.includes('slot-c-select')||lastChart.series.length!==3||lastChart.xAxis[0].data[0]!==observer.observation_start)throw Error('real comparison workbench differs');
+  window.DecisionAuditView.slotC='BENCHMARK_taotie';window.DecisionAuditView.render('root');
+  if(lastChart.series.length!==4||lastChart.series.slice(0,3).some(s=>s.data[0]!==1)||lastChart.yAxis[1].name!=='Spread (pp)')throw Error('third benchmark slot differs');
+  window.DecisionAuditView.slotA='CONTESTANT_B';window.DecisionAuditView.slotB='CONTESTANT_A';window.DecisionAuditView.render('root');
+  if(lastChart.xAxis[0].data[0]!==dates[0]||lastChart.series[0].data.length!==dates.length)throw Error('original full-season comparison was lost');
+ }
+ window.LeaderboardView.render('root');
+ results.push({sid,paths:data.paths.length,expectedPaths:data.contestants.length*28+2,tests:tested.length,count:tested[0].monkey_count,daily:dates.length});
 }
 console.log(JSON.stringify(results));
 '''
@@ -68,5 +97,5 @@ console.log(JSON.stringify(results));
     assert completed.returncode==0,completed.stderr
     results=json.loads(completed.stdout)
     assert len(results)==5
-    assert all(result['paths']==170 and result['tests']==168 and result['count']>=16800 for result in results)
-    assert all(result['daily']==65 for result in results)
+    assert all(result['paths']==result['expectedPaths'] and result['tests']==168 and result['count']==100000 for result in results)
+    assert len({result['daily'] for result in results})==1

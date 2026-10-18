@@ -1,0 +1,20 @@
+contestant_id: CONTESTANT_G
+display_name: CONTESTANT_G
+family: Anonymous
+observation_start: '2026-10-09'
+arena_eligible_from: '2026-10-09'
+statistics_eligible: false
+historical_role: Retrained edition of CONTESTANT_A
+integrity_class: OBSERVATION
+retrained_from: CONTESTANT_A
+retraining_context:
+  information_cutoff: '2026-10-09'
+  state_anchor: '2026-10-09'
+  first_execution: '2026-10-12'
+notes: >-
+  G is a retrained edition of CONTESTANT_A using information through 2026-10-09.
+  It inherits A's research portfolio state and decision history at that close,
+  then runs independently, with first simulated execution on 2026-10-12.
+  Its own observation NAV starts at 1.0000 on 2026-10-09; earlier A performance
+  is not counted as G performance. This is a retrospective research replay,
+  not evidence of orders committed before the historical execution date.

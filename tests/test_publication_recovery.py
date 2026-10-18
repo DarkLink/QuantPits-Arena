@@ -31,8 +31,9 @@ def test_frozen_inputs_survive_catalog_reordering(tmp_path):
         freeze(tmp_path,reordered[:-1],'2026-10-09')
 
 
+@pytest.mark.parametrize('private_journal',[False,True])
 @pytest.mark.parametrize('interruption',['before_swap','after_backup','after_install'])
-def test_interrupted_publication_recovery(tmp_path,monkeypatch,interruption):
+def test_interrupted_publication_recovery(tmp_path,monkeypatch,interruption,private_journal):
     monkeypatch.setattr(release,'REPO_ROOT',tmp_path)
     monkeypatch.setattr(release,'RUNS_DIR',tmp_path/'runs')
     root=tmp_path/'artifacts/evaluations/generation_a'
@@ -44,10 +45,18 @@ def test_interrupted_publication_recovery(tmp_path,monkeypatch,interruption):
     backup=root/'publication_backup/web/index.html';backup.parent.mkdir(parents=True)
     backup.write_text('old html')
     new_file=tmp_path/'web/new.md';new_file.write_text('new report')
+    cache=tmp_path/'artifacts/predictions/synthetic.pkl';cache.parent.mkdir(parents=True)
+    cache.write_bytes(b'new anonymous scores')
+    cache_backup=root/'publication_backup/artifacts/predictions/synthetic.pkl';cache_backup.parent.mkdir(parents=True)
+    cache_backup.write_bytes(b'old anonymous scores')
+    registry=tmp_path/'manifests/private/alias_map.yaml';registry.parent.mkdir(parents=True)
+    registry.write_text('new anonymous registration')
     item=dict(name=target.name,ready='.season_01_generation_a.ready',existed=True)
     journal=dict(phase='prepared',runs=[item],files=[
-        dict(path='web/index.html',existed=True),dict(path='web/new.md',existed=False)])
-    release.save_json(root/'publication_journal.json',journal)
+        dict(path='web/index.html',existed=True),dict(path='web/new.md',existed=False),
+        dict(path='artifacts/predictions/synthetic.pkl',existed=True),dict(path='manifests/private/alias_map.yaml',existed=False)])
+    journal_path=root/('private/publication_journal.json' if private_journal else 'publication_journal.json')
+    release.save_json(journal_path,journal)
     if interruption=='after_backup':
         replace=release.os.replace
         def fail_install(source,destination):
@@ -65,6 +74,8 @@ def test_interrupted_publication_recovery(tmp_path,monkeypatch,interruption):
     assert (target/'generation.txt').read_text()=='old'
     assert public.read_text()=='old html'
     assert not new_file.exists()
+    assert cache.read_bytes()==b'old anonymous scores'
+    assert not registry.exists()
     assert not (tmp_path/'runs'/item['ready']).exists()
-    assert json.loads((root/'publication_journal.json').read_text())['phase']=='rolled_back'
+    assert json.loads(journal_path.read_text())['phase']=='rolled_back'
     assert not release.recover_publication(root)

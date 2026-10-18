@@ -45,7 +45,8 @@ def release_html(html, evaluation_id):
 
 def recover_publication(root):
     """Roll an interrupted publication back using its write-ahead journal."""
-    journal_path=root/'publication_journal.json'
+    journal_path=root/'private/publication_journal.json'
+    if not journal_path.exists():journal_path=root/'publication_journal.json'
     if not journal_path.exists():return False
     journal=json.loads(journal_path.read_text())
     if journal['phase']!='prepared':return False
@@ -70,9 +71,12 @@ def recover_publication(root):
 
 def recover_pending_publications():
     """Called under the common operation lock before reading live checkpoints."""
-    for journal in sorted((REPO_ROOT/'artifacts/evaluations').glob('*/publication_journal.json')):
-        if recover_publication(journal.parent):
-            print(f'[recovery] {journal.parent.name}: interrupted publication rolled back',flush=True)
+    base=REPO_ROOT/'artifacts/evaluations'
+    roots={p.parent for p in base.glob('*/publication_journal.json')}
+    roots.update(p.parent.parent for p in base.glob('*/private/publication_journal.json'))
+    for root in sorted(roots):
+        if recover_publication(root):
+            print(f'[recovery] {root.name}: interrupted publication rolled back',flush=True)
 
 
 def replace_run(root,item):
@@ -136,7 +140,10 @@ def build_monitoring(root,sids,count):
             settlements[spec]={date:snapshots[spec][date] for date in dates}
             hist,edges=np.histogram((values[-1]-1)*100,bins=64)
             histograms[spec]=dict(edges_pct=edges.tolist(),counts=hist.tolist())
-            matching=[name for name in public_paths(nav) if map_animal_to_spec_id(name.split('_',2)[2])==spec]
+            eligible={runner.registry.get_anonymous_id(c.contestant_id) for c in runner.registry.list_contestants()
+                      if getattr(c,'statistics_eligible',True)}
+            matching=[name for name in public_paths(nav) if '_'.join(name.split('_')[:2]) in eligible
+                      and map_animal_to_spec_id(name.split('_',2)[2])==spec]
             for c,date in enumerate(daily_dates):
                 null_values=np.zeros(count) if c==0 else values[c-1]-1
                 for name in matching:
@@ -156,7 +163,8 @@ def build_monitoring(root,sids,count):
             key=next((key for key in paths if runner.registry.get_anonymous_id(key[0])==cid and key[1]==aid),None)
             if key:
                 for field in ('stale_mark_count','rejected_order_count'):
-                    diag.loc[row_i,field]=paths[key].diagnostics[field]
+                    observed=exporter.observation(paths[key],runner.registry)
+                    diag.loc[row_i,field]=observed.diagnostics[field]
         diag.to_csv(exporter.public_dir/'capital_constraint_diagnostics.csv',index=False)
         print(f'[monitoring] {sid}: {len(daily_dates)} NAV dates; actual daily null quantiles complete',flush=True)
     frame=pd.DataFrame(collected)
@@ -176,7 +184,9 @@ def build_monitoring(root,sids,count):
 
 
 def section_data(data,start,end):
-    nav=data['nav']; names=public_paths(nav)
+    nav=data['nav']
+    lookup=data['monitoring'][data['monitoring'].cutoff==end].set_index('path_id')
+    names=[name for name in public_paths(nav) if name in lookup.index]
     sub=nav.loc[start:end,names]
     returns=(sub.iloc[-1]/sub.iloc[0]-1)*100
     cumulative=(sub.iloc[-1]-1)*100
@@ -250,6 +260,32 @@ def dispatch(data,start,end,title,language='en',append_october=False):
     if append_october:
         sub_oct,oct_metrics,_=section_data(data,'2026-09-30','2026-10-09')
         text+=('## 十月独立附录\n\n9月30日收盘至10月9日包含2个收益交易日；周一休市不补调仓。下表单独报告十月区间，未混入九月收益。\n\n' if zh else '## Separate October appendix\n\nSeptember 30 close to October 9 contains two return sessions. The holiday Monday produces no makeup rebalance. October is reported separately from September.\n\n')+table(oct_metrics.sort_values('period_pct',ascending=False).head(10)[top_columns])+'\n'
+    observations=[]
+    for name in public_paths(data['nav']):
+        if name in lookup.index:
+            continue
+        curve=data['nav'].loc[:end,name].dropna()
+        if len(curve)<2:
+            continue
+        anchor=curve.index[0]
+        window=curve.loc[max(start,anchor):end]
+        if len(window)<2:
+            continue
+        row=dict(path=name,anchor=window.index[0],cutoff=end,
+            return_pct=float((window.iloc[-1]/window.iloc[0]-1)*100),
+            mdd_pct=float(-(window/window.cummax()-1).min()*100))
+        animal=name.split('_',2)[2]
+        references=sorted(p for p in lookup.index if p.split('_',2)[2]==animal)
+        if references:
+            reference=references[0]
+            reference_curve=data['nav'].loc[window.index,reference]
+            reference_return=float((reference_curve.iloc[-1]/reference_curve.iloc[0]-1)*100)
+            row.update(reference_path=reference,reference_return_pct=reference_return,
+                       difference_pp=row['return_pct']-reference_return)
+        observations.append(row)
+    if observations:
+        text+=('## 独立观察窗口\n\n以下匿名路径按各自有效观察窗口报告，不进入上面的全季累计排名和 840 项检验。参照路径采用相同动物和完全相同的收盘锚点；差值为观察对象收益减参照收益，单位为百分点。未提供该窗口的随机检验 p 值。\n\n' if zh else
+               '## Separate observation windows\n\nThese anonymous paths are reported over their stated observation windows and are excluded from the full-season cumulative standings and 840-item tests above. Reference paths use the same animal and close anchor; differences are observation returns minus reference returns in percentage points. No random-control p value is assigned to these windows.\n\n')+table(pd.DataFrame(observations))+'\n\n'
     return text.rstrip()+"\n",dict(leader=leader.path,nav=float(leader.nav),return_pct=float(leader.cumulative_pct),period_leader=best.path,period_return_pct=float(best.period_pct),positive=positive,sessions=len(sub)-1,raw=raw,bonferroni=bonf)
 
 
@@ -259,13 +295,28 @@ def build_dispatches(root,datasets):
         cfg=data['cfg']; entries=cfg.raw_dict.setdefault('dispatches',{}).setdefault('episodes',[])
         latest_end=data['dates'][-1]
         if not any(str(e.get('date'))==latest_end for e in entries):
-            entries.append(dict(id=f"refresh_{latest_end.replace('-','')}",date=latest_end,
-                file=f"chronicles/en/{sid}_{latest_end.replace('-','')}.md",tab_label=f"{latest_end} Recalculated"))
+            if sid=='season_01':
+                number=max([int(e['id'][2:]) for e in entries if re.fullmatch(r'ep\d+',e['id'])]+[0])+1
+                entries.append(dict(id=f'ep{number:02d}',date=latest_end,
+                    file=f'chronicles/en/episode_{number:02d}_weekly_review.md',tab_label=f'Episode {number}'))
+            else:
+                entries.append(dict(id=f"refresh_{latest_end.replace('-','')}",date=latest_end,
+                    file=f"chronicles/en/{sid}_{latest_end.replace('-','')}.md",tab_label=f"{latest_end} Recalculated"))
         calendar=cfg.raw_dict.get('calendar',cfg.raw_dict.get('horizon',{}))
         calendar['end_date']=latest_end
         cfg.end_date=latest_end
         for entry in entries:
             file=entry['file'];end=entry['date']
+            prior_source=root/'legacy'/file
+            if end<latest_end and prior_source.is_file():
+                target=staged/file;target.parent.mkdir(parents=True,exist_ok=True)
+                shutil.copy2(prior_source,target)
+                web=staged/'web'/file;web.parent.mkdir(parents=True,exist_ok=True)
+                shutil.copy2(prior_source,web)
+                for old in (root/'legacy/chronicles/zh').glob('*.md'):
+                    target=staged/'chronicles/zh'/old.name
+                    target.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(old,target)
+                continue
             if end=='2026-08-28': start='2026-07-03'
             elif '_m3' in file: start='2026-08-28'
             else:
@@ -273,6 +324,8 @@ def build_dispatches(root,datasets):
                 start=prior[-1] if prior else cfg.anchor_date
             name=Path(file).name
             title=(f'{sid} — repaired baseline through {end}' if end=='2026-08-28' else f'{sid} — repaired dispatch through {end}')
+            if sid=='season_01' and re.fullmatch(r'ep\d+',entry['id']):
+                title=f"Episode {int(entry['id'][2:])} — Weekly review through {end}"
             text,summary=dispatch(data,start,end,title,append_october='_m3' in file)
             target=staged/file;target.parent.mkdir(parents=True,exist_ok=True);target.write_text(text)
             web=staged/'web'/file;web.parent.mkdir(parents=True,exist_ok=True);web.write_text(text)
@@ -280,11 +333,12 @@ def build_dispatches(root,datasets):
             if sid=='season_01':
                 prefix='episodes_01_08_' if end=='2026-08-28' else f"episode_{entry['id'].replace('ep','')}_"
                 matches=list((REPO_ROOT/'chronicles/zh').glob(prefix+'*.md'))
-                zh_name=matches[0].name if matches else name
+                zh_name=matches[0].name if matches else f"episode_{int(entry['id'][2:]):02d}_{end.replace('-','')}_weekly_review.md" if re.fullmatch(r'ep\d+',entry['id']) else name
             else:
                 matches=list((REPO_ROOT/'chronicles/zh').glob(Path(name).stem+'*.md'))
                 zh_name=matches[0].name if matches else name
-            zh,_=dispatch(data,start,end,title,language='zh',append_october='_m3' in file)
+            zh_title=f"第{int(entry['id'][2:])}集：周度观察（截止 {end}）" if sid=='season_01' and re.fullmatch(r'ep\d+',entry['id']) else title
+            zh,_=dispatch(data,start,end,zh_title,language='zh',append_october='_m3' in file)
             target=staged/'chronicles/zh'/zh_name;target.parent.mkdir(parents=True,exist_ok=True);target.write_text(zh)
             entry.update(title=title,summary=f"Repaired replay: {summary['sessions']} return sessions; {summary['period_leader']} segment {summary['period_return_pct']:+.2f}%. Cumulative leader {summary['leader']} at NAV {summary['nav']:.4f}.",badge='Recalculated',read_time='8 min read')
         latest_start=data['dates'][-2] if len(data['dates'])>1 else cfg.anchor_date
@@ -342,7 +396,9 @@ def publish(root,sids,end_date,count):
     # Obtain independently exported market index curves before composing reports.
     for sid,data in datasets.items():
         output=root/'staging/web/js/data'/f'{sid}.js'
-        data['exporter'].export_web_payload(data['cfg'],web_output_path=output,publish_auxiliary=False)
+        public_manifests=root/'staging/manifests/public'
+        data['exporter'].export_web_payload(data['cfg'],web_output_path=output,publish_auxiliary=False,
+            manifests_public_dir=public_manifests if public_manifests.exists() else None)
         payload=json.loads(output.read_text().split(f'window.ARENA_SEASONS_DATA["{sid}"] = ',1)[1].rstrip().rstrip(';'))
         curves=payload['nav_timeline']['curves']
         if 'BENCHMARK_market' not in curves: raise ValueError('Market index curve missing')
@@ -352,13 +408,15 @@ def publish(root,sids,end_date,count):
     outputs=[];index=[]
     for sid,data in datasets.items():
         output=root/'staging/web/js/data'/f'{sid}.js'
-        data['exporter'].export_web_payload(data['cfg'],web_output_path=output,publish_auxiliary=False)
+        public_manifests=root/'staging/manifests/public'
+        data['exporter'].export_web_payload(data['cfg'],web_output_path=output,publish_auxiliary=False,
+            manifests_public_dir=public_manifests if public_manifests.exists() else None)
         content=output.read_text();outputs.append(content)
         payload=json.loads(content.split(f'window.ARENA_SEASONS_DATA["{sid}"] = ',1)[1].rstrip().rstrip(';'))
         meta=payload['meta']
         index.append(dict(id=sid,title=data['cfg'].title,short_title=data['cfg'].raw_dict.get('short_title',data['cfg'].universe_code),
             status=data['cfg'].status,badge_type='active',period='2026.07 - 2026.10',anchor_date=data['cfg'].anchor_date,
-            end_date=end_date,trading_days=len(data['nav']),contestants_count=6,animals_count=28,
+            end_date=end_date,trading_days=len(data['nav']),contestants_count=meta['total_contestants'],animals_count=28,
             description=data['cfg'].description,dispatches_banner=dict(title='Recalculated research dispatches',link='#dispatches',link_text='Read dispatches'),
             methodology=dict(framework_name='Daily-bar repair research',anchor_spec='Preserved historical weekly signals',
                 capital_spec='Normalized NAV; declared standard account and round lots',
@@ -383,6 +441,8 @@ def publish(root,sids,end_date,count):
     publish_files=[]
     for base in ('chronicles','seasons','web'):
         publish_files.extend(p for p in (root/'staging'/base).rglob('*') if p.is_file())
+    for base in ('manifests','artifacts/predictions'):
+        publish_files.extend(p for p in (root/'staging'/base).rglob('*') if p.is_file())
     # Existing page keeps its old named data until the complete bundle and loader switch.
     def phase(path):
         rel=path.relative_to(root/'staging')
@@ -391,7 +451,9 @@ def publish(root,sids,end_date,count):
         if str(rel).startswith('web/js/data/'): return 4
         return 1
     publish_files.sort(key=lambda p:(phase(p),str(p)))
-    journal_path=root/'publication_journal.json'
+    # The transaction includes private registry filenames. Keep its recovery
+    # mapping beside private operational metadata, never in public artifacts.
+    journal_path=root/'private/publication_journal.json'
     # A completed earlier publish may have backups under this evaluation ID.
     # Clear them before preparing the new journal, so untouched runs cannot be
     # mistaken for runs moved by the new transaction during recovery.
@@ -409,7 +471,9 @@ def publish(root,sids,end_date,count):
     save_json(journal_path,journal)
     # Scan ignored staging explicitly, then run the mandatory repository audit.
     from scripts.audit_privacy import scan_file
-    public_staging=publish_files+list((root/'staging/public').glob('*'))
+    public_staging=[p for p in publish_files if p.suffix not in ('.pkl','.bin')
+                    and 'manifests/private' not in str(p.relative_to(root/'staging'))]
+    public_staging+=list((root/'staging/public').glob('*'))
     for path in public_staging:
         findings=scan_file(path)
         if findings:

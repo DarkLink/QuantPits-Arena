@@ -469,8 +469,7 @@ window.ArenaApp = {
 
       case "decision-audit":
         this.showView("view-decision-audit");
-        const forkId = params.forkId || "fork_model_selection_20260626";
-        window.DecisionAuditView.render("view-decision-audit", forkId);
+        window.DecisionAuditView.render("view-decision-audit", params);
         break;
 
       case "methodology":

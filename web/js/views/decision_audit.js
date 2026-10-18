@@ -15,48 +15,45 @@
  */
 
 window.DecisionAuditView = {
-  activePreset: "fork_model_selection_20260626",
-  slotA: "CONTESTANT_B",
+  activePreset: null,
+  start: null,
+  end: null,
+  season: null,
+  window: null,
+  slotA: "CONTESTANT_G",
   slotB: "CONTESTANT_A",
-  slotC: "BENCHMARK_taotie",
+  slotC: "",
   activeAnimalId: "robot",
 
   render(containerId, params) {
     const container = document.getElementById(containerId);
     if (!container) return;
 
-    const forks = window.arenaAdapter.getDecisionForks() || [];
-    const allSubjects = window.arenaAdapter.getAllContestantsAndBenchmarks() || [];
-    const allAnimals = window.arenaAdapter.getAllAnimals() || [];
-
-    // Parse params if navigated from link/route
-    if (params) {
-      if (typeof params === "object") {
-        if (params.forkId) this.applyPreset(params.forkId, forks);
-        if (params.animalId) this.activeAnimalId = params.animalId;
-      } else if (typeof params === "string") {
-        this.applyPreset(params, forks);
-      }
+    const adapter=window.arenaAdapter;
+    const forks=adapter.getComparisonPresets();
+    const allSubjects=adapter.getAllContestantsAndBenchmarks();
+    const allAnimals=adapter.getAllAnimals();
+    const season=adapter.getCurrentSeasonMeta().season_id;
+    if(this.season!==season){this.season=season;this.start=null;this.end=null;}
+    const requested=typeof params==='string'?params:params?.forkId;
+    if(params?.animalId)this.activeAnimalId=params.animalId;
+    if(requested)this.applyPreset(requested,forks);
+    else if(!this.activePreset&&forks.length)this.applyPreset(forks[0].id||forks[0].fork_id,forks);
+    const validIds=allSubjects.map(s=>s.id);
+    if(!validIds.includes(this.slotA))this.slotA=validIds[0];
+    if(!validIds.includes(this.slotB))this.slotB=validIds[1]||validIds[0];
+    if(this.slotC&&!validIds.includes(this.slotC))this.slotC='';
+    this.window=null;
+    try{
+      this.window=adapter.getComparisonWindow([this.slotA,this.slotB,this.slotC],this.activeAnimalId,this.start,this.end);
+    }catch(error){
+      container.innerHTML=`<div class="view-header"><h1 class="view-title">Decision Archaeology & Sandbox</h1></div>
+        ${this.renderWorkbench(forks,allSubjects,allAnimals)}
+        <div class="card" role="status">${error.message} Use Common start to reset the window.</div>`;
+      this.bindEvents(container,containerId,forks);
+      return;
     }
-
-    // Validate slots against available subjects
-    const validIds = allSubjects.map(s => s.id);
-    if (!validIds.includes(this.slotA)) {
-      this.slotA = validIds[0] || "CONTESTANT_B";
-    }
-    if (!validIds.includes(this.slotB)) {
-      this.slotB = validIds[1] || "CONTESTANT_A";
-    }
-    if (this.slotC && !validIds.includes(this.slotC)) {
-      this.slotC = "";
-    }
-
-    // Retrieve full profiles for Slot A, B, and C
-    const profA = window.arenaAdapter.getSubjectProfile(this.slotA, this.activeAnimalId);
-    const profB = window.arenaAdapter.getSubjectProfile(this.slotB, this.activeAnimalId);
-    const profC = this.slotC ? window.arenaAdapter.getSubjectProfile(this.slotC, this.activeAnimalId) : null;
-
-    if (!profA || !profB) return;
+    const [profA,profB,profC]=this.window.profiles;
 
     // Active animal object
     const currentAnimal = allAnimals.find(a => a.id === this.activeAnimalId) || allAnimals[0] || { id: "robot", name: "Robot 22/3" };
@@ -65,7 +62,7 @@ window.DecisionAuditView = {
     const activeFork = forks.find(f => (f.id === this.activePreset || f.fork_id === this.activePreset));
 
     // Calculate Head-to-Head delta on active animal
-    const deltaRetAB = Number((profA.totalReturnPct - profB.totalReturnPct).toFixed(2));
+    const deltaRetAB = profA.totalReturnPct - profB.totalReturnPct;
     const isABetter = deltaRetAB >= 0;
 
     // Cross-Animal Win Count & Comparisons
@@ -73,33 +70,20 @@ window.DecisionAuditView = {
     let winCountB = 0;
     const animalComparisons = [];
 
-    allAnimals.forEach(animal => {
-      const aPath = window.arenaAdapter.getPath(`${this.slotA}_${animal.id}`);
-      const bPath = window.arenaAdapter.getPath(`${this.slotB}_${animal.id}`);
-      const cPath = this.slotC ? window.arenaAdapter.getPath(`${this.slotC}_${animal.id}`) : null;
-
-      // Returns for this animal
-      const retA = aPath ? aPath.total_return_pct : profA.totalReturnPct;
-      const retB = bPath ? bPath.total_return_pct : profB.totalReturnPct;
-      const retC = cPath ? cPath.total_return_pct : (profC ? profC.totalReturnPct : null);
-
-      const spread = Number((retA - retB).toFixed(2));
-      if (spread > 0) winCountA++;
-      else if (spread < 0) winCountB++;
-
-      animalComparisons.push({
-        animalId: animal.id,
-        animalName: animal.name || animal.id,
-        category: animal.category || "Execution",
-        retA: retA,
-        retB: retB,
-        retC: retC,
-        spread: spread
-      });
+    allAnimals.forEach(animal=>{
+      try{
+        const row=adapter.getComparisonWindow([this.slotA,this.slotB,this.slotC],animal.id,this.window.start,this.window.end);
+        const [left,right,reference]=row.profiles;
+        const spread=left.totalReturnPct-right.totalReturnPct;
+        if(spread>0)winCountA++;else if(spread<0)winCountB++;
+        animalComparisons.push({animalId:animal.id,animalName:animal.name||animal.id,
+          category:animal.category||'Execution',retA:left.totalReturnPct,retB:right.totalReturnPct,
+          retC:reference?.totalReturnPct??null,spread});
+      }catch(error){animalComparisons.push({animalId:animal.id,animalName:animal.name||animal.id,error:error.message});}
     });
 
-    const totalAnimals = animalComparisons.length || 28;
-    const winRatePctA = Number(((winCountA / totalAnimals) * 100).toFixed(0));
+    const totalAnimals = animalComparisons.filter(row=>!row.error).length;
+    const winRatePctA = Number(((winCountA / Math.max(1,totalAnimals)) * 100).toFixed(0));
 
     // Render Main Layout
     container.innerHTML = `
@@ -119,78 +103,7 @@ window.DecisionAuditView = {
         </div>
       </div>
 
-      <!-- Workbench Control Center (Unified Presets + 3 Comparator Slots) -->
-      <div class="card" style="margin-bottom: 24px; padding: 18px 20px; background: rgba(30, 41, 59, 0.4); border: 1px solid var(--border-color); box-shadow: 0 4px 20px rgba(0,0,0,0.15);">
-        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 16px; padding-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,0.06);">
-          <!-- Curated Presets Pills -->
-          <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-            <span style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-right: 4px;">
-              🏛️ Presets:
-            </span>
-            ${forks.map(f => {
-              const fid = f.id || f.fork_id;
-              const isSelected = this.activePreset === fid;
-              return `
-                <button class="btn btn-sm ${isSelected ? 'btn-primary' : 'btn-secondary'} preset-btn" data-preset="${fid}">
-                  ${f.title}
-                </button>
-              `;
-            }).join('')}
-            <button class="btn btn-sm ${this.activePreset === 'custom' ? 'btn-primary' : 'btn-secondary'} preset-btn" data-preset="custom">
-              🧪 Custom Sandbox
-            </button>
-          </div>
-
-          <!-- Animal Selector -->
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <label style="font-size: 12px; color: var(--text-secondary); font-weight: 600;">🐾 Execution Handler:</label>
-            <select id="archaeology-animal-select" class="filter-select" style="min-width: 190px;">
-              ${allAnimals.map(a => `
-                <option value="${a.id}" ${a.id === this.activeAnimalId ? 'selected' : ''}>
-                  ${a.name}
-                </option>
-              `).join('')}
-            </select>
-          </div>
-        </div>
-
-        <!-- 3 Comparator Selection Slots -->
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px;">
-          <!-- Slot A -->
-          <div style="background: rgba(16, 185, 129, 0.06); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: 8px; padding: 10px 14px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-              <span style="font-size: 11px; font-weight: 700; color: #10b981; letter-spacing: 0.05em;">● SUBJECT A (Baseline / Chosen)</span>
-              <span class="badge badge-success" style="font-size: 10px; padding: 2px 6px;">Slot A</span>
-            </div>
-            <select id="slot-a-select" class="filter-select" style="width: 100%; font-weight: 600;">
-              ${this.renderSubjectOptions(allSubjects, this.slotA)}
-            </select>
-          </div>
-
-          <!-- Slot B -->
-          <div style="background: rgba(244, 63, 94, 0.06); border: 1px solid rgba(244, 63, 94, 0.35); border-radius: 8px; padding: 10px 14px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-              <span style="font-size: 11px; font-weight: 700; color: #f43f5e; letter-spacing: 0.05em;">● SUBJECT B (Challenger / Rejected)</span>
-              <span class="badge badge-danger" style="font-size: 10px; padding: 2px 6px;">Slot B</span>
-            </div>
-            <select id="slot-b-select" class="filter-select" style="width: 100%; font-weight: 600;">
-              ${this.renderSubjectOptions(allSubjects, this.slotB)}
-            </select>
-          </div>
-
-          <!-- Slot C -->
-          <div style="background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.35); border-radius: 8px; padding: 10px 14px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-              <span style="font-size: 11px; font-weight: 700; color: #38bdf8; letter-spacing: 0.05em;">● SUBJECT C (Reference / Benchmark)</span>
-              <span class="badge badge-neutral" style="font-size: 10px; padding: 2px 6px;">Optional</span>
-            </div>
-            <select id="slot-c-select" class="filter-select" style="width: 100%;">
-              <option value="">-- None (2-way comparison) --</option>
-              ${this.renderSubjectOptions(allSubjects, this.slotC)}
-            </select>
-          </div>
-        </div>
-      </div>
+      ${this.renderWorkbench(forks,allSubjects,allAnimals)}
 
       <!-- Historical Context or Sandbox Intelligence Banner -->
       <div class="card" style="margin-bottom: 24px; border-left: 4px solid ${isABetter ? 'var(--accent-emerald)' : 'var(--accent-rose)'};">
@@ -206,17 +119,22 @@ window.DecisionAuditView = {
           <div style="text-align: right;">
             <div style="font-size: 11px; color: var(--text-secondary); margin-bottom: 4px;">Spread (A − B on ${currentAnimal.name}):</div>
             <span class="badge ${isABetter ? 'badge-success' : 'badge-danger'}" style="font-size: 13px; font-weight: 700; padding: 4px 12px;">
-              ${isABetter ? '✅' : '⚠️'} ${deltaRetAB >= 0 ? '+' : ''}${deltaRetAB}% (${isABetter ? 'A Outperformed' : 'B Outperformed'})
+              ${isABetter ? '✅' : '⚠️'} ${deltaRetAB >= 0 ? '+' : ''}${deltaRetAB.toFixed(4)} pp (${isABetter ? 'Slot A Outperformed' : 'Slot B Outperformed'})
             </span>
           </div>
         </div>
         <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 0;">
           ${activeFork 
             ? (activeFork.historical_context || activeFork.description) 
-            : `Evaluating relative alpha and stability between <strong>${profA.name}</strong> and <strong>${profB.name}</strong> across all market friction regimes. Subject A holds a <strong>${winRatePctA}%</strong> win rate across the 28 animal containers.`}
+            : `Comparing <strong>${profA.name}</strong> and <strong>${profB.name}</strong> in the stated window. Slot A has a higher realized return in <strong>${winCountA}/${totalAnimals}</strong> available animal containers; this is descriptive, not a count of independent tests.`}
         </p>
       </div>
 
+      <div class="card" style="margin-bottom:24px" data-comparison-window="${this.window.start}/${this.window.end}">
+        <strong>${this.window.start} close → ${this.window.end} close · ${this.window.sessions} return sessions</strong>
+        <p>Every selected subject, including Slot C, uses this window and NAV=1.0000 at its start.
+        Cards, curves and the animal matrix share these dates. Random-control tests for this window are N/A.</p>
+      </div>
       <!-- Side-by-Side Subject Cards -->
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; margin-bottom: 24px;">
         <!-- Subject A Card -->
@@ -249,7 +167,7 @@ window.DecisionAuditView = {
             <div class="kpi-card" style="padding: 10px;">
               <div class="kpi-title" data-tooltip-term="null_court">Null Court</div>
               <div class="kpi-value" style="font-size: 13px; color: var(--accent-emerald);">
-                ${profA.nullCourt || 'Pass'}
+                ${profA.nullCourt}
               </div>
             </div>
           </div>
@@ -285,7 +203,7 @@ window.DecisionAuditView = {
             <div class="kpi-card" style="padding: 10px;">
               <div class="kpi-title" data-tooltip-term="null_court">Null Court</div>
               <div class="kpi-value" style="font-size: 13px; color: var(--accent-emerald);">
-                ${profB.nullCourt || 'Pass'}
+                ${profB.nullCourt}
               </div>
             </div>
           </div>
@@ -322,7 +240,7 @@ window.DecisionAuditView = {
               <div class="kpi-card" style="padding: 10px;">
                 <div class="kpi-title">Role</div>
                 <div class="kpi-value" style="font-size: 13px; color: var(--text-secondary);">
-                  ${profC.nullCourt || 'Benchmark'}
+                  ${profC.nullCourt}
                 </div>
               </div>
             </div>
@@ -336,7 +254,7 @@ window.DecisionAuditView = {
           <div>
             <div class="chart-card-title">Synchronized Trajectory & Counterfactual Spread / Regret</div>
             <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">
-              Upper panel: Out-of-sample NAV trajectories. Lower panel: Relative spread (A − B). Positive values indicate Slot A outperformance.
+              Upper panel: NAV rebased to 1.0000 at the common close anchor. Lower panel: Slot A minus Slot B return, in percentage points.
             </div>
           </div>
           <div style="display: flex; align-items: center; gap: 10px;">
@@ -383,6 +301,7 @@ window.DecisionAuditView = {
             </thead>
             <tbody>
               ${animalComparisons.map(ac => {
+                if(ac.error)return `<tr><td>${ac.animalName}</td><td colspan="${profC?6:5}">Unavailable in this window</td></tr>`;
                 const isWinA = ac.spread > 0;
                 const isTie = ac.spread === 0;
                 return `
@@ -404,7 +323,7 @@ window.DecisionAuditView = {
                       </td>
                     ` : ''}
                     <td style="text-align: right; font-weight: 700; font-family: monospace;" class="${ac.spread >= 0 ? 'text-up' : 'text-down'}">
-                      ${ac.spread >= 0 ? '+' : ''}${ac.spread.toFixed(2)}%
+                      ${ac.spread >= 0 ? '+' : ''}${ac.spread.toFixed(2)} pp
                     </td>
                     <td style="text-align: center;">
                       ${isTie 
@@ -424,7 +343,7 @@ window.DecisionAuditView = {
     this.bindEvents(container, containerId, forks);
 
     // Render Dual-Grid Chart
-    const dates = window.arenaAdapter.getNavDates();
+    const dates = this.window.dates;
     const modelsData = [
       {
         name: profA.shortName,
@@ -450,7 +369,9 @@ window.DecisionAuditView = {
     }
 
     if (dates && dates.length > 0) {
+      const expectedWindow=this.window;
       setTimeout(() => {
+        if(this.window!==expectedWindow)return;
         window.ArenaCharts.renderCustomArchaeology(
           "chart-archaeology-trajectory",
           dates,
@@ -461,8 +382,91 @@ window.DecisionAuditView = {
     }
   },
 
+  renderWorkbench(forks,allSubjects,allAnimals) {
+    return `      <!-- Workbench Control Center (Unified Presets + 3 Comparator Slots) -->
+      <div class="card" style="margin-bottom: 24px; padding: 18px 20px; background: rgba(30, 41, 59, 0.4); border: 1px solid var(--border-color); box-shadow: 0 4px 20px rgba(0,0,0,0.15);">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 16px; padding-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,0.06);">
+          <!-- Curated Presets Pills -->
+          <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+            <span style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-right: 4px;">
+              🏛️ Presets:
+            </span>
+            ${forks.map(f => {
+              const fid = f.id || f.fork_id;
+              const isSelected = this.activePreset === fid;
+              return `
+                <button class="btn btn-sm ${isSelected ? 'btn-primary' : 'btn-secondary'} preset-btn" data-preset="${fid}">
+                  ${f.title}
+                </button>
+              `;
+            }).join('')}
+            <button class="btn btn-sm ${this.activePreset === 'custom' ? 'btn-primary' : 'btn-secondary'} preset-btn" data-preset="custom">
+              🧪 Custom Sandbox
+            </button>
+          </div>
+
+          <!-- Animal Selector -->
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <label style="font-size: 12px; color: var(--text-secondary); font-weight: 600;">🐾 Execution Handler:</label>
+            <select id="archaeology-animal-select" class="filter-select" style="min-width: 190px;">
+              ${allAnimals.map(a => `
+                <option value="${a.id}" ${a.id === this.activeAnimalId ? 'selected' : ''}>
+                  ${a.name}
+                </option>
+              `).join('')}
+            </select>
+          </div>
+        </div>
+
+        <!-- 3 Comparator Selection Slots -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px;">
+          <!-- Slot A -->
+          <div style="background: rgba(16, 185, 129, 0.06); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: 8px; padding: 10px 14px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <span style="font-size: 11px; font-weight: 700; color: #10b981; letter-spacing: 0.05em;">● SUBJECT A (First Curve)</span>
+              <span class="badge badge-success" style="font-size: 10px; padding: 2px 6px;">Slot A</span>
+            </div>
+            <select id="slot-a-select" class="filter-select" style="width: 100%; font-weight: 600;">
+              ${this.renderSubjectOptions(allSubjects, this.slotA)}
+            </select>
+          </div>
+
+          <!-- Slot B -->
+          <div style="background: rgba(244, 63, 94, 0.06); border: 1px solid rgba(244, 63, 94, 0.35); border-radius: 8px; padding: 10px 14px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <span style="font-size: 11px; font-weight: 700; color: #f43f5e; letter-spacing: 0.05em;">● SUBJECT B (Second Curve)</span>
+              <span class="badge badge-danger" style="font-size: 10px; padding: 2px 6px;">Slot B</span>
+            </div>
+            <select id="slot-b-select" class="filter-select" style="width: 100%; font-weight: 600;">
+              ${this.renderSubjectOptions(allSubjects, this.slotB)}
+            </select>
+          </div>
+
+          <!-- Slot C -->
+          <div style="background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.35); border-radius: 8px; padding: 10px 14px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <span style="font-size: 11px; font-weight: 700; color: #38bdf8; letter-spacing: 0.05em;">● SUBJECT C (Reference / Benchmark)</span>
+              <span class="badge badge-neutral" style="font-size: 10px; padding: 2px 6px;">Optional</span>
+            </div>
+            <select id="slot-c-select" class="filter-select" style="width: 100%;">
+              <option value="">-- None (2-way comparison) --</option>
+              ${this.renderSubjectOptions(allSubjects, this.slotC)}
+            </select>
+          </div>
+        </div>
+        <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:end;margin-top:16px">
+          <label>Close anchor<br><input id="comparison-start" class="filter-select" type="date" value="${this.start||this.window?.start||''}"></label>
+          <label>Through<br><input id="comparison-end" class="filter-select" type="date" value="${this.end||this.window?.end||''}"></label>
+          <button id="comparison-reset" class="btn btn-secondary">Common start</button>
+        </div>
+      </div>
+
+`;
+  },
+
   applyPreset(presetId, forks) {
     this.activePreset = presetId;
+    this.start=null;this.end=null;
     if (presetId === "custom") {
       return;
     }
@@ -471,7 +475,7 @@ window.DecisionAuditView = {
     if (fork) {
       this.slotA = fork.chosen_contestant_id || fork.chosen_id || "CONTESTANT_B";
       this.slotB = fork.rejected_contestant_id || fork.rejected_id || "CONTESTANT_A";
-      this.slotC = "BENCHMARK_taotie";
+      this.slotC = fork.reference_id ?? "BENCHMARK_taotie";
     }
   },
 
@@ -498,6 +502,10 @@ window.DecisionAuditView = {
   },
 
   bindEvents(container, containerId, forks) {
+    const bind=(id,event,handler)=>container.querySelector(id)?.addEventListener(event,handler);
+    bind('#comparison-start','change',event=>{this.start=event.target.value;this.render(containerId);});
+    bind('#comparison-end','change',event=>{this.end=event.target.value;this.render(containerId);});
+    bind('#comparison-reset','click',()=>{this.start=null;this.end=null;this.render(containerId);});
     // Preset buttons
     container.querySelectorAll(".preset-btn").forEach(btn => {
       btn.addEventListener("click", () => {
@@ -521,6 +529,7 @@ window.DecisionAuditView = {
     if (slotASelect) {
       slotASelect.addEventListener("change", (e) => {
         this.slotA = e.target.value;
+        this.start=null;this.end=null;
         this.activePreset = "custom";
         this.render(containerId);
       });
@@ -531,6 +540,7 @@ window.DecisionAuditView = {
     if (slotBSelect) {
       slotBSelect.addEventListener("change", (e) => {
         this.slotB = e.target.value;
+        this.start=null;this.end=null;
         this.activePreset = "custom";
         this.render(containerId);
       });
@@ -541,6 +551,7 @@ window.DecisionAuditView = {
     if (slotCSelect) {
       slotCSelect.addEventListener("change", (e) => {
         this.slotC = e.target.value;
+        this.start=null;this.end=null;
         this.activePreset = "custom";
         this.render(containerId);
       });

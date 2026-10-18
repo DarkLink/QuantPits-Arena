@@ -114,6 +114,11 @@ def load_model_file(artifact_path: Path):
         with open(artifact_path, "rb") as f:
             return pickle.load(f)
     except Exception:
+        from arena.inference.registered import load_portable_model
+        try:
+            return load_portable_model(artifact_path)
+        except (pickle.UnpicklingError, EOFError):
+            pass
         import torch
         return torch.load(artifact_path, map_location="cpu", weights_only=False)
 

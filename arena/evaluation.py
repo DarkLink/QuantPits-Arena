@@ -127,8 +127,10 @@ def runner_from_inputs(root,sid,end_date):
     with (root/'inputs'/f'{sid}_signals.pkl').open('rb') as stream: signals=pickle.load(stream)
     with (root/'inputs'/f'{sid}_market.pkl').open('rb') as stream: market=pickle.load(stream)
     cfg=effective_config(sid)
+    from arena.contestants.lifecycle import candidate_registry
     runner=WeeklyCycleRunner(anchor_date=cfg.anchor_date,end_date=end_date,season_id=sid,
         initial_cash=cfg.initial_cash,frozen_signals=signals,market_provider=market,
+        registry=candidate_registry(root),
         run_dir=root/'staging/runs'/f'{sid}_run')
     runner.source_signature=hashlib.sha256((digest(root/'inputs'/f'{sid}_signals.pkl')+digest(root/'inputs'/f'{sid}_market.pkl')).encode()).hexdigest()
     return runner,cfg
@@ -195,6 +197,8 @@ def load_replayed(root,sid,end_date):
     runner,cfg=runner_from_inputs(root,sid,end_date)
     runner.load_checkpoint_from_disk(runner.run_dir/'checkpoints/latest_state.pkl')
     results={k:e.to_portfolio_path() for k,e in runner.engines.items()}
+    for key,engine in runner.engines.items():
+        results[key].diagnostics['rebalance_days_with_buy']=engine.rebalance_days_with_buy
     results[('BENCHMARK','taotie')]=runner.taotie_benchmark.engine.to_portfolio_path()
     results[('BENCHMARK','ghost_taotie')]=runner.ghost_taotie_benchmark.engine.to_portfolio_path()
     return runner,results,DualTierExporter(f'{sid}_run',base_dir=root/'staging/runs')
@@ -210,14 +214,17 @@ def family_corrections(root,sids):
         frame.loc[valid,'percentile_rank']=100*(frame.loc[valid,'monkey_count']-frame.loc[valid,'exceedance_count'])/(frame.loc[valid,'monkey_count']+1)
         frame['season_id']=sid;frames.append(frame)
     combined=pd.concat(frames,ignore_index=True)
-    mask=combined['contestant_id'].str.startswith('CONTESTANT_') & combined['empirical_p_value'].notna()
+    eligible={f'CONTESTANT_{letter}' for letter in 'ABCDEF'}
+    mask=combined['contestant_id'].isin(eligible) & combined['empirical_p_value'].notna()
     if int(mask.sum())!=840: raise ValueError('Declared 840-comparison family is incomplete')
     values=combined.loc[mask,'empirical_p_value'].to_numpy()
     for method,values_adj in adjust(values).items():
         key={'bonferroni':'bonferroni_p','holm':'holm_p','bh':'bh_q','by':'by_q'}[method]
         combined.loc[mask,key]=values_adj
-    combined['family_size']=840
-    combined['family_scope']='five_pools_six_contestants_28_animals_cumulative_cutoff'
+    combined['family_size']=0
+    combined.loc[mask,'family_size']=840
+    combined['family_scope']='not_tested'
+    combined.loc[mask,'family_scope']='five_pools_six_contestants_28_animals_cumulative_cutoff'
     for sid in sids:
         combined[combined.season_id==sid].drop(columns='season_id').to_csv(root/'staging/runs'/f'{sid}_run/public/contestant_monkey_significance.csv',index=False)
     out=root/'staging/public';out.mkdir(parents=True,exist_ok=True)
@@ -290,20 +297,30 @@ def advance(args):
         raise ValueError('A published rollforward requires current controls; use step --no-monkeys for local diagnostics')
     if getattr(args,'mock',False):
         raise ValueError('Mock data cannot replace the public active generation; use isolated run --mock')
-    root=REPO_ROOT/'artifacts/evaluations'/f"advance_{end.replace('-','')}"
+    from arena.contestants.lifecycle import generation_root, candidate_registry, candidate_cache, verify_entry_source
+    generation=getattr(args,'generation',None)
+    root=generation_root(generation) if generation else REPO_ROOT/'artifacts/evaluations'/f"advance_{end.replace('-','')}"
     with operation_lock(REPO_ROOT/'artifacts/evaluations/refresh.lock'):
         from arena.reports.refresh_release import recover_pending_publications
         recover_pending_publications()
+        if generation:
+            if not (root/'entry.json').exists():raise ValueError('Admission generation has not been prepared')
+            receipt=json.loads((root/'entry.json').read_text())
+            if receipt['spec']['end_date']!=end:raise ValueError('Prepared admission cutoff differs')
         actual_dates=[]
         for sid in sids:
             cp=RUNS_DIR/f'{sid}_run/checkpoints/latest_state.pkl'
             with cp.open('rb') as stream: state=pickle.load(stream)
             actual_dates.append(next(iter(state['engines'].values())).daily_valuations[-1].date)
         if any(date>end for date in actual_dates): raise ValueError('Cannot rewind a published evaluation')
-        if all(date==end for date in actual_dates):
+        if all(date==end for date in actual_dates) and (not generation or (root/'complete.json').exists()):
             subprocess.run([sys.executable,str(REPO_ROOT/'scripts/audit_privacy.py')],check=True)
             print(f'[rollforward] all pools already valued through {end}; no duplicate execution',flush=True)
             return
+        if generation:
+            from arena.contestants.lifecycle import verify_admission_predictions
+            verify_entry_source(root)
+            verify_admission_predictions(root,[SeasonManager.get_season_config(s).universe_code for s in sids])
         root.mkdir(parents=True,exist_ok=True)
         journal=root/'advance_journal.json'
         save_json(journal,dict(phase='staging',requested_cutoff=end,seasons=sids,previous_cutoffs=actual_dates))
@@ -315,9 +332,12 @@ def advance(args):
             if not (legacy/'runs'/source.name).exists():shutil.copytree(source,legacy/'runs'/source.name)
             staged=root/'staging/runs'/source.name
             if not staged.exists():shutil.copytree(source,staged)
+            registry=candidate_registry(root)
+            auth_store=candidate_cache(root,SeasonManager.get_season_config(sid).universe_code) if generation else None
             cmd_step(argparse.Namespace(season=sid,run_id=None,output=str(root/'staging/runs'),
                 anchor_date=SeasonManager.get_season_config(sid).anchor_date,end_date=end,
-                initial_cash=500000.,mock=False,monkeys=True,monkey_count=args.monkey_count,contestants=None))
+                initial_cash=500000.,mock=False,monkeys=True,monkey_count=args.monkey_count,contestants=None,
+                registry=registry,auth_store_path=auth_store))
         files={}
         inputs=root/'inputs';inputs.mkdir(exist_ok=True)
         for sid in sids:
@@ -326,7 +346,7 @@ def advance(args):
             with (run_dir/'checkpoints/latest_state.pkl').open('rb') as stream: state=pickle.load(stream)
             signals=state['signal_history']
             runner=WeeklyCycleRunner(anchor_date=cfg.anchor_date,end_date=end,initial_cash=cfg.initial_cash,
-                season_id=sid,frozen_signals=signals,run_dir=run_dir)
+                season_id=sid,frozen_signals=signals,run_dir=run_dir,registry=candidate_registry(root))
             runner.load_checkpoint(state)
             runner._setup_market_provider(runner.registry.list_contestants(),None,None)
             runner.market_provider.snapshot_frozen=True

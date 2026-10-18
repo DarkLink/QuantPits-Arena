@@ -16,6 +16,26 @@ window.ContestantDetailView = {
   activeContestantId: "CONTESTANT_A",
   activeAnimalCluster: "rep",
 
+  renderRetrainingContext(contestant,meta) {
+    const context=contestant.retraining_context||{};
+    return `<div class="card" style="border-left:4px solid var(--accent-amber)">
+      <div class="card-header"><h3 class="card-title">Participant Background &amp; Retraining</h3>
+        <span class="badge badge-warning">${contestant.retrained_from?'Retrained participant':'Observation participant'}</span></div>
+      <p style="font-size:13px;color:var(--text-secondary);line-height:1.6">${contestant.notes||contestant.bio}</p>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:16px;font-size:12px">
+        <div>Source participant<br><strong>${contestant.retrained_from||'N/A'}</strong></div>
+        <div>Information cutoff<br><strong>${context.information_cutoff||'N/A'}</strong></div>
+        <div>Inherited state at close<br><strong>${context.state_anchor||contestant.observation_start}</strong></div>
+        <div>First simulated execution<br><strong>${context.first_execution||'N/A'}</strong></div>
+        <div>Own observation anchor<br><strong>${contestant.observation_start} · NAV 1.0000</strong></div>
+        <div>Current arena pool<br><strong>${meta.universe_name||meta.title}</strong></div>
+      </div>
+      <p style="font-size:12px;color:var(--text-muted);line-height:1.6;margin-top:16px">The inherited portfolio includes holdings, cash and delayed decision history. Subsequent decisions and performance run independently.
+        Pre-entry performance belongs to the source participant. Legacy metrics, full-season rank and random-control tests for this short observation window are N/A.</p>
+      <a class="btn btn-secondary" href="#decision-audit">Compare in a common window →</a>
+    </div>`;
+  },
+
   getClusterPaths(paths, clusterKey) {
     switch (clusterKey) {
       case "sloth":
@@ -63,6 +83,8 @@ window.ContestantDetailView = {
       const seasonMeta = window.arenaAdapter ? window.arenaAdapter.getCurrentSeasonMeta() : {};
       const fingerprints = window.arenaAdapter.getContestantFingerprints(this.activeContestantId);
       const paths = window.arenaAdapter.getFilteredPaths({ contestantId: this.activeContestantId });
+      const observed=!!contestant.observation_start;
+      const observationStart=contestant.observation_start||seasonMeta.anchor_date;
 
       // Calculate stats
       const returns = paths.map(p => p.total_return_pct);
@@ -85,7 +107,7 @@ window.ContestantDetailView = {
                   <span>🧬 Field Guide Model Specs</span>
                 </button>
               </div>
-              <p class="view-subtitle">Detailed model architecture profile, historical lineage, and 28-animal execution stress tests</p>
+              <p class="view-subtitle">${observed ? (contestant.retrained_from ? 'Retrained from '+contestant.retrained_from+' · ' : '')+'Observation since '+observationStart : 'Participant background and 28-animal execution stress tests'}</p>
             </div>
 
             <!-- Model Switcher Chips -->
@@ -110,7 +132,7 @@ window.ContestantDetailView = {
 
         <!-- Two Pillars: Historical Context vs Arena OOS Performance -->
         <div class="grid-2col" style="margin-bottom: 24px;">
-          <!-- 1. Historical Biography: Context Prior to Arena -->
+          ${observed ? this.renderRetrainingContext(contestant,seasonMeta) : `          <!-- 1. Historical Biography: Context Prior to Arena -->
           <div class="card" style="border-left: 4px solid var(--accent-amber);">
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
               <h3 style="font-size: 15px; font-weight: 700; color: var(--accent-amber); display: flex; align-items: center; gap: 8px; margin: 0;">
@@ -175,11 +197,13 @@ window.ContestantDetailView = {
             </div>
           </div>
 
+`}
+
           <!-- 2. Arena OOS Performance -->
           <div class="card" style="border-left: 4px solid var(--accent-cyan);">
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
               <h3 style="font-size: 15px; font-weight: 700; color: var(--accent-cyan); display: flex; align-items: center; gap: 8px; margin: 0;">
-                Arena OOS Reality (${seasonMeta.short_title || "Current Season"})
+                ${observed?'Arena Observation':'Arena OOS Reality'} (${seasonMeta.short_title || "Current Season"})
               </h3>
               <span class="badge badge-info" style="font-size: 10px;">${seasonMeta.universe_name || 'Arena Universe'}</span>
             </div>
@@ -201,13 +225,13 @@ window.ContestantDetailView = {
               <div class="kpi-card" style="padding: 12px;">
                 <div class="kpi-title">Paths p &lt; 0.05 vs Null</div>
                 <div class="kpi-value text-gold" style="font-size: 20px;">
-                  ${beatMonkeys} / 28
+                  ${observed ? 'N/A' : beatMonkeys+' / 28'}
                 </div>
-                <div class="kpi-hint">Mean Rank: ${window.formatPercentile ? window.formatPercentile(avgMonkeyPct) : avgMonkeyPct + '%'}</div>
+                <div class="kpi-hint">${observed ? 'Observation window · no assigned test' : 'Mean Rank: '+(window.formatPercentile ? window.formatPercentile(avgMonkeyPct) : avgMonkeyPct+'%')}</div>
               </div>
             </div>
             <div style="font-size: 12px; color: var(--text-secondary); background: rgba(0,0,0,0.2); padding: 10px 12px; border-radius: var(--radius-sm); line-height: 1.5;">
-              Evaluated across the <strong>${seasonMeta.universe_name || seasonMeta.title || 'Standard Arena Pool'}</strong> starting from zero on ${seasonMeta.anchor_date || "2026-07-03"} under ${seasonMeta.methodology?.capital_spec || "identical market conditions, CNY 500,000 cash, and 100-share trading lots"}.
+              ${observed ? `Observation from ${observationStart} close to ${seasonMeta.cutoff||seasonMeta.end_date}; NAV=1.0000 at the inherited close state. All 28 handlers and benchmark curves below use this same window.` : `Evaluated across <strong>${seasonMeta.universe_name||seasonMeta.title||'Standard Arena Pool'}</strong> from ${observationStart} under the declared research allocation and round-lot rules.`}
             </div>
           </div>
         </div>
@@ -283,7 +307,7 @@ window.ContestantDetailView = {
               </div>
               <div id="chart-fingerprint-delay" style="height: 240px; width: 100%;"></div>
               <div style="font-size: 11px; color: var(--text-muted); margin-top: 8px;">
-                Steep downward slope indicates rapid alpha decay requiring prompt order execution.
+                Differences describe realized lag and inherited exposure over the stated window; they do not isolate pure signal decay.
               </div>
             </div>
 
@@ -362,7 +386,7 @@ window.ContestantDetailView = {
               <tbody>
                 ${paths.map(p => {
                   const retColor = p.total_return_pct >= 0 ? "text-up" : "text-down";
-                  const pRank = p.percentile_rank !== undefined ? p.percentile_rank : (p.monkey_percentile || 0);
+                  const pRank = p.percentile_rank ?? p.monkey_percentile ?? null;
                   const isSig = p.empirical_p_value != null && p.empirical_p_value < .05;
                   const pVal = p.empirical_p_value !== undefined ? p.empirical_p_value : (p.p_value !== undefined ? p.p_value : 1.0);
                   return `
@@ -376,10 +400,10 @@ window.ContestantDetailView = {
                         ${p.total_return_pct >= 0 ? '+' : ''}${p.total_return_pct.toFixed(2)}%
                       </td>
                       <td style="text-align: right; color: var(--accent-rose);">${p.max_drawdown_pct ? p.max_drawdown_pct.toFixed(2) : '0.00'}%</td>
-                      <td style="text-align: right; font-weight: 600;">${p.sharpe_ratio !== undefined ? p.sharpe_ratio.toFixed(2) : '-'}</td>
+                      <td style="text-align: right; font-weight: 600;">${Number.isFinite(p.sharpe_ratio) ? p.sharpe_ratio.toFixed(2) : 'N/A'}</td>
                       <td style="text-align: right;">
                         <span class="badge ${isSig ? 'badge-success' : 'badge-neutral'}" style="font-weight: 700;">
-                          ${window.formatPercentile ? window.formatPercentile(pRank) : pRank.toFixed(1) + '%'}
+                          ${pRank==null ? 'N/A' : window.formatPercentile ? window.formatPercentile(pRank) : pRank.toFixed(1)+'%'}
                         </span>
                       </td>
                       <td style="text-align: right; font-family: monospace; color: ${isSig ? 'var(--accent-cyan)' : 'var(--text-muted)'};">
@@ -414,7 +438,9 @@ window.ContestantDetailView = {
       });
 
       // Render fingerprint charts & multi-curve chart
+      const expectedContestant=this.activeContestantId;
       setTimeout(() => {
+        if(this.activeContestantId!==expectedContestant)return;
         this.renderCharts(fingerprints, paths);
       }, 50);
 

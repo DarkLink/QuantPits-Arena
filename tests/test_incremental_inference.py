@@ -156,3 +156,49 @@ def test_cli_dispatches_incremental_parameters(monkeypatch):
     monkeypatch.setattr(incremental, "extend_predictions", lambda **kwargs: calls.append(kwargs))
     cli.main()
     assert calls == [{"market": "csi500", "end_date": "2026-10-09"}]
+
+
+def test_late_entry_replaces_no_parent_slice_and_starts_at_its_signal_day(cache_setup,monkeypatch):
+    from arena.inference import registered
+    path,dates,member=cache_setup
+    child=SimpleNamespace(contestant_id='candidate_2',members=[member],observation_start=dates[-1])
+    parent=SimpleNamespace(contestant_id='candidate_1',members=[member])
+    registry=SimpleNamespace(list_contestants=lambda:[parent,child],
+        get_anonymous_id=lambda cid:'CONTESTANT_A' if cid=='candidate_1' else 'CONTESTANT_G')
+    with path.open('rb') as stream:before=pickle.load(stream)
+    inherited=pd.Series([.1,.9],index=['STOCK_01','STOCK_02'])
+    before['candidate_2']={d:inherited.copy() for d in dates[:-1]}
+    with path.open('wb') as stream:pickle.dump(before,stream)
+    install_inference(monkeypatch,{d:inherited.copy() for d in dates})
+    requests=[]
+    new=pd.Series([.8,.2],index=inherited.index)
+    def infer(participant,market,start,end):
+        requests.append((start,end))
+        return {dates[-1]:new}
+    monkeypatch.setattr(registered,'infer_registered',infer)
+    incremental.extend_predictions('csirun300',dates[-1],registry=registry)
+    with path.open('rb') as stream:after=pickle.load(stream)
+    assert requests==[(dates[-1],dates[-1])]
+    pd.testing.assert_series_equal(after['candidate_2'][dates[0]],inherited)
+    pd.testing.assert_series_equal(after['CONTESTANT_G'][dates[-1]],new)
+    pd.testing.assert_series_equal(after['candidate_1'][dates[0]],before['candidate_1'][dates[0]])
+
+
+def test_registered_failure_keeps_live_cache_and_resumes_legacy_work(cache_setup,monkeypatch):
+    from arena.inference import registered
+    path,dates,member=cache_setup
+    parent=SimpleNamespace(contestant_id='candidate_1',members=[member])
+    child=SimpleNamespace(contestant_id='candidate_2',members=[member],observation_start=dates[-1])
+    registry=SimpleNamespace(list_contestants=lambda:[parent,child],
+        get_anonymous_id=lambda cid:'CONTESTANT_A' if cid=='candidate_1' else 'CONTESTANT_G')
+    initial=path.read_bytes()
+    score=pd.Series([.3,.7],index=['STOCK_01','STOCK_02'])
+    calls=install_inference(monkeypatch,{d:score.copy() for d in dates})
+    def fail(*args):raise RuntimeError('synthetic registered failure')
+    monkeypatch.setattr(registered,'infer_registered',fail)
+    with pytest.raises(RuntimeError,match='synthetic registered failure'):
+        incremental.extend_predictions('csirun300',dates[-1],registry=registry)
+    assert path.read_bytes()==initial
+    monkeypatch.setattr(registered,'infer_registered',lambda *args:{dates[-1]:score.copy()})
+    incremental.extend_predictions('csirun300',dates[-1],registry=registry)
+    assert len(calls)==1

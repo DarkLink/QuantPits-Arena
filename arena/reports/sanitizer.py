@@ -7,6 +7,7 @@ arena/reports/sanitizer.py
 from typing import Dict, List, Any, Optional
 from pathlib import Path
 import json
+import re
 import pandas as pd
 
 from arena.config import RUNS_DIR
@@ -32,6 +33,18 @@ class DualTierExporter:
         self.public_dir.mkdir(parents=True, exist_ok=True)
         self.reports_dir.mkdir(parents=True, exist_ok=True)
 
+    def observation(self, path, registry):
+        from arena.reports.comparison import observation_path
+        try:
+            participant = registry.get_contestant(path.contestant_id)
+        except (KeyError, AttributeError):
+            return path
+        anchor = getattr(participant, 'observation_start', None)
+        entries = self.private_dir / 'participant_entries.json'
+        metadata = json.loads(entries.read_text()) if anchor and entries.exists() else {}
+        baseline = metadata.get(path.contestant_id, {}).get('baselines', {}).get(path.animal_id, {})
+        return observation_path(path, anchor, baseline)
+
     def export(
         self,
         results: Dict[tuple, PortfolioPath],
@@ -47,6 +60,7 @@ class DualTierExporter:
         matrix_data: Dict[str, Dict[str, float]] = {}
 
         for (cid, aid), path in results.items():
+            path = self.observation(path, registry)
             anon_cid = registry.get_anonymous_id(cid)
             col_name = f"{anon_cid}_{aid}"
 
@@ -66,6 +80,7 @@ class DualTierExporter:
                 "total_return_pct": f"{tot_ret * 100:.2f}%",
                 "max_drawdown_pct": f"{mdd * 100:.2f}%",
                 "final_nav": f"{s.iloc[-1]:.4f}" if len(s) > 0 else "1.0000",
+                "observation_start": path.diagnostics.get('observation_start'),
                 "target_holdings_mean": diag.get("target_holdings_mean", 0),
                 "actual_holdings_mean": diag.get("actual_holdings_mean", 0),
                 "unaffordable_buy_count": diag.get("unaffordable_buy_count", 0),
@@ -79,6 +94,7 @@ class DualTierExporter:
             diagnostics_rows.append({
                 "contestant_id": anon_cid,
                 "animal_id": aid,
+                "observation_start": path.diagnostics.get('observation_start'),
                 "target_holdings_mean": diag.get("target_holdings_mean", 0),
                 "actual_holdings_mean": diag.get("actual_holdings_mean", 0),
                 "actual_holdings_min": diag.get("actual_holdings_min", 0),
@@ -95,9 +111,10 @@ class DualTierExporter:
             })
 
             # Model × Animal 矩阵数据
-            if anon_cid not in matrix_data:
-                matrix_data[anon_cid] = {}
-            matrix_data[anon_cid][aid] = tot_ret
+            if not path.diagnostics.get('observation_start'):
+                if anon_cid not in matrix_data:
+                    matrix_data[anon_cid] = {}
+                matrix_data[anon_cid][aid] = tot_ret
 
         # 写入 public/daily_nav_curves.csv
         pub_nav_file = self.public_dir / "daily_nav_curves.csv"
@@ -179,13 +196,18 @@ class DualTierExporter:
             f.write(f"Run ID: `{self.run_id}`\n\n")
             # 展示核心收益列
             core_cols = ["contestant_id", "animal_id", "total_return_pct", "max_drawdown_pct", "final_nav"]
-            f.write(to_md(df_summary[core_cols], include_index=False))
+            observed=df_summary['observation_start'].notna()
+            f.write('Full-season paths:\n\n')
+            f.write(to_md(df_summary.loc[~observed,core_cols], include_index=False))
+            if observed.any():
+                f.write('\n\n## Separate observation windows\n\nReturns start at the stated close anchor, with NAV rebased to 1.0000. These paths have no full-season rank.\n\n')
+                f.write(to_md(df_summary.loc[observed,core_cols+['observation_start']], include_index=False))
             f.write("\n\n---\n\n")
             f.write("## Capital Granularity Diagnostics Summary\n\n")
             f.write("Below is the affordability and cash deployment diagnostics across capacity breadth groups:\n\n")
             # 抽取关键字段展示
             diag_summary_cols = [
-                "contestant_id", "animal_id", "target_holdings_mean", "actual_holdings_mean",
+                "contestant_id", "animal_id", "observation_start", "target_holdings_mean", "actual_holdings_mean",
                 "unaffordable_buy_count", "unaffordable_buy_ratio", "mean_cash_ratio", "final_cash_ratio"
             ]
             f.write(to_md(df_diag[diag_summary_cols], include_index=False))
@@ -209,7 +231,7 @@ class DualTierExporter:
             f.write(f"Run ID: `{self.run_id}`\n\n")
             f.write("## 1. Unified Execution Environment Constraints\n\n")
             f.write("All contestants and animal portfolios in this Arena were executed under strictly standardized real-world capital constraints:\n\n")
-            f.write("- **Initial Capital**: `CNY 500,000` (fixed benchmark per portfolio)\n")
+            f.write("- **Reporting Basis**: normalized NAV starts at 1.0000; execution uses the declared standard research allocation\n")
             f.write("- **Lot Sizing Rule**: `lot_size = 100` (China A-share standard; fractional / partial-lot buying is disabled)\n")
             f.write("- **Affordability Rule**: If allocated cash for an instrument cannot purchase 1 lot (`price * 100 > allocated_cash`), the BUY order is **skipped** (unaffordable skip)\n")
             f.write("- **Residual Cash Rule**: Residual unspent cash remains in the cash account without secondary redistribution or round-up leverage\n")
@@ -217,8 +239,8 @@ class DualTierExporter:
 
             f.write("## 2. Research Interpretation & Methodology\n\n")
             f.write("For broader portfolios with large `TopK` (e.g., Eagle-44/66/88, Whale Shark, Taotie), performance variations must **not** be automatically interpreted as pure signal breadth sensitivity.\n\n")
-            f.write("Under fixed CNY 500,000 capital:\n")
-            f.write("1. As target capacity grows, theoretical cash allocation per stock decreases (`500k / K`);\n")
+            f.write("Under the declared standard research allocation:\n")
+            f.write("1. As target capacity grows, theoretical allocation per stock decreases (`1 / K` of initial capital);\n")
             f.write("2. Higher-priced stocks naturally trigger the 1-lot affordability constraint and get skipped;\n")
             f.write("3. Actual holdings may systematically diverge from theoretical target capacity, leading to natural cash retention;\n")
             f.write("4. Therefore, these animals stress-test the compound interaction of:  \n")
@@ -276,15 +298,17 @@ class DualTierExporter:
                 **{f"monkey_{k}":v*100 for k,v in dist.items()}))
         rows=[]
         for (cid,aid),path in contestant_results.items():
+            path = self.observation(path, registry)
             spec_id=map_animal_to_spec_id(aid)
             values=distributions.get(spec_id)
-            tested=spec_id is not None and not CANONICAL_STRATEGY_SPECS[spec_id].passive_pool
+            observed = bool(path.diagnostics.get('observation_start'))
+            tested=not observed and spec_id is not None and not CANONICAL_STRATEGY_SPECS[spec_id].passive_pool
             row=dict(contestant_id=registry.get_anonymous_id(cid),animal_id=aid,strategy_spec=spec_id,
                      actual_return_pct=path.total_return*100,
-                     test_status="random_control" if tested else "not_applicable",
-                     empirical_p_value=None,significant_95pct=False,monkey_count=0,
-                     monkey_median_pct=float(np.median(values))*100 if values is not None else None,
-                     excess_over_monkey_pct=(path.total_return-float(np.median(values)))*100 if values is not None else None)
+                     test_status="observation" if observed else "random_control" if tested else "not_applicable",
+                     empirical_p_value=None,significant_95pct=None if observed else False,monkey_count=0,
+                     monkey_median_pct=float(np.median(values))*100 if tested else None,
+                     excess_over_monkey_pct=(path.total_return-float(np.median(values)))*100 if tested else None)
             if tested:
                 row.update(empirical(path.total_return,values))
             rows.append(row)
@@ -350,6 +374,21 @@ class DualTierExporter:
                         "paired_rival": data.get("paired_rival", ""),
                         "notes": data.get("notes", "")
                     })
+                    contestants[-1]['observation_start'] = data.get('observation_start')
+                    contestants[-1]['statistics_eligible'] = data.get('statistics_eligible', True)
+                    # Explicit public context uses anonymous participant identifiers only.
+                    context=data.get('retraining_context',{})
+                    if not isinstance(context,dict):context={}
+                    parent=data.get('retrained_from')
+                    if isinstance(parent,str) and re.fullmatch(r'CONTESTANT_[A-Z]+',parent):
+                        contestants[-1]['retrained_from']=parent
+                        contestants[-1]['retraining_context']={key:str(context[key]) for key in
+                            ('information_cutoff','state_anchor','first_execution') if key in context}
+                    if data.get('observation_start'):
+                        for field in ('historical_is_sharpe', 'historical_is_return_pct', 'historical_is_mdd_pct',
+                                      'historical_sys_ann_return_pct', 'artifact_date', 'train_cutoff',
+                                      'burial_date', 'training_mode', 'feature_set', 'historical_metric_basis', 'paired_rival'):
+                            contestants[-1][field] = None
 
         # 2. Public CSVs
         df_metrics = pd.read_csv(pub_dir / "summary_metrics.csv", float_precision="round_trip") if (pub_dir / "summary_metrics.csv").exists() else pd.DataFrame()
@@ -369,7 +408,7 @@ class DualTierExporter:
         nav_series_map: Dict[str, List[float]] = {}
         for col in df_nav.columns:
             if col != "datetime":
-                nav_series_map[col] = [float(v) for v in df_nav[col].tolist()]
+                nav_series_map[col] = [float(v) if pd.notna(v) else None for v in df_nav[col].tolist()]
 
         # 4. Market benchmark from universe definition or benchmarks list
         univ = raw_dict.get("universe", {})
@@ -453,6 +492,8 @@ class DualTierExporter:
                 rets = series.pct_change().dropna()
                 if len(rets) > 1 and rets.std() > 0:
                     sharpe = round(float((rets.mean() / rets.std()) * (250 ** 0.5)), 2)
+                if pd.notna(row.get('observation_start')) and len(rets) < 20:
+                    sharpe = None
 
             def _get_animal_category(animal_id: str) -> str:
                 if animal_id == "robot":
@@ -482,7 +523,7 @@ class DualTierExporter:
             badges = []
             if pct_rank >= 99.0:
                 badges.append("Alpha Outlier (>99%)")
-            if sharpe >= 2.0:
+            if sharpe is not None and sharpe >= 2.0:
                 badges.append("High Sharpe (≥2.0)")
             if _parse_pct(d_info.get("unaffordable_buy_ratio", 0)) > 20.0:
                 badges.append("Capital Friction (>20%)")
@@ -502,15 +543,17 @@ class DualTierExporter:
                 "total_return_pct": tot_ret,
                 "max_drawdown_pct": mdd,
                 "final_nav": final_nav,
+                "observation_start": str(row['observation_start']) if pd.notna(row.get('observation_start')) else None,
+                "full_season_eligible": pd.isna(row.get('observation_start')),
                 "sharpe_ratio": sharpe,
-                "excess_over_csi300_pct": tot_ret - bench_ret,
-                "excess_over_monkey_pct": excess_monkey,
+                "excess_over_csi300_pct": tot_ret - bench_ret if pd.isna(row.get('observation_start')) else None,
+                "excess_over_monkey_pct": excess_monkey if p_val is not None else None,
                 "percentile_rank": pct_rank if p_val is not None else None,
                 "monkey_percentile": pct_rank if p_val is not None else None,
                 "monkey_percentile_rank": pct_rank if p_val is not None else None,
                 "empirical_p_value": p_val,
                 "p_value": p_val,
-                "is_statistically_significant": (p_val is not None and p_val < 0.05),
+                "is_statistically_significant": None if pd.notna(row.get('observation_start')) else (p_val is not None and p_val < 0.05),
                 "test_status": s_info.get("test_status", "not_evaluated"),
                 "monkey_count": int(s_info.get("monkey_count", 0)),
                 "exceedance_count": int(s_info["exceedance_count"]) if pd.notna(s_info.get("exceedance_count")) else None,
@@ -518,7 +561,7 @@ class DualTierExporter:
                 **{key: float(s_info[key]) if pd.notna(s_info.get(key)) else None for key in
                    ("bonferroni_p", "holm_p", "bh_q", "by_q", "mc_tail_lower_95", "mc_tail_upper_95")},
                 "family_size": int(s_info.get("family_size", 0)),
-                "is_bonferroni_significant": bool(s_info.get("bonferroni_p", 1.0) < .05),
+                "is_bonferroni_significant": None if pd.notna(row.get('observation_start')) else bool(s_info.get('bonferroni_p',1.) < .05),
                 "buy_attempt_count": int(d_info.get("buy_attempt_count", 0)),
                 "unaffordable_buy_ratio": _parse_pct(d_info.get("unaffordable_buy_ratio", 0)),
                 "unaffordable_buy_count": int(d_info.get("unaffordable_buy_count", 0)),
@@ -541,9 +584,12 @@ class DualTierExporter:
                 s = pd.Series(curve)
                 cummax = s.cummax()
                 dd = ((s - cummax) / cummax) * 100.0
-                drawdowns_map[k] = [round(float(v), 2) for v in dd.tolist()]
+                drawdowns_map[k] = [round(float(v), 2) if pd.notna(v) else None for v in dd.tolist()]
                 if bench_curve and len(bench_curve) == len(curve):
-                    excess = [round(float((c - b) * 100.0), 2) for c, b in zip(curve, bench_curve)]
+                    valid = next((i for i,v in enumerate(curve) if v is not None), None)
+                    bench_anchor = bench_curve[valid] if valid is not None else None
+                    excess = [round(float((c - b/bench_anchor) * 100.0), 2) if c is not None and bench_anchor else None
+                              for c, b in zip(curve, bench_curve)]
                     excess_map[k] = excess
 
         # Benchmark returns
@@ -602,6 +648,7 @@ class DualTierExporter:
                     f_path = ep.get("file")
                     if f_path:
                         candidates = [
+                            self.run_dir.parent.parent / f_path,
                             REPO_ROOT / f_path,
                             REPO_ROOT / "web" / f_path,
                             REPO_ROOT / "chronicles" / "en" / Path(f_path).name,
@@ -697,7 +744,7 @@ class DualTierExporter:
             f.write(f"/**\n * QuantPits-Arena {season_id} Backtest Data Payload\n * Auto-generated by DualTierExporter.export_web_payload\n */\n")
             f.write("window.ARENA_SEASONS_DATA = window.ARENA_SEASONS_DATA || {};\n")
             f.write(f"window.ARENA_SEASONS_DATA[\"{season_id}\"] = ")
-            json.dump(web_payload, f, ensure_ascii=False, indent=2)
+            json.dump(web_payload, f, ensure_ascii=False, indent=2, allow_nan=False)
             f.write(";\n")
         # Also synchronize legacy arena_data.js for Season 1 canonical baseline
         if publish_auxiliary and season_id == "season_01":

@@ -36,7 +36,7 @@ class ArenaDataAdapter {
       c.bio = c.bio || c.historical_role || "Historical quantitative model candidate.";
       c.retire_date = c.burial_date || c.retire_date || c.train_cutoff || "2026-06-26";
       c.retire_reason = c.retire_reason || c.historical_role || "Archived candidate model.";
-      c.status = c.status || "RETIRED";
+      c.status = c.status || (c.observation_start ? "OBSERVATION" : "RETIRED");
       c.architecture_type = c.architecture_type || c.training_mode || "Multi-Factor Ensemble";
       c.lineage = c.lineage || c.family || "Family-Alpha";
       c.historical_is_sharpe = c.historical_is_sharpe !== undefined ? c.historical_is_sharpe : (c.legacy_is_sharpe || 1.85);
@@ -45,6 +45,10 @@ class ArenaDataAdapter {
       c.historical_is_mdd_pct = c.historical_is_mdd_pct !== undefined ? c.historical_is_mdd_pct : 8.0;
       c.historical_sys_ann_return_pct = c.historical_sys_ann_return_pct !== undefined ? c.historical_sys_ann_return_pct : null;
       c.historical_metric_basis = c.historical_metric_basis || "Cashflow-adjusted cumulative system return from weekly inception (2024-10-21) up to burial date";
+      if(c.observation_start){
+        c.retire_date=null;c.retire_reason=null;c.architecture_type=null;
+        c.lineage='Anonymous';c.historical_metric_basis=null;
+      }
 
       this.contestantMap.set(c.contestant_id, c);
       this.contestantMap.set(c.id, c);
@@ -136,7 +140,60 @@ class ArenaDataAdapter {
   }
 
   getAllContestants() {
-    return this.contestants;
+    const cutoff = this.metadata.cutoff || this.getNavDates().at(-1);
+    return this.contestants.filter(c => !c.observation_start || c.observation_start <= cutoff);
+  }
+
+  getPairComparison(referenceId, candidateId, animalId = 'robot', start = null, end = null) {
+    const result = this.getComparisonWindow([referenceId,candidateId],animalId,start,end);
+    const [left,right] = result.profiles;
+    return {...result,referenceId,candidateId,animalId,reference:left.curve,candidate:right.curve,
+      spread:right.curve.map((value,i)=>(value-left.curve[i])*100),
+      referenceReturn:left.totalReturnPct,candidateReturn:right.totalReturnPct,
+      referenceMdd:left.maxDrawdownPct,candidateMdd:right.maxDrawdownPct};
+  }
+
+  getComparisonWindow(subjectIds, animalId = 'robot', start = null, end = null) {
+    const ids=subjectIds.filter(Boolean);
+    if(!ids.length)throw Error('Choose at least one subject.');
+    const dates = this.getNavDates();
+    const subjects=ids.map(id=>{
+      const benchmark=id.startsWith('BENCHMARK_');
+      const path=benchmark?null:this.getPath(`${id}_${animalId}`);
+      if(!benchmark&&!path)throw Error(`${id} does not cover the selected animal.`);
+      const profile=this.getSubjectProfile(id,animalId);
+      if(!profile)throw Error('The selected subject is unavailable.');
+      const curve=benchmark?profile.curve:this.getNavCurve(path.path_id);
+      return {profile,curve,anchor:path?.observation_start||profile.contestant?.observation_start||dates[0]};
+    });
+    const earliest = [dates[0],...subjects.map(s=>s.anchor)].sort().at(-1);
+    start = start || earliest;
+    end = end || dates.at(-1);
+    if (start < earliest) throw Error(`The common observation anchor is ${earliest}.`);
+    const first = dates.indexOf(start), last = dates.indexOf(end);
+    if (first < 0 || last < first) throw Error('Choose available valuation dates in ascending order.');
+    const valid = values => values.length === last-first+1 && values.every(v => typeof v === 'number' && Number.isFinite(v) && v > 0);
+    const profiles=subjects.map(({profile,curve})=>{
+      const values=curve.slice(first,last+1);
+      if(!valid(values))throw Error('The selected window contains unavailable observations.');
+      const normalized=values.map(v=>v/values[0]);
+      let peak=1,worst=0;
+      for(const value of normalized){peak=Math.max(peak,value);worst=Math.max(worst,(1-value/peak)*100);}
+      return {...profile,curve:normalized,totalReturnPct:(normalized.at(-1)-1)*100,
+        maxDrawdownPct:worst,sharpeRatio:null,nullCourt:'N/A · selected window',start,end};
+    });
+    return {profiles,start,end,earliest,dates:dates.slice(first,last+1),sessions:last-first};
+  }
+
+  getComparisonPresets() {
+    const available=new Set(this.getAllContestants().map(c=>c.id));
+    const preferred=[['CONTESTANT_A','CONTESTANT_G'],['CONTESTANT_G','CONTESTANT_H'],['CONTESTANT_A','CONTESTANT_H']]
+      .filter(pair=>pair.every(id=>available.has(id))).map(([reference,candidate])=>({
+        id:`compare_${reference}_${candidate}`,title:`${reference.replace('CONTESTANT_','')} / ${candidate.replace('CONTESTANT_','')}`,
+        chosen_contestant_id:candidate,rejected_contestant_id:reference,reference_id:'',
+        decision_date:this.getContestant(candidate).observation_start,
+        description:`Compare ${candidate} with ${reference} over their common observation window. Spread is ${candidate} minus ${reference}, in percentage points.`}));
+    return [...preferred,...this.getDecisionForks()];
   }
 
   getContestant(cid) {
@@ -598,11 +655,11 @@ class ArenaDataAdapter {
   }
 
   getAllContestantsAndBenchmarks() {
-    const list = this.contestants.map(c => ({
+    const list = this.getAllContestants().map(c => ({
       id: c.id || c.contestant_id,
       name: c.display_name || c.anonymous_name || c.id,
       isBenchmark: false,
-      tag: "Model Candidate"
+      tag: c.retrained_from ? `Retrained from ${c.retrained_from}` : c.observation_start ? 'Observation participant' : 'Model Candidate'
     }));
 
     list.push({
@@ -615,9 +672,9 @@ class ArenaDataAdapter {
     if (this.hasGhostTaotie()) {
       list.push({
         id: "BENCHMARK_ghost_taotie",
-        name: "Ghost Taotie (Theoretical Equal-Weight 100M)",
+        name: "Ghost Taotie (Capital Granularity Scenario)",
         isBenchmark: true,
-        tag: "Theoretical Benchmark"
+        tag: "Capital Granularity Scenario"
       });
     }
 
@@ -661,7 +718,7 @@ class ArenaDataAdapter {
       const lastVal = curve && curve.length ? curve[curve.length - 1] : 1.0;
       return {
         id: "BENCHMARK_ghost_taotie",
-        name: "Ghost Taotie (Theoretical Equal-Weight 100M)",
+        name: "Ghost Taotie (Capital Granularity Scenario)",
         shortName: "Ghost Taotie",
         isBenchmark: true,
         tag: "Theoretical Benchmark",
@@ -699,7 +756,7 @@ class ArenaDataAdapter {
     const ret = path ? path.total_return_pct : (curve && curve.length ? Number(((curve[curve.length - 1] - 1.0) * 100).toFixed(2)) : 0);
     const mdd = path ? path.max_drawdown_pct : 0;
     const sharpe = path ? path.sharpe_ratio : null;
-    const nullCourt = path && path.null_court && path.null_court.verdict ? path.null_court.verdict : "Pass";
+    const nullCourt = path && path.null_court && path.null_court.verdict ? path.null_court.verdict : "Not evaluated";
 
     return {
       id: subjectId,
@@ -723,6 +780,7 @@ class ArenaDataAdapter {
 
     let candidatePaths = [];
     let alphaPaths = this.paths.filter(p => p.contestant_id !== "BENCHMARK");
+    if (!focusModel || focusModel === 'all') alphaPaths = alphaPaths.filter(p => p.full_season_eligible !== false);
 
     if (focusModel && focusModel !== "all") {
       alphaPaths = alphaPaths.filter(p => p.contestant_id === focusModel);
@@ -912,7 +970,7 @@ class ArenaDataAdapter {
    * Global KPI summary metrics
    */
   getGlobalKPIs() {
-    const alphaPaths = this.paths.filter(p => p.contestant_id !== "BENCHMARK");
+    const alphaPaths = this.paths.filter(p => p.contestant_id !== "BENCHMARK" && p.full_season_eligible !== false);
     if (alphaPaths.length === 0) {
       return {
         totalPaths: 0,
@@ -1053,7 +1111,9 @@ class ArenaDataAdapter {
       { topk: 66, label: "Eagle-66/9", return: pathByAnimal.get("eagle-66-9")?.total_return_pct ?? 0 },
       { topk: 88, label: "Eagle-88/12", return: pathByAnimal.get("eagle-88-12")?.total_return_pct ?? 0 },
       { topk: 123, label: "WhaleShark", return: pathByAnimal.get("whale-shark")?.total_return_pct ?? 0 },
-      { topk: this.metadata.universe_size || null, label: "Taotie (Full Pool)", return: this.getPath("BENCHMARK_taotie")?.total_return_pct ?? null },
+      { topk: this.metadata.universe_size || null, label: "Taotie (Full Pool)", return: this.getContestant(cid)?.observation_start
+        ? this.getComparisonWindow(['BENCHMARK_taotie'],'robot',this.getContestant(cid).observation_start).profiles[0].totalReturnPct
+        : this.getPath("BENCHMARK_taotie")?.total_return_pct ?? null },
     ];
 
     // 4. Direction Sanity (Robot vs Koala)

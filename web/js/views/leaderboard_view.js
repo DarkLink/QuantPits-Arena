@@ -56,7 +56,7 @@ window.LeaderboardView = {
             </button>
           </div>
           <div style="font-size: 11px; color: var(--text-tertiary); font-family: monospace;">
-            Showing 168 Execution Paths
+            Full-season paths and separately labeled observations
           </div>
         </div>
 
@@ -110,7 +110,7 @@ window.LeaderboardView = {
           <div class="card-header" style="flex-wrap:wrap; gap:10px;">
             <div>
               <div style="display: flex; align-items: center; gap: 8px;">
-                <h3 class="card-title">🗺️ Cross-Sectional Performance Matrix (6 Models × 28 Handlers)</h3>
+                <h3 class="card-title">🗺️ Full-season Performance Matrix</h3>
                 <button class="chart-spec-pill" onclick="window.ArenaSpecDrawer && window.ArenaSpecDrawer.open('Zoo Animals')">
                   <span>🦁 Zoo Specs</span>
                 </button>
@@ -209,6 +209,7 @@ window.LeaderboardView = {
     const csiRet = window.arenaAdapter.getCsi300Return();
 
     const sorted = [...filtered].sort((a, b) => {
+      if (a.full_season_eligible !== b.full_season_eligible) return a.full_season_eligible === false ? 1 : -1;
       let vA = a[this.sortField];
       let vB = b[this.sortField];
 
@@ -290,20 +291,24 @@ window.LeaderboardView = {
         `;
       }
 
+      if (p.observation_start) {
+        returnCellHtml = `<b>${p.total_return_pct >= 0 ? '+' : ''}${p.total_return_pct.toFixed(2)}%</b><small style="display:block">Own observation window</small>`;
+      }
+
       return `
         <tr class="clickable-row" onclick="window.appRouter.navigate('path-detail', { pathId: '${p.path_id}' })">
           <td><b>${p.path_id}</b></td>
-          <td><span class="badge badge-cyan">${p.contestant_id}</span></td>
+          <td><span class="badge badge-cyan">${p.contestant_id}</span>${p.observation_start ? `<small style="display:block">Observation since ${p.observation_start} · full-season rank N/A</small>` : ''}</td>
           <td><span class="badge badge-purple">${p.animal_id}</span></td>
           <td class="numeric">
             ${returnCellHtml}
           </td>
           <td class="numeric ${p.excess_over_monkey_pct >= 0 ? 'positive' : 'negative'}">
-            ${p.excess_over_monkey_pct >= 0 ? '+' : ''}${p.excess_over_monkey_pct.toFixed(2)}%
+            ${p.excess_over_monkey_pct == null ? 'N/A' : (p.excess_over_monkey_pct >= 0 ? '+' : '')+p.excess_over_monkey_pct.toFixed(2)+'%'}
           </td>
           <td class="numeric">
             <span class="badge ${isSig ? 'badge-green' : 'badge-neutral'}">
-              ${window.formatPercentile ? window.formatPercentile(pct, p.monkey_count) : pct.toFixed(1) + '%'}
+              ${pct == null ? 'N/A' : window.formatPercentile ? window.formatPercentile(pct, p.monkey_count) : pct.toFixed(1) + '%'}
             </span>
           </td>
           <td class="numeric" style="font-family:monospace; color:${isSig ? 'var(--accent-positive)' : 'var(--text-tertiary)'};">

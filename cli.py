@@ -198,7 +198,7 @@ def cmd_step(args):
     initial_cash = args.initial_cash if args.initial_cash != 500_000.0 else season_cfg.initial_cash
 
     calendar = TradingCalendar()
-    registry = ContestantRegistry()
+    registry = getattr(args, 'registry', None) or ContestantRegistry()
 
     runner = WeeklyCycleRunner(
         anchor_date=anchor_date,
@@ -208,7 +208,8 @@ def cmd_step(args):
         calendar=calendar,
         registry=registry,
         season_id=season_id,
-        run_dir=run_dir
+        run_dir=run_dir,
+        auth_store_path=getattr(args, 'auth_store_path', None),
     )
 
     print("\n" + "=" * 70)
@@ -269,6 +270,8 @@ def cmd_step(args):
     results[("BENCHMARK", "ghost_taotie")] = runner.ghost_taotie_benchmark.engine.to_portfolio_path()
 
     exporter = DualTierExporter(run_id=run_id, base_dir=base_dir)
+    for key, engine in runner.engines.items():
+        results[key].diagnostics['rebalance_days_with_buy'] = engine.rebalance_days_with_buy
     artifacts = exporter.export(results, registry)
 
     # 可选：运行参数化猴子群落
@@ -440,7 +443,17 @@ def cmd_infer(args):
 def cmd_infer_update(args):
     """通过原生推理引擎补齐缺失日期，原子保留既有历史预测。"""
     from arena.inference.incremental import extend_predictions
-    extend_predictions(market=args.universe, end_date=args.end_date)
+    generation = getattr(args, 'generation', None)
+    if generation:
+        from arena.contestants.lifecycle import generation_root, candidate_registry, candidate_cache, verify_entry_source
+        root = generation_root(generation)
+        verify_entry_source(root)
+        from arena.state import operation_lock
+        with operation_lock(root / 'inference.lock'):
+            extend_predictions(market=args.universe, end_date=args.end_date,
+                output_file=candidate_cache(root, args.universe), registry=candidate_registry(root))
+    else:
+        extend_predictions(market=args.universe, end_date=args.end_date)
 
 
 def cmd_pipeline(args):
@@ -702,6 +715,21 @@ def main():
     p_inc = subparsers.add_parser("infer-update", help="仅追加缺失预测日期并保留历史缓存")
     p_inc.add_argument("--universe", type=str, required=True, help="目标股票池")
     p_inc.add_argument("--end-date", type=str, required=True, help="目标截止交易日")
+    p_inc.add_argument("--generation", default=None, help="已准备的候选代次")
+
+    p_import = subparsers.add_parser('contestant-import', help='审查并导入既有模型资产，不执行训练')
+    p_import.add_argument('--workspace', required=True)
+    p_import.add_argument('--contestant', required=True)
+    p_import.add_argument('--cutoff', required=True)
+    p_entry = subparsers.add_parser('contestant-fork', help='核验或准备参与者的快照接入')
+    p_entry.add_argument('--spec', required=True)
+    entry_mode = p_entry.add_mutually_exclusive_group()
+    entry_mode.add_argument('--dry-run', action='store_true')
+    entry_mode.add_argument('--prepare', action='store_true')
+    p_verify = subparsers.add_parser('infer-verify', help='核验决策截面不受后续日期影响')
+    p_verify.add_argument('--generation', required=True)
+    p_verify.add_argument('--universe', required=True)
+    p_verify.add_argument('--date', required=True)
 
     # export-web
     p_exp = subparsers.add_parser("export-web", help="导出通用前端 Web Payload (web/js/data/<season_id>.js)")
@@ -735,6 +763,7 @@ def main():
     p_rf.add_argument("--no-sync-chronicles", action="store_true", help="跳过自动同步 Chronicles 文档")
     p_rf.add_argument("--no-audit", action="store_true", help="跳过末尾本地零泄密隐私审计")
     p_rf.add_argument("--output", type=str, default=None, help="指定输出根目录")
+    p_rf.add_argument("--generation", default=None, help="已准备的候选代次")
 
     args = parser.parse_args()
     if not args.subcommand:
@@ -755,6 +784,15 @@ def main():
         cmd_infer(args)
     elif args.subcommand == "infer-update":
         cmd_infer_update(args)
+    elif args.subcommand == 'contestant-import':
+        from arena.contestants.lifecycle import import_assets
+        import_assets(args.workspace, args.contestant, args.cutoff)
+    elif args.subcommand == 'contestant-fork':
+        from arena.contestants.lifecycle import prepare_entry
+        prepare_entry(args.spec, prepare=args.prepare)
+    elif args.subcommand == 'infer-verify':
+        from arena.inference.registered import verify_asof
+        verify_asof(args.generation,args.universe,args.date)
     elif args.subcommand == "run":
         cmd_run(args)
     elif args.subcommand == "step":

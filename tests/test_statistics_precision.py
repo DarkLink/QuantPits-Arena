@@ -57,3 +57,37 @@ def test_csv_web_adapter_preserves_small_p_and_na(tmp_path):
     data=json.loads(output.stdout)
     assert data[0]==[pytest.approx(1/100001),100000,True]
     assert data[1][0] is None and data[1][2] is False
+
+
+def test_observation_payload_has_no_borrowed_history_or_significance(tmp_path):
+    rows=[DailyValuation('2026-10-08',10,80,90,.9,0,1),
+          DailyValuation('2026-10-09',20,100,120,1.2,1/3,1),
+          DailyValuation('2026-10-12',18,100,118,1.18,-1/60,1)]
+    paths={(cid,'robot'):PortfolioPath(cid,'robot',daily_valuations=rows) for cid in ('CONTESTANT_A','CONTESTANT_G')}
+    registry=SimpleNamespace(get_anonymous_id=lambda c:c,
+        get_contestant=lambda c:SimpleNamespace(observation_start='2026-10-09' if c=='CONTESTANT_G' else None))
+    exporter=DualTierExporter('TEST',tmp_path)
+    exporter.export(paths,registry)
+    exporter.export_monkey_reports({'P_22_3':CompactDistribution(np.zeros(10),np.ones((10,1)))},paths,registry)
+    cfg=SimpleNamespace(season_id='TEST',raw_dict={},title='TEST',description='TEST',status='DRAFT',
+        anchor_date='2026-10-08',end_date='2026-10-12')
+    import yaml
+    public=tmp_path/'public_manifests';public.mkdir()
+    (public/'contestant_g.yaml').write_text(yaml.safe_dump(dict(contestant_id='CONTESTANT_G',
+        observation_start='2026-10-09',retrained_from='CONTESTANT_A',
+        retraining_context=dict(information_cutoff='2026-10-09',first_execution='2026-10-12',
+                               internal_note='excluded from public context'))))
+    output=exporter.export_web_payload(cfg,manifests_public_dir=public,web_output_path=tmp_path/'payload.js',publish_auxiliary=False)
+    payload=json.loads(output.read_text().split('window.ARENA_SEASONS_DATA["TEST"] = ',1)[1].rstrip().rstrip(';'))
+    row=next(p for p in payload['paths'] if p['contestant_id']=='CONTESTANT_G')
+    participant=payload['contestants'][0]
+    assert participant['retrained_from']=='CONTESTANT_A'
+    assert participant['retraining_context']==dict(information_cutoff='2026-10-09',first_execution='2026-10-12')
+    assert row['test_status']=='observation'
+    for field in ('empirical_p_value','is_statistically_significant','is_bonferroni_significant',
+                  'percentile_rank','bonferroni_p','sharpe_ratio'):
+        assert row[field] is None
+    curve=payload['nav_timeline']['curves']['CONTESTANT_G_robot']
+    assert curve[0] is None and curve[1:]==pytest.approx([1,118/120])
+    report=(exporter.reports_dir/'leaderboard.md').read_text()
+    assert 'Separate observation windows' in report and '2026-10-09' in report
