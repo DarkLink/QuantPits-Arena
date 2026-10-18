@@ -463,6 +463,16 @@ class ArenaDataAdapter {
     return Number.isFinite(first) && first > 0 && Number.isFinite(last) ? (last / first - 1) * 100 : null;
   }
 
+  getBenchmarkReturnForPath(path, benchmarkId) {
+    if (!path.observation_start) {
+      if (benchmarkId === 'BENCHMARK_taotie') return this.getTaotieReturn();
+      if (benchmarkId === 'BENCHMARK_ghost_taotie') return this.getGhostTaotieReturn();
+      return this.getMarketBenchmarkReturn();
+    }
+    const first = this.getNavDates().indexOf(path.observation_start);
+    return first < 0 ? null : this.getCurveReturn(this.getNavCurve(benchmarkId).slice(first));
+  }
+
   getBenchmarkMarketCurve() {
     if (this.navTimeline && this.navTimeline.curves) {
       const code = (this.metadata.universe_code || "").toLowerCase();
@@ -529,31 +539,7 @@ class ArenaDataAdapter {
     if (this.navTimeline && this.navTimeline.excess_csi300 && this.navTimeline.excess_csi300[pathId]) {
       return this.navTimeline.excess_csi300[pathId];
     }
-    if (pathId === "BENCHMARK_ghost_taotie" || pathId === "ghost_taotie") {
-      const gCurve = this.getBenchmarkGhostTaotieCurve();
-      const cCurve = this.getBenchmarkMarketCurve();
-      if (gCurve && gCurve.length && cCurve && cCurve.length) {
-        const len = Math.min(gCurve.length, cCurve.length);
-        const res = [];
-        for (let i = 0; i < len; i++) {
-          res.push(Number(((gCurve[i] - cCurve[i]) * 100).toFixed(2)));
-        }
-        return res;
-      }
-    }
-    if (pathId === "BENCHMARK_taotie" || pathId === "taotie") {
-      const tCurve = this.getBenchmarkTaotieCurve();
-      const cCurve = this.getBenchmarkMarketCurve();
-      if (tCurve && tCurve.length && cCurve && cCurve.length) {
-        const len = Math.min(tCurve.length, cCurve.length);
-        const res = [];
-        for (let i = 0; i < len; i++) {
-          res.push(Number(((tCurve[i] - cCurve[i]) * 100).toFixed(2)));
-        }
-        return res;
-      }
-    }
-    return [];
+    return this.getPathExcessBenchmark(pathId, 'BENCHMARK_csi300');
   }
 
   getCsi300Drawdown() {
@@ -610,39 +596,43 @@ class ArenaDataAdapter {
   }
 
   getPathExcessTaotie(pathId) {
-    const pCurve = this.getNavCurve(pathId);
-    const bCurve = this.getBenchmarkTaotieCurve();
-    if (!pCurve || !bCurve || pCurve.length === 0) return [];
-    const len = Math.min(pCurve.length, bCurve.length);
-    const res = [];
-    for (let i = 0; i < len; i++) {
-      res.push(Number(((pCurve[i] - bCurve[i]) * 100).toFixed(2)));
-    }
-    return res;
+    return this.getPathExcessBenchmark(pathId, 'BENCHMARK_taotie');
   }
 
   getPathExcessGhostTaotie(pathId) {
+    return this.getPathExcessBenchmark(pathId, 'BENCHMARK_ghost_taotie');
+  }
+
+  getPathExcessBenchmark(pathId, benchmarkId) {
     const pCurve = this.getNavCurve(pathId);
-    const bCurve = this.getBenchmarkGhostTaotieCurve();
-    if (!pCurve || !bCurve || pCurve.length === 0) return [];
+    const bCurve = this.getNavCurve(benchmarkId);
+    if (!pCurve.length || !bCurve.length) return [];
     const len = Math.min(pCurve.length, bCurve.length);
-    const res = [];
-    for (let i = 0; i < len; i++) {
-      res.push(Number(((pCurve[i] - bCurve[i]) * 100).toFixed(2)));
-    }
-    return res;
+    const anchor = this.getPath(pathId)?.observation_start;
+    const first = anchor ? this.getNavDates().indexOf(anchor) : pCurve.findIndex(Number.isFinite);
+    const pBase = pCurve[first], bBase = bCurve[first];
+    const validBase = first >= 0 && Number.isFinite(pBase) && pBase > 0 && Number.isFinite(bBase) && bBase > 0;
+    return pCurve.slice(0, len).map((value, i) =>
+      validBase && i >= first && Number.isFinite(value) && Number.isFinite(bCurve[i])
+        ? Number(((value / pBase - bCurve[i] / bBase) * 100).toFixed(2)) : null);
   }
 
   getSpreadCurve(pathIdA, pathIdB) {
     const curveA = this.getNavCurve(pathIdA);
     const curveB = this.getNavCurve(pathIdB);
-    if (!curveA || !curveB || curveA.length === 0) return [];
+    if (!curveA.length || !curveB.length) return [];
     const len = Math.min(curveA.length, curveB.length);
-    const res = [];
-    for (let i = 0; i < len; i++) {
-      res.push(Number(((curveA[i] - curveB[i]) * 100).toFixed(2)));
-    }
-    return res;
+    const firstIndex = (id, curve) => {
+      const anchor = this.getPath(id)?.observation_start;
+      return anchor ? this.getNavDates().indexOf(anchor) : curve.findIndex(Number.isFinite);
+    };
+    const firstA = firstIndex(pathIdA, curveA), firstB = firstIndex(pathIdB, curveB);
+    const first = firstA < 0 || firstB < 0 ? -1 : Math.max(firstA, firstB);
+    const baseA = curveA[first], baseB = curveB[first];
+    const validBase = first >= 0 && Number.isFinite(baseA) && baseA > 0 && Number.isFinite(baseB) && baseB > 0;
+    return curveA.slice(0, len).map((value, i) =>
+      validBase && i >= first && Number.isFinite(value) && Number.isFinite(curveB[i])
+        ? Number(((value / baseA - curveB[i] / baseB) * 100).toFixed(2)) : null);
   }
 
   getGhostTaotieDrawdown() {
@@ -784,31 +774,35 @@ class ArenaDataAdapter {
 
     let candidatePaths = [];
     let alphaPaths = this.paths.filter(p => p.contestant_id !== "BENCHMARK");
-    if (!focusModel || focusModel === 'all') alphaPaths = alphaPaths.filter(p => p.full_season_eligible !== false);
 
     if (focusModel && focusModel !== "all") {
       alphaPaths = alphaPaths.filter(p => p.contestant_id === focusModel);
     }
 
     if (filterGroup === "top5") {
-      candidatePaths = [...alphaPaths].sort((a, b) => b.total_return_pct - a.total_return_pct).slice(0, 6);
+      // A return-ranking preset keeps its declared full-season cohort in all-model mode.
+      const ranked = !focusModel || focusModel === 'all' ? alphaPaths.filter(p => p.full_season_eligible !== false) : alphaPaths;
+      candidatePaths = [...ranked].sort((a, b) => b.total_return_pct - a.total_return_pct).slice(0, 6);
     } else if (filterGroup === "robot") {
       candidatePaths = alphaPaths.filter(p => p.animal_id === "robot");
     } else if (filterGroup === "eagle") {
-      candidatePaths = alphaPaths.filter(p => p.animal_id.startsWith("eagle")).slice(0, 6);
+      candidatePaths = alphaPaths.filter(p => p.animal_id.startsWith("eagle"));
     } else if (filterGroup === "sloth") {
-      candidatePaths = alphaPaths.filter(p => p.animal_id.startsWith("sloth")).slice(0, 6);
+      candidatePaths = alphaPaths.filter(p => p.animal_id.startsWith("sloth"));
     } else if (filterGroup === "snail") {
-      candidatePaths = alphaPaths.filter(p => p.animal_id.startsWith("snail")).slice(0, 6);
+      candidatePaths = alphaPaths.filter(p => p.animal_id.startsWith("snail"));
     } else if (filterGroup === "turnover") {
-      candidatePaths = alphaPaths.filter(p => p.animal_id.startsWith("rabbit") || p.animal_id === "turtle").slice(0, 6);
+      candidatePaths = alphaPaths.filter(p => p.animal_id.startsWith("rabbit") || p.animal_id === "turtle");
     } else if (filterGroup === "koala") {
-      candidatePaths = alphaPaths.filter(p => p.animal_id === "koala").slice(0, 6);
+      candidatePaths = alphaPaths.filter(p => p.animal_id === "koala");
     } else {
       candidatePaths = alphaPaths.slice(0, 6);
     }
 
-    const observationStart = candidatePaths.map(p => p.observation_start).filter(Boolean).sort().at(-1);
+    // Only a single participant's focused view uses its entry window.
+    // Mixed-participant overviews retain all published histories, including null prefixes.
+    const observationStart = focusModel && focusModel !== 'all'
+      ? candidatePaths.map(p => p.observation_start).filter(Boolean).sort().at(-1) : null;
     if (observationStart) {
       const references = ['BENCHMARK_taotie', 'BENCHMARK_csi300'];
       if (this.hasGhostTaotie()) references.push('BENCHMARK_ghost_taotie');

@@ -211,27 +211,23 @@ window.LeaderboardView = {
     if (!tbody) return;
 
     const filtered = window.arenaAdapter.getFilteredPaths(window.ArenaFilters ? window.ArenaFilters.currentFilters : {});
-    const taotieRet = window.arenaAdapter.getTaotieReturn();
-    const hasGhost = window.arenaAdapter.hasGhostTaotie();
-    const ghostRet = hasGhost ? window.arenaAdapter.getGhostTaotieReturn() : 0;
-    const csiRet = window.arenaAdapter.getCsi300Return();
+    const referenceId = {vs_taotie:'BENCHMARK_taotie', vs_ghost:'BENCHMARK_ghost_taotie', vs_csi300:'BENCHMARK_csi300'}[this.viewMode];
+    const excess = (path, reference) => {
+      const benchmark = window.arenaAdapter.getBenchmarkReturnForPath(path, reference);
+      return Number.isFinite(benchmark) && Number.isFinite(path.total_return_pct) ? path.total_return_pct - benchmark : null;
+    };
+    const formatSpread = (value, digits = 2) => Number.isFinite(value)
+      ? `${value >= 0 ? '+' : ''}${value.toFixed(digits)} pp` : 'N/A';
 
     const sorted = [...filtered].sort((a, b) => {
       if (a.full_season_eligible !== b.full_season_eligible) return a.full_season_eligible === false ? 1 : -1;
+      if (a.observation_start && b.observation_start && a.observation_start !== b.observation_start) return a.observation_start.localeCompare(b.observation_start);
       let vA = a[this.sortField];
       let vB = b[this.sortField];
 
-      if (this.sortField === "total_return_pct") {
-        if (this.viewMode === "vs_taotie") {
-          vA = a.total_return_pct - taotieRet;
-          vB = b.total_return_pct - taotieRet;
-        } else if (this.viewMode === "vs_ghost") {
-          vA = a.total_return_pct - ghostRet;
-          vB = b.total_return_pct - ghostRet;
-        } else if (this.viewMode === "vs_csi300") {
-          vA = a.total_return_pct - csiRet;
-          vB = b.total_return_pct - csiRet;
-        }
+      if (this.sortField === "total_return_pct" && referenceId) {
+        vA = excess(a, referenceId);
+        vB = excess(b, referenceId);
       }
 
       if (typeof vA === "string") {
@@ -253,9 +249,9 @@ window.LeaderboardView = {
       const isSig = p.empirical_p_value != null && p.empirical_p_value < 0.05;
       const pVal = p.empirical_p_value ?? p.p_value ?? null;
 
-      const alphaTao = p.total_return_pct - taotieRet;
-      const alphaGhost = p.total_return_pct - ghostRet;
-      const alphaCsi = p.total_return_pct - csiRet;
+      const alphaTao = excess(p, 'BENCHMARK_taotie');
+      const alphaGhost = excess(p, 'BENCHMARK_ghost_taotie');
+      const alphaCsi = excess(p, 'BENCHMARK_csi300');
 
       let returnCellHtml = "";
       if (this.viewMode === "vs_taotie") {
@@ -263,7 +259,7 @@ window.LeaderboardView = {
         returnCellHtml = `
           <div style="display: flex; flex-direction: column; align-items: flex-end;">
             <b style="color: ${isAlphaPos ? 'var(--accent-positive)' : 'var(--accent-negative)'}; font-family: monospace;">
-              ${isAlphaPos ? '+' : ''}${alphaTao.toFixed(2)} pp
+              ${formatSpread(alphaTao)}
             </b>
             <span style="font-size: 10px; color: var(--text-tertiary);">Abs: ${p.total_return_pct >= 0 ? '+' : ''}${p.total_return_pct.toFixed(2)}%</span>
           </div>
@@ -273,7 +269,7 @@ window.LeaderboardView = {
         returnCellHtml = `
           <div style="display: flex; flex-direction: column; align-items: flex-end;">
             <b style="color: ${isAlphaPos ? '#00f0ff' : 'var(--accent-negative)'}; font-family: monospace;">
-              ${isAlphaPos ? '+' : ''}${alphaGhost.toFixed(2)} pp
+              ${formatSpread(alphaGhost)}
             </b>
             <span style="font-size: 10px; color: var(--text-tertiary);">Abs: ${p.total_return_pct >= 0 ? '+' : ''}${p.total_return_pct.toFixed(2)}%</span>
           </div>
@@ -283,7 +279,7 @@ window.LeaderboardView = {
         returnCellHtml = `
           <div style="display: flex; flex-direction: column; align-items: flex-end;">
             <b style="color: ${isAlphaPos ? 'var(--accent-positive)' : 'var(--accent-negative)'}; font-family: monospace;">
-              ${isAlphaPos ? '+' : ''}${alphaCsi.toFixed(2)} pp
+              ${formatSpread(alphaCsi)}
             </b>
             <span style="font-size: 10px; color: var(--text-tertiary);">Abs: ${p.total_return_pct >= 0 ? '+' : ''}${p.total_return_pct.toFixed(2)}%</span>
           </div>
@@ -295,14 +291,14 @@ window.LeaderboardView = {
               ${isPositive ? '+' : ''}${p.total_return_pct.toFixed(2)}%
             </b>
             <span style="font-size: 10px; color: var(--text-muted); font-family: monospace;">
-              α_Tao: ${alphaTao >= 0 ? '+' : ''}${alphaTao.toFixed(1)} pp
+              α_Tao: ${formatSpread(alphaTao, 1)}
             </span>
           </div>
         `;
       }
 
       if (p.observation_start) {
-        returnCellHtml = `<b>${p.total_return_pct >= 0 ? '+' : ''}${p.total_return_pct.toFixed(2)}%</b><small style="display:block">Own observation window</small>`;
+        returnCellHtml += `<small style="display:block">Own observation window</small>`;
       }
 
       return `

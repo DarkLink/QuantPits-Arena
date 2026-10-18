@@ -1749,6 +1749,7 @@ window.ArenaCharts = {
         type: "line",
         data: item.data,
         smooth: true,
+        connectNulls: false,
         showSymbol: false,
         lineStyle: item.lineStyle || {
           width: isBenchmark ? 2.5 : 2.5,

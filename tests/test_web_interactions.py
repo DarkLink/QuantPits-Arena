@@ -8,7 +8,7 @@ from arena.config import REPO_ROOT
 
 @pytest.mark.parametrize('entry', [
     'benchmark_switches', 'deferred_paths', 'deferred_profiles', 'deferred_routes',
-    'dispatch_race', 'resizing', 'season_selection', 'routing_inputs', 'summary_counts', 'filter_reset', 'comparison_tie', 'matrix_filters',
+    'dispatch_race', 'dispatch_participants', 'resizing', 'season_selection', 'focused_pool_change', 'routing_inputs', 'summary_counts', 'filter_reset', 'comparison_tie', 'matrix_filters',
 ])
 def test_interaction_runtime(entry):
     program = r'''
@@ -100,6 +100,21 @@ const checks={
   assert(node('dispatch-article-body').innerHTML.includes('current article'),'An older fetch replaced the selected episode');
   assert(!node('dispatch-article-body').innerHTML.includes('stale article'));
  },
+ dispatch_participants(){
+  const createElement=document.createElement;
+  document.createElement=tag=>({nodeType:Node.ELEMENT_NODE,tagName:tag.toUpperCase(),childNodes:[],
+   classList:{contains(){return false;}},
+   set innerHTML(text){this.childNodes=[{nodeType:Node.TEXT_NODE,nodeValue:text,parentNode:this}];},
+   get innerHTML(){return this.childNodes.map(child=>child.nodeValue??child.innerHTML).join('');},
+   replaceChild(next,previous){this.childNodes[this.childNodes.indexOf(previous)]=next;}});
+  for(const suffix of ['A','G','H','AA']){
+   const contestant='CONTESTANT_'+suffix,path=contestant+'_eagle-11-2';
+   const decorated=window.DispatchesView.decorateArticle(`${contestant} follows ${path}.`);
+   assert(decorated.includes(`data-tooltip-term="${contestant}"`),'Dispatch glossary omitted an admitted participant');
+   assert(decorated.includes(`data-tooltip-term="${path}"`),'A complete path identifier was split into separate terms');
+  }
+  document.createElement=createElement;
+ },
  resizing(){
   const adapter=pool(seasons[0]);
   for(let i=0;i<25;i++)window.ArenaCharts.renderScatter('chart',adapter.getAllPaths());
@@ -124,6 +139,24 @@ const checks={
   window.ArenaApp.switchSeason('season_csi800');
   assert.equal(window.ArenaApp.currentSeasonId,target,'The label switched while the previous pool data stayed active');
   assert.equal(window.arenaAdapter.getCurrentSeasonMeta().id,target);
+ },
+ focused_pool_change(){
+  for(const sid of seasons){
+   const data=structuredClone(window.ARENA_SEASONS_DATA[sid]);
+   data.contestants=data.contestants.filter(c=>c.contestant_id!=='CONTESTANT_G');
+   data.paths=data.paths.filter(p=>p.contestant_id!=='CONTESTANT_G');
+   window.arenaAdapter=new window.ArenaDataAdapter(data);
+   window.OverviewView.activeFocusModel='CONTESTANT_G';window.OverviewView.activeFilterGroup='robot';
+   window.OverviewView.render('root');flush();
+   assert.equal(window.OverviewView.activeFocusModel,'all','A stale panorama focus hid the new pool participants');
+   assert(option('chart-arena-panorama').series.some(s=>s.name==='CONTESTANT_A_robot'));
+   Object.assign(window.AnimalsView,{activeFocusModel:'CONTESTANT_G',comparisonMode:'multi',selectedAnimalIds:['robot']});
+   window.AnimalsView.render('root');flush();
+   assert.equal(window.AnimalsView.activeFocusModel,'all','A stale Zoo focus hid the new pool participants');
+   assert(option('animal-cross-model-chart').series.some(s=>s.name.startsWith('CONTESTANT_A')));
+   pool(sid);window.OverviewView.activeFocusModel='CONTESTANT_G';window.OverviewView.render('root');flush();
+   assert.equal(window.OverviewView.activeFocusModel,'CONTESTANT_G','An available participant selection was discarded');
+  }
  },
  routing_inputs(){
   pool(seasons[0]);

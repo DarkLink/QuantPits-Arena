@@ -6,7 +6,7 @@ import pytest
 from arena.config import REPO_ROOT
 
 
-@pytest.mark.parametrize('entry', ['matrix', 'scatter', 'panorama', 'details', 'table', 'formatting'])
+@pytest.mark.parametrize('entry', ['matrix', 'scatter', 'panorama', 'benchmark_anchors', 'late_entry', 'details', 'table', 'formatting'])
 def test_nullable_view_runtime(entry):
     program = r'''
 const fs = require('fs'), vm = require('vm'), assert = require('assert/strict');
@@ -25,7 +25,7 @@ global.echarts = {getInstanceByDom(){return null;}, init(dom){return {
  setOption(option){charts.set(dom.id, option);}, resize(){}, on(){}, off(){},
  getOption(){return {series:[]};}};}, graphic:{LinearGradient:function(){}}};
 for (const file of ['js/data/arena_release.js','js/adapter.js','js/components/charts.js',
- 'js/views/landing.js','js/views/overview.js','js/views/leaderboard_view.js',
+ 'js/views/landing.js','js/views/overview.js','js/views/leaderboard_view.js','js/views/animals_view.js',
  'js/views/path_detail.js','js/views/contestant_detail.js','js/views/decision_audit.js',
  'js/views/methodology.js','js/views/disclaimer.js']) vm.runInThisContext(fs.readFileSync('web/'+file,'utf8'));
 function safeText(text, context = '') {
@@ -73,6 +73,7 @@ const checks = {
   }
  },
  panorama(data) {
+  const original = JSON.stringify(data.nav_timeline);
   window.OverviewView.render('root'); safeText(node('root').innerHTML);
   for (const focus of ['all','CONTESTANT_A','CONTESTANT_G']) {
    window.OverviewView.activeFocusModel = focus;
@@ -84,19 +85,33 @@ const checks = {
      const start = focus === 'CONTESTANT_G' ? '2026-10-09' : data.nav_timeline.dates[0];
      assert.equal(option.xAxis.data[0], start, 'Panorama mixes participant observation windows');
      assert(node('panorama-observation-window').textContent.includes(start));
+     const selected = data.paths.filter(p => p.contestant_id !== 'BENCHMARK' && (focus === 'all' || p.contestant_id === focus));
+     const groups = {robot:p=>p.animal_id==='robot', eagle:p=>p.animal_id.startsWith('eagle'),
+      sloth:p=>p.animal_id.startsWith('sloth'), snail:p=>p.animal_id.startsWith('snail'),
+      turnover:p=>p.animal_id.startsWith('rabbit')||p.animal_id==='turtle', koala:p=>p.animal_id==='koala'};
+     const expectedPaths = group === 'top5'
+      ? selected.filter(p => focus !== 'all' || p.full_season_eligible !== false).sort((a,b)=>b.total_return_pct-a.total_return_pct).slice(0,6)
+      : selected.filter(groups[group]);
+     assert.deepEqual(option.series.filter(s => !s.name.includes('Taotie') && s.name.startsWith('CONTESTANT_')).map(s=>s.name),
+      expectedPaths.map(p=>p.path_id), 'A panorama cohort silently omitted matching participants or handlers');
      for (const series of option.series) {
       assert.equal(series.data.length, option.xAxis.data.length);
-      assert(series.data.every(Number.isFinite));
-      assert.equal(series.data[0], metric === 'nav' ? 1 : 0);
+      assert(series.data.every(v=>v===null||Number.isFinite(v)));
       const path = data.paths.find(p => p.path_id === series.name);
       if (path) {
        const first = data.nav_timeline.dates.indexOf(start);
        const values = data.nav_timeline.curves[path.path_id].slice(first);
-       const nav = values.map(v => v / values[0]); let peak = 1;
+       const anchor = values.findIndex(Number.isFinite), base = values[anchor];
+       const nav = values.map(v => v===null?null:v/base); let peak = 1;
        const referenceId = {excess_taotie:'BENCHMARK_taotie', excess_ghost:'BENCHMARK_ghost_taotie', excess_csi300:'BENCHMARK_csi300'}[metric];
        const reference = referenceId && data.nav_timeline.curves[referenceId].slice(first);
-       const expected = nav.map((v,i) => {peak = Math.max(peak,v); return metric === 'nav' ? v : metric === 'drawdown' ? (v/peak-1)*100 : (v-reference[i]/reference[0])*100;});
-       assert(series.data.every((v,i) => Math.abs(v-expected[i]) < 0.011), 'Panorama values use a different benchmark anchor');
+       const expected = nav.map((v,i) => {if(v===null)return null;peak = Math.max(peak,v); return metric === 'nav' ? v : metric === 'drawdown' ? (v/peak-1)*100 : (v-reference[i]/reference[anchor])*100;});
+       assert(series.data.every((v,i) => expected[i]===null?v===null:Number.isFinite(v)&&Math.abs(v-expected[i]) < 0.011), 'Panorama values use a different benchmark anchor');
+       assert.equal(series.connectNulls, false);
+       assert.equal(series.data[anchor], metric==='nav'?1:0);
+       if(metric==='nav')assert.deepEqual(series.data, values, 'Panorama changed the published NAV history');
+      } else {
+       assert.equal(series.data[0], metric === 'nav' ? 1 : 0);
       }
      }
      for (const day of [0, option.xAxis.data.length-1]) safeText(option.tooltip.formatter(
@@ -105,6 +120,59 @@ const checks = {
     }
    }
   }
+  assert.equal(JSON.stringify(data.nav_timeline),original);
+ },
+ benchmark_anchors(data) {
+  const adapter=window.arenaAdapter,dates=adapter.getNavDates();
+  for(const participant of adapter.getAllContestants()){
+   const path=adapter.getPath(participant.id+'_robot'),curve=adapter.getNavCurve(path.path_id);
+   const first=dates.indexOf(path.observation_start||dates[0]);
+   for(const [method,reference] of [['getPathExcessTaotie','BENCHMARK_taotie'],['getPathExcessGhostTaotie','BENCHMARK_ghost_taotie'],['getPathExcessMarket','BENCHMARK_csi300']]){
+    const values=adapter[method](path.path_id),benchmark=adapter.getNavCurve(reference);
+    assert.equal(values.length,dates.length);
+    assert(values.slice(0,first).every(v=>v===null),'Missing pre-entry NAV was treated as zero');
+    assert.equal(values[first],0,'Excess did not start at the participant entry');
+    for(let i=first;i<dates.length;i++)assert(Math.abs(values[i]-(curve[i]-benchmark[i]/benchmark[first])*100)<.011);
+   }
+  }
+  const left=adapter.getNavCurve('CONTESTANT_A_robot'),right=adapter.getNavCurve('CONTESTANT_G_robot');
+  const first=dates.indexOf(adapter.getPath('CONTESTANT_G_robot').observation_start);
+  const spread=adapter.getSpreadCurve('CONTESTANT_A_robot','CONTESTANT_G_robot');
+  assert(spread.slice(0,first).every(v=>v===null),'A spread invented values before both paths were observed');
+  assert.equal(spread[first],0,'Spread curves use different anchors');
+  for(let i=first;i<dates.length;i++)assert(Math.abs(spread[i]-(left[i]/left[first]-right[i]/right[first])*100)<.011);
+ },
+ late_entry(data) {
+  const dates=data.nav_timeline.dates,start=dates.at(-3),cid='CONTESTANT_H';
+  const participant={...data.contestants.find(c=>c.contestant_id==='CONTESTANT_G'),id:cid,contestant_id:cid,observation_start:start};
+  const path={...data.paths.find(p=>p.path_id==='CONTESTANT_G_robot'),contestant_id:cid,path_id:cid+'_robot',observation_start:start,
+   total_return_pct:-1,final_nav:.99,max_drawdown_pct:(1-.99/1.005)*100};
+  data.contestants.push(participant);data.paths.push(path);
+  data.nav_timeline.curves[path.path_id]=dates.map((_,i)=>i<dates.length-3?null:[1,1.005,.99][i-dates.length+3]);
+  window.arenaAdapter=new window.ArenaDataAdapter(data);
+  const all=window.arenaAdapter.getMacroPanoramaData('nav','robot','all');
+  assert.deepEqual(all.dates,dates,'The newest entrant shortened older histories');
+  assert.deepEqual(all.seriesList.filter(s=>s.type==='candidate').map(s=>s.path.contestant_id).sort(),data.contestants.map(c=>c.id).sort());
+  for(const series of all.seriesList.filter(s=>s.type==='candidate'))assert.deepEqual(series.data,data.nav_timeline.curves[series.id]);
+  const focused=window.arenaAdapter.getMacroPanoramaData('nav','robot',cid);
+  assert.equal(focused.dates[0],start,'The focused branch used another participant entry');
+  assert(focused.seriesList.every(s=>s.data[0]===1));
+  const excess=window.arenaAdapter.getPathExcessMarket(path.path_id),first=dates.indexOf(start);
+  const reference=window.arenaAdapter.getBenchmarkCsi300Curve(),curve=data.nav_timeline.curves[path.path_id];
+  assert(excess.slice(0,first).every(v=>v===null));assert.equal(excess[first],0);
+  for(let i=first;i<dates.length;i++)assert(Math.abs(excess[i]-(curve[i]-reference[i]/reference[first])*100)<.011);
+  const spread=window.arenaAdapter.getSpreadCurve('CONTESTANT_G_robot',path.path_id);
+  assert(spread.slice(0,first).every(v=>v===null));assert.equal(spread[first],0);
+  const anchorValue=curve[first];curve[first]=null;
+  assert(window.arenaAdapter.getPathExcessMarket(path.path_id).every(v=>v===null),'A missing declared entry was silently moved forward');
+  assert(window.arenaAdapter.getSpreadCurve('CONTESTANT_G_robot',path.path_id).every(v=>v===null));
+  curve[first]=anchorValue;
+  window.LeaderboardView.activeTab='matrix';window.LeaderboardView.render('root');
+  assert(charts.get('chart-leaderboard-matrix').yAxis.data.includes(cid),'A later retraining branch was omitted from HeatMap');
+  window.AnimalsView.comparisonMode='single';window.AnimalsView.activeAnimalId='robot';window.AnimalsView.render('root');
+  safeText(node('root').innerHTML);
+  assert.deepEqual(charts.get('animal-cross-model-chart').xAxis.data,dates);
+  assert(node('root').innerHTML.includes(`data-zoo-path="${path.path_id}" data-observation-start="${start}"`));
  },
  details(data) {
   for (const view of [window.LandingView, window.MethodologyView, window.DisclaimerView]) {
@@ -143,7 +211,18 @@ const checks = {
   window.LeaderboardView.activeTab = 'table';
   for (const mode of ['return','vs_taotie','vs_ghost','vs_csi300']) {
    window.LeaderboardView.viewMode = mode; window.LeaderboardView.render('root');
-   safeText(node('leaderboard-tbody').innerHTML);
+   const html=node('leaderboard-tbody').innerHTML;safeText(html);
+   for(const path of data.paths.filter(p=>p.contestant_id!=='BENCHMARK')){
+    const row=html.split('<tr').find(row=>row.includes(`pathId: '${path.path_id}'`));
+    assert(row,'Leaderboard omitted a participant');
+    const reference={vs_taotie:'BENCHMARK_taotie',vs_ghost:'BENCHMARK_ghost_taotie',vs_csi300:'BENCHMARK_csi300'}[mode];
+    if(reference){
+     const values=window.arenaAdapter.getNavCurve(reference),first=data.nav_timeline.dates.indexOf(path.observation_start||data.nav_timeline.dates[0]);
+     const fullSeason={vs_taotie:()=>window.arenaAdapter.getTaotieReturn(),vs_ghost:()=>window.arenaAdapter.getGhostTaotieReturn(),vs_csi300:()=>window.arenaAdapter.getCsi300Return()};
+     const expected=path.total_return_pct-(path.observation_start?(values.at(-1)/values[first]-1)*100:fullSeason[mode]());
+     assert(row.includes(`${expected>=0?'+':''}${expected.toFixed(2)} pp`),'The excess-return column shows an absolute return or uses the full-season benchmark for a later entrant');
+    }
+   }
   }
   const originals = data.paths.filter(p => p.contestant_id === 'CONTESTANT_A');
   originals[0].sharpe_ratio = null; originals[1].sharpe_ratio = 0;

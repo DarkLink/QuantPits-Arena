@@ -89,5 +89,11 @@ def test_observation_payload_has_no_borrowed_history_or_significance(tmp_path):
         assert row[field] is None
     curve=payload['nav_timeline']['curves']['CONTESTANT_G_robot']
     assert curve[0] is None and curve[1:]==pytest.approx([1,118/120])
+    assert payload['nav_timeline']['dates']==['2026-10-08','2026-10-09','2026-10-12']
+    assert payload['nav_timeline']['curves']['CONTESTANT_A_robot']==pytest.approx([.9,1.2,1.18])
+    original=next(p for p in payload['paths'] if p['contestant_id']=='CONTESTANT_A')
+    assert original['observation_start'] is None
+    assert original['test_status']=='random_control'
+    assert original['empirical_p_value'] is not None
     report=(exporter.reports_dir/'leaderboard.md').read_text()
     assert 'Separate observation windows' in report and '2026-10-09' in report

@@ -14,6 +14,7 @@ window.OverviewView = {
     const el = document.getElementById(containerId);
     if (!el) return;
     const isCurrent = window.ArenaCharts.beginViewRender(el);
+    if (this.activeFocusModel !== 'all' && !window.arenaAdapter.getAllContestants().some(c => c.id === this.activeFocusModel)) this.activeFocusModel = 'all';
 
     const kpis = window.arenaAdapter.getGlobalKPIs();
     const allPaths = window.arenaAdapter.getAllPaths().filter(p => p.contestant_id !== "BENCHMARK" && p.full_season_eligible !== false);
@@ -347,9 +348,14 @@ window.OverviewView = {
     const data = window.arenaAdapter.getMacroPanoramaData(this.activeMetricMode, this.activeFilterGroup, this.activeFocusModel);
     window.ArenaCharts.renderMacroPanorama("chart-arena-panorama", data);
     const caption = document.getElementById('panorama-observation-window');
-    if (caption) caption.textContent = data.dates.length
-      ? `Common window: ${data.dates[0]} close → ${data.dates.at(-1)} close · NAV starts at 1.0000. All-model selections use full-season participants.`
-      : 'No observations available for this selection.';
+    if (caption) {
+      const entries = [...new Set(data.seriesList.filter(s => s.type === 'candidate' && s.path?.observation_start)
+        .map(s => `${s.path.contestant_id} since ${s.path.observation_start}`))];
+      const ranked = this.activeFilterGroup === 'top5' && this.activeFocusModel === 'all';
+      caption.textContent = data.dates.length
+        ? `History: ${data.dates[0]} close → ${data.dates.at(-1)} close. ${ranked ? 'Top Leaders ranks full-season participants.' : 'Each participant retains its own entry date; excess uses its matching benchmark window.'}${entries.length ? ' ' + entries.join('; ') + '.' : ''}`
+        : 'No observations available for this selection.';
+    }
 
     // Maintain benchmark pill selection state
     const bmPills = document.querySelectorAll("#panorama-benchmark-pill-group .benchmark-pill");

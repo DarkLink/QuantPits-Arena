@@ -205,7 +205,7 @@ window.DispatchesView = {
     if (!html) return "";
 
     // Comprehensive term regex: matches longest candidates first
-    const regex = /\b(Ghost\s+Taotie|Taotie|Null\s+Court|Matched\s+Monkeys|random\s+monkeys|matched\s+null\s+colony|CSI\s*300|CSI300|CONTESTANT_[A-F]_[a-z0-9-]+|CONTESTANT_[A-F]|eagle-[0-9-]+|rabbit-[0-9-]+|sloth-[0-9-]+|snail-[0-9-]+|meerkat-[0-9-]+|turtle-[0-9-]+|whale-shark|whale\s+shark|koala|robot|Sharpe\s+ratio|Sharpe|maximum\s+drawdown|Max\s+Drawdown|MDD|empirical\s+p-value|p-value|empirical\s+percentile)\b/gi;
+    const regex = /\b(Ghost\s+Taotie|Taotie|Null\s+Court|Matched\s+Monkeys|random\s+monkeys|matched\s+null\s+colony|CSI\s*300|CSI300|CONTESTANT_[A-Z]+_[a-z0-9-]+|CONTESTANT_[A-Z]+|eagle-[0-9-]+|rabbit-[0-9-]+|sloth-[0-9-]+|snail-[0-9-]+|meerkat-[0-9-]+|turtle-[0-9-]+|whale-shark|whale\s+shark|koala|robot|Sharpe\s+ratio|Sharpe|maximum\s+drawdown|Max\s+Drawdown|MDD|empirical\s+p-value|p-value|empirical\s+percentile)\b/gi;
 
     const temp = document.createElement("div");
     temp.innerHTML = html;

@@ -53,6 +53,8 @@ window.AnimalsView = {
         }
       }
 
+      const allContestants = window.arenaAdapter.getAllContestants();
+      if (this.activeFocusModel !== 'all' && !allContestants.some(c => c.id === this.activeFocusModel)) this.activeFocusModel = 'all';
       const allAnimals = window.arenaAdapter.getAllAnimals();
       let activeAnimal = allAnimals.find(a => a.id === this.activeAnimalId);
       if (!activeAnimal) {
@@ -100,7 +102,6 @@ window.AnimalsView = {
       const summaryStart = chartPaths.map(observationStart).sort()[0] || this.history.start;
       const summaryPaths = chartPaths.filter(p => observationStart(p) === summaryStart);
       const csi300Ret = this.benchmarkReturn('BENCHMARK_csi300', summaryStart);
-      const allContestants = window.arenaAdapter.getAllContestants();
 
       // Summary cards use the earliest-entry cohort; later entrants keep their own rows and curves.
       const returns = summaryPaths.map(p => p.total_return_pct);
