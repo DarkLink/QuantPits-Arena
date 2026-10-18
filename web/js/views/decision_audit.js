@@ -28,6 +28,7 @@ window.DecisionAuditView = {
   render(containerId, params) {
     const container = document.getElementById(containerId);
     if (!container) return;
+    const isCurrent = window.ArenaCharts.beginViewRender(container);
 
     const adapter=window.arenaAdapter;
     const forks=adapter.getComparisonPresets();
@@ -49,7 +50,7 @@ window.DecisionAuditView = {
     }catch(error){
       container.innerHTML=`<div class="view-header"><h1 class="view-title">Decision Archaeology & Sandbox</h1></div>
         ${this.renderWorkbench(forks,allSubjects,allAnimals)}
-        <div class="card" role="status">${error.message} Use Common start to reset the window.</div>`;
+        <div class="card" role="status">${window.escapeHtml(error.message)} Use Common start to reset the window.</div>`;
       this.bindEvents(container,containerId,forks);
       return;
     }
@@ -63,7 +64,8 @@ window.DecisionAuditView = {
 
     // Calculate Head-to-Head delta on active animal
     const deltaRetAB = profA.totalReturnPct - profB.totalReturnPct;
-    const isABetter = deltaRetAB >= 0;
+    const isABetter = deltaRetAB > 0;
+    const isTieAB = deltaRetAB === 0;
 
     // Cross-Animal Win Count & Comparisons
     let winCountA = 0;
@@ -106,7 +108,7 @@ window.DecisionAuditView = {
       ${this.renderWorkbench(forks,allSubjects,allAnimals)}
 
       <!-- Historical Context or Sandbox Intelligence Banner -->
-      <div class="card" style="margin-bottom: 24px; border-left: 4px solid ${isABetter ? 'var(--accent-emerald)' : 'var(--accent-rose)'};">
+      <div class="card" style="margin-bottom: 24px; border-left: 4px solid ${isTieAB ? 'var(--text-muted)' : isABetter ? 'var(--accent-emerald)' : 'var(--accent-rose)'};">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 12px;">
           <div>
             <h2 style="font-size: 17px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">
@@ -118,8 +120,8 @@ window.DecisionAuditView = {
           </div>
           <div style="text-align: right;">
             <div style="font-size: 11px; color: var(--text-secondary); margin-bottom: 4px;">Spread (A − B on ${currentAnimal.name}):</div>
-            <span class="badge ${isABetter ? 'badge-success' : 'badge-danger'}" style="font-size: 13px; font-weight: 700; padding: 4px 12px;">
-              ${isABetter ? '✅' : '⚠️'} ${deltaRetAB >= 0 ? '+' : ''}${deltaRetAB.toFixed(4)} pp (${isABetter ? 'Slot A Outperformed' : 'Slot B Outperformed'})
+            <span class="badge ${isTieAB ? 'badge-neutral' : isABetter ? 'badge-success' : 'badge-danger'}" style="font-size: 13px; font-weight: 700; padding: 4px 12px;">
+              ${isTieAB ? '=' : isABetter ? '✅' : '⚠️'} ${deltaRetAB >= 0 ? '+' : ''}${deltaRetAB.toFixed(4)} pp (${isTieAB ? 'Equal return' : isABetter ? 'Slot A Outperformed' : 'Slot B Outperformed'})
             </span>
           </div>
         </div>
@@ -371,7 +373,7 @@ window.DecisionAuditView = {
     if (dates && dates.length > 0) {
       const expectedWindow=this.window;
       setTimeout(() => {
-        if(this.window!==expectedWindow)return;
+        if(!isCurrent() || this.window!==expectedWindow)return;
         window.ArenaCharts.renderCustomArchaeology(
           "chart-archaeology-trajectory",
           dates,

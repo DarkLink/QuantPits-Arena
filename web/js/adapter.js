@@ -201,7 +201,7 @@ class ArenaDataAdapter {
     if (typeof cid === "object") {
       cid = cid.contestant_id || cid.id || cid.cid;
     }
-    return this.contestantMap.get(cid) || this.contestants.find(c => c.id === cid || c.contestant_id === cid) || this.contestants[0] || null;
+    return this.contestantMap.get(cid) || this.contestants.find(c => c.id === cid || c.contestant_id === cid) || null;
   }
 
   getAllPaths() {
@@ -1028,10 +1028,12 @@ class ArenaDataAdapter {
     const sortedRets = [...rets].sort((a, b) => a - b);
     const medianRet = sortedRets[Math.floor(sortedRets.length / 2)];
     const topRet = Math.max(...rets);
-    const bestSharpe = Math.max(...alphaPaths.map(p => p.sharpe_ratio || 0));
+    const sharpes = alphaPaths.map(p => p.sharpe_ratio).filter(Number.isFinite);
+    const bestSharpe = sharpes.length ? Math.max(...sharpes) : null;
 
-    const sigCount = alphaPaths.filter(p => p.empirical_p_value != null && p.empirical_p_value < 0.05).length;
-    const sigPct = ((sigCount / alphaPaths.length) * 100).toFixed(1) + "%";
+    const tested = alphaPaths.filter(p => Number.isFinite(p.empirical_p_value));
+    const sigCount = tested.filter(p => p.empirical_p_value < 0.05).length;
+    const sigPct = tested.length ? ((sigCount / tested.length) * 100).toFixed(1) + '%' : 'N/A';
 
     const taotieRet = this.getTaotieReturn();
     const csi300Ret = this.getCsi300Return();
@@ -1207,6 +1209,12 @@ class ArenaDataAdapter {
 // Global statistical formatting helpers
 window.formatNumber = function(value, digits = 2, suffix = '') {
   return Number.isFinite(value) ? value.toFixed(digits) + suffix : 'N/A';
+};
+
+window.escapeHtml = function(value) {
+  return String(value ?? '').replace(/[&<>"']/g, character => ({
+    '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
+  })[character]);
 };
 
 window.formatPValue = function(pVal) {

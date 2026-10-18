@@ -30,9 +30,14 @@ window.ArenaFilters = {
   render(containerId) {
     const container = document.getElementById(containerId);
     if (!container) return;
+    clearTimeout(this.searchTimer);
 
     const contestants = window.arenaAdapter.getAllContestants();
     const categories = window.arenaAdapter.getAnimalCategories();
+    if (!contestants.some(c => (c.id || c.contestant_id) === this.currentFilters.contestantId)) {
+      this.currentFilters.contestantId = 'ALL';
+    }
+    if (!categories.includes(this.currentFilters.animalCategory)) this.currentFilters.animalCategory = 'ALL';
 
     container.innerHTML = `
       <div class="filters-card-compact">
@@ -78,7 +83,7 @@ window.ArenaFilters = {
         </div>
 
         <div class="filter-item" style="flex: 1; min-width: 170px;">
-          <input type="text" id="filter-search" class="filter-input" style="width: 100%;" placeholder="Search path, model, animal..." value="${this.currentFilters.search}">
+          <input type="text" id="filter-search" class="filter-input" style="width: 100%;" placeholder="Search path, model, animal..." value="${window.escapeHtml(this.currentFilters.search)}">
         </div>
 
         <button id="filter-reset-btn" class="btn btn-sm btn-outline" style="font-size: 11px; padding: 4px 10px; white-space: nowrap;">
@@ -127,11 +132,10 @@ window.ArenaFilters = {
     }
 
     if (inpSearch) {
-      let debounceTimer = null;
       inpSearch.addEventListener("input", (e) => {
-        clearTimeout(debounceTimer);
-        debounceTimer = setTimeout(() => {
-          this.currentFilters.search = e.target.value.trim();
+        this.currentFilters.search = e.target.value.trim();
+        clearTimeout(this.searchTimer);
+        this.searchTimer = setTimeout(() => {
           this.notify();
         }, 200);
       });
@@ -145,6 +149,7 @@ window.ArenaFilters = {
   },
 
   reset() {
+    clearTimeout(this.searchTimer);
     this.currentFilters = {
       contestantId: "ALL",
       animalCategory: "ALL",

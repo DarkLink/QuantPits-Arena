@@ -13,6 +13,7 @@ window.OverviewView = {
   render(containerId) {
     const el = document.getElementById(containerId);
     if (!el) return;
+    const isCurrent = window.ArenaCharts.beginViewRender(el);
 
     const kpis = window.arenaAdapter.getGlobalKPIs();
     const allPaths = window.arenaAdapter.getAllPaths().filter(p => p.contestant_id !== "BENCHMARK" && p.full_season_eligible !== false);
@@ -333,6 +334,7 @@ window.OverviewView = {
 
     // Render charts
     setTimeout(() => {
+      if (!isCurrent()) return;
       this.updatePanoramaChart();
       window.ArenaCharts.renderScatter("chart-overview-scatter", allPaths, path => {
         window.appRouter.navigate("path-detail", { pathId: path.path_id });

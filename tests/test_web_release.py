@@ -10,7 +10,7 @@ def test_release_contract_and_view_runtime():
     program=r'''
 const fs=require('fs');const vm=require('vm');
 const nodes=new Map();
-function node(id){if(!nodes.has(id))nodes.set(id,{innerHTML:'',addEventListener(){},querySelectorAll(){return[];},querySelector(){return null;},classList:{toggle(){},add(){},remove(){},contains(){return true;}}});return nodes.get(id);}
+function node(id){if(!nodes.has(id))nodes.set(id,{innerHTML:'',style:{},addEventListener(){},querySelectorAll(){return[];},querySelector(){return null;},classList:{toggle(){},add(){},remove(){},contains(){return true;}}});return nodes.get(id);}
 global.window={addEventListener(){},location:{search:'',hash:'',href:'https://arena.invalid/'}};
 global.document={readyState:'loading',addEventListener(){},documentElement:{getAttribute(){return'dark';}},getElementById:node,querySelectorAll(){return[];},querySelector(){return node('query');}};
 global.setTimeout=cb=>{cb();return 0;};

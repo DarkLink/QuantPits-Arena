@@ -17,6 +17,8 @@ window.LeaderboardView = {
     this.containerId = containerId || this.containerId || "view-leaderboard";
     const el = document.getElementById(this.containerId);
     if (!el) return;
+    window.ArenaCharts.beginViewRender(el);
+    this.updateFilterVisibility();
 
     const taotieRet = window.arenaAdapter.getTaotieReturn();
     const hasGhost = window.arenaAdapter.hasGhostTaotie();
@@ -76,7 +78,7 @@ window.LeaderboardView = {
                     <span class="arena-glossary-term" data-tooltip-term="total_return_pct">${this.getReturnColumnHeader()}</span>
                   </th>
                   <th class="numeric" onclick="window.LeaderboardView.handleSort('excess_over_monkey_pct')">
-                    <span class="arena-glossary-term" data-tooltip-term="monkeys">Excess vs Monkey</span>
+                    <span class="arena-glossary-term" data-tooltip-term="monkeys">Excess vs Monkey (pp)</span>
                   </th>
                   <th class="numeric" onclick="window.LeaderboardView.handleSort('percentile_rank')">
                     <span class="arena-glossary-term" data-tooltip-term="monkey_percentile">Monkey %ile</span>
@@ -150,9 +152,9 @@ window.LeaderboardView = {
   },
 
   getReturnColumnHeader() {
-    if (this.viewMode === "vs_taotie") return "Alpha vs Taotie (%)";
-    if (this.viewMode === "vs_ghost") return "Alpha vs Ghost (%)";
-    if (this.viewMode === "vs_csi300") return `Alpha vs ${window.arenaAdapter.getMarketBenchmarkName()} (%)`;
+    if (this.viewMode === "vs_taotie") return "Alpha vs Taotie (pp)";
+    if (this.viewMode === "vs_ghost") return "Alpha vs Ghost (pp)";
+    if (this.viewMode === "vs_csi300") return `Alpha vs ${window.arenaAdapter.getMarketBenchmarkName()} (pp)`;
     return "Return (%)";
   },
 
@@ -163,6 +165,7 @@ window.LeaderboardView = {
 
   switchTab(tab) {
     this.activeTab = tab;
+    this.updateFilterVisibility();
     const tabTable = document.getElementById("tab-content-table");
     const tabMatrix = document.getElementById("tab-content-matrix");
     if (tabTable) tabTable.style.display = tab === "table" ? "block" : "none";
@@ -181,6 +184,11 @@ window.LeaderboardView = {
     } else {
       this.renderMatrixChart();
     }
+  },
+
+  updateFilterVisibility() {
+    const container = document.getElementById('global-filters-container');
+    if (container) container.style.display = this.activeTab === 'table' ? 'block' : 'none';
   },
 
   handleSort(field) {
@@ -255,7 +263,7 @@ window.LeaderboardView = {
         returnCellHtml = `
           <div style="display: flex; flex-direction: column; align-items: flex-end;">
             <b style="color: ${isAlphaPos ? 'var(--accent-positive)' : 'var(--accent-negative)'}; font-family: monospace;">
-              ${isAlphaPos ? '+' : ''}${alphaTao.toFixed(2)}%
+              ${isAlphaPos ? '+' : ''}${alphaTao.toFixed(2)} pp
             </b>
             <span style="font-size: 10px; color: var(--text-tertiary);">Abs: ${p.total_return_pct >= 0 ? '+' : ''}${p.total_return_pct.toFixed(2)}%</span>
           </div>
@@ -265,7 +273,7 @@ window.LeaderboardView = {
         returnCellHtml = `
           <div style="display: flex; flex-direction: column; align-items: flex-end;">
             <b style="color: ${isAlphaPos ? '#00f0ff' : 'var(--accent-negative)'}; font-family: monospace;">
-              ${isAlphaPos ? '+' : ''}${alphaGhost.toFixed(2)}%
+              ${isAlphaPos ? '+' : ''}${alphaGhost.toFixed(2)} pp
             </b>
             <span style="font-size: 10px; color: var(--text-tertiary);">Abs: ${p.total_return_pct >= 0 ? '+' : ''}${p.total_return_pct.toFixed(2)}%</span>
           </div>
@@ -275,7 +283,7 @@ window.LeaderboardView = {
         returnCellHtml = `
           <div style="display: flex; flex-direction: column; align-items: flex-end;">
             <b style="color: ${isAlphaPos ? 'var(--accent-positive)' : 'var(--accent-negative)'}; font-family: monospace;">
-              ${isAlphaPos ? '+' : ''}${alphaCsi.toFixed(2)}%
+              ${isAlphaPos ? '+' : ''}${alphaCsi.toFixed(2)} pp
             </b>
             <span style="font-size: 10px; color: var(--text-tertiary);">Abs: ${p.total_return_pct >= 0 ? '+' : ''}${p.total_return_pct.toFixed(2)}%</span>
           </div>
@@ -287,7 +295,7 @@ window.LeaderboardView = {
               ${isPositive ? '+' : ''}${p.total_return_pct.toFixed(2)}%
             </b>
             <span style="font-size: 10px; color: var(--text-muted); font-family: monospace;">
-              α_Tao: ${alphaTao >= 0 ? '+' : ''}${alphaTao.toFixed(1)}%
+              α_Tao: ${alphaTao >= 0 ? '+' : ''}${alphaTao.toFixed(1)} pp
             </span>
           </div>
         `;
@@ -306,7 +314,7 @@ window.LeaderboardView = {
             ${returnCellHtml}
           </td>
           <td class="numeric ${p.excess_over_monkey_pct >= 0 ? 'positive' : 'negative'}">
-            ${p.excess_over_monkey_pct == null ? 'N/A' : (p.excess_over_monkey_pct >= 0 ? '+' : '')+p.excess_over_monkey_pct.toFixed(2)+'%'}
+            ${p.excess_over_monkey_pct == null ? 'N/A' : (p.excess_over_monkey_pct >= 0 ? '+' : '')+p.excess_over_monkey_pct.toFixed(2)+' pp'}
           </td>
           <td class="numeric">
             <span class="badge ${isSig ? 'badge-green' : 'badge-neutral'}">
@@ -332,7 +340,9 @@ window.LeaderboardView = {
 
   renderMatrixChart() {
     const matrixData = window.arenaAdapter.matrix;
+    const isCurrent = window.ArenaCharts.beginViewRender(document.getElementById('chart-leaderboard-matrix'));
     setTimeout(() => {
+      if (!isCurrent()) return;
       window.ArenaCharts.renderHeatmap("chart-leaderboard-matrix", matrixData, this.matrixMetric, path => {
         window.appRouter.navigate("path-detail", { pathId: path.path_id });
       });

@@ -213,16 +213,18 @@ window.ArenaApp = {
   switchSeason(seasonId, updateHistory = true) {
     if (!seasonId) return;
     const validatedSeason = this.normalizeSeasonId(seasonId) || "season_01";
-    this.currentSeasonId = validatedSeason;
 
     const seasonData = window.ARENA_SEASONS_DATA ? window.ARENA_SEASONS_DATA[validatedSeason] : null;
     if (seasonData) {
       console.log(`[ArenaApp] Switching to ${validatedSeason}...`);
       window.arenaAdapter = new ArenaDataAdapter(seasonData);
+      this.currentSeasonId = validatedSeason;
     } else {
       console.warn(`[ArenaApp] No data found for ${validatedSeason}, retaining active adapter.`);
+      return;
     }
 
+    window.ArenaFilters?.render('global-filters-container');
     this.updateSeasonButtonUI();
     this.updatePreviewBanner();
 
@@ -230,7 +232,7 @@ window.ArenaApp = {
     if (updateHistory) {
       try {
         const url = new URL(window.location.href);
-        url.searchParams.set("season", seasonId);
+        url.searchParams.set("season", validatedSeason);
         window.history.replaceState({}, "", url.toString());
       } catch (e) {
         // Fallback for older browsers
@@ -357,8 +359,10 @@ window.ArenaApp = {
     const primaryRoute = slashParts[0] || "overview";
 
     if (slashParts.length > 1) {
-      const subId = decodeURIComponent(slashParts.slice(1).join("/"));
-      if (primaryRoute === "contestants") {
+      const encodedId = slashParts.slice(1).join("/");
+      let subId = encodedId;
+      try { subId = decodeURIComponent(encodedId); } catch (error) { /* Keep malformed links renderable. */ }
+      if (primaryRoute === "contestants" || primaryRoute === "contestant-detail") {
         params.contestantId = subId;
       } else if (primaryRoute === "animals" || primaryRoute === "zoo") {
         params.animalId = subId;
@@ -380,6 +384,7 @@ window.ArenaApp = {
 
   handleRouting() {
     const { route, params } = this.parseHash();
+    window.ArenaCharts?.disposeAll();
     this.currentRoute = route;
     this.routeParams = params;
 

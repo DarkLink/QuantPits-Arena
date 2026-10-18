@@ -54,6 +54,7 @@ window.AnimalsView = {
   render(containerId, params) {
     const container = document.getElementById(containerId);
     if (!container) return;
+    const isCurrent = window.ArenaCharts.beginViewRender(container);
 
     try {
       if (params) {
@@ -489,7 +490,7 @@ window.AnimalsView = {
       // Render cross-model chart
       const expectedWindow = this.comparisonWindow;
       setTimeout(() => {
-        if (this.comparisonWindow !== expectedWindow) return;
+        if (!isCurrent() || this.comparisonWindow !== expectedWindow) return;
         this.updateChart(chartPaths);
       }, 50);
 

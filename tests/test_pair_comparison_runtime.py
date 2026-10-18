@@ -10,7 +10,7 @@ const fs=require('fs'),vm=require('vm');
 const nodes=new Map();
 const node=id=>{if(!nodes.has(id))nodes.set(id,{innerHTML:'',addEventListener(){},querySelectorAll(){return[];},querySelector(){return null;}});return nodes.get(id);};
 global.window={};global.document={getElementById:node};global.setTimeout=cb=>cb();
-for(const file of ['web/js/adapter.js','web/js/views/decision_audit.js'])vm.runInThisContext(fs.readFileSync(file,'utf8'));
+for(const file of ['web/js/adapter.js','web/js/components/charts.js','web/js/views/decision_audit.js'])vm.runInThisContext(fs.readFileSync(file,'utf8'));
 const dates=['2026-10-09','2026-10-12','2026-10-13','2026-10-14'];
 const contestants=['A','G','H'].map(c=>({contestant_id:'CONTESTANT_'+c,observation_start:c==='H'?dates[2]:c==='G'?dates[0]:null}));
 const paths=contestants.map(c=>({...c,path_id:c.contestant_id+'_robot',animal_id:'robot'}));
@@ -27,7 +27,7 @@ const three=adapter.getComparisonWindow(['CONTESTANT_A','CONTESTANT_G','CONTESTA
 if(three.start!==dates[2]||three.profiles.some(p=>p.curve[0]!==1||p.nullCourt!=='N/A · selected window'))throw Error('third subject failed to align all cards');
 const previous=adapter.getComparisonWindow(['CONTESTANT_A','CONTESTANT_G'],'robot',dates[0],dates[1]);
 if(Math.abs(previous.profiles[1].totalReturnPct-20)>1e-9||previous.dates.length!==2)throw Error('historical cutoff borrowed latest metrics');
-let plotted;window.ArenaCharts={renderCustomArchaeology(id,dates,profiles){plotted={dates,profiles};}};
+let plotted;window.ArenaCharts.renderCustomArchaeology=(id,dates,profiles)=>{plotted={dates,profiles};};
 window.DecisionAuditView.render('root');
 if(!node('root').innerHTML.includes('slot-c-select')||!node('root').innerHTML.includes('Cross-Handler')||plotted.profiles[0].name!=='CONTESTANT_G'||plotted.profiles[1].name!=='CONTESTANT_A')throw Error('original workbench and default preset differ');
 window.DecisionAuditView.slotC='CONTESTANT_H';window.DecisionAuditView.render('root');

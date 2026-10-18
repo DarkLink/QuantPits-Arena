@@ -11,6 +11,8 @@ window.DispatchesView = {
   render(containerId, params = {}) {
     const el = document.getElementById(containerId);
     if (!el) return;
+    this.isCurrentRender = window.ArenaCharts.beginViewRender(el);
+    const isCurrent = this.isCurrentRender;
 
     const seasonMeta = window.arenaAdapter ? window.arenaAdapter.getCurrentSeasonMeta() : {};
     const dispatches = window.arenaAdapter ? window.arenaAdapter.getDispatchesData() : null;
@@ -160,6 +162,7 @@ window.DispatchesView = {
 
     // Trigger async direct file loading if available
     setTimeout(() => {
+      if (!isCurrent()) return;
       this.loadArticle(this.currentEpisode);
     }, 0);
   },
@@ -298,6 +301,11 @@ window.DispatchesView = {
   async loadArticle(epId) {
     const bodyEl = document.getElementById("dispatch-article-body");
     if (!bodyEl) return;
+    const adapter = window.arenaAdapter;
+    const request = this.articleRequest = (this.articleRequest || 0) + 1;
+    const currentRender = this.isCurrentRender;
+    const isCurrent = () => this.articleRequest === request && this.currentEpisode === epId &&
+      window.arenaAdapter === adapter && (!currentRender || currentRender());
 
     const dispatches = window.arenaAdapter ? window.arenaAdapter.getDispatchesData() : null;
     const episodes = dispatches?.episodes || [];
@@ -309,6 +317,7 @@ window.DispatchesView = {
         const res = await fetch(activeEp.file);
         if (res.ok) {
           const md = await res.text();
+          if (!isCurrent()) return;
           bodyEl.innerHTML = this.wrapArticle(activeEp, window.marked.parse(md));
           this.postProcessArticle(bodyEl);
           return;
@@ -319,6 +328,7 @@ window.DispatchesView = {
     }
 
     // Fallback to synchronous renderer
+    if (!isCurrent()) return;
     bodyEl.innerHTML = this.renderArticleContent();
     this.postProcessArticle(bodyEl);
   },

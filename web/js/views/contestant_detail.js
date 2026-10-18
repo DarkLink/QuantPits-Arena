@@ -61,6 +61,7 @@ window.ContestantDetailView = {
   render(containerId, contestantId) {
     const container = document.getElementById(containerId);
     if (!container) return;
+    const isCurrent = window.ArenaCharts.beginViewRender(container);
 
     try {
       if (contestantId) {
@@ -72,7 +73,7 @@ window.ContestantDetailView = {
       }
 
       const contestants = window.arenaAdapter.getAllContestants();
-      const contestant = window.arenaAdapter.getContestant(this.activeContestantId) || contestants[0];
+      const contestant = window.arenaAdapter.getContestant(this.activeContestantId);
       if (!contestant) {
         container.innerHTML = `<div class="card" style="text-align:center; padding:3rem;">No contestant found.</div>`;
         return;
@@ -441,7 +442,7 @@ window.ContestantDetailView = {
       // Render fingerprint charts & multi-curve chart
       const expectedContestant=this.activeContestantId;
       setTimeout(() => {
-        if(this.activeContestantId!==expectedContestant)return;
+        if(!isCurrent() || this.activeContestantId!==expectedContestant)return;
         this.renderCharts(fingerprints, paths);
       }, 50);
 
@@ -562,7 +563,7 @@ window.ContestantDetailView = {
           }
         }]
       }, true);
-      window.addEventListener("resize", () => chart.resize());
+      window.ArenaCharts.trackChart(chart);
     }
   }
 };

@@ -12,13 +12,14 @@ window.PathDetailView = {
   render(containerId, pathId) {
     const container = document.getElementById(containerId);
     if (!container) return;
+    const isCurrent = window.ArenaCharts.beginViewRender(container);
 
     const path = window.arenaAdapter.getPath(pathId);
     if (!path) {
       container.innerHTML = `
         <div class="card" style="text-align: center; padding: 4rem 2rem;">
           <h2>Path Not Found</h2>
-          <p style="color: var(--text-tertiary); margin: 1rem 0;">Path ID "${pathId}" does not exist in this tournament run.</p>
+          <p style="color: var(--text-tertiary); margin: 1rem 0;">Path ID "${window.escapeHtml(pathId)}" does not exist in this tournament run.</p>
           <button class="btn btn-primary" onclick="window.appRouter.navigate('leaderboard')">
             Back to Leaderboard
           </button>
@@ -53,9 +54,9 @@ window.PathDetailView = {
           ← Back to Leaderboard
         </button>
         <div style="display:flex; gap:0.75rem; align-items:center;">
-          <button class="btn btn-secondary" onclick="window.appRouter.navigate('contestants', { contestantId: '${path.contestant_id}' })">
+          ${contestant ? `<button class="btn btn-secondary" onclick="window.appRouter.navigate('contestants', { contestantId: '${path.contestant_id}' })">
             Model Profile (${contestant?.display_name || path.contestant_id})
-          </button>
+          </button>` : ''}
           <button class="btn btn-secondary" onclick="navigator.clipboard.writeText(window.location.href); alert('Path URL copied to clipboard!')">
             Share Path
           </button>
@@ -157,9 +158,9 @@ window.PathDetailView = {
               <!-- Benchmark Standards Independent Controls -->
               <div class="benchmark-pill-group" id="path-benchmark-pill-group">
                 <span class="benchmark-pill-label">Benchmarks:</span>
-                <button type="button" class="benchmark-pill monkey is-active" data-benchmark="monkey" title="Toggle Monkey Null Standard">
+                ${monkeyDist ? `<button type="button" class="benchmark-pill monkey is-active" data-benchmark="monkey" title="Toggle Monkey Null Standard">
                   <span class="bm-line-badge"></span> Monkey Null
-                </button>
+                </button>` : ''}
                 ${window.arenaAdapter.hasGhostTaotie() ? `
                 <button type="button" class="benchmark-pill ghost-taotie is-active" data-benchmark="ghost" title="Toggle Ghost Capital Scenario">
                   <span class="bm-line-badge"></span> Ghost Scenario
@@ -247,6 +248,7 @@ window.PathDetailView = {
 
     // Render initial charts
     setTimeout(() => {
+      if (!isCurrent()) return;
       renderChart(this.activeMetric);
 
       if (monkeyDist) {

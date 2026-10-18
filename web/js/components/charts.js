@@ -13,10 +13,54 @@
  */
 
 window.ArenaCharts = {
+  charts: new Set(),
+  renderTokens: new WeakMap(),
+
+  trackChart(chart) {
+    this.charts.add(chart);
+    if (!this.resizeBound) {
+      this.resizeBound = true;
+      window.addEventListener('resize', () => {
+        for (const current of this.charts) {
+          if (current.isDisposed?.() || current.getDom?.()?.isConnected === false) {
+            if (!current.isDisposed?.()) current.dispose?.();
+            this.charts.delete(current);
+          } else current.resize();
+        }
+      });
+    }
+    return chart;
+  },
+
+  disposeWithin(container) {
+    for (const chart of this.charts) {
+      const dom = chart.getDom?.();
+      if (dom && container.contains?.(dom)) {
+        chart.dispose?.();
+        this.charts.delete(chart);
+      }
+    }
+  },
+
+  disposeAll() {
+    for (const chart of this.charts) chart.dispose?.();
+    this.charts.clear();
+    this.renderTokens = new WeakMap();
+  },
+
+  beginViewRender(container) {
+    if (!container) return () => false;
+    this.disposeWithin(container);
+    const tokens = this.renderTokens, token = {};
+    const adapter = window.arenaAdapter;
+    tokens.set(container, token);
+    return () => container.isConnected !== false && this.renderTokens === tokens && tokens.get(container) === token && window.arenaAdapter === adapter;
+  },
+
   renderPairComparison(domId, data) {
     const dom = document.getElementById(domId);
     if (!dom) return;
-    const chart = echarts.getInstanceByDom(dom) || echarts.init(dom);
+    const chart = this.trackChart(echarts.getInstanceByDom(dom) || echarts.init(dom));
     const colors = this.getThemeColors();
     const palette = ['#38bdf8','#f59e0b','#f43f5e','#a855f7','#94a3b8','#fb7185','#10b981','#c084fc'];
     const color = id => palette[(id.charCodeAt(id.length-1)-65+palette.length)%palette.length];
@@ -60,22 +104,18 @@ window.ArenaCharts = {
     const opt = chart.getOption();
     if (!opt || !opt.series) return;
 
-    const currentLegend = (opt.legend && opt.legend[0]) || {};
+    const currentLegend = (Array.isArray(opt.legend) ? opt.legend[0] : opt.legend) || {};
     const selected = Object.assign({}, currentLegend.selected || {});
 
     opt.series.forEach(s => {
       const sName = s.name || "";
-      let match = false;
-      if (benchmarkKey === "ghost") {
-        match = sName.includes("Ghost");
-      } else if (benchmarkKey === "taotie") {
-        match = sName.includes("Taotie") && !sName.includes("Ghost");
-      } else if (benchmarkKey === "csi300" || benchmarkKey === "market") {
-        const mBm = (window.arenaAdapter && window.arenaAdapter.getMarketBenchmarkName) ? window.arenaAdapter.getMarketBenchmarkName() : "CSI 300";
-        match = s.isMarketBenchmark || sName.includes(mBm) || (mBm && sName.toLowerCase().includes(mBm.toLowerCase())) || sName.includes("Benchmark") || sName.includes("Index");
-      } else if (benchmarkKey === "monkey") {
-        match = sName.includes("Monkey");
-      }
+      const marketName = window.arenaAdapter.getMarketBenchmarkName().toLowerCase();
+      // A spread can mention two references. Its owner, rather than its denominator, controls visibility.
+      const role = s.benchmarkKey || (/ghost/i.test(sName) ? 'ghost'
+        : /taotie|executable passive/i.test(sName) ? 'taotie'
+        : /monkey/i.test(sName) ? 'monkey'
+        : (s.isMarketBenchmark || sName.toLowerCase().includes(marketName)) ? 'market' : null);
+      const match = role === (benchmarkKey === 'csi300' ? 'market' : benchmarkKey);
       if (match) {
         if (typeof forceState === "boolean") {
           selected[sName] = forceState;
@@ -219,7 +259,7 @@ window.ArenaCharts = {
       }
     });
 
-    window.addEventListener("resize", () => chart.resize());
+    this.trackChart(chart);
     return chart;
   },
 
@@ -361,7 +401,7 @@ window.ArenaCharts = {
       }
     });
 
-    window.addEventListener("resize", () => chart.resize());
+    this.trackChart(chart);
     return chart;
   },
 
@@ -386,13 +426,18 @@ window.ArenaCharts = {
       const target=normalize(window.arenaAdapter.getNavCurve(targetPath.path_id));
       const market=normalize(csi300Curve), passive=normalize(taotieCurve);
       const underwater=values=>{let peak=1;return values.map(v=>{if(v==null)return null;peak=Math.max(peak,v);return(v/peak-1)*100;});};
-      let selected=[{name:targetPath.contestant_id,data:target},{name:window.arenaAdapter.getMarketBenchmarkName(),data:market},{name:'Executable passive',data:passive}];
+      let selected=[{name:targetPath.contestant_id,data:target},
+        {name:window.arenaAdapter.getMarketBenchmarkName(),data:market,benchmarkKey:'market'},
+        {name:window.arenaAdapter.getTaotieShortName(),data:passive,benchmarkKey:'taotie'}];
+      if(window.arenaAdapter.hasGhostTaotie())selected.push({name:'Ghost Capital Scenario',benchmarkKey:'ghost',
+        data:normalize(window.arenaAdapter.getBenchmarkGhostTaotieCurve())});
       if(metricType==='drawdown')selected=selected.map(s=>({...s,data:underwater(s.data)}));
       if(metricType==='excess_csi300')selected=selected.map(s=>({...s,data:s.data.map((v,i)=>v==null||market[i]==null?null:(v-market[i])*100)}));
       chart.setOption({tooltip:{trigger:'axis',valueFormatter:v=>typeof v==='number'?v.toFixed(4):'N/A'},
         legend:{data:selected.map(s=>s.name)},grid:{left:65,right:25,top:45,bottom:55},
         xAxis:{type:'category',data:windowDates},yAxis:{type:'value',scale:true,name:metricType==='nav'?'NAV':metricType==='drawdown'?'%':'pp'},
         series:selected.map(s=>({...s,type:'line',smooth:false,symbol:'none'})),dataZoom:[{type:'inside'},{type:'slider'}]},true);
+      this.trackChart(chart);
       return chart;
     }
     const tc = this.getThemeColors();
@@ -481,8 +526,8 @@ window.ArenaCharts = {
       });
 
     } else if (metricType === "excess_csi300") {
-      yAxisName = `Active Excess Return vs. ${marketBmName} (%)`;
-      yAxisFormatter = v => `${v >= 0 ? '+' : ''}${v.toFixed(1)}%`;
+      yAxisName = `Active Excess Return vs. ${marketBmName} (pp)`;
+      yAxisFormatter = v => `${v >= 0 ? '+' : ''}${v.toFixed(1)} pp`;
 
       const targetExcess = window.arenaAdapter.getPathExcessMarket(targetPath.path_id);
       const taotieExcess = window.arenaAdapter.getPathExcessMarket("BENCHMARK_taotie");
@@ -643,7 +688,7 @@ window.ArenaCharts = {
               </div>`;
             } else {
               const formattedVal = (metricType === "drawdown" || metricType === "excess_csi300")
-                ? `${typeof val === 'number' ? (val >= 0 && metricType === "excess_csi300" ? '+' : '') + val.toFixed(2) : val}%`
+                ? `${typeof val === 'number' ? (val >= 0 && metricType === "excess_csi300" ? '+' : '') + val.toFixed(2) : 'N/A'}${Number.isFinite(val) ? (metricType === 'excess_csi300' ? ' pp' : '%') : ''}`
                 : (typeof val === 'number' ? val.toFixed(4) : val);
               const marker = item.marker || `<span style="display:inline-block;margin-right:4px;border-radius:10px;width:10px;height:10px;background-color:${item.color};"></span>`;
               html += `<div style="display:flex; justify-content:space-between; align-items:center; gap:12px; font-size:11px;">
@@ -694,7 +739,7 @@ window.ArenaCharts = {
     };
 
     chart.setOption(option, true);
-    window.addEventListener("resize", () => chart.resize());
+    this.trackChart(chart);
     return chart;
   },
 
@@ -799,7 +844,7 @@ window.ArenaCharts = {
     };
 
     chart.setOption(option, true);
-    window.addEventListener("resize", () => chart.resize());
+    this.trackChart(chart);
     return chart;
   },
 
@@ -924,7 +969,7 @@ window.ArenaCharts = {
     };
 
     chart.setOption(option, true);
-    window.addEventListener("resize", () => chart.resize());
+    this.trackChart(chart);
     return chart;
   },
 
@@ -951,7 +996,7 @@ window.ArenaCharts = {
           { name: "Snail (Holding Lag)", type: "line", data: fingerprints.delayData.snail, color: "#f59e0b", itemStyle: { color: "#f59e0b" }, lineStyle: { color: "#f59e0b", width: 2 } }
         ]
       }, true);
-      window.addEventListener("resize", () => c1.resize());
+      this.trackChart(c1);
     }
 
     // B. Turnover Sensitivity
@@ -969,7 +1014,7 @@ window.ArenaCharts = {
         yAxis: { type: "value", splitLine: { lineStyle: { color: tc.gridLine } }, axisLabel: { color: tc.textSecondary, formatter: "{value}%" } },
         series: [{ type: "bar", data: vals, itemStyle: { color: "#10b981", borderRadius: [4, 4, 0, 0] } }]
       }, true);
-      window.addEventListener("resize", () => c2.resize());
+      this.trackChart(c2);
     }
 
     // C. Capacity & Breadth
@@ -987,7 +1032,7 @@ window.ArenaCharts = {
         yAxis: { type: "value", splitLine: { lineStyle: { color: tc.gridLine } }, axisLabel: { color: tc.textSecondary, formatter: "{value}%" } },
         series: [{ type: "line", data: bVals, smooth: true, color: "#a855f7", itemStyle: { color: "#a855f7" }, lineStyle: { color: "#a855f7", width: 2.5 } }]
       }, true);
-      window.addEventListener("resize", () => c3.resize());
+      this.trackChart(c3);
     }
 
     // D. Direction Sanity (Robot vs Koala)
@@ -1010,7 +1055,7 @@ window.ArenaCharts = {
           ]
         }]
       }, true);
-      window.addEventListener("resize", () => c4.resize());
+      this.trackChart(c4);
     }
   },
 
@@ -1324,7 +1369,7 @@ window.ArenaCharts = {
     };
 
     chart.setOption(option, true);
-    window.addEventListener("resize", () => chart.resize());
+    this.trackChart(chart);
     return chart;
   },
 
@@ -1663,7 +1708,7 @@ window.ArenaCharts = {
     };
 
     chart.setOption(option, true);
-    window.addEventListener("resize", () => chart.resize());
+    this.trackChart(chart);
     return chart;
   },
 
@@ -1814,7 +1859,7 @@ window.ArenaCharts = {
     };
 
     chart.setOption(option, true);
-    window.addEventListener("resize", () => chart.resize());
+    this.trackChart(chart);
     return chart;
   },
 
@@ -1965,7 +2010,7 @@ window.ArenaCharts = {
     };
 
     chart.setOption(option, true);
-    window.addEventListener("resize", () => chart.resize());
+    this.trackChart(chart);
     return chart;
   }
 };
