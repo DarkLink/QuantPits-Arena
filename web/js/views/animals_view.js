@@ -34,7 +34,7 @@ window.AnimalsView = {
   benchmarkReturn(id, start) {
     const values = this.history.curves[id];
     const first = this.history.dates.indexOf(start);
-    return (values.at(-1) / values[first] - 1) * 100;
+    return first < 0 ? null : window.arenaAdapter.getCurveReturn(values.slice(first));
   },
 
   render(containerId, params) {
@@ -113,6 +113,7 @@ window.AnimalsView = {
       const avgDrawdown = drawdowns.length > 0
         ? drawdowns.reduce((s, v) => s + v, 0) / drawdowns.length
         : 0;
+      const medianSpread = Number.isFinite(csi300Ret) ? medianReturn - csi300Ret : null;
       const tested = summaryPaths.filter(p => Number.isFinite(p.empirical_p_value));
       const sigCount = tested.filter(p => p.empirical_p_value < .05).length;
       const sigPct = tested.length ? `${(sigCount / tested.length * 100).toFixed(0)}%` : 'N/A';
@@ -290,7 +291,7 @@ window.AnimalsView = {
                   ${medianReturn >= 0 ? '+' : ''}${medianReturn.toFixed(2)}%
                 </div>
                 <div style="font-size: 10px; color: var(--text-secondary); margin-top: 2px;">
-                  Active spread: <b>${(medianReturn - csi300Ret >= 0 ? '+' : '') + (medianReturn - csi300Ret).toFixed(2)} pp vs ${window.arenaAdapter.getMarketBenchmarkName()}</b>
+                  Active spread: <b>${Number.isFinite(medianSpread) && medianSpread >= 0 ? '+' : ''}${window.formatNumber(medianSpread, 2, ' pp')} vs ${window.arenaAdapter.getMarketBenchmarkName()}</b>
                 </div>
               </div>
 
@@ -422,8 +423,10 @@ window.AnimalsView = {
                   const pVal = Number.isFinite(rawP) ? (window.formatPValue ? window.formatPValue(rawP) : rawP.toFixed(4)) : 'N/A';
                   const isSig = p.empirical_p_value != null && p.empirical_p_value < .05;
                   const start = observationStart(p);
-                  const spreadCsi = p.total_return_pct - this.benchmarkReturn('BENCHMARK_csi300', start);
-                  const spreadTaotie = p.total_return_pct - this.benchmarkReturn('BENCHMARK_taotie', start);
+                  const marketReturn = this.benchmarkReturn('BENCHMARK_csi300', start);
+                  const passiveReturn = this.benchmarkReturn('BENCHMARK_taotie', start);
+                  const spreadCsi = Number.isFinite(marketReturn) ? p.total_return_pct - marketReturn : null;
+                  const spreadTaotie = Number.isFinite(passiveReturn) ? p.total_return_pct - passiveReturn : null;
 
                   return `
                     <tr data-zoo-path="${p.path_id}" data-observation-start="${start}" style="border-bottom: 1px solid var(--border-subtle); hover:background var(--surface-hover);">
@@ -459,10 +462,10 @@ window.AnimalsView = {
                         </span>
                       </td>
                       <td data-zoo-spread="market" style="padding: 12px 16px; text-align: right; font-weight: 600; color: ${spreadCsi >= 0 ? 'var(--color-success)' : 'var(--color-danger)'};">
-                        ${spreadCsi >= 0 ? '+' : ''}${spreadCsi.toFixed(2)} pp
+                        ${Number.isFinite(spreadCsi) && spreadCsi >= 0 ? '+' : ''}${window.formatNumber(spreadCsi, 2, ' pp')}
                       </td>
                       <td data-zoo-spread="taotie" style="padding: 12px 16px; text-align: right; font-weight: 600; color: ${spreadTaotie >= 0 ? 'var(--color-success)' : 'var(--color-danger)'};">
-                        ${spreadTaotie >= 0 ? '+' : ''}${spreadTaotie.toFixed(2)} pp
+                        ${Number.isFinite(spreadTaotie) && spreadTaotie >= 0 ? '+' : ''}${window.formatNumber(spreadTaotie, 2, ' pp')}
                       </td>
                       <td style="padding: 12px 16px; text-align: center;">
                         <a href="#path/${p.path_id}" class="btn btn-sm btn-outline" style="font-size: 11px; padding: 3px 8px; text-decoration: none;">

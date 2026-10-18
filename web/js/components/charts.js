@@ -16,6 +16,13 @@ window.ArenaCharts = {
   charts: new Set(),
   renderTokens: new WeakMap(),
 
+  formatCurveValue(value, metric = 'nav') {
+    if (!Number.isFinite(value)) return 'N/A';
+    if (metric === 'drawdown') return `${value.toFixed(2)}%`;
+    if (metric === 'excess_csi300') return `${value >= 0 ? '+' : ''}${value.toFixed(2)} pp`;
+    return value.toFixed(4);
+  },
+
   trackChart(chart) {
     this.charts.add(chart);
     if (!this.resizeBound) {
@@ -428,7 +435,9 @@ window.ArenaCharts = {
       const windowDates=dates.slice(first);
       const normalize=values=>{
         const selected=values.slice(first);
-        return selected.map(v=>v==null?null:v/selected[0]);
+        const base=selected[0];
+        return windowDates.map((_,i)=>Number.isFinite(base)&&base>0&&Number.isFinite(selected[i])&&selected[i]>0
+          ? selected[i]/base : null);
       };
       const target=normalize(window.arenaAdapter.getNavCurve(targetPath.path_id));
       const market=normalize(csi300Curve), passive=normalize(taotieCurve);
@@ -440,7 +449,7 @@ window.ArenaCharts = {
         data:normalize(window.arenaAdapter.getBenchmarkGhostTaotieCurve())});
       if(metricType==='drawdown')selected=selected.map(s=>({...s,data:underwater(s.data)}));
       if(metricType==='excess_csi300')selected=selected.map(s=>({...s,data:s.data.map((v,i)=>v==null||market[i]==null?null:(v-market[i])*100)}));
-      chart.setOption({tooltip:{trigger:'axis',valueFormatter:v=>typeof v==='number'?v.toFixed(4):'N/A'},
+      chart.setOption({tooltip:{trigger:'axis',valueFormatter:v=>this.formatCurveValue(v,metricType)},
         legend:{data:selected.map(s=>s.name)},grid:{left:65,right:25,top:45,bottom:55},
         xAxis:{type:'category',data:windowDates},yAxis:{type:'value',scale:true,name:metricType==='nav'?'NAV':metricType==='drawdown'?'%':'pp'},
         series:selected.map(s=>({...s,type:'line',smooth:false,symbol:'none'})),dataZoom:[{type:'inside'},{type:'slider'}]},true);
@@ -694,9 +703,7 @@ window.ArenaCharts = {
                 <b>${low.toFixed(4)} ~ ${high}</b>
               </div>`;
             } else {
-              const formattedVal = (metricType === "drawdown" || metricType === "excess_csi300")
-                ? `${typeof val === 'number' ? (val >= 0 && metricType === "excess_csi300" ? '+' : '') + val.toFixed(2) : 'N/A'}${Number.isFinite(val) ? (metricType === 'excess_csi300' ? ' pp' : '%') : ''}`
-                : (typeof val === 'number' ? val.toFixed(4) : val);
+              const formattedVal = this.formatCurveValue(val, metricType);
               const marker = item.marker || `<span style="display:inline-block;margin-right:4px;border-radius:10px;width:10px;height:10px;background-color:${item.color};"></span>`;
               html += `<div style="display:flex; justify-content:space-between; align-items:center; gap:12px; font-size:11px;">
                 <span style="display:flex; align-items:center;">${marker}${item.seriesName.split(' (')[0]}:</span>
@@ -1083,16 +1090,16 @@ window.ArenaCharts = {
     const normalize=values=>{
       if(!anchor)return values;
       const rows=values.slice(offset);
-      if(rows.length!==dates.length||rows.some(v=>typeof v!=='number'||!Number.isFinite(v)||v<=0))
-        throw Error('Observation and benchmark coverage differ.');
-      return rows.map(v=>v/rows[0]);
+      const base=rows[0];
+      return dates.map((_,i)=>Number.isFinite(base)&&base>0&&Number.isFinite(rows[i])&&rows[i]>0
+        ? rows[i]/base : null);
     };
     if(anchor)dates=dates.slice(offset);
     taotieCurve=normalize(taotieCurve);csi300Curve=normalize(csi300Curve);
     const nav=id=>normalize(id==='BENCHMARK_taotie'?adapter.getBenchmarkTaotieCurve():
       id==='BENCHMARK_ghost_taotie'?adapter.getBenchmarkGhostTaotieCurve():adapter.getNavCurve(id));
-    const drawdown=curve=>{let peak=1;return curve.map(v=>{peak=Math.max(peak,v);return(v/peak-1)*100;});};
-    const excess=curve=>curve.map((v,i)=>(v-csi300Curve[i])*100);
+    const drawdown=curve=>{let peak=1;return curve.map(v=>{if(v==null)return null;peak=Math.max(peak,v);return(v/peak-1)*100;});};
+    const excess=curve=>curve.map((v,i)=>v==null||csi300Curve[i]==null?null:(v-csi300Curve[i])*100);
     const tc = this.getThemeColors();
     const marketBmName = (window.arenaAdapter && window.arenaAdapter.getMarketBenchmarkName) ? window.arenaAdapter.getMarketBenchmarkName() : "CSI 300";
     const taotieName = (window.arenaAdapter && window.arenaAdapter.getTaotieShortName) ? window.arenaAdapter.getTaotieShortName() : "Taotie";
@@ -1328,9 +1335,7 @@ window.ArenaCharts = {
           let html = `<div style="font-weight:700; margin-bottom:6px; color:#38bdf8;">${date}</div>`;
           params.forEach(item => {
             let val = item.value;
-            const formattedVal = (metricType === "drawdown" || metricType === "excess_csi300")
-              ? `${typeof val === 'number' ? (val >= 0 && metricType === "excess_csi300" ? '+' : '') + val.toFixed(2) : val}${metricType==='excess_csi300'?' pp':'%'}`
-              : (typeof val === 'number' ? val.toFixed(4) : val);
+            const formattedVal = this.formatCurveValue(val, metricType);
             const marker = item.marker || `<span style="display:inline-block;margin-right:4px;border-radius:10px;width:10px;height:10px;background-color:${item.color};"></span>`;
             html += `<div style="display:flex; justify-content:space-between; align-items:center; gap:12px; font-size:11px;">
               <span style="display:flex; align-items:center;">${marker}${item.seriesName.split(' (')[0]}:</span>
@@ -1655,9 +1660,7 @@ window.ArenaCharts = {
           let html = `<div style="font-weight:700; margin-bottom:6px; color:#38bdf8;">${date}</div>`;
           params.forEach(item => {
             const val = item.value;
-            const formattedVal = !Number.isFinite(val) ? 'N/A' : (metricType === "drawdown" || metricType === "excess_csi300")
-              ? `${val >= 0 && metricType === "excess_csi300" ? '+' : ''}${val.toFixed(2)}${metricType === 'excess_csi300' ? ' pp' : '%'}`
-              : val.toFixed(4);
+            const formattedVal = this.formatCurveValue(val, metricType);
             const marker = item.marker || `<span style="display:inline-block;margin-right:4px;border-radius:10px;width:10px;height:10px;background-color:${item.color};"></span>`;
             html += `<div style="display:flex; justify-content:space-between; align-items:center; gap:12px; font-size:11px;">
               <span style="display:flex; align-items:center;">${marker}${item.seriesName.split(' (')[0]}:</span>

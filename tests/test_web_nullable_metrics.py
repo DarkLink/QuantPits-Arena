@@ -6,7 +6,7 @@ import pytest
 from arena.config import REPO_ROOT
 
 
-@pytest.mark.parametrize('entry', ['matrix', 'scatter', 'panorama', 'benchmark_anchors', 'late_entry', 'details', 'table', 'formatting'])
+@pytest.mark.parametrize('entry', ['matrix', 'scatter', 'panorama', 'benchmark_anchors', 'late_entry', 'curve_tooltips', 'observation_gaps', 'fingerprints', 'details', 'table', 'formatting'])
 def test_nullable_view_runtime(entry):
     program = r'''
 const fs = require('fs'), vm = require('vm'), assert = require('assert/strict');
@@ -33,6 +33,87 @@ function safeText(text, context = '') {
  assert(!/Error Loading|Failed to render/.test(text), 'The view swallowed a runtime exception');
 }
 const checks = {
+ curve_tooltips(data) {
+  const adapter=window.arenaAdapter,dates=adapter.getNavDates();
+  for(const cid of ['CONTESTANT_A','CONTESTANT_G'])for(const metric of ['nav','drawdown','excess_csi300']){
+   const path=adapter.getPath(cid+'_robot'),taotie=adapter.getBenchmarkTaotieCurve(),market=adapter.getBenchmarkCsi300Curve();
+   for(const render of [()=>window.ArenaCharts.renderEquityCurves('tooltip-curve',dates,path,taotie,market,null,metric),
+    ()=>window.ArenaCharts.renderMultiAnimalCurves('tooltip-curve',dates,[path],taotie,market,metric)]){
+    render();const option=charts.get('tooltip-curve');
+    const tooltip=value=>option.tooltip.valueFormatter?option.tooltip.valueFormatter(value):option.tooltip.formatter([{axisValue:dates.at(-1),seriesName:cid,value,color:'#fff'}]);
+    for(const value of [null,undefined,NaN,Infinity,-Infinity]){
+     const text=tooltip(value);safeText(text,'curve tooltip');assert(text.includes('N/A'),'Missing curve values were not labeled N/A');
+    }
+    for(const value of [0,1.23456,-1.23456]){
+     const expected=metric==='nav'?value.toFixed(4):metric==='drawdown'?value.toFixed(2)+'%':(value>=0?'+':'')+value.toFixed(2)+' pp';
+     assert(tooltip(value).includes(expected),'Curve tooltip units or precision differ across observation participants');
+    }
+   }
+  }
+ },
+ observation_gaps(data) {
+  const adapter=window.arenaAdapter,dates=adapter.getNavDates(),path=adapter.getPath('CONTESTANT_G_robot');
+  const first=dates.indexOf(path.observation_start);
+  const modes=['nav','drawdown','excess_csi300'],baseline=new Map();
+  const draw=metric=>window.ArenaCharts.renderEquityCurves('gaps',dates,path,adapter.getBenchmarkTaotieCurve(),adapter.getBenchmarkCsi300Curve(),null,metric);
+  for(const metric of modes){draw(metric);baseline.set(metric,charts.get('gaps'));}
+  for(const id of [path.path_id,'BENCHMARK_taotie','BENCHMARK_csi300','BENCHMARK_ghost_taotie']){
+   const curve=adapter.getNavCurve(id),original=[...curve];
+   for(const [day,value] of [[first,null],[first,0],[first+1,null]]){
+    curve[day]=value;
+    for(const metric of modes){
+     draw(metric);
+     const option=charts.get('gaps');
+     assert.equal(option.xAxis.data[0],path.observation_start,'A missing anchor silently moved the observation period');
+     for(const [i,series] of option.series.entries()){
+      assert.equal(series.data.length,dates.length-first,'A missing point shifted the timeline');
+      assert(series.data.every(v=>v===null||Number.isFinite(v)),'The chart divided by an unavailable or zero anchor');
+      const seriesId={market:'BENCHMARK_csi300',taotie:'BENCHMARK_taotie',ghost:'BENCHMARK_ghost_taotie'}[series.benchmarkKey]||path.path_id;
+      const affected=seriesId===id||metric==='excess_csi300'&&id==='BENCHMARK_csi300';
+      if(affected){
+       assert.equal(series.data[day-first],null,'The chart manufactured a value for an unavailable observation');
+       if(day===first)assert(series.data.every(v=>v===null),'A missing anchor was silently replaced with a later NAV');
+      } else assert.deepEqual(series.data,baseline.get(metric).series[i].data,'A missing point changed an unrelated curve');
+     }
+    }
+    window.PathDetailView.render('root',path.path_id);safeText(node('root').innerHTML,'path benchmark card');
+    for(const metric of modes){
+     window.ArenaCharts.renderMultiAnimalCurves('profile-gaps',dates,[path],adapter.getBenchmarkTaotieCurve(),adapter.getBenchmarkCsi300Curve(),metric);
+     const option=charts.get('profile-gaps');
+     assert.equal(option.xAxis.data[0],path.observation_start);
+     for(const series of option.series){
+      assert.equal(series.data.length,dates.length-first);
+      assert(series.data.every(v=>v===null||Number.isFinite(v)),'A profile chart manufactured a value from a missing observation');
+     }
+    }
+    window.ContestantDetailView.render('root',path.contestant_id);safeText(node('root').innerHTML,'profile benchmark coverage');
+    Object.assign(window.AnimalsView,{comparisonMode:'multi',activeFocusModel:path.contestant_id,selectedAnimalIds:['robot'],activeMetric:'nav'});
+    window.AnimalsView.render('root');safeText(node('root').innerHTML,'Zoo benchmark coverage');
+    curve.splice(0,curve.length,...original);
+   }
+  }
+ },
+ fingerprints(data) {
+  for(const cid of ['CONTESTANT_A','CONTESTANT_G']){
+   const sample=structuredClone(data),missing=['robot','rabbit-1','eagle-5-1','koala','meerkat-30'];
+   sample.paths=sample.paths.filter(p=>p.contestant_id!==cid||!missing.includes(p.animal_id));
+   sample.paths.find(p=>p.path_id===cid+'_rabbit-2').total_return_pct=0;
+   const untested=sample.paths.find(p=>p.path_id===cid+'_turtle');untested.empirical_p_value=null;untested.p_value=null;
+   const adapter=window.arenaAdapter=new window.ArenaDataAdapter(sample),fp=adapter.getContestantFingerprints(cid);
+   assert.equal(fp.turnoverData[1].return,null,'A missing baseline was presented as a flat return');
+   assert.equal(fp.turnoverData[2].return,null);assert.equal(fp.turnoverData[3].return,0,'A measured zero was hidden');
+   assert.equal(fp.breadthData[0].return,null);assert.equal(fp.meerkatData[2].return,null);
+   assert.deepEqual(fp.directionData,{robot:null,koala:null,spread:null},'A direction spread was manufactured from missing returns');
+   window.ContestantDetailView.render('root',cid);const html=node('root').innerHTML;safeText(html);
+   assert(/Baseline Handler \(Robot\)[\s\S]*?>\s*N\/A\s*<\/div>/.test(html),'The profile reports a zero baseline for an unavailable handler');
+   assert(html.includes(`Across ${sample.paths.filter(p=>p.contestant_id===cid).length} available handlers`));
+   if(cid==='CONTESTANT_A'){
+    const tested=sample.paths.filter(p=>p.contestant_id===cid&&Number.isFinite(p.empirical_p_value));
+    assert(html.includes(`${tested.filter(p=>p.empirical_p_value<.05).length} / ${tested.length}`),'Missing tests were included in the significance denominator');
+   }
+   assert.equal(charts.get('chart-fingerprint-turnover').series[0].data[1],null);
+  }
+ },
  scatter(data) {
   const path = data.paths.find(p => p.contestant_id === 'CONTESTANT_A');
   path.sharpe_ratio = null; path.empirical_p_value = null; path.p_value = null;
@@ -203,6 +284,8 @@ const checks = {
    }
   }
   const path = data.paths.find(p => p.contestant_id === 'CONTESTANT_G' && p.animal_id === 'robot');
+  window.PathDetailView.render('root',path.path_id);
+  assert(!node('root').innerHTML.includes('Deterministic or unmatched reference'), 'An observation participant was mislabeled as a reference');
   for (const key of ['final_nav','max_drawdown_pct','actual_holdings_mean','target_holdings_mean','mean_cash_ratio','mean_cash_ratio_pct','unaffordable_buy_ratio']) path[key] = null;
   window.PathDetailView.render('root', path.path_id); safeText(node('root').innerHTML);
   assert(node('root').innerHTML.includes('N/A'));

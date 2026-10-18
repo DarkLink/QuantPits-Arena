@@ -88,12 +88,13 @@ window.ContestantDetailView = {
       const observationStart=contestant.observation_start||seasonMeta.anchor_date;
 
       // Calculate stats
-      const returns = paths.map(p => p.total_return_pct);
-      const maxRet = returns.length ? Math.max(...returns) : 0;
-      const minRet = returns.length ? Math.min(...returns) : 0;
+      const returns = paths.map(p => p.total_return_pct).filter(Number.isFinite);
+      const maxRet = returns.length ? Math.max(...returns) : null;
+      const minRet = returns.length ? Math.min(...returns) : null;
       const robotPath = paths.find(p => p.animal_id === "robot");
-      const robotRet = robotPath ? robotPath.total_return_pct : 0;
-      const beatMonkeys = paths.filter(p => p.empirical_p_value != null && p.empirical_p_value < .05).length;
+      const robotRet = robotPath?.total_return_pct ?? null;
+      const testedPaths = paths.filter(p => Number.isFinite(p.empirical_p_value));
+      const beatMonkeys = testedPaths.filter(p => p.empirical_p_value < .05).length;
       const testedRanks = paths.map(p => p.percentile_rank ?? p.monkey_percentile).filter(Number.isFinite);
       const avgMonkeyPct = testedRanks.length ? testedRanks.reduce((sum, value) => sum + value, 0) / testedRanks.length : null;
 
@@ -212,22 +213,22 @@ window.ContestantDetailView = {
             <div class="kpi-grid" style="grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 12px;">
               <div class="kpi-card" style="padding: 12px;">
                 <div class="kpi-title">Baseline Handler (Robot)</div>
-                <div class="kpi-value ${robotRet >= 0 ? 'text-up' : 'text-down'}" style="font-size: 20px;">
-                  ${robotRet >= 0 ? '+' : ''}${robotRet.toFixed(2)}%
+                <div class="kpi-value ${Number.isFinite(robotRet) ? (robotRet >= 0 ? 'text-up' : 'text-down') : ''}" style="font-size: 20px;">
+                  ${Number.isFinite(robotRet) && robotRet >= 0 ? '+' : ''}${window.formatNumber(robotRet, 2, '%')}
                 </div>
                 <div class="kpi-hint">Canonical 22/3 Policy</div>
               </div>
               <div class="kpi-card" style="padding: 12px;">
                 <div class="kpi-title">Zoo Return Spread</div>
                 <div class="kpi-value" style="font-size: 20px; color: var(--accent-purple);">
-                  ${minRet.toFixed(1)}% ~ ${maxRet.toFixed(1)}%
+                  ${window.formatNumber(minRet, 1, '%')} ~ ${window.formatNumber(maxRet, 1, '%')}
                 </div>
-                <div class="kpi-hint">Across 28 Handlers</div>
+                <div class="kpi-hint">Across ${paths.length} available handlers</div>
               </div>
               <div class="kpi-card" style="padding: 12px;">
                 <div class="kpi-title">Paths p &lt; 0.05 vs Null</div>
                 <div class="kpi-value text-gold" style="font-size: 20px;">
-                  ${observed ? 'N/A' : beatMonkeys+' / 28'}
+                  ${observed || !testedPaths.length ? 'N/A' : beatMonkeys+' / '+testedPaths.length}
                 </div>
                 <div class="kpi-hint">${observed ? 'Observation window · no assigned test' : 'Mean Rank: '+(window.formatPercentile ? window.formatPercentile(avgMonkeyPct) : window.formatNumber(avgMonkeyPct, 1, '%'))}</div>
               </div>

@@ -1110,53 +1110,58 @@ class ArenaDataAdapter {
     const cPaths = this.paths.filter(p => p.contestant_id === cid);
     const pathByAnimal = new Map();
     cPaths.forEach(p => pathByAnimal.set(p.animal_id, p));
+    const pathReturn = animal => {
+      const value = pathByAnimal.get(animal)?.total_return_pct;
+      return Number.isFinite(value) ? value : null;
+    };
 
     // 1. Delay Sensitivity (Robot, Sloth-1~4, Snail-1~4)
     const delayData = {
       lags: [0, 1, 2, 3, 4],
       sloth: [
-        pathByAnimal.get("robot")?.total_return_pct ?? null,
-        pathByAnimal.get("sloth-1")?.total_return_pct ?? null,
-        pathByAnimal.get("sloth-2")?.total_return_pct ?? null,
-        pathByAnimal.get("sloth-3")?.total_return_pct ?? null,
-        pathByAnimal.get("sloth-4")?.total_return_pct ?? null,
+        pathReturn("robot"),
+        pathReturn("sloth-1"),
+        pathReturn("sloth-2"),
+        pathReturn("sloth-3"),
+        pathReturn("sloth-4"),
       ],
       snail: [
-        pathByAnimal.get("robot")?.total_return_pct ?? null,
-        pathByAnimal.get("snail-1")?.total_return_pct ?? null,
-        pathByAnimal.get("snail-2")?.total_return_pct ?? null,
-        pathByAnimal.get("snail-3")?.total_return_pct ?? null,
-        pathByAnimal.get("snail-4")?.total_return_pct ?? null,
+        pathReturn("robot"),
+        pathReturn("snail-1"),
+        pathReturn("snail-2"),
+        pathReturn("snail-3"),
+        pathReturn("snail-4"),
       ]
     };
 
     // 2. Turnover Sensitivity (Turtle, Robot, Rabbit-1, Rabbit-2)
     const turnoverData = [
-      { name: "Turtle (Low Turnover)", return: pathByAnimal.get("turtle")?.total_return_pct ?? 0 },
-      { name: "Robot (Standard)", return: pathByAnimal.get("robot")?.total_return_pct ?? 0 },
-      { name: "Rabbit-1 (50% Turnover)", return: pathByAnimal.get("rabbit-1")?.total_return_pct ?? 0 },
-      { name: "Rabbit-2 (100% Turnover)", return: pathByAnimal.get("rabbit-2")?.total_return_pct ?? 0 },
+      { name: "Turtle (Low Turnover)", return: pathReturn("turtle") },
+      { name: "Robot (Standard)", return: pathReturn("robot") },
+      { name: "Rabbit-1 (50% Turnover)", return: pathReturn("rabbit-1") },
+      { name: "Rabbit-2 (100% Turnover)", return: pathReturn("rabbit-2") },
     ];
 
     // 3. Concentration & Capacity Breadth (Eagle 5, 11, 44, 66, 88, WhaleShark, Taotie)
     const breadthData = [
-      { topk: 5, label: "Eagle-5/1", return: pathByAnimal.get("eagle-5-1")?.total_return_pct ?? 0 },
-      { topk: 11, label: "Eagle-11/2", return: pathByAnimal.get("eagle-11-2")?.total_return_pct ?? 0 },
-      { topk: 22, label: "Robot-22/3", return: pathByAnimal.get("robot")?.total_return_pct ?? 0 },
-      { topk: 44, label: "Eagle-44/6", return: pathByAnimal.get("eagle-44-6")?.total_return_pct ?? 0 },
-      { topk: 66, label: "Eagle-66/9", return: pathByAnimal.get("eagle-66-9")?.total_return_pct ?? 0 },
-      { topk: 88, label: "Eagle-88/12", return: pathByAnimal.get("eagle-88-12")?.total_return_pct ?? 0 },
-      { topk: 123, label: "WhaleShark", return: pathByAnimal.get("whale-shark")?.total_return_pct ?? 0 },
+      { topk: 5, label: "Eagle-5/1", return: pathReturn("eagle-5-1") },
+      { topk: 11, label: "Eagle-11/2", return: pathReturn("eagle-11-2") },
+      { topk: 22, label: "Robot-22/3", return: pathReturn("robot") },
+      { topk: 44, label: "Eagle-44/6", return: pathReturn("eagle-44-6") },
+      { topk: 66, label: "Eagle-66/9", return: pathReturn("eagle-66-9") },
+      { topk: 88, label: "Eagle-88/12", return: pathReturn("eagle-88-12") },
+      { topk: 123, label: "WhaleShark", return: pathReturn("whale-shark") },
       { topk: this.metadata.universe_size || null, label: "Taotie (Full Pool)", return: this.getContestant(cid)?.observation_start
-        ? this.getComparisonWindow(['BENCHMARK_taotie'],'robot',this.getContestant(cid).observation_start).profiles[0].totalReturnPct
+        ? this.getBenchmarkReturnForPath(this.getContestant(cid), 'BENCHMARK_taotie')
         : this.getPath("BENCHMARK_taotie")?.total_return_pct ?? null },
     ];
 
     // 4. Direction Sanity (Robot vs Koala)
+    const robotReturn = pathReturn("robot"), koalaReturn = pathReturn("koala");
     const directionData = {
-      robot: pathByAnimal.get("robot")?.total_return_pct ?? 0,
-      koala: pathByAnimal.get("koala")?.total_return_pct ?? 0,
-      spread: (pathByAnimal.get("robot")?.total_return_pct ?? 0) - (pathByAnimal.get("koala")?.total_return_pct ?? 0)
+      robot: robotReturn,
+      koala: koalaReturn,
+      spread: robotReturn !== null && koalaReturn !== null ? robotReturn - koalaReturn : null
     };
 
     // 5. Meerkat Percentile Slices (10% ~ 90%)
@@ -1164,7 +1169,7 @@ class ArenaDataAdapter {
     for (let p = 10; p <= 90; p += 10) {
       meerkatData.push({
         percentile: `${p}%`,
-        return: pathByAnimal.get(`meerkat-${p}`)?.total_return_pct ?? 0
+        return: pathReturn(`meerkat-${p}`)
       });
     }
 

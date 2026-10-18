@@ -39,10 +39,8 @@ window.PathDetailView = {
     const pVal = path.empirical_p_value ?? path.p_value ?? null;
     const pRank = path.percentile_rank ?? path.monkey_percentile ?? path.monkey_percentile_rank ?? null;
     const retColor = path.total_return_pct >= 0 ? "var(--accent-positive)" : "var(--accent-negative)";
-    const taotieRet = path.observation_start && dates.includes(path.observation_start)
-      ? (taotieCurve.at(-1)/taotieCurve[dates.indexOf(path.observation_start)]-1)*100
-      : window.arenaAdapter.getTaotieReturn();
-    const taotieExcess = path.total_return_pct - taotieRet;
+    const taotieRet = window.arenaAdapter.getBenchmarkReturnForPath(path, 'BENCHMARK_taotie');
+    const taotieExcess = Number.isFinite(path.total_return_pct) && Number.isFinite(taotieRet) ? path.total_return_pct - taotieRet : null;
     const seasonMeta = window.arenaAdapter?.getCurrentSeasonMeta() || {};
 
     this.activeMetric = "nav";
@@ -97,7 +95,7 @@ window.PathDetailView = {
                 ${path.total_return_pct >= 0 ? '+' : ''}${window.formatNumber(path.total_return_pct, 2, '%')}
               </div>
               <div style="font-size:0.75rem; color:var(--text-tertiary);">
-                Excess vs Executable <span data-tooltip-term="taotie">${window.arenaAdapter.getTaotieShortName()}</span>: <b>${taotieExcess >= 0 ? '+' : ''}${taotieExcess.toFixed(2)} pp</b>
+                Excess vs Executable <span data-tooltip-term="taotie">${window.arenaAdapter.getTaotieShortName()}</span>: <b>${Number.isFinite(taotieExcess) && taotieExcess >= 0 ? '+' : ''}${window.formatNumber(taotieExcess, 2, ' pp')}</b>
               </div>
             </div>
             <div style="text-align:right; border-left:1px solid var(--border-subtle); padding-left:1.25rem;">
@@ -185,7 +183,7 @@ window.PathDetailView = {
           <div class="card-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
             <div>
               <h3 class="card-title">Null Distribution & Statistical Significance</h3>
-              <div class="card-subtitle">${path.monkey_count ? `${path.monkey_count.toLocaleString()} random TopK/DropN controls (${specId})` : `Deterministic or unmatched reference — p value N/A`}</div>
+              <div class="card-subtitle">${path.test_status === 'observation' ? 'Observation window — no random-control test is assigned' : path.monkey_count ? `${path.monkey_count.toLocaleString()} random TopK/DropN controls (${specId})` : `Deterministic or unmatched reference — p value N/A`}</div>
             </div>
             <button class="chart-spec-pill" onclick="if(window.ArenaSpecDrawer) window.ArenaSpecDrawer.openTerm('metric_monkey_percentile');">
               🐒 Monkey Specs
