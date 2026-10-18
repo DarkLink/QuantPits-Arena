@@ -1321,15 +1321,30 @@ window.ArenaCharts = {
 
   /**
    * 8. Cross-Model Comparative Curves for a Single Animal Handler
-   * Plots all 6 contestant models under the selected animal execution handler.
+   * Plots contestant models under the selected animal execution handler.
    * Supports: "nav", "drawdown", "excess_csi300"
    */
-  renderCrossModelAnimalCurves(domId, dates, animalPaths, taotieCurve, csi300Curve, metricType = "nav") {
+  renderCrossModelAnimalCurves(domId, dates, animalPaths, taotieCurve, csi300Curve, metricType = "nav", comparison = null) {
     const dom = document.getElementById(domId);
     if (!dom) return null;
     let chart = echarts.getInstanceByDom(dom);
     if (!chart) chart = echarts.init(dom);
 
+    const adapter = window.arenaAdapter;
+    if (comparison) {
+      dates = comparison.dates;
+      taotieCurve = comparison.curves.BENCHMARK_taotie;
+      csi300Curve = comparison.curves.BENCHMARK_csi300;
+    }
+    const nav = id => comparison ? comparison.curves[id] : adapter.getNavCurve(id);
+    const drawdown = curve => {
+      let peak = 1;
+      return curve.map(value => {
+        peak = Math.max(peak, value);
+        return (value / peak - 1) * 100;
+      });
+    };
+    const excess = curve => curve.map((value, i) => (value - csi300Curve[i]) * 100);
     const tc = this.getThemeColors();
     const marketBmName = (window.arenaAdapter && window.arenaAdapter.getMarketBenchmarkName) ? window.arenaAdapter.getMarketBenchmarkName() : "CSI 300";
     const taotieName = (window.arenaAdapter && window.arenaAdapter.getTaotieShortName) ? window.arenaAdapter.getTaotieShortName() : "Taotie";
@@ -1388,14 +1403,14 @@ window.ArenaCharts = {
       yAxisFormatter = v => `${v.toFixed(1)}%`;
 
       animalPaths.forEach((p, idx) => {
-        const dd = window.arenaAdapter.getPathDrawdown(p.path_id);
+        const dd = comparison ? drawdown(nav(p.path_id)) : adapter.getPathDrawdown(p.path_id);
         if (dd && dd.length > 0) {
           const color = getColor(p, idx);
           series.push({
             name: getSeriesName(p, "drawdown"),
             type: "line",
             data: dd,
-            smooth: true,
+            smooth: false,
             showSymbol: false,
             color: color,
             itemStyle: { color: color },
@@ -1404,13 +1419,13 @@ window.ArenaCharts = {
         }
       });
 
-      const ghostDD = window.arenaAdapter.hasGhostTaotie() ? window.arenaAdapter.getGhostTaotieDrawdown() : null;
+      const ghostDD = adapter.hasGhostTaotie() ? (comparison ? drawdown(nav("BENCHMARK_ghost_taotie")) : adapter.getGhostTaotieDrawdown()) : null;
       if (ghostDD && ghostDD.length > 0) {
         series.push({
           name: "Ghost Taotie Drawdown",
           type: "line",
           data: ghostDD,
-          smooth: true,
+          smooth: false,
           showSymbol: false,
           color: "#00f0ff",
           itemStyle: { color: "#00f0ff" },
@@ -1418,13 +1433,13 @@ window.ArenaCharts = {
         });
       }
 
-      const taotieDD = window.arenaAdapter.getTaotieDrawdown();
+      const taotieDD = comparison ? drawdown(taotieCurve) : adapter.getTaotieDrawdown();
       if (taotieDD && taotieDD.length > 0) {
         series.push({
           name: "Taotie Drawdown",
           type: "line",
           data: taotieDD,
-          smooth: true,
+          smooth: false,
           showSymbol: false,
           color: "#c084fc",
           itemStyle: { color: "#c084fc" },
@@ -1432,13 +1447,13 @@ window.ArenaCharts = {
         });
       }
 
-      const csi300DD = window.arenaAdapter.getMarketDrawdown();
+      const csi300DD = comparison ? drawdown(csi300Curve) : adapter.getMarketDrawdown();
       if (csi300DD && csi300DD.length > 0) {
         series.push({
           name: `${marketBmName} Drawdown`,
           type: "line",
           data: csi300DD,
-          smooth: true,
+          smooth: false,
           showSymbol: false,
           color: "#f59e0b",
           itemStyle: { color: "#f59e0b" },
@@ -1448,18 +1463,18 @@ window.ArenaCharts = {
 
     } else if (metricType === "excess_csi300") {
       titleText = isMultiAnimal ? `Multi-Animal Active Excess Return vs. ${marketBmName}` : `Cross-Model Active Excess Return vs. ${marketBmName}`;
-      yAxisName = `Excess vs. ${marketBmName} (%)`;
-      yAxisFormatter = v => `${v >= 0 ? '+' : ''}${v.toFixed(1)}%`;
+      yAxisName = `Excess vs. ${marketBmName} (pp)`;
+      yAxisFormatter = v => `${v >= 0 ? '+' : ''}${v.toFixed(1)} pp`;
 
       animalPaths.forEach((p, idx) => {
-        const curve = window.arenaAdapter.getPathExcessMarket(p.path_id);
+        const curve = comparison ? excess(nav(p.path_id)) : adapter.getPathExcessMarket(p.path_id);
         if (curve && curve.length > 0) {
           const color = getColor(p, idx);
           series.push({
             name: getSeriesName(p, "excess"),
             type: "line",
             data: curve,
-            smooth: true,
+            smooth: false,
             showSymbol: false,
             color: color,
             itemStyle: { color: color },
@@ -1479,13 +1494,13 @@ window.ArenaCharts = {
         showSymbol: false
       });
 
-      const taotieExcess = window.arenaAdapter.getPathExcessMarket("BENCHMARK_taotie");
+      const taotieExcess = comparison ? excess(taotieCurve) : adapter.getPathExcessMarket("BENCHMARK_taotie");
       if (taotieExcess && taotieExcess.length > 0) {
         series.push({
           name: `Taotie vs ${marketBmName}`,
           type: "line",
           data: taotieExcess,
-          smooth: true,
+          smooth: false,
           showSymbol: false,
           color: "#c084fc",
           itemStyle: { color: "#c084fc" },
@@ -1493,13 +1508,13 @@ window.ArenaCharts = {
         });
       }
 
-      const ghostExcess = window.arenaAdapter.hasGhostTaotie() ? window.arenaAdapter.getPathExcessMarket("BENCHMARK_ghost_taotie") : null;
+      const ghostExcess = adapter.hasGhostTaotie() ? (comparison ? excess(nav("BENCHMARK_ghost_taotie")) : adapter.getPathExcessMarket("BENCHMARK_ghost_taotie")) : null;
       if (ghostExcess && ghostExcess.length > 0) {
         series.push({
           name: `Ghost Taotie vs ${marketBmName}`,
           type: "line",
           data: ghostExcess,
-          smooth: true,
+          smooth: false,
           showSymbol: false,
           color: "#00f0ff",
           itemStyle: { color: "#00f0ff" },
@@ -1514,14 +1529,14 @@ window.ArenaCharts = {
       yAxisFormatter = v => v.toFixed(4);
 
       animalPaths.forEach((p, idx) => {
-        const curve = window.arenaAdapter.getNavCurve(p.path_id);
+        const curve = nav(p.path_id);
         if (curve && curve.length > 0) {
           const color = getColor(p, idx);
           series.push({
             name: getSeriesName(p, "nav"),
             type: "line",
             data: curve,
-            smooth: true,
+            smooth: false,
             showSymbol: false,
             color: color,
             itemStyle: { color: color },
@@ -1531,13 +1546,13 @@ window.ArenaCharts = {
       });
 
       if (window.arenaAdapter && window.arenaAdapter.hasGhostTaotie()) {
-        const ghostCurve = window.arenaAdapter.getBenchmarkGhostTaotieCurve();
+        const ghostCurve = comparison ? nav("BENCHMARK_ghost_taotie") : adapter.getBenchmarkGhostTaotieCurve();
         if (ghostCurve && ghostCurve.length > 0) {
           series.push({
             name: "Ghost Capital Scenario",
             type: "line",
             data: ghostCurve,
-            smooth: true,
+            smooth: false,
             showSymbol: false,
             color: "#00f0ff",
             itemStyle: { color: "#00f0ff" },
@@ -1551,7 +1566,7 @@ window.ArenaCharts = {
           name: taotieName,
           type: "line",
           data: taotieCurve,
-          smooth: true,
+          smooth: false,
           showSymbol: false,
           color: "#c084fc",
           itemStyle: { color: "#c084fc" },
@@ -1564,7 +1579,7 @@ window.ArenaCharts = {
           name: marketBmName,
           type: "line",
           data: csi300Curve,
-          smooth: true,
+          smooth: false,
           showSymbol: false,
           color: "#f59e0b",
           itemStyle: { color: "#f59e0b" },
@@ -1592,7 +1607,7 @@ window.ArenaCharts = {
           params.forEach(item => {
             let val = item.value;
             const formattedVal = (metricType === "drawdown" || metricType === "excess_csi300")
-              ? `${typeof val === 'number' ? (val >= 0 && metricType === "excess_csi300" ? '+' : '') + val.toFixed(2) : val}%`
+              ? `${typeof val === 'number' ? (val >= 0 && metricType === "excess_csi300" ? '+' : '') + val.toFixed(2) : val}${metricType==='excess_csi300'?' pp':'%'}`
               : (typeof val === 'number' ? val.toFixed(4) : val);
             const marker = item.marker || `<span style="display:inline-block;margin-right:4px;border-radius:10px;width:10px;height:10px;background-color:${item.color};"></span>`;
             html += `<div style="display:flex; justify-content:space-between; align-items:center; gap:12px; font-size:11px;">

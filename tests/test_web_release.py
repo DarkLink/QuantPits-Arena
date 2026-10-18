@@ -15,7 +15,7 @@ global.window={addEventListener(){},location:{search:'',hash:'',href:'https://ar
 global.document={readyState:'loading',addEventListener(){},documentElement:{getAttribute(){return'dark';}},getElementById:node,querySelectorAll(){return[];},querySelector(){return node('query');}};
 global.setTimeout=cb=>{cb();return 0;};
 global.echarts={getInstanceByDom(){return null;},init(){return {setOption(option){global.lastChart=option;},resize(){},getOption(){return{series:[]};},on(){}};},graphic:{LinearGradient:function(){}}};
-for(const file of ['web/js/data/arena_release.js','web/js/adapter.js','web/js/components/charts.js','web/js/views/methodology.js','web/js/views/path_detail.js','web/js/views/contestant_detail.js','web/js/views/decision_audit.js','web/js/views/leaderboard_view.js','web/js/app.js'])vm.runInThisContext(fs.readFileSync(file,'utf8'));
+for(const file of ['web/js/data/arena_release.js','web/js/adapter.js','web/js/components/charts.js','web/js/views/methodology.js','web/js/views/path_detail.js','web/js/views/contestant_detail.js','web/js/views/decision_audit.js','web/js/views/leaderboard_view.js','web/js/views/animals_view.js','web/js/app.js'])vm.runInThisContext(fs.readFileSync(file,'utf8'));
 const expected=['season_01','season_csi300','season_csi500','season_csi800','season_csi1000'];
 if(JSON.stringify(window.ARENA_SEASONS_INDEX.map(s=>s.id))!==JSON.stringify(expected))throw Error('season order differs');
 if(JSON.stringify(Object.keys(window.ARENA_SEASONS_DATA))!==JSON.stringify(expected))throw Error('bundle order differs');
@@ -25,6 +25,63 @@ if(window.ArenaApp.normalizeSeasonId('season_02')!==null||window.ArenaApp.normal
 window.ArenaApp.initSeasonSelector();
 const dropdownIds=[...node('season-dropdown').innerHTML.matchAll(/data-season-id="([^"]+)"/g)].map(m=>m[1]);
 if(JSON.stringify(dropdownIds)!==JSON.stringify(expected)||node('current-season-label').textContent!=='csirun300')throw Error('dropdown order or default differs');
+function verifyZoo(data){
+ const view=window.AnimalsView;
+ const original=JSON.stringify(data.paths);
+ const dates=data.nav_timeline.dates;
+ const animals=window.arenaAdapter.getAllAnimals().map(a=>a.id);
+ const observers=data.paths.filter(p=>p.observation_start);
+ const anchor=observers.map(p=>p.observation_start).sort().at(-1)||dates[0];
+ function check(start,expectedPaths){
+  view.render('root');
+  const html=node('root').innerHTML;
+  if(html.includes('Failed to render Animals View')||html.includes('NaN')||html.includes('Infinity'))throw Error('Zoo failed with the published participants');
+  if(!html.includes(`data-zoo-window="${start}/${dates.at(-1)}"`))throw Error('Zoo observation window is not disclosed');
+  const rows=view.comparisonWindow.paths;
+  if(rows.length!==expectedPaths.length)throw Error('Zoo selection coverage differs');
+  const first=dates.indexOf(start);
+  const curve=id=>{const values=data.nav_timeline.curves[id].slice(first);return values.map(v=>v/values[0]);};
+  const expectedReturns=new Map(expectedPaths.map(p=>[p.path_id,(curve(p.path_id).at(-1)-1)*100]));
+  const rendered=[...html.matchAll(/href="#path\/([^"]+)"/g)].map(m=>m[1]);
+  if(rendered.length!==expectedPaths.length||new Set(rendered).size!==expectedPaths.length||rendered.some((id,i)=>!expectedReturns.has(id)||(i>0&&expectedReturns.get(id)>expectedReturns.get(rendered[i-1])+1e-9)))throw Error('Zoo ranks mixed observation windows');
+  for(const row of rows){
+   const source=expectedPaths.find(p=>p.path_id===row.path_id);
+   if(!source||Math.abs(row.total_return_pct-expectedReturns.get(row.path_id))>1e-9)throw Error('Zoo card return window differs');
+   if(start!==dates[0]&&(row.empirical_p_value!==null||row.percentile_rank!==null))throw Error('Zoo borrowed full-season inference');
+   if(start===dates[0]&&row.empirical_p_value!==source.empirical_p_value)throw Error('Zoo lost full-season inference');
+   if(source.sharpe_ratio===null&&row.sharpe_ratio!==null)throw Error('Zoo manufactured a short-window Sharpe');
+  }
+  for(const metric of ['nav','drawdown','excess_csi300']){
+   view.activeMetric=metric;view.updateChart(rows);
+   if(JSON.stringify(lastChart.xAxis.data)!==JSON.stringify(dates.slice(first)))throw Error('Zoo chart date window differs');
+   if(lastChart.series.length!==expectedPaths.length+3||lastChart.series.some(s=>s.data.length!==dates.length-first||s.data.some(v=>!Number.isFinite(v))||s.data[0]!== (metric==='nav'?1:0)))throw Error('Zoo series or benchmark anchor differs');
+   const market=curve('BENCHMARK_csi300');
+   rows.forEach((row,i)=>{
+    const values=curve(row.path_id);let peak=1;
+    const expected=values.map((v,j)=>{peak=Math.max(peak,v);return metric==='nav'?v:metric==='drawdown'?(v/peak-1)*100:(v-market[j])*100;});
+    if(lastChart.series[i].data.some((v,j)=>Math.abs(v-expected[j])>1e-9))throw Error('Zoo curve calculation differs');
+   });
+   const tooltip=lastChart.tooltip.formatter(lastChart.series.map(s=>({axisValue:dates.at(-1),seriesName:s.name,value:s.data.at(-1),color:'#fff'})));
+   if(tooltip.includes('NaN')||tooltip.includes('undefined')||tooltip.includes('null'))throw Error('Zoo tooltip failed');
+  }
+ }
+ view.comparisonMode='single';
+ for(const animal of animals){
+  view.activeAnimalId=animal;
+  check(anchor,data.paths.filter(p=>p.contestant_id!=='BENCHMARK'&&p.animal_id===animal));
+ }
+ view.comparisonMode='multi';view.selectedAnimalIds=animals;
+ for(const focus of ['all','CONTESTANT_A','CONTESTANT_G']){
+  view.activeFocusModel=focus;
+  check(focus==='CONTESTANT_A'?dates[0]:anchor,data.paths.filter(p=>p.contestant_id!=='BENCHMARK'&&(focus==='all'||p.contestant_id===focus)));
+ }
+ const formatPValue=window.formatPValue,formatPercentile=window.formatPercentile;
+ window.formatPValue=undefined;window.formatPercentile=undefined;
+ view.activeFocusModel='CONTESTANT_G';
+ check(anchor,observers);
+ window.formatPValue=formatPValue;window.formatPercentile=formatPercentile;
+ if(JSON.stringify(data.paths)!==original)throw Error('Zoo mutated published statistics');
+}
 const results=[];
 for(const [sid,data] of Object.entries(window.ARENA_SEASONS_DATA)){
  if(data.meta.evaluation_id!==window.ARENA_ACTIVE_EVALUATION)throw Error('mixed generations');
@@ -44,6 +101,7 @@ for(const [sid,data] of Object.entries(window.ARENA_SEASONS_DATA)){
  }
  if(data.paths.filter(p=>p.test_status==='not_applicable').some(p=>p.empirical_p_value!==null))throw Error('reference has random p');
  window.arenaAdapter=new window.ArenaDataAdapter(data);
+ verifyZoo(data);
  window.MethodologyView.render('root');
  const dates=data.nav_timeline.dates;
  for(const dist of data.monkey_null_distributions){

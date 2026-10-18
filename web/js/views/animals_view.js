@@ -4,7 +4,7 @@
  * The Zoo: Execution Containers View
  * Deep-dive analysis for all 28 animal execution policies.
  * Enables:
- *   - Single Container Profile: deep dive into 1 animal across 6 contestant models
+ *   - Single Container Profile: deep dive into 1 animal across contestant models
  *   - Uncapped Multi-Animal Comparison: freely select and compare any number of animal containers
  *     with optional Model Focus filter and benchmark overlays.
  */
@@ -17,6 +17,39 @@ window.AnimalsView = {
   comparisonMode: "single", // "single" or "multi"
   selectedAnimalIds: ["robot", "sloth-2", "snail-2", "turtle", "rabbit-1", "koala", "eagle-11-2", "whale-shark"],
   activeFocusModel: "all", // "all" or specific contestant_id
+  comparisonWindow: null,
+
+  buildWindow(paths) {
+    const adapter = window.arenaAdapter;
+    const dates = adapter.getNavDates();
+    const start = [dates[0], ...paths.map(p => p.observation_start)].filter(Boolean).sort().at(-1);
+    const end = dates.at(-1);
+    const curves = {};
+    const rows = paths.map(path => {
+      const profile = adapter.getComparisonWindow([path.contestant_id], path.animal_id, start, end).profiles[0];
+      curves[path.path_id] = profile.curve;
+      // Inference and Sharpe belong to their declared window; cropping cannot reuse them.
+      const fullSeason = start === dates[0] && !path.observation_start;
+      const sameWindow = start === (path.observation_start || dates[0]);
+      const pValue = fullSeason && Number.isFinite(path.empirical_p_value) ? path.empirical_p_value : null;
+      return {
+        ...path,
+        total_return_pct: profile.totalReturnPct,
+        max_drawdown_pct: profile.maxDrawdownPct,
+        sharpe_ratio: sameWindow && Number.isFinite(path.sharpe_ratio) ? path.sharpe_ratio : null,
+        empirical_p_value: pValue,
+        p_value: pValue,
+        percentile_rank: pValue !== null ? (path.percentile_rank ?? path.monkey_percentile ?? null) : null,
+        monkey_percentile: pValue !== null ? (path.monkey_percentile ?? path.percentile_rank ?? null) : null,
+        monkey_percentile_rank: pValue !== null ? (path.monkey_percentile_rank ?? path.percentile_rank ?? null) : null
+      };
+    });
+    const references = ['BENCHMARK_taotie', 'BENCHMARK_csi300'];
+    if (adapter.hasGhostTaotie()) references.push('BENCHMARK_ghost_taotie');
+    const comparison = adapter.getComparisonWindow(references, 'robot', start, end);
+    for (const profile of comparison.profiles) curves[profile.id] = profile.curve;
+    return {...comparison, paths: rows, curves};
+  },
 
   render(containerId, params) {
     const container = document.getElementById(containerId);
@@ -75,9 +108,10 @@ window.AnimalsView = {
         }
       }
 
-      // Benchmark metrics for reference
-      const csi300Ret = window.arenaAdapter.getCsi300Return();
-      const taotieRet = window.arenaAdapter.getTaotieReturn();
+      this.comparisonWindow = this.buildWindow(chartPaths);
+      chartPaths = this.comparisonWindow.paths;
+      const csi300Ret = (this.comparisonWindow.curves.BENCHMARK_csi300.at(-1) - 1) * 100;
+      const taotieRet = (this.comparisonWindow.curves.BENCHMARK_taotie.at(-1) - 1) * 100;
       const allContestants = window.arenaAdapter.getAllContestants();
 
       // Compute statistics
@@ -90,13 +124,9 @@ window.AnimalsView = {
       const avgDrawdown = drawdowns.length > 0
         ? drawdowns.reduce((s, v) => s + v, 0) / drawdowns.length
         : 0;
-      const sigCount = chartPaths.filter(p => {
-        const pct = p.percentile_rank !== undefined ? p.percentile_rank : (p.monkey_percentile !== undefined ? p.monkey_percentile : (p.monkey_percentile_rank || 0));
-        return pct >= 95;
-      }).length;
-      const sigPct = chartPaths.length > 0
-        ? ((sigCount / chartPaths.length) * 100).toFixed(0)
-        : 0;
+      const tested = chartPaths.filter(p => Number.isFinite(p.empirical_p_value));
+      const sigCount = tested.filter(p => p.empirical_p_value < .05).length;
+      const sigPct = tested.length ? `${(sigCount / tested.length * 100).toFixed(0)}%` : 'N/A';
 
       container.innerHTML = `
         <div class="view-header">
@@ -111,6 +141,7 @@ window.AnimalsView = {
                 </button>
               </div>
               <p class="view-subtitle">Explore operational execution containers testing latency, exit inertia, turnover constraints, portfolio capacity, and polarity sanity across all contestant models.</p>
+              <p class="view-subtitle" data-zoo-window="${this.comparisonWindow.start}/${this.comparisonWindow.end}">Common observation window: ${this.comparisonWindow.start} close → ${this.comparisonWindow.end} close. All cards, rankings and curves use this window; NAV starts at 1.0000.</p>
             </div>
 
             <!-- Single vs Multi-Animal Mode Switcher -->
@@ -244,7 +275,7 @@ window.AnimalsView = {
                 </h4>
                 <div style="font-size: 11px; color: var(--text-secondary); margin-top: 3px;">
                   ${this.comparisonMode === 'single'
-                    ? `Testing alpha durability across all 6 contestant models under <b>${activeAnimal.name}</b>`
+                    ? `Testing ${new Set(chartPaths.map(p=>p.contestant_id)).size} contestants under <b>${activeAnimal.name}</b> over the common window`
                     : `Telemetry across ${chartPaths.length} evaluated path${chartPaths.length > 1 ? 's' : ''} in comparison scope`}
                 </div>
               </div>
@@ -267,7 +298,7 @@ window.AnimalsView = {
                   ${medianReturn >= 0 ? '+' : ''}${medianReturn.toFixed(2)}%
                 </div>
                 <div style="font-size: 10px; color: var(--text-secondary); margin-top: 2px;">
-                  Active spread: <b>${(medianReturn - csi300Ret >= 0 ? '+' : '') + (medianReturn - csi300Ret).toFixed(2)}% vs ${window.arenaAdapter.getMarketBenchmarkName()}</b>
+                  Active spread: <b>${(medianReturn - csi300Ret >= 0 ? '+' : '') + (medianReturn - csi300Ret).toFixed(2)} pp vs ${window.arenaAdapter.getMarketBenchmarkName()}</b>
                 </div>
               </div>
 
@@ -284,10 +315,10 @@ window.AnimalsView = {
               <div style="background: var(--surface-hover); padding: 12px; border-radius: 8px; border: 1px solid var(--border-subtle);">
                 <div style="font-size: 11px; color: var(--text-muted);">Upper-Tail Rate (p &lt; 0.05)</div>
                 <div style="font-size: 18px; font-weight: 700; color: var(--color-accent);">
-                  ${sigPct}%
+                  ${sigPct}
                 </div>
                 <div style="font-size: 10px; color: var(--text-secondary); margin-top: 2px;">
-                  <b>${sigCount}/${chartPaths.length}</b> beat null 95th %ile
+                  ${tested.length?`<b>${sigCount}/${tested.length}</b> tested paths with p &lt; 0.05`:'No random-control test assigned for this observation window'}
                 </div>
               </div>
             </div>
@@ -305,7 +336,7 @@ window.AnimalsView = {
               </h3>
               <p style="font-size: 12px; color: var(--text-secondary); margin: 2px 0 0 0;">
                 ${this.comparisonMode === 'single'
-                  ? `Comparing performance trajectories of all 6 contestant models under <b>${activeAnimal.name}</b> vs. benchmarks`
+                  ? `Comparing ${chartPaths.length} contestant paths under <b>${activeAnimal.name}</b> and benchmarks over the common window`
                   : `Overlaying trajectories for ${this.selectedAnimalIds.length} animal containers (Model Focus: <b>${this.activeFocusModel === 'all' ? 'All Models' : this.activeFocusModel}</b>)`}
               </p>
             </div>
@@ -368,7 +399,7 @@ window.AnimalsView = {
                 : `Multi-Animal Comparison Matrix (${chartPaths.length} Paths)`}
             </h3>
             <p style="font-size: 12px; color: var(--text-secondary); margin: 2px 0 0 0;">
-              Ranked by Out-of-Sample Return. Compare empirical significance against the 100,000-path matched random-control benchmark.
+              Ranked by return over the stated common window. Random-control statistics are N/A when the selected window differs from the declared full-season test.
             </p>
           </div>
 
@@ -392,10 +423,10 @@ window.AnimalsView = {
               </thead>
               <tbody>
                 ${[...chartPaths].sort((a, b) => b.total_return_pct - a.total_return_pct).map((p, idx) => {
-                  const rawPct = p.percentile_rank !== undefined ? p.percentile_rank : (p.monkey_percentile !== undefined ? p.monkey_percentile : (p.monkey_percentile_rank || 0));
-                  const pct = window.formatPercentile ? window.formatPercentile(rawPct) : rawPct.toFixed(1) + "%";
-                  const rawP = p.empirical_p_value !== undefined ? p.empirical_p_value : (p.p_value !== undefined ? p.p_value : 1.0);
-                  const pVal = window.formatPValue ? window.formatPValue(rawP) : rawP.toFixed(4);
+                  const rawPct = p.percentile_rank ?? p.monkey_percentile ?? p.monkey_percentile_rank;
+                  const pct = Number.isFinite(rawPct) ? (window.formatPercentile ? window.formatPercentile(rawPct) : rawPct.toFixed(1) + '%') : 'N/A';
+                  const rawP = p.empirical_p_value ?? p.p_value;
+                  const pVal = Number.isFinite(rawP) ? (window.formatPValue ? window.formatPValue(rawP) : rawP.toFixed(4)) : 'N/A';
                   const isSig = p.empirical_p_value != null && p.empirical_p_value < .05;
                   const spreadCsi = p.total_return_pct - csi300Ret;
                   const spreadTaotie = p.total_return_pct - taotieRet;
@@ -421,7 +452,7 @@ window.AnimalsView = {
                         -${p.max_drawdown_pct.toFixed(2)}%
                       </td>
                       <td style="padding: 12px 16px; text-align: right; font-family: monospace; font-weight: 600;">
-                        ${p.sharpe_ratio !== undefined ? p.sharpe_ratio.toFixed(2) : 'N/A'}
+                        ${Number.isFinite(p.sharpe_ratio) ? p.sharpe_ratio.toFixed(2) : 'N/A'}
                       </td>
                       <td style="padding: 12px 16px; text-align: right; font-family: monospace;">
                         <span style="font-weight: 600; color: ${isSig ? 'var(--color-success)' : 'var(--text-primary)'};">${pct}</span>
@@ -429,14 +460,14 @@ window.AnimalsView = {
                       </td>
                       <td style="padding: 12px 16px; text-align: center;">
                         <span class="badge ${isSig ? 'badge-success' : 'badge-neutral'}" style="font-size: 10px;">
-                          ${isSig ? 'P < 0.05' : 'Null Range'}
+                          ${Number.isFinite(rawP)?(isSig?'P < 0.05':'Null Range'):'N/A'}
                         </span>
                       </td>
                       <td style="padding: 12px 16px; text-align: right; font-weight: 600; color: ${spreadCsi >= 0 ? 'var(--color-success)' : 'var(--color-danger)'};">
-                        ${spreadCsi >= 0 ? '+' : ''}${spreadCsi.toFixed(2)}%
+                        ${spreadCsi >= 0 ? '+' : ''}${spreadCsi.toFixed(2)} pp
                       </td>
                       <td style="padding: 12px 16px; text-align: right; font-weight: 600; color: ${spreadTaotie >= 0 ? 'var(--color-success)' : 'var(--color-danger)'};">
-                        ${spreadTaotie >= 0 ? '+' : ''}${spreadTaotie.toFixed(2)}%
+                        ${spreadTaotie >= 0 ? '+' : ''}${spreadTaotie.toFixed(2)} pp
                       </td>
                       <td style="padding: 12px 16px; text-align: center;">
                         <a href="#path/${p.path_id}" class="btn btn-sm btn-outline" style="font-size: 11px; padding: 3px 8px; text-decoration: none;">
@@ -456,7 +487,9 @@ window.AnimalsView = {
       this.attachEvents(containerId, chartPaths);
 
       // Render cross-model chart
+      const expectedWindow = this.comparisonWindow;
       setTimeout(() => {
+        if (this.comparisonWindow !== expectedWindow) return;
         this.updateChart(chartPaths);
       }, 50);
 
@@ -467,16 +500,17 @@ window.AnimalsView = {
   },
 
   updateChart(paths) {
-    const dates = window.arenaAdapter.getNavDates();
-    const taotieCurve = window.arenaAdapter.getBenchmarkTaotieCurve();
-    const csi300Curve = window.arenaAdapter.getBenchmarkCsi300Curve();
+    const dates = this.comparisonWindow.dates;
+    const taotieCurve = this.comparisonWindow.curves.BENCHMARK_taotie;
+    const csi300Curve = this.comparisonWindow.curves.BENCHMARK_csi300;
     window.ArenaCharts.renderCrossModelAnimalCurves(
       "animal-cross-model-chart",
       dates,
       paths,
       taotieCurve,
       csi300Curve,
-      this.activeMetric
+      this.activeMetric,
+      this.comparisonWindow
     );
 
     // Maintain benchmark pill selection state
