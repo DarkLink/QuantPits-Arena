@@ -273,7 +273,8 @@ window.ArenaCharts = {
     if (!chart) chart = echarts.init(dom);
 
     const tc = this.getThemeColors();
-    const contestants = (matrixData.rows || []).filter(r => !String(r).toUpperCase().includes("BENCHMARK"));
+    // Legacy matrix rows can predate admissions; paths provide each metric on its own period.
+    const contestants = window.arenaAdapter.getAllContestants().map(c => c.id);
     const animals = (matrixData.columns || []).filter(a => a !== "taotie");
 
     const data = [];
@@ -285,7 +286,7 @@ window.ArenaCharts = {
         const pathId = `${cId}_${aId}`;
         const path = window.arenaAdapter.getPath(pathId);
         let val = null;
-        if (path && path.full_season_eligible !== false) {
+        if (path) {
           if (metricKey === "total_return_pct") val = path.total_return_pct;
           else if (metricKey === "percentile_rank" || metricKey === "monkey_percentile") {
             val = path.percentile_rank ?? path.monkey_percentile ?? null;
@@ -331,7 +332,7 @@ window.ArenaCharts = {
           const pct = window.formatPercentile ? window.formatPercentile(rank) : window.formatNumber(rank, 1, '%');
           return `
             <div style="font-weight:700; color:#38bdf8;">${p.path_id}</div>
-            ${p.observation_start ? `<div>Observation since ${p.observation_start} · full-season metric: N/A</div>` : ''}
+            <div>${p.observation_start ? 'Observation' : 'Full season'}: ${p.observation_start || window.arenaAdapter.getNavDates()[0]} → ${window.arenaAdapter.getNavDates().at(-1)}</div>
             <div>Return: <b style="color:${p.total_return_pct >= 0 ? '#10b981' : '#f43f5e'}">${p.total_return_pct >= 0 ? '+' : ''}${p.total_return_pct.toFixed(2)}%</b></div>
             <div>Drawdown: <b>${window.formatNumber(p.max_drawdown_pct, 2, '%')}</b> | Sharpe: <b>${window.formatNumber(p.sharpe_ratio)}</b></div>
             <div>Monkey Percentile: <b>${pct}</b></div>
@@ -355,7 +356,13 @@ window.ArenaCharts = {
         type: "category",
         data: contestants,
         splitArea: { show: true },
-        axisLabel: { color: tc.textSecondary, fontWeight: 600, fontSize: 11 }
+        axisLabel: {
+          color: tc.textSecondary, fontWeight: 600, fontSize: 11,
+          formatter: id => {
+            const start = window.arenaAdapter.getContestant(id)?.observation_start;
+            return start ? `${id}\nsince ${start}` : id;
+          }
+        }
       },
       visualMap: {
         dimension: 2, // Explicitly map dimension 2 to the color scale!
@@ -1378,27 +1385,14 @@ window.ArenaCharts = {
    * Plots contestant models under the selected animal execution handler.
    * Supports: "nav", "drawdown", "excess_csi300"
    */
-  renderCrossModelAnimalCurves(domId, dates, animalPaths, taotieCurve, csi300Curve, metricType = "nav", comparison = null) {
+  renderCrossModelAnimalCurves(domId, dates, animalPaths, taotieCurve, csi300Curve, metricType = "nav") {
     const dom = document.getElementById(domId);
     if (!dom) return null;
     let chart = echarts.getInstanceByDom(dom);
     if (!chart) chart = echarts.init(dom);
 
     const adapter = window.arenaAdapter;
-    if (comparison) {
-      dates = comparison.dates;
-      taotieCurve = comparison.curves.BENCHMARK_taotie;
-      csi300Curve = comparison.curves.BENCHMARK_csi300;
-    }
-    const nav = id => comparison ? comparison.curves[id] : adapter.getNavCurve(id);
-    const drawdown = curve => {
-      let peak = 1;
-      return curve.map(value => {
-        peak = Math.max(peak, value);
-        return (value / peak - 1) * 100;
-      });
-    };
-    const excess = curve => curve.map((value, i) => (value - csi300Curve[i]) * 100);
+    const nav = id => adapter.getNavCurve(id);
     const tc = this.getThemeColors();
     const marketBmName = (window.arenaAdapter && window.arenaAdapter.getMarketBenchmarkName) ? window.arenaAdapter.getMarketBenchmarkName() : "CSI 300";
     const taotieName = (window.arenaAdapter && window.arenaAdapter.getTaotieShortName) ? window.arenaAdapter.getTaotieShortName() : "Taotie";
@@ -1457,7 +1451,7 @@ window.ArenaCharts = {
       yAxisFormatter = v => `${v.toFixed(1)}%`;
 
       animalPaths.forEach((p, idx) => {
-        const dd = comparison ? drawdown(nav(p.path_id)) : adapter.getPathDrawdown(p.path_id);
+        const dd = adapter.getPathDrawdown(p.path_id);
         if (dd && dd.length > 0) {
           const color = getColor(p, idx);
           series.push({
@@ -1473,7 +1467,7 @@ window.ArenaCharts = {
         }
       });
 
-      const ghostDD = adapter.hasGhostTaotie() ? (comparison ? drawdown(nav("BENCHMARK_ghost_taotie")) : adapter.getGhostTaotieDrawdown()) : null;
+      const ghostDD = adapter.hasGhostTaotie() ? adapter.getGhostTaotieDrawdown() : null;
       if (ghostDD && ghostDD.length > 0) {
         series.push({
           name: "Ghost Taotie Drawdown",
@@ -1487,7 +1481,7 @@ window.ArenaCharts = {
         });
       }
 
-      const taotieDD = comparison ? drawdown(taotieCurve) : adapter.getTaotieDrawdown();
+      const taotieDD = adapter.getTaotieDrawdown();
       if (taotieDD && taotieDD.length > 0) {
         series.push({
           name: "Taotie Drawdown",
@@ -1501,7 +1495,7 @@ window.ArenaCharts = {
         });
       }
 
-      const csi300DD = comparison ? drawdown(csi300Curve) : adapter.getMarketDrawdown();
+      const csi300DD = adapter.getMarketDrawdown();
       if (csi300DD && csi300DD.length > 0) {
         series.push({
           name: `${marketBmName} Drawdown`,
@@ -1521,7 +1515,7 @@ window.ArenaCharts = {
       yAxisFormatter = v => `${v >= 0 ? '+' : ''}${v.toFixed(1)} pp`;
 
       animalPaths.forEach((p, idx) => {
-        const curve = comparison ? excess(nav(p.path_id)) : adapter.getPathExcessMarket(p.path_id);
+        const curve = adapter.getPathExcessMarket(p.path_id);
         if (curve && curve.length > 0) {
           const color = getColor(p, idx);
           series.push({
@@ -1548,7 +1542,7 @@ window.ArenaCharts = {
         showSymbol: false
       });
 
-      const taotieExcess = comparison ? excess(taotieCurve) : adapter.getPathExcessMarket("BENCHMARK_taotie");
+      const taotieExcess = adapter.getPathExcessMarket("BENCHMARK_taotie");
       if (taotieExcess && taotieExcess.length > 0) {
         series.push({
           name: `Taotie vs ${marketBmName}`,
@@ -1562,7 +1556,7 @@ window.ArenaCharts = {
         });
       }
 
-      const ghostExcess = adapter.hasGhostTaotie() ? (comparison ? excess(nav("BENCHMARK_ghost_taotie")) : adapter.getPathExcessMarket("BENCHMARK_ghost_taotie")) : null;
+      const ghostExcess = adapter.hasGhostTaotie() ? adapter.getPathExcessMarket("BENCHMARK_ghost_taotie") : null;
       if (ghostExcess && ghostExcess.length > 0) {
         series.push({
           name: `Ghost Taotie vs ${marketBmName}`,
@@ -1600,7 +1594,7 @@ window.ArenaCharts = {
       });
 
       if (window.arenaAdapter && window.arenaAdapter.hasGhostTaotie()) {
-        const ghostCurve = comparison ? nav("BENCHMARK_ghost_taotie") : adapter.getBenchmarkGhostTaotieCurve();
+        const ghostCurve = adapter.getBenchmarkGhostTaotieCurve();
         if (ghostCurve && ghostCurve.length > 0) {
           series.push({
             name: "Ghost Capital Scenario",
@@ -1642,6 +1636,7 @@ window.ArenaCharts = {
       }
     }
 
+    series.forEach(s => { s.connectNulls = false; });
     const option = {
       backgroundColor: tc.bg,
       title: {
@@ -1659,10 +1654,10 @@ window.ArenaCharts = {
           const date = params[0].axisValue;
           let html = `<div style="font-weight:700; margin-bottom:6px; color:#38bdf8;">${date}</div>`;
           params.forEach(item => {
-            let val = item.value;
-            const formattedVal = (metricType === "drawdown" || metricType === "excess_csi300")
-              ? `${typeof val === 'number' ? (val >= 0 && metricType === "excess_csi300" ? '+' : '') + val.toFixed(2) : val}${metricType==='excess_csi300'?' pp':'%'}`
-              : (typeof val === 'number' ? val.toFixed(4) : val);
+            const val = item.value;
+            const formattedVal = !Number.isFinite(val) ? 'N/A' : (metricType === "drawdown" || metricType === "excess_csi300")
+              ? `${val >= 0 && metricType === "excess_csi300" ? '+' : ''}${val.toFixed(2)}${metricType === 'excess_csi300' ? ' pp' : '%'}`
+              : val.toFixed(4);
             const marker = item.marker || `<span style="display:inline-block;margin-right:4px;border-radius:10px;width:10px;height:10px;background-color:${item.color};"></span>`;
             html += `<div style="display:flex; justify-content:space-between; align-items:center; gap:12px; font-size:11px;">
               <span style="display:flex; align-items:center;">${marker}${item.seriesName.split(' (')[0]}:</span>

@@ -112,12 +112,12 @@ window.LeaderboardView = {
           <div class="card-header" style="flex-wrap:wrap; gap:10px;">
             <div>
               <div style="display: flex; align-items: center; gap: 8px;">
-                <h3 class="card-title">🗺️ Full-season Performance Matrix</h3>
+                <h3 class="card-title">🗺️ Participant Performance Matrix</h3>
                 <button class="chart-spec-pill" onclick="window.ArenaSpecDrawer && window.ArenaSpecDrawer.open('Zoo Animals')">
                   <span>🦁 Zoo Specs</span>
                 </button>
               </div>
-              <div class="card-subtitle">Examine structural sensitivity across models and execution variations</div>
+              <div class="card-subtitle">Each participant retains its own observation period. Full-season paths: ${window.arenaAdapter.getNavDates()[0]} → ${window.arenaAdapter.getNavDates().at(-1)}; later entry dates are labeled on the rows. Unavailable statistics are N/A. Use <a href="#decision-audit">Compare Participants</a> for a common-window comparison.</div>
             </div>
             <div style="display:flex; align-items:center; gap:0.5rem;">
               <span style="font-size:0.82rem; color:var(--text-tertiary);">Display Metric:</span>
@@ -131,7 +131,7 @@ window.LeaderboardView = {
           </div>
           <div id="chart-leaderboard-matrix" class="chart-container" style="height: 520px;"></div>
           <div style="display:flex; justify-content:space-between; align-items:center; margin-top:12px; padding:10px 16px; background:var(--bg-surface-elevated); border-radius:var(--radius-sm); font-size:0.8rem; border:1px solid var(--border-subtle); flex-wrap:wrap; gap:10px;">
-            <span style="color:var(--text-muted); font-weight:600;">Benchmark Reference Standards:</span>
+            <span style="color:var(--text-muted); font-weight:600;">Full-season Benchmark References:</span>
             <div style="display:flex; gap:20px; flex-wrap:wrap;">
               <span><span class="arena-glossary-term" data-tooltip-term="taotie">Taotie (Executable Universe Benchmark)</span>: <b style="color:var(--accent-positive);">${taotieRet >= 0 ? '+' : ''}${window.formatNumber(taotieRet, 2, '%')}</b></span>
               ${hasGhost ? `

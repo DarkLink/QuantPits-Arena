@@ -17,38 +17,24 @@ window.AnimalsView = {
   comparisonMode: "single", // "single" or "multi"
   selectedAnimalIds: ["robot", "sloth-2", "snail-2", "turtle", "rabbit-1", "koala", "eagle-11-2", "whale-shark"],
   activeFocusModel: "all", // "all" or specific contestant_id
-  comparisonWindow: null,
+  history: null,
 
-  buildWindow(paths) {
+  buildHistory(paths) {
     const adapter = window.arenaAdapter;
     const dates = adapter.getNavDates();
-    const start = [dates[0], ...paths.map(p => p.observation_start)].filter(Boolean).sort().at(-1);
-    const end = dates.at(-1);
     const curves = {};
-    const rows = paths.map(path => {
-      const profile = adapter.getComparisonWindow([path.contestant_id], path.animal_id, start, end).profiles[0];
-      curves[path.path_id] = profile.curve;
-      // Inference and Sharpe belong to their declared window; cropping cannot reuse them.
-      const fullSeason = start === dates[0] && !path.observation_start;
-      const sameWindow = start === (path.observation_start || dates[0]);
-      const pValue = fullSeason && Number.isFinite(path.empirical_p_value) ? path.empirical_p_value : null;
-      return {
-        ...path,
-        total_return_pct: profile.totalReturnPct,
-        max_drawdown_pct: profile.maxDrawdownPct,
-        sharpe_ratio: sameWindow && Number.isFinite(path.sharpe_ratio) ? path.sharpe_ratio : null,
-        empirical_p_value: pValue,
-        p_value: pValue,
-        percentile_rank: pValue !== null ? (path.percentile_rank ?? path.monkey_percentile ?? null) : null,
-        monkey_percentile: pValue !== null ? (path.monkey_percentile ?? path.percentile_rank ?? null) : null,
-        monkey_percentile_rank: pValue !== null ? (path.monkey_percentile_rank ?? path.percentile_rank ?? null) : null
-      };
-    });
+    // Keep each participant's published history and statistics on its own window.
+    for (const path of paths) curves[path.path_id] = adapter.getNavCurve(path.path_id);
     const references = ['BENCHMARK_taotie', 'BENCHMARK_csi300'];
     if (adapter.hasGhostTaotie()) references.push('BENCHMARK_ghost_taotie');
-    const comparison = adapter.getComparisonWindow(references, 'robot', start, end);
-    for (const profile of comparison.profiles) curves[profile.id] = profile.curve;
-    return {...comparison, paths: rows, curves};
+    for (const id of references) curves[id] = adapter.getNavCurve(id);
+    return {dates, start: dates[0], end: dates.at(-1), paths, curves};
+  },
+
+  benchmarkReturn(id, start) {
+    const values = this.history.curves[id];
+    const first = this.history.dates.indexOf(start);
+    return (values.at(-1) / values[first] - 1) * 100;
   },
 
   render(containerId, params) {
@@ -109,23 +95,24 @@ window.AnimalsView = {
         }
       }
 
-      this.comparisonWindow = this.buildWindow(chartPaths);
-      chartPaths = this.comparisonWindow.paths;
-      const csi300Ret = (this.comparisonWindow.curves.BENCHMARK_csi300.at(-1) - 1) * 100;
-      const taotieRet = (this.comparisonWindow.curves.BENCHMARK_taotie.at(-1) - 1) * 100;
+      this.history = this.buildHistory(chartPaths);
+      const observationStart = p => p.observation_start || this.history.start;
+      const summaryStart = chartPaths.map(observationStart).sort()[0] || this.history.start;
+      const summaryPaths = chartPaths.filter(p => observationStart(p) === summaryStart);
+      const csi300Ret = this.benchmarkReturn('BENCHMARK_csi300', summaryStart);
       const allContestants = window.arenaAdapter.getAllContestants();
 
-      // Compute statistics
-      const returns = chartPaths.map(p => p.total_return_pct);
-      const drawdowns = chartPaths.map(p => p.max_drawdown_pct);
-      const bestPath = chartPaths.length > 0 ? [...chartPaths].sort((a, b) => b.total_return_pct - a.total_return_pct)[0] : null;
+      // Summary cards use the earliest-entry cohort; later entrants keep their own rows and curves.
+      const returns = summaryPaths.map(p => p.total_return_pct);
+      const drawdowns = summaryPaths.map(p => p.max_drawdown_pct);
+      const bestPath = summaryPaths.length > 0 ? [...summaryPaths].sort((a, b) => b.total_return_pct - a.total_return_pct)[0] : null;
       const medianReturn = returns.length > 0
         ? [...returns].sort((a, b) => a - b)[Math.floor(returns.length / 2)]
         : 0;
       const avgDrawdown = drawdowns.length > 0
         ? drawdowns.reduce((s, v) => s + v, 0) / drawdowns.length
         : 0;
-      const tested = chartPaths.filter(p => Number.isFinite(p.empirical_p_value));
+      const tested = summaryPaths.filter(p => Number.isFinite(p.empirical_p_value));
       const sigCount = tested.filter(p => p.empirical_p_value < .05).length;
       const sigPct = tested.length ? `${(sigCount / tested.length * 100).toFixed(0)}%` : 'N/A';
 
@@ -142,7 +129,7 @@ window.AnimalsView = {
                 </button>
               </div>
               <p class="view-subtitle">Explore operational execution containers testing latency, exit inertia, turnover constraints, portfolio capacity, and polarity sanity across all contestant models.</p>
-              <p class="view-subtitle" data-zoo-window="${this.comparisonWindow.start}/${this.comparisonWindow.end}">Common observation window: ${this.comparisonWindow.start} close → ${this.comparisonWindow.end} close. All cards, rankings and curves use this window; NAV starts at 1.0000.</p>
+              <p class="view-subtitle" data-zoo-window="${this.history.start}/${this.history.end}">Full history: ${this.history.start} close → ${this.history.end} close. Each participant retains its own entry date and starts at NAV 1.0000; later entrants have no data before entry. Use <a href="#decision-audit">Compare Participants</a> for a common-window comparison.</p>
             </div>
 
             <!-- Single vs Multi-Animal Mode Switcher -->
@@ -276,8 +263,11 @@ window.AnimalsView = {
                 </h4>
                 <div style="font-size: 11px; color: var(--text-secondary); margin-top: 3px;">
                   ${this.comparisonMode === 'single'
-                    ? `Testing ${new Set(chartPaths.map(p=>p.contestant_id)).size} contestants under <b>${activeAnimal.name}</b> over the common window`
+                    ? `Testing ${new Set(chartPaths.map(p=>p.contestant_id)).size} contestants under <b>${activeAnimal.name}</b>, with each participant's full history`
                     : `Telemetry across ${chartPaths.length} evaluated path${chartPaths.length > 1 ? 's' : ''} in comparison scope`}
+                </div>
+                <div style="font-size: 11px; color: var(--text-secondary); margin-top: 3px;" data-zoo-summary="${summaryStart}/${this.history.end}">
+                  Summary: ${summaryPaths.length} paths starting ${summaryStart} → ${this.history.end}. ${summaryPaths.length < chartPaths.length ? 'Later entrants are listed below with their own observation periods.' : ''}
                 </div>
               </div>
             </div>
@@ -309,7 +299,7 @@ window.AnimalsView = {
                   -${avgDrawdown.toFixed(2)}%
                 </div>
                 <div style="font-size: 10px; color: var(--text-secondary); margin-top: 2px;">
-                  Across ${chartPaths.length} path${chartPaths.length > 1 ? 's' : ''}
+                  Across ${summaryPaths.length} path${summaryPaths.length > 1 ? 's' : ''} in the summary period
                 </div>
               </div>
 
@@ -337,8 +327,9 @@ window.AnimalsView = {
               </h3>
               <p style="font-size: 12px; color: var(--text-secondary); margin: 2px 0 0 0;">
                 ${this.comparisonMode === 'single'
-                  ? `Comparing ${chartPaths.length} contestant paths under <b>${activeAnimal.name}</b> and benchmarks over the common window`
+                  ? `Overlaying ${chartPaths.length} contestant paths under <b>${activeAnimal.name}</b> and benchmarks, retaining each participant's full history`
                   : `Overlaying trajectories for ${this.selectedAnimalIds.length} animal containers (Model Focus: <b>${this.activeFocusModel === 'all' ? 'All Models' : this.activeFocusModel}</b>)`}
+                Returns and drawdowns use each participant's own period; excess returns use the benchmark rebased at that participant's entry.
               </p>
             </div>
 
@@ -400,7 +391,7 @@ window.AnimalsView = {
                 : `Multi-Animal Comparison Matrix (${chartPaths.length} Paths)`}
             </h3>
             <p style="font-size: 12px; color: var(--text-secondary); margin: 2px 0 0 0;">
-              Ranked by return over the stated common window. Random-control statistics are N/A when the selected window differs from the declared full-season test.
+              Full-season paths retain their original return ranking and statistics. Later entrants follow with labeled observation periods and no full-season rank. Benchmark spreads use each row's own period; unavailable statistics are N/A.
             </p>
           </div>
 
@@ -423,22 +414,24 @@ window.AnimalsView = {
                 </tr>
               </thead>
               <tbody>
-                ${[...chartPaths].sort((a, b) => b.total_return_pct - a.total_return_pct).map((p, idx) => {
+                ${[...chartPaths].sort((a, b) => observationStart(a).localeCompare(observationStart(b)) || b.total_return_pct - a.total_return_pct).map((p, idx) => {
                   const rawPct = p.percentile_rank ?? p.monkey_percentile ?? p.monkey_percentile_rank;
                   const pct = Number.isFinite(rawPct) ? (window.formatPercentile ? window.formatPercentile(rawPct) : rawPct.toFixed(1) + '%') : 'N/A';
                   const rawP = p.empirical_p_value ?? p.p_value;
                   const pVal = Number.isFinite(rawP) ? (window.formatPValue ? window.formatPValue(rawP) : rawP.toFixed(4)) : 'N/A';
                   const isSig = p.empirical_p_value != null && p.empirical_p_value < .05;
-                  const spreadCsi = p.total_return_pct - csi300Ret;
-                  const spreadTaotie = p.total_return_pct - taotieRet;
+                  const start = observationStart(p);
+                  const spreadCsi = p.total_return_pct - this.benchmarkReturn('BENCHMARK_csi300', start);
+                  const spreadTaotie = p.total_return_pct - this.benchmarkReturn('BENCHMARK_taotie', start);
 
                   return `
-                    <tr style="border-bottom: 1px solid var(--border-subtle); hover:background var(--surface-hover);">
-                      <td style="padding: 12px 16px; font-weight: 700; color: var(--text-muted);">#${idx + 1}</td>
+                    <tr data-zoo-path="${p.path_id}" data-observation-start="${start}" style="border-bottom: 1px solid var(--border-subtle); hover:background var(--surface-hover);">
+                      <td style="padding: 12px 16px; font-weight: 700; color: var(--text-muted);">${p.full_season_eligible === false ? 'Observation' : '#' + (idx + 1)}</td>
                       <td style="padding: 12px 16px;">
                         <a href="#contestants/${p.contestant_id}" style="font-weight: 600; color: var(--color-accent); text-decoration: none;">
                           ${p.contestant_id}
                         </a>
+                        <div style="font-size: 10px; color: var(--text-secondary); margin-top: 3px;">${start} → ${this.history.end}</div>
                       </td>
                       <td style="padding: 12px 16px;">
                         <span class="badge badge-neutral">${p.animal_name || p.animal_id}</span>
@@ -464,10 +457,10 @@ window.AnimalsView = {
                           ${Number.isFinite(rawP)?(isSig?'P < 0.05':'Null Range'):'N/A'}
                         </span>
                       </td>
-                      <td style="padding: 12px 16px; text-align: right; font-weight: 600; color: ${spreadCsi >= 0 ? 'var(--color-success)' : 'var(--color-danger)'};">
+                      <td data-zoo-spread="market" style="padding: 12px 16px; text-align: right; font-weight: 600; color: ${spreadCsi >= 0 ? 'var(--color-success)' : 'var(--color-danger)'};">
                         ${spreadCsi >= 0 ? '+' : ''}${spreadCsi.toFixed(2)} pp
                       </td>
-                      <td style="padding: 12px 16px; text-align: right; font-weight: 600; color: ${spreadTaotie >= 0 ? 'var(--color-success)' : 'var(--color-danger)'};">
+                      <td data-zoo-spread="taotie" style="padding: 12px 16px; text-align: right; font-weight: 600; color: ${spreadTaotie >= 0 ? 'var(--color-success)' : 'var(--color-danger)'};">
                         ${spreadTaotie >= 0 ? '+' : ''}${spreadTaotie.toFixed(2)} pp
                       </td>
                       <td style="padding: 12px 16px; text-align: center;">
@@ -488,9 +481,9 @@ window.AnimalsView = {
       this.attachEvents(containerId, chartPaths);
 
       // Render cross-model chart
-      const expectedWindow = this.comparisonWindow;
+      const expectedHistory = this.history;
       setTimeout(() => {
-        if (!isCurrent() || this.comparisonWindow !== expectedWindow) return;
+        if (!isCurrent() || this.history !== expectedHistory) return;
         this.updateChart(chartPaths);
       }, 50);
 
@@ -501,17 +494,16 @@ window.AnimalsView = {
   },
 
   updateChart(paths) {
-    const dates = this.comparisonWindow.dates;
-    const taotieCurve = this.comparisonWindow.curves.BENCHMARK_taotie;
-    const csi300Curve = this.comparisonWindow.curves.BENCHMARK_csi300;
+    const dates = this.history.dates;
+    const taotieCurve = this.history.curves.BENCHMARK_taotie;
+    const csi300Curve = this.history.curves.BENCHMARK_csi300;
     window.ArenaCharts.renderCrossModelAnimalCurves(
       "animal-cross-model-chart",
       dates,
       paths,
       taotieCurve,
       csi300Curve,
-      this.activeMetric,
-      this.comparisonWindow
+      this.activeMetric
     );
 
     // Maintain benchmark pill selection state

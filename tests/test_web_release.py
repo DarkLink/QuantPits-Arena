@@ -28,59 +28,77 @@ if(JSON.stringify(dropdownIds)!==JSON.stringify(expected)||node('current-season-
 function verifyZoo(data){
  const view=window.AnimalsView;
  const original=JSON.stringify(data.paths);
+ const originalTimeline=JSON.stringify(data.nav_timeline);
  const dates=data.nav_timeline.dates;
  const animals=window.arenaAdapter.getAllAnimals().map(a=>a.id);
  const observers=data.paths.filter(p=>p.observation_start);
- const anchor=observers.map(p=>p.observation_start).sort().at(-1)||dates[0];
- function check(start,expectedPaths){
+ function check(expectedPaths){
   view.render('root');
   const html=node('root').innerHTML;
   if(html.includes('Failed to render Animals View')||html.includes('NaN')||html.includes('Infinity'))throw Error('Zoo failed with the published participants');
-  if(!html.includes(`data-zoo-window="${start}/${dates.at(-1)}"`))throw Error('Zoo observation window is not disclosed');
-  const rows=view.comparisonWindow.paths;
+  if(!html.includes(`data-zoo-window="${dates[0]}/${dates.at(-1)}"`))throw Error('Zoo removed earlier participant history');
+  const rows=view.history.paths;
   if(rows.length!==expectedPaths.length)throw Error('Zoo selection coverage differs');
-  const first=dates.indexOf(start);
-  const curve=id=>{const values=data.nav_timeline.curves[id].slice(first);return values.map(v=>v/values[0]);};
-  const expectedReturns=new Map(expectedPaths.map(p=>[p.path_id,(curve(p.path_id).at(-1)-1)*100]));
+  const curve=id=>data.nav_timeline.curves[id];
+  const observationStart=p=>p.observation_start||dates[0];
+  const summaryStart=expectedPaths.map(observationStart).sort()[0];
+  const summaryPaths=expectedPaths.filter(p=>observationStart(p)===summaryStart);
+  if(!html.includes(`data-zoo-summary="${summaryStart}/${dates.at(-1)}"`))throw Error('Zoo summary mixes observation periods');
+  const ordered=[...expectedPaths].sort((a,b)=>observationStart(a).localeCompare(observationStart(b))||b.total_return_pct-a.total_return_pct);
   const rendered=[...html.matchAll(/href="#path\/([^"]+)"/g)].map(m=>m[1]);
-  if(rendered.length!==expectedPaths.length||new Set(rendered).size!==expectedPaths.length||rendered.some((id,i)=>!expectedReturns.has(id)||(i>0&&expectedReturns.get(id)>expectedReturns.get(rendered[i-1])+1e-9)))throw Error('Zoo ranks mixed observation windows');
+  if(JSON.stringify(rendered)!==JSON.stringify(ordered.map(p=>p.path_id)))throw Error('Zoo ranks mixed observation windows');
+  const best=[...summaryPaths].sort((a,b)=>b.total_return_pct-a.total_return_pct)[0];
+  if(!html.includes(`Leader: <b>${best.contestant_id} (${best.animal_id})</b>`))throw Error('Zoo summary no longer uses original-period returns');
   for(const row of rows){
    const source=expectedPaths.find(p=>p.path_id===row.path_id);
-   if(!source||Math.abs(row.total_return_pct-expectedReturns.get(row.path_id))>1e-9)throw Error('Zoo card return window differs');
-   if(start!==dates[0]&&(row.empirical_p_value!==null||row.percentile_rank!==null))throw Error('Zoo borrowed full-season inference');
-   if(start===dates[0]&&row.empirical_p_value!==source.empirical_p_value)throw Error('Zoo lost full-season inference');
-   if(source.sharpe_ratio===null&&row.sharpe_ratio!==null)throw Error('Zoo manufactured a short-window Sharpe');
+   if(!source||JSON.stringify(row)!==JSON.stringify(source))throw Error('Zoo changed published participant statistics');
+   if(!html.includes(`data-zoo-path="${row.path_id}" data-observation-start="${observationStart(row)}"`))throw Error('Zoo path period is not disclosed');
+   const rowHtml=html.split(`data-zoo-path="${row.path_id}"`)[1].split('</tr>')[0];
+   if(row.observation_start&&!rowHtml.includes('Observation</td>'))throw Error('Zoo gave a later entrant a full-season rank');
+   for(const [reference,key] of [['BENCHMARK_csi300','market'],['BENCHMARK_taotie','taotie']]){
+    const values=curve(reference),first=dates.indexOf(observationStart(row));
+    const spread=row.total_return_pct-(values.at(-1)/values[first]-1)*100;
+    if(!rowHtml.includes(`data-zoo-spread="${key}"`)||!rowHtml.includes(`${spread>=0?'+':''}${spread.toFixed(2)} pp`))throw Error('Zoo table benchmark uses a different period');
+   }
   }
   for(const metric of ['nav','drawdown','excess_csi300']){
    view.activeMetric=metric;view.updateChart(rows);
-   if(JSON.stringify(lastChart.xAxis.data)!==JSON.stringify(dates.slice(first)))throw Error('Zoo chart date window differs');
-   if(lastChart.series.length!==expectedPaths.length+3||lastChart.series.some(s=>s.data.length!==dates.length-first||s.data.some(v=>!Number.isFinite(v))||s.data[0]!== (metric==='nav'?1:0)))throw Error('Zoo series or benchmark anchor differs');
+   if(JSON.stringify(lastChart.xAxis.data)!==JSON.stringify(dates))throw Error('Zoo chart removed earlier participant history');
+   if(lastChart.series.length!==expectedPaths.length+3||lastChart.series.some(s=>s.data.length!==dates.length||s.data.some(v=>v!==null&&!Number.isFinite(v))))throw Error('Zoo series coverage differs');
    const market=curve('BENCHMARK_csi300');
    rows.forEach((row,i)=>{
-    const values=curve(row.path_id);let peak=1;
-    const expected=values.map((v,j)=>{peak=Math.max(peak,v);return metric==='nav'?v:metric==='drawdown'?(v/peak-1)*100:(v-market[j])*100;});
-    if(lastChart.series[i].data.some((v,j)=>Math.abs(v-expected[j])>1e-9))throw Error('Zoo curve calculation differs');
+    const values=curve(row.path_id),first=dates.indexOf(observationStart(row));let peak=1;
+    const expected=values.map((v,j)=>{if(v===null)return null;peak=Math.max(peak,v);return metric==='nav'?v:metric==='drawdown'?(v/peak-1)*100:(v-market[j]/market[first])*100;});
+    const actual=lastChart.series[i];
+    if(actual.connectNulls!==false||actual.data.some((v,j)=>expected[j]===null?v!==null:!Number.isFinite(v)||Math.abs(v-expected[j])>.011))throw Error('Zoo curve or own-period benchmark calculation differs');
+    if(metric==='nav'&&JSON.stringify(actual.data)!==JSON.stringify(values))throw Error('Zoo rebased or shortened a participant history');
+    const observed=actual.data.findIndex(v=>v!==null);
+    if(observed!==first||actual.data[first]!== (metric==='nav'?1:0))throw Error('Zoo observation anchor differs');
    });
-   const tooltip=lastChart.tooltip.formatter(lastChart.series.map(s=>({axisValue:dates.at(-1),seriesName:s.name,value:s.data.at(-1),color:'#fff'})));
-   if(tooltip.includes('NaN')||tooltip.includes('undefined')||tooltip.includes('null'))throw Error('Zoo tooltip failed');
+   for(const day of [0,dates.length-1]){
+    const tooltip=lastChart.tooltip.formatter(lastChart.series.map(s=>({axisValue:dates[day],seriesName:s.name,value:s.data[day],color:'#fff'})));
+    if(tooltip.includes('NaN')||tooltip.includes('undefined')||tooltip.includes('null'))throw Error('Zoo tooltip failed');
+    if(day===0&&rows.some(p=>p.observation_start)&&!tooltip.includes('N/A'))throw Error('Zoo manufactured a pre-entry value');
+   }
   }
  }
  view.comparisonMode='single';
  for(const animal of animals){
   view.activeAnimalId=animal;
-  check(anchor,data.paths.filter(p=>p.contestant_id!=='BENCHMARK'&&p.animal_id===animal));
+  check(data.paths.filter(p=>p.contestant_id!=='BENCHMARK'&&p.animal_id===animal));
  }
  view.comparisonMode='multi';view.selectedAnimalIds=animals;
  for(const focus of ['all','CONTESTANT_A','CONTESTANT_G']){
   view.activeFocusModel=focus;
-  check(focus==='CONTESTANT_A'?dates[0]:anchor,data.paths.filter(p=>p.contestant_id!=='BENCHMARK'&&(focus==='all'||p.contestant_id===focus)));
+  check(data.paths.filter(p=>p.contestant_id!=='BENCHMARK'&&(focus==='all'||p.contestant_id===focus)));
  }
  const formatPValue=window.formatPValue,formatPercentile=window.formatPercentile;
  window.formatPValue=undefined;window.formatPercentile=undefined;
  view.activeFocusModel='CONTESTANT_G';
- check(anchor,observers);
+ check(observers);
  window.formatPValue=formatPValue;window.formatPercentile=formatPercentile;
  if(JSON.stringify(data.paths)!==original)throw Error('Zoo mutated published statistics');
+ if(JSON.stringify(data.nav_timeline)!==originalTimeline)throw Error('Zoo mutated published history');
 }
 const results=[];
 for(const [sid,data] of Object.entries(window.ARENA_SEASONS_DATA)){

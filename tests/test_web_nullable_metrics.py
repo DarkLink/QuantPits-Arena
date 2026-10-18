@@ -50,21 +50,24 @@ const checks = {
   for (const metric of ['total_return_pct','percentile_rank','max_drawdown_pct','sharpe_ratio']) {
    view.changeMatrixMetric(metric);
    const option = charts.get('chart-leaderboard-matrix');
-   assert.equal(option.yAxis.data.length, data.contestants.filter(c => !c.observation_start).length);
-   window.ArenaCharts.renderHeatmap('nullable-matrix', {...window.arenaAdapter.matrix,
-    rows:data.contestants.map(c => c.contestant_id)}, metric);
-   const extended = charts.get('nullable-matrix');
-   for (const cell of extended.series[0].data) {
+   assert.deepEqual(option.yAxis.data, window.arenaAdapter.getAllContestants().map(c => c.id),
+    'The actual HeatMap view omitted an admitted participant');
+   assert.equal(option.series[0].data.length, option.yAxis.data.length * option.xAxis.data.length);
+   for (const cell of option.series[0].data) {
     const value = cell.value || cell;
     const params = {data:cell, value};
-    const tooltip = extended.tooltip.formatter(params);
-    const label = cell.label?.formatter || extended.series[0].label.formatter(params);
+    const tooltip = option.tooltip.formatter(params);
+    const label = cell.label?.formatter || option.series[0].label.formatter(params);
     safeText(tooltip); safeText(String(label));
     const path = window.arenaAdapter.getPath(value[3]);
     if (path.observation_start) {
-     assert.equal(value[2], null, 'A later entrant received a full-season heatmap score');
-     assert.equal(label, 'N/A');
+     const expected = path[metric];
+     assert.equal(value[2], Number.isFinite(expected) ? expected : null,
+      'An available observation-period metric was hidden');
+     if (!Number.isFinite(expected)) assert.equal(label, 'N/A');
      assert(tooltip.includes(path.observation_start));
+     assert(option.yAxis.axisLabel.formatter(path.contestant_id).includes(path.observation_start),
+      'A later entrant has no visible period label');
     }
    }
   }
