@@ -17,6 +17,17 @@ window.ArenaSpecDrawer = {
   drawerEl: null,
   fabEl: null,
 
+  normalizeCategory(category) {
+    if (typeof category !== 'string') return category;
+    const value = category.toLowerCase();
+    if (value === 'all') return 'All';
+    if (value === 'animals' || value.includes('zoo')) return 'Zoo Animals';
+    if (value === 'contestants' || value.includes('model')) return 'Contestants';
+    if (value.includes('bench')) return 'Benchmarks';
+    if (value.includes('metric')) return 'Metrics';
+    return category;
+  },
+
   init() {
     this.createFab();
     this.createDrawer();
@@ -124,6 +135,7 @@ window.ArenaSpecDrawer = {
   },
 
   open(category = null) {
+    category = this.normalizeCategory(category);
     if (!this.drawerEl) {
       this.init();
     }
@@ -185,6 +197,7 @@ window.ArenaSpecDrawer = {
   },
 
   toggle(category = null) {
+    category = this.normalizeCategory(category);
     if (this.isOpen) {
       if (!category) {
         this.close();
@@ -219,13 +232,17 @@ window.ArenaSpecDrawer = {
 
   openTerm(termKey) {
     if (!termKey) return;
-    this.open();
+    if (!this.isOpen) this.open();
 
     const termData = window.ArenaGlossaryService ? window.ArenaGlossaryService.lookup(termKey) : null;
     if (termData && termData.category) {
       // Switch to category tab
       const catName = termData.category;
-      this.activeCategory = catName === "Zoo Mechanics" ? "Zoo Animals" : catName;
+      const dictionary = window.ArenaGlossaryService.getDictionary();
+      const groups = {contestants:'Contestants', animals:'Zoo Animals', benchmarks:'Benchmarks', metrics:'Metrics'};
+      const group = Object.keys(groups).find(key =>
+        Object.values(dictionary[key] || {}).some(item => item.id === termData.id));
+      this.activeCategory = groups[group] || (catName === 'Zoo Mechanics' ? 'Zoo Animals' : catName);
       const tabs = this.drawerEl.querySelectorAll(".drawer-tab");
       tabs.forEach(t => {
         if (t.getAttribute("data-cat") === this.activeCategory || (this.activeCategory === "Zoo Animals" && t.getAttribute("data-cat") === "Zoo Animals")) {
@@ -292,7 +309,7 @@ window.ArenaSpecDrawer = {
       contentEl.innerHTML = `
         <div class="drawer-empty">
           <div style="font-size: 2rem; margin-bottom: 8px;">🔍</div>
-          <div>No matching specifications found for "${this.searchQuery}".</div>
+          <div>No matching specifications found for "${window.escapeHtml(this.searchQuery)}".</div>
         </div>
       `;
       return;

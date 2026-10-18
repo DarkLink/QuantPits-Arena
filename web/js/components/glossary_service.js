@@ -19,7 +19,7 @@ window.ArenaGlossaryService = {
       name: "Normalized Net Asset Value (NAV)",
       category: "Metrics",
       tagline: "Standardized Wealth Index",
-      tooltip: "Cumulative portfolio wealth starting strictly at 1.0000 on common inception date (2026-07-03). Eliminates real-money cash differences for apples-to-apples comparison.",
+      tooltip: "Cumulative portfolio wealth starting at 1.0000 on the declared observation anchor. Eliminates real-money cash differences for apples-to-apples comparison.",
       details: "In QuantPits Arena, all strategy variants, benchmark indices, and monkey controls begin at exactly NAV = 1.0000. Subsequent daily marked-to-market valuations track compounding value net of trading commissions, slippage, and stamp taxes."
     },
     "total_return_pct": {
@@ -109,30 +109,19 @@ window.ArenaGlossaryService = {
 
     // 1. Dynamic Contestants from active season adapter
     const contestants = adapter ? adapter.getAllContestants() : [];
-    const contestantArchetypes = {
-      "CONTESTANT_A": { archetype: "Multi-Factor Ensemble", tagline: "The Expert Committee", desc: "A multi-factor ensemble integrating diverse cross-sectional features. Designed like an investment committee to deliver broad market coverage and strong resilience against single-factor failure." },
-      "CONTESTANT_B": { archetype: "Cross-Validation Ensemble", tagline: "The High-Conviction Hunter", desc: "A time-series cross-validation ensemble with extreme conviction in top-tier assets. Displays explosive upside velocity in concentrated, high-intensity portfolios (e.g. Eagle)." },
-      "CONTESTANT_C": { archetype: "Multi-Factor Ensemble", tagline: "The Momentum Sprinter", desc: "An early baseline ensemble with elevated sensitivity to short-term price-volume momentum and rapid cross-sectional sector rotations." },
-      "CONTESTANT_D": { archetype: "Multi-Factor Ensemble", tagline: "The Resilient Marathoner", desc: "A multi-factor model engineered for low factor correlation and turnover tolerance. Demonstrates remarkable structural consistency and parameter invariance across diverse execution containers." },
-      "CONTESTANT_E": { archetype: "High-Dimensional Single Model (52-dim)", tagline: "The Complex Non-Linear Explorer", desc: "A single deep/statistical model trained on an expanded 52-dimensional feature space to probe the capacity limits of complex non-linear factor interactions." },
-      "CONTESTANT_F": { archetype: "Condensed Core Single Model (20-dim)", tagline: "The Minimalist Benchmark", desc: "A compact single model relying on just 20 classic, economically intuitive factors. Highly resistant to overfitting, validating the 'less is more' principle." }
-    };
-
     contestants.forEach(c => {
       const cid = c.id || c.contestant_id;
-      const staticMeta = contestantArchetypes[cid] || {
-        archetype: c.training_mode || "Quantitative Model Candidate",
-        tagline: c.historical_role || "Tournament Contestant",
-        desc: `Anonymized tournament candidate model evaluated under ${seasonMeta.short_title || "Arena"}.`
-      };
+      const name = c.display_name || cid;
+      const anchor = c.observation_start || seasonMeta.anchor_date || adapter.getNavDates()[0];
+      const scope = c.observation_start ? 'observation' : 'full-season';
       dict.contestants[cid] = {
         id: cid,
         term: cid,
-        name: c.display_name || cid,
-        category: "Contestants",
-        tagline: staticMeta.tagline,
-        tooltip: `【${staticMeta.tagline}】${staticMeta.desc}`,
-        details: `Architectural Archetype: ${staticMeta.archetype}. Evaluated on ${seasonMeta.title || "Arena Baseline"} across all 28 animal containers.`
+        name,
+        category: 'Contestants',
+        tagline: c.observation_start ? 'Observation Participant' : 'Full-season Participant',
+        tooltip: `${name} is an anonymous ${scope} participant evaluated in ${seasonMeta.short_title || 'Arena'}.`,
+        details: `Observation anchor: ${anchor}. Evaluated in ${seasonMeta.title || 'Arena'} across 28 execution containers. Comparisons use a common observation window.`
       };
     });
 
@@ -272,15 +261,16 @@ window.ArenaGlossaryService = {
 
   // Lookup single term metadata by key or alias
   lookup(key) {
-    if (!key) return null;
-    const cleanKey = key.trim();
+    if (typeof key !== 'string' || !key.trim()) return null;
+    const aliases = {metric_monkey_percentile:'monkey_percentile', whale_shark:'whale-shark', 'turtle-22-3':'turtle'};
+    const trimmed = key.trim();
+    const cleanKey = Object.prototype.hasOwnProperty.call(aliases, trimmed.toLowerCase()) ? aliases[trimmed.toLowerCase()] : trimmed;
     const dict = this.getDictionary();
 
     // Direct match across categories
-    if (dict.contestants[cleanKey]) return dict.contestants[cleanKey];
-    if (dict.animals[cleanKey]) return dict.animals[cleanKey];
-    if (dict.benchmarks[cleanKey]) return dict.benchmarks[cleanKey];
-    if (dict.metrics[cleanKey]) return dict.metrics[cleanKey];
+    for (const group of Object.values(dict)) {
+      if (Object.prototype.hasOwnProperty.call(group, cleanKey)) return group[cleanKey];
+    }
 
     // Case-insensitive / prefix matching
     const lower = cleanKey.toLowerCase();

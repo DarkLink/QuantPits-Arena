@@ -306,7 +306,11 @@ window.ArenaApp = {
   },
 
   initTheme() {
-    const savedTheme = localStorage.getItem("arena_theme") || "dark";
+    let savedTheme = 'dark';
+    try {
+      const stored = localStorage.getItem('arena_theme');
+      if (stored === 'light' || stored === 'dark') savedTheme = stored;
+    } catch (error) { /* Theme persistence is optional when browser storage is blocked. */ }
     document.documentElement.setAttribute("data-theme", savedTheme);
     this.updateThemeButton(savedTheme);
 
@@ -316,7 +320,7 @@ window.ArenaApp = {
         const currentTheme = document.documentElement.getAttribute("data-theme") || "dark";
         const newTheme = currentTheme === "dark" ? "light" : "dark";
         document.documentElement.setAttribute("data-theme", newTheme);
-        localStorage.setItem("arena_theme", newTheme);
+        try { localStorage.setItem('arena_theme', newTheme); } catch (error) { /* Keep the selected theme usable for this session. */ }
         this.updateThemeButton(newTheme);
 
         // Re-render active view to refresh theme colors
@@ -385,6 +389,7 @@ window.ArenaApp = {
   handleRouting() {
     const { route, params } = this.parseHash();
     window.ArenaCharts?.disposeAll();
+    window.ArenaTooltip?.hide();
     this.currentRoute = route;
     this.routeParams = params;
 

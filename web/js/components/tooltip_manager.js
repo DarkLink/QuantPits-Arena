@@ -115,19 +115,28 @@ window.ArenaTooltip = {
   },
 
   render(el) {
+    if (!this.container || el.isConnected === false) {
+      this.hide();
+      return;
+    }
     const termKey = el.getAttribute("data-tooltip-term") || el.getAttribute("data-term") || el.textContent;
     const termData = window.ArenaGlossaryService ? window.ArenaGlossaryService.lookup(termKey) : null;
 
     if (!termData) {
       // Fallback simple title attribute if no dictionary match
       const fallbackTitle = el.getAttribute("title");
-      if (!fallbackTitle) return;
+      if (!fallbackTitle) {
+        this.hide();
+        return;
+      }
       this.container.innerHTML = `
-        <div class="tooltip-body">${fallbackTitle}</div>
+        <div class="tooltip-body">${window.escapeHtml(fallbackTitle)}</div>
       `;
       this.container.style.display = "block";
       this.position(el);
-      requestAnimationFrame(() => this.container.classList.add("visible"));
+      requestAnimationFrame(() => {
+        if (this.currentAnchor === el && this.container.style.display !== 'none') this.container.classList.add('visible');
+      });
       return;
     }
 
@@ -202,7 +211,7 @@ window.ArenaTooltip = {
     this.position(el);
     // Trigger transition
     requestAnimationFrame(() => {
-      this.container.classList.add("visible");
+      if (this.currentAnchor === el && this.container.style.display !== 'none') this.container.classList.add('visible');
     });
   },
 
@@ -229,8 +238,8 @@ window.ArenaTooltip = {
     let left = rect.left + scrollX + (rect.width / 2) - (popRect.width / 2);
 
     // Boundary clamping
-    const maxLeft = window.innerWidth + scrollX - popRect.width - padding;
     const minLeft = scrollX + padding;
+    const maxLeft = Math.max(minLeft, window.innerWidth + scrollX - popRect.width - padding);
     if (left < minLeft) left = minLeft;
     if (left > maxLeft) left = maxLeft;
 
