@@ -93,7 +93,8 @@ window.ContestantDetailView = {
       const robotPath = paths.find(p => p.animal_id === "robot");
       const robotRet = robotPath ? robotPath.total_return_pct : 0;
       const beatMonkeys = paths.filter(p => p.empirical_p_value != null && p.empirical_p_value < .05).length;
-      const avgMonkeyPct = (paths.reduce((s, p) => s + (p.percentile_rank !== undefined ? p.percentile_rank : (p.monkey_percentile || 0)), 0) / Math.max(1, paths.length)).toFixed(1);
+      const testedRanks = paths.map(p => p.percentile_rank ?? p.monkey_percentile).filter(Number.isFinite);
+      const avgMonkeyPct = testedRanks.length ? testedRanks.reduce((sum, value) => sum + value, 0) / testedRanks.length : null;
 
       container.innerHTML = `
         <div class="view-header">
@@ -166,15 +167,15 @@ window.ContestantDetailView = {
               <div>
                 <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">Burial Annualized Return (Legacy Selection Pool Only)</div>
                 <div style="font-size: 22px; font-weight: 800; color: var(--accent-positive); font-family: monospace; margin-top: 2px;">
-                  +${(contestant.historical_sys_ann_return_pct || 10.0).toFixed(1)}% <span style="font-size: 13px; font-weight: 500; color: var(--text-secondary);">p.a.</span>
+                  ${contestant.historical_sys_ann_return_pct > 0 ? '+' : ''}${window.formatNumber(contestant.historical_sys_ann_return_pct, 1, '%')} <span style="font-size: 13px; font-weight: 500; color: var(--text-secondary);">p.a.</span>
                 </div>
               </div>
               <div style="text-align: right;">
                 <div style="font-size: 11px; color: var(--text-muted);">Cumulative Return &amp; MDD</div>
                 <div style="font-size: 14px; font-weight: 700; color: var(--text-primary); margin-top: 2px;">
-                  +${(contestant.historical_is_return_pct || 20.0).toFixed(1)}% <span style="color: var(--accent-negative); font-size: 12px;">(-${(contestant.historical_is_mdd_pct || 8.0).toFixed(2)}% MDD)</span>
+                  ${contestant.historical_is_return_pct > 0 ? '+' : ''}${window.formatNumber(contestant.historical_is_return_pct, 1, '%')} <span style="color: var(--accent-negative); font-size: 12px;">(${window.formatNumber(contestant.historical_is_mdd_pct, 2, '%')} MDD)</span>
                 </div>
-                <div style="font-size: 11px; color: var(--text-muted);">Historical Sharpe: <b>${(contestant.historical_is_sharpe || 1.85).toFixed(2)}</b></div>
+                <div style="font-size: 11px; color: var(--text-muted);">Historical Sharpe: <b>${window.formatNumber(contestant.historical_is_sharpe)}</b></div>
               </div>
             </div>
 
@@ -227,7 +228,7 @@ window.ContestantDetailView = {
                 <div class="kpi-value text-gold" style="font-size: 20px;">
                   ${observed ? 'N/A' : beatMonkeys+' / 28'}
                 </div>
-                <div class="kpi-hint">${observed ? 'Observation window · no assigned test' : 'Mean Rank: '+(window.formatPercentile ? window.formatPercentile(avgMonkeyPct) : avgMonkeyPct+'%')}</div>
+                <div class="kpi-hint">${observed ? 'Observation window · no assigned test' : 'Mean Rank: '+(window.formatPercentile ? window.formatPercentile(avgMonkeyPct) : window.formatNumber(avgMonkeyPct, 1, '%'))}</div>
               </div>
             </div>
             <div style="font-size: 12px; color: var(--text-secondary); background: rgba(0,0,0,0.2); padding: 10px 12px; border-radius: var(--radius-sm); line-height: 1.5;">
@@ -388,7 +389,7 @@ window.ContestantDetailView = {
                   const retColor = p.total_return_pct >= 0 ? "text-up" : "text-down";
                   const pRank = p.percentile_rank ?? p.monkey_percentile ?? null;
                   const isSig = p.empirical_p_value != null && p.empirical_p_value < .05;
-                  const pVal = p.empirical_p_value !== undefined ? p.empirical_p_value : (p.p_value !== undefined ? p.p_value : 1.0);
+                  const pVal = p.empirical_p_value ?? p.p_value ?? null;
                   return `
                     <tr style="cursor: pointer;" onclick="window.appRouter.navigate('path-detail', { pathId: '${p.path_id}' })">
                       <td>
@@ -399,21 +400,21 @@ window.ContestantDetailView = {
                       <td style="text-align: right; font-weight: 700;" class="${retColor}">
                         ${p.total_return_pct >= 0 ? '+' : ''}${p.total_return_pct.toFixed(2)}%
                       </td>
-                      <td style="text-align: right; color: var(--accent-rose);">${p.max_drawdown_pct ? p.max_drawdown_pct.toFixed(2) : '0.00'}%</td>
+                      <td style="text-align: right; color: var(--accent-rose);">${window.formatNumber(p.max_drawdown_pct, 2, '%')}</td>
                       <td style="text-align: right; font-weight: 600;">${Number.isFinite(p.sharpe_ratio) ? p.sharpe_ratio.toFixed(2) : 'N/A'}</td>
                       <td style="text-align: right;">
                         <span class="badge ${isSig ? 'badge-success' : 'badge-neutral'}" style="font-weight: 700;">
-                          ${pRank==null ? 'N/A' : window.formatPercentile ? window.formatPercentile(pRank) : pRank.toFixed(1)+'%'}
+                          ${window.formatPercentile ? window.formatPercentile(pRank) : window.formatNumber(pRank, 1, '%')}
                         </span>
                       </td>
                       <td style="text-align: right; font-family: monospace; color: ${isSig ? 'var(--accent-cyan)' : 'var(--text-muted)'};">
-                        ${window.formatPValue ? window.formatPValue(pVal) : pVal.toFixed(4)}
+                        ${window.formatPValue ? window.formatPValue(pVal) : window.formatNumber(pVal, 4)}
                       </td>
                       <td style="text-align: right; color: ${p.unaffordable_buy_count > 0 ? 'var(--accent-amber)' : 'var(--text-muted)'};">
-                        ${p.unaffordable_buy_count ?? 0}
+                        ${p.unaffordable_buy_count ?? 'N/A'}
                       </td>
                       <td style="text-align: right; color: var(--text-secondary);">
-                        ${p.mean_cash_ratio_pct ? p.mean_cash_ratio_pct.toFixed(2) + '%' : '-'}
+                        ${window.formatNumber(p.mean_cash_ratio_pct, 2, '%')}
                       </td>
                       <td style="text-align: center;">
                         <button class="btn btn-secondary" style="padding: 2px 8px; font-size: 11px;">

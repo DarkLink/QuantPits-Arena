@@ -115,7 +115,7 @@ window.ArenaCharts = {
 
     const tc = this.getThemeColors();
 
-    const data = paths.filter(p => p.percentile_rank != null).map(p => {
+    const data = paths.filter(p => p.full_season_eligible !== false && Number.isFinite(p.percentile_rank)).map(p => {
       const pctRank = p.percentile_rank !== undefined ? p.percentile_rank : (p.monkey_percentile !== undefined ? p.monkey_percentile : (p.monkey_percentile_rank || 50));
       const ret = p.total_return_pct;
       const sharpe = Math.max(0.2, p.sharpe_ratio || 0.5);
@@ -132,9 +132,9 @@ window.ArenaCharts = {
         formatter: (params) => {
           const p = params.data[3];
           const rawPct = p.percentile_rank !== undefined ? p.percentile_rank : (p.monkey_percentile !== undefined ? p.monkey_percentile : p.monkey_percentile_rank);
-          const pct = window.formatPercentile ? window.formatPercentile(rawPct) : (rawPct !== undefined ? rawPct.toFixed(1) + "%" : "N/A");
+          const pct = window.formatPercentile ? window.formatPercentile(rawPct) : window.formatNumber(rawPct, 1, '%');
           const rawP = p.empirical_p_value !== undefined ? p.empirical_p_value : p.p_value;
-          const pVal = window.formatPValue ? window.formatPValue(rawP) : (rawP !== undefined ? rawP.toFixed(4) : "N/A");
+          const pVal = window.formatPValue ? window.formatPValue(rawP) : window.formatNumber(rawP, 4);
           const pLabel = pVal.startsWith("<") ? `p ${pVal}` : `p = ${pVal}`;
           return `
             <div style="font-weight:700; color:#38bdf8; margin-bottom:4px;">${p.path_id}</div>
@@ -142,7 +142,7 @@ window.ArenaCharts = {
               <div>Model: <b>${p.contestant_id}</b> | Handler: <b>${p.animal_id}</b></div>
               <div>Return: <b style="color:${p.total_return_pct >= 0 ? '#10b981' : '#f43f5e'}">${p.total_return_pct >= 0 ? '+' : ''}${p.total_return_pct.toFixed(2)}%</b></div>
               <div>Monkey Percentile: <b>${pct}</b> (${pLabel})</div>
-              <div>Max Drawdown: <b style="color:#f43f5e;">${p.max_drawdown_pct.toFixed(2)}%</b> | Sharpe: <b>${p.sharpe_ratio}</b></div>
+              <div>Max Drawdown: <b style="color:#f43f5e;">${window.formatNumber(p.max_drawdown_pct, 2, '%')}</b> | Sharpe: <b>${window.formatNumber(p.sharpe_ratio)}</b></div>
               <div style="margin-top:4px; font-size:11px; color:#94a3b8;">Click bubble to inspect path details</div>
             </div>
           `;
@@ -244,18 +244,23 @@ window.ArenaCharts = {
       animals.forEach((aId, xIdx) => {
         const pathId = `${cId}_${aId}`;
         const path = window.arenaAdapter.getPath(pathId);
-        let val = 0;
-        if (path) {
+        let val = null;
+        if (path && path.full_season_eligible !== false) {
           if (metricKey === "total_return_pct") val = path.total_return_pct;
           else if (metricKey === "percentile_rank" || metricKey === "monkey_percentile") {
-            val = path.percentile_rank !== undefined ? path.percentile_rank : (path.monkey_percentile || 0);
+            val = path.percentile_rank ?? path.monkey_percentile ?? null;
           } else if (metricKey === "max_drawdown_pct") val = path.max_drawdown_pct;
-          else if (metricKey === "sharpe_ratio") val = path.sharpe_ratio || 0;
+          else if (metricKey === "sharpe_ratio") val = path.sharpe_ratio;
         }
-        if (val < minVal) minVal = val;
-        if (val > maxVal) maxVal = val;
         // Dimension 0: xIdx, Dimension 1: yIdx, Dimension 2: val (numeric metric for visualMap), Dimension 3: pathId
-        data.push([xIdx, yIdx, val, pathId]);
+        if (Number.isFinite(val)) {
+          minVal = Math.min(minVal, val);
+          maxVal = Math.max(maxVal, val);
+          data.push([xIdx, yIdx, val, pathId]);
+        } else {
+          data.push({value:[xIdx, yIdx, null, pathId],
+            itemStyle:{color:tc.isDark ? '#1e293b' : '#e2e8f0'}, label:{show:true,formatter:'N/A'}});
+        }
       });
     });
 
@@ -278,15 +283,18 @@ window.ArenaCharts = {
         borderColor: tc.tooltipBorder,
         textStyle: { color: tc.textPrimary },
         formatter: (params) => {
-          const pathId = params.data && params.data[3];
+          const cell = params.value || params.data?.value || params.data;
+          const pathId = cell && cell[3];
           const p = window.arenaAdapter.getPath(pathId);
           if (!p) return "No data";
-          const pct = (p.percentile_rank !== undefined ? p.percentile_rank : (p.monkey_percentile || 0)).toFixed(1);
+          const rank = p.percentile_rank ?? p.monkey_percentile ?? null;
+          const pct = window.formatPercentile ? window.formatPercentile(rank) : window.formatNumber(rank, 1, '%');
           return `
             <div style="font-weight:700; color:#38bdf8;">${p.path_id}</div>
+            ${p.observation_start ? `<div>Observation since ${p.observation_start} · full-season metric: N/A</div>` : ''}
             <div>Return: <b style="color:${p.total_return_pct >= 0 ? '#10b981' : '#f43f5e'}">${p.total_return_pct >= 0 ? '+' : ''}${p.total_return_pct.toFixed(2)}%</b></div>
-            <div>Drawdown: <b>${p.max_drawdown_pct.toFixed(2)}%</b> | Sharpe: <b>${p.sharpe_ratio}</b></div>
-            <div>Monkey Percentile: <b>${pct}%</b></div>
+            <div>Drawdown: <b>${window.formatNumber(p.max_drawdown_pct, 2, '%')}</b> | Sharpe: <b>${window.formatNumber(p.sharpe_ratio)}</b></div>
+            <div>Monkey Percentile: <b>${pct}</b></div>
             <div style="font-size:10px; color:#94a3b8; margin-top:3px;">Click cell to inspect details</div>
           `;
         }
@@ -329,8 +337,8 @@ window.ArenaCharts = {
             show: true,
             fontSize: 9,
             formatter: (params) => {
-              const v = params.data[2];
-              return isPctRank ? Math.round(v) : (typeof v === "number" ? v.toFixed(1) : v);
+              const cell = params.value || params.data?.value || params.data;
+              return window.formatNumber(cell[2], isPctRank ? 0 : 1);
             },
             color: tc.isDark ? "#ffffff" : "#0f172a"
           },
@@ -345,7 +353,8 @@ window.ArenaCharts = {
     chart.setOption(option, true);
     chart.off("click");
     chart.on("click", (params) => {
-      const pathId = params.data && params.data[3];
+      const cell = params.value || params.data?.value || params.data;
+      const pathId = cell && cell[3];
       if (pathId && typeof onCellClick === "function") {
         const path = window.arenaAdapter.getPath(pathId);
         if (path) onCellClick(path);
@@ -773,8 +782,8 @@ window.ArenaCharts = {
                 xAxis: actualReturnPct,
                 label: {
                   formatter: () => {
-                    const pctStr = window.formatPercentile ? window.formatPercentile(pctRank, monkeyDist.colony_size) : `${pctRank.toFixed(1)}%`;
-                    const pValStr = window.formatPValue ? window.formatPValue(pValue) : pValue.toFixed(4);
+                    const pctStr = window.formatPercentile ? window.formatPercentile(pctRank, monkeyDist.colony_size) : window.formatNumber(pctRank, 1, '%');
+                    const pValStr = window.formatPValue ? window.formatPValue(pValue) : window.formatNumber(pValue, 4);
                     const pLabel = pValStr.startsWith("<") ? `p ${pValStr}` : `p = ${pValStr}`;
                     return `Actual: ${actualReturnPct >= 0 ? '+' : ''}${actualReturnPct.toFixed(2)}%\n(Rank: ${pctStr}, ${pLabel})`;
                   },
@@ -1679,10 +1688,10 @@ window.ArenaCharts = {
     let yAxisFormatter = v => v.toFixed(3);
 
     if (isExcess) {
-      if (metricMode === "excess_taotie") yAxisName = "Excess Return vs Taotie (%)";
-      else if (metricMode === "excess_ghost") yAxisName = "Excess Return vs Ghost Taotie (%)";
-      else yAxisName = `Excess Return vs ${marketBmName} (%)`;
-      yAxisFormatter = v => `${v >= 0 ? '+' : ''}${v.toFixed(1)}%`;
+      if (metricMode === "excess_taotie") yAxisName = "Excess Return vs Taotie (pp)";
+      else if (metricMode === "excess_ghost") yAxisName = "Excess Return vs Ghost Taotie (pp)";
+      else yAxisName = `Excess Return vs ${marketBmName} (pp)`;
+      yAxisFormatter = v => `${v >= 0 ? '+' : ''}${v.toFixed(1)} pp`;
     } else if (isDD) {
       yAxisName = "Underwater Drawdown (%)";
       yAxisFormatter = v => `${v.toFixed(1)}%`;
@@ -1758,9 +1767,9 @@ window.ArenaCharts = {
           let html = `<div style="font-weight:700; margin-bottom:6px; color:#38bdf8;">${params[0].axisValue}</div>`;
           params.forEach(p => {
             const val = p.value;
-            const displayVal = (isExcess || isDD)
-              ? `${val >= 0 ? '+' : ''}${val.toFixed(2)}%`
-              : (typeof val === "number" ? val.toFixed(4) : val);
+            const displayVal = Number.isFinite(val)
+              ? (isExcess || isDD ? `${val >= 0 ? '+' : ''}${val.toFixed(2)}${isExcess ? ' pp' : '%'}` : val.toFixed(4))
+              : 'N/A';
             const marker = p.marker || `<span style="display:inline-block;margin-right:4px;border-radius:10px;width:10px;height:10px;background-color:${p.color};"></span>`;
             html += `<div style="display:flex; justify-content:space-between; align-items:center; gap:14px; font-size:11px; margin-bottom:2px;">
               <span style="display:flex; align-items:center;">${marker} ${p.seriesName}</span>

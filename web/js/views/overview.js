@@ -15,7 +15,8 @@ window.OverviewView = {
     if (!el) return;
 
     const kpis = window.arenaAdapter.getGlobalKPIs();
-    const allPaths = window.arenaAdapter.getAllPaths().filter(p => p.contestant_id !== "BENCHMARK");
+    const allPaths = window.arenaAdapter.getAllPaths().filter(p => p.contestant_id !== "BENCHMARK" && p.full_season_eligible !== false);
+    const observationPaths = window.arenaAdapter.getAllPaths().filter(p => p.full_season_eligible === false && p.contestant_id !== 'BENCHMARK');
 
     // Top 5 and Bottom 5 paths
     const sorted = [...allPaths].sort((a, b) => b.total_return_pct - a.total_return_pct);
@@ -64,9 +65,9 @@ window.OverviewView = {
       <!-- Candidate Strategy Highlights (Clean 4-column Grid) -->
       <div class="kpi-grid" style="grid-template-columns: repeat(4, 1fr); margin-bottom: 14px;">
         <div class="kpi-card">
-          <div class="kpi-label">Active Strategy Paths</div>
+          <div class="kpi-label">Full-season Strategy Paths</div>
           <div class="kpi-value">${kpis.totalPaths}</div>
-          <div class="kpi-subtext">6 Model Candidates × 28 Zoo Handlers</div>
+          <div class="kpi-subtext">${new Set(allPaths.map(p => p.contestant_id)).size} full-season contestants · ${observationPaths.length} additional observation paths</div>
         </div>
         <div class="kpi-card positive">
           <div class="kpi-label arena-glossary-term" data-tooltip-term="empirical_p_value">Upper Tail vs Null (p &lt; 0.05)</div>
@@ -75,12 +76,12 @@ window.OverviewView = {
         </div>
         <div class="kpi-card positive">
           <div class="kpi-label arena-glossary-term" data-tooltip-term="total_return_pct">Peak OOS Return</div>
-          <div class="kpi-value positive">${kpis.topReturn >= 0 ? '+' : ''}${kpis.topReturn.toFixed(2)}%</div>
+          <div class="kpi-value positive">${kpis.topReturn >= 0 ? '+' : ''}${window.formatNumber(kpis.topReturn, 2, '%')}</div>
           <div class="kpi-subtext">Top performer across ${window.arenaAdapter.getTradingDays()} market sessions</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-label arena-glossary-term" data-tooltip-term="total_return_pct">Median OOS Return</div>
-          <div class="kpi-value" style="color:#38bdf8;">${kpis.medianReturn >= 0 ? '+' : ''}${kpis.medianReturn.toFixed(2)}%</div>
+          <div class="kpi-value" style="color:#38bdf8;">${kpis.medianReturn >= 0 ? '+' : ''}${window.formatNumber(kpis.medianReturn, 2, '%')}</div>
           <div class="kpi-subtext">Cross-path median performance</div>
         </div>
       </div>
@@ -99,19 +100,19 @@ window.OverviewView = {
           <div style="display: flex; align-items: center; gap: 8px;">
             <span class="bm-line-badge" style="border-top-color: #c084fc; width: 14px;"></span>
             <span class="arena-glossary-term" data-tooltip-term="taotie" style="font-size: 12px;">${window.arenaAdapter.getTaotieDisplayName()}:</span>
-            <b style="font-size: 13px; font-family: monospace; color: #c084fc;">${kpis.taotieReturn >= 0 ? '+' : ''}${kpis.taotieReturn.toFixed(2)}%</b>
+            <b style="font-size: 13px; font-family: monospace; color: #c084fc;">${kpis.taotieReturn >= 0 ? '+' : ''}${window.formatNumber(kpis.taotieReturn, 2, '%')}</b>
           </div>
           ${window.arenaAdapter.hasGhostTaotie() ? `
           <div style="display: flex; align-items: center; gap: 8px;">
             <span class="bm-line-badge" style="border-top-color: #00f0ff; width: 14px;"></span>
             <span class="arena-glossary-term" data-tooltip-term="ghost_taotie" style="font-size: 12px;">Ghost Taotie:</span>
-            <b style="font-size: 13px; font-family: monospace; color: #00f0ff;">${window.arenaAdapter.getGhostTaotieReturn() >= 0 ? '+' : ''}${window.arenaAdapter.getGhostTaotieReturn().toFixed(2)}%</b>
+            <b style="font-size: 13px; font-family: monospace; color: #00f0ff;">${window.arenaAdapter.getGhostTaotieReturn() >= 0 ? '+' : ''}${window.formatNumber(window.arenaAdapter.getGhostTaotieReturn(), 2, '%')}</b>
           </div>
           ` : ''}
           <div style="display: flex; align-items: center; gap: 8px;">
             <span class="bm-line-badge" style="border-top-color: #f59e0b; width: 14px;"></span>
             <span class="arena-glossary-term" data-tooltip-term="market" style="font-size: 12px;">${window.arenaAdapter.getMarketBenchmarkName()} (Market Benchmark):</span>
-            <b style="font-size: 13px; font-family: monospace; color: #f59e0b;">${kpis.csi300Return >= 0 ? '+' : ''}${kpis.csi300Return.toFixed(2)}%</b>
+            <b style="font-size: 13px; font-family: monospace; color: #f59e0b;">${kpis.csi300Return >= 0 ? '+' : ''}${window.formatNumber(kpis.csi300Return, 2, '%')}</b>
           </div>
         </div>
         <div style="font-size: 11px; color: var(--text-tertiary);">
@@ -195,6 +196,7 @@ window.OverviewView = {
           </div>
         </div>
 
+        <div id="panorama-observation-window" class="kpi-subtext"></div>
         <div id="chart-arena-panorama" style="height: 420px; width: 100%;"></div>
       </div>
 
@@ -236,7 +238,7 @@ window.OverviewView = {
                       #${idx + 1} ${p.path_id}
                     </div>
                     <div style="font-size:0.75rem; color:var(--text-tertiary);">
-                      Monkey Pct: <b style="color:#a855f7;">${window.formatPercentile ? window.formatPercentile(p.percentile_rank ?? p.monkey_percentile ?? p.monkey_percentile_rank) : ((p.percentile_rank ?? p.monkey_percentile ?? p.monkey_percentile_rank) || 0).toFixed(1) + '%'}</b> | ${(() => {
+                      Monkey Pct: <b style="color:#a855f7;">${window.formatPercentile ? window.formatPercentile(p.percentile_rank ?? p.monkey_percentile ?? p.monkey_percentile_rank) : window.formatNumber(p.percentile_rank ?? p.monkey_percentile ?? p.monkey_percentile_rank, 1, '%')}</b> | ${(() => {
                         const rawP = p.empirical_p_value !== undefined ? p.empirical_p_value : p.p_value;
                         const pVal = window.formatPValue ? window.formatPValue(rawP) : '1.0000';
                         return pVal.startsWith('<') ? `p ${pVal}` : `p=${pVal}`;
@@ -269,7 +271,7 @@ window.OverviewView = {
                       ${p.path_id}
                     </div>
                     <div style="font-size:0.75rem; color:var(--text-tertiary);">
-                      ${p.animal_id === 'koala' ? '⚡ Inverted Polarity Test' : 'Monkey Pct: ' + (window.formatPercentile ? window.formatPercentile(p.percentile_rank ?? p.monkey_percentile ?? p.monkey_percentile_rank) : ((p.percentile_rank ?? p.monkey_percentile ?? p.monkey_percentile_rank) || 0).toFixed(1) + '%')}
+                      ${p.animal_id === 'koala' ? '⚡ Inverted Polarity Test' : 'Monkey Pct: ' + (window.formatPercentile ? window.formatPercentile(p.percentile_rank ?? p.monkey_percentile ?? p.monkey_percentile_rank) : window.formatNumber(p.percentile_rank ?? p.monkey_percentile ?? p.monkey_percentile_rank, 1, '%'))}
                     </div>
                   </div>
                   <div style="text-align:right;">
@@ -342,6 +344,10 @@ window.OverviewView = {
     if (!window.arenaAdapter || !window.ArenaCharts) return;
     const data = window.arenaAdapter.getMacroPanoramaData(this.activeMetricMode, this.activeFilterGroup, this.activeFocusModel);
     window.ArenaCharts.renderMacroPanorama("chart-arena-panorama", data);
+    const caption = document.getElementById('panorama-observation-window');
+    if (caption) caption.textContent = data.dates.length
+      ? `Common window: ${data.dates[0]} close → ${data.dates.at(-1)} close · NAV starts at 1.0000. All-model selections use full-season participants.`
+      : 'No observations available for this selection.';
 
     // Maintain benchmark pill selection state
     const bmPills = document.querySelectorAll("#panorama-benchmark-pill-group .benchmark-pill");

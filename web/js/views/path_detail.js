@@ -35,8 +35,8 @@ window.PathDetailView = {
     const monkeyDist = path.test_status === 'observation' ? null : window.arenaAdapter.getMonkeyDistribution(specId);
 
     const isSig = path.empirical_p_value != null && path.empirical_p_value < 0.05;
-    const pVal = path.empirical_p_value !== undefined ? path.empirical_p_value : (path.p_value !== undefined ? path.p_value : 1.0);
-    const pRank = path.percentile_rank !== undefined ? path.percentile_rank : (path.monkey_percentile !== undefined ? path.monkey_percentile : (path.monkey_percentile_rank !== undefined ? path.monkey_percentile_rank : 50.0));
+    const pVal = path.empirical_p_value ?? path.p_value ?? null;
+    const pRank = path.percentile_rank ?? path.monkey_percentile ?? path.monkey_percentile_rank ?? null;
     const retColor = path.total_return_pct >= 0 ? "var(--accent-positive)" : "var(--accent-negative)";
     const taotieRet = path.observation_start && dates.includes(path.observation_start)
       ? (taotieCurve.at(-1)/taotieCurve[dates.indexOf(path.observation_start)]-1)*100
@@ -77,7 +77,7 @@ window.PathDetailView = {
                 ${path.animal_name || path.animal_id}
               </span>
               <span style="font-size:0.85rem; color:var(--text-tertiary);">
-                Specification: <b>${specId}</b> (${path.animal_category})
+                Specification: <b>${specId || 'N/A'}</b> (${path.animal_category || 'Reference'})
               </span>
             </div>
             <h1 style="font-size:2rem; font-weight:800; color:var(--text-primary); margin:0 0 6px 0;">
@@ -93,7 +93,7 @@ window.PathDetailView = {
             <div style="text-align:right;">
               <div style="font-size:0.75rem; color:var(--text-tertiary); text-transform:uppercase;">${path.observation_start ? 'Observation return since '+path.observation_start : 'OOS Total Return'}</div>
               <div style="font-size:2.2rem; font-weight:800; color:${retColor};">
-                ${path.total_return_pct >= 0 ? '+' : ''}${path.total_return_pct.toFixed(2)}%
+                ${path.total_return_pct >= 0 ? '+' : ''}${window.formatNumber(path.total_return_pct, 2, '%')}
               </div>
               <div style="font-size:0.75rem; color:var(--text-tertiary);">
                 Excess vs Executable <span data-tooltip-term="taotie">${window.arenaAdapter.getTaotieShortName()}</span>: <b>${taotieExcess >= 0 ? '+' : ''}${taotieExcess.toFixed(2)} pp</b>
@@ -102,7 +102,7 @@ window.PathDetailView = {
             <div style="text-align:right; border-left:1px solid var(--border-subtle); padding-left:1.25rem;">
               <div style="font-size:0.75rem; color:var(--text-tertiary); text-transform:uppercase;" data-tooltip-term="monkey_percentile">Monkey Percentile</div>
               <div style="font-size:2.2rem; font-weight:800; color:${isSig ? 'var(--accent-positive)' : 'var(--accent-warning)'};">
-                ${pRank == null ? 'N/A' : window.formatPercentile ? window.formatPercentile(pRank, path.monkey_count) : pRank.toFixed(1) + '%'}
+                ${window.formatPercentile ? window.formatPercentile(pRank, path.monkey_count) : window.formatNumber(pRank, 1, '%')}
               </div>
               <div style="font-size:0.75rem; color:var(--text-tertiary);">
                 Raw p: <b data-tooltip-term="p_value">${window.formatPValue(pVal)}</b><br>
@@ -117,22 +117,22 @@ window.PathDetailView = {
         <div class="kpi-grid" style="margin-top:1.5rem; grid-template-columns:repeat(4, 1fr);">
           <div class="kpi-card">
             <div class="kpi-label">Final NAV</div>
-            <div class="kpi-value">${(path.final_nav !== undefined ? path.final_nav : 1.0).toFixed(4)}</div>
-            <div class="kpi-subtext">Base 1.0000 on ${seasonMeta?.anchor_date || '2026-07-03'}</div>
+            <div class="kpi-value">${window.formatNumber(path.final_nav, 4)}</div>
+            <div class="kpi-subtext">Base 1.0000 on ${path.observation_start || seasonMeta.anchor_date || dates[0]}</div>
           </div>
           <div class="kpi-card">
             <div class="kpi-label" data-tooltip-term="mdd">Max Drawdown</div>
-            <div class="kpi-value" style="color:var(--accent-negative);">${(path.max_drawdown_pct !== undefined ? path.max_drawdown_pct : 0.0).toFixed(2)}%</div>
+            <div class="kpi-value" style="color:var(--accent-negative);">${window.formatNumber(path.max_drawdown_pct, 2, '%')}</div>
             <div class="kpi-subtext">Peak-to-trough drop</div>
           </div>
           <div class="kpi-card">
             <div class="kpi-label" data-tooltip-term="sharpe">Sharpe Ratio</div>
-            <div class="kpi-value" style="color:var(--accent-positive);">${path.sharpe_ratio || '-'}</div>
+            <div class="kpi-value" style="color:var(--accent-positive);">${window.formatNumber(path.sharpe_ratio)}</div>
             <div class="kpi-subtext">Annualized risk-adjusted return</div>
           </div>
           <div class="kpi-card">
             <div class="kpi-label">Holdings Breadth</div>
-            <div class="kpi-value" style="color:var(--accent-cyan);">${(path.actual_holdings_mean !== undefined ? path.actual_holdings_mean : 0).toFixed(1)} / ${(path.target_holdings_mean !== undefined ? path.target_holdings_mean : 22).toFixed(0)}</div>
+            <div class="kpi-value" style="color:var(--accent-cyan);">${window.formatNumber(path.actual_holdings_mean, 1)} / ${window.formatNumber(path.target_holdings_mean, 0)}</div>
             <div class="kpi-subtext">Mean actual vs target stocks</div>
           </div>
         </div>
@@ -202,25 +202,25 @@ window.PathDetailView = {
               <div style="background:var(--bg-surface-elevated); padding:0.65rem 0.85rem; border-radius:var(--radius-sm); border:1px solid var(--border-subtle);">
                 <span style="color:var(--text-tertiary);">Unaffordable 1-Lot Skips:</span>
                 <b style="float:right; color:${path.unaffordable_buy_count > 0 ? 'var(--accent-warning)' : 'var(--text-primary)'};">
-                  ${path.unaffordable_buy_count || 0} orders (${(path.unaffordable_buy_ratio || 0).toFixed(1)}%)
+                  ${path.unaffordable_buy_count ?? 'N/A'} orders (${window.formatNumber(path.unaffordable_buy_ratio, 1, '%')})
                 </b>
               </div>
               <div style="background:var(--bg-surface-elevated); padding:0.65rem 0.85rem; border-radius:var(--radius-sm); border:1px solid var(--border-subtle);">
                 <span style="color:var(--text-tertiary);">Friction Event Days:</span>
                 <b style="float:right; color:${path.unaffordable_event_days > 0 ? 'var(--accent-warning)' : 'var(--text-primary)'};">
-                  ${path.unaffordable_event_days || 0} trading days
+                  ${path.unaffordable_event_days ?? 'N/A'} trading days
                 </b>
               </div>
               <div style="background:var(--bg-surface-elevated); padding:0.65rem 0.85rem; border-radius:var(--radius-sm); border:1px solid var(--border-subtle);">
                 <span style="color:var(--text-tertiary);">Mean Cash Drag (Uninvested):</span>
                 <b style="float:right; color:${(path.mean_cash_ratio !== undefined ? path.mean_cash_ratio : (path.mean_cash_ratio_pct || 0)) > 5 ? 'var(--accent-warning)' : 'var(--text-primary)'};">
-                  ${(path.mean_cash_ratio !== undefined ? path.mean_cash_ratio : (path.mean_cash_ratio_pct || 0)).toFixed(2)}%
+                  ${window.formatNumber(path.mean_cash_ratio ?? path.mean_cash_ratio_pct, 2, '%')}
                 </b>
               </div>
               <div style="background:var(--bg-surface-elevated); padding:0.65rem 0.85rem; border-radius:var(--radius-sm); border:1px solid var(--border-subtle);">
                 <span style="color:var(--text-tertiary);">Holdings Fulfillment Rate:</span>
                 <b style="float:right; color:var(--accent-cyan);">
-                  ${(path.actual_holdings_mean !== undefined ? path.actual_holdings_mean : 0).toFixed(1)} / ${(path.target_holdings_mean !== undefined ? path.target_holdings_mean : 0).toFixed(0)} stocks
+                  ${window.formatNumber(path.actual_holdings_mean, 1)} / ${window.formatNumber(path.target_holdings_mean, 0)} stocks
                 </b>
               </div>
             </div>

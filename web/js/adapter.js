@@ -39,10 +39,10 @@ class ArenaDataAdapter {
       c.status = c.status || (c.observation_start ? "OBSERVATION" : "RETIRED");
       c.architecture_type = c.architecture_type || c.training_mode || "Multi-Factor Ensemble";
       c.lineage = c.lineage || c.family || "Family-Alpha";
-      c.historical_is_sharpe = c.historical_is_sharpe !== undefined ? c.historical_is_sharpe : (c.legacy_is_sharpe || 1.85);
+      c.historical_is_sharpe = c.historical_is_sharpe !== undefined ? c.historical_is_sharpe : (c.legacy_is_sharpe ?? null);
       c.legacy_is_sharpe = c.historical_is_sharpe;
-      c.historical_is_return_pct = c.historical_is_return_pct !== undefined ? c.historical_is_return_pct : 20.0;
-      c.historical_is_mdd_pct = c.historical_is_mdd_pct !== undefined ? c.historical_is_mdd_pct : 8.0;
+      c.historical_is_return_pct = c.historical_is_return_pct ?? null;
+      c.historical_is_mdd_pct = c.historical_is_mdd_pct ?? null;
       c.historical_sys_ann_return_pct = c.historical_sys_ann_return_pct !== undefined ? c.historical_sys_ann_return_pct : null;
       c.historical_metric_basis = c.historical_metric_basis || "Cashflow-adjusted cumulative system return from weekly inception (2024-10-21) up to burial date";
       if(c.observation_start){
@@ -116,14 +116,14 @@ class ArenaDataAdapter {
   }
 
   formatPValue(pVal) {
-    if (pVal === undefined || pVal === null || isNaN(pVal)) return "N/A";
+    if (pVal === undefined || pVal === null || !Number.isFinite(Number(pVal))) return "N/A";
     const num = Number(pVal);
     if (num < 0.001) return num.toExponential(3);
     return num.toPrecision(6);
   }
 
   formatPercentile(rank, n = 100000) {
-    if (rank === undefined || rank === null || isNaN(rank)) return "N/A";
+    if (rank === undefined || rank === null || !Number.isFinite(Number(rank))) return "N/A";
     const num = Number(rank);
     const resolution = 100 / (n + 1);
     if (num <= 0) {
@@ -453,10 +453,14 @@ class ArenaDataAdapter {
   }
 
   getMarketBenchmarkReturn() {
-    if (this.metadata.market_benchmark_return_pct !== undefined) {
-      return this.metadata.market_benchmark_return_pct;
-    }
-    return this.metadata.csi300_return_pct !== undefined ? this.metadata.csi300_return_pct : -4.81;
+    const reported = this.metadata.market_benchmark_return_pct ?? this.metadata.csi300_return_pct;
+    return this.getCurveReturn(this.getBenchmarkMarketCurve(), reported);
+  }
+
+  getCurveReturn(curve, reported) {
+    if (Number.isFinite(reported)) return reported;
+    const first = curve[0], last = curve.at(-1);
+    return Number.isFinite(first) && first > 0 && Number.isFinite(last) ? (last / first - 1) * 100 : null;
   }
 
   getBenchmarkMarketCurve() {
@@ -565,7 +569,7 @@ class ArenaDataAdapter {
   }
 
   getTaotieReturn() {
-    return this.metadata.taotie_return_pct !== undefined ? this.metadata.taotie_return_pct : 2.32;
+    return this.getCurveReturn(this.getBenchmarkTaotieCurve(), this.metadata.taotie_return_pct);
   }
 
   getTaotieDisplayName() {
@@ -598,7 +602,7 @@ class ArenaDataAdapter {
 
   getGhostTaotieReturn() {
     const p = this.paths.find(p => p.animal_id === "ghost_taotie");
-    return p ? p.total_return_pct : 3.85;
+    return this.getCurveReturn(this.getBenchmarkGhostTaotieCurve(), p?.total_return_pct);
   }
 
   getBenchmarkGhostTaotieCurve() {
@@ -804,6 +808,42 @@ class ArenaDataAdapter {
       candidatePaths = alphaPaths.slice(0, 6);
     }
 
+    const observationStart = candidatePaths.map(p => p.observation_start).filter(Boolean).sort().at(-1);
+    if (observationStart) {
+      const references = ['BENCHMARK_taotie', 'BENCHMARK_csi300'];
+      if (this.hasGhostTaotie()) references.push('BENCHMARK_ghost_taotie');
+      const comparison = this.getComparisonWindow(references, 'robot', observationStart);
+      const curves = Object.fromEntries(comparison.profiles.map(p => [p.id, p.curve]));
+      const excessId = {excess_taotie:'BENCHMARK_taotie', excess_ghost:'BENCHMARK_ghost_taotie', excess_csi300:'BENCHMARK_csi300'}[metricMode];
+      const transform = curve => {
+        if (metricMode === 'drawdown') {
+          let peak = 1;
+          return curve.map(value => {peak = Math.max(peak, value); return (value / peak - 1) * 100;});
+        }
+        if (excessId) return curve.map((value, i) => (value - curves[excessId][i]) * 100);
+        return curve;
+      };
+      const palette = ['#10b981', '#38bdf8', '#818cf8', '#f43f5e', '#fb923c', '#ec4899'];
+      const seriesList = candidatePaths.map((path, i) => {
+        const profile = this.getComparisonWindow([path.contestant_id], path.animal_id, observationStart).profiles[0];
+        return {id:path.path_id, name:path.path_id, type:'candidate', color:palette[i % palette.length], path,
+          data:transform(profile.curve)};
+      });
+      const benchmarks = [
+        {id:'BENCHMARK_ghost_taotie', name:'Ghost Taotie (100M)', type:'benchmark_ghost', color:'#00f0ff'},
+        {id:'BENCHMARK_taotie', name:this.getTaotieShortName(), type:'benchmark_taotie', color:'#c084fc'},
+        {id:'BENCHMARK_csi300', name:this.getMarketBenchmarkName(), type:'benchmark_csi300', color:'#f59e0b'}
+      ].filter(item => curves[item.id]);
+      if (excessId) {
+        const reference = benchmarks.find(item => item.id === excessId);
+        if (reference) seriesList.push({...reference, id:`BENCHMARK_zero_${excessId.slice(10)}`,
+          type:'benchmark_zero', data:comparison.dates.map(() => 0)});
+      } else {
+        for (const reference of benchmarks) seriesList.push({...reference, data:transform(curves[reference.id])});
+      }
+      return {dates:comparison.dates, seriesList, metricMode, filterGroup};
+    }
+
     const taotieCurve = this.getBenchmarkTaotieCurve();
     const ghostTaotieCurve = this.getBenchmarkGhostTaotieCurve();
     const csi300Curve = this.getBenchmarkCsi300Curve();
@@ -975,12 +1015,12 @@ class ArenaDataAdapter {
       return {
         totalPaths: 0,
         statSignificantCount: 0,
-        statSignificantPct: "0.0%",
-        topReturn: 0,
-        medianReturn: 0,
-        bestSharpe: 0,
-        taotieReturn: 2.32,
-        csi300Return: -4.81
+        statSignificantPct: "N/A",
+        topReturn: null,
+        medianReturn: null,
+        bestSharpe: null,
+        taotieReturn: this.getTaotieReturn(),
+        csi300Return: this.getCsi300Return()
       };
     }
 
@@ -1165,15 +1205,19 @@ class ArenaDataAdapter {
 }
 
 // Global statistical formatting helpers
+window.formatNumber = function(value, digits = 2, suffix = '') {
+  return Number.isFinite(value) ? value.toFixed(digits) + suffix : 'N/A';
+};
+
 window.formatPValue = function(pVal) {
-  if (pVal === undefined || pVal === null || isNaN(pVal)) return "N/A";
+  if (pVal === undefined || pVal === null || !Number.isFinite(Number(pVal))) return "N/A";
   const num = Number(pVal);
   if (num < 0.001) return num.toExponential(3);
   return num.toPrecision(6);
 };
 
 window.formatPercentile = function(rank, n = 100000) {
-  if (rank === undefined || rank === null || isNaN(rank)) return "N/A";
+  if (rank === undefined || rank === null || !Number.isFinite(Number(rank))) return "N/A";
   const num = Number(rank);
   const resolution = 100 / (n + 1);
   if (num <= 0) {

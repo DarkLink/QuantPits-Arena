@@ -44,15 +44,15 @@ window.LeaderboardView = {
               📊 Absolute Return
             </button>
             <button class="btn btn-sm ${this.viewMode === 'vs_taotie' ? 'btn-primary' : 'btn-secondary'}" onclick="window.LeaderboardView.switchViewMode('vs_taotie')">
-              🐾 Alpha vs Taotie (${taotieRet >= 0 ? '+' : ''}${taotieRet.toFixed(2)}%)
+              🐾 Alpha vs Taotie (${taotieRet >= 0 ? '+' : ''}${window.formatNumber(taotieRet, 2, '%')})
             </button>
             ${hasGhost ? `
               <button class="btn btn-sm ${this.viewMode === 'vs_ghost' ? 'btn-primary' : 'btn-secondary'}" onclick="window.LeaderboardView.switchViewMode('vs_ghost')">
-                👻 Alpha vs Ghost (${ghostRet >= 0 ? '+' : ''}${ghostRet.toFixed(2)}%)
+                👻 Alpha vs Ghost (${ghostRet >= 0 ? '+' : ''}${window.formatNumber(ghostRet, 2, '%')})
               </button>
             ` : ''}
             <button class="btn btn-sm ${this.viewMode === 'vs_csi300' ? 'btn-primary' : 'btn-secondary'}" onclick="window.LeaderboardView.switchViewMode('vs_csi300')">
-              🏛️ Alpha vs ${window.arenaAdapter.getMarketBenchmarkName()} (${csiRet >= 0 ? '+' : ''}${csiRet.toFixed(2)}%)
+              🏛️ Alpha vs ${window.arenaAdapter.getMarketBenchmarkName()} (${csiRet >= 0 ? '+' : ''}${window.formatNumber(csiRet, 2, '%')})
             </button>
           </div>
           <div style="font-size: 11px; color: var(--text-tertiary); font-family: monospace;">
@@ -99,7 +99,7 @@ window.LeaderboardView = {
             </table>
           </div>
           <div style="font-size: 11px; color: var(--text-tertiary); padding: 12px 16px 4px 16px; border-top: 1px solid var(--border-subtle);">
-            * Note: Return, Sharpe Ratio, and MDD are computed over <strong>${window.arenaAdapter.getPeriodLabel()}</strong>. All path statistics update dynamically across incremental evaluation cycles.
+            * Full-season paths cover <strong>${window.arenaAdapter.getPeriodLabel()}</strong>. Later entrants use their labeled observation windows and have no full-season rank. Missing statistics are N/A; use Compare Participants for a common-window comparison.
           </div>
         </div>
       </div>
@@ -131,11 +131,11 @@ window.LeaderboardView = {
           <div style="display:flex; justify-content:space-between; align-items:center; margin-top:12px; padding:10px 16px; background:var(--bg-surface-elevated); border-radius:var(--radius-sm); font-size:0.8rem; border:1px solid var(--border-subtle); flex-wrap:wrap; gap:10px;">
             <span style="color:var(--text-muted); font-weight:600;">Benchmark Reference Standards:</span>
             <div style="display:flex; gap:20px; flex-wrap:wrap;">
-              <span><span class="arena-glossary-term" data-tooltip-term="taotie">Taotie (Executable Universe Benchmark)</span>: <b style="color:var(--accent-positive);">${taotieRet >= 0 ? '+' : ''}${taotieRet.toFixed(2)}%</b></span>
+              <span><span class="arena-glossary-term" data-tooltip-term="taotie">Taotie (Executable Universe Benchmark)</span>: <b style="color:var(--accent-positive);">${taotieRet >= 0 ? '+' : ''}${window.formatNumber(taotieRet, 2, '%')}</b></span>
               ${hasGhost ? `
-              <span><span class="arena-glossary-term" data-tooltip-term="ghost_taotie">Ghost Taotie (Theoretical Equal-Weight)</span>: <b style="color:#00f0ff;">${ghostRet >= 0 ? '+' : ''}${ghostRet.toFixed(2)}%</b></span>
+              <span><span class="arena-glossary-term" data-tooltip-term="ghost_taotie">Ghost Taotie (Theoretical Equal-Weight)</span>: <b style="color:#00f0ff;">${ghostRet >= 0 ? '+' : ''}${window.formatNumber(ghostRet, 2, '%')}</b></span>
               ` : ''}
-              <span><span class="arena-glossary-term" data-tooltip-term="market">${window.arenaAdapter.getMarketBenchmarkName()} (External Market Anchor)</span>: <b style="color:var(--accent-negative);">${csiRet >= 0 ? '+' : ''}${csiRet.toFixed(2)}%</b></span>
+              <span><span class="arena-glossary-term" data-tooltip-term="market">${window.arenaAdapter.getMarketBenchmarkName()} (External Market Anchor)</span>: <b style="color:var(--accent-negative);">${csiRet >= 0 ? '+' : ''}${window.formatNumber(csiRet, 2, '%')}</b></span>
             </div>
           </div>
         </div>
@@ -229,6 +229,8 @@ window.LeaderboardView = {
       if (typeof vA === "string") {
         return this.sortAsc ? vA.localeCompare(vB) : vB.localeCompare(vA);
       }
+      const missingA = !Number.isFinite(vA), missingB = !Number.isFinite(vB);
+      if (missingA || missingB) return missingA === missingB ? 0 : missingA ? 1 : -1;
       return this.sortAsc ? vA - vB : vB - vA;
     });
 
@@ -239,9 +241,9 @@ window.LeaderboardView = {
 
     tbody.innerHTML = sorted.map(p => {
       const isPositive = p.total_return_pct >= 0;
-      const pct = (p.percentile_rank !== undefined ? p.percentile_rank : (p.monkey_percentile !== undefined ? p.monkey_percentile : (p.monkey_percentile_rank || 0)));
+      const pct = p.percentile_rank ?? p.monkey_percentile ?? p.monkey_percentile_rank ?? null;
       const isSig = p.empirical_p_value != null && p.empirical_p_value < 0.05;
-      const pVal = (p.empirical_p_value !== undefined ? p.empirical_p_value : (p.p_value !== undefined ? p.p_value : 1.0));
+      const pVal = p.empirical_p_value ?? p.p_value ?? null;
 
       const alphaTao = p.total_return_pct - taotieRet;
       const alphaGhost = p.total_return_pct - ghostRet;
@@ -308,16 +310,16 @@ window.LeaderboardView = {
           </td>
           <td class="numeric">
             <span class="badge ${isSig ? 'badge-green' : 'badge-neutral'}">
-              ${pct == null ? 'N/A' : window.formatPercentile ? window.formatPercentile(pct, p.monkey_count) : pct.toFixed(1) + '%'}
+              ${window.formatPercentile ? window.formatPercentile(pct, p.monkey_count) : window.formatNumber(pct, 1, '%')}
             </span>
           </td>
           <td class="numeric" style="font-family:monospace; color:${isSig ? 'var(--accent-positive)' : 'var(--text-tertiary)'};">
-            ${window.formatPValue ? window.formatPValue(pVal) : pVal.toFixed(4)}
+            ${window.formatPValue ? window.formatPValue(pVal) : window.formatNumber(pVal, 4)}
           </td>
           <td class="numeric" style="color:var(--accent-negative);">
-            ${p.max_drawdown_pct.toFixed(2)}%
+            ${window.formatNumber(p.max_drawdown_pct, 2, '%')}
           </td>
-          <td class="numeric">${p.sharpe_ratio || '-'}</td>
+          <td class="numeric">${window.formatNumber(p.sharpe_ratio)}</td>
           <td>
             <div style="display:flex; gap:0.25rem; flex-wrap:wrap;">
               ${(p.badges || []).map(b => `<span class="badge badge-neutral" style="font-size:0.65rem;">${b}</span>`).join("")}

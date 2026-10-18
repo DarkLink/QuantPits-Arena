@@ -62,7 +62,7 @@ window.LandingView = {
         <div>
           <h4 style="color:var(--accent-cyan); margin-bottom:4px;">Core Scientific Boundary: Historical Biography ≠ Arena Record</h4>
           <p style="font-size:0.9rem; color:var(--text-secondary); line-height:1.6; margin:0;">
-            Every strategy model in this tournament carries historical context (e.g. why it was accepted or superseded in production, historical training metrics). <b>In the Arena, all models start strictly from zero (NAV = 1.0000) on ${seasonMeta.anchor_date || "2026-07-03"} under ${seasonMeta.methodology?.capital_spec || "identical capital constraints"}</b>. Historical biography provides qualitative context, not arena advantage.
+            Every participant carries historical context. <b>Full-season participants start at NAV 1.0000 on ${seasonMeta.anchor_date || "2026-07-03"}; later entrants start at NAV 1.0000 on their declared observation date</b>. Historical biography provides qualitative context. Comparisons use a common observation window.
           </p>
         </div>
       </div>
@@ -73,7 +73,7 @@ window.LandingView = {
           <div class="concept-icon">🏺</div>
           <h3>The Models</h3>
           <p style="font-size:0.88rem; color:var(--text-secondary);">
-            Six anonymous contestants evaluated from the same initial NAV. Compare their Arena results across execution policies without revealing private model identities.
+            Six full-season contestants and later entrants, each with a declared observation window. Compare their Arena results across execution policies without revealing private model identities.
           </p>
           <div style="display:flex; justify-content:space-between; align-items:center; margin-top:auto;">
             <a href="#contestants" style="font-size:0.84rem; font-weight:600; color:var(--accent-cyan);">Explore Profiles →</a>
