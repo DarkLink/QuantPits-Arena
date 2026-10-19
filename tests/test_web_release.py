@@ -123,7 +123,12 @@ for(const [sid,data] of Object.entries(window.ARENA_SEASONS_DATA)){
  if(participation.totalPaths!==data.contestants.length*28||participation.fullSeasonPaths!==168||participation.referencePaths!==2)throw Error('participant and reference coverage were mixed');
  verifyZoo(data);
  window.MethodologyView.render('root');
- if(!node('root').innerHTML.includes(`${participation.totalPaths} participant paths`)||!node('root').innerHTML.includes('840 comparisons'))throw Error('participation count or original test family is mislabeled');
+ const methodology=node('root').innerHTML;
+ if(!methodology.includes(`${participation.totalPaths} participant paths`)||!methodology.includes('840 comparisons'))throw Error('participation count or original test family is mislabeled');
+ const guideAnimals=[...methodology.matchAll(/href="#animals\/([^"]+)"/g)].map(m=>m[1]).sort();
+ const animalIds=window.arenaAdapter.getAllAnimals().map(a=>a.id).sort();
+ if(JSON.stringify(guideAnimals)!==JSON.stringify(animalIds))throw Error('Methodology lost an animal introduction or links to an unknown Zoo policy');
+ if(!methodology.includes(window.arenaAdapter.getMarketBenchmarkName())||!methodology.includes(data.meta.cutoff)||!methodology.includes('href="#decision-audit"'))throw Error('Methodology lost pool context or shared-period comparison guidance');
  const dates=data.nav_timeline.dates;
  for(const dist of data.monkey_null_distributions){
   const quantiles=dist.daily_quantiles;

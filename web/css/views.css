@@ -381,6 +381,218 @@
   margin-bottom: 2rem;
 }
 
+/* Methodology field guide */
+.methodology-hero {
+  text-align: center;
+  padding: 1.75rem 0 0;
+}
+
+.methodology-hero .view-title {
+  margin: 1rem 0 0.75rem;
+}
+
+.methodology-hero .view-subtitle {
+  max-width: 720px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+.methodology-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  margin-top: 1.75rem;
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--border-subtle);
+}
+
+.methodology-summary > div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 1.25rem 0.75rem;
+  background: var(--bg-base);
+}
+
+.methodology-summary strong {
+  color: var(--brand-cyan);
+  font-family: var(--font-heading);
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.methodology-summary span {
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+}
+
+.methodology-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.methodology-section {
+  --methodology-accent: var(--brand-cyan);
+  border-left: 3px solid var(--methodology-accent);
+  padding: 1.5rem;
+}
+
+.methodology-section--amber { --methodology-accent: var(--accent-warning); }
+.methodology-section--purple { --methodology-accent: var(--brand-purple); }
+.methodology-section--green { --methodology-accent: var(--accent-positive); }
+
+.methodology-section-heading {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-bottom: 1rem;
+}
+
+.methodology-section-heading h2 {
+  flex: 1;
+  min-width: 0;
+  font-size: 1.2rem;
+  color: var(--methodology-accent);
+}
+
+.methodology-section p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.8;
+}
+
+.methodology-section > p + p,
+.methodology-section > .methodology-grid + p,
+.methodology-section > .methodology-formula + p {
+  margin-top: 1rem;
+}
+
+.methodology-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.methodology-section > p + .methodology-grid {
+  margin-top: 1rem;
+}
+
+.methodology-panel {
+  min-width: 0;
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.15rem;
+}
+
+.methodology-panel h3 {
+  font-size: 1.05rem;
+  margin-bottom: 0.45rem;
+}
+
+.methodology-panel p {
+  font-size: 0.88rem;
+}
+
+.methodology-eyebrow {
+  display: block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin-bottom: 0.35rem;
+}
+
+.methodology-animal-card {
+  display: flex;
+  flex-direction: column;
+  transition: border-color var(--transition-fast);
+}
+
+.methodology-animal-card:hover {
+  border-color: var(--border-accent);
+}
+
+.methodology-animal-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  margin-bottom: 0.6rem;
+}
+
+.methodology-animal-icon {
+  font-size: 1.9rem;
+  flex-shrink: 0;
+}
+
+.methodology-animal-heading h3 { margin-bottom: 0; }
+
+.methodology-animal-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  padding-top: 1rem;
+  margin-top: auto;
+}
+
+.methodology-animal-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  max-width: 100%;
+  padding: 0.3rem 0.6rem;
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 0.75rem;
+}
+
+.methodology-animal-link span {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--brand-cyan);
+}
+
+.methodology-animal-link:hover,
+.methodology-animal-link:focus-visible {
+  border-color: var(--brand-cyan);
+  color: var(--brand-cyan);
+}
+
+.methodology-callout,
+.methodology-formula {
+  padding: 1rem 1.15rem;
+  background: var(--bg-subtle);
+  border-left: 2px solid var(--methodology-accent);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  margin-top: 1rem;
+}
+
+.methodology-formula code {
+  display: block;
+  color: var(--methodology-accent);
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  overflow-wrap: anywhere;
+}
+
+.methodology-formula p { margin-top: 0.6rem; }
+.methodology-section .methodology-note { font-size: 0.85rem; }
+.methodology-timeline { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+@media (max-width: 680px) {
+  .methodology-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .methodology-grid { grid-template-columns: minmax(0, 1fr); }
+  .methodology-section { padding: 1.15rem; }
+  .methodology-hero .view-title { font-size: 1.8rem; }
+}
+
 /* --------------------------------------------------------------------------
    9. Community Discussion View (Giscus Integration)
    -------------------------------------------------------------------------- */

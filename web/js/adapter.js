@@ -252,7 +252,7 @@ class ArenaDataAdapter {
         spec: "P_22_3",
         topk: 22,
         n_drop: 3,
-        description: "Delays deployment of newly allocated cash into buying targets by 1 week, holding funds in cash before execution. Tests signal half-life."
+        description: "Starts in cash for 1 weekly cycle, then rebalances using rankings delayed by 1 cycle. Tests signal latency with a cash-only initial period."
       },
       {
         id: "sloth-2",
@@ -262,7 +262,7 @@ class ArenaDataAdapter {
         spec: "P_22_3",
         topk: 22,
         n_drop: 3,
-        description: "Delays entry into new target stocks by 2 weeks. Measures whether alpha decays exponentially or retains multi-week persistence."
+        description: "Starts in cash for 2 weekly cycles, then rebalances using rankings delayed by 2 cycles. Tests sensitivity to delayed information and initial market exposure."
       },
       {
         id: "sloth-3",
@@ -272,7 +272,7 @@ class ArenaDataAdapter {
         spec: "P_22_3",
         topk: 22,
         n_drop: 3,
-        description: "Delays new position deployment by 3 weeks, measuring severe operational latency resilience."
+        description: "Starts in cash for 3 weekly cycles, then rebalances using rankings delayed by 3 cycles. Tests behavior under a longer signal delay."
       },
       {
         id: "sloth-4",
@@ -282,7 +282,7 @@ class ArenaDataAdapter {
         spec: "P_22_3",
         topk: 22,
         n_drop: 3,
-        description: "Delays entry by a full month (4 weeks). A non-negative return indicates exceptional multi-month signal durability."
+        description: "Starts in cash for 4 weekly cycles, then rebalances using rankings delayed by 4 cycles. Returns also reflect the initial cash-exposure gap, not signal durability alone."
       },
       // 3. Stale Holding (Snail)
       {
@@ -293,7 +293,7 @@ class ArenaDataAdapter {
         spec: "P_22_3",
         topk: 22,
         n_drop: 3,
-        description: "Postpones forced liquidation of dropped positions by 1 week, keeping stale holdings longer in portfolio."
+        description: "Enters immediately using the initial ranking, then rebalances using rankings delayed by 1 weekly cycle. Unlike Sloth, it has no initial cash-only period."
       },
       {
         id: "snail-2",
@@ -303,7 +303,7 @@ class ArenaDataAdapter {
         spec: "P_22_3",
         topk: 22,
         n_drop: 3,
-        description: "Postpones liquidation of dropped positions by 2 weeks, measuring downside drag from stale factor exposure."
+        description: "Enters immediately and reuses the initial ranking during the transition, then rebalances using rankings delayed by 2 weekly cycles. Tests signal delay with an invested start."
       },
       {
         id: "snail-3",
@@ -313,7 +313,7 @@ class ArenaDataAdapter {
         spec: "P_22_3",
         topk: 22,
         n_drop: 3,
-        description: "Postpones liquidation by 3 weeks, evaluating exit inertia impact."
+        description: "Enters immediately and reuses the initial ranking during the transition, then rebalances using rankings delayed by 3 weekly cycles. Tests signal delay with an invested start."
       },
       {
         id: "snail-4",
@@ -323,7 +323,7 @@ class ArenaDataAdapter {
         spec: "P_22_3",
         topk: 22,
         n_drop: 3,
-        description: "Holds dropped positions for 4 extra weeks, testing tolerance to stale momentum."
+        description: "Enters immediately and reuses the initial ranking during the transition, then rebalances using rankings delayed by 4 weekly cycles. Orders are based on delayed rankings rather than a fixed extension of each holding."
       },
       // 4. Turnover & Friction (Turtle & Rabbit)
       {
