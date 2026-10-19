@@ -11,6 +11,7 @@ window.LandingView = {
 
     const seasonMeta = window.arenaAdapter ? window.arenaAdapter.getCurrentSeasonMeta() : {};
     const hasGhost = window.arenaAdapter ? window.arenaAdapter.hasGhostTaotie() : false;
+    const participation = window.arenaAdapter.getGlobalKPIs();
 
     el.innerHTML = `
       <section class="landing-hero">
@@ -73,7 +74,7 @@ window.LandingView = {
           <div class="concept-icon">🏺</div>
           <h3>The Models</h3>
           <p style="font-size:0.88rem; color:var(--text-secondary);">
-            Six full-season contestants and later entrants, each with a declared observation window. Compare their Arena results across execution policies without revealing private model identities.
+            ${participation.contestantCount} contestants across ${participation.totalPaths} participant paths in this pool: ${participation.fullSeasonPaths} full-season paths and ${participation.observationPaths} observation paths. Each participant has a declared observation window; benchmark reference paths are counted separately.
           </p>
           <div style="display:flex; justify-content:space-between; align-items:center; margin-top:auto;">
             <a href="#contestants" style="font-size:0.84rem; font-weight:600; color:var(--accent-cyan);">Explore Profiles →</a>

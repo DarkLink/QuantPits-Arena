@@ -228,20 +228,20 @@ def dispatch(data,start,end,title,language='en',append_october=False):
         f'{start} → {end}: {len(sub)-1} return sessions, {len(sub)} NAV observations including the reporting anchor; {rebalances} scheduled rebalances.',
         f'Period leader {best.path}: {best.period_pct:+.4f}%; end NAV {best.nav:.6f}.',
         f'Cumulative leader {leader.path}: {leader.cumulative_pct:+.4f}%; end NAV {leader.nav:.6f}.',
-        f'{positive}/168 contestant paths gained during this segment; median path return {metrics.period_pct.median():+.4f}%.',
+        f'{positive}/168 full-season contestant paths gained during this segment; median path return {metrics.period_pct.median():+.4f}%.',
         f'Taotie {tao_ret:+.4f}% for the segment, end NAV {tao.iloc[-1]:.6f}; Ghost scenario {ghost_ret:+.4f}%, NAV {ghost.iloc[-1]:.6f}.',
         f'Cumulative leader raw p={ptext(leader.raw_p)}, Bonferroni p={ptext(leader.bonferroni_p)}; N={count:,} per matched random spec.',
-        f'At this cutoff: {raw}/168 raw p<0.05 and {bonf}/168 Bonferroni p<0.05 in this pool, within the visible 840-item family.'
+        f'At this cutoff: {raw}/168 full-season paths with raw p<0.05 and {bonf}/168 with Bonferroni p<0.05 in this pool, within the visible 840-item family.'
     ]
     if market_ret is not None: facts.insert(4,f'Market index segment return {market_ret:+.4f}%; end normalized NAV {market.loc[end]:.6f}.')
     if zh:
         facts=[f'{start} 至 {end}：{len(sub)-1} 个收益交易日，含报告锚点共 {len(sub)} 个净值观察；{rebalances} 次计划调仓。',
             f'区间第一 {best.path}：{best.period_pct:+.4f}%，期末 NAV {best.nav:.6f}。',
             f'累计第一 {leader.path}：{leader.cumulative_pct:+.4f}%，期末 NAV {leader.nav:.6f}。',
-            f'168 条动物路径中 {positive} 条区间盈利；区间收益中位数 {metrics.period_pct.median():+.4f}%。',
+            f'168 条全季动物路径中 {positive} 条区间盈利；区间收益中位数 {metrics.period_pct.median():+.4f}%。',
             f'Taotie 区间 {tao_ret:+.4f}%，期末 NAV {tao.iloc[-1]:.6f}；Ghost 情景 {ghost_ret:+.4f}%，NAV {ghost.iloc[-1]:.6f}。',
             f'累计领先路径原始 p={ptext(leader.raw_p)}，Bonferroni p={ptext(leader.bonferroni_p)}；对应随机规格 N={count:,}。',
-            f'本池截至该日：{raw}/168 原始 p<0.05，{bonf}/168 Bonferroni p<0.05；校正族仍包含全部五池 840 项。']
+            f'本池全季路径截至该日：{raw}/168 原始 p<0.05，{bonf}/168 Bonferroni p<0.05；校正族仍包含全部五池 840 项。']
         if market_ret is not None:facts.insert(4,f'市场指数区间 {market_ret:+.4f}%，期末归一化 NAV {market.loc[end]:.6f}。')
     intro=(f'本篇在统一修复引擎下事后重放，采用旧快照保存的实际周原始信号，行情为本次冻结的现时日线快照。报告窗口锚点 {start}，截止 {end}。全部收益采用净值比率；收益差为百分点。旧版已在私有归档中保留，新版不构成当年事前发布的承诺。' if zh else
         f'This dispatch is a retrospective repair replay using the actual raw weekly signals preserved in legacy checkpoints and a frozen current daily-bar snapshot. Reporting anchor: {start}; cutoff: {end}. Period returns are NAV ratios; differences in returns are percentage points. Legacy artifacts are archived separately. This refreshed document is not evidence of a historical pre-market commitment.')
@@ -250,7 +250,7 @@ def dispatch(data,start,end,title,language='en',append_october=False):
     text+=('累计前十（截至本篇截止）：\n\n' if zh else 'Top ten cumulatively through this cutoff:\n\n')+table(cumulative.head(10)[top_columns])+'\n\n'
     text+=('区间后五：\n\n' if zh else 'Bottom five for the segment:\n\n')+table(period.tail(5)[top_columns])+'\n\n'
     text+=('## 六个匿名模型\n\n每个模型包含全部 28 个动物，不按获胜组合筛选。\n\n' if zh else '## Six anonymous contestants\n\nEach row includes all 28 animals; no selection of winning combinations.\n\n')+table(model)+'\n\n'
-    text+=('## 全部动物策略\n\n每行汇总六个模型的区间收益；范围体现模型与策略的交互。\n\n' if zh else '## All animal policies\n\nEach row summarizes segment returns across the six contestants; the range describes contestant-policy interaction.\n\n')+table(animals)+'\n\n'
+    text+=('## 全部动物策略\n\n每行汇总六个全季模型的区间收益；范围体现模型与策略的交互。\n\n' if zh else '## All animal policies\n\nEach row summarizes segment returns across the six full-season contestants; the range describes contestant-policy interaction.\n\n')+table(animals)+'\n\n'
     mechanism=(f'TopK=5/DropN=1 在六模型间的区间收益跨度为 {spread:.4f} 个百分点；仅凭单个优胜路径不能认定集中度有普遍优势。Rabbit 的 DropN 控制每周可替换数量，并不是更高的交易频率。Sloth 的延迟及冷启动现金和 Snail 的暖启动旧信号会同时改变敞口与路径，因此这里只评价完整策略，不将差额归因于纯预测半衰期。Meerkat 分位带与反向 Koala 的表现应结合上表全模型分布阅读。\n\n模型级均值衡量跨动物的一致性，最优行只描述本窗口的实现收益。宽池与窄池的可选集合、费用、整手约束、现金暴露及模型信号截面共同影响结果；这些结果不识别单一宏观原因，也不揭示模型架构。' if zh else
         f'The TopK=5/DropN=1 segment spread across contestants is {spread:.4f} percentage points. A winning concentrated path does not establish a universal concentration advantage. Rabbit DropN changes weekly replacement capacity, not trading frequency. Sloth delay and cold-start cash, and Snail warm-start stale signals, jointly alter exposure and path dependence; these are whole-strategy comparisons, not an identified prediction half-life. Percentile Meerkats and inverted Koala should be read against the full contestant distribution above.\n\nContestant averages describe consistency across animals; the best row describes realized performance in this window. Pool membership, fees, lots, cash exposure and signal cross-sections all contribute to differences across environments. The results do not identify a single macro cause or disclose contestant architecture.')
     text+=('## 机制解释与边界\n\n' if zh else '## Mechanisms and interpretation\n\n')+mechanism+'\n\n'
@@ -350,8 +350,8 @@ def build_dispatches(root,datasets):
             'nature_label':'Retrospective repair using preserved historical signals; daily-bar execution research.',
             'leader_summary':f"{latest['leader']} leads at NAV {latest['nav']:.4f} ({latest['return_pct']:+.2f}%). October segment leader {latest['period_leader']} at {latest['period_return_pct']:+.2f}%."}
         d['climate']={'tag':'Recalculated Market Review','status_badge':'Released','title':'Recalculated reporting segment',
-            'summary':f"{latest_start} ~ {latest_end}: {latest['positive']}/168 contestant paths positive. All statistics use the repaired execution policy and 100,000 matched random controls per spec.",
-            'bullets':[f"{latest['raw']}/168 raw cumulative p<0.05 in this pool; {latest['bonferroni']}/168 Bonferroni p<0.05 within the complete 840-item family.",
+            'summary':f"{latest_start} ~ {latest_end}: {latest['positive']}/168 full-season contestant paths positive. All statistics use the repaired execution policy and 100,000 matched random controls per spec.",
+            'bullets':[f"{latest['raw']}/168 full-season paths with raw cumulative p<0.05 in this pool; {latest['bonferroni']}/168 with Bonferroni p<0.05 within the complete 840-item family.",
                 'Past dispatches are retrospectively recalculated; historical pre-market commitment is not established.',
                 'Daily-bar research lacks complete verified corporate actions and opening direction-limit data.'],
             'decrypt_label':f'All dispatches recalculated through {latest_end}'}

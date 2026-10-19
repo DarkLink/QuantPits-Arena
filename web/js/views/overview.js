@@ -18,7 +18,6 @@ window.OverviewView = {
 
     const kpis = window.arenaAdapter.getGlobalKPIs();
     const allPaths = window.arenaAdapter.getAllPaths().filter(p => p.contestant_id !== "BENCHMARK" && p.full_season_eligible !== false);
-    const observationPaths = window.arenaAdapter.getAllPaths().filter(p => p.full_season_eligible === false && p.contestant_id !== 'BENCHMARK');
 
     // Top 5 and Bottom 5 paths
     const sorted = [...allPaths].sort((a, b) => b.total_return_pct - a.total_return_pct);
@@ -67,23 +66,23 @@ window.OverviewView = {
       <!-- Candidate Strategy Highlights (Clean 4-column Grid) -->
       <div class="kpi-grid" style="grid-template-columns: repeat(4, 1fr); margin-bottom: 14px;">
         <div class="kpi-card">
-          <div class="kpi-label">Full-season Strategy Paths</div>
-          <div class="kpi-value">${kpis.totalPaths}</div>
-          <div class="kpi-subtext">${new Set(allPaths.map(p => p.contestant_id)).size} full-season contestants · ${observationPaths.length} additional observation paths</div>
+          <div class="kpi-label">Participant Strategy Paths</div>
+          <div class="kpi-value" data-path-count="${kpis.totalPaths}">${kpis.totalPaths}</div>
+          <div class="kpi-subtext">${kpis.contestantCount} contestants · ${kpis.fullSeasonPaths} full-season + ${kpis.observationPaths} observation · references excluded</div>
         </div>
         <div class="kpi-card positive">
-          <div class="kpi-label arena-glossary-term" data-tooltip-term="empirical_p_value">Upper Tail vs Null (p &lt; 0.05)</div>
+          <div class="kpi-label arena-glossary-term" data-tooltip-term="empirical_p_value">Full-season Upper Tail (p &lt; 0.05)</div>
           <div class="kpi-value positive">${kpis.statSignificantCount}</div>
-          <div class="kpi-subtext">${kpis.statSignificantPct} exceed 95th %ile of matched nulls</div>
+          <div class="kpi-subtext">${kpis.testedPaths} tested paths · ${kpis.statSignificantPct} exceed 95th %ile of matched nulls</div>
         </div>
         <div class="kpi-card positive">
-          <div class="kpi-label arena-glossary-term" data-tooltip-term="total_return_pct">Peak OOS Return</div>
-          <div class="kpi-value positive">${kpis.topReturn >= 0 ? '+' : ''}${window.formatNumber(kpis.topReturn, 2, '%')}</div>
+          <div class="kpi-label arena-glossary-term" data-tooltip-term="total_return_pct">Full-season Peak Return</div>
+          <div class="kpi-value positive">${Number.isFinite(kpis.topReturn) && kpis.topReturn >= 0 ? '+' : ''}${window.formatNumber(kpis.topReturn, 2, '%')}</div>
           <div class="kpi-subtext">Top performer across ${window.arenaAdapter.getTradingDays()} market sessions</div>
         </div>
         <div class="kpi-card">
-          <div class="kpi-label arena-glossary-term" data-tooltip-term="total_return_pct">Median OOS Return</div>
-          <div class="kpi-value" style="color:#38bdf8;">${kpis.medianReturn >= 0 ? '+' : ''}${window.formatNumber(kpis.medianReturn, 2, '%')}</div>
+          <div class="kpi-label arena-glossary-term" data-tooltip-term="total_return_pct">Full-season Median Return</div>
+          <div class="kpi-value" style="color:#38bdf8;">${Number.isFinite(kpis.medianReturn) && kpis.medianReturn >= 0 ? '+' : ''}${window.formatNumber(kpis.medianReturn, 2, '%')}</div>
           <div class="kpi-subtext">Cross-path median performance</div>
         </div>
       </div>
@@ -209,7 +208,7 @@ window.OverviewView = {
           <div class="card-header">
             <div>
               <div style="display: flex; align-items: center; gap: 8px;">
-                <h3 class="card-title">🎯 Return vs. Monkey Percentile Significance</h3>
+                <h3 class="card-title">🎯 Full-season Return vs. Monkey Percentile</h3>
                 <button class="chart-spec-pill" onclick="window.ArenaSpecDrawer && window.ArenaSpecDrawer.toggle('Metrics')">
                   <span>📐 Null Court Specs</span>
                 </button>
@@ -230,7 +229,7 @@ window.OverviewView = {
           <!-- Top Performers -->
           <div class="card">
             <div class="card-header">
-              <h4 class="card-title">🔥 Top Outperformers</h4>
+              <h4 class="card-title">🔥 Full-season Top Outperformers</h4>
             </div>
             <div class="top-paths-list">
               ${top5.map((p, idx) => `
@@ -263,7 +262,7 @@ window.OverviewView = {
           <!-- Bottom Laggards -->
           <div class="card">
             <div class="card-header">
-              <h4 class="card-title">❄️ Tail Laggards & Inversions</h4>
+              <h4 class="card-title">❄️ Full-season Laggards & Inversions</h4>
             </div>
             <div class="top-paths-list">
               ${bottom5.map((p, idx) => `

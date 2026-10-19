@@ -186,13 +186,21 @@ class ArenaDataAdapter {
   }
 
   getComparisonPresets() {
-    const available=new Set(this.getAllContestants().map(c=>c.id));
-    const preferred=[['CONTESTANT_A','CONTESTANT_G'],['CONTESTANT_G','CONTESTANT_H'],['CONTESTANT_A','CONTESTANT_H']]
-      .filter(pair=>pair.every(id=>available.has(id))).map(([reference,candidate])=>({
-        id:`compare_${reference}_${candidate}`,title:`${reference.replace('CONTESTANT_','')} / ${candidate.replace('CONTESTANT_','')}`,
-        chosen_contestant_id:candidate,rejected_contestant_id:reference,reference_id:'',
-        decision_date:this.getContestant(candidate).observation_start,
-        description:`Compare ${candidate} with ${reference} over their common observation window. Spread is ${candidate} minus ${reference}, in percentage points.`}));
+    const available=new Map(this.getAllContestants().map(c=>[c.id,c]));
+    const preferred=[];
+    for(const candidate of available.values()){
+      const visited=new Set([candidate.id]);
+      let reference=candidate.retrained_from;
+      while(available.has(reference)&&!visited.has(reference)){
+        visited.add(reference);
+        preferred.push({
+          id:`compare_${reference}_${candidate.id}`,title:`${reference.replace('CONTESTANT_','')} / ${candidate.id.replace('CONTESTANT_','')}`,
+          chosen_contestant_id:candidate.id,rejected_contestant_id:reference,reference_id:'',
+          decision_date:candidate.observation_start,
+          description:`Compare ${candidate.id} with ${reference} over their common observation window. Spread is ${candidate.id} minus ${reference}, in percentage points.`});
+        reference=available.get(reference).retrained_from;
+      }
+    }
     return [...preferred,...this.getDecisionForks()];
   }
 
@@ -1004,24 +1012,14 @@ class ArenaDataAdapter {
    * Global KPI summary metrics
    */
   getGlobalKPIs() {
-    const alphaPaths = this.paths.filter(p => p.contestant_id !== "BENCHMARK" && p.full_season_eligible !== false);
-    if (alphaPaths.length === 0) {
-      return {
-        totalPaths: 0,
-        statSignificantCount: 0,
-        statSignificantPct: "N/A",
-        topReturn: null,
-        medianReturn: null,
-        bestSharpe: null,
-        taotieReturn: this.getTaotieReturn(),
-        csi300Return: this.getCsi300Return()
-      };
-    }
-
-    const rets = alphaPaths.map(p => p.total_return_pct);
+    const admitted = new Set(this.getAllContestants().map(c => c.id));
+    const participantPaths = this.paths.filter(p => admitted.has(p.contestant_id));
+    const alphaPaths = participantPaths.filter(p => p.full_season_eligible !== false);
+    const observationPaths = participantPaths.filter(p => p.full_season_eligible === false);
+    const rets = alphaPaths.map(p => p.total_return_pct).filter(Number.isFinite);
     const sortedRets = [...rets].sort((a, b) => a - b);
-    const medianRet = sortedRets[Math.floor(sortedRets.length / 2)];
-    const topRet = Math.max(...rets);
+    const medianRet = sortedRets.length ? sortedRets[Math.floor(sortedRets.length / 2)] : null;
+    const topRet = rets.length ? Math.max(...rets) : null;
     const sharpes = alphaPaths.map(p => p.sharpe_ratio).filter(Number.isFinite);
     const bestSharpe = sharpes.length ? Math.max(...sharpes) : null;
 
@@ -1033,7 +1031,12 @@ class ArenaDataAdapter {
     const csi300Ret = this.getCsi300Return();
 
     return {
-      totalPaths: alphaPaths.length,
+      totalPaths: participantPaths.length,
+      contestantCount: new Set(participantPaths.map(p => p.contestant_id)).size,
+      fullSeasonPaths: alphaPaths.length,
+      observationPaths: observationPaths.length,
+      referencePaths: this.paths.filter(p => p.contestant_id === 'BENCHMARK').length,
+      testedPaths: tested.length,
       statSignificantCount: sigCount,
       statSignificantPct: sigPct,
       topReturn: topRet,

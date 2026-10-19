@@ -8,21 +8,21 @@
 
 ## Current Repository Snapshot
 
-The bundled data cover **2026-07-03 through 2026-10-09** across five parallel testbeds. Each contains **64 evaluated market sessions plus one initial NAV anchor**, for **65 NAV observations**. Every path starts at NAV **1.0000**.
+The bundled data cover **2026-07-03 through 2026-10-16** across five parallel testbeds. Each contains **69 evaluated market sessions plus one initial NAV anchor**, for **70 NAV observations**. Full-season paths start at NAV **1.0000** on July 3; later entrants start at NAV **1.0000** on their own observation dates.
 
-Each testbed evaluates **6 anonymous contestants × 28 animal handlers = 168 contestant paths**, alongside two portfolio benchmarks. Its null court contains **10 random TopK/DropN specifications × 100,000 paths, plus one deterministic passive reference**; the five testbeds together contain **5,000,000 random paths plus five references**.
+Each testbed evaluates **7 anonymous contestants × 28 animal handlers = 196 contestant paths**, alongside two portfolio benchmarks. The original six contestants retain **168 full-season paths** and the declared **840-comparison family across five pools**. CONTESTANT_G contributes **28 separate observation paths beginning October 9**, with no inherited full-season rank or random-control p value. Benchmark records are excluded from the participant total. Its null court contains **10 random TopK/DropN specifications × 100,000 paths, plus one deterministic passive reference**; the five testbeds together contain **5,000,000 random paths plus five references**.
 
-| Testbed | Cumulative leader at October 9 | Final NAV | Cumulative return | Latest dispatch |
+| Testbed | Full-season leader at October 16 | Final NAV | Cumulative return | Latest dispatch |
 | :--- | :--- | ---: | ---: | :--- |
-| csirun300 subset (246 stocks) | CONTESTANT_B_eagle-5-1 | 1.2125 | +21.25% | [Episode 14: The Same Holdings, a Wider Crown](chronicles/en/episode_14_the_two_day_return.md) |
-| CSI 300 full universe (300 stocks) | CONTESTANT_D_rabbit-1 | 1.1886 | +18.86% | [October repaired dispatch](chronicles/en/season_csi300_20261009.md) |
-| CSI 500 | CONTESTANT_B_eagle-5-1 | 1.0885 | +8.85% | [October repaired dispatch](chronicles/en/season_csi500_20261009.md) |
-| CSI 800 | CONTESTANT_B_rabbit-2 | 1.1210 | +12.10% | [October repaired dispatch](chronicles/en/season_csi800_20261009.md) |
-| CSI 1000 | CONTESTANT_B_eagle-5-1 | 1.1349 | +13.49% | [October repaired dispatch](chronicles/en/season_csi1000_20261009.md) |
+| csirun300 subset (246 stocks) | CONTESTANT_B_eagle-5-1 | 1.1864 | +18.64% | [Episode 15: Weekly review](chronicles/en/episode_15_weekly_review.md) |
+| CSI 300 full universe (300 stocks) | CONTESTANT_D_rabbit-2 | 1.1806 | +18.06% | [October 16 dispatch](chronicles/en/season_csi300_20261016.md) |
+| CSI 500 | CONTESTANT_B_rabbit-1 | 1.0662 | +6.62% | [October 16 dispatch](chronicles/en/season_csi500_20261016.md) |
+| CSI 800 | CONTESTANT_B_rabbit-2 | 1.1252 | +12.52% | [October 16 dispatch](chronicles/en/season_csi800_20261016.md) |
+| CSI 1000 | CONTESTANT_B_eagle-5-1 | 1.1170 | +11.70% | [October 16 dispatch](chronicles/en/season_csi1000_20261016.md) |
 
 The current release is a retrospective daily-bar repair using preserved historical signals. [Execution, provenance, statistical corrections and remaining data limits](docs/EVALUATION_V2.md) describe the contract.
 
-These are cumulative standings in the repository snapshot. A monthly or two-day winner can differ from the cumulative leader; the figures do not establish durable forecasting skill.
+These are cumulative full-season standings in the repository snapshot. Later entrants use separate observation windows; use the dashboard's Compare page to align starting dates. A monthly or two-day winner can differ from the cumulative leader; the figures do not establish durable forecasting skill.
 
 The flagship's [Episode 13](chronicles/en/episode_13_the_three_day_trial.md) covers September 28–30, and [Episode 14](chronicles/en/episode_14_the_two_day_return.md) covers October 8–9. **September 28 had a rebalance; October 8–9 only valued the same holdings, with zero new trades.** Separate dispatches and settlements do not imply separate rebalances.
 
@@ -54,7 +54,7 @@ The five active seasons appear in this order: **csirun300, CSI300, CSI500, CSI80
 
 The full CSI 300 history was reconstructed on **2026-10-10**, from the common July 3 anchor through October 9. Its M1–M2 and M3 reports are retrospective; filling historical data does not constitute a prospective commitment. Other testbeds' July–August baseline was also simulated retrospectively. All current dispatches have been recalculated under the repaired policy; a completed report alone does not establish a verifiable pre-market commitment.
 
-The full CSI 300 definition has 300 constituents, but one has no supplied local market rows after September 14. All six contestants therefore have 299 scored names thereafter. Missing quotes prevent trading; existing holdings use the last available price. This data limitation is recorded in the season and its M3 report.
+The full CSI 300 definition has 300 constituents, but one has no supplied local market rows after September 14. The six full-season contestants therefore have 299 scored names thereafter. Missing quotes prevent trading; existing holdings use the last available price. This data limitation is recorded in the season and its M3 report.
 
 ### The 28-Animal Zoo
 

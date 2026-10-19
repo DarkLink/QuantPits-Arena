@@ -8,7 +8,7 @@ from arena.config import REPO_ROOT
 
 @pytest.mark.parametrize('entry', [
     'benchmark_switches', 'deferred_paths', 'deferred_profiles', 'deferred_routes',
-    'dispatch_race', 'dispatch_participants', 'resizing', 'season_selection', 'focused_pool_change', 'routing_inputs', 'summary_counts', 'filter_reset', 'comparison_tie', 'matrix_filters',
+    'dispatch_race', 'dispatch_participants', 'resizing', 'season_selection', 'focused_pool_change', 'routing_inputs', 'summary_counts', 'participation_counts', 'filter_reset', 'comparison_tie', 'matrix_filters',
 ])
 def test_interaction_runtime(entry):
     program = r'''
@@ -176,6 +176,37 @@ const checks={
   const significant=tested.filter(p=>p.empirical_p_value<.05).length;
   const kpis=adapter.getGlobalKPIs();
   assert.equal(kpis.bestSharpe,null);assert.equal(kpis.statSignificantPct,(100*significant/tested.length).toFixed(1)+'%');
+ },
+ participation_counts(){
+  for(const sid of seasons){
+   const adapter=pool(sid),baseline=adapter.getGlobalKPIs(),data=adapter.raw;
+   assert.equal(baseline.totalPaths,196,'The participant total omitted observation branches or counted benchmark paths');
+   assert.equal(baseline.fullSeasonPaths,168);assert.equal(baseline.observationPaths,28);
+   assert.equal(baseline.referencePaths,2);assert.equal(baseline.contestantCount,7);assert.equal(baseline.testedPaths,168);
+   window.OverviewView.render('root');
+   assert(node('root').innerHTML.includes('data-path-count="196"'));
+   assert(node('root').innerHTML.includes('168 full-season + 28 observation'));
+   const child={...data.contestants.find(c=>c.id==='CONTESTANT_G'),id:'CONTESTANT_H',contestant_id:'CONTESTANT_H',observation_start:'2026-11-01',retrained_from:'CONTESTANT_G'};
+   data.contestants.push(child);
+   const rows=data.paths.filter(p=>p.contestant_id==='CONTESTANT_G').map(p=>({...p,contestant_id:'CONTESTANT_H',path_id:p.path_id.replace('CONTESTANT_G','CONTESTANT_H'),observation_start:child.observation_start}));
+   data.paths.push(...rows);
+   assert.equal(adapter.getGlobalKPIs().totalPaths,196,'A future participant was counted before admission');
+   child.observation_start='2026-10-14';rows.forEach(p=>p.observation_start=child.observation_start);
+   const expanded=adapter.getGlobalKPIs();
+   assert.equal(expanded.totalPaths,224);assert.equal(expanded.observationPaths,56);assert.equal(expanded.contestantCount,8);
+   assert.equal(expanded.fullSeasonPaths,168);assert.equal(expanded.testedPaths,168);
+   for(const key of ['topReturn','medianReturn','bestSharpe','statSignificantCount','statSignificantPct'])assert.equal(expanded[key],baseline[key],'A new branch changed full-season statistics');
+   window.OverviewView.render('root');assert(node('root').innerHTML.includes('data-path-count="224"'));
+   for(const [parent,id] of [['C','I'],['D','J'],['E','K'],['F','L']]){
+    data.contestants.push({...child,id:'CONTESTANT_'+id,contestant_id:'CONTESTANT_'+id,retrained_from:'CONTESTANT_'+parent});
+    data.paths.push(...rows.map(p=>({...p,contestant_id:'CONTESTANT_'+id,path_id:p.path_id.replace('CONTESTANT_H','CONTESTANT_'+id)})));
+   }
+   const families=adapter.getGlobalKPIs();assert.equal(families.totalPaths,336);assert.equal(families.contestantCount,12);assert.equal(families.testedPaths,168);
+   assert.equal(families.fullSeasonPaths,168);assert.equal(families.observationPaths,168);
+   const onlyObserved=structuredClone(data);onlyObserved.paths=onlyObserved.paths.filter(p=>p.contestant_id==='CONTESTANT_G'||p.contestant_id==='BENCHMARK');
+   window.arenaAdapter=new window.ArenaDataAdapter(onlyObserved);const observed=window.arenaAdapter.getGlobalKPIs();
+   assert.equal(observed.totalPaths,28);assert.equal(observed.fullSeasonPaths,0);assert.equal(observed.topReturn,null);assert.equal(observed.statSignificantPct,'N/A');
+  }
  },
  filter_reset(){
   pool(seasons[0]);window.ArenaFilters.render('filters');

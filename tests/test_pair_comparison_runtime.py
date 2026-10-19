@@ -4,6 +4,27 @@ import subprocess
 from arena.config import REPO_ROOT
 
 
+def test_presets_follow_declared_branch_metadata():
+    program=r'''
+const fs=require('fs'),vm=require('vm'),assert=require('assert/strict');global.window={};
+vm.runInThisContext(fs.readFileSync('web/js/adapter.js','utf8'));
+const participants=[['A',null,null],['C',null,null],['G','A','2026-10-09'],['H','G','2026-10-14'],
+ ['I','C','2026-10-09'],['J','I','2026-10-14'],['K','C','2026-11-01']].map(([id,parent,start])=>({
+ contestant_id:'CONTESTANT_'+id,retrained_from:parent?'CONTESTANT_'+parent:null,observation_start:start}));
+const legacy={id:'legacy_case'};
+const adapter=new window.ArenaDataAdapter({meta:{cutoff:'2026-10-16'},contestants:participants,decision_forks:[legacy]});
+const presets=adapter.getComparisonPresets();
+assert.deepEqual(presets.map(p=>p.title||p.id),['A / G','G / H','A / H','C / I','I / J','C / J','legacy_case']);
+assert(!presets.some(p=>p.chosen_contestant_id==='CONTESTANT_K'),'An unadmitted branch acquired a preset');
+assert.equal(presets.find(p=>p.title==='C / J').decision_date,'2026-10-14');
+participants[0].retrained_from='CONTESTANT_H';
+const cyclic=new window.ArenaDataAdapter({meta:{cutoff:'2026-10-16'},contestants:participants}).getComparisonPresets();
+assert(cyclic.length<participants.length**2);assert(cyclic.every(p=>p.chosen_contestant_id!==p.rejected_contestant_id));
+'''
+    result=subprocess.run(['node','-e',program],cwd=REPO_ROOT,capture_output=True,text=True,timeout=10)
+    assert result.returncode==0,result.stderr
+
+
 def test_pair_comparison_runtime_and_late_entry():
     program=r'''
 const fs=require('fs'),vm=require('vm');

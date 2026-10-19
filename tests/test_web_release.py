@@ -119,8 +119,11 @@ for(const [sid,data] of Object.entries(window.ARENA_SEASONS_DATA)){
  }
  if(data.paths.filter(p=>p.test_status==='not_applicable').some(p=>p.empirical_p_value!==null))throw Error('reference has random p');
  window.arenaAdapter=new window.ArenaDataAdapter(data);
+ const participation=window.arenaAdapter.getGlobalKPIs();
+ if(participation.totalPaths!==data.contestants.length*28||participation.fullSeasonPaths!==168||participation.referencePaths!==2)throw Error('participant and reference coverage were mixed');
  verifyZoo(data);
  window.MethodologyView.render('root');
+ if(!node('root').innerHTML.includes(`${participation.totalPaths} participant paths`)||!node('root').innerHTML.includes('840 comparisons'))throw Error('participation count or original test family is mislabeled');
  const dates=data.nav_timeline.dates;
  for(const dist of data.monkey_null_distributions){
   const quantiles=dist.daily_quantiles;
