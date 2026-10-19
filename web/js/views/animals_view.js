@@ -380,6 +380,7 @@ window.AnimalsView = {
           </div>
 
           <div class="card-body" style="padding: 16px 20px;">
+            <p class="chart-color-caption">${window.ArenaColors.describe(chartPaths)}</p>
             <div id="animal-cross-model-chart" style="width: 100%; height: 380px;"></div>
           </div>
         </div>
@@ -432,13 +433,13 @@ window.AnimalsView = {
                     <tr class="zoo-path-row" data-zoo-path="${p.path_id}" data-observation-start="${start}" style="border-bottom: 1px solid var(--border-subtle);">
                       <td style="padding: 12px 16px; font-weight: 700; color: var(--text-muted);">${p.full_season_eligible === false ? 'Observation' : '#' + (idx + 1)}</td>
                       <td style="padding: 12px 16px;">
-                        <a href="#contestants/${p.contestant_id}" style="font-weight: 600; color: var(--brand-cyan); text-decoration: none;">
+                        <a href="#contestants/${p.contestant_id}" style="font-weight: 600; color: ${window.ArenaColors.subject(p.contestant_id)}; text-decoration: none;">
                           ${p.contestant_id}
                         </a>
                         <div style="font-size: 10px; color: var(--text-secondary); margin-top: 3px;">${start} → ${this.history.end}</div>
                       </td>
                       <td style="padding: 12px 16px;">
-                        <span class="badge badge-neutral">${p.animal_name || p.animal_id}</span>
+                        <span class="badge identity-badge" style="--identity-color:${window.ArenaColors.animal(p.animal_id)};">${p.animal_name || p.animal_id}</span>
                       </td>
                       <td style="padding: 12px 16px; font-family: monospace; color: var(--text-secondary);">
                         ${p.path_id}

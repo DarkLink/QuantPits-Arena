@@ -69,10 +69,10 @@ window.PathDetailView = {
         <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem;">
           <div>
             <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:0.5rem; flex-wrap:wrap;">
-              <span class="badge badge-cyan" style="font-size:0.85rem; padding:0.25rem 0.75rem;">
+              <span class="badge identity-badge" style="--identity-color:${window.ArenaColors.subject(path.contestant_id === 'BENCHMARK' ? path.path_id : path.contestant_id)}; font-size:0.85rem; padding:0.25rem 0.75rem;">
                 ${contestant?.display_name || path.contestant_id}
               </span>
-              <span class="badge badge-purple" style="font-size:0.85rem; padding:0.25rem 0.75rem;">
+              <span class="badge identity-badge" style="--identity-color:${path.contestant_id === 'BENCHMARK' ? window.ArenaColors.subject(path.path_id) : window.ArenaColors.animal(path.animal_id)}; font-size:0.85rem; padding:0.25rem 0.75rem;">
                 ${path.animal_name || path.animal_id}
               </span>
               <span style="font-size:0.85rem; color:var(--text-tertiary);">
@@ -255,7 +255,8 @@ window.PathDetailView = {
           monkeyDist,
           path.total_return_pct,
           pRank,
-          pVal
+          pVal,
+          path.animal_id
         );
       } else {
         const dom = document.getElementById("chart-path-monkey-dist");

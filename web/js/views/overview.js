@@ -82,7 +82,7 @@ window.OverviewView = {
         </div>
         <div class="kpi-card">
           <div class="kpi-label arena-glossary-term" data-tooltip-term="total_return_pct">Full-season Median Return</div>
-          <div class="kpi-value" style="color:#38bdf8;">${Number.isFinite(kpis.medianReturn) && kpis.medianReturn >= 0 ? '+' : ''}${window.formatNumber(kpis.medianReturn, 2, '%')}</div>
+          <div class="kpi-value" style="color:var(--brand-cyan);">${Number.isFinite(kpis.medianReturn) && kpis.medianReturn >= 0 ? '+' : ''}${window.formatNumber(kpis.medianReturn, 2, '%')}</div>
           <div class="kpi-subtext">Cross-path median performance</div>
         </div>
       </div>
@@ -99,21 +99,21 @@ window.OverviewView = {
         </div>
         <div style="display: flex; align-items: center; gap: 24px; flex-wrap: wrap;">
           <div style="display: flex; align-items: center; gap: 8px;">
-            <span class="bm-line-badge" style="border-top-color: #c084fc; width: 14px;"></span>
+            <span class="bm-line-badge" style="border-top-color: var(--benchmark-taotie); width: 14px;"></span>
             <span class="arena-glossary-term" data-tooltip-term="taotie" style="font-size: 12px;">${window.arenaAdapter.getTaotieDisplayName()}:</span>
-            <b style="font-size: 13px; font-family: monospace; color: #c084fc;">${kpis.taotieReturn >= 0 ? '+' : ''}${window.formatNumber(kpis.taotieReturn, 2, '%')}</b>
+            <b style="font-size: 13px; font-family: monospace; color: var(--benchmark-taotie);">${kpis.taotieReturn >= 0 ? '+' : ''}${window.formatNumber(kpis.taotieReturn, 2, '%')}</b>
           </div>
           ${window.arenaAdapter.hasGhostTaotie() ? `
           <div style="display: flex; align-items: center; gap: 8px;">
-            <span class="bm-line-badge" style="border-top-color: #00f0ff; width: 14px;"></span>
+            <span class="bm-line-badge" style="border-top-color: var(--benchmark-ghost); width: 14px;"></span>
             <span class="arena-glossary-term" data-tooltip-term="ghost_taotie" style="font-size: 12px;">Ghost Taotie:</span>
-            <b style="font-size: 13px; font-family: monospace; color: #00f0ff;">${window.arenaAdapter.getGhostTaotieReturn() >= 0 ? '+' : ''}${window.formatNumber(window.arenaAdapter.getGhostTaotieReturn(), 2, '%')}</b>
+            <b style="font-size: 13px; font-family: monospace; color: var(--benchmark-ghost);">${window.arenaAdapter.getGhostTaotieReturn() >= 0 ? '+' : ''}${window.formatNumber(window.arenaAdapter.getGhostTaotieReturn(), 2, '%')}</b>
           </div>
           ` : ''}
           <div style="display: flex; align-items: center; gap: 8px;">
-            <span class="bm-line-badge" style="border-top-color: #f59e0b; width: 14px;"></span>
+            <span class="bm-line-badge" style="border-top-color: var(--benchmark-market); width: 14px;"></span>
             <span class="arena-glossary-term" data-tooltip-term="market" style="font-size: 12px;">${window.arenaAdapter.getMarketBenchmarkName()} (Market Benchmark):</span>
-            <b style="font-size: 13px; font-family: monospace; color: #f59e0b;">${kpis.csi300Return >= 0 ? '+' : ''}${window.formatNumber(kpis.csi300Return, 2, '%')}</b>
+            <b style="font-size: 13px; font-family: monospace; color: var(--benchmark-market);">${kpis.csi300Return >= 0 ? '+' : ''}${window.formatNumber(kpis.csi300Return, 2, '%')}</b>
           </div>
         </div>
         <div style="font-size: 11px; color: var(--text-tertiary);">
@@ -214,7 +214,7 @@ window.OverviewView = {
                 </button>
               </div>
               <div class="card-subtitle">
-                X-axis: Matched Null Percentile | Y-axis: OOS Total Return (%) | Bubble Size: Sharpe Ratio
+                X-axis: Matched Null Percentile | Y-axis: OOS Total Return (%) | Bubble Size: Sharpe Ratio | Color: Animal
               </div>
             </div>
             <div style="font-size:0.8rem; color:var(--text-tertiary);">
@@ -239,7 +239,7 @@ window.OverviewView = {
                       #${idx + 1} ${p.path_id}
                     </div>
                     <div style="font-size:0.75rem; color:var(--text-tertiary);">
-                      Monkey Pct: <b style="color:#a855f7;">${window.formatPercentile ? window.formatPercentile(p.percentile_rank ?? p.monkey_percentile ?? p.monkey_percentile_rank) : window.formatNumber(p.percentile_rank ?? p.monkey_percentile ?? p.monkey_percentile_rank, 1, '%')}</b> | ${(() => {
+                      Monkey Pct: <b style="color:var(--brand-purple);">${window.formatPercentile ? window.formatPercentile(p.percentile_rank ?? p.monkey_percentile ?? p.monkey_percentile_rank) : window.formatNumber(p.percentile_rank ?? p.monkey_percentile ?? p.monkey_percentile_rank, 1, '%')}</b> | ${(() => {
                         const rawP = p.empirical_p_value !== undefined ? p.empirical_p_value : p.p_value;
                         const pVal = window.formatPValue ? window.formatPValue(rawP) : '1.0000';
                         return pVal.startsWith('<') ? `p ${pVal}` : `p=${pVal}`;
@@ -352,7 +352,7 @@ window.OverviewView = {
         .map(s => `${s.path.contestant_id} since ${s.path.observation_start}`))];
       const ranked = this.activeFilterGroup === 'top5' && this.activeFocusModel === 'all';
       caption.textContent = data.dates.length
-        ? `History: ${data.dates[0]} close → ${data.dates.at(-1)} close. ${ranked ? 'Top Leaders ranks full-season participants.' : 'Each participant retains its own entry date; excess uses its matching benchmark window.'}${entries.length ? ' ' + entries.join('; ') + '.' : ''}`
+        ? `History: ${data.dates[0]} close → ${data.dates.at(-1)} close. ${ranked ? 'Top Leaders ranks full-season participants.' : 'Each participant retains its own entry date; excess uses its matching benchmark window.'}${entries.length ? ' ' + entries.join('; ') + '.' : ''} ${window.ArenaColors.describe(data.seriesList.filter(s=>s.path).map(s=>s.path))}`
         : 'No observations available for this selection.';
     }
 

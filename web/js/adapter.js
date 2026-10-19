@@ -3,6 +3,107 @@
  * Provides index lookups, metric aggregations, and filtered queries across paths and contestants.
  */
 
+// Shared identity colors. IDs, rather than rank, slot or selected-array position,
+// determine colors across pools and charts. Light mode keeps each hue darker.
+window.ArenaColors = {
+  contestants: {
+    CONTESTANT_A: ['#38bdf8', '#0369a1'], CONTESTANT_B: ['#10b981', '#047857'],
+    CONTESTANT_C: ['#a855f7', '#7e22ce'], CONTESTANT_D: ['#ec4899', '#be185d'],
+    CONTESTANT_E: ['#fb923c', '#c2410c'], CONTESTANT_F: ['#eab308', '#a16207'],
+    CONTESTANT_G: ['#2dd4bf', '#0f766e'], CONTESTANT_H: ['#fb7185', '#be123c']
+  },
+  animals: {
+    robot: ['#38bdf8', '#0369a1'], koala: ['#f43f5e', '#be123c'],
+    'sloth-1': ['#86efac', '#15803d'], 'sloth-2': ['#4ade80', '#16a34a'],
+    'sloth-3': ['#22c55e', '#166534'], 'sloth-4': ['#a3e635', '#4d7c0f'],
+    'snail-1': ['#fde047', '#a16207'], 'snail-2': ['#fbbf24', '#b45309'],
+    'snail-3': ['#fb923c', '#c2410c'], 'snail-4': ['#fdba74', '#9a3412'],
+    turtle: ['#2dd4bf', '#0f766e'], 'rabbit-1': ['#f472b6', '#be185d'],
+    'rabbit-2': ['#e879f9', '#a21caf'], 'eagle-5-1': ['#c4b5fd', '#6d28d9'],
+    'eagle-11-2': ['#a78bfa', '#7c3aed'], 'eagle-44-6': ['#c084fc', '#9333ea'],
+    'eagle-66-9': ['#d8b4fe', '#7e22ce'], 'eagle-88-12': ['#f0abfc', '#86198f'],
+    'whale-shark': ['#818cf8', '#4338ca'],
+    'meerkat-10': ['#67e8f9', '#155e75'], 'meerkat-20': ['#22d3ee', '#0e7490'],
+    'meerkat-30': ['#06b6d4', '#0891b2'], 'meerkat-40': ['#7dd3fc', '#075985'],
+    'meerkat-50': ['#0ea5e9', '#0284c7'], 'meerkat-60': ['#93c5fd', '#1d4ed8'],
+    'meerkat-70': ['#60a5fa', '#2563eb'], 'meerkat-80': ['#a5b4fc', '#3730a3'],
+    'meerkat-90': ['#bfdbfe', '#1e40af']
+  },
+  isDark() {
+    return typeof document === 'undefined' || document.documentElement?.getAttribute('data-theme') !== 'light';
+  },
+  token(name, dark, light) {
+    return (typeof document !== 'undefined' && window.getComputedStyle?.(document.documentElement)
+      ?.getPropertyValue(name).trim()) || (this.isDark() ? dark : light);
+  },
+  semantic() {
+    return {
+      positive: this.token('--accent-positive', '#10b981', '#047857'),
+      negative: this.token('--accent-negative', '#f43f5e', '#be123c'),
+      warning: this.token('--accent-warning', '#f59e0b', '#b45309'),
+      info: this.token('--brand-cyan', '#38bdf8', '#0369a1'),
+      purple: this.token('--brand-purple', '#a78bfa', '#7c3aed'),
+      market: this.token('--benchmark-market', '#f59e0b', '#b45309'),
+      taotie: this.token('--benchmark-taotie', '#c084fc', '#7e22ce'),
+      ghost: this.token('--benchmark-ghost', '#22d3ee', '#0e7490'),
+      monkey: this.token('--benchmark-monkey', '#94a3b8', '#64748b'),
+      spread: this.token('--chart-spread', '#e879f9', '#a21caf')
+    };
+  },
+  hash(id) {
+    let value = 2166136261;
+    for (const char of String(id)) value = Math.imul(value ^ char.charCodeAt(0), 16777619) >>> 0;
+    return value;
+  },
+  identity(map, id) {
+    if (Object.hasOwn(map, id)) return map[id][this.isDark() ? 0 : 1];
+    // New identities do not shift any existing palette entries.
+    const hue = this.hash(id) % 360, s = 68, l = this.isDark() ? 65 : 35;
+    const a = s * Math.min(l / 100, 1 - l / 100) / 100;
+    const channel = n => {
+      const k = (n + hue / 30) % 12;
+      return Math.round(255 * (l / 100 - a * Math.max(-1, Math.min(k - 3, 9 - k, 1))))
+        .toString(16).padStart(2, '0');
+    };
+    return `#${channel(0)}${channel(8)}${channel(4)}`;
+  },
+  animal(id) { return this.identity(this.animals, id); },
+  subject(id) {
+    let key = String(id || '');
+    const colors = this.semantic();
+    if (/ghost/i.test(key)) return colors.ghost;
+    if (/taotie/i.test(key)) return colors.taotie;
+    if (/csi300|market/i.test(key) || key === window.arenaAdapter?.getMarketBenchmarkName?.()) return colors.market;
+    if (!key.startsWith('CONTESTANT_')) {
+      const participant = window.arenaAdapter?.getAllContestants?.()
+        .find(c => c.display_name === key || c.anonymous_name === key);
+      key = participant?.id || participant?.contestant_id || key;
+    }
+    return this.identity(this.contestants, key);
+  },
+  modelLine(id) {
+    const known = Object.keys(this.contestants).indexOf(id);
+    const patterns = ['solid', [8, 4], [2, 4], [10, 3, 2, 3], [14, 5], [6, 3, 2, 3], [12, 3, 2, 3, 2, 3], [3, 2]];
+    return patterns[(known < 0 ? this.hash(id) : known) % patterns.length];
+  },
+  path(path, paths = []) {
+    // One animal across models: color models. Otherwise color animals; dash mixed models.
+    const multiAnimal = new Set(paths.map(p => p.animal_id)).size > 1;
+    const multiModel = new Set(paths.map(p => p.contestant_id)).size > 1;
+    return {color: multiAnimal || !multiModel ? this.animal(path.animal_id) : this.subject(path.contestant_id),
+      lineStyle: {type: multiAnimal && multiModel ? this.modelLine(path.contestant_id) : 'solid'}};
+  },
+  describe(paths) {
+    const animals = new Set(paths.map(p => p.animal_id)).size;
+    const models = new Set(paths.map(p => p.contestant_id)).size;
+    return animals > 1 && models > 1 ? "Colors: animals · Line patterns: participants."
+      : animals === 1 && models > 1 ? "Colors: participants." : "Colors: animals.";
+  },
+  alpha(hex, opacity) {
+    return `rgba(${[1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16)).join(', ')}, ${opacity})`;
+  }
+};
+
 class ArenaDataAdapter {
   constructor(rawData) {
     if (!rawData) {
@@ -825,16 +926,15 @@ class ArenaDataAdapter {
         if (excessId) return curve.map((value, i) => (value - curves[excessId][i]) * 100);
         return curve;
       };
-      const palette = ['#10b981', '#38bdf8', '#818cf8', '#f43f5e', '#fb923c', '#ec4899'];
       const seriesList = candidatePaths.map((path, i) => {
         const profile = this.getComparisonWindow([path.contestant_id], path.animal_id, observationStart).profiles[0];
-        return {id:path.path_id, name:path.path_id, type:'candidate', color:palette[i % palette.length], path,
+        return {id:path.path_id, name:path.path_id, type:'candidate', ...window.ArenaColors.path(path, candidatePaths), path,
           data:transform(profile.curve)};
       });
       const benchmarks = [
-        {id:'BENCHMARK_ghost_taotie', name:'Ghost Taotie (100M)', type:'benchmark_ghost', color:'#00f0ff'},
-        {id:'BENCHMARK_taotie', name:this.getTaotieShortName(), type:'benchmark_taotie', color:'#c084fc'},
-        {id:'BENCHMARK_csi300', name:this.getMarketBenchmarkName(), type:'benchmark_csi300', color:'#f59e0b'}
+        {id:'BENCHMARK_ghost_taotie', name:'Ghost Taotie (100M)', type:'benchmark_ghost', color:window.ArenaColors.semantic().ghost},
+        {id:'BENCHMARK_taotie', name:this.getTaotieShortName(), type:'benchmark_taotie', color:window.ArenaColors.semantic().taotie},
+        {id:'BENCHMARK_csi300', name:this.getMarketBenchmarkName(), type:'benchmark_csi300', color:window.ArenaColors.semantic().market}
       ].filter(item => curves[item.id]);
       if (excessId) {
         const reference = benchmarks.find(item => item.id === excessId);
@@ -856,7 +956,6 @@ class ArenaDataAdapter {
 
     const hasGhost = this.hasGhostTaotie();
     const seriesList = [];
-    const palette = ["#10b981", "#38bdf8", "#818cf8", "#f43f5e", "#fb923c", "#ec4899"];
 
     candidatePaths.forEach((p, idx) => {
       let data = [];
@@ -876,7 +975,7 @@ class ArenaDataAdapter {
         id: p.path_id,
         name: p.path_id,
         type: "candidate",
-        color: palette[idx % palette.length],
+        ...window.ArenaColors.path(p, candidatePaths),
         data: data || [],
         path: p
       });
@@ -888,7 +987,7 @@ class ArenaDataAdapter {
           id: "BENCHMARK_ghost_taotie",
           name: "Ghost Taotie (100M)",
           type: "benchmark_ghost",
-          color: "#00f0ff",
+          color: window.ArenaColors.semantic().ghost,
           lineStyle: { type: [8, 4], width: 2.2 },
           data: ghostTaotieCurve
         });
@@ -899,7 +998,7 @@ class ArenaDataAdapter {
           id: "BENCHMARK_taotie",
           name: this.getTaotieShortName(),
           type: "benchmark_taotie",
-          color: "#c084fc",
+          color: window.ArenaColors.semantic().taotie,
           lineStyle: { type: [4, 4], width: 2.2 },
           data: taotieCurve
         });
@@ -910,7 +1009,7 @@ class ArenaDataAdapter {
           id: "BENCHMARK_csi300",
           name: this.getMarketBenchmarkName(),
           type: "benchmark_csi300",
-          color: "#f59e0b",
+          color: window.ArenaColors.semantic().market,
           lineStyle: { type: [6, 6], width: 2.0 },
           data: csi300Curve
         });
@@ -921,7 +1020,7 @@ class ArenaDataAdapter {
           id: "BENCHMARK_ghost_taotie",
           name: "Ghost Taotie (100M)",
           type: "benchmark_ghost",
-          color: "#00f0ff",
+          color: window.ArenaColors.semantic().ghost,
           lineStyle: { type: [8, 4], width: 2.2 },
           data: ghostDD
         });
@@ -932,7 +1031,7 @@ class ArenaDataAdapter {
           id: "BENCHMARK_taotie",
           name: this.getTaotieShortName(),
           type: "benchmark_taotie",
-          color: "#c084fc",
+          color: window.ArenaColors.semantic().taotie,
           lineStyle: { type: [4, 4], width: 2.2 },
           data: taotieDD
         });
@@ -943,7 +1042,7 @@ class ArenaDataAdapter {
           id: "BENCHMARK_csi300",
           name: this.getMarketBenchmarkName(),
           type: "benchmark_csi300",
-          color: "#f59e0b",
+          color: window.ArenaColors.semantic().market,
           lineStyle: { type: [6, 6], width: 2.0 },
           data: csiDD
         });
@@ -954,7 +1053,7 @@ class ArenaDataAdapter {
         id: "BENCHMARK_zero_taotie",
         name: this.getTaotieShortName(),
         type: "benchmark_zero",
-        color: "#c084fc",
+        color: window.ArenaColors.semantic().taotie,
         lineStyle: { type: [4, 4], width: 2.2 },
         data: zeroBase
       });
@@ -964,7 +1063,7 @@ class ArenaDataAdapter {
         id: "BENCHMARK_zero_ghost",
         name: "Ghost Taotie (100M)",
         type: "benchmark_zero",
-        color: "#00f0ff",
+        color: window.ArenaColors.semantic().ghost,
         lineStyle: { type: [8, 4], width: 2.2 },
         data: zeroBase
       });
@@ -974,7 +1073,7 @@ class ArenaDataAdapter {
         id: "BENCHMARK_zero_csi300",
         name: this.getMarketBenchmarkName(),
         type: "benchmark_zero",
-        color: "#f59e0b",
+        color: window.ArenaColors.semantic().market,
         lineStyle: { type: [6, 6], width: 2.0 },
         data: zeroBase
       });
@@ -1139,22 +1238,22 @@ class ArenaDataAdapter {
 
     // 2. Turnover Sensitivity (Turtle, Robot, Rabbit-1, Rabbit-2)
     const turnoverData = [
-      { name: "Turtle (Low Turnover)", return: pathReturn("turtle") },
-      { name: "Robot (Standard)", return: pathReturn("robot") },
-      { name: "Rabbit-1 (50% Turnover)", return: pathReturn("rabbit-1") },
-      { name: "Rabbit-2 (100% Turnover)", return: pathReturn("rabbit-2") },
+      { animal_id: "turtle", name: "Turtle (Low Turnover)", return: pathReturn("turtle") },
+      { animal_id: "robot", name: "Robot (Standard)", return: pathReturn("robot") },
+      { animal_id: "rabbit-1", name: "Rabbit-1 (50% Turnover)", return: pathReturn("rabbit-1") },
+      { animal_id: "rabbit-2", name: "Rabbit-2 (100% Turnover)", return: pathReturn("rabbit-2") },
     ];
 
     // 3. Concentration & Capacity Breadth (Eagle 5, 11, 44, 66, 88, WhaleShark, Taotie)
     const breadthData = [
-      { topk: 5, label: "Eagle-5/1", return: pathReturn("eagle-5-1") },
-      { topk: 11, label: "Eagle-11/2", return: pathReturn("eagle-11-2") },
-      { topk: 22, label: "Robot-22/3", return: pathReturn("robot") },
-      { topk: 44, label: "Eagle-44/6", return: pathReturn("eagle-44-6") },
-      { topk: 66, label: "Eagle-66/9", return: pathReturn("eagle-66-9") },
-      { topk: 88, label: "Eagle-88/12", return: pathReturn("eagle-88-12") },
-      { topk: 123, label: "WhaleShark", return: pathReturn("whale-shark") },
-      { topk: this.metadata.universe_size || null, label: "Taotie (Full Pool)", return: this.getContestant(cid)?.observation_start
+      { topk: 5, animal_id: "eagle-5-1", label: "Eagle-5/1", return: pathReturn("eagle-5-1") },
+      { topk: 11, animal_id: "eagle-11-2", label: "Eagle-11/2", return: pathReturn("eagle-11-2") },
+      { topk: 22, animal_id: "robot", label: "Robot-22/3", return: pathReturn("robot") },
+      { topk: 44, animal_id: "eagle-44-6", label: "Eagle-44/6", return: pathReturn("eagle-44-6") },
+      { topk: 66, animal_id: "eagle-66-9", label: "Eagle-66/9", return: pathReturn("eagle-66-9") },
+      { topk: 88, animal_id: "eagle-88-12", label: "Eagle-88/12", return: pathReturn("eagle-88-12") },
+      { topk: 123, animal_id: "whale-shark", label: "WhaleShark", return: pathReturn("whale-shark") },
+      { topk: this.metadata.universe_size || null, subject_id: "BENCHMARK_taotie", label: "Taotie (Full Pool)", return: this.getContestant(cid)?.observation_start
         ? this.getBenchmarkReturnForPath(this.getContestant(cid), 'BENCHMARK_taotie')
         : this.getPath("BENCHMARK_taotie")?.total_return_pct ?? null },
     ];
@@ -1171,6 +1270,7 @@ class ArenaDataAdapter {
     const meerkatData = [];
     for (let p = 10; p <= 90; p += 10) {
       meerkatData.push({
+        animal_id: `meerkat-${p}`,
         percentile: `${p}%`,
         return: pathReturn(`meerkat-${p}`)
       });

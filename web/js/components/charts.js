@@ -69,9 +69,8 @@ window.ArenaCharts = {
     if (!dom) return;
     const chart = this.trackChart(echarts.getInstanceByDom(dom) || echarts.init(dom));
     const colors = this.getThemeColors();
-    const palette = ['#38bdf8','#f59e0b','#f43f5e','#a855f7','#94a3b8','#fb7185','#10b981','#c084fc'];
-    const color = id => palette[(id.charCodeAt(id.length-1)-65+palette.length)%palette.length];
-    chart.setOption({backgroundColor:'transparent',color:[color(data.referenceId),color(data.candidateId),colors.accentAmber],
+    const color = id => window.ArenaColors.subject(id);
+    chart.setOption({backgroundColor:'transparent',color:[color(data.referenceId),color(data.candidateId),colors.spread],
       legend:{data:[data.referenceId,data.candidateId,'Difference (pp)'],textStyle:{color:colors.textPrimary}},
       grid:[{left:65,right:25,top:45,height:'48%'},{left:65,right:25,top:'64%',height:'20%'}],
       axisPointer:{link:[{xAxisIndex:'all'}]},tooltip:{trigger:'axis',valueFormatter:v => typeof v==='number'?v.toFixed(4):'—'},
@@ -85,21 +84,23 @@ window.ArenaCharts = {
   },
 
   getThemeColors() {
-    const isDark = document.documentElement.getAttribute("data-theme") !== "light";
+    const isDark = window.ArenaColors.isDark();
+    const semantic = window.ArenaColors.semantic();
     return {
       isDark,
       bg: "transparent",
       textPrimary: isDark ? "#f8fafc" : "#0f172a",
       textSecondary: isDark ? "#94a3b8" : "#475569",
-      textMuted: isDark ? "#64748b" : "#94a3b8",
+      textMuted: "#64748b",
       gridLine: isDark ? "rgba(255, 255, 255, 0.07)" : "rgba(0, 0, 0, 0.08)",
       tooltipBg: isDark ? "rgba(15, 23, 42, 0.92)" : "rgba(255, 255, 255, 0.95)",
       tooltipBorder: isDark ? "rgba(255, 255, 255, 0.15)" : "rgba(0, 0, 0, 0.15)",
-      accentBlue: "#38bdf8",
-      accentPurple: "#a855f7",
-      accentGreen: "#10b981",
-      accentRose: "#f43f5e",
-      accentAmber: "#f59e0b"
+      ...semantic,
+      accentBlue: semantic.info,
+      accentPurple: semantic.purple,
+      accentGreen: semantic.positive,
+      accentRose: semantic.negative,
+      accentAmber: semantic.warning
     };
   },
 
@@ -184,13 +185,13 @@ window.ArenaCharts = {
           const pVal = window.formatPValue ? window.formatPValue(rawP) : window.formatNumber(rawP, 4);
           const pLabel = pVal.startsWith("<") ? `p ${pVal}` : `p = ${pVal}`;
           return `
-            <div style="font-weight:700; color:#38bdf8; margin-bottom:4px;">${p.path_id}</div>
+            <div style="font-weight:700; color:${tc.accentBlue}; margin-bottom:4px;">${p.path_id}</div>
             <div style="font-size:12px; line-height:1.5;">
               <div>Model: <b>${p.contestant_id}</b> | Handler: <b>${p.animal_id}</b></div>
-              <div>Return: <b style="color:${p.total_return_pct >= 0 ? '#10b981' : '#f43f5e'}">${p.total_return_pct >= 0 ? '+' : ''}${p.total_return_pct.toFixed(2)}%</b></div>
+              <div>Return: <b style="color:${p.total_return_pct >= 0 ? tc.accentGreen : tc.accentRose}">${p.total_return_pct >= 0 ? '+' : ''}${p.total_return_pct.toFixed(2)}%</b></div>
               <div>Monkey Percentile: <b>${pct}</b> (${pLabel})</div>
-              <div>Max Drawdown: <b style="color:#f43f5e;">${window.formatNumber(p.max_drawdown_pct, 2, '%')}</b> | Sharpe: <b>${window.formatNumber(p.sharpe_ratio)}</b></div>
-              <div style="margin-top:4px; font-size:11px; color:#94a3b8;">Click bubble to inspect path details</div>
+              <div>Max Drawdown: <b style="color:${tc.accentRose};">${window.formatNumber(p.max_drawdown_pct, 2, '%')}</b> | Sharpe: <b>${window.formatNumber(p.sharpe_ratio)}</b></div>
+              <div style="margin-top:4px; font-size:11px; color:${tc.textSecondary};">Click bubble to inspect path details</div>
             </div>
           `;
         }
@@ -227,13 +228,7 @@ window.ArenaCharts = {
           data: data,
           symbolSize: (val) => Math.min(26, Math.max(8, val[2] * 5.5)),
           itemStyle: {
-            color: (params) => {
-              const p = params.data[3];
-              const pct = p.percentile_rank !== undefined ? p.percentile_rank : (p.monkey_percentile || 0);
-              if (pct >= 95) return "#10b981";
-              if (p.total_return_pct >= 0) return "#38bdf8";
-              return "#f43f5e";
-            },
+            color: params => window.ArenaColors.animal(params.data[3].animal_id),
             opacity: 0.82,
             shadowBlur: 8,
             shadowColor: "rgba(0, 0, 0, 0.3)"
@@ -244,8 +239,8 @@ window.ArenaCharts = {
             data: [
               {
                 xAxis: 95,
-                lineStyle: { color: "#10b981", type: "dashed", width: 2 },
-                label: { formatter: "p = 0.05 (95th Percentile)", position: "insideEndTop", color: "#10b981", fontSize: 10 }
+                lineStyle: { color: tc.accentGreen, type: "dashed", width: 2 },
+                label: { formatter: "p = 0.05 (95th Percentile)", position: "insideEndTop", color: tc.accentGreen, fontSize: 10 }
               },
               {
                 yAxis: 0,
@@ -316,12 +311,12 @@ window.ArenaCharts = {
 
     const isPctRank = metricKey.includes("percentile");
     const inRangeColors = isPctRank
-      ? ["#1e293b", "#4338ca", "#7c3aed", "#c026d3", "#10b981"]
+      ? [tc.isDark ? "#1e293b" : "#e2e8f0", "#4338ca", "#7c3aed", "#c026d3", tc.accentGreen]
       : (metricKey === "max_drawdown_pct"
-        ? ["#047857", "#10b981", "#f59e0b", "#f43f5e", "#991b1b"]
+        ? ["#047857", tc.accentGreen, tc.accentAmber, tc.accentRose, "#991b1b"]
         : (metricKey === "sharpe_ratio"
-          ? ["#dc2626", "#f97316", "#38bdf8", "#10b981", "#059669"]
-          : ["#dc2626", "#ea580c", "#334155", "#0ea5e9", "#10b981", "#059669"]));
+          ? ["#dc2626", "#f97316", tc.accentBlue, tc.accentGreen, "#059669"]
+          : ["#dc2626", "#ea580c", tc.isDark ? "#334155" : "#e2e8f0", "#0ea5e9", tc.accentGreen, "#059669"]));
 
     const option = {
       backgroundColor: tc.bg,
@@ -338,12 +333,12 @@ window.ArenaCharts = {
           const rank = p.percentile_rank ?? p.monkey_percentile ?? null;
           const pct = window.formatPercentile ? window.formatPercentile(rank) : window.formatNumber(rank, 1, '%');
           return `
-            <div style="font-weight:700; color:#38bdf8;">${p.path_id}</div>
+            <div style="font-weight:700; color:${tc.accentBlue};">${p.path_id}</div>
             <div>${p.observation_start ? 'Observation' : 'Full season'}: ${p.observation_start || window.arenaAdapter.getNavDates()[0]} → ${window.arenaAdapter.getNavDates().at(-1)}</div>
-            <div>Return: <b style="color:${p.total_return_pct >= 0 ? '#10b981' : '#f43f5e'}">${p.total_return_pct >= 0 ? '+' : ''}${p.total_return_pct.toFixed(2)}%</b></div>
+            <div>Return: <b style="color:${p.total_return_pct >= 0 ? tc.accentGreen : tc.accentRose}">${p.total_return_pct >= 0 ? '+' : ''}${p.total_return_pct.toFixed(2)}%</b></div>
             <div>Drawdown: <b>${window.formatNumber(p.max_drawdown_pct, 2, '%')}</b> | Sharpe: <b>${window.formatNumber(p.sharpe_ratio)}</b></div>
             <div>Monkey Percentile: <b>${pct}</b></div>
-            <div style="font-size:10px; color:#94a3b8; margin-top:3px;">Click cell to inspect details</div>
+            <div style="font-size:10px; color:${tc.textSecondary}; margin-top:3px;">Click cell to inspect details</div>
           `;
         }
       },
@@ -429,6 +424,8 @@ window.ArenaCharts = {
     if (!chart) chart = echarts.init(dom);
 
     if (!dates || !Array.isArray(dates) || dates.length === 0) return null;
+    const tc = this.getThemeColors();
+    const pathColor = targetPath.contestant_id === "BENCHMARK" ? window.ArenaColors.subject(targetPath.path_id) : window.ArenaColors.animal(targetPath.animal_id);
     if (targetPath.observation_start) {
       const first=dates.indexOf(targetPath.observation_start);
       if(first<0)return null;
@@ -449,14 +446,17 @@ window.ArenaCharts = {
         data:normalize(window.arenaAdapter.getBenchmarkGhostTaotieCurve())});
       if(metricType==='drawdown')selected=selected.map(s=>({...s,data:underwater(s.data)}));
       if(metricType==='excess_csi300')selected=selected.map(s=>({...s,data:s.data.map((v,i)=>v==null||market[i]==null?null:(v-market[i])*100)}));
-      chart.setOption({tooltip:{trigger:'axis',valueFormatter:v=>this.formatCurveValue(v,metricType)},
-        legend:{data:selected.map(s=>s.name)},grid:{left:65,right:25,top:45,bottom:55},
-        xAxis:{type:'category',data:windowDates},yAxis:{type:'value',scale:true,name:metricType==='nav'?'NAV':metricType==='drawdown'?'%':'pp'},
-        series:selected.map(s=>({...s,type:'line',smooth:false,symbol:'none'})),dataZoom:[{type:'inside'},{type:'slider'}]},true);
+      chart.setOption({backgroundColor:tc.bg,tooltip:{trigger:'axis',backgroundColor:tc.tooltipBg,borderColor:tc.tooltipBorder,
+        textStyle:{color:tc.textPrimary},valueFormatter:v=>this.formatCurveValue(v,metricType)},
+        legend:{data:selected.map(s=>s.name),textStyle:{color:tc.textSecondary}},grid:{left:65,right:25,top:45,bottom:55},
+        xAxis:{type:'category',data:windowDates,axisLabel:{color:tc.textSecondary}},yAxis:{type:'value',scale:true,
+          axisLabel:{color:tc.textSecondary},nameTextStyle:{color:tc.textSecondary},splitLine:{lineStyle:{color:tc.gridLine}},name:metricType==='nav'?'NAV':metricType==='drawdown'?'%':'pp'},
+        series:selected.map(s=>{const color=s.benchmarkKey?tc[s.benchmarkKey]:pathColor;
+          return {...s,type:'line',smooth:false,symbol:'none',itemStyle:{color},
+            lineStyle:{color,type:s.benchmarkKey?({market:[6,6],taotie:[4,4],ghost:[8,4]})[s.benchmarkKey]:'solid'}};}),dataZoom:[{type:'inside'},{type:'slider'}]},true);
       this.trackChart(chart);
       return chart;
     }
-    const tc = this.getThemeColors();
     const marketBmName = (window.arenaAdapter && window.arenaAdapter.getMarketBenchmarkName) ? window.arenaAdapter.getMarketBenchmarkName() : "CSI 300";
     const taotieName = (window.arenaAdapter && window.arenaAdapter.getTaotieShortName) ? window.arenaAdapter.getTaotieShortName() : "Taotie";
 
@@ -491,9 +491,9 @@ window.ArenaCharts = {
           data: csi300DD,
           smooth: true,
           showSymbol: false,
-          color: "#f59e0b",
-          itemStyle: { color: "#f59e0b" },
-          lineStyle: { width: 2.0, color: "#f59e0b", type: [6, 6], opacity: 0.9 }
+          color: tc.market,
+          itemStyle: { color: tc.market },
+          lineStyle: { width: 2.0, color: tc.market, type: [6, 6], opacity: 0.9 }
         },
         {
           name: taotieName,
@@ -501,9 +501,9 @@ window.ArenaCharts = {
           data: taotieDD,
           smooth: true,
           showSymbol: false,
-          color: "#c084fc",
-          itemStyle: { color: "#c084fc" },
-          lineStyle: { width: 2.2, color: "#c084fc", type: [4, 4], opacity: 0.9 }
+          color: tc.taotie,
+          itemStyle: { color: tc.taotie },
+          lineStyle: { width: 2.2, color: tc.taotie, type: [4, 4], opacity: 0.9 }
         }
       ];
 
@@ -518,9 +518,9 @@ window.ArenaCharts = {
           data: ghostDD,
           smooth: true,
           showSymbol: false,
-          color: "#00f0ff",
-          itemStyle: { color: "#00f0ff" },
-          lineStyle: { width: 2.2, color: "#00f0ff", type: [8, 4], opacity: 0.9 }
+          color: tc.ghost,
+          itemStyle: { color: tc.ghost },
+          lineStyle: { width: 2.2, color: tc.ghost, type: [8, 4], opacity: 0.9 }
         });
       }
 
@@ -530,13 +530,13 @@ window.ArenaCharts = {
         data: targetDD,
         smooth: true,
         showSymbol: false,
-        color: "#f43f5e",
-        itemStyle: { color: "#f43f5e" },
-        lineStyle: { width: 2.5, color: "#f43f5e", type: "solid" },
+        color: pathColor,
+        itemStyle: { color: pathColor },
+        lineStyle: { width: 2.5, color: pathColor, type: "solid" },
         areaStyle: {
           color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            { offset: 0, color: "rgba(244, 63, 94, 0.35)" },
-            { offset: 1, color: "rgba(244, 63, 94, 0.04)" }
+            { offset: 0, color: window.ArenaColors.alpha(pathColor, 0.35) },
+            { offset: 1, color: window.ArenaColors.alpha(pathColor, 0.04) }
           ])
         }
       });
@@ -555,9 +555,9 @@ window.ArenaCharts = {
           name: `${marketBmName} (0.00%)`,
           type: "line",
           data: zeroBase,
-          color: "#f59e0b",
-          itemStyle: { color: "#f59e0b" },
-          lineStyle: { width: 2.0, color: "#f59e0b", type: [6, 6], opacity: 0.9 },
+          color: tc.market,
+          itemStyle: { color: tc.market },
+          lineStyle: { width: 2.0, color: tc.market, type: [6, 6], opacity: 0.9 },
           showSymbol: false
         },
         {
@@ -566,9 +566,9 @@ window.ArenaCharts = {
           data: taotieExcess,
           smooth: true,
           showSymbol: false,
-          color: "#c084fc",
-          itemStyle: { color: "#c084fc" },
-          lineStyle: { width: 2.2, color: "#c084fc", type: [4, 4], opacity: 0.9 }
+          color: tc.taotie,
+          itemStyle: { color: tc.taotie },
+          lineStyle: { width: 2.2, color: tc.taotie, type: [4, 4], opacity: 0.9 }
         }
       ];
 
@@ -583,9 +583,9 @@ window.ArenaCharts = {
           data: ghostExcess,
           smooth: true,
           showSymbol: false,
-          color: "#00f0ff",
-          itemStyle: { color: "#00f0ff" },
-          lineStyle: { width: 2.2, color: "#00f0ff", type: [8, 4], opacity: 0.9 }
+          color: tc.ghost,
+          itemStyle: { color: tc.ghost },
+          lineStyle: { width: 2.2, color: tc.ghost, type: [8, 4], opacity: 0.9 }
         });
       }
 
@@ -595,13 +595,13 @@ window.ArenaCharts = {
         data: targetExcess,
         smooth: true,
         showSymbol: false,
-        color: "#10b981",
-        itemStyle: { color: "#10b981" },
-        lineStyle: { width: 2.5, color: "#10b981", type: "solid" },
+        color: pathColor,
+        itemStyle: { color: pathColor },
+        lineStyle: { width: 2.5, color: pathColor, type: "solid" },
         areaStyle: {
           color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            { offset: 0, color: "rgba(16, 185, 129, 0.30)" },
-            { offset: 1, color: "rgba(16, 185, 129, 0.02)" }
+            { offset: 0, color: window.ArenaColors.alpha(pathColor, 0.30) },
+            { offset: 1, color: window.ArenaColors.alpha(pathColor, 0.02) }
           ])
         }
       });
@@ -615,7 +615,7 @@ window.ArenaCharts = {
       const sample = key => dates.map(d => snapshots[d]?.[key] ?? null);
       const targetLabel = `Path: ${targetPath.path_id}`;
       series = [
-        ...[['p05','Monkey P05','#c084fc'],['p95','Monkey P95','#c084fc'],['median','Monkey Median','#94a3b8']].map(([key,name,color]) => ({
+        ...[['p05','Monkey P05',tc.monkey],['p95','Monkey P95',tc.monkey],['median','Monkey Median',tc.monkey]].map(([key,name,color]) => ({
           name,type:hasDaily ? 'line' : 'scatter',data:sample(key),color,
           smooth:false,showSymbol:false,symbolSize:4,connectNulls:false,
           lineStyle:{width:key==='median' ? 1.5 : 1,type:'dashed'}
@@ -626,9 +626,9 @@ window.ArenaCharts = {
           data: csi300Curve && csi300Curve.length ? csi300Curve : [],
           smooth: true,
           showSymbol: false,
-          color: "#f59e0b",
-          itemStyle: { color: "#f59e0b" },
-          lineStyle: { width: 2.0, color: "#f59e0b", type: [6, 6], opacity: 0.9 }
+          color: tc.market,
+          itemStyle: { color: tc.market },
+          lineStyle: { width: 2.0, color: tc.market, type: [6, 6], opacity: 0.9 }
         },
         {
           name: taotieName,
@@ -636,9 +636,9 @@ window.ArenaCharts = {
           data: taotieCurve && taotieCurve.length ? taotieCurve : [],
           smooth: true,
           showSymbol: false,
-          color: "#c084fc",
-          itemStyle: { color: "#c084fc" },
-          lineStyle: { width: 2.2, color: "#c084fc", type: [4, 4], opacity: 0.9 }
+          color: tc.taotie,
+          itemStyle: { color: tc.taotie },
+          lineStyle: { width: 2.2, color: tc.taotie, type: [4, 4], opacity: 0.9 }
         }
       ];
 
@@ -655,9 +655,9 @@ window.ArenaCharts = {
             data: ghostCurve,
             smooth: true,
             showSymbol: false,
-            color: "#00f0ff",
-            itemStyle: { color: "#00f0ff" },
-            lineStyle: { width: 2.2, color: "#00f0ff", type: [8, 4], opacity: 0.9 }
+            color: tc.ghost,
+            itemStyle: { color: tc.ghost },
+            lineStyle: { width: 2.2, color: tc.ghost, type: [8, 4], opacity: 0.9 }
           });
         }
       }
@@ -668,13 +668,13 @@ window.ArenaCharts = {
         data: targetCurve,
         smooth: true,
         showSymbol: false,
-        color: "#38bdf8",
-        itemStyle: { color: "#38bdf8" },
-        lineStyle: { width: 3, color: "#38bdf8", type: "solid" },
+        color: pathColor,
+        itemStyle: { color: pathColor },
+        lineStyle: { width: 3, color: pathColor, type: "solid" },
         areaStyle: {
           color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            { offset: 0, color: "rgba(56, 189, 248, 0.28)" },
-            { offset: 1, color: "rgba(56, 189, 248, 0.0)" }
+            { offset: 0, color: window.ArenaColors.alpha(pathColor, 0.28) },
+            { offset: 1, color: window.ArenaColors.alpha(pathColor, 0.0) }
           ])
         }
       });
@@ -690,7 +690,7 @@ window.ArenaCharts = {
         formatter: (params) => {
           if (!params || params.length === 0) return "";
           const date = params[0].axisValue;
-          let html = `<div style="font-weight:700; margin-bottom:6px; color:#38bdf8;">${date}</div>`;
+          let html = `<div style="font-weight:700; margin-bottom:6px; color:${tc.accentBlue};">${date}</div>`;
           params.forEach(item => {
             if (item.seriesName === "Monkey P05 Base") return;
             let val = item.value;
@@ -698,7 +698,7 @@ window.ArenaCharts = {
               const idx = item.dataIndex;
               const low = monkeyLower[idx] || 0;
               const high = (low + val).toFixed(4);
-              html += `<div style="display:flex; justify-content:space-between; align-items:center; gap:12px; font-size:11px; color:#c084fc;">
+              html += `<div style="display:flex; justify-content:space-between; align-items:center; gap:12px; font-size:11px; color:${tc.taotie};">
                 <span>${item.marker || '🟣'} 90% Monkey Envelope:</span>
                 <b>${low.toFixed(4)} ~ ${high}</b>
               </div>`;
@@ -760,7 +760,7 @@ window.ArenaCharts = {
   /**
    * 4. Monkey Null Distribution Boxplot with Significance Marker
    */
-  renderMonkeyDistribution(domId, monkeyDist, actualReturnPct, pctRank, pValue) {
+  renderMonkeyDistribution(domId, monkeyDist, actualReturnPct, pctRank, pValue, animalId = "robot") {
     const dom = document.getElementById(domId);
     if (!dom) return null;
     let chart = echarts.getInstanceByDom(dom);
@@ -828,14 +828,14 @@ window.ArenaCharts = {
           type: "boxplot",
           data: [[minVal, p05, med, p95, maxVal]],
           itemStyle: {
-            color: "rgba(168, 85, 247, 0.2)",
-            borderColor: "#a855f7",
+            color: window.ArenaColors.alpha(tc.monkey, 0.2),
+            borderColor: tc.monkey,
             borderWidth: 2
           },
           markLine: {
             silent: false,
             symbol: ["none", "none"],
-            lineStyle: { color: "#38bdf8", width: 3, type: "solid" },
+            lineStyle: { color: window.ArenaColors.animal(animalId), width: 3, type: "solid" },
             data: [
               {
                 xAxis: actualReturnPct,
@@ -847,7 +847,7 @@ window.ArenaCharts = {
                     return `Actual: ${actualReturnPct >= 0 ? '+' : ''}${actualReturnPct.toFixed(2)}%\n(Rank: ${pctStr}, ${pLabel})`;
                   },
                   position: "end",
-                  color: "#38bdf8",
+                  color: window.ArenaColors.animal(animalId),
                   fontWeight: 700
                 }
               }
@@ -889,9 +889,9 @@ window.ArenaCharts = {
         xAxisIndex: 0,
         yAxisIndex: 0,
         data: chosenCurve,
-        color: "#10b981",
-        itemStyle: { color: "#10b981" },
-        lineStyle: { width: 2.5, color: "#10b981" },
+        color: window.ArenaColors.subject(chosenName),
+        itemStyle: { color: window.ArenaColors.subject(chosenName) },
+        lineStyle: { width: 2.5, color: window.ArenaColors.subject(chosenName) },
         showSymbol: false
       },
       {
@@ -900,9 +900,9 @@ window.ArenaCharts = {
         xAxisIndex: 0,
         yAxisIndex: 0,
         data: rejectedCurve,
-        color: "#f43f5e",
-        itemStyle: { color: "#f43f5e" },
-        lineStyle: { width: 2.5, color: "#f43f5e", type: "dashed" },
+        color: window.ArenaColors.subject(rejectedName),
+        itemStyle: { color: window.ArenaColors.subject(rejectedName) },
+        lineStyle: { width: 2.5, color: window.ArenaColors.subject(rejectedName), type: "dashed" },
         showSymbol: false
       },
       {
@@ -911,15 +911,15 @@ window.ArenaCharts = {
         xAxisIndex: 1,
         yAxisIndex: 1,
         data: regretCurve,
-        color: "#f59e0b",
-        itemStyle: { color: "#f59e0b" },
+        color: tc.spread,
+        itemStyle: { color: tc.spread },
         areaStyle: {
           color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            { offset: 0, color: "rgba(244, 63, 94, 0.3)" },
-            { offset: 1, color: "rgba(16, 185, 129, 0.3)" }
+            { offset: 0, color: window.ArenaColors.alpha(tc.spread, 0.3) },
+            { offset: 1, color: window.ArenaColors.alpha(tc.spread, 0.03) }
           ])
         },
-        lineStyle: { width: 2, color: "#f59e0b" },
+        lineStyle: { width: 2, color: tc.spread },
         showSymbol: false
       }
     ];
@@ -936,7 +936,7 @@ window.ArenaCharts = {
           let html = `<div style="font-weight:700; margin-bottom:6px; color:${tc.textPrimary};">${params[0].axisValue}</div>`;
           params.forEach(item => {
             const val = typeof item.value === "number" ? item.value.toFixed(4) : item.value;
-            const color = item.color || "#38bdf8";
+            const color = item.color || tc.accentBlue;
             const marker = `<span style="display:inline-block;margin-right:4px;border-radius:10px;width:9px;height:9px;background-color:${color};"></span>`;
             html += `<div style="display:flex; justify-content:space-between; align-items:center; gap:14px; font-size:11px; margin-bottom:2px;">
               <span style="display:flex; align-items:center;">${marker}${item.seriesName}:</span>
@@ -978,7 +978,7 @@ window.ArenaCharts = {
           axisLabel: { color: tc.textSecondary }
         }
       ],
-      color: ["#10b981", "#f43f5e", "#f59e0b"],
+      color: [window.ArenaColors.subject(chosenName), window.ArenaColors.subject(rejectedName), tc.spread],
       series: series
     };
 
@@ -992,6 +992,8 @@ window.ArenaCharts = {
    */
   renderFingerprintGroup(domDelayId, domTurnoverId, domBreadthId, domDirectionId, fingerprints) {
     const tc = this.getThemeColors();
+    const tooltip = {trigger: "axis", backgroundColor:tc.tooltipBg, borderColor:tc.tooltipBorder, textStyle:{color:tc.textPrimary}};
+    const point = (value, animal) => value == null ? null : ({value, itemStyle:{color:window.ArenaColors.animal(animal)}});
 
     // A. Delay Sensitivity
     const domDelay = document.getElementById(domDelayId);
@@ -1000,15 +1002,17 @@ window.ArenaCharts = {
       c1.setOption({
         backgroundColor: tc.bg,
         title: { text: "Delay Sensitivity (Execution Lag)", textStyle: { color: tc.textPrimary, fontSize: 12 } },
-        tooltip: { trigger: "axis" },
-        legend: { data: ["Sloth (Cash Lag)", "Snail (Holding Lag)"], textStyle: { color: tc.textSecondary }, top: 0 },
-        grid: { left: "8%", right: "8%", top: "25%", bottom: "15%" },
+        tooltip,
+        legend: { data: ["Sloth (Cash Lag)", "Snail (Holding Lag)"], textStyle: { color: tc.textSecondary, fontSize:10 }, top: 22 },
+        grid: { left: "8%", right: "8%", top: 55, bottom: "15%" },
         xAxis: { type: "category", data: ["0W", "1W", "2W", "3W", "4W"], axisLabel: { color: tc.textSecondary } },
         yAxis: { type: "value", splitLine: { lineStyle: { color: tc.gridLine } }, axisLabel: { color: tc.textSecondary, formatter: "{value}%" } },
-        series: [
-          { name: "Sloth (Cash Lag)", type: "line", data: fingerprints.delayData.sloth, color: "#38bdf8", itemStyle: { color: "#38bdf8" }, lineStyle: { color: "#38bdf8", width: 2 } },
-          { name: "Snail (Holding Lag)", type: "line", data: fingerprints.delayData.snail, color: "#f59e0b", itemStyle: { color: "#f59e0b" }, lineStyle: { color: "#f59e0b", width: 2 } }
-        ]
+        series: [['sloth', 'Sloth (Cash Lag)'], ['snail', 'Snail (Holding Lag)']].map(([family, name]) => {
+          const color = window.ArenaColors.animal(`${family}-2`);
+          return {name, type:'line', showSymbol:true, symbolSize:6, color,
+            data: fingerprints.delayData[family].map((value,i)=>point(value,i?`${family}-${i}`:'robot')),
+            itemStyle:{color}, lineStyle:{color,width:2}};
+        })
       }, true);
       this.trackChart(c1);
     }
@@ -1022,11 +1026,11 @@ window.ArenaCharts = {
       c2.setOption({
         backgroundColor: tc.bg,
         title: { text: "Turnover Sensitivity (Friction Stress)", textStyle: { color: tc.textPrimary, fontSize: 12 } },
-        tooltip: { trigger: "axis" },
+        tooltip,
         grid: { left: "8%", right: "8%", top: "20%", bottom: "15%" },
         xAxis: { type: "category", data: names, axisLabel: { color: tc.textSecondary, fontSize: 10 } },
         yAxis: { type: "value", splitLine: { lineStyle: { color: tc.gridLine } }, axisLabel: { color: tc.textSecondary, formatter: "{value}%" } },
-        series: [{ type: "bar", data: vals, itemStyle: { color: "#10b981", borderRadius: [4, 4, 0, 0] } }]
+        series: [{ type: "bar", data: vals, itemStyle: { color: params => window.ArenaColors.animal(fingerprints.turnoverData[params.dataIndex].animal_id), borderRadius: [4, 4, 0, 0] } }]
       }, true);
       this.trackChart(c2);
     }
@@ -1040,11 +1044,19 @@ window.ArenaCharts = {
       c3.setOption({
         backgroundColor: tc.bg,
         title: { text: "Capacity & Portfolio Breadth Expansion", textStyle: { color: tc.textPrimary, fontSize: 12 } },
-        tooltip: { trigger: "axis" },
+        tooltip,
         grid: { left: "8%", right: "8%", top: "20%", bottom: "25%" },
         xAxis: { type: "category", data: bLabels, axisLabel: { color: tc.textSecondary, rotate: 30, fontSize: 9 } },
         yAxis: { type: "value", splitLine: { lineStyle: { color: tc.gridLine } }, axisLabel: { color: tc.textSecondary, formatter: "{value}%" } },
-        series: [{ type: "line", data: bVals, smooth: true, color: "#a855f7", itemStyle: { color: "#a855f7" }, lineStyle: { color: "#a855f7", width: 2.5 } }]
+        series: [{type:'line', smooth:true, showSymbol:true, symbolSize:7,
+          color:tc.monkey, itemStyle:{color:tc.monkey}, lineStyle:{color:tc.monkey,width:2.5},
+          data:bVals.map((value,i)=>{
+            if(value == null)return null;
+            const row=fingerprints.breadthData[i];
+            const color=row.subject_id?window.ArenaColors.subject(row.subject_id):window.ArenaColors.animal(row.animal_id);
+            return {value,itemStyle:{color}};
+          })
+        }]
       }, true);
       this.trackChart(c3);
     }
@@ -1056,16 +1068,16 @@ window.ArenaCharts = {
       c4.setOption({
         backgroundColor: tc.bg,
         title: { text: "Direction Sanity (Robot vs. Koala Reverse)", textStyle: { color: tc.textPrimary, fontSize: 12 } },
-        tooltip: { trigger: "axis" },
+        tooltip,
         grid: { left: "10%", right: "8%", top: "20%", bottom: "15%" },
         xAxis: { type: "category", data: ["Robot (Top)", "Koala (Bottom)", "Spread"], axisLabel: { color: tc.textSecondary } },
         yAxis: { type: "value", splitLine: { lineStyle: { color: tc.gridLine } }, axisLabel: { color: tc.textSecondary, formatter: "{value}%" } },
         series: [{
           type: "bar",
           data: [
-            { value: fingerprints.directionData.robot, itemStyle: { color: "#38bdf8" } },
-            { value: fingerprints.directionData.koala, itemStyle: { color: "#f43f5e" } },
-            { value: fingerprints.directionData.spread, itemStyle: { color: "#10b981" } },
+            { value: fingerprints.directionData.robot, itemStyle: { color: window.ArenaColors.animal("robot") } },
+            { value: fingerprints.directionData.koala, itemStyle: { color: window.ArenaColors.animal("koala") } },
+            { value: fingerprints.directionData.spread, itemStyle: { color: tc.spread } },
           ]
         }]
       }, true);
@@ -1104,10 +1116,6 @@ window.ArenaCharts = {
     const marketBmName = (window.arenaAdapter && window.arenaAdapter.getMarketBenchmarkName) ? window.arenaAdapter.getMarketBenchmarkName() : "CSI 300";
     const taotieName = (window.arenaAdapter && window.arenaAdapter.getTaotieShortName) ? window.arenaAdapter.getTaotieShortName() : "Taotie";
 
-    const colorPalette = [
-      "#38bdf8", "#10b981", "#f59e0b", "#ec4899", "#8b5cf6",
-      "#06b6d4", "#84cc16", "#f43f5e", "#d946ef", "#6366f1"
-    ];
 
     const series = [];
     let titleText = "Multi-Animal Execution Trajectories";
@@ -1122,7 +1130,7 @@ window.ArenaCharts = {
       paths.forEach((p, idx) => {
         const curve = anchor?drawdown(nav(p.path_id)):adapter.getPathDrawdown(p.path_id);
         if (curve && curve.length > 0) {
-          const color = p.animal_id === "robot" ? "#38bdf8" : (p.animal_id === "koala" ? "#f43f5e" : colorPalette[idx % colorPalette.length]);
+          const color = window.ArenaColors.animal(p.animal_id);
           series.push({
             name: `${p.animal_id} (MDD: -${p.max_drawdown_pct.toFixed(2)}%)`,
             type: "line",
@@ -1148,9 +1156,9 @@ window.ArenaCharts = {
           data: ghostDD,
           smooth: false,
           showSymbol: false,
-          color: "#00f0ff",
-          itemStyle: { color: "#00f0ff" },
-          lineStyle: { width: 2.2, color: "#00f0ff", type: [8, 4], opacity: 0.9 }
+          color: tc.ghost,
+          itemStyle: { color: tc.ghost },
+          lineStyle: { width: 2.2, color: tc.ghost, type: [8, 4], opacity: 0.9 }
         });
       }
 
@@ -1162,9 +1170,9 @@ window.ArenaCharts = {
           data: taotieDD,
           smooth: false,
           showSymbol: false,
-          color: "#c084fc",
-          itemStyle: { color: "#c084fc" },
-          lineStyle: { width: 2.2, color: "#c084fc", type: [4, 4], opacity: 0.9 }
+          color: tc.taotie,
+          itemStyle: { color: tc.taotie },
+          lineStyle: { width: 2.2, color: tc.taotie, type: [4, 4], opacity: 0.9 }
         });
       }
 
@@ -1176,9 +1184,9 @@ window.ArenaCharts = {
           data: csi300DD,
           smooth: false,
           showSymbol: false,
-          color: "#f59e0b",
-          itemStyle: { color: "#f59e0b" },
-          lineStyle: { width: 2.0, color: "#f59e0b", type: [6, 6], opacity: 0.9 }
+          color: tc.market,
+          itemStyle: { color: tc.market },
+          lineStyle: { width: 2.0, color: tc.market, type: [6, 6], opacity: 0.9 }
         });
       }
 
@@ -1190,7 +1198,7 @@ window.ArenaCharts = {
       paths.forEach((p, idx) => {
         const curve = anchor?excess(nav(p.path_id)):adapter.getPathExcessMarket(p.path_id);
         if (curve && curve.length > 0) {
-          const color = p.animal_id === "robot" ? "#38bdf8" : colorPalette[idx % colorPalette.length];
+          const color = window.ArenaColors.animal(p.animal_id);
           series.push({
             name: `${p.animal_id} (${p.total_return_pct >= 0 ? '+' : ''}${p.total_return_pct.toFixed(2)}%)`,
             type: "line",
@@ -1213,9 +1221,9 @@ window.ArenaCharts = {
         name: `${marketBmName} (0.00%)`,
         type: "line",
         data: zeroBase,
-        color: "#f59e0b",
-        itemStyle: { color: "#f59e0b" },
-        lineStyle: { width: 2.0, color: "#f59e0b", type: [6, 6], opacity: 0.9 },
+        color: tc.market,
+        itemStyle: { color: tc.market },
+        lineStyle: { width: 2.0, color: tc.market, type: [6, 6], opacity: 0.9 },
         showSymbol: false
       });
 
@@ -1227,9 +1235,9 @@ window.ArenaCharts = {
           data: taotieExcess,
           smooth: false,
           showSymbol: false,
-          color: "#c084fc",
-          itemStyle: { color: "#c084fc" },
-          lineStyle: { width: 2.2, color: "#c084fc", type: [4, 4], opacity: 0.9 }
+          color: tc.taotie,
+          itemStyle: { color: tc.taotie },
+          lineStyle: { width: 2.2, color: tc.taotie, type: [4, 4], opacity: 0.9 }
         });
       }
 
@@ -1241,9 +1249,9 @@ window.ArenaCharts = {
           data: ghostExcess,
           smooth: false,
           showSymbol: false,
-          color: "#00f0ff",
-          itemStyle: { color: "#00f0ff" },
-          lineStyle: { width: 2.2, color: "#00f0ff", type: [8, 4], opacity: 0.9 }
+          color: tc.ghost,
+          itemStyle: { color: tc.ghost },
+          lineStyle: { width: 2.2, color: tc.ghost, type: [8, 4], opacity: 0.9 }
         });
       }
 
@@ -1256,7 +1264,7 @@ window.ArenaCharts = {
       paths.forEach((p, idx) => {
         const curve = nav(p.path_id);
         if (curve && curve.length > 0) {
-          const color = p.animal_id === "robot" ? "#38bdf8" : colorPalette[idx % colorPalette.length];
+          const color = window.ArenaColors.animal(p.animal_id);
           series.push({
             name: `${p.animal_id} (${p.total_return_pct >= 0 ? '+' : ''}${p.total_return_pct.toFixed(2)}%)`,
             type: "line",
@@ -1283,9 +1291,9 @@ window.ArenaCharts = {
             data: ghostCurve,
             smooth: false,
             showSymbol: false,
-            color: "#00f0ff",
-            itemStyle: { color: "#00f0ff" },
-            lineStyle: { width: 2.2, color: "#00f0ff", type: [8, 4], opacity: 0.9 }
+            color: tc.ghost,
+            itemStyle: { color: tc.ghost },
+            lineStyle: { width: 2.2, color: tc.ghost, type: [8, 4], opacity: 0.9 }
           });
         }
       }
@@ -1297,9 +1305,9 @@ window.ArenaCharts = {
           data: taotieCurve,
           smooth: false,
           showSymbol: false,
-          color: "#c084fc",
-          itemStyle: { color: "#c084fc" },
-          lineStyle: { width: 2.2, color: "#c084fc", type: [4, 4], opacity: 0.9 }
+          color: tc.taotie,
+          itemStyle: { color: tc.taotie },
+          lineStyle: { width: 2.2, color: tc.taotie, type: [4, 4], opacity: 0.9 }
         });
       }
 
@@ -1310,9 +1318,9 @@ window.ArenaCharts = {
           data: csi300Curve,
           smooth: false,
           showSymbol: false,
-          color: "#f59e0b",
-          itemStyle: { color: "#f59e0b" },
-          lineStyle: { width: 2.0, color: "#f59e0b", type: [6, 6], opacity: 0.9 }
+          color: tc.market,
+          itemStyle: { color: tc.market },
+          lineStyle: { width: 2.0, color: tc.market, type: [6, 6], opacity: 0.9 }
         });
       }
     }
@@ -1332,7 +1340,7 @@ window.ArenaCharts = {
         formatter: (params) => {
           if (!params || params.length === 0) return "";
           const date = params[0].axisValue;
-          let html = `<div style="font-weight:700; margin-bottom:6px; color:#38bdf8;">${date}</div>`;
+          let html = `<div style="font-weight:700; margin-bottom:6px; color:${tc.accentBlue};">${date}</div>`;
           params.forEach(item => {
             let val = item.value;
             const formattedVal = this.formatCurveValue(val, metricType);
@@ -1402,20 +1410,6 @@ window.ArenaCharts = {
     const marketBmName = (window.arenaAdapter && window.arenaAdapter.getMarketBenchmarkName) ? window.arenaAdapter.getMarketBenchmarkName() : "CSI 300";
     const taotieName = (window.arenaAdapter && window.arenaAdapter.getTaotieShortName) ? window.arenaAdapter.getTaotieShortName() : "Taotie";
 
-    const modelColors = {
-      'CONTESTANT_A': '#38bdf8', // Sky Blue
-      'CONTESTANT_B': '#10b981', // Emerald Green
-      'CONTESTANT_C': '#a855f7', // Purple
-      'CONTESTANT_D': '#ec4899', // Pink
-      'CONTESTANT_E': '#f97316', // Orange
-      'CONTESTANT_F': '#eab308'  // Amber/Gold
-    };
-    const fallbackPalette = [
-      '#38bdf8', '#10b981', '#a855f7', '#ec4899', '#f97316', '#eab308',
-      '#06b6d4', '#84cc16', '#f43f5e', '#d946ef', '#6366f1', '#14b8a6',
-      '#fb923c', '#c084fc', '#4ade80', '#facc15', '#94a3b8'
-    ];
-
     const uniqueAnimals = new Set(animalPaths.map(p => p.animal_id));
     const uniqueModels = new Set(animalPaths.map(p => p.contestant_id));
     const isMultiAnimal = uniqueAnimals.size > 1;
@@ -1438,12 +1432,7 @@ window.ArenaCharts = {
       }
     };
 
-    const getColor = (p, idx) => {
-      if (isMultiAnimal && isSingleModel) {
-        return fallbackPalette[idx % fallbackPalette.length];
-      }
-      return modelColors[p.contestant_id] || fallbackPalette[idx % fallbackPalette.length];
-    };
+    const getColor = p => window.ArenaColors.path(p, animalPaths).color;
 
     const series = [];
     let titleText = "";
@@ -1467,7 +1456,7 @@ window.ArenaCharts = {
             showSymbol: false,
             color: color,
             itemStyle: { color: color },
-            lineStyle: { width: 2, color: color }
+            lineStyle: { ...window.ArenaColors.path(p, animalPaths).lineStyle, width: 2, color: color }
           });
         }
       });
@@ -1480,9 +1469,9 @@ window.ArenaCharts = {
           data: ghostDD,
           smooth: false,
           showSymbol: false,
-          color: "#00f0ff",
-          itemStyle: { color: "#00f0ff" },
-          lineStyle: { width: 2.2, color: "#00f0ff", type: [8, 4], opacity: 0.9 }
+          color: tc.ghost,
+          itemStyle: { color: tc.ghost },
+          lineStyle: { width: 2.2, color: tc.ghost, type: [8, 4], opacity: 0.9 }
         });
       }
 
@@ -1494,9 +1483,9 @@ window.ArenaCharts = {
           data: taotieDD,
           smooth: false,
           showSymbol: false,
-          color: "#c084fc",
-          itemStyle: { color: "#c084fc" },
-          lineStyle: { width: 2.2, color: "#c084fc", type: [4, 4], opacity: 0.9 }
+          color: tc.taotie,
+          itemStyle: { color: tc.taotie },
+          lineStyle: { width: 2.2, color: tc.taotie, type: [4, 4], opacity: 0.9 }
         });
       }
 
@@ -1508,9 +1497,9 @@ window.ArenaCharts = {
           data: csi300DD,
           smooth: false,
           showSymbol: false,
-          color: "#f59e0b",
-          itemStyle: { color: "#f59e0b" },
-          lineStyle: { width: 2.0, color: "#f59e0b", type: [6, 6], opacity: 0.9 }
+          color: tc.market,
+          itemStyle: { color: tc.market },
+          lineStyle: { width: 2.0, color: tc.market, type: [6, 6], opacity: 0.9 }
         });
       }
 
@@ -1531,7 +1520,7 @@ window.ArenaCharts = {
             showSymbol: false,
             color: color,
             itemStyle: { color: color },
-            lineStyle: { width: 2.2, color: color, type: "solid" }
+            lineStyle: { ...window.ArenaColors.path(p, animalPaths).lineStyle, width: 2.2, color: color }
           });
         }
       });
@@ -1541,9 +1530,9 @@ window.ArenaCharts = {
         name: `${marketBmName} (0.00%)`,
         type: "line",
         data: zeroBase,
-        color: "#f59e0b",
-        itemStyle: { color: "#f59e0b" },
-        lineStyle: { width: 2.0, color: "#f59e0b", type: [6, 6], opacity: 0.9 },
+        color: tc.market,
+        itemStyle: { color: tc.market },
+        lineStyle: { width: 2.0, color: tc.market, type: [6, 6], opacity: 0.9 },
         showSymbol: false
       });
 
@@ -1555,9 +1544,9 @@ window.ArenaCharts = {
           data: taotieExcess,
           smooth: false,
           showSymbol: false,
-          color: "#c084fc",
-          itemStyle: { color: "#c084fc" },
-          lineStyle: { width: 2.2, color: "#c084fc", type: [4, 4], opacity: 0.9 }
+          color: tc.taotie,
+          itemStyle: { color: tc.taotie },
+          lineStyle: { width: 2.2, color: tc.taotie, type: [4, 4], opacity: 0.9 }
         });
       }
 
@@ -1569,9 +1558,9 @@ window.ArenaCharts = {
           data: ghostExcess,
           smooth: false,
           showSymbol: false,
-          color: "#00f0ff",
-          itemStyle: { color: "#00f0ff" },
-          lineStyle: { width: 2.2, color: "#00f0ff", type: [8, 4], opacity: 0.9 }
+          color: tc.ghost,
+          itemStyle: { color: tc.ghost },
+          lineStyle: { width: 2.2, color: tc.ghost, type: [8, 4], opacity: 0.9 }
         });
       }
 
@@ -1593,7 +1582,7 @@ window.ArenaCharts = {
             showSymbol: false,
             color: color,
             itemStyle: { color: color },
-            lineStyle: { width: 2.2, color: color, type: "solid" }
+            lineStyle: { ...window.ArenaColors.path(p, animalPaths).lineStyle, width: 2.2, color: color }
           });
         }
       });
@@ -1607,9 +1596,9 @@ window.ArenaCharts = {
             data: ghostCurve,
             smooth: false,
             showSymbol: false,
-            color: "#00f0ff",
-            itemStyle: { color: "#00f0ff" },
-            lineStyle: { width: 2.2, color: "#00f0ff", type: [8, 4], opacity: 0.9 }
+            color: tc.ghost,
+            itemStyle: { color: tc.ghost },
+            lineStyle: { width: 2.2, color: tc.ghost, type: [8, 4], opacity: 0.9 }
           });
         }
       }
@@ -1621,9 +1610,9 @@ window.ArenaCharts = {
           data: taotieCurve,
           smooth: false,
           showSymbol: false,
-          color: "#c084fc",
-          itemStyle: { color: "#c084fc" },
-          lineStyle: { width: 2.2, color: "#c084fc", type: [4, 4], opacity: 0.9 }
+          color: tc.taotie,
+          itemStyle: { color: tc.taotie },
+          lineStyle: { width: 2.2, color: tc.taotie, type: [4, 4], opacity: 0.9 }
         });
       }
 
@@ -1634,9 +1623,9 @@ window.ArenaCharts = {
           data: csi300Curve,
           smooth: false,
           showSymbol: false,
-          color: "#f59e0b",
-          itemStyle: { color: "#f59e0b" },
-          lineStyle: { width: 2.0, color: "#f59e0b", type: [6, 6], opacity: 0.9 }
+          color: tc.market,
+          itemStyle: { color: tc.market },
+          lineStyle: { width: 2.0, color: tc.market, type: [6, 6], opacity: 0.9 }
         });
       }
     }
@@ -1657,7 +1646,7 @@ window.ArenaCharts = {
         formatter: (params) => {
           if (!params || params.length === 0) return "";
           const date = params[0].axisValue;
-          let html = `<div style="font-weight:700; margin-bottom:6px; color:#38bdf8;">${date}</div>`;
+          let html = `<div style="font-weight:700; margin-bottom:6px; color:${tc.accentBlue};">${date}</div>`;
           params.forEach(item => {
             const val = item.value;
             const formattedVal = this.formatCurveValue(val, metricType);
@@ -1754,10 +1743,7 @@ window.ArenaCharts = {
         smooth: true,
         connectNulls: false,
         showSymbol: false,
-        lineStyle: item.lineStyle || {
-          width: isBenchmark ? 2.5 : 2.5,
-          color: item.color
-        },
+        lineStyle: {width: 2.5, color: item.color, ...item.lineStyle},
         itemStyle: { color: item.color }
       };
 
@@ -1765,21 +1751,21 @@ window.ArenaCharts = {
         s.lineStyle = {
           width: 2.2,
           type: [8, 4],
-          color: "#00f0ff",
+          color: tc.ghost,
           opacity: 0.95
         };
       } else if (isTaotie) {
         s.lineStyle = {
           width: 2.2,
           type: [4, 4],
-          color: "#c084fc",
+          color: tc.taotie,
           opacity: 0.95
         };
       } else if (isCsi) {
         s.lineStyle = {
           width: 2.0,
           type: [6, 6],
-          color: "#f59e0b",
+          color: tc.market,
           opacity: 0.95
         };
       } else if (isZero) {
@@ -1808,7 +1794,7 @@ window.ArenaCharts = {
         axisPointer: { type: "cross", lineStyle: { color: tc.gridLine } },
         formatter: (params) => {
           if (!params || !params.length) return "";
-          let html = `<div style="font-weight:700; margin-bottom:6px; color:#38bdf8;">${params[0].axisValue}</div>`;
+          let html = `<div style="font-weight:700; margin-bottom:6px; color:${tc.accentBlue};">${params[0].axisValue}</div>`;
           params.forEach(p => {
             const val = p.value;
             const displayVal = Number.isFinite(val)
@@ -1895,8 +1881,8 @@ window.ArenaCharts = {
         data: m1.curve,
         smooth: false,
         showSymbol: false,
-        lineStyle: { width: 3, color: m1.color || "#10b981" },
-        itemStyle: { color: m1.color || "#10b981" }
+        lineStyle: { width: 3, color: window.ArenaColors.subject(m1.id || m1.name) },
+        itemStyle: { color: window.ArenaColors.subject(m1.id || m1.name) }
       },
       {
         name: m2.name,
@@ -1906,8 +1892,8 @@ window.ArenaCharts = {
         data: m2.curve,
         smooth: false,
         showSymbol: false,
-        lineStyle: { width: 3, color: m2.color || "#f43f5e" },
-        itemStyle: { color: m2.color || "#f43f5e" }
+        lineStyle: { width: 3, color: window.ArenaColors.subject(m2.id || m2.name) },
+        itemStyle: { color: window.ArenaColors.subject(m2.id || m2.name) }
       }
     ];
 
@@ -1922,10 +1908,10 @@ window.ArenaCharts = {
         showSymbol: false,
         lineStyle: {
           width: 2.5,
-          color: m3.color || "#38bdf8",
-          type: m3.isBenchmark ? "dashDot" : "solid"
+          color: window.ArenaColors.subject(m3.id || m3.name),
+          type: m3.isBenchmark ? [8, 4, 2, 4] : "solid"
         },
-        itemStyle: { color: m3.color || "#38bdf8" }
+        itemStyle: { color: window.ArenaColors.subject(m3.id || m3.name) }
       });
     }
 
@@ -1937,12 +1923,12 @@ window.ArenaCharts = {
       data: spreadM1M2,
       smooth: false,
       showSymbol: false,
-      lineStyle: { width: 2, color: "#a855f7" },
-      itemStyle: { color: "#a855f7" },
+      lineStyle: { width: 2, color: tc.spread },
+      itemStyle: { color: tc.spread },
       areaStyle: {
         color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-          { offset: 0, color: "rgba(168, 85, 247, 0.35)" },
-          { offset: 1, color: "rgba(168, 85, 247, 0.02)" }
+          { offset: 0, color: window.ArenaColors.alpha(tc.spread, 0.35) },
+          { offset: 1, color: window.ArenaColors.alpha(tc.spread, 0.02) }
         ])
       },
       markLine: {

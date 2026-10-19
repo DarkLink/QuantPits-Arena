@@ -129,13 +129,14 @@ window.LeaderboardView = {
               </select>
             </div>
           </div>
+          <p class="chart-color-caption">Cell colors encode the selected metric; they do not identify participants or animals.</p>
           <div id="chart-leaderboard-matrix" class="chart-container" style="height: 520px;"></div>
           <div style="display:flex; justify-content:space-between; align-items:center; margin-top:12px; padding:10px 16px; background:var(--bg-surface-elevated); border-radius:var(--radius-sm); font-size:0.8rem; border:1px solid var(--border-subtle); flex-wrap:wrap; gap:10px;">
             <span style="color:var(--text-muted); font-weight:600;">Full-season Benchmark References:</span>
             <div style="display:flex; gap:20px; flex-wrap:wrap;">
               <span><span class="arena-glossary-term" data-tooltip-term="taotie">Taotie (Executable Universe Benchmark)</span>: <b style="color:var(--accent-positive);">${taotieRet >= 0 ? '+' : ''}${window.formatNumber(taotieRet, 2, '%')}</b></span>
               ${hasGhost ? `
-              <span><span class="arena-glossary-term" data-tooltip-term="ghost_taotie">Ghost Taotie (Theoretical Equal-Weight)</span>: <b style="color:#00f0ff;">${ghostRet >= 0 ? '+' : ''}${window.formatNumber(ghostRet, 2, '%')}</b></span>
+              <span><span class="arena-glossary-term" data-tooltip-term="ghost_taotie">Ghost Taotie (Theoretical Equal-Weight)</span>: <b style="color:var(--benchmark-ghost);">${ghostRet >= 0 ? '+' : ''}${window.formatNumber(ghostRet, 2, '%')}</b></span>
               ` : ''}
               <span><span class="arena-glossary-term" data-tooltip-term="market">${window.arenaAdapter.getMarketBenchmarkName()} (External Market Anchor)</span>: <b style="color:var(--accent-negative);">${csiRet >= 0 ? '+' : ''}${window.formatNumber(csiRet, 2, '%')}</b></span>
             </div>
@@ -304,8 +305,8 @@ window.LeaderboardView = {
       return `
         <tr class="clickable-row" onclick="window.appRouter.navigate('path-detail', { pathId: '${p.path_id}' })">
           <td><b>${p.path_id}</b></td>
-          <td><span class="badge badge-cyan">${p.contestant_id}</span>${p.observation_start ? `<small style="display:block">Observation since ${p.observation_start} · full-season rank N/A</small>` : ''}</td>
-          <td><span class="badge badge-purple">${p.animal_id}</span></td>
+          <td><span class="badge identity-badge" style="--identity-color:${window.ArenaColors.subject(p.contestant_id)};">${p.contestant_id}</span>${p.observation_start ? `<small style="display:block">Observation since ${p.observation_start} · full-season rank N/A</small>` : ''}</td>
+          <td><span class="badge identity-badge" style="--identity-color:${window.ArenaColors.animal(p.animal_id)};">${p.animal_id}</span></td>
           <td class="numeric">
             ${returnCellHtml}
           </td>

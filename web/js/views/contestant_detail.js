@@ -122,8 +122,8 @@ window.ContestantDetailView = {
                   const isActive = cid === this.activeContestantId;
                   const familyTag = c.family || c.lineage || 'Alpha';
                   return `
-                    <button class="btn ${isActive ? 'btn-primary' : 'btn-secondary'} contestant-switch-btn" 
-                            data-cid="${cid}" style="padding: 4px 10px; font-size: 11px; font-weight: 600;">
+                    <button class="btn identity-badge ${isActive ? 'is-active' : ''} contestant-switch-btn"
+                            data-cid="${cid}" style="--identity-color:${window.ArenaColors.subject(cid)}; padding: 4px 10px; font-size: 11px; font-weight: 600;">
                       ${c.display_name || c.anonymous_name || cid} <span style="font-size: 10px; opacity: 0.75; margin-left: 2px;">[${familyTag}]</span>
                     </button>
                   `;
@@ -143,7 +143,7 @@ window.ContestantDetailView = {
               </h3>
               <div style="display: flex; gap: 6px; flex-wrap: wrap;">
                 <span class="badge badge-warning" style="font-size: 10px;">Prior to Arena Cutoff</span>
-                <span class="badge" style="font-size: 10px; background: rgba(239,68,68,0.15); color: #f87171; border: 1px solid rgba(239,68,68,0.3);">Non-Comparable Cross-Pool</span>
+                <span class="badge" style="font-size: 10px; background: rgba(239,68,68,0.15); color: var(--accent-negative); border: 1px solid rgba(239,68,68,0.3);">Non-Comparable Cross-Pool</span>
               </div>
             </div>
 
@@ -184,7 +184,7 @@ window.ContestantDetailView = {
             <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; font-size: 12px; background: var(--bg-subtle); padding: 12px; border-radius: var(--radius-sm);">
               <div><span style="color: var(--text-muted);">Architecture:</span> <strong style="color: var(--text-primary);">${contestant.architecture_type || contestant.training_mode || 'Multi-Factor Ensemble'}</strong></div>
               <div><span style="color: var(--text-muted);">Family:</span> <strong style="color: var(--text-primary);">${contestant.lineage || contestant.family || 'Alpha Family'}</strong></div>
-              <div><span style="color: var(--text-muted);">Historical Stock Pool:</span> <strong style="color: #fbbf24;">Legacy Production Pool</strong></div>
+              <div><span style="color: var(--text-muted);">Historical Stock Pool:</span> <strong style="color: var(--accent-warning);">Legacy Production Pool</strong></div>
               <div><span style="color: var(--text-muted);">Current Arena Pool:</span> <strong style="color: var(--brand-cyan);">${seasonMeta.universe_name || seasonMeta.title || 'Standard Arena Pool'}</strong></div>
               <div><span style="color: var(--text-muted);">Training Cutoff:</span> <span style="color: var(--text-secondary); font-family: monospace;">${contestant.train_cutoff || '2026-06-26'}</span></div>
               <div><span style="color: var(--text-muted);">Burial Date:</span> <span style="color: var(--text-secondary); font-family: monospace;">${contestant.burial_date || contestant.retire_date || '2026-06-28'}</span></div>
@@ -289,6 +289,7 @@ window.ContestantDetailView = {
             </div>
           </div>
 
+          <p class="chart-color-caption">Colors: animals. In sensitivity charts, point colors identify individual handlers.</p>
           <div id="chart-contestant-multi-curves" style="height: 380px; width: 100%;"></div>
         </div>
 
@@ -548,19 +549,19 @@ window.ContestantDetailView = {
 
       chart.setOption({
         backgroundColor: tc.bg,
-        tooltip: { trigger: "axis" },
+        tooltip: { trigger: "axis", backgroundColor:tc.tooltipBg, borderColor:tc.tooltipBorder, textStyle:{color:tc.textPrimary} },
         grid: { left: "6%", right: "4%", top: "15%", bottom: "20%" },
         xAxis: { type: "category", data: labels, axisLabel: { color: tc.textSecondary, fontSize: 11 } },
         yAxis: { type: "value", splitLine: { lineStyle: { color: tc.gridLine } }, axisLabel: { color: tc.textSecondary, formatter: "{value}%" } },
         series: [{
           type: "bar",
-          data: vals.map(v => ({
+          data: vals.map((v,i) => ({
             value: v,
-            itemStyle: { color: v >= 0 ? "#10b981" : "#f43f5e" }
+            itemStyle: { color: window.ArenaColors.animal(fingerprints.meerkatData[i].animal_id) }
           })),
           markLine: {
             data: [{ type: "average", name: "Mean" }],
-            lineStyle: { color: "#f59e0b", type: "dashed" }
+            lineStyle: { color: tc.monkey, type: "dashed" }
           }
         }]
       }, true);

@@ -425,7 +425,7 @@ window.DispatchesView = {
           🔒
         </div>
 
-        <div class="hero-tag" style="margin-bottom: 0.75rem; background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.3); color: #fbbf24;">
+        <div class="hero-tag" style="margin-bottom: 0.75rem; background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.3); color: var(--accent-warning);">
           <span>Institutional Embargo Active · Evaluation Cycle Unlocking</span>
         </div>
 

@@ -403,7 +403,7 @@ button.chart-spec-pill,
   gap: 5px !important;
   background: rgba(56, 189, 248, 0.1) !important;
   border: 1px solid rgba(56, 189, 248, 0.3) !important;
-  color: #38bdf8 !important;
+  color: var(--brand-cyan) !important;
   font-family: inherit !important;
   font-size: 11px !important;
   font-weight: 600 !important;
@@ -421,8 +421,8 @@ button.chart-spec-pill,
 button.chart-spec-pill:hover,
 .chart-spec-pill:hover {
   background: rgba(56, 189, 248, 0.22) !important;
-  border-color: #38bdf8 !important;
-  color: #ffffff !important;
+  border-color: var(--brand-cyan) !important;
+  color: var(--text-primary) !important;
   box-shadow: 0 4px 12px rgba(56, 189, 248, 0.35) !important;
   transform: translateY(-1px) !important;
 }
@@ -562,12 +562,12 @@ button.chart-spec-pill:hover,
 .season-switcher-btn.is-draft {
   background: rgba(245, 158, 11, 0.1);
   border-color: rgba(245, 158, 11, 0.35);
-  color: #f59e0b;
+  color: var(--accent-warning);
 }
 
 .season-switcher-btn.is-draft .pulse-indicator {
-  background: #f59e0b;
-  box-shadow: 0 0 8px #f59e0b;
+  background: var(--accent-warning);
+  box-shadow: 0 0 8px var(--accent-warning);
 }
 
 .season-switcher-btn .switcher-arrow {
@@ -675,13 +675,13 @@ button.chart-spec-pill:hover,
 
 .season-item-badge.badge-draft {
   background: rgba(245, 158, 11, 0.15);
-  color: #f59e0b;
+  color: var(--accent-warning);
   border: 1px solid rgba(245, 158, 11, 0.3);
 }
 
 .season-item-badge.badge-pending {
   background: rgba(148, 163, 184, 0.15);
-  color: #94a3b8;
+  color: var(--text-secondary);
   border: 1px solid rgba(148, 163, 184, 0.3);
 }
 
@@ -756,10 +756,10 @@ button.chart-spec-pill:hover,
 }
 
 .benchmark-pill.is-active {
-  background: rgba(var(--bm-rgb, 56, 189, 248), 0.14);
+  background: color-mix(in srgb, var(--bm-color, var(--accent-cyan)) 14%, transparent);
   border-color: var(--bm-color, var(--accent-cyan));
   color: var(--text-primary);
-  box-shadow: 0 0 8px rgba(var(--bm-rgb, 56, 189, 248), 0.25);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--bm-color, var(--accent-cyan)) 25%, transparent);
 }
 
 .bm-line-badge {
@@ -778,23 +778,41 @@ button.chart-spec-pill:hover,
 }
 
 .benchmark-pill.ghost-taotie {
-  --bm-color: #00f0ff;
-  --bm-rgb: 0, 240, 255;
+  --bm-color: var(--benchmark-ghost);
 }
 
 .benchmark-pill.taotie {
-  --bm-color: #c084fc;
-  --bm-rgb: 192, 132, 252;
+  --bm-color: var(--benchmark-taotie);
 }
 
 .benchmark-pill.csi300 {
-  --bm-color: #f59e0b;
-  --bm-rgb: 245, 158, 11;
+  --bm-color: var(--benchmark-market);
 }
 
 .benchmark-pill.monkey {
-  --bm-color: #94a3b8;
-  --bm-rgb: 148, 163, 184;
+  --bm-color: var(--benchmark-monkey);
+}
+
+.comparison-subject {
+  border: 1px solid color-mix(in srgb, var(--subject-color, var(--brand-cyan)) 40%, transparent);
+  background: color-mix(in srgb, var(--subject-color, var(--brand-cyan)) 4%, var(--bg-surface));
+}
+
+.comparison-subject-badge {
+  color: var(--subject-color, var(--brand-cyan));
+  border-color: color-mix(in srgb, var(--subject-color, var(--brand-cyan)) 35%, transparent);
+  background: color-mix(in srgb, var(--subject-color, var(--brand-cyan)) 12%, transparent);
+}
+
+.identity-badge {
+  color: var(--identity-color, var(--brand-cyan));
+  border-color: color-mix(in srgb, var(--identity-color, var(--brand-cyan)) 35%, transparent);
+  background: color-mix(in srgb, var(--identity-color, var(--brand-cyan)) 10%, transparent);
+}
+
+.identity-badge.is-active {
+  border-color: var(--identity-color, var(--brand-cyan));
+  box-shadow: 0 0 0 1px var(--identity-color, var(--brand-cyan));
 }
 
 .model-pill {
@@ -814,7 +832,7 @@ button.chart-spec-pill:hover,
 
 .model-pill.is-active {
   background: rgba(56, 189, 248, 0.12);
-  border-color: var(--model-color, #38bdf8);
+  border-color: var(--model-color, var(--brand-cyan));
   color: var(--text-primary);
 }
 
@@ -822,6 +840,13 @@ button.chart-spec-pill:hover,
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--model-color, #38bdf8);
+  background: var(--model-color, var(--brand-cyan));
 }
 
+
+.chart-color-caption {
+  color: var(--text-secondary);
+  font-size: 11px;
+  line-height: 1.5;
+  margin: 0 0 8px;
+}

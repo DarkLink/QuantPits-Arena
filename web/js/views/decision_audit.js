@@ -140,18 +140,18 @@ window.DecisionAuditView = {
       <!-- Side-by-Side Subject Cards -->
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 18px; margin-bottom: 24px;">
         <!-- Subject A Card -->
-        <div class="card" style="border: 1px solid rgba(16, 185, 129, 0.4); background: rgba(16, 185, 129, 0.03);">
+        <div class="card comparison-subject" style="--subject-color:${window.ArenaColors.subject(profA.id)};">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
             <div style="display: flex; align-items: center; gap: 8px;">
               <span style="font-size: 18px;">🏆</span>
               <div>
-                <h3 style="font-size: 15px; font-weight: 700; color: #10b981; margin: 0;">
+                <h3 style="font-size: 15px; font-weight: 700; color: var(--subject-color, var(--brand-cyan)); margin: 0;">
                   ${profA.name}
                 </h3>
                 <span style="font-size: 11px; color: var(--text-muted);">${profA.tag}</span>
               </div>
             </div>
-            <span class="badge badge-success">SLOT A</span>
+            <span class="badge comparison-subject-badge">SLOT A</span>
           </div>
           <div class="kpi-grid" style="grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px;">
             <div class="kpi-card" style="padding: 10px;">
@@ -176,18 +176,18 @@ window.DecisionAuditView = {
         </div>
 
         <!-- Subject B Card -->
-        <div class="card" style="border: 1px solid rgba(244, 63, 94, 0.4); background: rgba(244, 63, 94, 0.03);">
+        <div class="card comparison-subject" style="--subject-color:${window.ArenaColors.subject(profB.id)};">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
             <div style="display: flex; align-items: center; gap: 8px;">
               <span style="font-size: 18px;">⚔️</span>
               <div>
-                <h3 style="font-size: 15px; font-weight: 700; color: #f43f5e; margin: 0;">
+                <h3 style="font-size: 15px; font-weight: 700; color: var(--subject-color, var(--brand-cyan)); margin: 0;">
                   ${profB.name}
                 </h3>
                 <span style="font-size: 11px; color: var(--text-muted);">${profB.tag}</span>
               </div>
             </div>
-            <span class="badge badge-danger">SLOT B</span>
+            <span class="badge comparison-subject-badge">SLOT B</span>
           </div>
           <div class="kpi-grid" style="grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px;">
             <div class="kpi-card" style="padding: 10px;">
@@ -213,18 +213,18 @@ window.DecisionAuditView = {
 
         <!-- Subject C Card (Conditional) -->
         ${profC ? `
-          <div class="card" style="border: 1px solid rgba(56, 189, 248, 0.4); background: rgba(56, 189, 248, 0.03);">
+          <div class="card comparison-subject" style="--subject-color:${window.ArenaColors.subject(profC.id)};">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
               <div style="display: flex; align-items: center; gap: 8px;">
                 <span style="font-size: 18px;">🏛️</span>
                 <div>
-                  <h3 style="font-size: 15px; font-weight: 700; color: #38bdf8; margin: 0;">
+                  <h3 style="font-size: 15px; font-weight: 700; color: var(--subject-color, var(--brand-cyan)); margin: 0;">
                     ${profC.name}
                   </h3>
                   <span style="font-size: 11px; color: var(--text-muted);">${profC.tag}</span>
                 </div>
               </div>
-              <span class="badge badge-info">SLOT C</span>
+              <span class="badge comparison-subject-badge">SLOT C</span>
             </div>
             <div class="kpi-grid" style="grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px;">
               <div class="kpi-card" style="padding: 10px;">
@@ -283,8 +283,8 @@ window.DecisionAuditView = {
             </span>
           </div>
           <div style="display: flex; gap: 8px;">
-            <span class="badge badge-success">A Wins: ${winCountA}</span>
-            <span class="badge badge-danger">B Wins: ${winCountB}</span>
+            <span class="badge comparison-subject-badge" style="--subject-color:${window.ArenaColors.subject(profA.id)};">A Wins: ${winCountA}</span>
+            <span class="badge comparison-subject-badge" style="--subject-color:${window.ArenaColors.subject(profB.id)};">B Wins: ${winCountB}</span>
             <span class="badge badge-neutral">Ties: ${totalAnimals - winCountA - winCountB}</span>
           </div>
         </div>
@@ -320,7 +320,7 @@ window.DecisionAuditView = {
                       ${ac.retB >= 0 ? '+' : ''}${ac.retB.toFixed(2)}%
                     </td>
                     ${profC ? `
-                      <td style="text-align: right; font-weight: 600; color: #38bdf8;">
+                      <td style="text-align: right; font-weight: 600; color: var(--brand-cyan);">
                         ${ac.retC !== null ? `${ac.retC >= 0 ? '+' : ''}${ac.retC.toFixed(2)}%` : '—'}
                       </td>
                     ` : ''}
@@ -330,7 +330,7 @@ window.DecisionAuditView = {
                     <td style="text-align: center;">
                       ${isTie 
                         ? '<span class="badge badge-neutral">Flat</span>' 
-                        : `<span class="badge ${isWinA ? 'badge-success' : 'badge-danger'}">${isWinA ? 'A Won' : 'B Won'}</span>`}
+                        : `<span class="badge comparison-subject-badge" style="--subject-color:${window.ArenaColors.subject(isWinA?profA.id:profB.id)};">${isWinA ? 'A Won' : 'B Won'}</span>`}
                     </td>
                   </tr>
                 `;
@@ -348,24 +348,27 @@ window.DecisionAuditView = {
     const dates = this.window.dates;
     const modelsData = [
       {
+        id: profA.id,
         name: profA.shortName,
         curve: profA.curve,
-        color: "#10b981",
+        color: window.ArenaColors.subject(profA.id),
         isBenchmark: profA.isBenchmark
       },
       {
+        id: profB.id,
         name: profB.shortName,
         curve: profB.curve,
-        color: "#f43f5e",
+        color: window.ArenaColors.subject(profB.id),
         isBenchmark: profB.isBenchmark
       }
     ];
 
     if (profC && profC.curve && profC.curve.length > 0) {
       modelsData.push({
+        id: profC.id,
         name: profC.shortName,
         curve: profC.curve,
-        color: "#38bdf8",
+        color: window.ArenaColors.subject(profC.id),
         isBenchmark: profC.isBenchmark
       });
     }
@@ -423,10 +426,10 @@ window.DecisionAuditView = {
         <!-- 3 Comparator Selection Slots -->
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 14px;">
           <!-- Slot A -->
-          <div style="background: rgba(16, 185, 129, 0.06); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: 8px; padding: 10px 14px;">
+          <div class="comparison-subject comparison-slot" style="--subject-color:${window.ArenaColors.subject(this.slotA)}; border-radius: 8px; padding: 10px 14px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-              <span style="font-size: 11px; font-weight: 700; color: #10b981; letter-spacing: 0.05em;">● SUBJECT A (First Curve)</span>
-              <span class="badge badge-success" style="font-size: 10px; padding: 2px 6px;">Slot A</span>
+              <span style="font-size: 11px; font-weight: 700; color: var(--subject-color, var(--brand-cyan)); letter-spacing: 0.05em;">● SUBJECT A (First Curve)</span>
+              <span class="badge comparison-subject-badge">Slot A</span>
             </div>
             <select id="slot-a-select" class="filter-select" style="width: 100%; font-weight: 600;">
               ${this.renderSubjectOptions(allSubjects, this.slotA)}
@@ -434,10 +437,10 @@ window.DecisionAuditView = {
           </div>
 
           <!-- Slot B -->
-          <div style="background: rgba(244, 63, 94, 0.06); border: 1px solid rgba(244, 63, 94, 0.35); border-radius: 8px; padding: 10px 14px;">
+          <div class="comparison-subject comparison-slot" style="--subject-color:${window.ArenaColors.subject(this.slotB)}; border-radius: 8px; padding: 10px 14px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-              <span style="font-size: 11px; font-weight: 700; color: #f43f5e; letter-spacing: 0.05em;">● SUBJECT B (Second Curve)</span>
-              <span class="badge badge-danger" style="font-size: 10px; padding: 2px 6px;">Slot B</span>
+              <span style="font-size: 11px; font-weight: 700; color: var(--subject-color, var(--brand-cyan)); letter-spacing: 0.05em;">● SUBJECT B (Second Curve)</span>
+              <span class="badge comparison-subject-badge">Slot B</span>
             </div>
             <select id="slot-b-select" class="filter-select" style="width: 100%; font-weight: 600;">
               ${this.renderSubjectOptions(allSubjects, this.slotB)}
@@ -445,9 +448,9 @@ window.DecisionAuditView = {
           </div>
 
           <!-- Slot C -->
-          <div style="background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.35); border-radius: 8px; padding: 10px 14px;">
+          <div class="comparison-subject comparison-slot" style="--subject-color:${window.ArenaColors.subject(this.slotC)}; border-radius: 8px; padding: 10px 14px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-              <span style="font-size: 11px; font-weight: 700; color: #38bdf8; letter-spacing: 0.05em;">● SUBJECT C (Reference / Benchmark)</span>
+              <span style="font-size: 11px; font-weight: 700; color: var(--subject-color, var(--brand-cyan)); letter-spacing: 0.05em;">● SUBJECT C (Reference / Benchmark)</span>
               <span class="badge badge-neutral" style="font-size: 10px; padding: 2px 6px;">Optional</span>
             </div>
             <select id="slot-c-select" class="filter-select" style="width: 100%;">

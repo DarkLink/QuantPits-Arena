@@ -53,6 +53,13 @@
   --accent-cyan: #06b6d4;
   --accent-cyan-bg: rgba(6, 182, 212, 0.12);
 
+  /* Benchmark hues are shared by chart strokes, toggles and return swatches. */
+  --benchmark-market: #f59e0b;
+  --benchmark-taotie: #c084fc;
+  --benchmark-ghost: #22d3ee;
+  --benchmark-monkey: #94a3b8;
+  --chart-spread: #e879f9;
+
   /* Shadows & Glow */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -2px rgba(0, 0, 0, 0.5);
@@ -102,6 +109,12 @@
   --accent-negative: #be123c;
   --accent-warning: #b45309;
   --accent-cyan: #0e7490;
+
+  --benchmark-market: #b45309;
+  --benchmark-taotie: #7e22ce;
+  --benchmark-ghost: #0e7490;
+  --benchmark-monkey: #64748b;
+  --chart-spread: #a21caf;
 
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
