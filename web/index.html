@@ -12,7 +12,7 @@
 
   <!-- Core Stylesheets -->
   <link rel="stylesheet" href="css/variables.css?v=style-30110492e909">
-  <link rel="stylesheet" href="css/main.css?v=style-eb76f64bb281">
+  <link rel="stylesheet" href="css/main.css?v=footer-81380ef87519">
   <link rel="stylesheet" href="css/components.css?v=style-f118d5fcef86">
   <link rel="stylesheet" href="css/views.css?v=style-a3d0d663e272">
 
@@ -142,36 +142,26 @@
     </div>
   </main>
 
-  <!-- Clean, Multi-Season Ready Footer (Decoupled from Season 1 Specific Results) -->
+  <!-- Compact footer: identity, research context and links share one surface. -->
   <footer class="app-footer">
     <div class="footer-container">
-      <div class="footer-col">
-        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
-          <div class="brand-logo-badge" style="width: 20px; height: 20px; font-size: 9px; border-radius: 4px;">QP</div>
-          <strong style="color: var(--text-primary); font-size: 13px;">QuantPits Arena</strong>
-          <span style="font-size: 11px; color: var(--text-muted);">· Empirical Testbed & Benchmark Zoo</span>
-        </div>
-        <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5; margin: 0; max-width: 560px;">
-          An empirical research platform for evaluating quantitative alpha models against execution friction, parametric monkey null distributions, and capital constraints.
+      <div class="footer-summary">
+        <a class="footer-brand" href="#intro">
+          <span class="brand-logo-badge" aria-hidden="true">QP</span>
+          <strong>QuantPits Arena</strong>
+        </a>
+        <p class="footer-note">
+          Research only. Historical, non-production candidates; normalized NAV with standardized execution frictions.
         </p>
       </div>
-      <div class="footer-col" style="text-align: right;">
-        <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 6px; display: flex; gap: 14px; justify-content: flex-end; flex-wrap: wrap;">
-          <a href="https://quantpits.com/" target="_blank" rel="noopener" style="color: var(--brand-cyan); font-weight: 600;">QuantPits Main ↗</a>
-          <a href="https://github.com/DarkLink/QuantPits" target="_blank" rel="noopener" style="color: var(--text-secondary);">GitHub</a>
-          <a href="#discussion" style="color: var(--brand-purple); font-weight: 600;">💬 Discussion (#2)</a>
-          <a href="https://arxiv.org/abs/2604.11477" target="_blank" rel="noopener" style="color: var(--text-secondary);">Paper</a>
-          <a href="https://github.com/DarkLink/QuantPits/blob/main/docs/en/70_WALKTHROUGH.md" target="_blank" rel="noopener" style="color: var(--text-secondary);">Walkthrough</a>
-        </div>
-        <div style="font-size: 11px; color: var(--text-muted);">
-          QuantPits Open Research · Strategy Durability &amp; Empirical Significance
-        </div>
-      </div>
-    </div>
-    <!-- Bottom Short Disclaimer Banner -->
-    <div style="max-width: 1280px; margin: 12px auto 0 auto; padding-top: 10px; border-top: 1px solid var(--border-subtle); font-size: 11px; color: var(--text-muted); line-height: 1.6; text-align: left;">
-      <strong style="color: var(--text-secondary);">Disclaimer:</strong> For research and informational purposes only. Models evaluated are historical research candidates (non-live / non-production). All evaluations are based on normalized NAV curves under standardized execution frictions.
-      <a href="#disclaimer" style="color: var(--accent-cyan); text-decoration: underline; margin-left: 6px;">Read Full Legal &amp; Research Notice &rarr;</a>
+      <nav class="footer-links" aria-label="Research and project links">
+        <a href="https://quantpits.com/" target="_blank" rel="noopener">QuantPits Main ↗</a>
+        <a href="https://github.com/DarkLink/QuantPits" target="_blank" rel="noopener">GitHub</a>
+        <a href="#discussion">Discussion</a>
+        <a href="https://arxiv.org/abs/2604.11477" target="_blank" rel="noopener">Paper</a>
+        <a href="https://github.com/DarkLink/QuantPits/blob/main/docs/en/70_WALKTHROUGH.md" target="_blank" rel="noopener">Walkthrough</a>
+        <a href="#disclaimer">Research notice</a>
+      </nav>
     </div>
   </footer>
 

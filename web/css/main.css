@@ -554,7 +554,7 @@ a:hover {
   margin-top: auto;
   border-top: 1px solid var(--border-subtle);
   background: var(--bg-subtle);
-  padding: 2rem 1.5rem;
+  padding: 1rem 1.5rem;
 }
 
 .footer-container {
@@ -562,15 +562,65 @@ a:hover {
   max-width: 1600px;
   margin: 0 auto;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 1.5rem;
+  gap: 1rem 2rem;
 }
 
-.footer-col {
+.footer-summary {
+  flex: 1 1 28rem;
   display: flex;
   flex-direction: column;
+  gap: 0.4rem;
+}
+
+.footer-brand {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 0.55rem;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+}
+
+.footer-brand .brand-logo-badge {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  font-size: 9px;
+}
+
+.footer-note {
+  max-width: 42rem;
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  line-height: 1.6;
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem 1rem;
+  padding-top: 0.1rem;
+  padding-right: 9.5rem;
+  font-size: 0.82rem;
+}
+
+.footer-links a {
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.footer-links a:hover { color: var(--brand-cyan); }
+
+@media (max-width: 900px) {
+  .footer-summary { flex-basis: 100%; }
+  .footer-links {
+    padding-right: 0;
+    padding-bottom: 3.5rem;
+  }
 }
 
 /* Responsive Media Queries for Mobile & Tablet */
@@ -648,14 +698,6 @@ a:hover {
   }
   .view-header {
     margin-bottom: 1.25rem !important;
-  }
-  .footer-container {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
-  }
-  .footer-col:last-child {
-    text-align: left !important;
   }
 }
 
