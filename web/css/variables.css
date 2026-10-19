@@ -3,6 +3,7 @@
    ========================================================================== */
 
 :root {
+  color-scheme: dark;
   /* Typography */
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --font-heading: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -74,9 +75,11 @@
 
 /* Light Theme Overrides */
 [data-theme="light"] {
+  color-scheme: light;
   --bg-base: #f8fafc;
   --bg-subtle: #f1f5f9;
   --bg-surface: #ffffff;
+  --bg-card: #ffffff;
   --bg-surface-elevated: #ffffff;
   --bg-glass: rgba(255, 255, 255, 0.85);
   --bg-glass-elevated: rgba(255, 255, 255, 0.95);
@@ -91,6 +94,14 @@
   --text-tertiary: #64748b;
   --text-muted: #94a3b8;
   --text-inverse: #f8fafc;
+
+  --brand-cyan: #0369a1;
+  --brand-blue: #4f46e5;
+  --brand-purple: #7c3aed;
+  --accent-positive: #047857;
+  --accent-negative: #be123c;
+  --accent-warning: #b45309;
+  --accent-cyan: #0e7490;
 
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.05);

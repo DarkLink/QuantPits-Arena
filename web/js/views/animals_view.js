@@ -135,7 +135,7 @@ window.AnimalsView = {
             </div>
 
             <!-- Single vs Multi-Animal Mode Switcher -->
-            <div style="display: flex; gap: 6px; background: rgba(0,0,0,0.25); padding: 4px; border-radius: 8px; border: 1px solid var(--border-subtle);">
+            <div style="display: flex; gap: 6px; background: var(--bg-subtle); padding: 4px; border-radius: 8px; border: 1px solid var(--border-subtle);">
               <button class="btn btn-sm ${this.comparisonMode === 'single' ? 'btn-primary' : 'btn-outline'} zoo-mode-btn" data-mode="single" style="font-size: 11px; padding: 5px 12px; font-weight: 600;">
                 Single Container Profile
               </button>
@@ -209,7 +209,7 @@ window.AnimalsView = {
         </div>
 
         <!-- Animal Container Profile & Key Performance Card -->
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; margin-bottom: 24px;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 16px; margin-bottom: 24px;">
           <!-- Left: Animal Container Specifications / Sandbox Summary -->
           <div class="card" style="padding: 20px;">
             ${this.comparisonMode === 'single' ? `
@@ -223,7 +223,7 @@ window.AnimalsView = {
               <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 16px;">
                 ${activeAnimal.description}
               </p>
-              <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; background: var(--surface-hover); padding: 12px; border-radius: 8px; border: 1px solid var(--border-subtle);">
+              <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; background: var(--bg-surface-elevated); padding: 12px; border-radius: 8px; border: 1px solid var(--border-subtle);">
                 <div>
                   <div style="font-size: 11px; color: var(--text-muted);">Portfolio Holdings (topk)</div>
                   <div style="font-size: 16px; font-weight: 700; color: var(--text-primary); font-family: monospace;">${activeAnimal.topk} stocks</div>
@@ -244,7 +244,7 @@ window.AnimalsView = {
               <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 16px;">
                 Simultaneously comparing execution paths across selected animal policies. Toggle chips to add or remove any containers without restrictions.
               </p>
-              <div style="background: var(--surface-hover); padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border-subtle); font-size: 12px;">
+              <div style="background: var(--bg-surface-elevated); padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border-subtle); font-size: 12px;">
                 <div style="color: var(--text-muted); font-size: 11px; margin-bottom: 4px;">Active Selection (${this.selectedAnimalIds.length}):</div>
                 <div style="display: flex; flex-wrap: wrap; gap: 4px;">
                   ${this.selectedAnimalIds.map(aid => {
@@ -275,9 +275,9 @@ window.AnimalsView = {
             </div>
 
             <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
-              <div style="background: var(--surface-hover); padding: 12px; border-radius: 8px; border: 1px solid var(--border-subtle);">
+              <div style="background: var(--bg-surface-elevated); padding: 12px; border-radius: 8px; border: 1px solid var(--border-subtle);">
                 <div style="font-size: 11px; color: var(--text-muted);">Top Return in Scope</div>
-                <div style="font-size: 18px; font-weight: 700; color: ${bestPath && bestPath.total_return_pct >= 0 ? 'var(--color-success)' : 'var(--color-danger)'};">
+                <div style="font-size: 18px; font-weight: 700; color: ${bestPath && bestPath.total_return_pct >= 0 ? 'var(--accent-positive)' : 'var(--accent-negative)'};">
                   ${bestPath ? (bestPath.total_return_pct >= 0 ? '+' : '') + bestPath.total_return_pct.toFixed(2) + '%' : 'N/A'}
                 </div>
                 <div style="font-size: 10px; color: var(--text-secondary); margin-top: 2px;">
@@ -285,9 +285,9 @@ window.AnimalsView = {
                 </div>
               </div>
 
-              <div style="background: var(--surface-hover); padding: 12px; border-radius: 8px; border: 1px solid var(--border-subtle);">
+              <div style="background: var(--bg-surface-elevated); padding: 12px; border-radius: 8px; border: 1px solid var(--border-subtle);">
                 <div style="font-size: 11px; color: var(--text-muted);">Median Return</div>
-                <div style="font-size: 18px; font-weight: 700; color: ${medianReturn >= 0 ? 'var(--color-success)' : 'var(--color-danger)'};">
+                <div style="font-size: 18px; font-weight: 700; color: ${medianReturn >= 0 ? 'var(--accent-positive)' : 'var(--accent-negative)'};">
                   ${medianReturn >= 0 ? '+' : ''}${medianReturn.toFixed(2)}%
                 </div>
                 <div style="font-size: 10px; color: var(--text-secondary); margin-top: 2px;">
@@ -295,9 +295,9 @@ window.AnimalsView = {
                 </div>
               </div>
 
-              <div style="background: var(--surface-hover); padding: 12px; border-radius: 8px; border: 1px solid var(--border-subtle);">
+              <div style="background: var(--bg-surface-elevated); padding: 12px; border-radius: 8px; border: 1px solid var(--border-subtle);">
                 <div style="font-size: 11px; color: var(--text-muted);">Average Max Drawdown</div>
-                <div style="font-size: 18px; font-weight: 700; color: var(--color-danger);">
+                <div style="font-size: 18px; font-weight: 700; color: var(--accent-negative);">
                   -${avgDrawdown.toFixed(2)}%
                 </div>
                 <div style="font-size: 10px; color: var(--text-secondary); margin-top: 2px;">
@@ -305,9 +305,9 @@ window.AnimalsView = {
                 </div>
               </div>
 
-              <div style="background: var(--surface-hover); padding: 12px; border-radius: 8px; border: 1px solid var(--border-subtle);">
+              <div style="background: var(--bg-surface-elevated); padding: 12px; border-radius: 8px; border: 1px solid var(--border-subtle);">
                 <div style="font-size: 11px; color: var(--text-muted);">Upper-Tail Rate (p &lt; 0.05)</div>
-                <div style="font-size: 18px; font-weight: 700; color: var(--color-accent);">
+                <div style="font-size: 18px; font-weight: 700; color: var(--brand-cyan);">
                   ${sigPct}
                 </div>
                 <div style="font-size: 10px; color: var(--text-secondary); margin-top: 2px;">
@@ -350,7 +350,7 @@ window.AnimalsView = {
               ` : ''}
 
               <!-- Metric Switcher Buttons -->
-              <div class="chart-metric-btn-group" style="display: flex; gap: 4px; background: var(--surface-hover); padding: 3px; border-radius: 6px; border: 1px solid var(--border-subtle);">
+              <div class="chart-metric-btn-group" style="display: flex; gap: 4px; background: var(--bg-surface-elevated); padding: 3px; border-radius: 6px; border: 1px solid var(--border-subtle);">
                 <button class="btn btn-sm ${this.activeMetric === 'nav' ? 'btn-primary' : 'btn-outline'} animal-metric-btn" data-metric="nav" style="font-size: 11px; padding: 4px 10px;">
                   Cumulative NAV
                 </button>
@@ -400,7 +400,7 @@ window.AnimalsView = {
           <div class="card-body" style="padding: 0; overflow-x: auto;">
             <table class="table" style="width: 100%; font-size: 12px; border-collapse: collapse;">
               <thead>
-                <tr style="border-bottom: 1px solid var(--border-subtle); background: var(--surface-hover); text-align: left;">
+                <tr style="border-bottom: 1px solid var(--border-subtle); background: var(--bg-surface-elevated); text-align: left;">
                   <th style="padding: 10px 16px; width: 48px;">Rank</th>
                   <th style="padding: 10px 16px;">Contestant Model</th>
                   <th style="padding: 10px 16px;">Animal Container</th>
@@ -429,10 +429,10 @@ window.AnimalsView = {
                   const spreadTaotie = Number.isFinite(passiveReturn) ? p.total_return_pct - passiveReturn : null;
 
                   return `
-                    <tr data-zoo-path="${p.path_id}" data-observation-start="${start}" style="border-bottom: 1px solid var(--border-subtle); hover:background var(--surface-hover);">
+                    <tr data-zoo-path="${p.path_id}" data-observation-start="${start}" style="border-bottom: 1px solid var(--border-subtle); hover:background var(--bg-surface-elevated);">
                       <td style="padding: 12px 16px; font-weight: 700; color: var(--text-muted);">${p.full_season_eligible === false ? 'Observation' : '#' + (idx + 1)}</td>
                       <td style="padding: 12px 16px;">
-                        <a href="#contestants/${p.contestant_id}" style="font-weight: 600; color: var(--color-accent); text-decoration: none;">
+                        <a href="#contestants/${p.contestant_id}" style="font-weight: 600; color: var(--brand-cyan); text-decoration: none;">
                           ${p.contestant_id}
                         </a>
                         <div style="font-size: 10px; color: var(--text-secondary); margin-top: 3px;">${start} → ${this.history.end}</div>
@@ -443,17 +443,17 @@ window.AnimalsView = {
                       <td style="padding: 12px 16px; font-family: monospace; color: var(--text-secondary);">
                         ${p.path_id}
                       </td>
-                      <td style="padding: 12px 16px; text-align: right; font-weight: 700; color: ${p.total_return_pct >= 0 ? 'var(--color-success)' : 'var(--color-danger)'};">
+                      <td style="padding: 12px 16px; text-align: right; font-weight: 700; color: ${p.total_return_pct >= 0 ? 'var(--accent-positive)' : 'var(--accent-negative)'};">
                         ${p.total_return_pct >= 0 ? '+' : ''}${p.total_return_pct.toFixed(2)}%
                       </td>
-                      <td style="padding: 12px 16px; text-align: right; color: var(--color-danger); font-family: monospace;">
+                      <td style="padding: 12px 16px; text-align: right; color: var(--accent-negative); font-family: monospace;">
                         -${p.max_drawdown_pct.toFixed(2)}%
                       </td>
                       <td style="padding: 12px 16px; text-align: right; font-family: monospace; font-weight: 600;">
                         ${Number.isFinite(p.sharpe_ratio) ? p.sharpe_ratio.toFixed(2) : 'N/A'}
                       </td>
                       <td style="padding: 12px 16px; text-align: right; font-family: monospace;">
-                        <span style="font-weight: 600; color: ${isSig ? 'var(--color-success)' : 'var(--text-primary)'};">${pct}</span>
+                        <span style="font-weight: 600; color: ${isSig ? 'var(--accent-positive)' : 'var(--text-primary)'};">${pct}</span>
                         <div style="font-size: 10px; color: var(--text-muted);">${pVal.startsWith('<') ? 'p ' + pVal : 'p = ' + pVal}</div>
                       </td>
                       <td style="padding: 12px 16px; text-align: center;">
@@ -461,10 +461,10 @@ window.AnimalsView = {
                           ${Number.isFinite(rawP)?(isSig?'P < 0.05':'Null Range'):'N/A'}
                         </span>
                       </td>
-                      <td data-zoo-spread="market" style="padding: 12px 16px; text-align: right; font-weight: 600; color: ${spreadCsi >= 0 ? 'var(--color-success)' : 'var(--color-danger)'};">
+                      <td data-zoo-spread="market" style="padding: 12px 16px; text-align: right; font-weight: 600; color: ${spreadCsi >= 0 ? 'var(--accent-positive)' : 'var(--accent-negative)'};">
                         ${Number.isFinite(spreadCsi) && spreadCsi >= 0 ? '+' : ''}${window.formatNumber(spreadCsi, 2, ' pp')}
                       </td>
-                      <td data-zoo-spread="taotie" style="padding: 12px 16px; text-align: right; font-weight: 600; color: ${spreadTaotie >= 0 ? 'var(--color-success)' : 'var(--color-danger)'};">
+                      <td data-zoo-spread="taotie" style="padding: 12px 16px; text-align: right; font-weight: 600; color: ${spreadTaotie >= 0 ? 'var(--accent-positive)' : 'var(--accent-negative)'};">
                         ${Number.isFinite(spreadTaotie) && spreadTaotie >= 0 ? '+' : ''}${window.formatNumber(spreadTaotie, 2, ' pp')}
                       </td>
                       <td style="padding: 12px 16px; text-align: center;">
@@ -493,7 +493,7 @@ window.AnimalsView = {
 
     } catch (err) {
       console.error("Error rendering AnimalsView:", err);
-      container.innerHTML = `<div class="card" style="text-align:center; padding:2rem; color:var(--color-danger);">Failed to render Animals View: ${err.message}</div>`;
+      container.innerHTML = `<div class="card" style="text-align:center; padding:2rem; color:var(--accent-negative);">Failed to render Animals View: ${err.message}</div>`;
     }
   },
 

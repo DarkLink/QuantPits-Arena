@@ -16,11 +16,11 @@ window.DiscussionView = {
     if (!this.isGiscusLoaded) {
       el.innerHTML = `
         <div class="doc-page-container">
-          <div class="view-header" style="text-align: center; margin-bottom: 1.75rem;">
+          <div class="view-header document-header">
             <div class="hero-tag" style="margin-bottom: 0.75rem;">
               <span>💬 Open Peer Review &amp; Community Feedback</span>
             </div>
-            <h1 class="view-title" style="font-size: 2.2rem; margin-bottom: 0.5rem;">Arena Research Discussion</h1>
+            <h1 class="view-title">Arena Research Discussion</h1>
             <p class="view-subtitle" style="max-width: 680px; margin: 0 auto; font-size: 0.95rem; color: var(--text-secondary);">
               Discuss empirical model durability, propose new execution animal handlers, or share observations on regime shifts. Comments are synchronized with GitHub Discussions.
             </p>
@@ -42,7 +42,7 @@ window.DiscussionView = {
           </div>
 
           <!-- Discussion Community Standards -->
-          <div class="card" style="margin-bottom: 1.5rem; background: rgba(15, 23, 42, 0.45); padding: 1rem 1.25rem; font-size: 0.85rem; color: var(--text-tertiary); display: flex; gap: 1.5rem; flex-wrap: wrap;">
+          <div class="card" style="margin-bottom: 1.5rem; background: var(--bg-surface); padding: 1rem 1.25rem; font-size: 0.85rem; color: var(--text-tertiary); display: flex; gap: 1.5rem; flex-wrap: wrap;">
             <div>📌 <strong>Empirical Focus:</strong> Discussions should center on models, execution handlers, and econometric methodology.</div>
             <div>🛡️ <strong>Zero-Leakage:</strong> Never post real production cash numbers, account balances, or proprietary trade secrets.</div>
           </div>

@@ -58,26 +58,26 @@ window.DispatchesView = {
     el.innerHTML = `
       <div class="doc-page-container">
         <!-- View Header -->
-        <div class="view-header" style="text-align: center; margin-bottom: 2rem;">
+        <div class="view-header document-header">
           <div class="hero-tag" style="margin-bottom: 0.75rem;">
             <span>📜 ${seasonMeta.title || "QuantPits Arena"} Dispatches &amp; Market Climate</span>
           </div>
-          <h1 class="view-title" style="font-size: 2.2rem; margin-bottom: 0.5rem;">Arena Dispatches</h1>
+          <h1 class="view-title">Arena Dispatches</h1>
           <p class="view-subtitle" style="max-width: 720px; margin: 0 auto; font-size: 0.95rem; color: var(--text-secondary); line-height: 1.6;">
             Empirical chronicles of quantitative alpha models facing execution zoo frictions, regime shifts, and the Monte Carlo Null Court.
           </p>
         </div>
 
         <!-- Layer 1: Executive Status & Market Climate (The README Layer) -->
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 1.25rem; margin-bottom: 2rem;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 1.25rem; margin-bottom: 2rem;">
           
           <!-- Card 1: Official Baseline Status -->
-          <div class="card" style="border-left: 4px solid var(--brand-cyan); background: rgba(15, 23, 42, 0.55); padding: 1.25rem 1.5rem;">
+          <div class="card" style="border-left: 4px solid var(--brand-cyan); background: var(--bg-surface); padding: 1.25rem 1.5rem;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
               <span style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--brand-cyan); font-weight: 700;">
                 ${exec.tag || "🏆 Official Baseline"}
               </span>
-              <span class="badge" style="background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.3); font-size: 0.75rem;">
+              <span class="badge badge-positive" style="font-size: 0.75rem;">
                 ${exec.badge || "Active"}
               </span>
             </div>
@@ -102,12 +102,12 @@ window.DispatchesView = {
           </div>
 
           <!-- Card 2: Weekly Market Climate Report (Public facts, zero alpha leak) -->
-          <div class="card" style="border-left: 4px solid var(--accent-amber); background: rgba(15, 23, 42, 0.55); padding: 1.25rem 1.5rem;">
+          <div class="card" style="border-left: 4px solid var(--accent-warning); background: var(--bg-surface); padding: 1.25rem 1.5rem;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
-              <span style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-amber); font-weight: 700;">
+              <span style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-warning); font-weight: 700;">
                 ${climate.tag || "🌪️ Market Climate"}
               </span>
-              <span class="badge" style="background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); font-size: 0.75rem;">
+              <span class="badge badge-warning" style="font-size: 0.75rem;">
                 ${climate.status_badge || "Active"}
               </span>
             </div>
@@ -120,14 +120,14 @@ window.DispatchesView = {
             <ul style="font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5; margin: 0 0 0.75rem 1.25rem; padding: 0;">
               ${(climate.bullets || []).map(b => `<li>${b}</li>`).join("")}
             </ul>
-            <div style="font-size: 0.78rem; color: var(--accent-amber); display: flex; align-items: center; gap: 6px;">
+            <div style="font-size: 0.78rem; color: var(--accent-warning); display: flex; align-items: center; gap: 6px;">
               <span>⏳</span> <strong>${climate.decrypt_label || "Continuous Monitoring"}</strong>
             </div>
           </div>
         </div>
 
         <!-- Layer 2: Episodic Reader Container -->
-        <div class="card" style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-subtle); padding: 1.75rem; border-radius: var(--radius-md);">
+        <div class="card" style="background: var(--bg-surface); border: 1px solid var(--border-subtle); padding: 1.75rem; border-radius: var(--radius-md);">
           
           <!-- Dispatch Navigation Tabs -->
           <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 1rem; margin-bottom: 1.5rem;">
@@ -252,6 +252,13 @@ window.DispatchesView = {
     };
 
     walk(temp);
+    temp.querySelectorAll('table').forEach(table => {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'table-wrapper';
+      table.classList.add('data-table');
+      table.parentNode.insertBefore(wrapper, table);
+      wrapper.appendChild(table);
+    });
     return temp.innerHTML;
   },
 
@@ -431,8 +438,8 @@ window.DispatchesView = {
         </p>
 
         <!-- Public Market Climate Summary Box -->
-        <div class="card" style="background: rgba(0,0,0,0.4); border: 1px solid var(--border-subtle); padding: 1.25rem; text-align: left; margin-bottom: 1.75rem; font-size: 0.88rem; line-height: 1.6;">
-          <strong style="color: var(--accent-amber); display: block; margin-bottom: 6px;">
+        <div class="card" style="background: var(--bg-subtle); border: 1px solid var(--border-subtle); padding: 1.25rem; text-align: left; margin-bottom: 1.75rem; font-size: 0.88rem; line-height: 1.6;">
+          <strong style="color: var(--accent-warning); display: block; margin-bottom: 6px;">
             🌪️ Public Market Climate Overview (Aug 31 – Sep 04, 2026):
           </strong>
           During this 5-day cycle, the broader market experienced what the Arena designates as its "Black Wednesday" intraday breadth shock on September 2. Turnover contracted, and growth-heavy and previously strong segments experienced sharp localized drawdowns.

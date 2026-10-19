@@ -48,7 +48,7 @@ window.OverviewView = {
 
     el.innerHTML = `
       <!-- Tournament Dispatches & Climate Alert Banner -->
-      <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-subtle); border-left: 4px solid var(--brand-cyan); border-radius: 6px; padding: 10px 16px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+      <div style="background: var(--bg-surface); border: 1px solid var(--border-subtle); border-left: 4px solid var(--brand-cyan); border-radius: 6px; padding: 10px 16px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
         <div style="font-size: 13px; color: var(--text-secondary); flex: 1 1 320px; min-width: 0;">
           <div style="display: flex; align-items: center; gap: 8px;">
             <span>${banner.tag.split(" ")[0] || "🎙️"}</span>
@@ -88,7 +88,7 @@ window.OverviewView = {
       </div>
 
       <!-- Benchmark Baseline Reference Standards Strip (Dedicated Full-Width Row) -->
-      <div style="background: rgba(15, 23, 42, 0.65); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 12px 18px; margin-bottom: 22px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
+      <div style="background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 12px 18px; margin-bottom: 22px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
         <div style="display: flex; align-items: center; gap: 8px;">
           <span style="font-size: 11px; font-weight: 700; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em;">
             Benchmark Reference Standards:
@@ -144,7 +144,7 @@ window.OverviewView = {
             <!-- Model Focus Filter -->
             <div class="filter-group" style="display: flex; align-items: center; gap: 6px;">
               <span style="font-size: 11px; color: var(--text-secondary); text-transform: uppercase; font-weight: 600;">Model Focus:</span>
-              <select id="panorama-model-focus-select" class="form-control" style="font-size: 11px; padding: 3px 8px; width: auto; background: rgba(15,23,42,0.8); border: 1px solid var(--border-subtle); color: var(--text-primary); border-radius: 4px;">
+              <select id="panorama-model-focus-select" class="form-control" style="font-size: 11px; padding: 3px 8px; width: auto; background: var(--bg-surface); border: 1px solid var(--border-subtle); color: var(--text-primary); border-radius: 4px;">
                 <option value="all" ${this.activeFocusModel === 'all' ? 'selected' : ''}>All Contestant Models</option>
                 ${window.arenaAdapter.getAllContestants().map(c => `
                   <option value="${c.id}" ${this.activeFocusModel === c.id ? 'selected' : ''}>${c.display_name || c.id}</option>

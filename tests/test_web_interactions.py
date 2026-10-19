@@ -103,6 +103,7 @@ const checks={
  dispatch_participants(){
   const createElement=document.createElement;
   document.createElement=tag=>({nodeType:Node.ELEMENT_NODE,tagName:tag.toUpperCase(),childNodes:[],
+   querySelectorAll(){return[];},
    classList:{contains(){return false;}},
    set innerHTML(text){this.childNodes=[{nodeType:Node.TEXT_NODE,nodeValue:text,parentNode:this}];},
    get innerHTML(){return this.childNodes.map(child=>child.nodeValue??child.innerHTML).join('');},
@@ -160,6 +161,8 @@ const checks={
  },
  routing_inputs(){
   pool(seasons[0]);
+  location('https://arena.invalid/#intro');
+  assert.equal(window.ArenaApp.parseHash().route,'landing','The exhibition link no longer opens the existing landing page');
   location('https://arena.invalid/#contestant-detail/CONTESTANT_G');
   assert.equal(window.ArenaApp.parseHash().params.contestantId,'CONTESTANT_G');
   location('https://arena.invalid/#path/%E0%A4%A');assert.doesNotThrow(()=>window.ArenaApp.handleRouting());

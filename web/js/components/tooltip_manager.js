@@ -156,8 +156,8 @@ window.ArenaTooltip = {
             <div style="font-weight: 700; color: var(--brand-cyan); font-size: 0.78rem; text-transform: uppercase;">🧬 Model: ${termData.model.name}</div>
             <div style="color: var(--text-secondary); margin-top: 2px;">${termData.model.tooltip}</div>
           </div>
-          <div style="padding: 6px 8px; background: rgba(168, 85, 247, 0.06); border-left: 3px solid var(--accent-purple); border-radius: 3px;">
-            <div style="font-weight: 700; color: var(--accent-purple); font-size: 0.78rem; text-transform: uppercase;">🐾 Execution: ${termData.animal.name}</div>
+          <div style="padding: 6px 8px; background: rgba(168, 85, 247, 0.06); border-left: 3px solid var(--brand-purple); border-radius: 3px;">
+            <div style="font-weight: 700; color: var(--brand-purple); font-size: 0.78rem; text-transform: uppercase;">🐾 Execution: ${termData.animal.name}</div>
             <div style="color: var(--text-secondary); margin-top: 2px;">${termData.animal.tooltip}</div>
           </div>
         </div>
@@ -176,17 +176,17 @@ window.ArenaTooltip = {
     } else {
       const categoryColors = {
         "Contestants": "var(--brand-cyan)",
-        "Zoo Animals": "var(--accent-purple)",
-        "Benchmarks": "#fbbf24",
-        "Metrics": "#34d399",
-        "Zoo Mechanics": "#f472b6"
+        "Zoo Animals": "var(--brand-purple)",
+        "Benchmarks": "var(--accent-warning)",
+        "Metrics": "var(--accent-positive)",
+        "Zoo Mechanics": "var(--brand-purple)"
       };
       const catColor = categoryColors[termData.category] || "var(--brand-cyan)";
 
       this.container.innerHTML = `
         <div class="tooltip-header">
           <div class="tooltip-title-wrap">
-            <span class="tooltip-category-badge" style="color: ${catColor}; border-color: ${catColor}40; background: ${catColor}15;">
+            <span class="tooltip-category-badge" style="color: ${catColor}; border-color: color-mix(in srgb, ${catColor} 25%, transparent); background: color-mix(in srgb, ${catColor} 8%, transparent);">
               ${termData.category}
             </span>
             <strong class="tooltip-title">${termData.name || termData.term}</strong>

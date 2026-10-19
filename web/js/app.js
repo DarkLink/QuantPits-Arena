@@ -378,6 +378,7 @@ window.ArenaApp = {
     }
 
     let normalizedRoute = primaryRoute;
+    if (normalizedRoute === "intro") normalizedRoute = "landing";
     if (normalizedRoute === "zoo") normalizedRoute = "animals";
     if (normalizedRoute === "path") normalizedRoute = "path-detail";
     if (normalizedRoute === "archaeology") normalizedRoute = "decision-audit";

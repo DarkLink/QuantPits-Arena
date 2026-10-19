@@ -51,7 +51,7 @@ window.PathDetailView = {
         <button class="btn btn-secondary" onclick="window.appRouter.navigate('leaderboard')">
           ← Back to Leaderboard
         </button>
-        <div style="display:flex; gap:0.75rem; align-items:center;">
+        <div style="display:flex; flex-wrap:wrap; gap:0.75rem; align-items:center;">
           ${contestant ? `<button class="btn btn-secondary" onclick="window.appRouter.navigate('contestants', { contestantId: '${path.contestant_id}' })">
             Model Profile (${contestant?.display_name || path.contestant_id})
           </button>` : ''}
@@ -88,7 +88,7 @@ window.PathDetailView = {
           </div>
 
           <!-- Return & Percentile Highlights -->
-          <div style="display:flex; gap:1.25rem; align-items:center;">
+          <div class="path-summary-highlights">
             <div style="text-align:right;">
               <div style="font-size:0.75rem; color:var(--text-tertiary); text-transform:uppercase;">${path.observation_start ? 'Observation return since '+path.observation_start : 'OOS Total Return'}</div>
               <div style="font-size:2.2rem; font-weight:800; color:${retColor};">
@@ -197,7 +197,7 @@ window.PathDetailView = {
               <h4 style="font-size:0.95rem; margin:0;">Capital Granularity Diagnostics</h4>
               <span class="badge badge-neutral" style="font-size:0.75rem;">100-Share Lot Enforced</span>
             </div>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; font-size:0.85rem;">
+            <div class="detail-grid" style="gap:0.75rem; font-size:0.85rem;">
               <div style="background:var(--bg-surface-elevated); padding:0.65rem 0.85rem; border-radius:var(--radius-sm); border:1px solid var(--border-subtle);">
                 <span style="color:var(--text-tertiary);">Unaffordable 1-Lot Skips:</span>
                 <b style="float:right; color:${path.unaffordable_buy_count > 0 ? 'var(--accent-warning)' : 'var(--text-primary)'};">

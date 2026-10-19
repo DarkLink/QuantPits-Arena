@@ -27,7 +27,7 @@ window.MethodologyView = {
         description:'Targets 123 holdings with a replacement budget of 17 in every pool. That is half of the 246-stock subset, but a smaller share of expanded pools. Actual holdings remain subject to execution constraints.'}
     ];
     el.innerHTML = `<div class="doc-page-container methodology-page">
-      <header class="view-header methodology-hero">
+      <header class="view-header document-header methodology-hero">
         <span class="badge badge-primary">${escape(meta.short_title || meta.season_title)} · Research field guide</span>
         <h1 class="view-title">Methodology &amp; Statistical Interpretation</h1>
         <p class="view-subtitle">One signal, many animal policies. Understand what each experiment tests, which benchmark answers the question, and how to read the evidence.</p>

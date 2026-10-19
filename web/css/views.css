@@ -17,6 +17,7 @@
 }
 
 .hero-tag {
+  max-width: 100%;
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -56,13 +57,15 @@
 
 .hero-actions {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 1rem;
   margin-top: 0.5rem;
 }
 
 .concept-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
   gap: 1.5rem;
   margin: 2rem 0 3rem 0;
 }
@@ -266,9 +269,18 @@
   margin-bottom: 1.5rem;
 }
 
+.path-hero-card > div > div { min-width: 0; max-width: 100%; }
+.path-hero-card h1 { overflow-wrap: anywhere; }
+.path-summary-highlights {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  align-items: center;
+}
+
 .path-meta-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
   gap: 1rem;
   margin-top: 1.25rem;
   padding-top: 1.25rem;
@@ -313,7 +325,7 @@
 
 .fingerprint-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
   gap: 1.5rem;
   margin-top: 1.5rem;
 }
@@ -379,6 +391,80 @@
 
 .doc-page-container .view-header {
   margin-bottom: 2rem;
+}
+
+.document-header {
+  text-align: center;
+}
+
+.document-header .view-title {
+  font-size: clamp(1.75rem, 4vw, 2.2rem);
+  margin-bottom: 0.5rem;
+}
+
+.document-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.view-header div, .view-header h1 { min-width: 0; }
+
+.view-title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.document-header .view-title-row { justify-content: center; }
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+/* Markdown dispatches use the same typography and tables as the other views. */
+.prose {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.prose h1, .prose h2, .prose h3, .prose h4 {
+  margin: 1.75rem 0 0.75rem;
+  line-height: 1.4;
+}
+
+.prose h1 { font-size: clamp(1.5rem, 4vw, 2rem); }
+.prose h2 { font-size: 1.4rem; }
+.prose h3 { font-size: 1.15rem; }
+.prose p, .prose ul, .prose ol, .prose blockquote, .prose .table-wrapper {
+  margin-bottom: 1rem;
+}
+.prose ul, .prose ol { padding-left: 1.5rem; }
+.prose li + li { margin-top: 0.35rem; }
+.prose blockquote {
+  border-left: 3px solid var(--brand-cyan);
+  padding: 0.75rem 1rem;
+  background: var(--bg-subtle);
+}
+.prose code { font-family: var(--font-mono); font-size: 0.85em; }
+.prose pre {
+  max-width: 100%;
+  overflow-x: auto;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  background: var(--bg-subtle);
+  border-radius: var(--radius-sm);
+}
+
+@media (max-width: 680px) {
+  .detail-grid { grid-template-columns: minmax(0, 1fr); }
+  .view-container .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .view-container .kpi-value { overflow-wrap: anywhere; }
+  .view-container .view-header h1 { overflow-wrap: anywhere; }
 }
 
 /* Methodology field guide */

@@ -18,7 +18,7 @@ window.ContestantDetailView = {
 
   renderRetrainingContext(contestant,meta) {
     const context=contestant.retraining_context||{};
-    return `<div class="card" style="border-left:4px solid var(--accent-amber)">
+    return `<div class="card" style="border-left:4px solid var(--accent-warning)">
       <div class="card-header"><h3 class="card-title">Participant Background &amp; Retraining</h3>
         <span class="badge badge-warning">${contestant.retrained_from?'Retrained participant':'Observation participant'}</span></div>
       <p style="font-size:13px;color:var(--text-secondary);line-height:1.6">${contestant.notes||contestant.bio}</p>
@@ -136,9 +136,9 @@ window.ContestantDetailView = {
         <!-- Two Pillars: Historical Context vs Arena OOS Performance -->
         <div class="grid-2col" style="margin-bottom: 24px;">
           ${observed ? this.renderRetrainingContext(contestant,seasonMeta) : `          <!-- 1. Historical Biography: Context Prior to Arena -->
-          <div class="card" style="border-left: 4px solid var(--accent-amber);">
+          <div class="card" style="border-left: 4px solid var(--accent-warning);">
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
-              <h3 style="font-size: 15px; font-weight: 700; color: var(--accent-amber); display: flex; align-items: center; gap: 8px; margin: 0;">
+              <h3 style="font-size: 15px; font-weight: 700; color: var(--accent-warning); display: flex; align-items: center; gap: 8px; margin: 0;">
                 Historical Biography (Legacy Production Pool Archive)
               </h3>
               <div style="display: flex; gap: 6px; flex-wrap: wrap;">
@@ -148,8 +148,8 @@ window.ContestantDetailView = {
             </div>
 
             <!-- Prominent Universe Incomparability Warning -->
-            <div class="callout-box" style="margin-bottom: 12px; padding: 10px 12px; background: rgba(245, 158, 11, 0.08); border-left: 3px solid var(--accent-amber); border-radius: 4px; font-size: 11.5px; line-height: 1.55;">
-              <strong style="color: var(--accent-amber); display: block; margin-bottom: 3px;">
+            <div class="callout-box" style="margin-bottom: 12px; padding: 10px 12px; background: rgba(245, 158, 11, 0.08); border-left: 3px solid var(--accent-warning); border-radius: 4px; font-size: 11.5px; line-height: 1.55;">
+              <strong style="color: var(--accent-warning); display: block; margin-bottom: 3px;">
                 ⚠️ Cross-Universe Incomparability Notice:
               </strong>
               <span style="color: var(--text-secondary);">
@@ -181,7 +181,7 @@ window.ContestantDetailView = {
               </div>
             </div>
 
-            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; font-size: 12px; background: rgba(0,0,0,0.2); padding: 12px; border-radius: var(--radius-sm);">
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; font-size: 12px; background: var(--bg-subtle); padding: 12px; border-radius: var(--radius-sm);">
               <div><span style="color: var(--text-muted);">Architecture:</span> <strong style="color: var(--text-primary);">${contestant.architecture_type || contestant.training_mode || 'Multi-Factor Ensemble'}</strong></div>
               <div><span style="color: var(--text-muted);">Family:</span> <strong style="color: var(--text-primary);">${contestant.lineage || contestant.family || 'Alpha Family'}</strong></div>
               <div><span style="color: var(--text-muted);">Historical Stock Pool:</span> <strong style="color: #fbbf24;">Legacy Production Pool</strong></div>
@@ -220,7 +220,7 @@ window.ContestantDetailView = {
               </div>
               <div class="kpi-card" style="padding: 12px;">
                 <div class="kpi-title">Zoo Return Spread</div>
-                <div class="kpi-value" style="font-size: 20px; color: var(--accent-purple);">
+                <div class="kpi-value" style="font-size: 20px; color: var(--brand-purple);">
                   ${window.formatNumber(minRet, 1, '%')} ~ ${window.formatNumber(maxRet, 1, '%')}
                 </div>
                 <div class="kpi-hint">Across ${paths.length} available handlers</div>
@@ -233,7 +233,7 @@ window.ContestantDetailView = {
                 <div class="kpi-hint">${observed ? 'Observation window · no assigned test' : 'Mean Rank: '+(window.formatPercentile ? window.formatPercentile(avgMonkeyPct) : window.formatNumber(avgMonkeyPct, 1, '%'))}</div>
               </div>
             </div>
-            <div style="font-size: 12px; color: var(--text-secondary); background: rgba(0,0,0,0.2); padding: 10px 12px; border-radius: var(--radius-sm); line-height: 1.5;">
+            <div style="font-size: 12px; color: var(--text-secondary); background: var(--bg-subtle); padding: 10px 12px; border-radius: var(--radius-sm); line-height: 1.5;">
               ${observed ? `Observation from ${observationStart} close to ${seasonMeta.cutoff||seasonMeta.end_date}; NAV=1.0000 at the inherited close state. All 28 handlers and benchmark curves below use this same window.` : `Evaluated across <strong>${seasonMeta.universe_name||seasonMeta.title||'Standard Arena Pool'}</strong> from ${observationStart} under the declared research allocation and round-lot rules.`}
             </div>
           </div>
@@ -271,7 +271,7 @@ window.ContestantDetailView = {
           </div>
 
           <!-- Animal Family Cluster Toolbar -->
-          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; padding: 10px 16px; background: rgba(0,0,0,0.15); border-bottom: 1px solid var(--border-subtle);">
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; padding: 10px 16px; background: var(--bg-subtle); border-bottom: 1px solid var(--border-subtle);">
             <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
               <span style="font-size: 11px; color: var(--text-secondary); text-transform: uppercase; font-weight: 600; margin-right: 4px;">Animal Family:</span>
               <div class="chart-metric-btn-group" id="contestant-cluster-btn-group">
@@ -301,7 +301,7 @@ window.ContestantDetailView = {
             <span style="font-size: 12px; color: var(--text-muted);">Testing signal behavior under execution lag, turnover friction, capacity expansion, and polarity inversion</span>
           </div>
 
-          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 16px;">
+          <div class="detail-grid" style="margin-bottom: 16px;">
             <!-- 1. Delay Sensitivity -->
             <div class="chart-card">
               <div class="chart-card-header">
@@ -402,7 +402,7 @@ window.ContestantDetailView = {
                       <td style="text-align: right; font-weight: 700;" class="${retColor}">
                         ${p.total_return_pct >= 0 ? '+' : ''}${p.total_return_pct.toFixed(2)}%
                       </td>
-                      <td style="text-align: right; color: var(--accent-rose);">${window.formatNumber(p.max_drawdown_pct, 2, '%')}</td>
+                      <td style="text-align: right; color: var(--accent-negative);">${window.formatNumber(p.max_drawdown_pct, 2, '%')}</td>
                       <td style="text-align: right; font-weight: 600;">${Number.isFinite(p.sharpe_ratio) ? p.sharpe_ratio.toFixed(2) : 'N/A'}</td>
                       <td style="text-align: right;">
                         <span class="badge ${isSig ? 'badge-success' : 'badge-neutral'}" style="font-weight: 700;">
@@ -412,7 +412,7 @@ window.ContestantDetailView = {
                       <td style="text-align: right; font-family: monospace; color: ${isSig ? 'var(--accent-cyan)' : 'var(--text-muted)'};">
                         ${window.formatPValue ? window.formatPValue(pVal) : window.formatNumber(pVal, 4)}
                       </td>
-                      <td style="text-align: right; color: ${p.unaffordable_buy_count > 0 ? 'var(--accent-amber)' : 'var(--text-muted)'};">
+                      <td style="text-align: right; color: ${p.unaffordable_buy_count > 0 ? 'var(--accent-warning)' : 'var(--text-muted)'};">
                         ${p.unaffordable_buy_count ?? 'N/A'}
                       </td>
                       <td style="text-align: right; color: var(--text-secondary);">
@@ -450,7 +450,7 @@ window.ContestantDetailView = {
     } catch (err) {
       console.error("Error rendering ContestantDetailView:", err);
       container.innerHTML = `
-        <div class="card" style="padding: 2rem; text-align: center; color: var(--accent-rose);">
+        <div class="card" style="padding: 2rem; text-align: center; color: var(--accent-negative);">
           <h3>Error Loading Contestant Profile</h3>
           <p style="font-size: 13px; color: var(--text-secondary); margin-top: 8px;">${err.message}</p>
           <button class="btn btn-primary" onclick="window.appRouter.navigate('contestants', { contestantId: 'CONTESTANT_A' })" style="margin-top: 12px;">

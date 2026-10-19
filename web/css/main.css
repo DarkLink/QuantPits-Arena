@@ -90,6 +90,17 @@ h2 { font-size: 1.6rem; line-height: 1.3; }
 h3 { font-size: 1.25rem; line-height: 1.4; }
 h4 { font-size: 1.05rem; }
 
+button, input, select, textarea { font-family: inherit; }
+
+.view-header { margin-bottom: 1.5rem; }
+.view-title { font-size: clamp(1.75rem, 4vw, 2.2rem); }
+.view-subtitle {
+  margin-top: 0.5rem;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
 .font-mono {
   font-family: var(--font-mono);
 }
@@ -386,7 +397,7 @@ a:hover {
   top: 100%;
   left: 0;
   right: 0;
-  background: rgba(8, 12, 22, 0.98);
+  background: var(--bg-glass-elevated);
   border-bottom: 1px solid var(--border-medium);
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65);
   backdrop-filter: blur(24px);
@@ -398,7 +409,8 @@ a:hover {
 }
 
 .mobile-nav-drawer.open {
-  max-height: 520px;
+  max-height: calc(100dvh - 64px);
+  overflow-y: auto;
   padding: 1.25rem 1.25rem 1.75rem 1.25rem;
 }
 
@@ -562,7 +574,7 @@ a:hover {
 }
 
 /* Responsive Media Queries for Mobile & Tablet */
-@media (max-width: 1024px) {
+@media (max-width: 1400px) {
   .nav-segmented {
     display: none;
   }
@@ -647,6 +659,10 @@ a:hover {
   }
 }
 
+@media (max-width: 380px) {
+  .brand-text { display: none; }
+}
+
 /* ==========================================================================
    Interactive Glossary Terms & Tooltips
    ========================================================================== */
@@ -670,9 +686,10 @@ a:hover {
 .arena-tooltip-popover {
   position: absolute;
   z-index: 10000;
-  max-width: 320px;
+  max-width: min(320px, calc(100vw - 20px));
+  overflow-wrap: anywhere;
   width: max-content;
-  background: rgba(15, 23, 42, 0.96);
+  background: var(--bg-glass-elevated);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--border-subtle);
@@ -750,7 +767,7 @@ a:hover {
 .tooltip-footer {
   margin-top: 8px;
   padding-top: 6px;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid var(--border-subtle);
   display: flex;
   justify-content: flex-end;
 }
@@ -787,7 +804,7 @@ a:hover {
   max-width: 90vw;
   height: 100vh;
   z-index: 9999;
-  background: rgba(15, 23, 42, 0.94);
+  background: var(--bg-glass-elevated);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-left: 1px solid var(--border-subtle);
@@ -795,19 +812,22 @@ a:hover {
   display: flex;
   flex-direction: column;
   transform: translateX(100%);
-  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  visibility: hidden;
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s 0.28s;
   pointer-events: none;
 }
 
 .arena-spec-drawer.open {
   transform: translateX(0);
+  visibility: visible;
+  transition-delay: 0s;
   pointer-events: auto;
 }
 
 .drawer-header {
   padding: 18px 20px 14px 20px;
   border-bottom: 1px solid var(--border-subtle);
-  background: rgba(10, 15, 30, 0.7);
+  background: var(--bg-subtle);
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -879,7 +899,7 @@ a:hover {
 
 .drawer-search-input {
   width: 100%;
-  background: rgba(2, 6, 23, 0.6);
+  background: var(--bg-base);
   border: 1px solid var(--border-subtle);
   border-radius: 6px;
   padding: 7px 12px;
@@ -935,7 +955,7 @@ a:hover {
 }
 
 .spec-card {
-  background: rgba(15, 23, 42, 0.6);
+  background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
   border-radius: 6px;
   padding: 14px;
@@ -944,7 +964,7 @@ a:hover {
 
 .spec-card:hover {
   border-color: rgba(56, 189, 248, 0.35);
-  background: rgba(15, 23, 42, 0.85);
+  background: var(--bg-surface-elevated);
 }
 
 .spec-card.spec-card-highlight {
@@ -1013,7 +1033,7 @@ a:hover {
   bottom: 24px;
   right: 24px;
   z-index: 999;
-  background: rgba(15, 23, 42, 0.9);
+  background: var(--bg-glass-elevated);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(56, 189, 248, 0.4);
@@ -1032,14 +1052,14 @@ a:hover {
 
 .arena-drawer-fab:hover {
   border-color: var(--brand-cyan);
-  background: rgba(15, 23, 42, 1);
+  background: var(--bg-surface-elevated);
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5), 0 0 20px rgba(56, 189, 248, 0.4);
   transform: translateY(-2px);
 }
 
 .arena-drawer-fab.active {
   background: var(--brand-cyan);
-  color: #020617;
+  color: var(--text-inverse);
   border-color: var(--brand-cyan);
 }
 
@@ -1055,7 +1075,7 @@ button.chart-spec-pill,
   gap: 5px !important;
   background: rgba(56, 189, 248, 0.1) !important;
   border: 1px solid rgba(56, 189, 248, 0.3) !important;
-  color: #38bdf8 !important;
+  color: var(--brand-cyan) !important;
   font-family: inherit !important;
   font-size: 11px !important;
   font-weight: 600 !important;
@@ -1074,7 +1094,7 @@ button.chart-spec-pill:hover,
 .chart-spec-pill:hover {
   background: rgba(56, 189, 248, 0.22) !important;
   border-color: #38bdf8 !important;
-  color: #ffffff !important;
+  color: var(--text-primary) !important;
   box-shadow: 0 4px 12px rgba(56, 189, 248, 0.35) !important;
   transform: translateY(-1px) !important;
 }

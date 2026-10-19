@@ -317,18 +317,18 @@ window.ArenaSpecDrawer = {
 
     const categoryBadgeColors = {
       "Contestants": "var(--brand-cyan)",
-      "Zoo Animals": "var(--accent-purple)",
-      "Benchmarks": "#fbbf24",
-      "Metrics": "#34d399",
-      "Zoo Mechanics": "#f472b6"
+      "Zoo Animals": "var(--brand-purple)",
+      "Benchmarks": "var(--accent-warning)",
+      "Metrics": "var(--accent-positive)",
+      "Zoo Mechanics": "var(--brand-purple)"
     };
 
     contentEl.innerHTML = items.map(item => {
-      const badgeColor = categoryBadgeColors[item.category] || "var(--brand-cyan)";
+      const badgeColor = categoryBadgeColors[item.displayCategory || item.category] || "var(--brand-cyan)";
       return `
         <div class="spec-card" id="spec-card-${item.id || item.term}">
           <div class="spec-card-header">
-            <span class="spec-card-badge" style="color:${badgeColor}; border-color:${badgeColor}40; background:${badgeColor}15;">
+            <span class="spec-card-badge" style="color:${badgeColor}; border-color:color-mix(in srgb, ${badgeColor} 25%, transparent); background:color-mix(in srgb, ${badgeColor} 8%, transparent);">
               ${item.displayCategory || item.category}
             </span>
             ${item.tagline ? `<span class="spec-card-tagline">${item.tagline}</span>` : ''}

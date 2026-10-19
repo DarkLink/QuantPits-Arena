@@ -92,7 +92,7 @@ window.DecisionAuditView = {
       <div class="view-header">
         <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px;">
           <div>
-            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 6px;">
+            <div class="view-title-row">
               <h1 class="view-title">Decision Archaeology & Sandbox</h1>
               <span class="badge badge-warning">Counterfactual Audit</span>
               <span class="badge badge-neutral" style="font-family: monospace;">Multi-Subject Engine</span>
@@ -108,7 +108,7 @@ window.DecisionAuditView = {
       ${this.renderWorkbench(forks,allSubjects,allAnimals)}
 
       <!-- Historical Context or Sandbox Intelligence Banner -->
-      <div class="card" style="margin-bottom: 24px; border-left: 4px solid ${isTieAB ? 'var(--text-muted)' : isABetter ? 'var(--accent-emerald)' : 'var(--accent-rose)'};">
+      <div class="card" style="margin-bottom: 24px; border-left: 4px solid ${isTieAB ? 'var(--text-muted)' : isABetter ? 'var(--accent-positive)' : 'var(--accent-negative)'};">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 12px;">
           <div>
             <h2 style="font-size: 17px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">
@@ -138,7 +138,7 @@ window.DecisionAuditView = {
         Cards, curves and the animal matrix share these dates. Random-control tests for this window are N/A.</p>
       </div>
       <!-- Side-by-Side Subject Cards -->
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; margin-bottom: 24px;">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 18px; margin-bottom: 24px;">
         <!-- Subject A Card -->
         <div class="card" style="border: 1px solid rgba(16, 185, 129, 0.4); background: rgba(16, 185, 129, 0.03);">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
@@ -162,13 +162,13 @@ window.DecisionAuditView = {
             </div>
             <div class="kpi-card" style="padding: 10px;">
               <div class="kpi-title" data-tooltip-term="mdd">Max DD</div>
-              <div class="kpi-value" style="font-size: 16px; color: var(--accent-rose);">
+              <div class="kpi-value" style="font-size: 16px; color: var(--accent-negative);">
                 ${profA.maxDrawdownPct ? profA.maxDrawdownPct.toFixed(2) : '0'}%
               </div>
             </div>
             <div class="kpi-card" style="padding: 10px;">
               <div class="kpi-title" data-tooltip-term="null_court">Null Court</div>
-              <div class="kpi-value" style="font-size: 13px; color: var(--accent-emerald);">
+              <div class="kpi-value" style="font-size: 13px; color: var(--accent-positive);">
                 ${profA.nullCourt}
               </div>
             </div>
@@ -198,13 +198,13 @@ window.DecisionAuditView = {
             </div>
             <div class="kpi-card" style="padding: 10px;">
               <div class="kpi-title" data-tooltip-term="mdd">Max DD</div>
-              <div class="kpi-value" style="font-size: 16px; color: var(--accent-rose);">
+              <div class="kpi-value" style="font-size: 16px; color: var(--accent-negative);">
                 ${profB.maxDrawdownPct ? profB.maxDrawdownPct.toFixed(2) : '0'}%
               </div>
             </div>
             <div class="kpi-card" style="padding: 10px;">
               <div class="kpi-title" data-tooltip-term="null_court">Null Court</div>
-              <div class="kpi-value" style="font-size: 13px; color: var(--accent-emerald);">
+              <div class="kpi-value" style="font-size: 13px; color: var(--accent-positive);">
                 ${profB.nullCourt}
               </div>
             </div>
@@ -235,7 +235,7 @@ window.DecisionAuditView = {
               </div>
               <div class="kpi-card" style="padding: 10px;">
                 <div class="kpi-title">Max DD</div>
-                <div class="kpi-value" style="font-size: 16px; color: var(--accent-rose);">
+                <div class="kpi-value" style="font-size: 16px; color: var(--accent-negative);">
                   ${profC.maxDrawdownPct ? profC.maxDrawdownPct.toFixed(2) : '0'}%
                 </div>
               </div>
@@ -386,7 +386,7 @@ window.DecisionAuditView = {
 
   renderWorkbench(forks,allSubjects,allAnimals) {
     return `      <!-- Workbench Control Center (Unified Presets + 3 Comparator Slots) -->
-      <div class="card" style="margin-bottom: 24px; padding: 18px 20px; background: rgba(30, 41, 59, 0.4); border: 1px solid var(--border-color); box-shadow: 0 4px 20px rgba(0,0,0,0.15);">
+      <div class="card" style="margin-bottom: 24px; padding: 18px 20px; background: var(--bg-surface); border: 1px solid var(--border-subtle); box-shadow: 0 4px 20px rgba(0,0,0,0.15);">
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 16px; padding-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,0.06);">
           <!-- Curated Presets Pills -->
           <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
@@ -408,7 +408,7 @@ window.DecisionAuditView = {
           </div>
 
           <!-- Animal Selector -->
-          <div style="display: flex; align-items: center; gap: 8px;">
+          <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 8px;">
             <label style="font-size: 12px; color: var(--text-secondary); font-weight: 600;">🐾 Execution Handler:</label>
             <select id="archaeology-animal-select" class="filter-select" style="min-width: 190px;">
               ${allAnimals.map(a => `
@@ -421,7 +421,7 @@ window.DecisionAuditView = {
         </div>
 
         <!-- 3 Comparator Selection Slots -->
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 14px;">
           <!-- Slot A -->
           <div style="background: rgba(16, 185, 129, 0.06); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: 8px; padding: 10px 14px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">

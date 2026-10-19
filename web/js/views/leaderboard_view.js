@@ -39,7 +39,7 @@ window.LeaderboardView = {
       <!-- Tab Content 1: Table View -->
       <div id="tab-content-table" style="display: ${this.activeTab === 'table' ? 'block' : 'none'};">
         <!-- Benchmark Alpha Perspective Switcher -->
-        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; padding: 10px 14px; background: rgba(30, 41, 59, 0.4); border-radius: 8px; border: 1px solid var(--border-color);">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; padding: 10px 14px; background: var(--bg-surface); border-radius: 8px; border: 1px solid var(--border-subtle);">
           <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
             <span style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Benchmark Perspective:</span>
             <button class="btn btn-sm ${this.viewMode === 'return' ? 'btn-primary' : 'btn-secondary'}" onclick="window.LeaderboardView.switchViewMode('return')">
@@ -313,7 +313,7 @@ window.LeaderboardView = {
             ${p.excess_over_monkey_pct == null ? 'N/A' : (p.excess_over_monkey_pct >= 0 ? '+' : '')+p.excess_over_monkey_pct.toFixed(2)+' pp'}
           </td>
           <td class="numeric">
-            <span class="badge ${isSig ? 'badge-green' : 'badge-neutral'}">
+            <span class="badge ${isSig ? 'badge-positive' : 'badge-neutral'}">
               ${window.formatPercentile ? window.formatPercentile(pct, p.monkey_count) : window.formatNumber(pct, 1, '%')}
             </span>
           </td>

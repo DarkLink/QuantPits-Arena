@@ -126,9 +126,9 @@ window.LandingView = {
       </div>
 
       <!-- Institutional Research & Legal Disclaimer -->
-      <div class="card" style="margin-top: 36px; border-left: 4px solid var(--accent-amber); background: rgba(245, 158, 11, 0.03); padding: 24px;">
+      <div class="card" style="margin-top: 36px; border-left: 4px solid var(--accent-warning); background: rgba(245, 158, 11, 0.03); padding: 24px;">
         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
-          <h2 style="font-size: 17px; font-weight: 700; color: var(--accent-amber); margin: 0; display: flex; align-items: center; gap: 8px;">
+          <h2 style="font-size: 17px; font-weight: 700; color: var(--accent-warning); margin: 0; display: flex; align-items: center; gap: 8px;">
             <span>🛡️</span> Disclaimer
           </h2>
           <a href="#disclaimer" class="btn btn-sm btn-outline" style="font-size: 11px; padding: 4px 10px; text-decoration: none;">
@@ -152,7 +152,7 @@ window.LandingView = {
             Investing involves risk, including the possible loss of principal.
           </p>
           <div style="margin-top: 6px; padding-top: 12px; border-top: 1px dashed var(--border-subtle); font-style: italic; color: var(--text-muted); font-size: 12px;">
-            “QuantPits Arena is a research testbed. It studies models, portfolio policies, historical decisions, failures, and occasionally monkeys. <b style="color: var(--accent-rose);">It does not tell you what to buy.</b>”
+            “QuantPits Arena is a research testbed. It studies models, portfolio policies, historical decisions, failures, and occasionally monkeys. <b style="color: var(--accent-negative);">It does not tell you what to buy.</b>”
           </div>
         </div>
       </div>
