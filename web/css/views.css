@@ -261,6 +261,8 @@
 /* --------------------------------------------------------------------------
    4. Path Detail View
    -------------------------------------------------------------------------- */
+.zoo-path-row:hover { background: var(--bg-surface-elevated); }
+
 .path-hero-card {
   background: linear-gradient(135deg, var(--bg-surface) 0%, var(--bg-surface-elevated) 100%);
   border: 1px solid var(--border-medium);

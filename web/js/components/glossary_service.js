@@ -55,7 +55,7 @@ window.ArenaGlossaryService = {
       name: "Empirical p-value (vs Matched Monkeys)",
       category: "Metrics",
       tagline: "Statistical Significance",
-      tooltip: "The empirical probability that a pure random monkey strategy could match or exceed this performance. p < 0.05 indicates statistical significance.",
+      tooltip: "Upper-tail probability under the specified random-ranking control. Raw p < 0.05 is nominal evidence; the declared family correction is assessed separately.",
       details: "Upper-tail p = (k+1)/(N+1), where k counts random returns >= the actual return. Matching uses TopK/DropN only. Raw p < 0.05 is nominal; the declared cumulative family has 840 comparisons."
     },
     "monkey_percentile": {
@@ -64,8 +64,8 @@ window.ArenaGlossaryService = {
       name: "Matched Monkey Null Percentile",
       category: "Metrics",
       tagline: "Ranking Against Pure Luck",
-      tooltip: "Percentage of matched random monkeys this strategy outperforms (0% ~ 100%). >95.0% means it beats 95% of random portfolios.",
-      details: "Directly evaluates whether model ranking skill extracts genuine alpha above the statistical null colony. Computed per animal rule container."
+      tooltip: "Finite-simulation percentile against the matched random-ranking controls over the declared evaluation window.",
+      details: "Computed as 100 × count(null return < actual return)/(N+1), using the matched TopK/DropN specification. It describes the specified null comparison and does not establish persistent future alpha."
     },
     "topk": {
       id: "topk",
@@ -73,7 +73,7 @@ window.ArenaGlossaryService = {
       name: "Holding Capacity (TopK)",
       category: "Zoo Mechanics",
       tagline: "Portfolio Breadth",
-      tooltip: "The target number of assets held simultaneously in the portfolio (e.g., TopK=22 holds 22 stocks).",
+      tooltip: "The target number of holdings. Actual holdings can be lower because of affordability, missing quotes, round lots or other execution constraints.",
       details: "Lower TopK (e.g. 5) implies extreme concentration and higher single-stock risk; higher TopK (e.g. 88) demands broader alpha breadth across equities."
     },
     "dropn": {
@@ -82,8 +82,8 @@ window.ArenaGlossaryService = {
       name: "Turnover Capacity (DropN)",
       category: "Zoo Mechanics",
       tagline: "Weekly Rebalance Bandwidth",
-      tooltip: "Number of worst-ranked positions forcefully liquidated and replaced each weekly rebalancing cycle.",
-      details: "Governs portfolio agility vs. trading friction. High DropN flushes out stale ranks faster at the expense of higher commissions and market impact."
+      tooltip: "The scheduled replacement budget at each rebalance, not a guaranteed number of completed trades.",
+      details: "Actual turnover depends on ranking changes, universe membership and execution constraints. A larger replacement budget can increase trading costs, while an unchanged target can retain existing holdings."
     },
     "waterfall_allocation": {
       id: "waterfall_allocation",
@@ -91,8 +91,8 @@ window.ArenaGlossaryService = {
       name: "Greedy Waterfall Capital Allocation",
       category: "Zoo Mechanics",
       tagline: "Discrete Lot Packing",
-      tooltip: "An integer-programming allocation algorithm that purchases constituent stocks in 100-share round lots, distributing available capital until cash is fully utilized.",
-      details: "Simulates realistic retail execution constraints where small portfolios cannot buy fractional shares, leaving fractional cash drag."
+      tooltip: "An optional greedy mode that attempts additional round-lot purchases using cash left after the initial allocation.",
+      details: "This heuristic does not guarantee full investment. Its active setting follows the release execution policy; it is separate from the standard allocation policy and from fractional-share trading."
     }
   },
 
@@ -136,7 +136,7 @@ window.ArenaGlossaryService = {
         category: a.category || "Zoo Animals",
         tagline: a.badge || "Execution Policy",
         tooltip: `【${a.badge || a.category}】${a.description || "Simulated execution policy."}`,
-        details: `TopK: ${a.topk} holdings | DropN: ${a.n_drop} weekly turnover | Spec: ${a.spec}. Simulates controlled behavioral friction.`
+        details: `TopK target: ${a.topk} holdings | DropN replacement budget: ${a.n_drop} | Spec: ${a.spec}. Actual trades remain subject to execution constraints.`
       };
     });
 
@@ -146,27 +146,27 @@ window.ArenaGlossaryService = {
       term: "Sloth",
       name: "Sloth Cohort (Execution Latency)",
       category: "Zoo Animals",
-      tagline: "Signal Half-Life Test",
-      tooltip: "【Signal Latency Test】Delays buying recommended stocks by 1 to 4 weeks while holding uninvested cash. Evaluates alpha persistence and half-life decay.",
-      details: "Includes Sloth-1 (1-week lag), Sloth-2 (2-week lag), Sloth-3 (3-week lag), and Sloth-4 (1-month lag)."
+      tagline: "Signal Delay with Cash Start",
+      tooltip: "Starts in cash for 1–4 weekly cycles, then rebalances using rankings delayed by that many cycles.",
+      details: "Includes Sloth-1 through Sloth-4. Results combine signal latency with the initial cash-exposure gap and do not isolate pure signal half-life."
     };
     dict.animals["snail"] = {
       id: "snail",
       term: "Snail",
-      name: "Snail Cohort (Stale Holding)",
+      name: "Snail Cohort (Invested Start)",
       category: "Zoo Animals",
-      tagline: "Exit Inertia Test",
-      tooltip: "【Exit Hesitation Test】Keeps dropped/downgraded stocks for 1 to 4 extra weeks before selling. Measures portfolio drag from reluctant selling.",
-      details: "Includes Snail-1, Snail-2, Snail-3, and Snail-4 with incremental liquidation delays."
+      tagline: "Signal Delay with Invested Start",
+      tooltip: "Enters immediately using the initial ranking, reuses that ranking during the transition, then follows rankings delayed by 1–4 weekly cycles.",
+      details: "Includes Snail-1 through Snail-4. Orders follow delayed rankings; each position is not assigned a fixed extra holding period. Unlike Sloth, there is no initial cash-only period."
     };
     dict.animals["rabbit"] = {
       id: "rabbit",
       term: "Rabbit",
       name: "Rabbit Cohort (High Turnover)",
       category: "Zoo Animals",
-      tagline: "Agile Sector Rotator",
-      tooltip: "【High Turnover Bandwidth】Rotates 50% (Rabbit-1) or 100% (Rabbit-2) of holdings every week, testing if fresh signals outearn transaction costs.",
-      details: "Rabbit-1 flushes 11 positions weekly; Rabbit-2 executes complete weekly liquidation (22 positions)."
+      tagline: "Replacement Budget Stress",
+      tooltip: "Targets 22 holdings with replacement budgets of 11 (Rabbit-1) or 22 (Rabbit-2) positions per rebalance.",
+      details: "Tests sensitivity to faster rotation and trading costs. These are replacement budgets; unchanged targets and execution constraints can result in fewer trades."
     };
     dict.animals["eagle"] = {
       id: "eagle",
@@ -177,23 +177,14 @@ window.ArenaGlossaryService = {
       tooltip: "【Conviction & Capacity】Ranges from ultra-concentrated snipers (Eagle-5/1: Top 5 stocks) to institutional capacity tests (Eagle-44, 66, 88).",
       details: "Eagle-5/1 exerts the highest selection intensity in the tournament; expanded Eagles test capital scalability."
     };
-    dict.animals["koala"] = {
-      id: "koala",
-      term: "Koala",
-      name: "Koala (Inverted Polarity)",
-      category: "Zoo Animals",
-      tagline: "Falsification Test",
-      tooltip: "【Scientific Falsification Test】Intentionally buys the bottom 22 lowest-scoring stocks. If a model has true predictive alpha, Koala must lose heavily.",
-      details: "A critical sanity check. Positive returns in Koala reveal inverse signal ranking or spurious factor loadings."
-    };
     dict.animals["meerkat"] = {
       id: "meerkat",
       term: "Meerkat",
       name: "Meerkat Decile Cohort",
       category: "Zoo Animals",
       tagline: "Cross-Sectional CT Scan",
-      tooltip: "【Monotonicity CT Scan】Slices model rankings into 10%~90% deciles (Meerkat-10 to Meerkat-90). Verifies clean monotonic return decay from top to bottom.",
-      details: "Confirms that performance stems from broad ranking skill rather than isolated luck in the extreme tails."
+      tooltip: "Samples holdings around ranking percentiles from 10% through 90% (Meerkat-10 to Meerkat-90), exploring how results vary across ranking regions.",
+      details: "Targets 22 holdings around each selected percentile. Nearby selections can overlap; observed monotonicity is descriptive and does not establish causal ranking skill."
     };
 
     // 3. Dynamic Benchmarks from active season adapter
@@ -209,7 +200,7 @@ window.ArenaGlossaryService = {
       name: `${mktName} (${mktCode})`,
       category: "Benchmarks",
       tagline: "External Market Beta Anchor",
-      tooltip: `【The Macro Thermometer】Official capitalization-weighted index (${mktCode}). Measures broad macroeconomic trends to isolate market beta from model selection skill.`,
+      tooltip: `Official capitalization-weighted index (${mktCode}) providing external market context. Outperformance alone does not isolate ranking skill.`,
       details: `Represents the external market environment for ${seasonMeta.title || "the tournament"}. Outperforming it indicates positive market-relative spread.`
     };
     dict.benchmarks["csi300"] = dict.benchmarks["market"];
@@ -220,7 +211,7 @@ window.ArenaGlossaryService = {
       name: `${taotieName} (Physical Benchmark)`,
       category: "Benchmarks",
       tagline: "Executable Universe Baseline",
-      tooltip: `【The Real-World Floor】Capital-constrained full-universe portfolio with strict 100-share round lots and retail cash constraints. Reflects the true unselected market floor.`,
+      tooltip: `Capital-constrained full-universe portfolio with round lots and the declared allocation policy. It is an executable reference, not a guaranteed floor for returns.`,
       details: `Operates under identical capital (${seasonMeta.methodology?.capital_spec || 'the standard simulation budget'}) and lot constraints as contestant portfolios using the standard allocation policy, with residual cash preserved.`
     };
 
@@ -242,7 +233,7 @@ window.ArenaGlossaryService = {
       name: "Matched Monkeys (Statistical Null Colony)",
       category: "Benchmarks",
       tagline: "100,000 Random Controls",
-      tooltip: "【100,000 Random Controls】Deterministic pseudo-random portfolios sharing each animal's exact capital, lot constraints, and turnover rules, but zero model signals.",
+      tooltip: "100,000 deterministic pseudo-random portfolios per random TopK/DropN specification, under the declared capital, lot and cost constraints. Animal-specific ranking transformations and delay rules are not replicated.",
       details: "Answers: 'How unusual is this return under the declared random-ranking baseline?' Delay and initial exposure remain properties of the animal, not new control species."
     };
 

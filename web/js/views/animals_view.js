@@ -429,7 +429,7 @@ window.AnimalsView = {
                   const spreadTaotie = Number.isFinite(passiveReturn) ? p.total_return_pct - passiveReturn : null;
 
                   return `
-                    <tr data-zoo-path="${p.path_id}" data-observation-start="${start}" style="border-bottom: 1px solid var(--border-subtle); hover:background var(--bg-surface-elevated);">
+                    <tr class="zoo-path-row" data-zoo-path="${p.path_id}" data-observation-start="${start}" style="border-bottom: 1px solid var(--border-subtle);">
                       <td style="padding: 12px 16px; font-weight: 700; color: var(--text-muted);">${p.full_season_eligible === false ? 'Observation' : '#' + (idx + 1)}</td>
                       <td style="padding: 12px 16px;">
                         <a href="#contestants/${p.contestant_id}" style="font-weight: 600; color: var(--brand-cyan); text-decoration: none;">

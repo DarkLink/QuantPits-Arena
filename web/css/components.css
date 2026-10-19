@@ -390,8 +390,10 @@
   font-size: 0.78rem;
 }
 
-.text-up, .table td.text-up, .table tr:hover td.text-up { color: var(--accent-positive); }
-.text-down, .table td.text-down, .table tr:hover td.text-down { color: var(--accent-negative); }
+.positive, .text-up, .data-table td.positive, .data-table tr:hover td.positive,
+.table td.text-up, .table tr:hover td.text-up { color: var(--accent-positive); }
+.negative, .text-down, .data-table td.negative, .data-table tr:hover td.negative,
+.table td.text-down, .table tr:hover td.text-down { color: var(--accent-negative); }
 
 /* Chart & Section Specification Pill Button */
 button.chart-spec-pill,

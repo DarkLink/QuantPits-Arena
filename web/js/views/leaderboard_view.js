@@ -268,7 +268,7 @@ window.LeaderboardView = {
         const isAlphaPos = alphaGhost >= 0;
         returnCellHtml = `
           <div style="display: flex; flex-direction: column; align-items: flex-end;">
-            <b style="color: ${isAlphaPos ? '#00f0ff' : 'var(--accent-negative)'}; font-family: monospace;">
+            <b style="color: ${isAlphaPos ? 'var(--brand-cyan)' : 'var(--accent-negative)'}; font-family: monospace;">
               ${formatSpread(alphaGhost)}
             </b>
             <span style="font-size: 10px; color: var(--text-tertiary);">Abs: ${p.total_return_pct >= 0 ? '+' : ''}${p.total_return_pct.toFixed(2)}%</span>
@@ -309,7 +309,7 @@ window.LeaderboardView = {
           <td class="numeric">
             ${returnCellHtml}
           </td>
-          <td class="numeric ${p.excess_over_monkey_pct >= 0 ? 'positive' : 'negative'}">
+          <td class="numeric ${p.excess_over_monkey_pct == null ? '' : p.excess_over_monkey_pct >= 0 ? 'positive' : 'negative'}">
             ${p.excess_over_monkey_pct == null ? 'N/A' : (p.excess_over_monkey_pct >= 0 ? '+' : '')+p.excess_over_monkey_pct.toFixed(2)+' pp'}
           </td>
           <td class="numeric">

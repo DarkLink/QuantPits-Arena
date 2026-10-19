@@ -83,6 +83,9 @@ const checks={
     assert(description.tooltip.includes(description.name));
     assert(description.details.includes('Observation anchor: '+(participant.observation_start||adapter.getNavDates()[0])));
    }
+   for(const animal of adapter.getAllAnimals()){
+    assert(dict.animals[animal.id].tooltip.includes(animal.description),'A glossary override replaced the canonical animal description');
+   }
   }
  },
  tooltip_lifecycle(){
