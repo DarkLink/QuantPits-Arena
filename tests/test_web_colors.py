@@ -6,7 +6,7 @@ import pytest
 from arena.config import REPO_ROOT
 
 
-@pytest.mark.parametrize('entry', ['curves', 'panorama', 'fingerprints', 'comparison', 'palette'])
+@pytest.mark.parametrize('entry', ['curves', 'panorama', 'fingerprints', 'comparison', 'palette', 'heatmap_labels'])
 def test_color_contract(entry):
     program = r'''
 const fs=require('fs'),vm=require('vm'),assert=require('assert/strict');
@@ -46,6 +46,27 @@ for(const source of Object.values(window.ARENA_SEASONS_DATA))for(theme of ['dark
  const animals=adapter.getAllAnimals().map(a=>a.id),participants=adapter.getAllContestants().map(c=>c.id);
  const references=()=>colors.semantic();
  const checks={
+  heatmap_labels(){
+   let background=null;
+   const init=echarts.init;
+   echarts.init=dom=>{const chart=init(dom);chart.getModel=()=>({getSeriesByIndex(){return{
+    getData(){return{getItemVisual(){return{fill:background};}};}};}});return chart;};
+   for(const metric of ['total_return_pct','percentile_rank','max_drawdown_pct','sharpe_ratio']){
+    charts.renderHeatmap('matrix',adapter.matrix,metric);
+    const option=options.get('matrix'),label=option.series[0].label;
+    const cell=option.series[0].data.find(d=>Array.isArray(d));
+    const backgrounds=[...option.visualMap.inRange.color];
+    for(let v=0;v<=255;v++)backgrounds.push('rgb('+[v,v,v].join(',')+')');
+    for(background of backgrounds){
+     const formatted=label.formatter({data:cell,value:cell,dataIndex:0});
+     const match=formatted.match(/^\{(dark|light)\|(.+)\}$/);assert(match,'Heatmap label has no adaptive text style');
+     const hex=background.startsWith('#')?background:'#'+background.match(/\d+/g).map(v=>Number(v).toString(16).padStart(2,'0')).join('');
+     assert(contrast(hex,label.rich[match[1]].color)>=4.5,'The actual cell color obscures its numeric label');
+     assert.equal(match[2],window.formatNumber(cell[2],metric==='percentile_rank'?0:1),'Contrast correction changed the displayed metric');
+    }
+   }
+   echarts.init=init;
+  },
   curves(){
    for(const cid of ['CONTESTANT_A','CONTESTANT_G'])for(const metric of ['nav','drawdown','excess_csi300']){
     const paths=animals.map(id=>adapter.getPath(cid+'_'+id));

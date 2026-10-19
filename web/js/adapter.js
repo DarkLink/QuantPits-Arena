@@ -101,6 +101,18 @@ window.ArenaColors = {
   },
   alpha(hex, opacity) {
     return `rgba(${[1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16)).join(', ')}, ${opacity})`;
+  },
+  textOn(background) {
+    // ECharts continuous color scales return opaque rgb() or hex fills.
+    if (typeof background !== 'string') return null;
+    const rgb = background.startsWith('#')
+      ? [1, 3, 5].map(i => parseInt(background.slice(i, i + 2), 16))
+      : background.match(/[\d.]+/g)?.slice(0, 3).map(Number);
+    if (!rgb || rgb.length !== 3 || rgb.some(v => !Number.isFinite(v))) return null;
+    const luminance = rgb.map(v => v / 255)
+      .map(v => v <= .04045 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4)
+      .reduce((sum, v, i) => sum + v * [.2126, .7152, .0722][i], 0);
+    return luminance > Math.sqrt(1.05 * .05) - .05 ? '#000000' : '#ffffff';
   }
 };
 

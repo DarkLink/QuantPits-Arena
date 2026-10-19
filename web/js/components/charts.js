@@ -387,8 +387,14 @@ window.ArenaCharts = {
             fontSize: 9,
             formatter: (params) => {
               const cell = params.value || params.data?.value || params.data;
-              return window.formatNumber(cell[2], isPctRank ? 0 : 1);
+              const text = window.formatNumber(cell[2], isPctRank ? 0 : 1);
+              // Read the rendered fill so dragging visualMap also keeps labels legible.
+              const rendered = chart.getModel?.()?.getSeriesByIndex(0)?.getData();
+              const background = rendered?.getItemVisual(params.dataIndex, 'style')?.fill;
+              const ink = background && window.ArenaColors.textOn(background);
+              return ink ? `{${ink === '#000000' ? 'dark' : 'light'}|${text}}` : text;
             },
+            rich: {dark: {color: '#000000'}, light: {color: '#ffffff'}},
             color: tc.isDark ? "#ffffff" : "#0f172a"
           },
           itemStyle: {

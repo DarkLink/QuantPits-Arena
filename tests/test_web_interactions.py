@@ -9,6 +9,7 @@ from arena.config import REPO_ROOT
 @pytest.mark.parametrize('entry', [
     'benchmark_switches', 'deferred_paths', 'deferred_profiles', 'deferred_routes',
     'dispatch_race', 'dispatch_participants', 'resizing', 'season_selection', 'focused_pool_change', 'routing_inputs', 'summary_counts', 'participation_counts', 'filter_reset', 'comparison_tie', 'matrix_filters',
+    'zoo_route_state', 'comparison_route_state',
 ])
 def test_interaction_runtime(entry):
     program = r'''
@@ -45,6 +46,56 @@ const seasons=Object.keys(window.ARENA_SEASONS_DATA);
 function pool(id){window.arenaAdapter=new window.ArenaDataAdapter(structuredClone(window.ARENA_SEASONS_DATA[id]));return window.arenaAdapter;}
 function option(id){return instances.get(node(id))?.option;}
 const checks={
+ zoo_route_state(){
+  for(const sid of seasons){
+   const adapter=pool(sid),view=window.AnimalsView;
+   location('https://arena.invalid/?season='+sid+'#animals/robot');
+   Object.assign(view,{comparisonMode:'single',activeCategory:'All',activeAnimalId:'robot'});
+   const container=node('view-animals'),original=container.querySelectorAll;
+   const button=node('category-lag');button.getAttribute=()=> 'Execution Lag';
+   container.querySelectorAll=selector=>selector==='.animal-cat-btn'?[button]:[];
+   window.ArenaApp.handleRouting();flush();
+   button.events.click({currentTarget:button});flush();
+   const selected=view.activeAnimalId;
+   assert.equal(adapter.getAllAnimals().find(a=>a.id===selected).category,'Execution Lag');
+   assert.equal(window.ArenaApp.parseHash().params.animalId,selected,'Category selection left the old animal in the URL');
+   window.ArenaApp.handleRouting();flush();
+   assert.equal(view.activeAnimalId,selected,'A theme rerender reverted the selected animal');
+   location('https://arena.invalid/?season='+sid+'#animals/koala');
+   window.ArenaApp.handleRouting();flush();
+   assert.equal(view.activeCategory,adapter.getAllAnimals().find(a=>a.id==='koala').category);
+   assert(container.innerHTML.includes('value="koala" selected'),'The direct link disagrees with the selected dropdown');
+   location('https://arena.invalid/?season='+sid+'#animals/robot?mode=multi&modelFocus=CONTESTANT_G');
+   window.ArenaApp.handleRouting();flush();
+   view.comparisonMode='single';view.activeFocusModel='CONTESTANT_A';view.render('view-animals');flush();
+   window.ArenaApp.handleRouting();flush();
+   assert.equal(view.comparisonMode,'single','An old mode parameter overrode the current selection');
+   assert.equal(view.activeFocusModel,'CONTESTANT_A','An old focus parameter overrode the current selection');
+   assert.equal(window.location.search,'?season='+sid);
+   container.querySelectorAll=original;
+  }
+ },
+ comparison_route_state(){
+  for(const sid of seasons){
+   const adapter=pool(sid),view=window.DecisionAuditView,preset=adapter.getComparisonPresets()[0].id;
+   Object.assign(view,{activePreset:null,start:null,end:null,season:null});
+   location('https://arena.invalid/?season='+sid+'#decision-audit/'+preset+'?animalId=robot');
+   window.ArenaApp.handleRouting();flush();
+   node('comparison-start').events.change({target:{value:'2026-10-13'}});flush();
+   window.ArenaApp.handleRouting();flush();
+   assert.equal(view.window.start,'2026-10-13','A preset link reset the selected dates during a theme rerender');
+   node('slot-b-select').events.change({target:{value:'CONTESTANT_B'}});flush();
+   assert(!window.ArenaApp.parseHash().params.forkId,'A custom comparison retained a stale preset URL');
+   window.ArenaApp.handleRouting();flush();
+   assert.equal(view.slotB,'CONTESTANT_B','A theme rerender restored the old preset participant');
+   node('archaeology-animal-select').events.change({target:{value:'koala'}});flush();
+   window.ArenaApp.handleRouting();flush();
+   assert.equal(view.activeAnimalId,'koala','A stale animal query overrode the comparison selection');
+   assert.equal(window.location.search,'?season='+sid);
+   view.applyPreset(preset,adapter.getComparisonPresets());view.render('view-decision-audit');flush();
+   assert.equal(window.ArenaApp.parseHash().params.forkId,preset,'Selecting a preset left the custom URL active');
+  }
+ },
  benchmark_switches(){
   for(const sid of seasons){
    const adapter=pool(sid),dates=adapter.getNavDates();

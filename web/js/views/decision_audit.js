@@ -38,12 +38,13 @@ window.DecisionAuditView = {
     if(this.season!==season){this.season=season;this.start=null;this.end=null;}
     const requested=typeof params==='string'?params:params?.forkId;
     if(params?.animalId)this.activeAnimalId=params.animalId;
-    if(requested)this.applyPreset(requested,forks);
+    if(requested && requested!==this.activePreset)this.applyPreset(requested,forks);
     else if(!this.activePreset&&forks.length)this.applyPreset(forks[0].id||forks[0].fork_id,forks);
     const validIds=allSubjects.map(s=>s.id);
     if(!validIds.includes(this.slotA))this.slotA=validIds[0];
     if(!validIds.includes(this.slotB))this.slotB=validIds[1]||validIds[0];
     if(this.slotC&&!validIds.includes(this.slotC))this.slotC='';
+    this.syncRoute();
     this.window=null;
     try{
       this.window=adapter.getComparisonWindow([this.slotA,this.slotB,this.slotC],this.activeAnimalId,this.start,this.end);
@@ -467,6 +468,21 @@ window.DecisionAuditView = {
       </div>
 
 `;
+  },
+
+  syncRoute() {
+    const hash = window.location?.hash || '';
+    if (!/^#(?:decision-audit|archaeology)(?:[/?]|$)/.test(hash)) return;
+    const query = new URLSearchParams(hash.split('?')[1] || '');
+    query.delete('forkId');
+    if (query.has('animalId')) query.set('animalId', this.activeAnimalId);
+    const preset = this.activePreset && this.activePreset !== 'custom' ? '/' + encodeURIComponent(this.activePreset) : '';
+    const suffix = query.toString();
+    const route = `#decision-audit${preset}${suffix ? '?' + suffix : ''}`;
+    if (route === hash) return;
+    try {
+      window.history?.replaceState(null, '', new URL(route, window.location.href).href);
+    } catch (error) { /* The current view stays usable when history updates are blocked. */ }
   },
 
   applyPreset(presetId, forks) {

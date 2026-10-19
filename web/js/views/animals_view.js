@@ -19,6 +19,21 @@ window.AnimalsView = {
   activeFocusModel: "all", // "all" or specific contestant_id
   history: null,
 
+  syncRoute() {
+    const hash = window.location?.hash || '';
+    if (!/^#(?:animals|zoo)(?:[/?]|$)/.test(hash)) return;
+    const query = new URLSearchParams(hash.split('?')[1] || '');
+    query.delete('animalId'); query.delete('id');
+    if (query.has('mode')) query.set('mode', this.comparisonMode);
+    if (query.has('modelFocus')) query.set('modelFocus', this.activeFocusModel);
+    const suffix = query.toString();
+    const route = `#animals/${encodeURIComponent(this.activeAnimalId)}${suffix ? '?' + suffix : ''}`;
+    if (route === hash) return;
+    try {
+      window.history?.replaceState(null, '', new URL(route, window.location.href).href);
+    } catch (error) { /* The current view stays usable when history updates are blocked. */ }
+  },
+
   buildHistory(paths) {
     const adapter = window.arenaAdapter;
     const dates = adapter.getNavDates();
@@ -61,6 +76,10 @@ window.AnimalsView = {
         activeAnimal = allAnimals[0];
         this.activeAnimalId = activeAnimal.id;
       }
+      if (this.comparisonMode === 'single' && this.activeCategory !== 'All' && this.activeCategory !== activeAnimal.category) {
+        this.activeCategory = activeAnimal.category;
+      }
+      this.syncRoute();
 
       const categories = [
         "All",
